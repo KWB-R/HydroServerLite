@@ -53,7 +53,7 @@ if ($SourceL == '') {
         $State = $_POST['state'];
     }
 } else {
-    $state = ' ';
+    $State = ' ';
 } if (!isset($_POST['ZipCode'])) {
     echo "Zip Code is missing!";
     exit;
@@ -96,7 +96,21 @@ $sql3 = "SELECT `MetadataID` FROM `isometadata` WHERE `MetadataLink`='$MetadataL
 $result3 = @mysql_query($sql3, $connection) or die(mysql_error());
 $row3 = mysql_fetch_array($result3, MYSQL_ASSOC);
 $MetadataID = $row3['MetadataID'];
+
+// add the 'Country' field if required
+$result5 = @mysql_query("SHOW COLUMNS FROM sources") or die(mysql_error());
+$found_country_column = false;
+if ($result5) {
+  while($row5 = mysql_fetch_array($result5, MYSQL_ASSOC)){
+    if ($row5['Field'] == 'country') {
+	   $found_country_column = true;
+	}
+  }
+}
+if (!$found_country_column) {
+  $result6 = mysql_query('ALTER TABLE `sources` ADD `country` NVARCHAR(64)') or die(mysql_error());
+}
+
 $sql3 = "INSERT INTO `sources`(`SourceID`, `Organization`, `SourceDescription`, `SourceLink`, `ContactName`, `Phone`, `Email`, `Address`, `City`, `country`, `State`, `ZipCode`, `Citation`, `MetadataID`) VALUES ('$SourceID', '$Organization', '$SourceDescription', '$SourceLink', '$ContactName', '$Phone', '$Email', '$Address', '$City', '$country' ,'$State', '$ZipCode', '$Citation', '$MetadataID')";
 $result3 = @mysql_query($sql3, $connection) or die(mysql_error());
 echo($result3);
-?>
