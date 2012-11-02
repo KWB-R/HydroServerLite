@@ -354,7 +354,7 @@ function updateSource(){
 		$.ajax({
 		type: "POST",
 		url: "update_metadata.php?MetadataID2="+md_id+"&TopicCategory2="+md_tc+"&Title2="+md_title+"&Abstract2="+md_ab+"&ProfileVersion2="+md_pv+"&MetadataLink2="+md_link}).done(function(data){
-alert(data);
+
 			if(data==1){
 				
 				//Validation is now complete, so send info to the processing page
@@ -375,7 +375,7 @@ alert(data);
 				$.ajax({
 				type: "POST",
 				url: "update_source.php?SourceID2="+source_ID+"&Organization2="+source_org+"&SourceDescription2="+source_d+"&SourceLink2="+source_l+"&ContactName2="+source_cn+"&Phone2="+source_p+"&Email2="+source_e+"&Address2="+source_a+"&City2="+source_city+"&State2="+source_st+"&ZipCode2="+source_zc+"&Citation2="+source_c+"&MetadataID2="+source_md}).done(function(data2){
-alert(data2);
+
 					if(data2==1){
 
 						$("#msg2").show(2000);
