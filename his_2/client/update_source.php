@@ -38,5 +38,3 @@ ContactName='$source_cn',Phone='$source_p',Email='$source_e',Address='$source_a'
 $result_upd = @mysql_query($sql_upd,$connection)or die(mysql_error());
 
 echo ($result_upd);
-
-?>

@@ -3,13 +3,17 @@
 require_once 'authorization_check.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+if ($_COOKIE['power'] !="admin"){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
 
 //connect to server and select database
 require_once 'database_connection.php';
+
+//initialize variables
+$option_block_s = '';
+$msg = '';
 
 //filter the Site results after Source is selected
 $sql ="SELECT * FROM sources";
