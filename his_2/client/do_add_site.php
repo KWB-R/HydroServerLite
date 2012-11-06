@@ -58,7 +58,19 @@ $coms = $_GET['com'];
 
 require_once 'db_config.php';
 
-
+//add the country column if required
+$result_country = @mysql_query("SHOW COLUMNS FROM sites") or die(mysql_error());
+$found_country_column = false;
+if ($result5) {
+  while($row5 = mysql_fetch_array($result_country, MYSQL_ASSOC)){
+    if ($row5['Field'] == 'country') {
+	   $found_country_column = true;
+	}
+  }
+}
+if (!$found_country_column) {
+  $result_country2 = mysql_query('ALTER TABLE `sites` ADD `country` NVARCHAR(64)') or die(mysql_error());
+}
 
 $sql = "INSERT INTO `sites`(`SiteCode`, `SiteName`, `Latitude`, `Longitude`, `LatLongDatumID`, `SiteType`, `Elevation_m`, `VerticalDatum`, `country`, `State`, `County`, `Comments`) VALUES ('$sitecode', '$sitename', '$lat', '$lng', '$llid', '$type', '$elev', '$datum', '$country' ,'$state', '$county', '$coms')";
 

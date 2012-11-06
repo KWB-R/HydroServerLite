@@ -18,16 +18,16 @@ define("DATABASE_PASSWORD", "Olomouc1306"); //for example define("DATABASE_PASSW
 
 
 //Cookie Settings - This is for Security!
-$www = "localhost"; // Please change this to your websites domain name. You may also use "localhost" for testing purposes on a local server.
+$www = "geoinformatics.aalto.fi"; // Please change this to your websites domain name. You may also use "localhost" for testing purposes on a local server.
 
 //Default Variables for add_site.php
 $default_datum="MSL";
-$default_spatial="WGS 1984";
-$default_source="Lahti Urban Water Lab";
+$default_spatial="WGS1984";
+$default_source="Lahden kaupunkilaboratorio";
 
 //Establish default values for MOSS data variables when adding a data value to a site(add_data_value.php)
-$UTCOffset = "-2"; 
-$UTCOffset2 = "2"; // Actually it is -7
+$UTCOffset = "2"; 
+$UTCOffset2 = "-2"; // Actually it is -7
 $CensorCode ="nc";
 $QualityControlLevelID = "0";
 $ValueAccuracy ="NULL"; 
@@ -38,26 +38,26 @@ $SampleID ="NULL";
 $DerivedFromID ="NULL";
 
 //Establish default values for new MOSS site when adding a new site to the database (add_site.php)
-$LocalX ="NULL";
-$LocalY ="NULL";
-$LocalProjectionID ="NULL";
-$PosAccuracy_m ="NULL";
+$LocalX ="0";
+$LocalY ="0";
+$LocalProjectionID ="0";
+$PosAccuracy_m ="0";
 
 //Establish default values for Variable Code when adding a new variable (add_variable.php)
-$default_varcode="AA"; //for example, for MOSS, it is IDCS- or IDCS-(somethinghere)-Avg
+$default_varcode="1"; //for example, for MOSS, it is IDCS- or IDCS-(somethinghere)-Avg
 
 
 //Establish default values for source info when adding a new source to the database (add_source.php)
-$ProfileVersion = "ISO 19115"; 
+$ProfileVersion = "ISO 15195"; 
 
 //Name of your blog/Website homepage..(This affects the "Back to home button"
-$homename="Příliš žluťoučký";
+$homename="lahti";
 
 //Link of your blog/Website homepage..(This affects the "Back to home button"
-$homelink="http://localhost";
+$homelink="geoinformatics.aalto.fi";
 
 //Name of your organization
-$orgname="Příliš žluťoučký";
+$orgname="AAlto";
 
 //Name of your software version
 $HSLversion="Version 2.0";

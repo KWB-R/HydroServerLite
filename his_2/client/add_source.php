@@ -5,10 +5,13 @@ require_once 'authorization_check.php';
 //connect to server and select database
 require_once 'database_connection.php';
 
+$msg2 = '';
+
 //get list of TopicCategories to choose from
 $sql2 = "Select Term FROM topiccategorycv";
 
 $result2 = @mysql_query($sql2, $connection) or die(mysql_error());
+$option_block2 = "";
 
 $num2 = @mysql_num_rows($result2);
 if ($num2 < 1) {
