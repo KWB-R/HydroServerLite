@@ -1,7 +1,10 @@
 <?php
 
 require_once 'database_connection.php';
-require_once 'table_names.php';
+
+function get_table_name($uppercase_table_name) {
+    return '`'. strtolower($uppercase_table_name) .'`';
+}
 
 function db_GetSeriesCatalog($shortSiteCode)
 {
