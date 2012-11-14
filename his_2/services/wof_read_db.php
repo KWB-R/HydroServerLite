@@ -6,24 +6,40 @@ function get_table_name($uppercase_table_name) {
     return '`'. strtolower($uppercase_table_name) .'`';
 }
 
+function to_xml($xml_tag, $value) {
+   return "<$xml_tag>$value</$xml_tag>";
+}
+
+function to_attribute($attribute_name, $value) {
+   return "$attribute_name=\"$value\"";
+}
+
 function db_GetSeriesCatalog($shortSiteCode)
 {
-
-    //run SQL query
+   //get the table names
+   $variables_table = get_table_name('Variables');
+   $seriescatalog_table = get_table_name('SeriesCatalog');
+   $units_table = get_table_name('Units');
+   $qc_table = get_table_name('QualityControlLevels');
+   $methods_table = get_table_name('Methods');
+   
+   //run SQL query
     $query_text = "SELECT s.VariableID, s.VariableCode, s.VariableName, s.ValueType, s.DataType, s.GeneralCategory, s.SampleMedium,
-   s.VariableUnitsName, u.UnitsType, u.UnitsAbbreviation, s.VariableUnitsID, 
-   v.NoDataValue, v.IsRegular, s.TimeUnitsName, tu.UnitsType, tu.UnitsAbbreviation, s.TimeUnitsID, s.TimeSupport, s.Speciation, 
+   s.VariableUnitsName, u.UnitsType AS \"VariableUnitsType\", u.UnitsAbbreviation AS \"VariableUnitsAbbreviation\", s.VariableUnitsID, 
+   v.NoDataValue, v.IsRegular, 
+   s.TimeUnitsName, tu.UnitsType AS \"TimeUnitsType\", tu.UnitsAbbreviation AS \"TimeUnitsAbbreviation\", s.TimeUnitsID, 
+   s.TimeSupport, s.Speciation, 
    s.ValueCount, s.BeginDateTime, s.EndDateTime, s.BeginDateTimeUTC, s.EndDateTimeUTC, 
    s.SourceID, s.Organization, s.SourceDescription, s.Citation, 
    s.QualityControlLevelID, s.QualityControlLevelCode, qc.Definition, 
    s.MethodID, s.MethodDescription, m.MethodLink
-   FROM " . get_table_name('SeriesCatalog') . ' s LEFT JOIN ' .
-   get_table_name('Variables') . ' v ON s.VariableID = v.VariableID LEFT JOIN ' .
-   get_table_name('Units') . ' u ON s.VariableUnitsID = u.UnitsID LEFT JOIN ' . 
-   get_table_name('Units') . ' tu ON s.TimeUnitsID = tu.UnitsID LEFT JOIN ' .
-   get_table_name('QualityControlLevels') . ' qc ON s.QualityControlLevelID = qc.QualityControlLevelID LEFT JOIN ' . 
-   get_table_name('Methods') . ' m ON m.MethodID = s.MethodID';
-    $query_text .= ' WHERE SiteCode = "' . $shortSiteCode . '"';
+   FROM $seriescatalog_table s 
+   LEFT JOIN $variables_table v ON s.VariableID = v.VariableID 
+   LEFT JOIN $units_table u ON s.VariableUnitsID = u.UnitsID 
+   LEFT JOIN $units_table tu ON s.TimeUnitsID = tu.UnitsID 
+   LEFT JOIN $qc_table qc ON s.QualityControlLevelID = qc.QualityControlLevelID 
+   LEFT JOIN $methods_table m ON m.MethodID = s.MethodID
+   WHERE SiteCode = \"$shortSiteCode\"";
 
     $result = mysql_query($query_text);
 
@@ -35,54 +51,67 @@ function db_GetSeriesCatalog($shortSiteCode)
     $retVal = '<seriesCatalog>';
 
     while ($row = mysql_fetch_row($result)) {
-
-        $retVal .= '<series>';
-        $retVal .= '<variable>';
-
-        $retVal .= '<variableCode vocabulary="' . SERVICE_CODE . '" default="true" variableID="' . $row[0] . '">' . $row[1] . '</variableCode>';
-        $retVal .= "<variableName>{$row[2]}</variableName>";
-        $retVal .= "<valueType>{$row[3]}</valueType>";
-        $retVal .= "<dataType>{$row[4]}</dataType>";
-        $retVal .= "<generalCategory>{$row[5]}</generalCategory>";
-        $retVal .= "<sampleMedium>{$row[6]}</sampleMedium>";
-        $retVal .= "<unit><unitName>{$row[7]}</unitName><unitType>{$row[8]}</unitType>";
-        $retVal .= "<unitAbbreviation>{$row[9]}</unitAbbreviation><unitCode>{$row[10]}</unitCode></unit>";
-        $retVal .= "<noDataValue>{$row[11]}</noDataValue>";
-        $isRegular = "true";
-        if ($row[12] === false) {
-            $isRegular = "false";
-        }
-        $retVal .= '<timeScale isRegular="' . $isRegular . '">';
-        $retVal .= "<unit><unitName>{$row[13]}</unitName><unitType>{$row[14]}</unitType>";
-        $retVal .= "<unitAbbreviation>{$row[15]}</unitAbbreviation><unitCode>{$row[16]}</unitCode></unit>";
-        $retVal .= "<timeSupport>{$row[17]}</timeSupport>";
+		$serviceCode = SERVICE_CODE;
+		$variableID = $row["VariableID"];
+        $variableName = $row["VariableName"];
+		$variableCode = $row["VariableCode"];
+		$valueType = $row["ValueType"];
+		$dataType = $row["DataType"];
+		$generalCategory = $row["GeneralCategory"];
+		$sampleMedium = $row["SampleMedium"];
+		$isRegular = $row["IsRegular"] ? "true" : "false";
+		$beginTime = str_replace(" ", "T", $row["BeginDateTime"]); //1995-01-02T06:00:00
+        $endTime = str_replace(" ", "T", $row["EndDateTime"]); //2011-10-01T07:00:00
+        $beginTimeUTC = str_replace(" ", "T", $row["BeginDateTimeUTC"]); //1995-01-02T12:00:00
+        $endTimeUTC = str_replace(" ", "T", $row["EndDateTimeUTC"]); //2011-10-01T12:00:00
+		
+		$retval .= "<series>";
+		$retval .= variableFromDataRow($row);
+		$retval .= "<variable>";
+		$retval .= "<variableCode vocabulary=" . to_attribute($serviceCode) . "default=\"true\"" . to_attribute($variableID) . ">";
+		$retval .= to_xml("variableName",$variableName);
+        $retVal .= to_xml("valueType", $valueType);
+        $retVal .= to_xml("dataType", $row["DataType"]);
+        $retVal .= to_xml("generalCategory", $row["GeneralCategory"]);
+        $retVal .= to_xml("sampleMedium", $row["SampleMedium"]);
+        $retVal .= "<unit>";
+		$retVal .= to_xml("unitName",$row["VariableUnitsName"]);
+		$retVal .= to_xml("unitType", $row["VariableUnitsType"]);
+        $retVal .= to_xml("unitAbbreviation", $row["VariableUnitsAbbreviation"]);
+		$retVal .= to_xml("unitCode", $row["VariableUnitsID"]);
+		$retVal .= "</unit>";
+        $retVal .= to_xml("noDataValue", $row["NoDataValue"]);
+        $retVal .= "<timeScale " . to_attribute("isRegular", $isRegular) . ">";
+        $retVal .= "<unit>";
+		$retVal .= to_xml("unitName", $row["TimeUnitsName"]);
+		$retVal .= to_xml("unitType", $row["TimeUnitsType"]);
+        $retVal .= to_xml("unitAbbreviation", $row["TimeUnitsAbbreviation"]);
+		$retVal .= to_xml("unitCode", $row["TimeUnitsID"]);
+		$retVal .= "</unit>";
+        $retVal .= to_xml("timeSupport",$row["TimeSupport"]);
         $retVal .= "</timeScale>";
-        $retVal .= "<speciation>{$row[18]}</speciation>";
+        $retVal .= to_xml("speciation", $row["Speciation"]);
         $retVal .= "</variable>";
-        $retVal .= "<valueCount>{$row[19]}</valueCount>";
-        $retVal .= '<variableTimeInterval xsi:type="TimeIntervalType">';
-        $beginTime = str_replace(" ", "T", $row[20]); //1995-01-02T06:00:00
-        $endTime = str_replace(" ", "T", $row[21]); //2011-10-01T07:00:00
-        $beginTimeUTC = str_replace(" ", "T", $row[22]); //1995-01-02T12:00:00
-        $endTimeUTC = str_replace(" ", "T", $row[23]); //2011-10-01T12:00:00
-        $retVal .= "<beginDateTime>" . $beginTime . "</beginDateTime>";
-        $retVal .= "<endDateTime>" . $endTime . "</endDateTime>";
-        $retVal .= "<beginDateTimeUTC>" . $beginTimeUTC . "</beginDateTimeUTC>";
-        $retVal .= "<endDateTimeUTC>" . $endTimeUTC . "</endDateTimeUTC>";
+        $retVal .= to_xml("valueCount", $row["ValueCount"]);
+        $retVal .= "<variableTimeInterval xsi:type=\"TimeIntervalType\">";     
+        $retVal .= to_xml("beginDateTime", $beginTime);
+        $retVal .= to_xml("endDateTime", $endTime);
+        $retVal .= to_xml("beginDateTimeUTC", $beginTimeUTC);
+        $retVal .= to_xml("endDateTimeUTC", $endTimeUTC);
         $retVal .= "</variableTimeInterval>";
-        $retVal .= '<method methodID="' . $row[31] . '">';
-        $retVal .= "<methodCode>" . $row[31] . "</methodCode>";
-        $retVal .= "<methodDescription>" . $row[32] . "</methodDescription>";
-        $retVal .= "<methodLink>" . $row[33] . "</methodLink>";
+        $retVal .= "<method " . to_attribute(methodID, $row["MethodID"]) . ">";
+        $retVal .= to_xml("methodCode", $row["methodCode"]);
+        $retVal .= to_xml("methodDescription", $row["methodDescription"]);
+        $retVal .= to_xml("methodLink", $row["methodLink"]);
         $retVal .= "</method>";
-        $retVal .= "<source sourceID=\"{$row[24]}\">";
-        $retVal .= utf8_encode("<organization>{$row[25]}</organization>");
-        $retVal .= "<sourceDescription>{$row[26]}</sourceDescription>";
-        $retVal .= "<citation>{$row[27]}</citation>";
+        $retVal .= "<source " . to_attribute("sourceID", $row["SourceID"]) . ">";
+        $retVal .= to_xml("organization", $row["Organization"]);
+        $retVal .= to_xml("sourceDescription", $row["SourceDescription"]);
+        $retVal .= to_xml("citation", $row["Citation"]);
         $retVal .= "</source>";
-        $retVal .= "<qualityControlLevel qualityControlLevelID=\"{$row[28]}\">";
-        $retVal .= "<qualityControlLevelCode>{$row[29]}</qualityControlLevelCode>";
-        $retVal .= "<definition>{$row[30]}</definition>";
+        $retVal .= "<qualityControlLevel " . to_attribute("qualityControlLevelID=", $row["QualityControlLevelID"]) . ">";
+        $retVal .= to_xml("qualityControlLevelCode", $row["QualityControlLevelCode"]);
+        $retVal .= to_xml("definition", $row["Definition"]);
         $retVal .= "</qualityControlLevel>";
         $retVal .= "</series>";
     }
@@ -109,15 +138,18 @@ function db_GetSitesByQuery($query_text, $siteTag = "siteInfo", $siteTagType = "
     while ($row = mysql_fetch_row($result)) {
         $retVal = '';
         $retVal .= "<" . $fullSiteTag . ">";
-        $retVal .= '<siteName>'. $row[0] . '</siteName>';
-        $retVal .= '<siteCode network="' . SERVICE_CODE . '">' . $row[2] . "</siteCode>";
-        $retVal .= '<geoLocation><geogLocation xsi:type="LatLonPointType">';
-        $retVal .= "<latitude>{$row[3]}</latitude><longitude>{$row[4]}</longitude></geogLocation>";
+        $retVal .= to_xml("siteName", $row["SiteName"]);
+        $retVal .= '<siteCode network="' . SERVICE_CODE . '">' . $row["SiteCode"] . "</siteCode>";
+        $retVal .= "<geoLocation>";
+		$retVal .="<geogLocation xsi:type=\"LatLonPointType\">";
+        $retVal .= to_xml("latitude", $row["Latitude"]);
+		$retVal .= to_xml("longitude", $row["Longitude"]);
+		$retVal .= "</geogLocation>";
 
         //local projection info (optional)
-        $localProjectionID = $row[5];
-        $localX = $row[6];
-        $localY = $row[7];
+        $localProjectionID = $row["LocalProjectionID"];
+        $localX = $row["LocalX"];
+        $localY = $row["LocalY"];
         if ($localProjectionID != '' and $localX != '' and $localY != '') {
             $retVal .= '<localSiteXY projectionInformation="' . $localProjectionID . '" >';
             $retVal .= '<X>' . $localX . '</X><Y>' . $localY . '</Y></localSiteXY>';
@@ -125,17 +157,15 @@ function db_GetSitesByQuery($query_text, $siteTag = "siteInfo", $siteTagType = "
 
         $retVal .= "</geoLocation>";
 
-        $elevation_m = $row[8];
+        $elevation_m = $row["Elevation_m"];
         if ($elevation_m != '') {
-            $retVal .= "<elevation_m>{$elevation_m}</elevation_m>";
+            $retVal .= to_xml("elevation_m", $elevation_m);
         }
-        $verticalDatum = $row[9];
+        $verticalDatum = $row["VerticalDatum"];
         if ($verticalDatum != '') {
-            $retVal .= "<verticalDatum>{$verticalDatum}</verticalDatum>";
+            $retVal .= to_xml("verticalDatum", $verticalDatum);
         }
-        $retVal .= '<note type="custom" title="my note">MyHydroServer</note>';
         $retVal .= "</" . $siteTag . ">";
-        $siteArray[$siteIndex] = utf8_encode($retVal);
         $siteIndex++;
     }
     return $siteArray;
@@ -255,6 +285,35 @@ function db_GetVariableCodesBySite($shortSiteCode) {
         $nr++;
     }
     return $retVal;
+}
+
+function variableFromDataRow($row) {
+		$retval = "<variable>";
+		$retval .= "<variableCode vocabulary=" . to_attribute($serviceCode) . "default=\"true\"" . to_attribute($variableID) . ">";
+		$retval .= to_xml("variableName",$variableName);
+        $retVal .= to_xml("valueType", $valueType);
+        $retVal .= to_xml("dataType", $row["DataType"]);
+        $retVal .= to_xml("generalCategory", $row["GeneralCategory"]);
+        $retVal .= to_xml("sampleMedium", $row["SampleMedium"]);
+        $retVal .= "<unit>";
+		$retVal .= to_xml("unitName",$row["VariableUnitsName"]);
+		$retVal .= to_xml("unitType", $row["VariableUnitsType"]);
+        $retVal .= to_xml("unitAbbreviation", $row["VariableUnitsAbbreviation"]);
+		$retVal .= to_xml("unitCode", $row["VariableUnitsID"]);
+		$retVal .= "</unit>";
+        $retVal .= to_xml("noDataValue", $row["NoDataValue"]);
+        $retVal .= "<timeScale " . to_attribute("isRegular", $isRegular) . ">";
+        $retVal .= "<unit>";
+		$retVal .= to_xml("unitName", $row["TimeUnitsName"]);
+		$retVal .= to_xml("unitType", $row["TimeUnitsType"]);
+        $retVal .= to_xml("unitAbbreviation", $row["TimeUnitsAbbreviation"]);
+		$retVal .= to_xml("unitCode", $row["TimeUnitsID"]);
+		$retVal .= "</unit>";
+        $retVal .= to_xml("timeSupport",$row["TimeSupport"]);
+        $retVal .= "</timeScale>";
+        $retVal .= to_xml("speciation", $row["Speciation"]);
+        $retVal .= "</variable>";
+		return $retVal;
 }
 
 function db_GetVariableByCode($shortvariablecode = NULL)
