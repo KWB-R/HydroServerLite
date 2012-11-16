@@ -2,6 +2,7 @@
 
 require_once 'database_connection.php';
 
+// this function is used to convert table name to lowercase
 function get_table_name($uppercase_table_name) {
     return '`'. strtolower($uppercase_table_name) .'`';
 }
