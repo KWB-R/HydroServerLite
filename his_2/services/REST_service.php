@@ -22,7 +22,7 @@ function write_REST_response($method)
             } else {
                 header("Content-type: text/xml");
                 echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
-                echo "<string>" . htmlspecialchars(wof_GetSiteInfo($authToken, $site)) . "</string>";
+                echo "<string>" . htmlspecialchars(wof_GetSiteInfo_REST($authToken, $site)) . "</string>";
             }
         }
         exit;

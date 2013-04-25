@@ -158,14 +158,38 @@ function wof_GetSiteInfoByCode($sitecode, $includeSeriesCatalog) {
 }
 
 function wof_GetSiteInfo($authToken, $fullSiteCode) {
-  $retVal = '<sitesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/">
-  <queryInfo><creationTime>'. date('c') . '</creationTime><criteria MethodCalled="GetSiteInfo"><parameter name="site" value="'. $fullSiteCode . '" /></criteria></queryInfo>';
+  $retVal = '<sitesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/">';
+  $retVal .= '<queryInfo><creationTime>';
+  $retVal .= date('c');
+  $retVal .= '</creationTime><criteria MethodCalled="GetSiteInfo"><parameter name="site" value="';
+  $retVal .= $fullSiteCode;
+  $retVal .= '" /></criteria></queryInfo>';
   
   $split = explode(":", $fullSiteCode);
   $shortcode = $split[1];
   
   $retVal .= "<site>";
-  $retVal .= db_GetSiteByCode($shortcode);
+  $retVal .= db_GetSiteByCode($shortcode, "siteInfo", "");
+  $retVal .= db_GetSeriesCatalog($shortcode);
+  $retVal .= '</site>';
+  $retVal .= '</sitesResponse>';
+  return $retVal;
+}
+
+function wof_GetSiteInfo_REST($authToken, $fullSiteCode) {
+  $retVal = '<sitesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/">';
+  $retVal .= '<queryInfo><creationTime>';
+  $retVal .= date('c');
+  $retVal .= '</creationTime><criteria MethodCalled="GetSiteInfo"><parameter name="site" value="';
+  $retVal .= $fullSiteCode;
+  $retVal .= '" /></criteria></queryInfo>';
+  
+  $split = explode(":", $fullSiteCode);
+  $shortcode = $split[1];
+  
+  $retVal .= "<site>";
+  $xsi = 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/';
+  $retVal .= db_GetSiteByCode($shortcode, "siteInfo", $xsi);
   $retVal .=  db_GetSeriesCatalog($shortcode);
   $retVal .= '</site>';
   $retVal .= '</sitesResponse>';
