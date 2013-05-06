@@ -154,8 +154,8 @@ $sql7 ="INSERT INTO `datavalues`(`DataValue`, `ValueAccuracy`, `LocalDateTime`, 
 
 $result7 = @mysql_query($sql7,$connection)or die(mysql_error());
 
+//updating the series catalog
 require_once 'update_series_catalog_function.php';
-
 update_series_catalog($SiteID, $VariableID, $MethodID, $SourceID, $QualityControlLevelID);
 
 if($result7==1)

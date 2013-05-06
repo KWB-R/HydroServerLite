@@ -61,6 +61,7 @@ require_once 'db_config.php';
 //add the country column if required
 $result_country = @mysql_query("SHOW COLUMNS FROM sites") or die(mysql_error());
 $found_country_column = false;
+$result5 = mysql_num_rows($result_country);
 if ($result5) {
   while($row5 = mysql_fetch_array($result_country, MYSQL_ASSOC)){
     if ($row5['Field'] == 'country') {

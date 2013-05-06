@@ -14,19 +14,15 @@ while (($data = fgetcsv($handle, 5000, ",")) !== FALSE) {
 	
 //Checking for Header and preventing further processing if it is a header
 
-if($flag==0)
-{
-//First Run
-if(($data[0]!="LocalDateTime")||($data[1]!="DataValue"))	
-{
-$msg = "Invalid column headings. The headings should be in the following format: 'LocalDateTime,DataValue'";
-$tracker=0;		
+if($flag==0) {
+  //First Run
+  if(($data[0]!="LocalDateTime")||($data[1]!="DataValue")) {
+  $msg = $data[0]+"Invalid column headings. The headings should be in the following format: 'LocalDateTime,DataValue'";
+  $tracker=0;		
 		break;
-}
-$flag=1;
-}
-else
-{
+  }
+  $flag=1;
+} else {
 //Now To Check for the date time parameter
 
 //Check for characters in the date
