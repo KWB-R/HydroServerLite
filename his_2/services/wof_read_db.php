@@ -376,9 +376,35 @@ function db_GetValues($siteCode, $variableCode, $beginTime, $endTime)
         return db_GetValues_OneSeries($row["SiteID"], $row["VariableID"], $row["MethodID"], $row["SourceID"], $row["QualityControlLevelID"], $beginTime, $endTime);
     }
     else {
-
-        $row = mysql_fetch_assoc($result);
-        return db_GetValues_MultipleSeries($row["SiteID"], $row["VariableID"], $beginTime, $endTime);
+		$row = mysql_fetch_assoc($result);
+		$siteID = $row["SiteID"];
+		$variableID = $row["VariableID"];
+		
+		$method_array[0] = $row["MethodID"];
+		$source_array[0] = $row["SourceID"];
+		$qc_array[0] = $row["QualityControlLevelID"];
+		$method_index = 0;
+		$source_index = 0;
+		$qc_index = 0;
+		
+        while($row = mysql_fetch_assoc($result)) {
+		  $last_methodID = $method_array[$method_index];
+		  if ($row["MethodID"] != $last_methodID) {
+		    $method_index++;
+			$method_array[$method_index] = $row["MethodID"];
+		  }
+		  $last_sourceID = $source_array[$source_index];
+		  if ($row["SourceID"] != $last_sourceID) {
+		    $source_index++;
+			$source_array[$source_index] = $row["SourceID"];
+		  }
+		  $last_qcID = $qc_array[$qc_index];
+		  if ($row["QualityControlLevelID"] != $last_qcID) {
+		    $qc_index++;
+			$qc_array[$qc_index] = $row["QualityControlLevelID"];
+		  }
+		}
+        return db_GetValues_MultipleSeries($siteID, $variableID, $method_array, $source_array, $qc_array, $beginTime, $endTime);
     }
 }
 
@@ -388,6 +414,7 @@ function db_GetValues_OneSeries($siteID, $variableID, $methodID, $sourceID, $qcI
 	$queryval = 'SELECT LocalDateTime, UTCOffset, DateTimeUTC, DataValue FROM ' . $data_values_table . ' WHERE ';
     $queryval .= "SiteID={$siteID} AND VariableID={$variableID} AND MethodID={$methodID} AND SourceID={$sourceID} AND QualityControlLevelID={$qcID}";
     $queryval .= " AND LocalDateTime >= '" . $beginTime . "' AND LocalDateTime <= '" . $endTime . "'";
+	$queryval .= " ORDER BY LocalDateTime";
 
     $result = mysql_query($queryval);
     if (!$result) {
@@ -413,7 +440,7 @@ function db_GetValues_OneSeries($siteID, $variableID, $methodID, $sourceID, $qcI
     return $retVal;
 }
 
-function db_GetValues_MultipleSeries($siteID, $variableID, $beginTime, $endTime)
+function db_GetValues_MultipleSeries($siteID, $variableID, $method_array, $source_array, $qc_array, $beginTime, $endTime)
 {
     $queryval = "SELECT LocalDateTime, UTCOffset, DateTimeUTC, MethodID, SourceID, QualityControlLevelID, DataValue FROM " . get_table_name('DataValues') . ' WHERE ';
     $queryval .= "SiteID={$siteID} AND VariableID={$variableID}";
@@ -434,9 +461,22 @@ function db_GetValues_MultipleSeries($siteID, $variableID, $beginTime, $endTime)
         $retVal .= ' qualityControlLevelCode="' . $row[5] . '" ';
         $retVal .= ">{$row[6]}</value>";
     }
+	
+	foreach ($qc_array as $qcID) {
+        $retVal .= db_GetQualityControlLevelByID($qcID);
+    }
+	foreach ($method_array as $methodID) {
+        $retVal .= db_GetMethodByID($methodID);
+    }
+	foreach ($source_array as $sourceID) {
+        $retVal .= db_GetSourceByID($sourceID);
+    }
 
     $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
-
+    
+	//add more vals!
+	
+	
     $retVal .= "</values>";
     return $retVal;
 }

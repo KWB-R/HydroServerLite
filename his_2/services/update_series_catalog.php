@@ -1,11 +1,14 @@
 <?php
 
 require_once 'database_connection.php';
-require_once 'table_names.php';
 
 echo 'Testing UpdateSeriesCatalog!';
 db_UpdateSeriesCatalog_All();
 //db_UpdateSeriesCatalog(24, 12, 4, 6, 0);
+
+function get_table_name($uppercase_table_name) {
+    return '`'. strtolower($uppercase_table_name) .'`';
+}
 
 // This function updates all entries in the 
 // SeriesCatalog by extracting the aggregate values
