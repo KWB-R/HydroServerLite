@@ -72,8 +72,8 @@ if (!function_exists('db_GetVariableByCode')) {
 		$ci = &get_instance();
     	$ci->db->select("VariableID, VariableCode, VariableName, ValueType, DataType, GeneralCategory, SampleMedium,
 u1.UnitsName AS \"VariableUnitsName\", u1.UnitsType AS \"VariableUnitsType\", u1.UnitsAbbreviation AS \"VariableUnitsAbbreviation\", VariableUnitsID, NoDataValue, IsRegular, u2.UnitsName AS \"TimeUnitsName\", u2.UnitsType AS \"TimeUnitsType\", u2.UnitsAbbreviation AS \"TimeUnitsAbbreviation\", TimeUnitsID, TimeSupport, Speciation");
-    	$ci->db->join("Units u1","v.VariableUnitsID = u1.UnitsID","left");
-    	$ci->db->join("Units u2","v.TimeUnitsID = u2.UnitsID","left");
+    	$ci->db->join("units u1","v.VariableUnitsID = u1.UnitsID","left");
+    	$ci->db->join("units u2","v.TimeUnitsID = u2.UnitsID","left");
 
 		if (isset($shortvariablecode)) {
 			$ci->db->where("VariableCode",$shortvariablecode);
@@ -81,14 +81,14 @@ u1.UnitsName AS \"VariableUnitsName\", u1.UnitsType AS \"VariableUnitsType\", u1
 
 		$retVal = '';
 
-  		$vars = $ci->db->get("Variables v");
+  		$vars = $ci->db->get("variables v");
 
 		if ($vars->num_rows() > 0) {
 			foreach($vars->result_array() as $row) {
 				$retVal .= variableFromDataRow($row);
 			}
 		} else {
-			die("<p>Error in executing the SQL query " . $query_text . ": " .
+			die("<p>Error in executing the SQL query \"db_GetVariableByCode\": " .
 	            mysql_error() . "</p>");
 		}
 
@@ -148,5 +148,118 @@ if (!function_exists('to_attribute')) {
 
     function to_attribute($attribute_name, $value) {
    		return "$attribute_name=\"$value\"";
+	}
+}
+
+if (!function_exists('GetSites')) {
+
+    function GetSites() {
+  		wof_start();
+  		echo '<GetSitesResponse xmlns="http://www.cuahsi.org/his/1.1/ws/"><GetSitesResult>';
+  		echo htmlspecialchars(wof_GetSites());
+  		echo '</GetSitesResult></GetSitesResponse>';
+  		wof_finish();
+	}
+}
+
+if (!function_exists('wof_GetSites')) {
+
+    function wof_GetSites() {
+  		$retVal = '<sitesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/">';
+  		$retVal .= wof_queryInfo_GetSites();
+  		$retVal .= db_GetSites();  
+  		$retVal .= '</sitesResponse>';
+  		return $retVal;
+	}
+}
+
+if (!function_exists('wof_queryInfo_GetSites')) {
+
+    function wof_queryInfo_GetSites($site = null) {
+  		$retVal = '<queryInfo><creationTime>' . date('c') . '</creationTime>';
+  		$retVal .= '<criteria MethodCalled="GetSites">';
+  		$retVal .= '<parameter name="site" value="ALL SITES" /></criteria></queryInfo>';
+  		return $retVal;
+	}
+}
+
+if (!function_exists('db_GetSites')) {
+
+    function db_GetSites() {
+    	$sitesArray = query_GetAllSites();
+    	$retVal = '';
+
+    	foreach ($sitesArray as $site) {
+        	$retVal .= "<site>";
+        	$retVal .= $site;
+        	$retVal .= "</site>";
+    	}
+    	return $retVal;
+	}
+}
+
+if (!function_exists('query_GetAllSites')) {
+
+    function query_GetAllSites() {
+		$ci = &get_instance();
+		$ci->db->distinct();
+    	$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments");
+    	$ci->db->join("seriescatalog sc","s.SiteID = sc.SiteID");
+    	$ci->db->join("spatialreferences sr","s.LocalProjectionID = sr.SpatialReferenceID","left");
+
+		if (isset($_GET["site"])) {
+			$siteCode = str_replace(SERVICE_CODE.":","",$_GET["site"]);
+			$ci->db->where("s.SiteCode",$siteCode);
+		}
+
+  		$sites = $ci->db->get("sites s");
+
+		$siteArray[0] = '';
+
+		if ($sites->num_rows() > 0) {
+	    	$siteIndex = 0;
+
+	    	$fullSiteTag = "siteInfo";
+
+			foreach($sites->result_array() as $row) {
+	        	$retVal = '';
+	        	$retVal .= "<" . $fullSiteTag . ">";
+	        	$retVal .= to_xml("siteName", $row["SiteName"]);
+	        	$retVal .= '<siteCode network="' . SERVICE_CODE . '">' . $row["SiteCode"] . "</siteCode>";
+	        	$retVal .= "<geoLocation>";
+				$retVal .="<geogLocation xsi:type=\"LatLonPointType\">";
+	        	$retVal .= to_xml("latitude", $row["Latitude"]);
+				$retVal .= to_xml("longitude", $row["Longitude"]);
+				$retVal .= "</geogLocation>";
+	
+	        	// local projection info (optional)
+	        	$localProjectionID = $row["LocalProjectionID"];
+	        	$localX = $row["LocalX"];
+	        	$localY = $row["LocalY"];
+	        	if ($localProjectionID != '' and $localX != '' and $localY != '') {
+	            	$retVal .= '<localSiteXY projectionInformation="' . $localProjectionID . '" >';
+	            	$retVal .= '<X>' . $localX . '</X><Y>' . $localY . '</Y></localSiteXY>';
+	        	}
+	
+	        	$retVal .= "</geoLocation>";
+	
+	        	$elevation_m = $row["Elevation_m"];
+	        	if ($elevation_m != '') {
+	            	$retVal .= to_xml("elevation_m", $elevation_m);
+	        	}
+	        	$verticalDatum = $row["VerticalDatum"];
+	        	if ($verticalDatum != '') {
+	            	$retVal .= to_xml("verticalDatum", $verticalDatum);
+	        	}
+	        	$retVal .= "</siteInfo>";       
+				$siteArray[$siteIndex] = $retVal;
+				$siteIndex++;
+			}
+		} else {
+			die("<p>Error in executing the SQL query \"query_GetAllSites\": " .
+	            mysql_error() . "</p>");
+		}
+
+    	return $siteArray;
 	}
 }
