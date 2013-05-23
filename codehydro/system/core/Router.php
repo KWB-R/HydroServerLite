@@ -268,11 +268,6 @@ class CI_Router {
 			return $segments;
 		}
 
-		//replace url for service
-		if (strpos($segments[0],"_1_1.asmx") >= 0) {
-			$segments[0] = str_replace("_1_1.asmx","",$segments[0]);
-		}
-
 		// Does the requested controller exist in the root folder?
 		if (file_exists(APPPATH.'controllers/'.$segments[0].'.php'))
 		{

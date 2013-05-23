@@ -39,6 +39,42 @@
 */
 
 $route['default_controller'] = "welcome";
+
+// REST routing
+$route["services/cuahsi_1_1.asmx"] 							= "services/cuahsi";
+$route["services/cuahsi_1_1.asmx/GetSites"] 				= "services/cuahsi/GetSites";
+$route["services/cuahsi_1_1.asmx/GetSiteInfo"] 				= "services/cuahsi/GetSiteInfo";
+$route["services/cuahsi_1_1.asmx/GetSiteInfoMultpleObject"] = "services/cuahsi/GetSiteInfoMultpleObject";
+$route["services/cuahsi_1_1.asmx/GetSiteInfoObject"] 		= "services/cuahsi/GetSiteInfoObject";
+$route["services/cuahsi_1_1.asmx/GetSitesObject"] 			= "services/cuahsi/GetSitesObject";
+$route["services/cuahsi_1_1.asmx/GetSitesByBoxObject"] 		= "services/cuahsi/GetSitesByBoxObject";
+$route["services/cuahsi_1_1.asmx/GetValues"] 				= "services/cuahsi/GetValues";
+$route["services/cuahsi_1_1.asmx/GetValuesObject"] 			= "services/cuahsi/GetValuesObject";
+$route["services/cuahsi_1_1.asmx/GetValuesForASiteObject"] 	= "services/cuahsi/GetValuesForASiteObject";
+$route["services/cuahsi_1_1.asmx/GetVariables"] 			= "services/cuahsi/GetVariables";
+$route["services/cuahsi_1_1.asmx/GetVariablesObject"] 		= "services/cuahsi/GetVariablesObject";
+$route["services/cuahsi_1_1.asmx/GetVariableInfo"] 			= "services/cuahsi/GetVariableInfo";
+$route["services/cuahsi_1_1.asmx/GetVariableInfoObject"] 	= "services/cuahsi/GetVariableInfoObject";
+// end of REST routing
+
+// SOAP routing
+$route["services/cuahsi_1_1.php"] 							= "services/cuahsi";
+$route["services/cuahsi_1_1.php/GetSites"] 					= "services/cuahsi/GetSites";
+$route["services/cuahsi_1_1.php/GetSiteInfo"] 				= "services/cuahsi/GetSiteInfo";
+$route["services/cuahsi_1_1.php/GetSiteInfoMultpleObject"] 	= "services/cuahsi/GetSiteInfoMultpleObject";
+$route["services/cuahsi_1_1.php/GetSiteInfoObject"] 		= "services/cuahsi/GetSiteInfoObject";
+$route["services/cuahsi_1_1.php/GetSitesObject"] 			= "services/cuahsi/GetSitesObject";
+$route["services/cuahsi_1_1.php/GetSitesByBoxObject"] 		= "services/cuahsi/GetSitesByBoxObject";
+$route["services/cuahsi_1_1.php/GetValues"] 				= "services/cuahsi/GetValues";
+$route["services/cuahsi_1_1.php/GetValuesObject"] 			= "services/cuahsi/GetValuesObject";
+$route["services/cuahsi_1_1.php/GetValuesForASiteObject"] 	= "services/cuahsi/GetValuesForASiteObject";
+$route["services/cuahsi_1_1.php/GetVariables"] 				= "services/cuahsi/GetVariables";
+$route["services/cuahsi_1_1.php/GetVariablesObject"] 		= "services/cuahsi/GetVariablesObject";
+$route["services/cuahsi_1_1.php/GetVariableInfo"] 			= "services/cuahsi/GetVariableInfo";
+$route["services/cuahsi_1_1.php/GetVariableInfoObject"] 	= "services/cuahsi/GetVariableInfoObject";
+
+// end of SOAP routing
+
 $route['404_override'] = '';
 
 
