@@ -1495,17 +1495,13 @@ if (!function_exists('db_GetValues')) {
 	    $ci = &get_instance();
 
 	    //first get the metadata
-		$ci->db->select("SiteID, VariableID, MethodID, SourceID, QualityControlLevelID");
-		$ci->db->where("SiteCode",$siteCode);
-		$ci->db->where("VariableCode",$variableCode);
+		// implement sql query (because of complex query date range that too difficult if still using active record) with escape string to avoid from SQL injection
+		$querymeta = "SELECT SiteID, VariableID, MethodID, SourceID, QualityControlLevelID FROM " . get_table_name('SeriesCatalog');
+    	$querymeta .= " WHERE SiteCode = ? AND VariableCode = ? AND ";
+		$querymeta .= "( (BeginDateTime <= ? AND EndDateTime >= ? ) OR (BeginDateTime >= ? AND BeginDateTime <= ? ) OR (EndDateTime >= ? AND EndDateTime <= ?) )";
+		$arr_param = array($siteCode,$variableCode,$beginTime,$endTime,$beginTime,$endTime,$beginTime,$endTime);
 
-		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
-			$ci->db->where("(BeginDateTime <= '{$beginTime}' AND EndDateTime >= '{$endTime}' )",NULL,FALSE);
-			$ci->db->or_where("(BeginDateTime >= '{$beginTime}' AND BeginDateTime <= '{$endTime}' )",NULL,FALSE);
-			$ci->db->or_where("(EndDateTime >= '{$beginTime}' AND EndDateTime <= '{$endTime}')",NULL,FALSE);
-	    }
-		
-	    $result = $ci->db->get(get_table_name('SeriesCatalog'));
+		$result = $ci->db->query($querymeta,$arr_param);
 	
 	    if (!$result) {
 	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
