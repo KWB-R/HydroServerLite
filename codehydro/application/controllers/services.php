@@ -3,6 +3,15 @@
 class Services extends CI_Controller {
 
 	/**
+	 * Index page
+	 *
+	 */
+	public function index()
+	{
+		$this->load->view("index");
+	}
+
+	/**
 	 * Implement cuahsi service
 	 *
 	 */
@@ -10,7 +19,7 @@ class Services extends CI_Controller {
 	{
 		$this->load->helper("hydroservices");
 		RunService();
-  		exit;
+		exit;
 	}
 
 	/**
@@ -37,7 +46,7 @@ class Services extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>SiteCode</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".SERVICE_CODE.":".get_random_site()."\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode. Remove Site Code by click 'x' button to show metadata for all sites. To show multiple sites, enter a list of codes separated by comma (,)\" /> 
+							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".$this->config->item('service_code').":".get_random_site()."\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode. Remove Site Code by click 'x' button to show metadata for all sites. To show multiple sites, enter a list of codes separated by comma (,)\" /> 
 						  		<a onclick=\"javascript:remove(this);\" class=\"remove\">x</a>
 						  	</div>
 						</div>";
@@ -47,7 +56,7 @@ class Services extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>SiteCode</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".SERVICE_CODE.":".get_random_site()."\" class=\"must\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode.\" />
+							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".$this->config->item('service_code').":".get_random_site()."\" class=\"must\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode.\" />
 						  	</div>
 						</div>";
 		          	break;
@@ -56,7 +65,7 @@ class Services extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>SiteCode</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".SERVICE_CODE.":".get_random_site()."\" class=\"must\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode. To show multiple sites, enter a list of codes separated by comma (,)\" />
+							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".$this->config->item('service_code').":".get_random_site()."\" class=\"must\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode. To show multiple sites, enter a list of codes separated by comma (,)\" />
 						  	</div>
 						</div>";
 		          	break;
@@ -65,7 +74,7 @@ class Services extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>SiteCode</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".SERVICE_CODE.":".get_random_site()."\" class=\"must\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode.\" />
+							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".$this->config->item('service_code').":".get_random_site()."\" class=\"must\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode.\" />
 						  	</div>
 						</div>";
 		          	break;
@@ -74,7 +83,7 @@ class Services extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>SiteCode</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".SERVICE_CODE.":".get_random_site()."\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode. Remove Site Code by click 'x' button to show metadata for all sites. To show multiple sites, enter a list of codes separated by comma (,)\" /> 
+							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".$this->config->item('service_code').":".get_random_site()."\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode. Remove Site Code by click 'x' button to show metadata for all sites. To show multiple sites, enter a list of codes separated by comma (,)\" /> 
 						  		<a onclick=\"javascript:remove(this);\" class=\"remove\">x</a>
 						  	</div>
 						</div>";
@@ -118,13 +127,13 @@ class Services extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>Location</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"location\" name=\"location\" value=\"".SERVICE_CODE.":".get_random_site()."\" class=\"must\" title=\"The location in the format: network:site_code. For example: KALA:SiteCode.\" />
+							  	<input type=\"text\" id=\"location\" name=\"location\" value=\"".$this->config->item('service_code').":".get_random_site()."\" class=\"must\" title=\"The location in the format: network:site_code. For example: KALA:SiteCode.\" />
 						  	</div>
 						</div>
 					  	<div class=\"param_container\">
 						  	<label>Variable</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"variable\" name=\"variable\" value=\"".SERVICE_CODE.":".get_random_variable()."\" class=\"must\" title=\"The variable in the format: network:variable_code. For example: KALA:IDCS-5-Avg.\" />
+							  	<input type=\"text\" id=\"variable\" name=\"variable\" value=\"".$this->config->item('service_code').":".get_random_variable()."\" class=\"must\" title=\"The variable in the format: network:variable_code. For example: KALA:IDCS-5-Avg.\" />
 						  	</div>
 					  	</div>
 					  	<div class=\"param_container\">
@@ -147,13 +156,13 @@ class Services extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>Location</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"location\" name=\"location\" value=\"".SERVICE_CODE.":".get_random_site()."\" class=\"must\" title=\"The location in the format: network:site_code. For example: KALA:SiteCode.\" />
+							  	<input type=\"text\" id=\"location\" name=\"location\" value=\"".$this->config->item('service_code').":".get_random_site()."\" class=\"must\" title=\"The location in the format: network:site_code. For example: KALA:SiteCode.\" />
 						  	</div>
 						</div>
 					  	<div class=\"param_container\">
 						  	<label>Variable</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"variable\" name=\"variable\" value=\"".SERVICE_CODE.":".get_random_variable()."\" class=\"must\" title=\"The variable in the format: network:variable_code. For example: KALA:IDCS-5-Avg.\" />
+							  	<input type=\"text\" id=\"variable\" name=\"variable\" value=\"".$this->config->item('service_code').":".get_random_variable()."\" class=\"must\" title=\"The variable in the format: network:variable_code. For example: KALA:IDCS-5-Avg.\" />
 						  	</div>
 					  	</div>
 					  	<div class=\"param_container\">
@@ -176,7 +185,7 @@ class Services extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>SiteCode</label>
 					  		<div class=\"content\">
-							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".SERVICE_CODE.":".get_random_site()."\" class=\"must\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode.\" />
+							  	<input type=\"text\" id=\"site\" name=\"site\" value=\"".$this->config->item('service_code').":".get_random_site()."\" class=\"must\" title=\"The site code in the format: network:site_code. For example: KALA:SiteCode.\" />
 						  	</div>
 						</div>
 					  	<div class=\"param_container\">

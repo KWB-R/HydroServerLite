@@ -99,7 +99,7 @@
 	
 
 	<span id="Span3">
-		<p class="intro">Click <a href="cuahsi_1_1.php">here</a> for a complete list of operations.</p>
+		<p class="intro">Click <a href="cuahsi_1_1.asmx">here</a> for a complete list of operations.</p>
 		<h2>GetSitesByBoxObject</h2>
 		<p class="intro">Given a site number, this method returns the site's metadata. Send the site code in this format: 'NetworkName:SiteCode'</p>
 		<div id="Span4">
@@ -115,18 +115,18 @@
 			        <textarea	id="txasoaptemplaterequest" style="background-color:#e5e5cc;width:80em;height:40em;font-family:monospace;white-space: pre;">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
   &lt;soap:Body&gt;
-    &lt;GetSitesByBoxObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
-      &lt;west&gt;float&lt;/west&gt;
-      &lt;south&gt;float&lt;/south&gt;
-      &lt;east&gt;float&lt;/east&gt;
-      &lt;north&gt;float&lt;/north&gt;
-      &lt;IncludeSeries&gt;boolean&lt;/IncludeSeries&gt;
-      &lt;authToken&gt;string&lt;/authToken&gt;
-    &lt;/GetSitesByBoxObject&gt;
+    &lt;tns:GetSitesByBoxObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
+      &lt;tns:west&gt;float&lt;/tns:west&gt;
+      &lt;tns:south&gt;float&lt;/tns:south&gt;
+      &lt;tns:east&gt;float&lt;/tns:east&gt;
+      &lt;tns:north&gt;float&lt;/tns:north&gt;
+      &lt;tns:IncludeSeries&gt;boolean&lt;/tns:IncludeSeries&gt;
+      &lt;tns:authToken&gt;string&lt;/tns:authToken&gt;
+    &lt;/tns:GetSitesByBoxObject&gt;
   &lt;/soap:Body&gt;
 &lt;/soap:Envelope&gt;</textarea>
 			        <div id="posthref" style="font-size:1.1em;color:#000000;margin-top:10px;margin-bottom:10px;">
-			             <a	href="javascript:SendSoapRequest_onclick(document.getElementById('txasoaptemplaterequest').innerText,	'GetSitesByBoxObject', './cuahsi_1_1.php');"	>Post template...</a>
+			             <a	href="javascript:SendSoapRequest_onclick(document.getElementById('txasoaptemplaterequest').innerText,	'GetSitesByBoxObject', './cuahsi_1_1.asmx');"	>Post template...</a>
 			        
 			        </div>
                     <div id="note" style="font-size:0.8em;color:#ff0000;margin-top:10px;margin-bottom:10px;">
