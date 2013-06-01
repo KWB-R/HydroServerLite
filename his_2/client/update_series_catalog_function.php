@@ -9,14 +9,17 @@ function update_series_catalog($siteID, $variableID, $methodID, $sourceID, $qcID
   //check for an existing seriesID
   $series_id = db_find_seriesid($siteID, $variableID, $methodID, $sourceID, $qcID);
   if ($series_id > 0) {
-    $series_id_exists = 2;
+    $series_id_exists = 2; //complete series exists
   }
-  else {
-  	$series_id  = db_find_seriesid2($siteID, $sourceID);
-  	if ($series_id > 0) {
-  		$series_id_exists = 1;
-  	}
+  if ($series_id == 0) {
+    //special case: find the existing row with SiteID, SourceID
+	$series_id  = db_find_seriesid2($siteID, $sourceID);
   }
+  if ($series_id == 0) {
+    $series_id_exists = 0; //incomplete series exists
+  } else {
+    $series_id_exists = 1;
+  }  
   
   if ($series_id_exists == 0) { // INSERT FULL ENTRY to SERIESCATALOG
   	
@@ -24,9 +27,9 @@ function update_series_catalog($siteID, $variableID, $methodID, $sourceID, $qcID
   	$long_query =
   	"SELECT dv.SiteID, s.SiteCode, s.SiteName, s.SiteType,
   	dv.VariableID, v.VariableCode, v.VariableName, v.Speciation,
-  	v.VariableUnitsID, vu.UnitsName,
+  	v.VariableUnitsID, vu.UnitsName AS \"VariableUnitsName\",
   	v.SampleMedium, v.ValueType, v.TimeSupport,
-  	v.TimeUnitsID, tu.UnitsName,
+  	v.TimeUnitsID, tu.UnitsName AS \"TimeUnitsName\",
   	v.DataType, v.GeneralCategory,
   	m.MethodID, m.MethodDescription,
   	sou.SourceID, sou.Organization, sou.SourceDescription, sou.Citation,
@@ -289,7 +292,7 @@ function db_find_seriesid($siteID, $variableID, $methodID, $sourceID, $qcID) {
 // find the SeriesID if the siteID and sourceID are known
 function db_find_seriesid2($siteID, $sourceID) {
 	$query_text = "SELECT SeriesID FROM seriescatalog WHERE
-	SiteID=$siteID AND SourceID=$sourceID";
+	SiteID=$siteID AND SourceID=$sourceID AND ValueCount=0";
 
 	$result = mysql_query($query_text);
 	 
@@ -298,7 +301,7 @@ function db_find_seriesid2($siteID, $sourceID) {
 	  mysql_error() . "</p>");
 	}
 	$num_rows = mysql_num_rows($result);
-	if ($num_rows == 0){
+	if ($num_rows == 1){
 		return 0;
 	} else {
 		$val = mysql_fetch_assoc($result);
