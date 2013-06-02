@@ -1555,9 +1555,17 @@ if (!function_exists('db_GetValues')) {
 	    //first get the metadata
 		// implement sql query (because of complex query date range that too difficult if still using active record) with escape string to avoid from SQL injection
 		$querymeta = "SELECT SiteID, VariableID, MethodID, SourceID, QualityControlLevelID FROM " . get_table_name('SeriesCatalog');
-    	$querymeta .= " WHERE SiteCode = ? AND VariableCode = ? AND ";
-		$querymeta .= "( (BeginDateTime <= ? AND EndDateTime >= ? ) OR (BeginDateTime >= ? AND BeginDateTime <= ? ) OR (EndDateTime >= ? AND EndDateTime <= ?) )";
-		$arr_param = array($siteCode,$variableCode,$beginTime,$endTime,$beginTime,$endTime,$beginTime,$endTime);
+    	$querymeta .= " WHERE SiteCode = ? AND VariableCode = ? ";
+
+		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+			$querymeta .= " AND ( (BeginDateTime <= ? AND EndDateTime >= ? ) OR (BeginDateTime >= ? AND BeginDateTime <= ? ) OR (EndDateTime >= ? AND EndDateTime <= ?) )";
+  		}
+
+		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+			$arr_param = array($siteCode,$variableCode,$beginTime,$endTime,$beginTime,$endTime,$beginTime,$endTime);
+		} else {
+			$arr_param = array($siteCode,$variableCode);
+		}
 
 		$result = $ci->db->query($querymeta,$arr_param);
 	
@@ -1591,29 +1599,33 @@ if (!function_exists('db_GetValues_OneSeries')) {
 	    $ci = &get_instance();
 
 	    $data_values_table = get_table_name('DataValues');
-		$ci->db->select("LocalDateTime, UTCOffset, DateTimeUTC, DataValue");
-		$ci->db->where("SiteID",$siteID);
-		$ci->db->where("VariableID",$variableID);
-		$ci->db->where("MethodID",$methodID);
-		$ci->db->where("SourceID",$sourceID);
-		$ci->db->where("QualityControlLevelID",$qcID);
+	    $samples_table = get_table_name('Samples');
+		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.DataValue, s.LabSampleCode");
+		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
+		$ci->db->where("d.SiteID",$siteID);
+		$ci->db->where("d.VariableID",$variableID);
+		$ci->db->where("d.MethodID",$methodID);
+		$ci->db->where("d.SourceID",$sourceID);
+		$ci->db->where("d.QualityControlLevelID",$qcID);
 	
 		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
-			$ci->db->where("LocalDateTime >=",$beginTime);
-			$ci->db->where("LocalDateTime <=",$endTime);
+			$ci->db->where("d.LocalDateTime >=",$beginTime);
+			$ci->db->where("d.LocalDateTime <=",$endTime);
 	    }
 
-	    $result = $ci->db->get($data_values_table);
+	    $result = $ci->db->get($data_values_table." d");
 	    if (!$result) {
 	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
 	            $ci->db->_error_message() . "</p>");
 	    }
 	    $retVal = "<values>";
-	    $metadata = 'methodCode="' . $methodID . '" sourceCode="' . $sourceID . '" qualityControlLevelCode="' . $qcID . '"';
 	    foreach ($result->result_array() as $row) {
 	        $retVal .= '<value censorCode="nc" dateTime="' . $row["LocalDateTime"] . '"';
 	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . $row["DateTimeUTC"] . '" ';
-	        $retVal .= $metadata;
+	        $retVal .= ' methodCode="' . $methodID . '" ';
+	        $retVal .= ' sourceCode="' . $sourceID . '" ';
+	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
+	        $retVal .= ' qualityControlLevelCode="' . $qcID . '" ';
 	        $retVal .= ">".$row["DataValue"]."</value>";
 	    }
 	    $retVal .= db_GetQualityControlLevelByID($qcID);
@@ -1633,16 +1645,18 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 	function db_GetValues_MultipleSeries($siteID, $variableID, $beginTime, $endTime) {
 	    $ci = &get_instance();
 
-		$ci->db->select("LocalDateTime, UTCOffset, DateTimeUTC, MethodID, SourceID, QualityControlLevelID, DataValue");
-		$ci->db->where("SiteID",$siteID);
-		$ci->db->where("VariableID",$variableID);
+	    $samples_table = get_table_name('Samples');
+		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.MethodID, d.SourceID, d.QualityControlLevelID, d.DataValue, s.LabSampleCode");
+		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
+		$ci->db->where("d.SiteID",$siteID);
+		$ci->db->where("d.VariableID",$variableID);
 
 		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
-			$ci->db->where("LocalDateTime >=",$beginTime);
-			$ci->db->where("LocalDateTime <=",$endTime);
+			$ci->db->where("d.LocalDateTime >=",$beginTime);
+			$ci->db->where("d.LocalDateTime <=",$endTime);
 	    }
 	
-	    $result = $ci->db->get(get_table_name('DataValues'));
+	    $result = $ci->db->get(get_table_name('DataValues')." d");
 	    if (!$result) {
 	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
 	            $ci->db->_error_message() . "</p>");
@@ -1654,6 +1668,7 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . $row["DateTimeUTC"] . '"';
 	        $retVal .= ' methodCode="' . $row["MethodID"] . '" ';
 	        $retVal .= ' sourceCode="' . $row["SourceID"] . '" ';
+	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
 	        $retVal .= ' qualityControlLevelCode="' . $row["QualityControlLevelID"] . '" ';
 	        $retVal .= ">".$row["DataValue"]."</value>";
 	    }
