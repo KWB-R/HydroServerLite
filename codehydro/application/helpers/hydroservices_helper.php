@@ -1586,9 +1586,23 @@ if (!function_exists('db_GetValues')) {
 	        return db_GetValues_OneSeries($row["SiteID"], $row["VariableID"], $row["MethodID"], $row["SourceID"], $row["QualityControlLevelID"], $beginTime, $endTime);
 	    }
 	    else {
+	    	$arrMethod = array();
+	    	$arrSource = array();
+	    	$arrQC = array();
+			foreach ($result->result_array() as $row) {
+				if (!in_array($row['MethodID'],$arrMethod)) {
+					$arrMethod[] = $row['MethodID'];
+				}
+				if (!in_array($row['SourceID'],$arrSource)) {
+					$arrSource[] = $row['SourceID'];
+				}
+				if (!in_array($row['QualityControlLevelID'],$arrQC)) {
+					$arrQC[] = $row['QualityControlLevelID'];
+				}
+			}
 	
 	        $row = $result->row("0","array");
-	        return db_GetValues_MultipleSeries($row["SiteID"], $row["VariableID"], $beginTime, $endTime);
+	        return db_GetValues_MultipleSeries($row["SiteID"], $row["VariableID"], $arrMethod, $arrSource, $arrQC, $beginTime, $endTime);
 	    }
 	}
 }
@@ -1642,7 +1656,7 @@ if (!function_exists('db_GetValues_OneSeries')) {
 
 if (!function_exists('db_GetValues_MultipleSeries')) {
 
-	function db_GetValues_MultipleSeries($siteID, $variableID, $beginTime, $endTime) {
+	function db_GetValues_MultipleSeries($siteID, $variableID, $arrMethod, $arrSource, $arrQC, $beginTime, $endTime) {
 	    $ci = &get_instance();
 
 	    $samples_table = get_table_name('Samples');
@@ -1672,7 +1686,19 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 	        $retVal .= ' qualityControlLevelCode="' . $row["QualityControlLevelID"] . '" ';
 	        $retVal .= ">".$row["DataValue"]."</value>";
 	    }
-	
+
+		foreach ($arrQC as $row) {
+	    	$retVal .= db_GetQualityControlLevelByID($row);
+		}
+
+		foreach ($arrMethod as $row) {
+	    	$retVal .= db_GetMethodByID($row);
+		}
+
+		foreach ($arrSource as $row) {
+	    	$retVal .= db_GetSourceByID($row);
+		}
+
 	    $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
 	
 	    $retVal .= "</values>";
