@@ -7,6 +7,7 @@ if (!function_exists('RunService')) {
 
     function RunService() {
     	$ci = &get_instance();    	
+
 		$wsdl_is_set = (isset($_REQUEST['wsdl']) or isset($_REQUEST['WSDL']));
 
 		//if the POST request contains the SoapACTION parameter
@@ -29,82 +30,91 @@ if (!function_exists('RunService')) {
 			$postdata = file_get_contents('php://input');
 			$authtoken = wof_read_authtoken($postdata);
 
-			header('Content-Type: text/html; charset=utf-8');
+			//load authToken
+		    $validToken = $ci->config->item('auth_token');
 
-			if ($action == 'GetSiteInfo') {
-  				$site = wof_read_parameter($postdata, 'site');
-  				GetSiteInfo($authtoken, $site);
-  				exit;
-			} elseif ($action == 'GetSiteInfoMultpleObject') {
-  				//$sitesArray = wof_read_site_array($postdata);
-  				//GetSiteInfoMultpleObject($authtoken, $sitesArray);
-  				$site = wof_read_array_parameter($postdata, 'site');
-  				$siteArray = $site == ""? array():explode(",",$site);
-  				GetSiteInfoMultpleObject($authtoken, $siteArray);
-  				exit;
-			} elseif ($action == 'GetSiteInfoObject') {
-  				$site = wof_read_parameter($postdata, 'site');
-  				GetSiteInfoObject($authtoken, $site);
-  				exit;
-			} elseif ($action == 'GetSites') {
-  				//$site = wof_read_parameter($postdata, 'site');
-  				$site = wof_read_array_parameter($postdata, 'site');
-  				$siteArray = $site == ""? array():explode(",",$site);
-  				GetSites($siteArray);
-  				exit;
-			} elseif ($action == 'GetSitesByBoxObject') {
-  				$north = wof_read_parameter($postdata, 'north');
-  				$south = wof_read_parameter($postdata, 'south');
-  				$east =  wof_read_parameter($postdata, 'east');
-  				$west = wof_read_parameter($postdata, 'west');
-  				$IncludeSeries = wof_read_parameter($postdata, 'includeseries');
-  				GetSitesByBoxObject($north, $south, $east, $west, $IncludeSeries);
-  				exit;
-			} elseif ($action == 'GetSitesObject') {
-  				//$site = wof_read_parameter($postdata, 'site');
-  				$site = wof_read_array_parameter($postdata, 'site');
-  				$siteArray = $site == ""? array():explode(",",$site);
-  				GetSitesObject($siteArray);
-  				exit;
-			} elseif ($action == 'GetValues') {
-  				$location = wof_read_parameter($postdata, 'location');
-  				$variable = wof_read_parameter($postdata, 'variable');
-  				$startDate =  wof_read_parameter($postdata, 'startDate');
-  				$endDate = wof_read_parameter($postdata, 'endDate');
-  				//echo 'postdata: ' . $postdata;
-  				//echo $location . $variable . 'startDate:' . $startDate;
-  				GetValues($authtoken, $location, $variable, $startDate, $endDate);
-  				exit;
-			} elseif ($action == 'GetValuesForASiteObject') {
-  				$site = wof_read_parameter($postdata, 'site');
-  				$startDate =  wof_read_parameter($postdata, 'startDate');
-  				$endDate = wof_read_parameter($postdata, 'endDate');
-  				GetValuesForASiteObject($authtoken, $site, $startDate, $endDate);
-  				exit;
-			} elseif ($action == 'GetValuesObject') {
-  				$location = wof_read_parameter($postdata, 'location');
-  				$variable = wof_read_parameter($postdata, 'variable');
-  				$startDate =  wof_read_parameter($postdata, 'startDate');
-  				$endDate = wof_read_parameter($postdata, 'endDate');
-  				GetValuesObject($authtoken, $location, $variable, $startDate, $endDate);
-  				exit;
-			} elseif ($action == 'GetVariableInfo') {
-  				$variable = wof_read_parameter($postdata, 'variable');
-  				GetVariableInfo($authtoken, $variable);
-  				exit;
-			} elseif ($action == 'GetVariableInfoObject') {
-  				$variable = wof_read_parameter($postdata, 'variable');
-  				GetVariableInfoObject($authtoken, $variable);
-  				exit;
-			} elseif ($action == 'GetVariables') {
-  				GetVariables();
-  				exit;
-			} elseif ($action == 'GetVariablesObject') {
-  				GetVariablesObject();
-  				exit;
+			if ($validToken == "" || ($validToken != "" && $validToken == $authtoken)) {
+				header('Content-Type: text/html; charset=utf-8');
+
+				if ($action == 'GetSiteInfo') {
+	  				$site = wof_read_parameter($postdata, 'site');
+	  				GetSiteInfo($authtoken, $site);
+	  				exit;
+				} elseif ($action == 'GetSiteInfoMultpleObject') {
+	  				//$sitesArray = wof_read_site_array($postdata);
+	  				//GetSiteInfoMultpleObject($authtoken, $sitesArray);
+	  				$site = wof_read_array_parameter($postdata, 'site');
+	  				$siteArray = $site == ""? array():explode(",",$site);
+	  				GetSiteInfoMultpleObject($authtoken, $siteArray);
+	  				exit;
+				} elseif ($action == 'GetSiteInfoObject') {
+	  				$site = wof_read_parameter($postdata, 'site');
+	  				GetSiteInfoObject($authtoken, $site);
+	  				exit;
+				} elseif ($action == 'GetSites') {
+	  				//$site = wof_read_parameter($postdata, 'site');
+	  				$site = wof_read_array_parameter($postdata, 'site');
+	  				$siteArray = $site == ""? array():explode(",",$site);
+	  				GetSites($siteArray);
+	  				exit;
+				} elseif ($action == 'GetSitesByBoxObject') {
+	  				$north = wof_read_parameter($postdata, 'north');
+	  				$south = wof_read_parameter($postdata, 'south');
+	  				$east =  wof_read_parameter($postdata, 'east');
+	  				$west = wof_read_parameter($postdata, 'west');
+	  				$IncludeSeries = wof_read_parameter($postdata, 'includeseries');
+	  				GetSitesByBoxObject($north, $south, $east, $west, $IncludeSeries);
+	  				exit;
+				} elseif ($action == 'GetSitesObject') {
+	  				//$site = wof_read_parameter($postdata, 'site');
+	  				$site = wof_read_array_parameter($postdata, 'site');
+	  				$siteArray = $site == ""? array():explode(",",$site);
+	  				GetSitesObject($siteArray);
+	  				exit;
+				} elseif ($action == 'GetValues') {
+	  				$location = wof_read_parameter($postdata, 'location');
+	  				$variable = wof_read_parameter($postdata, 'variable');
+	  				$startDate =  wof_read_parameter($postdata, 'startDate');
+	  				$endDate = wof_read_parameter($postdata, 'endDate');
+	  				//echo 'postdata: ' . $postdata;
+	  				//echo $location . $variable . 'startDate:' . $startDate;
+	  				GetValues($authtoken, $location, $variable, $startDate, $endDate);
+	  				exit;
+				} elseif ($action == 'GetValuesForASiteObject') {
+	  				$site = wof_read_parameter($postdata, 'site');
+	  				$startDate =  wof_read_parameter($postdata, 'startDate');
+	  				$endDate = wof_read_parameter($postdata, 'endDate');
+	  				GetValuesForASiteObject($authtoken, $site, $startDate, $endDate);
+	  				exit;
+				} elseif ($action == 'GetValuesObject') {
+	  				$location = wof_read_parameter($postdata, 'location');
+	  				$variable = wof_read_parameter($postdata, 'variable');
+	  				$startDate =  wof_read_parameter($postdata, 'startDate');
+	  				$endDate = wof_read_parameter($postdata, 'endDate');
+	  				GetValuesObject($authtoken, $location, $variable, $startDate, $endDate);
+	  				exit;
+				} elseif ($action == 'GetVariableInfo') {
+	  				$variable = wof_read_parameter($postdata, 'variable');
+	  				GetVariableInfo($authtoken, $variable);
+	  				exit;
+				} elseif ($action == 'GetVariableInfoObject') {
+	  				$variable = wof_read_parameter($postdata, 'variable');
+	  				GetVariableInfoObject($authtoken, $variable);
+	  				exit;
+				} elseif ($action == 'GetVariables') {
+	  				GetVariables();
+	  				exit;
+				} elseif ($action == 'GetVariablesObject') {
+	  				GetVariablesObject();
+	  				exit;
+				} else {
+	  				echo "ACTION NOT FOUND!! " . $action;
+	  				exit;
+				}
 			} else {
-  				echo "ACTION NOT FOUND!! " . $action;
-  				exit;
+				header("Status: 401 Unauthorized");
+				header("Content-type: text/plain");
+				echo "HTTP/1.0 401 Unauthorized";
 			}
 		} elseif ($op_is_set == 1) { //when the op parameter is set, return the web method test page
 			$operation_name = $_REQUEST['op'];
@@ -125,7 +135,7 @@ if (!function_exists('RunService')) {
   				//replace the absolute uri
   				//$absolute_uri = "http://localhost:333/HIS/hydroserver/webservice/cuahsi_1_1.php";
   				$complete_uri = $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-  				$absolute_uri = "http://" . substr($complete_uri, 0, strrpos($complete_uri, '/')) . "/cuahsi_1_1.php";
+  				$absolute_uri = "http://" . substr($complete_uri, 0, strrpos($complete_uri, '/')) . "/cuahsi_1_1.asmx";
   				$pattern = "/ABSOLUTEURI_TO_REPLACE/";
   				$wsdl2 = preg_replace($pattern, $absolute_uri, $wsdl);
   				header("Content-type: text/xml");
@@ -167,15 +177,20 @@ if (!function_exists('get_random_site')) {
 
 		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
 
-		$where = '';
-	    foreach ($siteSC->result_array() as $row) {
-	        $where .= '"' . $row["SiteID"] . '",';
+		if ($siteSC->num_rows() > 0) {
+			$where = '';
+		    foreach ($siteSC->result_array() as $row) {
+		        $where .= '"' . $row["SiteID"] . '",';
+		    }
+		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 	    }
-	    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 
 		$ci->db->distinct();
 		$ci->db->select("SiteCode");
-		$ci->db->where("SiteID IN",$whereID,FALSE);
+
+		if (isset($whereID)) {
+			$ci->db->where("SiteID IN",$whereID,FALSE);
+		}
 
 		$result = $ci->db->get($sites_table);
 
@@ -201,15 +216,20 @@ if (!function_exists('get_random_site_coordinate')) {
 
 		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
 
-		$where = '';
-	    foreach ($siteSC->result_array() as $row) {
-	        $where .= '"' . $row["SiteID"] . '",';
+		if ($siteSC->num_rows() > 0) {
+			$where = '';
+		    foreach ($siteSC->result_array() as $row) {
+		        $where .= '"' . $row["SiteID"] . '",';
+		    }
+		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 	    }
-	    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 
 		$ci->db->distinct();
 		$ci->db->select("Latitude,Longitude");
-		$ci->db->where("SiteID IN",$whereID,FALSE);
+
+		if (isset($whereID)) {
+			$ci->db->where("SiteID IN",$whereID,FALSE);
+		}
 
 		$result = $ci->db->get($sites_table);
 
@@ -309,16 +329,17 @@ if (!function_exists('wof_read_array_parameter')) {
 if (!function_exists('wof_read_authtoken')) {
 
     function wof_read_authtoken($soap_envelope) {
-  		$pos1 = stripos($soap_envelope, "<authtoken>");
+  		$pos1 = stripos($soap_envelope, "<tns:authtoken>");
   
   		if ($pos1 === false) {
     		return "";
   		} else {
-    		$pos2 = stripos($soap_envelope, "</authtoken>");
+    		$pos2 = stripos($soap_envelope, "</tns:authtoken>");
 			if ($pos2 === false) {
 	  			return "";
 			}
-			$result = substr($soap_envelope, $pos1 + 12, $pos2 - $pos1 - 12);
+			$result = substr($soap_envelope, $pos1 + 15, $pos2 - $pos1 - 15);
+
 			return $result;
   		}
 	}
@@ -835,185 +856,194 @@ if (!function_exists('write_XML_header')) {
 if (!function_exists('write_REST_response')) {
 
 	function write_REST_response($method) {
+		$ci = &get_instance();
 	    //$method = $_REQUEST["method"];
-	    $authToken = "";
-	    if ($method == 'GetSiteInfo') {
-	        if (!isset($_REQUEST["site"])) {
-	            echo "Value cannot be null.\nParameter name: SiteCode";
-	        } else {
-	            $site = $_REQUEST["site"];
-	            if ($site == "") {
-	                echo "Value cannot be null.\nParameter name: SiteCode";
-	            } else {
-	                header("Content-type: text/xml");
-	                echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
-	                echo "<string>" . htmlspecialchars(wof_GetSiteInfo_REST($authToken, $site)) . "</string>";
-	                //echo wof_GetSiteInfo_REST($authToken, $site);
-	            }
-	        }
-	        exit;
-	    } elseif ($method == 'GetSiteInfoMultpleObject') {
-	        //TODO: user may post multiple site values in query string
-	        if (!isset($_REQUEST["site"])) {
-	            echo "Value cannot be null.\nParameter name: SiteCode";
-	        } else {
-	            $site = $_REQUEST["site"];
-	            if ($site == "") {
-	                echo "Value cannot be null.\nParameter name: SiteCode";
-	            } else {
-	                write_XML_header();
-	                echo wof_GetSiteInfoMultipleObject($authToken, explode(",",$site));
-	            }
-	        }
-	        exit;
-	    } elseif ($method == 'GetSiteInfoObject') {
-	        if (!isset($_REQUEST["site"])) {
-	            echo "Value cannot be null.\nParameter name: SiteCode";
-	        } else {
-	            $site = $_REQUEST["site"];
-	            if ($site == "") {
-	                echo "Value cannot be null.\nParameter name: SiteCode";
-	            } else {
-	                write_XML_header();
-	                echo wof_GetSiteInfo($authToken, $site);
-	            }
-	        }
-	        exit;
-	    } elseif ($method == 'GetSites') {
-	    	$site = isset($_REQUEST['site'])? explode(",",$_REQUEST['site']):array();
-	        write_XML_header();
-	        echo "<string>" . htmlspecialchars(wof_GetSites($site)) . "</string>";
-	        //echo wof_GetSites($site);
-	        exit;
-	    } elseif ($method == 'GetSitesByBoxObject') {
-	        $includeSeries = FALSE;
-	        if (!isset($_REQUEST["west"])) {
-	            echo "Missing parameter: west";
-	            exit;
-	        }
-	        if (!isset($_REQUEST["south"])) {
-	            echo "Missing parameter: south";
-	            exit;
-	        }
-	        if (!isset($_REQUEST["east"])) {
-	            echo "Missing parameter: east";
-	            exit;
-	        }
-	        if (!isset($_REQUEST["north"])) {
-	            echo "Missing parameter: north";
-	            exit;
-	        }
-	        if (isset($_REQUEST["IncludeSeries"])) {
-	            $includeSeries = $_REQUEST["IncludeSeries"]; //TRUE or FALSE
-	        }
-	        $west = $_REQUEST['west'];
-	        if ($west == NULL) {
-	            echo "Value cannot be null.\nParameter name: west";
-	            exit;
-	        }
-	        $south = $_REQUEST['south'];
-	        if ($south == NULL) {
-	            echo "Value cannot be null.\nParameter name: south";
-	            exit;
-	        }
-	        $east = $_REQUEST['east'];
-	        if ($east == NULL) {
-	            echo "Value cannot be null.\nParameter name: east";
-	            exit;
-	        }
-	        $north = $_REQUEST['north'];
-	        if ($north == NULL) {
-	            echo "Value cannot be null.\nParameter name: north";
-	            exit;
-	        }
-	        write_XML_header();
-	        echo wof_GetSitesByBox($west, $south, $east, $north, $includeSeries);
-	        exit;
-	    } elseif ($method == 'GetSitesObject') {
-	    	$site = isset($_REQUEST['site'])? explode(",",$_REQUEST['site']):array();
-	        header("Content-type: text/xml");
-	        echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
-	        echo wof_GetSites($site);
-	        exit;
-	    } elseif ($method == 'GetValues' or $method == 'GetValuesObject') {
-	        if (!isset($_REQUEST['location'])) {
-	            echo "Missing parameter: location";
-	            exit;
-	        }
-	        if (!isset($_REQUEST['variable'])) {
-	            echo "Missing parameter: variable";
-	            exit;
-	        }
-	        /*if (!isset($_REQUEST['startDate'])) {
-	            echo "Missing parameter: startDate";
-	            exit;
-	        }
-	        if (!isset($_REQUEST['endDate'])) {
-	            echo "Missing parameter: endDate";
-	            exit;
-	        }*/
-	        $location = $_REQUEST["location"];
-	        $variable = $_REQUEST["variable"];
-	        $startDate = isset($_REQUEST["startDate"])? $_REQUEST["startDate"]:"";
-	        $endDate = isset($_REQUEST["endDate"])? $_REQUEST["endDate"]:"";
-	        write_XML_header();
-	
-	        if ($method == "GetValues") {
-	            echo '<string>';
-	            echo htmlspecialchars(wof_GetValues($authToken, $location, $variable, $startDate, $endDate));
-	            echo "</string>";
-	        }
-	        elseif ($method == "GetValuesObject") {
-	            echo wof_GetValues($authToken, $location, $variable, $startDate, $endDate);
-	        }
-	        exit;
-	    } elseif ($method == 'GetValuesForASiteObject') {
-	        if (!isset($_REQUEST['site'])) {
-	            echo "Missing parameter: site";
-	            exit;
-	        }
-	        if (!isset($_REQUEST['startDate'])) {
-	            echo "Missing parameter: startDate";
-	            exit;
-	        }
-	        if (!isset($_REQUEST['endDate'])) {
-	            echo "Missing parameter: endDate";
-	            exit;
-	        }
-	        $site = $_REQUEST['site'];
-	        $startDate = $_REQUEST['startDate'];
-	        $endDate = $_REQUEST['endDate'];
-	        write_XML_header();
-	        echo wof_GetValuesForASite($authToken, $site, $startDate, $endDate);
-	        exit;
-	    } elseif ($method == 'GetVariableInfo' or $method == 'GetVariableInfoObject') {
-	        $variable = "";
-	        if (isset($_REQUEST['variable'])) {
-	            $variable = $_REQUEST['variable'];
-	        }
-	        write_XML_header();
-	        if ($method == "GetVariableInfo") {
-	            echo '<string>';
-	            echo htmlspecialchars(wof_GetVariableInfo($authToken, $variable));
-	            echo '</string>';
-	        } elseif ($method == "GetVariableInfoObject") {
-	            echo wof_GetVariableInfo($authToken, $variable);
-	        }
-	        exit;
-	    } elseif ($method == 'GetVariables') {
-	        write_XML_header();
-	        echo '<string>';
-	        echo htmlspecialchars(wof_GetVariables());
-	        echo '</string>';
-	        exit;
-	    } elseif ($method == 'GetVariablesObject') {
-	        write_XML_header();
-	        echo wof_GetVariables();
-	        exit;
-	    }
-	    else {
-	        echo $method . " Web Service method name is not valid. method names are case sensitive.";
-	        exit;
+	    $validToken = $ci->config->item('auth_token');
+	    $authToken = isset($_POST['authToken'])? $_POST['authToken']:'';
+	    
+	    if ($validToken == "" || ($validToken != "" && $validToken == $authToken)) {
+		    if ($method == 'GetSiteInfo') {
+		        if (!isset($_REQUEST["site"])) {
+		            echo "Value cannot be null.\nParameter name: SiteCode";
+		        } else {
+		            $site = $_REQUEST["site"];
+		            if ($site == "") {
+		                echo "Value cannot be null.\nParameter name: SiteCode";
+		            } else {
+		                header("Content-type: text/xml");
+		                echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
+		                echo "<string>" . htmlspecialchars(wof_GetSiteInfo_REST($authToken, $site)) . "</string>";
+		                //echo wof_GetSiteInfo_REST($authToken, $site);
+		            }
+		        }
+		        exit;
+		    } elseif ($method == 'GetSiteInfoMultpleObject') {
+		        //TODO: user may post multiple site values in query string
+		        if (!isset($_REQUEST["site"])) {
+		            echo "Value cannot be null.\nParameter name: SiteCode";
+		        } else {
+		            $site = $_REQUEST["site"];
+		            if ($site == "") {
+		                echo "Value cannot be null.\nParameter name: SiteCode";
+		            } else {
+		                write_XML_header();
+		                echo wof_GetSiteInfoMultipleObject($authToken, explode(",",$site));
+		            }
+		        }
+		        exit;
+		    } elseif ($method == 'GetSiteInfoObject') {
+		        if (!isset($_REQUEST["site"])) {
+		            echo "Value cannot be null.\nParameter name: SiteCode";
+		        } else {
+		            $site = $_REQUEST["site"];
+		            if ($site == "") {
+		                echo "Value cannot be null.\nParameter name: SiteCode";
+		            } else {
+		                write_XML_header();
+		                echo wof_GetSiteInfo($authToken, $site);
+		            }
+		        }
+		        exit;
+		    } elseif ($method == 'GetSites') {
+		    	$site = isset($_REQUEST['site'])? explode(",",$_REQUEST['site']):array();
+		        write_XML_header();
+		        echo "<string>" . htmlspecialchars(wof_GetSites($site)) . "</string>";
+		        //echo wof_GetSites($site);
+		        exit;
+		    } elseif ($method == 'GetSitesByBoxObject') {
+		        $includeSeries = FALSE;
+		        if (!isset($_REQUEST["west"])) {
+		            echo "Missing parameter: west";
+		            exit;
+		        }
+		        if (!isset($_REQUEST["south"])) {
+		            echo "Missing parameter: south";
+		            exit;
+		        }
+		        if (!isset($_REQUEST["east"])) {
+		            echo "Missing parameter: east";
+		            exit;
+		        }
+		        if (!isset($_REQUEST["north"])) {
+		            echo "Missing parameter: north";
+		            exit;
+		        }
+		        if (isset($_REQUEST["IncludeSeries"])) {
+		            $includeSeries = $_REQUEST["IncludeSeries"]; //TRUE or FALSE
+		        }
+		        $west = $_REQUEST['west'];
+		        if ($west == NULL) {
+		            echo "Value cannot be null.\nParameter name: west";
+		            exit;
+		        }
+		        $south = $_REQUEST['south'];
+		        if ($south == NULL) {
+		            echo "Value cannot be null.\nParameter name: south";
+		            exit;
+		        }
+		        $east = $_REQUEST['east'];
+		        if ($east == NULL) {
+		            echo "Value cannot be null.\nParameter name: east";
+		            exit;
+		        }
+		        $north = $_REQUEST['north'];
+		        if ($north == NULL) {
+		            echo "Value cannot be null.\nParameter name: north";
+		            exit;
+		        }
+		        write_XML_header();
+		        echo wof_GetSitesByBox($west, $south, $east, $north, $includeSeries);
+		        exit;
+		    } elseif ($method == 'GetSitesObject') {
+		    	$site = isset($_REQUEST['site'])? explode(",",$_REQUEST['site']):array();
+		        header("Content-type: text/xml");
+		        echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
+		        echo wof_GetSites($site);
+		        exit;
+		    } elseif ($method == 'GetValues' or $method == 'GetValuesObject') {
+		        if (!isset($_REQUEST['location'])) {
+		            echo "Missing parameter: location";
+		            exit;
+		        }
+		        if (!isset($_REQUEST['variable'])) {
+		            echo "Missing parameter: variable";
+		            exit;
+		        }
+		        /*if (!isset($_REQUEST['startDate'])) {
+		            echo "Missing parameter: startDate";
+		            exit;
+		        }
+		        if (!isset($_REQUEST['endDate'])) {
+		            echo "Missing parameter: endDate";
+		            exit;
+		        }*/
+		        $location = $_REQUEST["location"];
+		        $variable = $_REQUEST["variable"];
+		        $startDate = isset($_REQUEST["startDate"])? $_REQUEST["startDate"]:"";
+		        $endDate = isset($_REQUEST["endDate"])? $_REQUEST["endDate"]:"";
+		        write_XML_header();
+		
+		        if ($method == "GetValues") {
+		            echo '<string>';
+		            echo htmlspecialchars(wof_GetValues($authToken, $location, $variable, $startDate, $endDate));
+		            echo "</string>";
+		        }
+		        elseif ($method == "GetValuesObject") {
+		            echo wof_GetValues($authToken, $location, $variable, $startDate, $endDate);
+		        }
+		        exit;
+		    } elseif ($method == 'GetValuesForASiteObject') {
+		        if (!isset($_REQUEST['site'])) {
+		            echo "Missing parameter: site";
+		            exit;
+		        }
+		        if (!isset($_REQUEST['startDate'])) {
+		            echo "Missing parameter: startDate";
+		            exit;
+		        }
+		        if (!isset($_REQUEST['endDate'])) {
+		            echo "Missing parameter: endDate";
+		            exit;
+		        }
+		        $site = $_REQUEST['site'];
+		        $startDate = $_REQUEST['startDate'];
+		        $endDate = $_REQUEST['endDate'];
+		        write_XML_header();
+		        echo wof_GetValuesForASite($authToken, $site, $startDate, $endDate);
+		        exit;
+		    } elseif ($method == 'GetVariableInfo' or $method == 'GetVariableInfoObject') {
+		        $variable = "";
+		        if (isset($_REQUEST['variable'])) {
+		            $variable = $_REQUEST['variable'];
+		        }
+		        write_XML_header();
+		        if ($method == "GetVariableInfo") {
+		            echo '<string>';
+		            echo htmlspecialchars(wof_GetVariableInfo($authToken, $variable));
+		            echo '</string>';
+		        } elseif ($method == "GetVariableInfoObject") {
+		            echo wof_GetVariableInfo($authToken, $variable);
+		        }
+		        exit;
+		    } elseif ($method == 'GetVariables') {
+		        write_XML_header();
+		        echo '<string>';
+		        echo htmlspecialchars(wof_GetVariables());
+		        echo '</string>';
+		        exit;
+		    } elseif ($method == 'GetVariablesObject') {
+		        write_XML_header();
+		        echo wof_GetVariables();
+		        exit;
+		    }
+		    else {
+		        echo $method . " Web Service method name is not valid. method names are case sensitive.";
+		        exit;
+		    }
+	    } else {
+			header("Status: 401 Unauthorized");
+			header("Content-type: text/plain");
+			echo "HTTP/1.0 401 Unauthorized";
 	    }
 	}
 }
@@ -1072,7 +1102,7 @@ if (!function_exists('db_GetSeriesCatalog')) {
 	    $retVal = '<seriesCatalog>';
 	
 	    foreach ($result->result_array() as $row) {
-			$serviceCode = SERVICE_CODE;
+			$serviceCode = $ci->config->item('service_code');
 			$variableID = $row["VariableID"];
 	        $variableName = $row["VariableName"];
 			$variableCode = $row["VariableCode"];
@@ -1120,6 +1150,7 @@ if (!function_exists('db_GetSeriesCatalog')) {
 if (!function_exists('fn_GetSiteArray')) {
 
 	function fn_GetSiteArray($sites, $siteTag = "siteInfo", $siteTagType = "") {
+		$ci = &get_instance();
 	   	$siteArray[0] = '';
 	    $siteIndex = 0;
 	
@@ -1132,7 +1163,7 @@ if (!function_exists('fn_GetSiteArray')) {
 	        $retVal = '';
 	        $retVal .= "<" . $fullSiteTag . ">";
 	        $retVal .= to_xml("siteName", $row["SiteName"]);
-	        $retVal .= '<siteCode network="' . SERVICE_CODE . '">' . $row["SiteCode"] . "</siteCode>";
+	        $retVal .= '<siteCode network="' . $ci->config->item('service_code') . '">' . $row["SiteCode"] . "</siteCode>";
 	        $retVal .= "<geoLocation>";
 			$retVal .="<geogLocation xsi:type=\"LatLonPointType\">";
 	        $retVal .= to_xml("latitude", $row["Latitude"]);
@@ -1177,17 +1208,22 @@ if (!function_exists('db_GetSiteByCode')) {
 
 		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
 
-		$where = '';
-	    foreach ($siteSC->result_array() as $row) {
-	        $where .= '"' . $row["SiteID"] . '",';
+		if ($siteSC->num_rows() > 0) {
+			$where = '';
+		    foreach ($siteSC->result_array() as $row) {
+		        $where .= '"' . $row["SiteID"] . '",';
+		    }
+		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 	    }
-	    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 
 		$ci->db->distinct();
 		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments");
 		$ci->db->join($sr_table." sr","s.LocalProjectionID = sr.SpatialReferenceID","LEFT");
 		$ci->db->where("s.SiteCode",$shortCode);
-		$ci->db->where("s.SiteID IN",$whereID,FALSE);
+
+		if (isset($whereID)) {
+			$ci->db->where("s.SiteID IN",$whereID,FALSE);
+		}
 
 		$result = $ci->db->get($sites_table." s");
 
@@ -1213,17 +1249,22 @@ if (!function_exists('db_GetSiteByID')) {
 
 		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
 
-		$where = '';
-	    foreach ($siteSC->result_array() as $row) {
-	        $where .= '"' . $row["SiteID"] . '",';
+		if ($siteSC->num_rows() > 0) {
+			$where = '';
+		    foreach ($siteSC->result_array() as $row) {
+		        $where .= '"' . $row["SiteID"] . '",';
+		    }
+		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 	    }
-	    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 
 		$ci->db->distinct();
 		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments");
 		$ci->db->join($sr_table." sr","s.LocalProjectionID = sr.SpatialReferenceID","LEFT");
 		$ci->db->where("s.SiteID",$siteID);
-		$ci->db->where("s.SiteID IN",$whereID,FALSE);
+
+		if (isset($whereID)) {
+			$ci->db->where("s.SiteID IN",$whereID,FALSE);
+		}
 
 		$result = $ci->db->get($sites_table." s");
 
@@ -1249,16 +1290,21 @@ if (!function_exists('db_GetSites')) {
 
 		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
 
-		$where = '';
-	    foreach ($siteSC->result_array() as $row) {
-	        $where .= '"' . $row["SiteID"] . '",';
+		if ($siteSC->num_rows() > 0) {
+			$where = '';
+		    foreach ($siteSC->result_array() as $row) {
+		        $where .= '"' . $row["SiteID"] . '",';
+		    }
+		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 	    }
-	    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 
 		$ci->db->distinct();
 		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments");
 		$ci->db->join($sr_table." sr","s.LocalProjectionID = sr.SpatialReferenceID","LEFT");
-		$ci->db->where("s.SiteID IN",$whereID,FALSE);
+
+		if (isset($whereID)) {
+			$ci->db->where("s.SiteID IN",$whereID,FALSE);
+		}
 
 		$where = '';
 		if (is_array($site) && count($site) > 0) {
@@ -1309,11 +1355,13 @@ if (!function_exists('db_GetSitesByCodes')) {
 
 		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
 
-		$where = '';
-	    foreach ($siteSC->result_array() as $row) {
-	        $where .= '"' . $row["SiteID"] . '",';
+		if ($siteSC->num_rows() > 0) {
+			$where = '';
+		    foreach ($siteSC->result_array() as $row) {
+		        $where .= '"' . $row["SiteID"] . '",';
+		    }
+		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 	    }
-	    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 
 	    $sr_table = get_table_name('SpatialReferences');
 		$sites_table = get_table_name('Sites');
@@ -1322,7 +1370,11 @@ if (!function_exists('db_GetSitesByCodes')) {
 		$ci->db->distinct();
 		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments");
 		$ci->db->join($sr_table." sr","s.LocalProjectionID = sr.SpatialReferenceID","LEFT");
-		$ci->db->where("s.SiteID IN",$whereID,FALSE);
+
+		if (isset($whereID)) {
+			$ci->db->where("s.SiteID IN",$whereID,FALSE);
+		}
+
 		$ci->db->where("s.SiteCode IN",$whereStr,FALSE);
 
 		$result = $ci->db->get($sites_table." s");
@@ -1356,11 +1408,13 @@ if (!function_exists('db_GetSitesByBox')) {
 
 		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
 
-		$where = '';
-	    foreach ($siteSC->result_array() as $row) {
-	        $where .= '"' . $row["SiteID"] . '",';
+		if ($siteSC->num_rows() > 0) {
+			$where = '';
+		    foreach ($siteSC->result_array() as $row) {
+		        $where .= '"' . $row["SiteID"] . '",';
+		    }
+		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 	    }
-	    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 
 		$ci->db->distinct();
 		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments");
@@ -1369,7 +1423,10 @@ if (!function_exists('db_GetSitesByBox')) {
 		$ci->db->where("Longitude <=",$east);
 		$ci->db->where("Latitude >=",$south);
 		$ci->db->where("Latitude <=",$north);
-		$ci->db->where("s.SiteID IN",$whereID,FALSE);
+
+		if (isset($whereID)) {
+			$ci->db->where("s.SiteID IN",$whereID,FALSE);
+		}
 
 		$result = $ci->db->get($sites_table." s");
 
@@ -1417,6 +1474,7 @@ if (!function_exists('db_GetVariableCodesBySite')) {
 if (!function_exists('variableFromDataRow')) {
 
 	function variableFromDataRow($row) {
+		$ci = &get_instance();
 	    $variableID = $row["VariableID"];
 	    $variableName = $row["VariableName"];
 	    $variableCode = $row["VariableCode"];
@@ -1427,7 +1485,7 @@ if (!function_exists('variableFromDataRow')) {
 		$isRegular = $row["IsRegular"] ? "true" : "false";
 			
 		$retVal = "<variable>";
-		$retVal .= "<variableCode vocabulary=\"" . SERVICE_CODE . "\" default=\"true\" variableID=\"" . $variableID . "\" >" . $variableCode . "</variableCode>";
+		$retVal .= "<variableCode vocabulary=\"" . $ci->config->item('service_code') . "\" default=\"true\" variableID=\"" . $variableID . "\" >" . $variableCode . "</variableCode>";
 		$retVal .= to_xml("variableName",$variableName);
 	    $retVal .= to_xml("valueType", $valueType);
 	    $retVal .= to_xml("dataType", $dataType);
@@ -1497,9 +1555,17 @@ if (!function_exists('db_GetValues')) {
 	    //first get the metadata
 		// implement sql query (because of complex query date range that too difficult if still using active record) with escape string to avoid from SQL injection
 		$querymeta = "SELECT SiteID, VariableID, MethodID, SourceID, QualityControlLevelID FROM " . get_table_name('SeriesCatalog');
-    	$querymeta .= " WHERE SiteCode = ? AND VariableCode = ? AND ";
-		$querymeta .= "( (BeginDateTime <= ? AND EndDateTime >= ? ) OR (BeginDateTime >= ? AND BeginDateTime <= ? ) OR (EndDateTime >= ? AND EndDateTime <= ?) )";
-		$arr_param = array($siteCode,$variableCode,$beginTime,$endTime,$beginTime,$endTime,$beginTime,$endTime);
+    	$querymeta .= " WHERE SiteCode = ? AND VariableCode = ? ";
+
+		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+			$querymeta .= " AND ( (BeginDateTime <= ? AND EndDateTime >= ? ) OR (BeginDateTime >= ? AND BeginDateTime <= ? ) OR (EndDateTime >= ? AND EndDateTime <= ?) )";
+  		}
+
+		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+			$arr_param = array($siteCode,$variableCode,$beginTime,$endTime,$beginTime,$endTime,$beginTime,$endTime);
+		} else {
+			$arr_param = array($siteCode,$variableCode);
+		}
 
 		$result = $ci->db->query($querymeta,$arr_param);
 	
@@ -1520,9 +1586,23 @@ if (!function_exists('db_GetValues')) {
 	        return db_GetValues_OneSeries($row["SiteID"], $row["VariableID"], $row["MethodID"], $row["SourceID"], $row["QualityControlLevelID"], $beginTime, $endTime);
 	    }
 	    else {
+	    	$arrMethod = array();
+	    	$arrSource = array();
+	    	$arrQC = array();
+			foreach ($result->result_array() as $row) {
+				if (!in_array($row['MethodID'],$arrMethod)) {
+					$arrMethod[] = $row['MethodID'];
+				}
+				if (!in_array($row['SourceID'],$arrSource)) {
+					$arrSource[] = $row['SourceID'];
+				}
+				if (!in_array($row['QualityControlLevelID'],$arrQC)) {
+					$arrQC[] = $row['QualityControlLevelID'];
+				}
+			}
 	
 	        $row = $result->row("0","array");
-	        return db_GetValues_MultipleSeries($row["SiteID"], $row["VariableID"], $beginTime, $endTime);
+	        return db_GetValues_MultipleSeries($row["SiteID"], $row["VariableID"], $arrMethod, $arrSource, $arrQC, $beginTime, $endTime);
 	    }
 	}
 }
@@ -1533,29 +1613,33 @@ if (!function_exists('db_GetValues_OneSeries')) {
 	    $ci = &get_instance();
 
 	    $data_values_table = get_table_name('DataValues');
-		$ci->db->select("LocalDateTime, UTCOffset, DateTimeUTC, DataValue");
-		$ci->db->where("SiteID",$siteID);
-		$ci->db->where("VariableID",$variableID);
-		$ci->db->where("MethodID",$methodID);
-		$ci->db->where("SourceID",$sourceID);
-		$ci->db->where("QualityControlLevelID",$qcID);
+	    $samples_table = get_table_name('Samples');
+		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.DataValue, s.LabSampleCode");
+		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
+		$ci->db->where("d.SiteID",$siteID);
+		$ci->db->where("d.VariableID",$variableID);
+		$ci->db->where("d.MethodID",$methodID);
+		$ci->db->where("d.SourceID",$sourceID);
+		$ci->db->where("d.QualityControlLevelID",$qcID);
 	
 		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
-			$ci->db->where("LocalDateTime >=",$beginTime);
-			$ci->db->where("LocalDateTime <=",$endTime);
+			$ci->db->where("d.LocalDateTime >=",$beginTime);
+			$ci->db->where("d.LocalDateTime <=",$endTime);
 	    }
 
-	    $result = $ci->db->get($data_values_table);
+	    $result = $ci->db->get($data_values_table." d");
 	    if (!$result) {
 	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
 	            $ci->db->_error_message() . "</p>");
 	    }
 	    $retVal = "<values>";
-	    $metadata = 'methodCode="' . $methodID . '" sourceCode="' . $sourceID . '" qualityControlLevelCode="' . $qcID . '"';
 	    foreach ($result->result_array() as $row) {
 	        $retVal .= '<value censorCode="nc" dateTime="' . $row["LocalDateTime"] . '"';
 	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . $row["DateTimeUTC"] . '" ';
-	        $retVal .= $metadata;
+	        $retVal .= ' methodCode="' . $methodID . '" ';
+	        $retVal .= ' sourceCode="' . $sourceID . '" ';
+	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
+	        $retVal .= ' qualityControlLevelCode="' . $qcID . '" ';
 	        $retVal .= ">".$row["DataValue"]."</value>";
 	    }
 	    $retVal .= db_GetQualityControlLevelByID($qcID);
@@ -1572,19 +1656,21 @@ if (!function_exists('db_GetValues_OneSeries')) {
 
 if (!function_exists('db_GetValues_MultipleSeries')) {
 
-	function db_GetValues_MultipleSeries($siteID, $variableID, $beginTime, $endTime) {
+	function db_GetValues_MultipleSeries($siteID, $variableID, $arrMethod, $arrSource, $arrQC, $beginTime, $endTime) {
 	    $ci = &get_instance();
 
-		$ci->db->select("LocalDateTime, UTCOffset, DateTimeUTC, MethodID, SourceID, QualityControlLevelID, DataValue");
-		$ci->db->where("SiteID",$siteID);
-		$ci->db->where("VariableID",$variableID);
+	    $samples_table = get_table_name('Samples');
+		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.MethodID, d.SourceID, d.QualityControlLevelID, d.DataValue, s.LabSampleCode");
+		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
+		$ci->db->where("d.SiteID",$siteID);
+		$ci->db->where("d.VariableID",$variableID);
 
 		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
-			$ci->db->where("LocalDateTime >=",$beginTime);
-			$ci->db->where("LocalDateTime <=",$endTime);
+			$ci->db->where("d.LocalDateTime >=",$beginTime);
+			$ci->db->where("d.LocalDateTime <=",$endTime);
 	    }
 	
-	    $result = $ci->db->get(get_table_name('DataValues'));
+	    $result = $ci->db->get(get_table_name('DataValues')." d");
 	    if (!$result) {
 	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
 	            $ci->db->_error_message() . "</p>");
@@ -1596,10 +1682,23 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . $row["DateTimeUTC"] . '"';
 	        $retVal .= ' methodCode="' . $row["MethodID"] . '" ';
 	        $retVal .= ' sourceCode="' . $row["SourceID"] . '" ';
+	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
 	        $retVal .= ' qualityControlLevelCode="' . $row["QualityControlLevelID"] . '" ';
 	        $retVal .= ">".$row["DataValue"]."</value>";
 	    }
-	
+
+		foreach ($arrQC as $row) {
+	    	$retVal .= db_GetQualityControlLevelByID($row);
+		}
+
+		foreach ($arrMethod as $row) {
+	    	$retVal .= db_GetMethodByID($row);
+		}
+
+		foreach ($arrSource as $row) {
+	    	$retVal .= db_GetSourceByID($row);
+		}
+
 	    $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
 	
 	    $retVal .= "</values>";

@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=7" />
-    <link rel="alternate" type="text/xml" href="cuahsi_1_1.php?disco"/>
+    <link rel="alternate" type="text/xml" href="cuahsi_1_1.asmx?disco"/>
     <link rel='stylesheet' type='text/css' href="css/operation_style.css" />
 
     <title>WaterOneFlow Web Service</title>
@@ -99,7 +99,7 @@
 	
 
 	<span id="Span3">
-		<p class="intro">Click <a href="cuahsi_1_1.php">here</a> for a complete list of operations.</p>
+		<p class="intro">Click <a href="cuahsi_1_1.asmx">here</a> for a complete list of operations.</p>
 		<h2>GetVariableInfo</h2>
 		<p class="intro">Given a variable code, this method returns the variable's name. Pass in the variable in this format: 'NetworkName:Variable'</p>
 		<div id="Span4">
@@ -115,14 +115,14 @@
 			        <textarea	id="txasoaptemplaterequest" style="background-color:#e5e5cc;width:80em;height:40em;font-family:monospace;white-space: pre;">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
   &lt;soap:Body&gt;
-    &lt;GetVariableInfo xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
-      &lt;variable&gt;string&lt;/variable&gt;
-      &lt;authToken&gt;string&lt;/authToken&gt;
-    &lt;/GetVariableInfo&gt;
+    &lt;tns:GetVariableInfo xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
+      &lt;tns:variable&gt;string&lt;/tns:variable&gt;
+      &lt;tns:authToken&gt;string&lt;/tns:authToken&gt;
+    &lt;/tns:GetVariableInfo&gt;
   &lt;/soap:Body&gt;
 &lt;/soap:Envelope&gt;</textarea>
 			        <div id="posthref" style="font-size:1.1em;color:#000000;margin-top:10px;margin-bottom:10px;">
-			             <a	href="javascript:SendSoapRequest_onclick(document.getElementById('txasoaptemplaterequest').innerText,	'GetVariableInfo', './cuahsi_1_1.php');"	>Post template...</a>
+			             <a	href="javascript:SendSoapRequest_onclick(document.getElementById('txasoaptemplaterequest').innerText,	'GetVariableInfo', './cuahsi_1_1.asmx');"	>Post template...</a>
 			        
 			        </div>
                     <div id="note" style="font-size:0.8em;color:#ff0000;margin-top:10px;margin-bottom:10px;">
@@ -134,7 +134,7 @@
                     <input id="tempsoaprequest" type="hidden"	/>
                 </form>
             </div>
-		    <div id="soapsamplerequest"	style="background-color:#e5e5cc;width:80em;height:40em;font-family:monospace;white-space: pre;">POST ./cuahsi_1_1.php HTTP/1.1
+		    <div id="soapsamplerequest"	style="background-color:#e5e5cc;width:80em;height:40em;font-family:monospace;white-space: pre;">POST ./cuahsi_1_1.asmx HTTP/1.1
 Host: hydrodata.info
 Content-Type: text/xml; charset=utf-8
 Content-Length: <font class=value>length</font>
@@ -143,10 +143,10 @@ SOAPAction: "http://www.cuahsi.org/his/1.1/ws/GetVariableInfo"
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
   &lt;soap:Body&gt;
-    &lt;GetVariableInfo xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
-      &lt;variable&gt;<font class=value>string</font>&lt;/variable&gt;
-      &lt;authToken&gt;<font class=value>string</font>&lt;/authToken&gt;
-    &lt;/GetVariableInfo&gt;
+    &lt;tns:GetVariableInfo xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
+      &lt;tns:variable&gt;<font class=value>string</font>&lt;/tns:variable&gt;
+      &lt;tns:authToken&gt;<font class=value>string</font>&lt;/tns:authToken&gt;
+    &lt;/tns:GetVariableInfo&gt;
   &lt;/soap:Body&gt;
 &lt;/soap:Envelope&gt;</div>
 			<div id="soapsampleresponse" style="background-color:#e5e5cc;;font-family:monospace;white-space: pre;">HTTP/1.1 200 OK

@@ -99,7 +99,7 @@
 	
 
 	<span id="Span3">
-		<p class="intro">Click <a href="cuahsi_1_1.php">here</a> for a complete list of operations.</p>
+		<p class="intro">Click <a href="cuahsi_1_1.asmx">here</a> for a complete list of operations.</p>
 		<h2>GetVariablesObject</h2>
 		<p class="intro">Given a variable code, this method returns the variable's siteName. Pass in the variable in this format: 'NetworkName:Variable'</p>
 		<div id="Span4">
@@ -115,13 +115,13 @@
 			        <textarea	id="txasoaptemplaterequest" style="background-color:#e5e5cc;width:80em;height:40em;font-family:monospace;white-space: pre;">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
   &lt;soap:Body&gt;
-    &lt;GetVariablesObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
-      &lt;authToken&gt;string&lt;/authToken&gt;
-    &lt;/GetVariablesObject&gt;
+    &lt;tns:GetVariablesObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
+      &lt;tns:authToken&gt;string&lt;/tns:authToken&gt;
+    &lt;/tns:GetVariablesObject&gt;
   &lt;/soap:Body&gt;
 &lt;/soap:Envelope&gt;</textarea>
 			        <div id="posthref" style="font-size:1.1em;color:#000000;margin-top:10px;margin-bottom:10px;">
-			             <a	href="javascript:SendSoapRequest_onclick(document.getElementById('txasoaptemplaterequest').innerText,	'GetVariablesObject', './cuahsi_1_1.php');"	>Post template...</a>
+			             <a	href="javascript:SendSoapRequest_onclick(document.getElementById('txasoaptemplaterequest').innerText,	'GetVariablesObject', './cuahsi_1_1.asmx');"	>Post template...</a>
 			        
 			        </div>
                     <div id="note" style="font-size:0.8em;color:#ff0000;margin-top:10px;margin-bottom:10px;">
@@ -142,9 +142,9 @@ SOAPAction: "http://www.cuahsi.org/his/1.1/ws/GetVariablesObject"
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
   &lt;soap:Body&gt;
-    &lt;GetVariablesObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
-      &lt;authToken&gt;<font class=value>string</font>&lt;/authToken&gt;
-    &lt;/GetVariablesObject&gt;
+    &lt;tns:GetVariablesObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
+      &lt;tns:authToken&gt;<font class=value>string</font>&lt;/tns:authToken&gt;
+    &lt;/tns:GetVariablesObject&gt;
   &lt;/soap:Body&gt;
 &lt;/soap:Envelope&gt;</div>
 			<div id="soapsampleresponse" style="background-color:#e5e5cc;;font-family:monospace;white-space: pre;">HTTP/1.1 200 OK
