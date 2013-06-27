@@ -12,9 +12,9 @@ This file will be populated while deployment
 //MySql Database Configuration Settings
 
 define("DATABASE_HOST", "localhost"); //for example define("DATABASE_HOST", "your_database_host");
-define("DATABASE_USERNAME", "jiri"); //for example define("DATABASE_USERNAME", "your_database_username");
-define("DATABASE_NAME", "jiri4");  //for example define("DATABASE_NAME", "your_database_name");
-define("DATABASE_PASSWORD", "2c506bbe"); //for example define("DATABASE_PASSWORD", "your_database_password");
+define("DATABASE_USERNAME", "root"); //for example define("DATABASE_USERNAME", "your_database_username");
+define("DATABASE_NAME", "hydroserverlite");  //for example define("DATABASE_NAME", "your_database_name");
+define("DATABASE_PASSWORD", ""); //for example define("DATABASE_PASSWORD", "your_database_password");
 
 
 //Cookie Settings - This is for Security!
