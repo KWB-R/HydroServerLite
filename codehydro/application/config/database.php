@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'hydroserverlite';
+$db['default']['username'] = 'YOUR_USER_NAME';
+$db['default']['password'] = 'YOUR_PASSWORD';
+$db['default']['database'] = 'YOUR_DATABASE_NAME';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
