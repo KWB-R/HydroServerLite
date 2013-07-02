@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbench progressCount="40" version="2.0">
+<workbenchAdvisor/>
+<window height="768" maximized="true" width="1012" x="385" y="167">
+<fastViewData fastViewLocation="1024"/>
+<intro standby="true"/>
+<perspectiveBar>
+<itemSize x="160"/>
+</perspectiveBar>
+<coolbarLayout>
+<coolItem id="group.file" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="132" y="30"/>
+<coolItem id="additions" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="120" y="30"/>
+<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="76" y="30"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="40" y="30"/>
+<coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="group.nav" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="184" y="30"/>
+<coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.html.core.htmlsource.source" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.ui.browser.editor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.php.editor" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="group.help" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
+</coolbarLayout>
+<page aggregateWorkingSetId="Aggregate for window 1367828169305" focus="true" label="Workspace - PHP">
+<editors>
+<editorArea activeWorkbook="DefaultEditorWorkbook">
+<info part="DefaultEditorWorkbook">
+<folder appearance="1" expanded="2">
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+<part id="3"/>
+<part id="4"/>
+<part id="5"/>
+<part id="6"/>
+<part id="7"/>
+<part id="8"/>
+<part id="9"/>
+<part id="10"/>
+<part id="11"/>
+</presentation>
+</folder>
+</info>
+</editorArea>
+<editor id="org.eclipse.php.editor" name="details.php" partName="details.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/details.php" title="details.php" tooltip="HSL2.1/hydroserverlite/his_2/client/details.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/details.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="38874" selectionTopPixel="23324"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="details.php" partName="details.php" path="/var/www/hydroserverlite_2_1/hydroserverlite1/his_2/client/details.php" title="details.php" tooltip="HSL2.1/hydroserverlite1/his_2/client/details.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite1/his_2/client/details.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="14" selectionOffset="37069" selectionTopPixel="22576"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="update_series_catalog_function.php" partName="update_series_catalog_function.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/update_series_catalog_function.php" title="update_series_catalog_function.php" tooltip="HSL2.1/hydroserverlite/his_2/client/update_series_catalog_function.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/update_series_catalog_function.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5804" selectionTopPixel="4583"/>
+</editor>
+<editor id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="header.js" partName="header.js" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/js/header.js" title="header.js" tooltip="HSL2.1/hydroserverlite/his_2/client/js/header.js" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/js/header.js"/>
+<editorState selectionHorizontalPixel="0" selectionLength="1" selectionOffset="195" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="services_config.php" partName="services_config.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/services/services_config.php" title="services_config.php" tooltip="HSL2.1/hydroserverlite/his_2/services/services_config.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/services/services_config.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="648" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="main_config.php" partName="main_config.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/main_config.php" title="main_config.php" tooltip="HSL2.1/hydroserverlite/his_2/client/main_config.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/main_config.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="648" selectionTopPixel="150"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="upload_check.php" partName="upload_check.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/upload_check.php" title="upload_check.php" tooltip="HSL2.1/hydroserverlite/his_2/client/upload_check.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/upload_check.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="293" selectionTopPixel="1279"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="upload.php" partName="upload.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/upload.php" title="upload.php" tooltip="HSL2.1/hydroserverlite/his_2/client/upload.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/upload.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="do_import_data_file.php" partName="do_import_data_file.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/do_import_data_file.php" title="do_import_data_file.php" tooltip="HSL2.1/hydroserverlite/his_2/client/do_import_data_file.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/do_import_data_file.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4753" selectionTopPixel="2322"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="AL_hidden_values.php" partName="AL_hidden_values.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/AL_hidden_values.php" title="AL_hidden_values.php" tooltip="HSL2.1/hydroserverlite/his_2/client/AL_hidden_values.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/AL_hidden_values.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.php.editor" name="do_add_site.php" partName="do_add_site.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/do_add_site.php" title="do_add_site.php" tooltip="HSL2.1/hydroserverlite/his_2/client/do_add_site.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/do_add_site.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1995" selectionTopPixel="0"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.php.editor" name="add_site.php" partName="add_site.php" path="/var/www/hydroserverlite_2_1/hydroserverlite/his_2/client/add_site.php" title="add_site.php" tooltip="HSL2.1/hydroserverlite/his_2/client/add_site.php" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/HSL2.1/hydroserverlite/his_2/client/add_site.php"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="50821" selectionTopPixel="15498"/>
+</editor>
+</editors>
+<views>
+<view id="org.eclipse.ui.navigator.ProjectExplorer" partName="Project Explorer">
+<viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
+</view>
+<view id="org.eclipse.dltk.ui.TypeHierarchy" partName="Type Hierarchy">
+<viewState isWindowWorkingSet="false" mv_vertical_scroll="0" org.eclipse.dltk.ui.packages.linktypehierarchytoeditor="0" orientation="3" ratio="350" showinherited="false" sortbydefiningtype="false" vertical_scroll="0" view="2" workingSetName=""/>
+</view>
+<view id="org.eclipse.ui.views.ProblemView" partName="Problems">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
+<columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="330" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="443"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="org.eclipse.php.ui.explorer" partName="PHP Explorer">
+<viewState group_libraries="1" isWindowWorkingSet="false" layout="1" linkWithEditor="0" rootMode="1" workingSetName="">
+<customFilters userDefinedPatternsEnabled="false">
+<xmlDefinedFilters>
+<child filterId="org.eclipse.php.ui.explorer.EmptyInnerPackageFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.PHPHTMLFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.NonScriptElementFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.NonPublicFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.NonScriptProjectsFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.RSEProjectFilter" isEnabled="true"/>
+<child filterId="org.eclipse.php.ui.explorer.FieldsFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.EmptyPackageFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.ContainMembersFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.LibraryFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.UseStatementFilter" isEnabled="true"/>
+<child filterId="org.eclipse.php.ui.explorer.SMFileFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.NonSharedProjectsFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.DotFilesFilter" isEnabled="true"/>
+<child filterId="org.eclipse.php.ui.explorer.ContainedLibraryFilter" isEnabled="false"/>
+<child filterId="org.eclipse.php.ui.explorer.ClosedProjectsFilter" isEnabled="false"/>
+</xmlDefinedFilters>
+</customFilters>
+</viewState>
+</view>
+<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.internal.introview" partName="Welcome">
+<viewState>
+<presentation currentPage="root" restore="true"/>
+<standbyPart/>
+</viewState>
+</view>
+<view id="org.eclipse.debug.ui.PHPDebugOutput" partName="Debug Output">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.views.TaskList" partName="Tasks">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.completionField" categoryGroup="none" markerContentGenerator="org.eclipse.ui.ide.tasksGenerator" partName="Tasks">
+<columnWidths org.eclipse.ui.ide.completionField="40" org.eclipse.ui.ide.descriptionField="350" org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="105" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.priorityField="35" org.eclipse.ui.ide.resourceField="105"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.completionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.priorityField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.descriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="org.eclipse.ui.views.ContentOutline" partName="Outline">
+<viewState/>
+</view>
+</views>
+<perspectives activePart="org.eclipse.php.editor" activePerspective="org.eclipse.php.perspective">
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.eclipse.ui.internal.ide.application.ResourcePerspective" id="org.eclipse.ui.resourcePerspective" label="Resource"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.externaltools.ExternalToolsSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.NavigateActionSet"/>
+<show_view_action id="org.eclipse.ui.navigator.ProjectExplorer"/>
+<show_view_action id="org.eclipse.ui.views.BookmarkView"/>
+<show_view_action id="org.eclipse.ui.views.ContentOutline"/>
+<show_view_action id="org.eclipse.ui.views.PropertySheet"/>
+<show_view_action id="org.eclipse.ui.views.ProblemView"/>
+<show_view_action id="org.eclipse.ui.views.ProgressView"/>
+<show_view_action id="org.eclipse.ui.views.TaskList"/>
+<show_view_action id="org.eclipse.ant.ui.views.AntView"/>
+<show_view_action id="org.eclipse.pde.runtime.LogView"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.folder"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.file"/>
+<new_wizard_action id="org.eclipse.ui.editors.wizards.UntitledTextFileWizard"/>
+<perspective_action id="org.eclipse.jdt.ui.JavaPerspective"/>
+<perspective_action id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
+<perspective_action id="org.eclipse.team.cvs.ui.cvsPerspective"/>
+<perspective_action id="org.eclipse.team.ui.TeamSynchronizingPerspective"/>
+<hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<view id="org.eclipse.ui.navigator.ProjectExplorer"/>
+<view id="org.eclipse.ui.views.ContentOutline"/>
+<view id="org.eclipse.ui.views.TaskList"/>
+<view id="org.eclipse.ui.internal.introview"/>
+<fastViewBars/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="topLeft">&#x0A;<folder activePageID="org.eclipse.ui.navigator.ProjectExplorer" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.navigator.ProjectExplorer" label="Project Explorer"/>
+<page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
+<page content="org.eclipse.team.ccvs.ui.RepositoriesView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@2b1bed2" ratio="0.7495049" ratioLeft="757" ratioRight="253" relationship="2" relative="topLeft">&#x0A;<folder activePageID="org.eclipse.ui.internal.introview" appearance="2" expanded="1">&#x0A;<page content="org.eclipse.ui.internal.introview" label="Welcome"/>
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.25940594" ratioLeft="262" ratioRight="748" relationship="2" relative="topLeft"/>
+<info folder="true" part="bottomRight" ratio="0.6599064" ratioLeft="423" ratioRight="218" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.views.TaskList" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
+<page content="org.eclipse.team.ui.GenericHistoryView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="bottomLeft" ratio="0.49921995" ratioLeft="320" ratioRight="321" relationship="4" relative="topLeft">&#x0A;<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+</presentation>
+</folder>
+</info>
+</mainWindow>
+</layout>
+</perspective>
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.eclipse.php.internal.ui.PHPPerspectiveFactory" id="org.eclipse.php.perspective" label="PHP"/>
+<alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.externaltools.ExternalToolsSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.launchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.NavigateActionSet"/>
+<alwaysOnActionSet id="org.eclipse.php.ui.PHPActionSet"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.breakpointActionSet"/>
+<alwaysOnActionSet id="org.eclipse.php.ui.text.php.actionSet.presentation"/>
+<show_view_action id="org.eclipse.php.ui.explorer"/>
+<show_view_action id="org.eclipse.dltk.ui.TypeHierarchy"/>
+<show_view_action id="org.eclipse.php.ui.functions"/>
+<show_view_action id="org.eclipse.php.ui.projectOutline"/>
+<show_view_action id="org.eclipse.ui.console.ConsoleView"/>
+<show_view_action id="org.eclipse.ui.views.ContentOutline"/>
+<show_view_action id="org.eclipse.ui.views.ProblemView"/>
+<show_view_action id="org.eclipse.ui.views.TaskList"/>
+<show_view_action id="org.eclipse.ui.views.ResourceNavigator"/>
+<new_wizard_action id="org.eclipse.php.ui.wizards.PHPProjectCreationWizard"/>
+<new_wizard_action id="org.eclipse.php.ui.wizards.PHPFileCreationWizard"/>
+<new_wizard_action id="org.eclipse.php.ui.wizards.UntitledPHPDocumentWizard"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.folder"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.file"/>
+<new_wizard_action id="org.eclipse.wst.css.ui.internal.wizard.NewCSSWizard"/>
+<new_wizard_action id="org.eclipse.wst.html.ui.internal.wizard.NewHTMLWizard"/>
+<new_wizard_action id="org.eclipse.wst.xml.ui.internal.wizards.NewXMLWizard"/>
+<new_wizard_action id="org.eclipse.ui.editors.wizards.UntitledTextFileWizard"/>
+<perspective_action id="org.eclipse.php.perspective"/>
+<perspective_action id="org.eclipse.debug.ui.DebugPerspective"/>
+<hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<view id="org.eclipse.php.ui.explorer"/>
+<view id="org.eclipse.dltk.ui.TypeHierarchy"/>
+<view id="org.eclipse.ui.views.ProblemView"/>
+<view id="org.eclipse.ui.views.TaskList"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
+<view id="org.eclipse.ui.views.ContentOutline"/>
+<view id="org.eclipse.debug.ui.PHPDebugOutput"/>
+<view id="org.eclipse.ui.internal.introview"/>
+<fastViewBars/>
+<layout>
+<mainWindow>
+<info folder="true" part="topLeft">
+<folder activePageID="org.eclipse.php.ui.explorer" appearance="2" expanded="2">
+<page content="org.eclipse.php.ui.explorer" label="PHP Explorer"/>
+<page content="org.eclipse.dltk.ui.TypeHierarchy" label="Type Hierarchy"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@999c305" ratio="0.74950296" ratioLeft="754" ratioRight="252" relationship="2" relative="topLeft">
+<folder activePageID="org.eclipse.ui.internal.introview" appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.PHPDebugOutput" label="Debug Output"/>
+<page content="org.eclipse.ui.internal.introview" label="Welcome"/>
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+</presentation>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.28949025" ratioLeft="460" ratioRight="1129" relationship="2" relative="topLeft"/>
+<info folder="true" part="bottom" ratio="0.64093024" ratioLeft="689" ratioRight="386" relationship="4" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.ui.views.ProblemView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
+<page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="right" ratio="0.89076376" ratioLeft="1003" ratioRight="123" relationship="2" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<page content="org.eclipse.php.ui.projectOutline" label="LabelNotFound"/>
+<page content="org.eclipse.php.ui.functions" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
+</folder>
+</info>
+</mainWindow>
+</layout>
+</perspective>
+</perspectives>
+<workingSets/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.html.core.htmlsource.source" path="/HSL2/services/index.html"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/details.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite1/his_2/client/details.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" path="/HSL2.1/hydroserverlite/his_2/client/uploader/i18n/fa.js"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/update_series_catalog_function.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" path="/HSL2.1/hydroserverlite/his_2/client/js/header.js"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/main_config.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/services/services_config.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/main_config.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/upload_check.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/upload.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/import_data_file.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/do_import_data_file.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/update_series_catalog_function.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/AL_hidden_values.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/do_add_site.php"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" path="/HSL2.1/hydroserverlite/his_2/client/add_site.php"/>
+</editors>
+<item historyLabel="index.html" index="0">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="details.php" index="1">
+<position info="not_deleted" x="37069" y="14"/>
+</item>
+<item historyLabel="details.php" index="1">
+<position/>
+</item>
+<item historyLabel="details.php" index="1">
+<position/>
+</item>
+<item historyLabel="details.php" index="2">
+<position info="not_deleted" x="37069" y="14"/>
+</item>
+<item historyLabel="fa.js" index="3">
+<position info="not_deleted" x="1247" y="2"/>
+</item>
+<item historyLabel="details.php" index="2">
+<position info="not_deleted" x="37069" y="14"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="4">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="header.js" index="5">
+<position info="not_deleted" x="195" y="1"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="4">
+<position info="not_deleted" x="7088" y="0"/>
+</item>
+<item historyLabel="main_config.php" index="6">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="services_config.php" index="7">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="main_config.php" index="6">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="services_config.php" index="7">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="main_config.php" index="8">
+<position info="not_deleted" x="648" y="0"/>
+</item>
+<item historyLabel="upload_check.php" index="9">
+<position info="not_deleted" x="293" y="0"/>
+</item>
+<item historyLabel="upload.php" index="10">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="import_data_file.php" index="11">
+<position info="not_deleted" x="11344" y="0"/>
+</item>
+<item historyLabel="do_import_data_file.php" index="12">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="13">
+<position info="not_deleted" x="11744" y="0"/>
+</item>
+<item historyLabel="do_import_data_file.php" index="12">
+<position info="not_deleted" x="201" y="0"/>
+</item>
+<item historyLabel="AL_hidden_values.php" index="14">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="do_import_data_file.php" index="12">
+<position info="not_deleted" x="4983" y="0"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="13">
+<position info="not_deleted" x="11744" y="0"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="13">
+<position info="not_deleted" x="523" y="0"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="13">
+<position info="not_deleted" x="10053" y="0"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="13">
+<position info="not_deleted" x="10022" y="0"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="13">
+<position info="not_deleted" x="10022" y="0"/>
+</item>
+<item historyLabel="upload_check.php" index="9">
+<position info="not_deleted" x="293" y="0"/>
+</item>
+<item historyLabel="upload.php" index="10">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="do_import_data_file.php" index="12">
+<position info="not_deleted" x="4753" y="0"/>
+</item>
+<item historyLabel="update_series_catalog_function.php" index="13">
+<position info="not_deleted" x="5804" y="0"/>
+</item>
+<item historyLabel="do_add_site.php" index="15">
+<position info="not_deleted" x="1995" y="0"/>
+</item>
+<item active="true" historyLabel="add_site.php" index="16">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+</navigationHistory>
+<input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
+</page>
+<workbenchWindowAdvisor/>
+<actionBarAdvisor/>
+<trimLayout>
+<trimArea IMemento.internal.id="128">
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
+</trimArea>
+<trimArea IMemento.internal.id="1024">
+<trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
+<trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+</trimArea>
+</trimLayout>
+</window>
+<mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="add_site.php" tooltip="HSL2.1/hydroserverlite/his_2/client/add_site.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/add_site.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="do_add_site.php" tooltip="HSL2.1/hydroserverlite/his_2/client/do_add_site.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/do_add_site.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="AL_hidden_values.php" tooltip="HSL2.1/hydroserverlite/his_2/client/AL_hidden_values.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/AL_hidden_values.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="do_import_data_file.php" tooltip="HSL2.1/hydroserverlite/his_2/client/do_import_data_file.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/do_import_data_file.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="import_data_file.php" tooltip="HSL2.1/hydroserverlite/his_2/client/import_data_file.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/import_data_file.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="upload.php" tooltip="HSL2.1/hydroserverlite/his_2/client/upload.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/upload.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="upload_check.php" tooltip="HSL2.1/hydroserverlite/his_2/client/upload_check.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/upload_check.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="main_config.php" tooltip="HSL2.1/hydroserverlite/his_2/client/main_config.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/main_config.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="services_config.php" tooltip="HSL2.1/hydroserverlite/his_2/services/services_config.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/services/services_config.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="header.js" tooltip="HSL2.1/hydroserverlite/his_2/client/js/header.js">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/js/header.js"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="update_series_catalog_function.php" tooltip="HSL2.1/hydroserverlite/his_2/client/update_series_catalog_function.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/update_series_catalog_function.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="fa.js" tooltip="HSL2.1/hydroserverlite/his_2/client/uploader/i18n/fa.js">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/uploader/i18n/fa.js"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="details.php" tooltip="HSL2.1/hydroserverlite1/his_2/client/details.php">
+<persistable path="/HSL2.1/hydroserverlite1/his_2/client/details.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="details.php" tooltip="HSL2.1/hydroserverlite/his_2/client/details.php">
+<persistable path="/HSL2.1/hydroserverlite/his_2/client/details.php"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.php.editor" name="helloDriver.php" tooltip="hello/helloDriver.php">
+<persistable path="/hello/helloDriver.php"/>
+</file>
+</mruList>
+</workbench>
