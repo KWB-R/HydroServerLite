@@ -1,0 +1,31 @@
+<?php
+	$FAQ = "Help Center (FAQ's)";
+	$ReviewBelow = "If you need help with a part of the website, please review our Frequently Asked Questions below.";
+	$Register = "How do I register for an account, so I can enter data?";
+	$Account = "How do I register for an account?";
+	$Bug = "Need to report a bug?";
+	$SourceSite = "What's the difference between a source and a site?";
+	$DeleteMethod = "Why can't I get a specific Method to delete?";
+	$DataSuccess = "How do I know if my data was entered successfully?";
+	$ValueDelete = "Can I delete values if I realize I entered something incorrectly?";
+	$MethodAdd = "How do I add a new method?";
+	$DataInfo = "Where can I find additional information about the database?";
+	$StillQuestions = "Still have questions?";
+	$CreateWebsite = "Ready to create a website of your own?";
+	$RegisterPara = "Creating an account must be done by your direct supervisor. Please contact them to fulfill this request.";
+	$BugPara1 = "If you are experiencing an issue with the website, you may share it with the programming team to have it resolved. Please visit  us";
+	$BugPara2 = ", register for an account, and post the request by clicking &quot;Create Issue&quot; in the &quot;Issue Tracker.&quot";
+	$SourceSitePara = "A &quot;Source&quot; is the institution, school, or other organization that is collecting data and coordinating the work being conducted. Sites, on the other hand, are locations or places where data is collected. Sites have a specific set of parameters (things like name, latitude, longitude, and elevation) which uniquely identify them from other Sites even when they are close to one another.";
+	$DeleteMethodPara = "In order to delete an existing Method from the system, you must delete all data values associated with it in the database. Once you have deleted the data values, the Method can be  deleted.";
+	$DataSuccessPara = "When data (or any other parameters) is submitted, the page will always display a success action message. The system is also built to notify you of missing or empty fields before the form may be submitted to the database.";
+	$ValueDeletePara = "If you enter a value  that is incorrect or needs to be changed, please contact your direct supervisor immediately. They have the authority  needed to edit or delete the  data from the table.";
+	$MethodAddPara = "Only an Administrator has the authority to add new methods to the system. Please contact them with the necessary information to fulfill this request. They will associate the new method with the appropriate Types (or Variables) in the database.";
+	$DataInfoPara1 = "The database used for this software is modeled closely after those suggested by the Consortium of Universities for the Advancement of Hydrologic Sciences (CUAHSI). For additional information about the database structure, please refer to the";
+	$DataInfoLink = "Advanced Database Documentation";
+	$DataInfoPara2 = "provided by them.";
+	$StillQuestionsPara = "If you do not see your question or  answer you're seeking, please contact your direct supervisor about these additional  questions.";
+	$CreateWebsitePara1 = "The HydroServer Lite Interactive Web Client is an open source software developed in connection with HydroDesktop through a grant  provided by";
+	$CreateWebsitePara2 = "HydroServer and HydroDesktop are part of the";
+	$Consortium = "Consortium of Universities for the Advancement of Hydrologic Sciences";
+	$CreateWebsitePara3 = "or commonly referred to as CUAHSI (pronounced &quot;kwä-ze&quot;). To learn more about this software or find out how your school or organization can get their own version of the HydroServer Lite Interactive Web Client, please visit us";
+?>

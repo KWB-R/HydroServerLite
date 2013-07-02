@@ -1,0 +1,34 @@
+<?php
+	$AdministratorNavigation = "!Administrator Navigation";
+	$PublicNavigation = "!Public Navigation";
+	$StudentNavigation = "!Student Navigation";
+	$TeacherNavigation = "!Teacher Navigation";
+	$Home = "Home!";
+	$HelpCenter = "Help Center";
+	$Logout = "Logout"; 
+	$DatabaseManagement = "Database Management";
+	$AddASource = "Add a Source";
+	$ChangeSource = "Change a Source"; 
+	$AddASite = "Add a Site";
+	$ChangeASite = "Change a Site";
+	$AddAVariable = "Add a Variable";
+	$ChangeAVariable = "Change a Variable";
+	$AddAMethod = "Add a Method";
+	$ChangeAMethod = "Change a Method"; 
+	$Users = "Users";
+	$AddUser = "Add User";
+	$ChangeUserPassword = "Change User's Password"; 
+	$ChangeUserAuthority = "Change User's Authority";
+	$RemoveUser = "Remove User";
+	$AddData = "Add Data";
+	$AddSingleValue = "Add a Single Value";
+	$AddMultipleValues = "Add Multiple Values";
+	$ImportDataFiles = "Import Data File";
+	$ViewModifyData = "View/Modify Data";
+	$SearchData = "Search Data";
+	$BackToHome = "Back to Home";
+	$Copyright = "Copyright";
+	$RightsReserved = "All Rights Reserved."; 
+	$MeetUs = "Meet the Developers";
+	$HydroserverTitle = "Hydroserver Interactive";
+?>

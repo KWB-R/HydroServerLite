@@ -1,0 +1,3 @@
+<?php
+	$InvalidQuery = "Invalid query: ";
+?>
