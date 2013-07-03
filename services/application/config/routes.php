@@ -38,24 +38,28 @@
 |
 */
 
-$route['default_controller'] = "welcome";
+$route['default_controller'] = "cuahsi";
 
 // REST routing
-$route["services/cuahsi_1_1.asmx"] 							= "services/cuahsi";
-$route["services/cuahsi_1_1.asmx/GetSites"] 				= "services/cuahsi/GetSites";
-$route["services/cuahsi_1_1.asmx/GetSiteInfo"] 				= "services/cuahsi/GetSiteInfo";
-$route["services/cuahsi_1_1.asmx/GetSiteInfoMultpleObject"] = "services/cuahsi/GetSiteInfoMultpleObject";
-$route["services/cuahsi_1_1.asmx/GetSiteInfoObject"] 		= "services/cuahsi/GetSiteInfoObject";
-$route["services/cuahsi_1_1.asmx/GetSitesObject"] 			= "services/cuahsi/GetSitesObject";
-$route["services/cuahsi_1_1.asmx/GetSitesByBoxObject"] 		= "services/cuahsi/GetSitesByBoxObject";
-$route["services/cuahsi_1_1.asmx/GetValues"] 				= "services/cuahsi/GetValues";
-$route["services/cuahsi_1_1.asmx/GetValuesObject"] 			= "services/cuahsi/GetValuesObject";
-$route["services/cuahsi_1_1.asmx/GetValuesForASiteObject"] 	= "services/cuahsi/GetValuesForASiteObject";
-$route["services/cuahsi_1_1.asmx/GetVariables"] 			= "services/cuahsi/GetVariables";
-$route["services/cuahsi_1_1.asmx/GetVariablesObject"] 		= "services/cuahsi/GetVariablesObject";
-$route["services/cuahsi_1_1.asmx/GetVariableInfo"] 			= "services/cuahsi/GetVariableInfo";
-$route["services/cuahsi_1_1.asmx/GetVariableInfoObject"] 	= "services/cuahsi/GetVariableInfoObject";
+$route["cuahsi_1_1.asmx"] 							= "cuahsi";
+$route["cuahsi_1_1.asmx/GetSites"] 					= "cuahsi/GetSites";
+$route["cuahsi_1_1.asmx/GetSiteInfo"] 				= "cuahsi/GetSiteInfo";
+$route["cuahsi_1_1.asmx/GetSiteInfoMultpleObject"] 	= "cuahsi/GetSiteInfoMultpleObject";
+$route["cuahsi_1_1.asmx/GetSiteInfoObject"] 		= "cuahsi/GetSiteInfoObject";
+$route["cuahsi_1_1.asmx/GetSitesObject"] 			= "cuahsi/GetSitesObject";
+$route["cuahsi_1_1.asmx/GetSitesByBoxObject"] 		= "cuahsi/GetSitesByBoxObject";
+$route["cuahsi_1_1.asmx/GetValues"] 				= "cuahsi/GetValues";
+$route["cuahsi_1_1.asmx/GetValuesObject"] 			= "cuahsi/GetValuesObject";
+$route["cuahsi_1_1.asmx/GetValuesForASiteObject"] 	= "cuahsi/GetValuesForASiteObject";
+$route["cuahsi_1_1.asmx/GetVariables"] 				= "cuahsi/GetVariables";
+$route["cuahsi_1_1.asmx/GetVariablesObject"] 		= "cuahsi/GetVariablesObject";
+$route["cuahsi_1_1.asmx/GetVariableInfo"] 			= "cuahsi/GetVariableInfo";
+$route["cuahsi_1_1.asmx/GetVariableInfoObject"] 	= "cuahsi/GetVariableInfoObject";
 // end of REST routing
+
+// Test Page routing
+$route["test"] 										= "cuahsi/test";
+// end of Test Page routing
 
 $route['404_override'] = '';
 

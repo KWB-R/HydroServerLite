@@ -98,7 +98,7 @@
 	
 
 	<span id="Span3">
-		<p class="intro">Click <a href="cuahsi_1_1.asmx">here</a> for a complete list of operations.</p>
+		<p class="intro">Click <a href="ABSOLUTEURI_TO_REPLACE">here</a> for a complete list of operations.</p>
 		<h2>GetValuesObject</h2>
 		<p class="intro">Given a site number, a variable, a start date, and an end date, this method returns a time series. Pass in the sitecode and variable in this format: 'NetworkName:SiteCode' and 'NetworkName:Variable'</p>
 		<div id="Span4">
@@ -145,13 +145,13 @@ SOAPAction: "http://www.cuahsi.org/his/1.1/ws/GetValuesObject"
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
   &lt;soap:Body&gt;
-    &lt;GetValuesObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
-      &lt;location&gt;<font class=value>string</font>&lt;/location&gt;
-      &lt;variable&gt;<font class=value>string</font>&lt;/variable&gt;
-      &lt;startDate&gt;<font class=value>string</font>&lt;/startDate&gt;
-      &lt;endDate&gt;<font class=value>string</font>&lt;/endDate&gt;
-      &lt;authToken&gt;<font class=value>string</font>&lt;/authToken&gt;
-    &lt;/GetValuesObject&gt;
+    &lt;tns:GetValuesObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
+      &lt;tns:location&gt;<font class=value>string</font>&lt;/tns:location&gt;
+      &lt;tns:variable&gt;<font class=value>string</font>&lt;/tns:variable&gt;
+      &lt;tns:startDate&gt;<font class=value>string</font>&lt;/tns:startDate&gt;
+      &lt;tns:endDate&gt;<font class=value>string</font>&lt;/tns:endDate&gt;
+      &lt;tns:authToken&gt;<font class=value>string</font>&lt;/tns:authToken&gt;
+    &lt;/tns:GetValuesObject&gt;
   &lt;/soap:Body&gt;
 &lt;/soap:Envelope&gt;</div>
 			<div id="soapsampleresponse" style="background-color:#e5e5cc;;font-family:monospace;white-space: pre;">HTTP/1.1 200 OK

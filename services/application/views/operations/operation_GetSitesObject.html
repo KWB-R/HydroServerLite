@@ -99,7 +99,7 @@
 	
 
 	<span id="Span3">
-		<p class="intro">Click <a href="cuahsi_1_1.asmx">here</a> for a complete list of operations.</p>
+		<p class="intro">Click <a href="ABSOLUTEURI_TO_REPLACE">here</a> for a complete list of operations.</p>
 		<h2>GetSitesObject</h2>
 		<p class="intro">Given an array of site numbers, this method returns the site metadata for each one. Send the array of site codes in this format: 'NetworkName:SiteCode'</p>
 		<div id="Span4">
@@ -145,13 +145,13 @@ SOAPAction: "http://www.cuahsi.org/his/1.1/ws/GetSitesObject"
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
   &lt;soap:Body&gt;
-    &lt;GetSitesObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
-      &lt;site&gt;
-        &lt;string&gt;<font class=value>string</font>&lt;/string&gt;
-        &lt;string&gt;<font class=value>string</font>&lt;/string&gt;
-      &lt;/site&gt;
-      &lt;authToken&gt;<font class=value>string</font>&lt;/authToken&gt;
-    &lt;/GetSitesObject&gt;
+    &lt;tns:GetSitesObject xmlns="http://www.cuahsi.org/his/1.1/ws/"&gt;
+      &lt;tns:site&gt;
+        &lt;tns:string&gt;<font class=value>string</font>&lt;/tns:string&gt;
+        &lt;tns:string&gt;<font class=value>string</font>&lt;/tns:string&gt;
+      &lt;/tns:site&gt;
+      &lt;tns:authToken&gt;<font class=value>string</font>&lt;/tns:authToken&gt;
+    &lt;/tns:GetSitesObject&gt;
   &lt;/soap:Body&gt;
 &lt;/soap:Envelope&gt;</div>
 			<div id="soapsampleresponse" style="background-color:#e5e5cc;;font-family:monospace;white-space: pre;">HTTP/1.1 200 OK

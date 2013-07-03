@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
 <title>404 Page Not Found</title>
@@ -59,4 +59,5 @@ p {
 		<?php echo $message; ?>
 	</div>
 </body>
-</html>
+</html>-->
+Method not found

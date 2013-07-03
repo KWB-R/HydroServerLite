@@ -27,7 +27,7 @@ $(document).ready(function() {
 		}
 
 		$.ajax({
-			url:"<?=site_url()?>services/method_get_params/" + $(this).val(),
+			url:"<?=base_url()?>cuahsi/method_get_params/" + $(this).val(),
 			success: function(response){
 				$("#method_param").html(response);
 				$(document).tooltip();
@@ -48,7 +48,7 @@ $(document).ready(function() {
 	$("#btnGenerator").click(function(e) {
 	    $.ajax({
            type: "POST",
-           url: "<?=base_url()?>index.php/services/generate_url/",
+           url: "<?=base_url()?>cuahsi/generate_url/",
            data: $("#form_url_generator").serialize(), // serializes the form's elements.
            success: function(data)
            {
