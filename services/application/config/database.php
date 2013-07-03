@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'ogimet';
-$db['default']['password'] = '2c506bbe';
-$db['default']['database'] = 'ogimetperu4';
+$db['default']['hostname'] = 'your_database_host'; /* often this value is 'localhost' */
+$db['default']['username'] = 'your_database_username';
+$db['default']['password'] = 'your_database_password';
+$db['default']['database'] = 'your_database';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
