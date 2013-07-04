@@ -34,16 +34,16 @@ if (!function_exists('RunService')) {
 
 				if ($action == 'GetSiteInfo') {
 	  				$site = wof_read_parameter($postdata, 'site');
-	  				GetSiteInfo($authtoken, $site);
+	  				GetSiteInfo($site);
 	  				exit;
 				} elseif ($action == 'GetSiteInfoMultpleObject') {
 	  				$site = wof_read_array_parameter($postdata, 'site');
 	  				$siteArray = $site == ""? array():explode(",",$site);
-	  				GetSiteInfoMultpleObject($authtoken, $siteArray);
+	  				GetSiteInfoMultpleObject($siteArray);
 	  				exit;
 				} elseif ($action == 'GetSiteInfoObject') {
 	  				$site = wof_read_parameter($postdata, 'site');
-	  				GetSiteInfoObject($authtoken, $site);
+	  				GetSiteInfoObject($site);
 	  				exit;
 				} elseif ($action == 'GetSites') {
 	  				$site = wof_read_array_parameter($postdata, 'site');
@@ -68,28 +68,28 @@ if (!function_exists('RunService')) {
 	  				$variable = wof_read_parameter($postdata, 'variable');
 	  				$startDate =  wof_read_parameter($postdata, 'startDate');
 	  				$endDate = wof_read_parameter($postdata, 'endDate');
-	  				GetValues($authtoken, $location, $variable, $startDate, $endDate);
+	  				GetValues($location, $variable, $startDate, $endDate);
 	  				exit;
 				} elseif ($action == 'GetValuesForASiteObject') {
 	  				$site = wof_read_parameter($postdata, 'site');
 	  				$startDate =  wof_read_parameter($postdata, 'startDate');
 	  				$endDate = wof_read_parameter($postdata, 'endDate');
-	  				GetValuesForASiteObject($authtoken, $site, $startDate, $endDate);
+	  				GetValuesForASiteObject($site, $startDate, $endDate);
 	  				exit;
 				} elseif ($action == 'GetValuesObject') {
 	  				$location = wof_read_parameter($postdata, 'location');
 	  				$variable = wof_read_parameter($postdata, 'variable');
 	  				$startDate =  wof_read_parameter($postdata, 'startDate');
 	  				$endDate = wof_read_parameter($postdata, 'endDate');
-	  				GetValuesObject($authtoken, $location, $variable, $startDate, $endDate);
+	  				GetValuesObject($location, $variable, $startDate, $endDate);
 	  				exit;
 				} elseif ($action == 'GetVariableInfo') {
 	  				$variable = wof_read_parameter($postdata, 'variable');
-	  				GetVariableInfo($authtoken, $variable);
+	  				GetVariableInfo($variable);
 	  				exit;
 				} elseif ($action == 'GetVariableInfoObject') {
 	  				$variable = wof_read_parameter($postdata, 'variable');
-	  				GetVariableInfoObject($authtoken, $variable);
+	  				GetVariableInfoObject($variable);
 	  				exit;
 				} elseif ($action == 'GetVariables') {
 	  				GetVariables();
@@ -1039,7 +1039,7 @@ if (!function_exists('db_GetSiteByCode')) {
 	            $ci->db->_error_message() . "</p>");
 	    }
 
-	    $sitesArray = fn_GetSiteArray($result, $siteTag, $siteTagType);
+	    $sitesArray = fn_GetSiteArray($result);
 
 	    return $sitesArray[0]; //what if no site is found?
 	}
