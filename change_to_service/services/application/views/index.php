@@ -48,7 +48,7 @@ Once you are a registered user, you will be able to login and upload your own da
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('updatecv');?>" class="info_link">Update Controlled Vocabulary</a></label>
+			    <label class="info_label"><a href="<?php echo base_url('updatecv.php');?>" class="info_link">Update Controlled Vocabulary</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Update Controlled Vocabulary from HIS Central.

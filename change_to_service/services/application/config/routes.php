@@ -61,6 +61,10 @@ $route["cuahsi_1_1.asmx/GetVariableInfoObject"] 	= "cuahsi/GetVariableInfoObject
 $route["test"] 										= "cuahsi/test";
 // end of Test Page routing
 
+// Update CV Page routing
+$route["updatecv.php"] 								= "updatecv";
+// end of Test Page routing
+
 $route['404_override'] = '';
 
 
