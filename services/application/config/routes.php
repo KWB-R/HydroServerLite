@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "cuahsi";
+$route['default_controller'] = "welcome";
 
 // REST routing
 $route["cuahsi_1_1.asmx"] 							= "cuahsi";
@@ -59,6 +59,10 @@ $route["cuahsi_1_1.asmx/GetVariableInfoObject"] 	= "cuahsi/GetVariableInfoObject
 
 // Test Page routing
 $route["test"] 										= "cuahsi/test";
+// end of Test Page routing
+
+// Update CV Page routing
+$route["updatecv.php"] 								= "updatecv";
 // end of Test Page routing
 
 $route['404_override'] = '';

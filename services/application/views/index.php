@@ -32,7 +32,7 @@ Once you are a registered user, you will be able to login and upload your own da
 		<br />
 		<div id="base_info">
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('services/test');?>" class="info_link">REST Service Test</a></label>
+			    <label class="info_label"><a href="<?php echo base_url('test');?>" class="info_link">REST Service Test</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;You can perform tests on all of the methods in Hydrodata Server on this page. In this case the test for REST Service.
@@ -40,10 +40,18 @@ Once you are a registered user, you will be able to login and upload your own da
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('services/cuahsi_1_1.php');?>" class="info_link">SOAP Web Service</a></label>
+			    <label class="info_label"><a href="<?php echo base_url('cuahsi_1_1.asmx');?>" class="info_link">SOAP Web Service</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Hydrodata soap service page.
+					</div>
+				</div> 
+			</div>
+			<div class="info_container">
+			    <label class="info_label"><a href="<?php echo base_url('updatecv.php');?>" class="info_link">Update Controlled Vocabulary</a></label>
+				<div class="info_content">
+					<div class="link_desc">
+						&nbsp;Update Controlled Vocabulary from HIS Central.
 					</div>
 				</div> 
 			</div>

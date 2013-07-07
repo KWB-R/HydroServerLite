@@ -47,11 +47,20 @@
 
 $active_group = 'default';
 $active_record = TRUE;
+if (file_exists(BASEPATH.'../../client/main_config.php')) {
+	require_once BASEPATH.'../../client/main_config.php';
 
-$db['default']['hostname'] = 'your_database_host'; /* often this value is 'localhost' */
-$db['default']['username'] = 'your_database_username';
-$db['default']['password'] = 'your_database_password';
-$db['default']['database'] = 'your_database';
+	$db['default']['hostname'] = DATABASE_HOST;
+	$db['default']['username'] = DATABASE_USERNAME;
+	$db['default']['password'] = DATABASE_PASSWORD;
+	$db['default']['database'] = DATABASE_NAME;
+
+} else {
+	$db['default']['hostname'] = 'localhost';
+	$db['default']['username'] = 'root';
+	$db['default']['password'] = '';
+	$db['default']['database'] = 'hydroserverlite';
+}
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
@@ -63,7 +72,6 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
-
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

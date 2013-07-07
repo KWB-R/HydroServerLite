@@ -28,9 +28,6 @@
  * By default development will show errors but testing and live will hide them.
  */
 
-//Service code Settings
-define("SERVICE_CODE", "KALA");
-
 if (defined('ENVIRONMENT'))
 {
 	switch (ENVIRONMENT)

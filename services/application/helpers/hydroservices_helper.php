@@ -1039,7 +1039,7 @@ if (!function_exists('db_GetSiteByCode')) {
 	            $ci->db->_error_message() . "</p>");
 	    }
 
-	    $sitesArray = fn_GetSiteArray($result, $siteTag, $siteTagType);
+	    $sitesArray = fn_GetSiteArray($result);
 
 	    return $sitesArray[0]; //what if no site is found?
 	}
@@ -1080,7 +1080,7 @@ if (!function_exists('db_GetSiteByID')) {
 	            $ci->db->_error_message() . "</p>");
 	    }
 
-	    $sitesArray = fn_GetSiteArray($result, $siteTag, $siteTagType);
+	    $sitesArray = fn_GetSiteArray($result);
 
 	    return $sitesArray[0]; //what if no site is found?
 	}
