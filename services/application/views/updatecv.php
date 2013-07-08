@@ -73,6 +73,7 @@ $(document).ready(function() {
 						<option value="">.: Select Web Method :.</option>
 						<option class="opt" value="GetCensorCodeCV">GetCensorCodeCV</option>
 						<option class="opt" value="GetGeneralCategoryCV">GetGeneralCategoryCV</option>
+						<option class="opt" value="GetSiteTypeCV">GetSiteTypeCV</option>
 						<option class="opt" value="GetSampleMediumCV">GetSampleMediumCV</option>
 						<option class="opt" value="GetSampleTypeCV">GetSampleTypeCV</option>
 						<option class="opt" value="GetSpatialReferences">GetSpatialReferences</option>
