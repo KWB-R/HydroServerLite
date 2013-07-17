@@ -266,6 +266,9 @@
 
 //These are for the variables found in the js folder
 	//to be left in common
+	$RegisterWeb = "Registre la Web";
+	$WebService = "Servicio Web";
+	$RegisterHIS = "Registrarse en HIS ​​Central";
 	$SearchData = "Buscar datos";
 	$Help = "Centro de Ayuda";
 	$Home = "Principal";

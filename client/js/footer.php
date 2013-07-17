@@ -1,6 +1,6 @@
 <?php
 //This is required to get the international text strings dictionary
-	require_once '../internationalize.php';
+	//require_once 'internationalize.php';
 ?>
 <td colspan=2 bgcolor=#0971B3><center><font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><i><?php echo $CopyRight;?> &copy; <?php echo date('Y'); ?>. 
 

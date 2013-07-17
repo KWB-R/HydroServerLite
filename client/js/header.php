@@ -1,6 +1,6 @@
 <?php 
 //This is required to get the international text strings dictionary
-require_once '../internationalize.php';
+//require_once 'internationalize.php';
 
 require_once 'main_config.php';
 
