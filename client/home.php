@@ -25,10 +25,13 @@ $num = mysql_num_rows($result);
 		$auth = $row['authority'];
 		}
 		$uname ="$firstname";
+		setcookie("uname",$uname);
 	} else {
 		header("Location: index.php?state=pass");
 		exit;
 	}
+} else {
+	$uname = $_COOKIE['uname'];
 }
 
 //Count the number of Sites
@@ -491,7 +494,7 @@ else
         </tr>
         <tr>
           <!--<td><p>To search for a data collection sites, simply type in the city or hit the button &quot;Find sites near me!&quot; to show sites within a 300 mile radius of your present geographic location. (Note: Sites in which there is no data will NOT be displayed below.)</p></td>-->
-          <td><p><?php echo $SearchDataHome; ?></p></td>
+          <td><p><?php echo $SearchData; ?></p></td>
 
         </tr>
         <tr>

@@ -7,6 +7,9 @@ require_once("main_config.php");
 if (isset($_COOKIE["power"])) {
   unset($_COOKIE["power"]);
 }
+if (isset($_COOKIE["uname"])) {
+  unset($_COOKIE["uname"]);
+}
 setcookie ("power", null, -3600, $www);
 
 ?>

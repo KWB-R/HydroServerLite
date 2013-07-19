@@ -7,7 +7,7 @@ require_once 'internationalize.php';
 require_once 'authorization_check.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+if ($_COOKIE["power"] !="admin"){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}

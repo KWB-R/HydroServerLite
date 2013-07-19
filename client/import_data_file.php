@@ -8,6 +8,9 @@ require_once 'authorization_check.php';
 //connect to server and select database
 require_once 'database_connection.php';
 
+$option_block = "";
+$option_block3 = "";
+
 //add the SourceID's
 $sql ="Select * FROM sources";
 
@@ -446,7 +449,7 @@ xmlhttp.send();
 $(document).ready(function() {
 	//$("#filename").val("Please select a file....");
 	$("#filename").val(<?php echo "'".$SelectFileEllipsis."'";?>);
-	<?php echo $jq;?>
+	<?php //echo $jq;?>
   var glob_siteid=1;
   var $filename="";
   

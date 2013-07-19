@@ -10,6 +10,11 @@ require_once 'authorization_check.php';
 require_once 'database_connection.php';
 require_once 'main_config.php';
 
+$option_block = "";
+$option_block2 = "";
+$option_block3 = "";
+$option_block4 = "";
+
 //add the SourceID's options
 $sql ="Select * FROM sources";
 

@@ -5,6 +5,8 @@ require_once 'internationalize.php';
 //value given from the page
 $q=$_GET["q"];
 
+$option_block2 = "";
+
 //connect to server and select database
 require_once 'database_connection.php';
 

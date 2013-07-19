@@ -9,6 +9,12 @@ require_once 'authorization_check.php';
 //connect to server and select database
 require_once 'database_connection.php';
 
+$option_block = "";
+$option_block3 = "";
+$msg = "";
+$msg3 = "";
+$msg4 = "";
+
 //add the SourceID's
 $sql ="Select distinct SourceID, Organization FROM seriescatalog";
 

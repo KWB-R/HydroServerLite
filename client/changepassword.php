@@ -9,7 +9,7 @@ require_once 'authorization_check.php';
 require_once 'database_connection.php';
 
 //Display the appropriate user authority to add depending on the user's authority
-if ($_COOKIE[power] == "admin"){
+if ($_COOKIE["power"] == "admin"){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE (authority='teacher' OR authority='student') ORDER BY username";
 	$result = @mysql_query($sql,$connection)or die(mysql_error());
@@ -24,7 +24,7 @@ if ($_COOKIE[power] == "admin"){
 		}
 	}
 }
-elseif ($_COOKIE[power] == "teacher"){
+elseif ($_COOKIE["power"] == "teacher"){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE authority='student' ORDER BY username";
 	$result = @mysql_query($sql,$connection)or die(mysql_error());
@@ -39,7 +39,7 @@ elseif ($_COOKIE[power] == "teacher"){
 		}
 	}
 }
-elseif ($_COOKIE[power] == "student"){
+elseif ($_COOKIE["power"] == "student"){
 	header("Location: unauthorized.php");
 	exit;	
 	}

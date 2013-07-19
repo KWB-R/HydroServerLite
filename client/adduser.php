@@ -6,15 +6,15 @@ require_once 'internationalize.php';
 require_once 'authorization_check.php';
 
 //Display the appropriate user authority to add depending on the user's authority
-if ($_COOKIE[power] == "admin"){
+if ($_COOKIE["power"] == "admin"){
 	//$selection = "<select name=authority id=authority><option value=>Select....</option><option value=admin>Administrator</option><option value=teacher>Teacher</option><option value=student>Student</option></select>";
 	$selection = "<select name=authority id=authority><option value=>".$SelectEllipsis."</option><option value=admin>".$Administrator."</option><option value=teacher>".$Teacher."</option><option value=student>".$Student."</option></select>";			
 	}
-elseif ($_COOKIE[power] == "teacher"){
+elseif ($_COOKIE["power"] == "teacher"){
 	//$selection = "<select name=authority id=authority><option value=>Select....</option><option value=teacher>Teacher</option><option value=student>Student</option></select>";
 	$selection = "<select name=authority id=authority><option value=>".$SelectEllipsis."</option><option value=teacher>".$Teacher."</option><option value=student>".$Student."</option></select>";
 	}
-elseif ($_COOKIE[power] == "student"){
+elseif ($_COOKIE["power"] == "student"){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}

@@ -6,13 +6,16 @@ require_once 'internationalize.php';
 require_once 'authorization_check.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+if ($_COOKIE["power"] !="admin"){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
 
 //connect to server and select database
 require_once 'database_connection.php';
+
+$option_block = "";
+$msg_1 = "";
 
 //filter the Site results after Source is selected
 $sql_1 ="SELECT * FROM methods WHERE MethodID >= 3";

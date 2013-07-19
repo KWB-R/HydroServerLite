@@ -8,6 +8,10 @@
 	$page_text = "languages/" . $lang_code . "/" . $lang_file;
 	$common_text = "languages/" . $lang_code . "/_common_text.php";
 	include($header_text);
-	include($page_text);
+
+	if (file_exists($page_text)) {
+		include($page_text);
+	}
+
 	include_once($common_text);
 ?>

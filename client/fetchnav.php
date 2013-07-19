@@ -1,12 +1,12 @@
 <?php
 
-if ($_COOKIE[power] ==admin){
+if ($_COOKIE["power"] =="admin"){
 	$nav ="A_navbar.php";
 	}
-elseif ($_COOKIE[power] ==teacher){
+elseif ($_COOKIE["power"] =="teacher"){
 	$nav ="T_navbar.php";
 	}
-elseif ($_COOKIE[power] ==student){
+elseif ($_COOKIE["power"] =="student"){
 	$nav ="S_navbar.php";
 	} 
 else {
