@@ -762,7 +762,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td valign="top"><strong><!--Time Support:--><?php echo $TimeSupport;?></strong></td>
-          <td colspan="3" valign="top"><input type="text" id="tsup" name="tsup" value="<?php echo $default_timesupport; ?>" size="15" />*&nbsp;<a href="#" onClick="show_answerTS()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td colspan="3" valign="top"><input type="text" id="tsup" name="tsup" value="<?php //echo $default_timesupport; ?>" size="15" />*&nbsp;<a href="#" onClick="show_answerTS()" border="0"><img src="images/questionmark.png" border="0"></a></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -836,7 +836,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="4" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddVariableButton;?>" class="button" /></td>
           </tr>
       </table>
-    </FORM></p>
+    </form></p>
 </blockquote>
     <p></p></td>
   </tr>
@@ -851,399 +851,332 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 
 //Calls a function to validate all fields when the submit button is hit.
 $("form").submit(function(){
-if(($("#var_code").val())==""){
+	if(($("#var_code").val())==""){
 		//alert("Please enter a Variable Code!");
 		alert(<?php echo "'".$EnterVariableCode."'"; ?>);
 		return false;
 	}
 	
-	if(($("#var_code").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
-{
+	if(($("#var_code").val().search("^[a-zA-Z0-9_.-]*$")) == -1) {
 		//alert("Invalid Variable code. VaraibleCodes cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
 		alert(<?php echo "'".$InvalidVariableCode."'"; ?>);
 		return false;
 	}
 
 
-//Check variable Name
+	//Check variable Name
 
-var checkitem = $('#varname').jqxDropDownList('getSelectedItem');
+	var checkitem = $('#varname').jqxDropDownList('getSelectedItem');
 
-   if ((checkitem == null)||(checkitem.value=="-1"))
-   {
+   	if ((checkitem == null)||(checkitem.value == "-1")) {
 	 //alert("Please select a variable name or select Other/New from the drop down to enter a new variable name!");
-	 alert(<?php echo "'".$SelectVariableName."'"; ?>);
+	 	alert(<?php echo "'".$SelectVariableName."'"; ?>);
 		return false;    
-   }
+   	}
    
-   if(checkitem.value=="-10")
-   {
-	//A new selection...need to process it first so that the entry will be valid
+   	if (checkitem.value=="-10") {
+		//A new selection...need to process it first so that the entry will be valid
 	
-	//Check if new fields are filled
-	if(($("#newvarname").val())==""){
-		//alert("Please enter a new variable name!");
-		alert(<?php echo "'".$EnterNewVariable."'"; ?>);
-		return false;
-	}
+		//Check if new fields are filled
+		if (($("#newvarname").val()) == "") {
+			//alert("Please enter a new variable name!");
+			alert(<?php echo "'".$EnterNewVariable."'"; ?>);
+			return false;
+		}
 	
-	if(($("#newvarname").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
-{
-		//alert("Invalid Variable name. Varaible Name cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
-		alert(<?php echo "'".$InvalidVariableName."'"; ?>);
-		return false;
-	}
+		if(($("#newvarname").val().search("^[a-zA-Z0-9_.-]*$")) == -1) {
+			//alert("Invalid Variable name. Varaible Name cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
+			alert(<?php echo "'".$InvalidVariableName."'"; ?>);
+			return false;
+		}
 
-	 
-	 
-	 if((($("#vardef").val())=="")||(($("#vardef").val())=="Please enter a definition")){
-		//alert("Please enter the definition for the new variable");
-		alert(<?php echo "'".$EnterDefinitionNewVariable."'"; ?>);
-		return false;
-	}  
-	
-	
-	//Process the new var name
-	
-	$.ajax({
-  type: "POST",
-  url: "do_add_varname.php?varname="+$("#newvarname").val()+"&vardef="+$("#vardef").val()
-}).done(function( msg ) {
-  if(msg==1)
-  {
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
-	   
-   }
+	 	if ((($("#vardef").val())=="")||(($("#vardef").val())=="Please enter a definition")) {
+			//alert("Please enter the definition for the new variable");
+			alert(<?php echo "'".$EnterDefinitionNewVariable."'"; ?>);
+			return false;
+		}  
+
+		//Process the new var name
+		$.ajax({
+	  		type: "POST",
+	  		url: "do_add_varname.php?varname="+$("#newvarname").val()+"&vardef="+$("#vardef").val()
+		}).done(function(msg) {
+	  		if(msg==1) {
+	  		} else {
+		  		alert(msg);
+		  		return false;  
+	  		}
+	 	});
+   	}
   
-checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
+	checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
 
-   if ((checkitem == null)||(checkitem.value=="-1"))
-   {
-	 //alert("Please select a Speciation or select Other/New from the drop down to enter a new Speciation!");
+   	if ((checkitem == null)||(checkitem.value == "-1")) {
+	 	//alert("Please select a Speciation or select Other/New from the drop down to enter a new Speciation!");
 		return false;
 		alert(<?php echo "'".$SelectSpeciation."'"; ?>);    
-   }
+   	}
    
-   if(checkitem.value=="-10")
-   {
-	//A new selection...need to process it first so that the entry will be valid
-	
-	//Check if new fields are filled
-	if(($("#other_spec").val())==""){
-		//alert("Please enter a new Speciation!");
-		alert(<?php echo "'".$SelectNewSpeciation."'"; ?>);
-		return false;
-	}
+   	if(checkitem.value == "-10") {
+		//A new selection...need to process it first so that the entry will be valid
 
-	 if((($("#specdef").val())=="")||(($("#specdef").val())=="Please enter a definition")){
-		//alert("Please enter the definition for the NEW Speciation");
-		alert(<?php echo "'".$EnterDefinitionNewSpeciation."'"; ?>);
-		return false;
-	}  
-	   
-	   $.ajax({
-  type: "POST",
-  url: "do_add_spec.php?varname="+$("#other_spec").val()+"&vardef="+$("#specdef").val()
-}).done(function( msg ) {
-  if(msg==1)
-  {
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
-   }
+		//Check if new fields are filled
+		if (($("#other_spec").val()) == "") {
+			//alert("Please enter a new Speciation!");
+			alert(<?php echo "'".$SelectNewSpeciation."'"; ?>);
+			return false;
+		}
+
+	 	if ((($("#specdef").val()) == "")||(($("#specdef").val()) == "Please enter a definition")) {
+			//alert("Please enter the definition for the NEW Speciation");
+			alert(<?php echo "'".$EnterDefinitionNewSpeciation."'"; ?>);
+			return false;
+		}
+
+	   	$.ajax({
+  			type: "POST",
+  			url: "do_add_spec.php?varname="+$("#other_spec").val()+"&vardef="+$("#specdef").val()
+		}).done(function(msg) {
+  			if (msg == 1) {
+  			} else {
+	  			alert(msg);
+	  			return false;  
+  			}
+ 		});
+   	}
+
+	checkitem = $('#unittype').jqxDropDownList('getSelectedItem');
+
+   	if ((checkitem == null)||(checkitem.value == "-1")) {
+	 	//alert("Please select a Variable Unit Type or select Other/New from the drop down to enter a new Unit Type!");
+	 	alert(<?php echo "'".$SelectVariableUnitType."'"; ?>);
+		return false;    
+   	}
+
+	if ((checkitem != null)&&(checkitem.value != "-1")&&(checkitem.value != "-10")) {
+		//If type selected...check if unit selected
+
+		var unititem = $('#unit').jqxDropDownList('getSelectedItem');
+
+		if ((unititem == null)||(unititem.value == "-1")) {
+	 		//alert("Please select a Unit or select Other/New from the drop down to enter a new Unit!");
+	 		alert(<?php echo "'".$SelectUnit."'"; ?>);
+			return false;    
+   		}
+
+ 		if (unititem.value == "-10") {
+			//A new selection...need to process it first so that the entry will be valid
+
+			//Check if new fields are filled
+			if (($("#new_unit_name").val()) == "") {
+				//alert("Please enter a name for the new Unit!");
+				alert(<?php echo "'".$EnterNameNewUnit."'"; ?>);
+				return false;
+			}
+
+		 	if (($("#new_unit_abb").val()) == "") {
+				//alert("Please enter an abbreviation for the new Unit!");
+				alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
+				return false;
+			}
+		  	//All tests Passed...Write code to inset NEW UNIT 
+
+		   	$.ajax({
+	  			type: "POST",
+	  			url: "do_add_unit.php?varname="+$("#new_unit_name").val()+"&vardef="+$("#new_unit_abb").val()+"&vartype="+checkitem.label
+			}).done(function( msg ) {
+	  			if (msg == "The unit already exists. Cannot Add again. Please select it from the drop down list.") {
+		  			alert(msg);
+		  			return false;
+	  			} else {
+					unitsid=msg;
+	  			}
+	 		});
+	   	}
+	}
+   	if (checkitem.value == "-10") {
+		//A new selection...need to process it first so that the entry will be valid
+
+		//Check if new fields are filled
+		if(($("#new_unit_name").val())==""){
+			//alert("Please enter a name for the new Unit!");
+			alert(<?php echo "'".$EnterNameNewUnit."'"; ?>);
+			return false;
+		}
+
+	 	if (($("#new_unit_abb").val()) == "") {
+			//alert("Please enter an abbreviation for the new Unit!");
+			alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
+			return false;
+		}
+
+ 		if (($("#new_unit_type").val()) == "") {
+			//alert("Please enter the type of the new unit!");
+			alert(<?php echo "'".$EnterTypeNewUnit."'"; ?>);
+			return false;
+		}
+
+		//add a new unit inlucing a new data type
+
+   		$.ajax({
+  			type: "POST",
+  			url: "do_add_unit.php?varname="+$("#new_unit_name").val()+"&vardef="+$("#new_unit_abb").val()+"&vartype="+$("#new_unit_type").val()
+		}).done(function( msg ) {
+			var myMsg = new Array();
+			myMsg = msg.split("|");
+
+			if(myMsg[0] == "false") //the first part of the message is true/false whether we succeeded or not.  =="The unit already exists. Cannot Add again. Please select it from the drop down list.")
+	  		{
+		  		alert(myMsg[1]);
+		  		return false;
+	  		} else {
+				unitsid=msg;
+	  		}
+ 		});
+   	}
+	
+	//Check for Sample Medium
+	checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
+
+   	if ((checkitem == null) || (checkitem.value == "-1")) {
+	 	//alert("Please select a Sample Medium or select Other/New from the drop down to enter a new Sample Medium!");
+	 	alert(<?php echo "'".$SelectMedium."'"; ?>);
+		return false;    
+   	}
    
- 
-checkitem = $('#unittype').jqxDropDownList('getSelectedItem');
+   	if (checkitem.value == "-10") {
+		//A new selection...need to process it first so that the entry will be valid
 
-   if ((checkitem == null)||(checkitem.value=="-1"))
-   {
-	 //alert("Please select a Variable Unit Type or select Other/New from the drop down to enter a new Unit Type!");
-	 alert(<?php echo "'".$SelectVariableUnitType."'"; ?>);
+		//Check if new fields are filled
+		if(($("#smnew").val())==""){
+			//alert("Please enter a new Sample Medium!");
+			alert(<?php echo "'".$EnterNewSampleMedium."'"; ?>);
+			return false;
+		}
+
+		if (($("#smnew").val().search("^[a-zA-Z0-9_.-]*$")) == -1) {
+			//alert("Invalid new Sample Medium. Sample Medium cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
+			alert(<?php echo "'".$InvalidSampleMedium."'"; ?>);
+			return false;
+		}
+
+	 	if ((($("#smdef").val()) == "") || (($("#smdef").val()) == "Please enter a definition")) {
+			//alert("Please enter the definition for the new Sample Medium");
+			alert(<?php echo "'".$EnterDefinitionNewSampleMedium."'"; ?>);
+			return false;
+		}
+
+	   	$.ajax({
+  			type: "POST",
+  			url: "do_add_sm.php?varname="+$("#smnew").val()+"&vardef="+$("#smdef").val()
+		}).done(function( msg ) {
+  			if (msg == 1) {
+  			} else {
+	  			alert(msg);
+	  			return false;  
+  			}
+ 		});
+	}
+	//End Check SAMPLE MEDIUM
+
+	//Check Value type
+	checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
+
+   	if ((checkitem == null)||(checkitem.value == "-1")) {
+	 	//alert("Please select a Value Type or select Other/New from the drop down to enter a new Value Type!");
+	 	alert(<?php echo "'".$SelectValueType."'"; ?>);
 		return false;    
-   }
-
-if ((checkitem != null)&&(checkitem.value!="-1")&&(checkitem.value!="-10")) 
+   	}
    
-{
-//If type selected...check if unit selected
+   	if (checkitem.value == "-10") {
+		//A new selection...need to process it first so that the entry will be valid
 
-var unititem = $('#unit').jqxDropDownList('getSelectedItem');
+		//Check if new fields are filled
+		if (($("#valuetypenew").val()) == "") {
+			//alert("Please enter a new Value Type!");
+			alert(<?php echo "'".$EnterNewValueType."'"; ?>);
+			return false;
+		}
 
-if ((unititem == null)||(unititem.value=="-1"))
-   {
-	 //alert("Please select a Unit or select Other/New from the drop down to enter a new Unit!");
-	 alert(<?php echo "'".$SelectUnit."'"; ?>);
+		if (($("#valuetypenew").val().search("^[a-zA-Z0-9_.-]*$")) == -1) {
+			//alert("Invalid new Value Type. Value Type cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
+			alert(<?php echo "'".$InvalidValueType."'"; ?>);
+			return false;
+		}
+
+	 	if ((($("#vtdef").val())=="")||(($("#vtdef").val())=="Please enter a definition")) {
+			//alert("Please enter the definition for the new Value Type");
+			alert(<?php echo "'".$EnterDefinitionNewValueType."'";?>);
+			return false;
+		}
+
+	   	$.ajax({
+  			type: "POST",
+  			url: "do_add_vt.php?varname="+$("#valuetypenew").val()+"&vardef="+$("#vtdef").val()
+		}).done(function(msg) {
+  			if (msg == 1) {
+  			} else {
+	  			alert(msg);
+	  			return false;  
+  			}
+ 		});
+   	}
+
+	//End Check Value type
+
+	checkitem = $('#isreg').jqxDropDownList('getSelectedItem');
+
+   	if ((checkitem == null)||(checkitem.value=="-1")) {
+	 	//alert("Please select the Regularity of the value.");
+	 	alert(<?php echo "'".$SelectRegularity."'"; ?>);
 		return false;    
-   }
+   	}
 
+	checkitem = $('#timeunit').jqxDropDownList('getSelectedItem');
 
- if(unititem.value=="-10")
-   {
-	//A new selection...need to process it first so that the entry will be valid
-	
-	//Check if new fields are filled
-	if(($("#new_unit_name").val())==""){
-		//alert("Please enter a name for the new Unit!");
-		alert(<?php echo "'".$EnterNameNewUnit."'"; ?>);
-		return false;
-	}
-
-	 if(($("#new_unit_abb").val())==""){
-		//alert("Please enter an abbreviation for the new Unit!");
-		alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
-		return false;
-	}  
-	  //All tests Passed...Write code to inset NEW UNIT 
-	  
-	   $.ajax({
-  type: "POST",
-  url: "do_add_unit.php?varname="+$("#new_unit_name").val()+"&vardef="+$("#new_unit_abb").val()+"&vartype="+checkitem.label
-}).done(function( msg ) {
-  if(msg=="The unit already exists. Cannot Add again. Please select it from the drop down list.")
-  {
-	  alert(msg);
-	  return false;
-  }
-  else
-  {
-	unitsid=msg;
-	 
-  }
- });
-	  
-	  
-   }
-
-
-
-}
-   if(checkitem.value=="-10")
-   {
-	//A new selection...need to process it first so that the entry will be valid
-	
-	//Check if new fields are filled
-	if(($("#new_unit_name").val())==""){
-		//alert("Please enter a name for the new Unit!");
-		alert(<?php echo "'".$EnterNameNewUnit."'"; ?>);
-		return false;
-	}
-
-	 if(($("#new_unit_abb").val())==""){
-		//alert("Please enter an abbreviation for the new Unit!");
-		alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
-		return false;
-	}  
-
- if(($("#new_unit_type").val())==""){
-		//alert("Please enter the type of the new unit!");
-		alert(<?php echo "'".$EnterTypeNewUnit."'"; ?>);
-		return false;
-	}  
-	   
-
-//add a new unit inlucing a new data type
-
-   $.ajax({
-  type: "POST",
-  url: "do_add_unit.php?varname="+$("#new_unit_name").val()+"&vardef="+$("#new_unit_abb").val()+"&vartype="+$("#new_unit_type").val()
-}).done(function( msg ) {
-	var myMsg = new Array();
-	myMsg = msg.split("|");
-	
-	if(myMsg[0] == "false") //the first part of the message is true/false whether we succeeded or not.  =="The unit already exists. Cannot Add again. Please select it from the drop down list.")
-	  {
-		  alert(myMsg[1]);
-		  return false;
-	  }
-	  else
-	  {
-		unitsid=msg;
-	  }
- });
-	  
-
-   }
-	
-//Check for Sample Medium
-
-
-
-checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
-
-   if ((checkitem == null)||(checkitem.value=="-1"))
-   {
-	 //alert("Please select a Sample Medium or select Other/New from the drop down to enter a new Sample Medium!");
-	 alert(<?php echo "'".$SelectMedium."'"; ?>);
-		return false;    
-   }
-   
-   if(checkitem.value=="-10")
-   {
-	//A new selection...need to process it first so that the entry will be valid
-	
-	//Check if new fields are filled
-	if(($("#smnew").val())==""){
-		//alert("Please enter a new Sample Medium!");
-		alert(<?php echo "'".$EnterNewSampleMedium."'"; ?>);
-		return false;
-	}
-	
-	if(($("#smnew").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
-{
-		//alert("Invalid new Sample Medium. Sample Medium cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
-		alert(<?php echo "'".$InvalidSampleMedium."'"; ?>);
-		return false;
-	}
-
-	 
-	 if((($("#smdef").val())=="")||(($("#smdef").val())=="Please enter a definition")){
-		//alert("Please enter the definition for the new Sample Medium");
-		alert(<?php echo "'".$EnterDefinitionNewSampleMedium."'"; ?>);
-		return false;
-	}  
-	
-	   
-	   $.ajax({
-  type: "POST",
-  url: "do_add_sm.php?varname="+$("#smnew").val()+"&vardef="+$("#smdef").val()
-}).done(function( msg ) {
-  if(msg==1)
-  {
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
-	   
-   }
-//End Check SAMPLE MEDIUM
-
-//Check Value type
-
-
-checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
-
-   if ((checkitem == null)||(checkitem.value=="-1"))
-   {
-	 //alert("Please select a Value Type or select Other/New from the drop down to enter a new Value Type!");
-	 alert(<?php echo "'".$SelectValueType."'"; ?>);
-		return false;    
-   }
-   
-   if(checkitem.value=="-10")
-   {
-	//A new selection...need to process it first so that the entry will be valid
-	
-	//Check if new fields are filled
-	if(($("#valuetypenew").val())==""){
-		//alert("Please enter a new Value Type!");
-		alert(<?php echo "'".$EnterNewValueType."'"; ?>);
-		return false;
-	}
-	
-	if(($("#valuetypenew").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
-{
-		//alert("Invalid new Value Type. Value Type cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
-		alert(<?php echo "'".$InvalidValueType."'"; ?>);
-		return false;
-	}
-
-	 
-	 if((($("#vtdef").val())=="")||(($("#vtdef").val())=="Please enter a definition")){
-		//alert("Please enter the definition for the new Value Type");
-		alert(<?php echo "'".$EnterDefinitionNewValueType."'";?>);
-		return false;
-	} 
-	
-	 
-	   $.ajax({
-  type: "POST",
-  url: "do_add_vt.php?varname="+$("#valuetypenew").val()+"&vardef="+$("#vtdef").val()
-}).done(function( msg ) {
-  if(msg==1)
-  {
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
-	 
-	   
-   }
-
-//End Check Value type
-
-
-checkitem = $('#isreg').jqxDropDownList('getSelectedItem');
-
-   if ((checkitem == null)||(checkitem.value=="-1"))
-   {
-	 //alert("Please select the Regularity of the value.");
-	 alert(<?php echo "'".$SelectRegularity."'"; ?>);
-		return false;    
-   }
-
-
-checkitem = $('#timeunit').jqxDropDownList('getSelectedItem');
-
-   if ((checkitem == null)||(checkitem.value=="-1")){
+   	if ((checkitem == null)||(checkitem.value=="-1")) {
 		//alert("Please select the Time unit.");
 		alert(<?php echo "'".$SelectTimeUnit."'"; ?>);
 		return false;    
-   }
+   	}
 
-checkitem = $('#datatype').jqxDropDownList('getSelectedItem');
+	checkitem = $('#datatype').jqxDropDownList('getSelectedItem');
 
-   if ((checkitem == null)||(checkitem.value=="-1")){
+   	if ((checkitem == null)||(checkitem.value=="-1")) {
 		//alert("Please select the Data Type.");
 		alert(<?php echo "'".$SelectDataTypeMsg."'"; ?>);
 		return false;    
-   }
+   	}
 
-checkitem = $('#gc').jqxDropDownList('getSelectedItem');
+	checkitem = $('#gc').jqxDropDownList('getSelectedItem');
 
-   if ((checkitem == null)||(checkitem.value=="-1")){
+   	if ((checkitem == null)||(checkitem.value=="-1")) {
 		//alert("Please select the Category.");
 		alert(<?php echo "'".$SelectCategoryMsg."'"; ?>);
 		return false;    
-   }
+   	}
 
-
-if(($("#tsup").val())==""){
+	if(($("#tsup").val())==""){
 		//alert("Please enter a Time Support Value! 0 is used to indicate data values that are instantaneous. Other values indicate the time over which the data values are implicitly or explicitly averaged or aggregated.");
 		alert(<?php echo "'".$EnterTimeSupportValue."'"; ?>);
 		return false;
 	}
 
-//Checking ends
+	//Checking ends
 
-var f_vc=$("#var_code").val();
+	var f_vc=$("#var_code").val();
 
-checkitem = $('#varname').jqxDropDownList('getSelectedItem');
+	checkitem = $('#varname').jqxDropDownList('getSelectedItem');
 
-	if(checkitem.value=="-10"){
+	if (checkitem.value=="-10") {
 		var f_vn=$("#newvarname").val();
 	}else{
 		var f_vn=checkitem.label;
 	}
 
-checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
+	checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
 
-	if(checkitem.value=="-10"){
+	if (checkitem.value=="-10") {
 		var f_sp=$("#other_spec").val();
 	}else{
 		var f_sp=checkitem.label;
@@ -1266,76 +1199,71 @@ checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
 		var f_sm=checkitem.label;
 	}
 
-checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
+	checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
 
-	if(checkitem.value=="-10"){
+	if (checkitem.value=="-10") {
 		var f_vt=$("#valuetypenew").val();
-	}else{
+	} else {
 		var f_vt=checkitem.label;
 	}
 
-if(varmeth==""){
-	//alert("Please select at least one Method!");
-	alert(<?php echo "'".$SelectOneMethod."'"; ?>);
-	return false;
+	if(varmeth==""){
+		//alert("Please select at least one Method!");
+		alert(<?php echo "'".$SelectOneMethod."'"; ?>);
+		return false;
 	}
 
-var isreg=$('#isreg').jqxDropDownList('getSelectedItem').value;
-var f_tid=$('#timeunit').jqxDropDownList('getSelectedItem').value;
-var f_dt=$('#datatype').jqxDropDownList('getSelectedItem').label;
-var f_cat=$('#gc').jqxDropDownList('getSelectedItem').label;
+	var isreg=$('#isreg').jqxDropDownList('getSelectedItem').value;
+	var f_tid=$('#timeunit').jqxDropDownList('getSelectedItem').value;
+	var f_dt=$('#datatype').jqxDropDownList('getSelectedItem').label;
+	var f_cat=$('#gc').jqxDropDownList('getSelectedItem').label;
 
-   $.ajax({
-  type: "POST",
-  url: "do_add_variable.php?varcode="+f_vc+"&varname="+f_vn+"&sp="+f_sp+"&unit="+f_un+"&sm="+f_sm+"&vt="+f_vt+"&isreg="+isreg+"&ts="+$("#tsup").val()+"&tid="+f_tid+"&dt="+f_dt+"&cat="+f_cat+"&nodata="+nodatavalue+"&mid="+varmeth}).done(function( msg ){
+   	$.ajax({
+  		type: "POST",
+  		url: "do_add_variable.php?varcode="+f_vc+"&varname="+f_vn+"&sp="+f_sp+"&unit="+f_un+"&sm="+f_sm+"&vt="+f_vt+"&isreg="+isreg+"&ts="+$("#tsup").val()+"&tid="+f_tid+"&dt="+f_dt+"&cat="+f_cat+"&nodata="+nodatavalue+"&mid="+varmeth
+	}).done(function(msg){
+		if (msg == 1) {
+	  		$("#msg").show(1600);
+	  		$("#msg").hide(5000);
+    		$("form").find(':input').each(function(){
+              	switch(this.type) {
+            		case 'submit':
+                		break;
+            		default:
+               			$(this).val('');
+        		}
+    		});
 
-	if(msg==1){
-
-	  $("#msg").show(1600);
-	  $("#msg").hide(5000);
-	 
-    $("form").find(':input').each(function(){
-              switch(this.type) {
-            case 'submit':
-                break;
-            default:
-               $(this).val('');
-        }
-    });
-
-
-unitsid=0;
-$("#new_spec").hide();
-$("#new_spec1").hide();
-$("#unit").hide();
-$("#unittext").hide();
-$("#newunit").hide();
-$("#smother").hide();
-$("#newunitonly").hide();
-$("#valuetypenewb").hide();
-$("#newvarnameb").hide();
-$("#varname").jqxDropDownList('selectIndex', 0 );
-$("#specdata").jqxDropDownList('selectIndex', 0 );
-$("#unittype").jqxDropDownList('selectIndex', 0 );
-$("#unit").jqxDropDownList('selectIndex', 0 );
-$("#samplemedium").jqxDropDownList('selectIndex', 0 );
-$("#valuetype").jqxDropDownList('selectIndex', 0 );
-$("#isreg").jqxDropDownList('selectIndex', 0 ); 
-$("#timeunit").jqxDropDownList('selectIndex', 0 );
-$("#datatype").jqxDropDownList('selectIndex', 0 );
-$("#gc").jqxDropDownList('selectIndex', 0 );
-$("#jqxWidget").jqxListBox('clearSelection');
-$("#dtdef").val("Please select a data type to view its definition");
-$("#gcdef").val("Please select a category to view its definition");
- $("html, body").animate({ scrollTop: 0 }, "slow")
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
-return false;
+			unitsid=0;
+			$("#new_spec").hide();
+			$("#new_spec1").hide();
+			$("#unit").hide();
+			$("#unittext").hide();
+			$("#newunit").hide();
+			$("#smother").hide();
+			$("#newunitonly").hide();
+			$("#valuetypenewb").hide();
+			$("#newvarnameb").hide();
+			$("#varname").jqxDropDownList('selectIndex', 0 );
+			$("#specdata").jqxDropDownList('selectIndex', 0 );
+			$("#unittype").jqxDropDownList('selectIndex', 0 );
+			$("#unit").jqxDropDownList('selectIndex', 0 );
+			$("#samplemedium").jqxDropDownList('selectIndex', 0 );
+			$("#valuetype").jqxDropDownList('selectIndex', 0 );
+			$("#isreg").jqxDropDownList('selectIndex', 0 ); 
+			$("#timeunit").jqxDropDownList('selectIndex', 0 );
+			$("#datatype").jqxDropDownList('selectIndex', 0 );
+			$("#gc").jqxDropDownList('selectIndex', 0 );
+			$("#jqxWidget").jqxListBox('clearSelection');
+			$("#dtdef").val("Please select a data type to view its definition");
+			$("#gcdef").val("Please select a category to view its definition");
+ 			$("html, body").animate({ scrollTop: 0 }, "slow");
+  		} else {
+	  		alert(msg);
+	  		return false;  
+  		}
+ 	});
+	return false;
 });
 	
 </script>

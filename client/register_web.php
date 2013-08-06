@@ -98,7 +98,7 @@ $(document).ready(function(){
           <td colspan="2" valign="top"><select name="source" id="source">
             <option value="-1"><?php echo $SelectSource;?></option>
             <?php echo "$option_source"; ?>
-          </select>&nbsp;<?php echo "$msg"; ?></td>
+          </select>&nbsp;<?php echo "$msg"; ?>&nbsp;<div id="status" style="display:none;"><img src="<?php echo $base_url.'images/loader.gif';?>"/></div></td>
         </tr>
         <tr>
           <td width="108" valign="top">&nbsp;</td>
@@ -191,10 +191,19 @@ $(document).ready(function(){
           <td colspan="2" valign="top"><span class="em">
             <input type="text" id="abstract" name="abstract" size="5" maxlength="8" style="background-color:#999;" readonly="true"/></td>
         </tr>
+        <tr id="param_is_public" style="display:none;">
+          <td valign="top"><strong><?php echo $IsPublic;?></strong></td>
+          <td colspan="2" valign="top"><span class="em">
+            <input type="checkbox" id="is_public" name="is_public" checked="true" /></td>
+        </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td valign="top">&nbsp;</td>
           <td valign="top">&nbsp;</td>
+        </tr>
+        <tr id="process_result" style="display:none;">
+          <td valign="top"><strong><?php echo $TheLink;?></strong></td>
+          <td colspan="2" valign="top"><div id="link_result"></div></td>
         </tr>
         <tr>
           <td width="108" valign="top">&nbsp;</td>
@@ -202,7 +211,14 @@ $(document).ready(function(){
           <td width="470" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $RegisterWebButton;?>" class="button" /></td>
+          <td colspan="3" valign="top">
+		  	  <input type="hidden" id="process" name="process" value="CHECK" />
+			  <input type="button" id="btnSubmit" name="submit" value="<?php echo $CheckRegisterWebButton;?>" class="button" />
+			  &nbsp;
+			  <input type="button" id="btnHarvest" name="btnHarvest" value="<?php echo $HarvestWebButton;?>" class="button" style="display:none;" />
+			  &nbsp;
+			  <input type="button" id="btnUnregister" name="btnUnregister" value="<?php echo $UnregisterWebButton;?>" class="button" style="display:none;" />
+			 </td>
           </tr>
       </table></form>
     <p>&nbsp;</p>
@@ -215,8 +231,11 @@ $(document).ready(function(){
 
 <script>
 
-$("#registerweb").submit(function(){
-
+$("#btnSubmit").click(function(){
+	$('#status').show();
+	if ($("#is_public").attr('checked') != 'undefined') {
+		$("#is_public").val("true");
+	}
 	//Validate all fields
 	if(($("#source").val())==""){
 		alert(<?php echo "'".$SelectSourceFirst."'"; ?>);
@@ -225,34 +244,102 @@ $("#registerweb").submit(function(){
 
 	//Validation is all complete, so now process it
 
+	processRegistration();
+	return false;
+});
+
+$("#btnUnregister").click(function() {
+	$('#status').show();
+	$("#is_public").val("");
+	$("#process").val("UNREGISTER");
+	processRegistration();
+	return false;
+});
+
+$("#btnHarvest").click(function() {
+	$('#status').show();
+	$("#is_public").val("");
+	$("#process").val("HARVEST");
+	processRegistration();
+	return false;
+});
+
+function processRegistration() {
 	$.post("process_register_web.php", $("#registerweb").serialize(), function(data){
-  
-		 if(data==1){
-			$("#msg").show(5000);
-			$("#msg").hide(3500);
-		    $("#source").val("-1");
-		    $("#title").val("");
-		    $("#wsdl").val("");
-		    $("#network").val("");
-		    $("#organization_name").val("");
-		    $("#organization_url").val("");
-		    $("#contact_name").val("");
-		    $("#contact_email").val("");
-		    $("#contact_phone").val("");
-		    $("#citation").val("");
-		    $("#abstract").val("");
-			setTimeout(function(){
-				window.open("register_web.php","_self");
-				}, 5000);
-			return true;
+		var resp = $.parseJSON(data);
+		 if (resp.status == "OK") {
+			$('#status').hide();
+		 	if ($('#process').val() == "CHECK") {
+			 	if (resp.is_registered == "no") {
+			 		$('#process').val("REGISTER");
+			 		$("#param_is_public").show();
+				 	$('#btnSubmit').val("<?=$RegisterWebButton;?>");
+				 	alert('<?=$NotRegistered;?>');
+				} else {
+				    $("#process_result").show();
+					$("#link_result").html(resp.result_link);
+			 		$('#process').val("UPDATE");
+			 		$('#btnSubmit').val("<?=$UpdateRegisterWebButton;?>");		 		
+			 		$('#btnHarvest').show();		 		
+			 		$('#btnUnregister').show();		 		
+			 		$("#param_is_public").show();
+
+					$("#title").css("background-color","white");
+				    $("#wsdl").css("background-color","white");
+				    $("#network").css("background-color","white");
+				    $("#organization_name").css("background-color","white");
+				    $("#organization_url").css("background-color","white");
+				    $("#contact_name").css("background-color","white");
+				    $("#contact_email").css("background-color","white");
+				    $("#contact_phone").css("background-color","white");
+				    $("#citation").css("background-color","white");
+				    $("#abstract").css("background-color","white");
+
+					$("#title").removeAttr("readonly");
+				    $("#wsdl").removeAttr("readonly");
+				    $("#network").removeAttr("readonly");
+				    $("#organization_name").removeAttr("readonly");
+				    $("#organization_url").removeAttr("readonly");
+				    $("#contact_name").removeAttr("readonly");
+				    $("#contact_email").removeAttr("readonly");
+				    $("#contact_phone").removeAttr("readonly");
+				    $("#citation").removeAttr("readonly");
+				    $("#abstract").removeAttr("readonly");
+					alert('<?=$Registered;?>');
+				}
+			} else if ($('#process').val() == "REGISTER" || $('#process').val() == "UNREGISTER") {
+		 		$('#process').val("CHECK");
+		 		$("#param_is_public").hide();
+			 	$('#btnSubmit').val("<?=$CheckRegisterWebButton;?>");		 		
+				$("#msg").show(5000);
+				$("#msg").hide(3500);
+			    $("#source").val("-1");
+			    $("#title").val("");
+			    $("#wsdl").val("");
+			    $("#network").val("");
+			    $("#organization_name").val("");
+			    $("#organization_url").val("");
+			    $("#contact_name").val("");
+			    $("#contact_email").val("");
+			    $("#contact_phone").val("");
+			    $("#citation").val("");
+			    $("#abstract").val("");
+				setTimeout(function(){
+					window.open("register_web.php","_self");
+					}, 5000);
+			} else if ($('#process').val() == "UPDATE") {
+				alert('<?=$UpdateRegistered;?>');
+			} else if ($('#process').val() == "HARVEST") {
+			    $("#process_result").show();
+				$("#link_result").html(resp.result_link);
+				alert('<?=$HarvestRegistered;?>');
+			}
 		}else{
-			alert(<?php echo "'".$ProcessingError."'";?>);
-			return false;
+			alert(resp.error);
 		}
 		
 	});
-return false;
-});
+}
 </script>
 </body>
 </html>

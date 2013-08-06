@@ -20,6 +20,8 @@ if ($num > 0) {
 	if ($row = mysql_fetch_array ($result)) {
 		$row["Network"] = $default_varcode;
 		$row["WSDL"] = $proto.$server."/services/cuahsi_1_1.asmx?wsdl";
+		//$row["WSDL"] = $row['SourceLink']."/services/cuahsi_1_1.asmx?wsdl";
+		//$row["WSDL"] = "http://his.cuahsi.org/ODMCV_1_1/ODMCV_1_1.asmx?wsdl";
 		$data = $row;
 	}
 }

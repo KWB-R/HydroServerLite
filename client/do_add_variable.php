@@ -39,7 +39,9 @@ $result1 = @mysql_query($sql1,$connect)or die(mysql_error());
 
 //Update the Var Meth Table to have a new Variable
 
-$sql2="INSERT INTO `varmeth`(`VariableID`, `VariableCode`, `VariableName`, `DataType`, `MethodID`) VALUES ('$varid','$vc','$vn','$dt','$mid')";
+//$sql2="INSERT INTO `varmeth`(`VariableID`, `VariableCode`, `VariableName`, `DataType`, `MethodID`) VALUES ('$varid','$vc','$vn','$dt','$mid')";
+//change varmeth to seriescatalog
+$sql2="INSERT INTO `seriescatalog`(`VariableID`, `VariableCode`, `VariableName`, `DataType`, `MethodID`) VALUES ('$varid','$vc','$vn','$dt','$mid')";
 $result2 = @mysql_query($sql2,$connect)or die(mysql_error());
 
 echo($result1);

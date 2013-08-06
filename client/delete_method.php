@@ -14,7 +14,10 @@ $sql_d ="DELETE FROM methods WHERE MethodID='$MID'";
 $result_d = @mysql_query($sql_d,$connection)or die(mysql_error());
 
 //Update or delete method from varmeth table too!
-require_once 'update_varmeth.php';
+//require_once 'update_varmeth.php';
+
+//change varmeth to seriescatalog
+require_once 'update_var_seriescatalog.php';
 
 echo ($result_d);
 

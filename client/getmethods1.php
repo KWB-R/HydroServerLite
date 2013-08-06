@@ -9,7 +9,10 @@ $m=$_GET["m"];
 require_once 'database_connection.php';
 
 //filter the Site results after Source is selected
-$sql4 ="SELECT MethodID FROM varmeth WHERE VariableID='".$m."'";
+//$sql4 ="SELECT MethodID FROM varmeth WHERE VariableID='".$m."'";
+
+//change varmeth to seriescatalog
+$sql4 ="SELECT MethodID FROM seriescatalog WHERE VariableID='".$m."'";
 
 $result4 = @mysql_query($sql4,$connection)or die(mysql_error());
 

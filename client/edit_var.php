@@ -506,7 +506,7 @@ $.ajax({
 $("#jqxWidget").jqxListBox('clearSelection'); 	
 $.ajax({
   type: "POST",
-  url: "getvarmeth.php?varid="+$("#varid").val()
+  url: "getvar_seriescatalog.php?varid="+$("#varid").val()
 }).done(function( msg ) {
   if(msg)
   {
@@ -1707,7 +1707,7 @@ var f_cat=$('#gc').jqxDropDownList('getSelectedItem').label;
 
 	$.ajax({
 	type: "POST",
-	url: "do_edit_varmeth.php?vmeth="+varmeth+"&varid="+$('#varid').val()}).done(function(msg){
+	url: "do_edit_var_seriescatalog.php?vmeth="+varmeth+"&varid="+$('#varid').val()}).done(function(msg){
 		if(msg==1){
 			
 		}else{

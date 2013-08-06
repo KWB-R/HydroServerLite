@@ -15,6 +15,6 @@
 //JS Variables	
 	$Error = "Error en la Base de Datos. Por favor, póngase en contacto con su Administrador Web";
 	$SelectAtLeastOne = "¡Seleccione al menos una variable!";
-	$VarmethFail = "¡La mesa de varmeth no pudo actualizar!";
+	$VarmethFail = "¡La mesa de SeriesCatalog no pudo actualizar!";
 	$EditFail = "La edición ha fallado! Actualice la página y vuelva a intentarlo.";
 ?>

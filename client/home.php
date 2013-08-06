@@ -51,7 +51,10 @@ $num = mysql_num_rows($result);
 	$num_datapts = mysql_num_rows($result_datapts);
 	
 //Count the number of Variables
-	$sql_vars ="SELECT * FROM varmeth";
+	//$sql_vars ="SELECT * FROM varmeth";
+
+	//change varmeth to seriescatalog
+	$sql_vars ="SELECT * FROM seriescatalog";
 
 	$result_vars = @mysql_query($sql_vars,$connection) or die(mysql_error());
 
