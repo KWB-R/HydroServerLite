@@ -23,7 +23,7 @@ else
 }
 		$variables[] = array(
         'dataid' => $dataid,
-        'dataname' => $row['DataType']);
+        'dataname' => utf8_encode($row['DataType']));
 }
 
 echo json_encode($variables);

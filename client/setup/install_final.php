@@ -1,6 +1,18 @@
 ﻿<?php
 	//This is required to get the international text strings dictionary
+	$urlExtra = "..//";
+	$setup="yes";
 	require_once '../internationalize.php';
+	
+	//Clean Up Crew
+	//Destroy the language session variable. 
+	if (!isset($_SESSION))
+		{
+			session_start();
+		}
+	unset($_SESSION['setupLang']);
+	
+	
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

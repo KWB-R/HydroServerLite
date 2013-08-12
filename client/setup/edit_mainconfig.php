@@ -1,6 +1,19 @@
 ﻿<?php
+	
+	if (isset($_GET['lang']))
+	{
+	session_start();
+	$_SESSION['setupLang']=$_GET['lang'];
+	}
+	else
+	{
+	header ("Location: index.php");
+	}
 	//This is required to get the international text strings dictionary
+	$urlExtra="..//";
+	$setup="yes";
 	require_once '../internationalize.php';
+	
 ?>
 
 
@@ -128,11 +141,11 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   
   <tr>
     
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br />
+    <td width="960" valign="top" bgcolor="#FFFFFF"><blockquote><br />
       <form name="form1" id="form1" method="post" action="">
-<table width="800" border="0" align="center" style="background-color: #FFFFFF;">
+<table width="720" border="0" align="center" style="background-color: #FFFFFF;">
   <tr>
-    <td><table width="600" border="0" align="center" style="background-color: #FFFFFF;">
+    <td><table width="720" border="0" align="center" style="background-color: #FFFFFF;">
   <tr>
     <td colspan="3">&nbsp;</td>
   </tr>
@@ -200,6 +213,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
+
   <tr>
     <td colspan="3"><span class="confighead"><!--Configuration settings for website's look and functionality--><?php echo $ConfigurationSettingsLook;?></span></td>
     </tr>
@@ -208,6 +222,12 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
+    <tr>
+    <td>&nbsp;</td>
+    <!-- @TODO : Add language conversion to the below file-->
+    <td><?php echo $LanguageCode;?> ('en','es'):</td>
+    <td><input type="text" id="LangCode" name="lang" value="" />&nbsp;</td>
+    </tr>
   <tr>
     <td>&nbsp;</td>
     <td><!--Organization's Name:--><?php echo $OrganizationName;?></td>
@@ -269,7 +289,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><!--Profile Version:--><?php echo $ProfileVersion;?></td>
+    <td><!--Profile Version:--><?php echo $MetaDataProfileVersion;?></td>
     <td><input type="text" id="Profile Version" name="profilev" value="" />&nbsp;<a href="#" onClick="show_answerPV()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>

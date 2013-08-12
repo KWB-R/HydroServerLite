@@ -1,6 +1,6 @@
 <?php
 
-require 'main_config.php';
+require 'fetchMainConfig.php';
 
 //create next increment SourceID in the table
 $next_increment ="0";

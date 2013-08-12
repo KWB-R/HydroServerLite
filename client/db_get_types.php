@@ -21,7 +21,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
 		$variables[] = array(
         'variableid' => $row['VariableID'],
-        'variablename' => $row['VariableName']. ' ' ."(".$row["DataType"].")");
+        'variablename' => utf8_encode($row['VariableName']). ' ' ."(".utf8_encode($row["DataType"]).")");
 
 }
 

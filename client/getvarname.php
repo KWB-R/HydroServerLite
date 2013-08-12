@@ -8,20 +8,20 @@ include ('internationalize.php');
 $query = "SELECT * FROM variablenamecv";
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
 $variables[] = array(
-        //'specterm' => "Select...",
+       
 		'specterm' => $SelectEllipsis,
         'specdef' => "-1" );
 
 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     
 		$variables[] = array(
-        'specterm' => $row['Term'],
-        'specdef' => $row['Definition']);
+        'specterm' =>utf8_encode( $row['Term']),
+        'specdef' => utf8_encode($row['Definition']));
 
 }
 
 $variables[] = array(
-        //'specterm' => "Other/New",
+       
 		'specterm' => $OtherSlashNew,
         'specdef' => "-10" );
 

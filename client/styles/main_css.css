@@ -106,6 +106,8 @@ td {
 	text-align: left;
 	position:relative;
 	behavior: url(styles/PIE.php);
+	cursor: pointer;
+	cursor: hand;
 }
 
 .menuhead2 {

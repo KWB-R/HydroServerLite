@@ -17,7 +17,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
 		$methods[] = array(
         'methodid' => $row['MethodID'],
-        'methodname' => $row['MethodDescription']);
+        'methodname' => utf8_encode($row['MethodDescription']));
 }
 
 echo json_encode($methods);

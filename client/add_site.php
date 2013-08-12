@@ -8,7 +8,7 @@ require_once 'authorization_check.php';
 
 //connect to server and select database
 require_once 'database_connection.php';
-require_once 'main_config.php';
+require_once 'fetchMainConfig.php';
 
 //add the SourceID's options
 $sql ="Select * FROM sources";
@@ -420,7 +420,8 @@ display: none;
         </tr>
         <tr>
           <td valign="top"><strong><!--Site Photo:--><?php echo $SitePhoto;?></strong></td>
-          <td><input type="file" name="file" id="file" size="30">
+          <td><!--<input type="button" id="pseudobutton" value="Aprire the File" style="z-index:2">-->
+			<input type="file" name="file" id="file" size="30" value="File" >
             <br>
             <!--(Photo must be in .JPG format; File will be uploaded upon submit below.)--><?php echo $ExSitePhoto;?></td>
         </tr>

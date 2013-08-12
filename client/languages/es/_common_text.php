@@ -1,12 +1,10 @@
 ﻿<?php
-
 //This page is intended to hold all commonly used terms so that they only have
 //to be translated once.
 	//authoridad del usarios
 	$Administrator = "Administrador";
 	$Teacher = "Gerente";
 	$Student = "Técnico";
-	
 	$Abstract = "Resumen:";
 	$AddNewUser = "Adicionar un Nuevo Usuario"; 
 	$Address = "Dirección:";
@@ -34,6 +32,7 @@
 	$Date = "Fecha:";
 	$Delete = "Remover";
 	$Description = "Descripción:";
+	$Edit = "Editar:";
 	$Elevation= "Elevación:";
 	$Email = "Correo Electrónico:";
 	$ExAbstract = "(Ej.: MOSS acquiere datos hidrologicos del Parque Estatal Ponderosa...; ó usted puede entrar Desconocido)";
@@ -62,7 +61,7 @@
 	$International = "Internacional";
 	$LastName = "Apellido:";
 	$Latitude = "Latitud:";
-	$Link  = "Enlazar con el Orig:";
+	$Link  = "Enlace a la Organización:";
 	$Longitude = "Longitud:";
 	$MayNotEdit = "(Esto no puede ser editado!)";
 	$MediumDefinition = "Definición de la Medición de la Muestra:";
@@ -263,6 +262,8 @@
 	$UnitExists = "La unidad ya existe. No se puede adicionar otra vez. Por favor seleccionela del menú desplegable";
 	$SelectCategoryMsg = "Por favor seleccione la categoría.";
 	$NotFound = " No encontrado";
+	$ClickHere = "Seleccione de una lista de sitios: ";
+	$NoSites = "Ningun sitio encontrado. Por favor cambiar los términos de búsqueda.";
 
 //These are for the variables found in the js folder
 	//to be left in common
@@ -277,7 +278,7 @@
 	$ChangeUserPasswordNav = "Cambiar la contraseña de Usuario";
 	//Remove User above
 	$AddData = "Adicionar Datos";
-	$AddSingleValue = "Adicionar un Simple Valor";
+	$AddSingleValue = "Adicionar un Único Valor";
 	$AddMultipleValues = "Adicionar Multiples Valores";
 	//$Import called above
 	$ViewModifyData = "Visualizar/Modificar Datos";

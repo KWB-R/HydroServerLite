@@ -28,7 +28,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 if($row['VariableName']!=null){
 		$variables[] = array(
         'variableid' => $temp,
-        'variablename' => $row['VariableName']);
+        'variablename' => utf8_encode($row['VariableName']));
 $temp=$temp+1;
 }
 }

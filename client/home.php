@@ -3,15 +3,19 @@
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
 
+//Author : Rohit Khattar : Include File added to check removal of Setup directory. 
+
+require_once 'setupCheck.php';
+
 //check authority to be here
 //require_once 'authorization_check.php';
 
 //connect to server and select database
 require_once 'database_connection.php';
-require_once 'main_config.php';
+require_once 'fetchMainConfig.php';
 
 if (!isset($_COOKIE['power'])){
-//Check to see if the perosn is an authorized user and display their first name
+//Check to see if the person is an authorized user and display their first name
 $sql ="SELECT * FROM moss_users WHERE username='$_POST[username]' AND password= password('$_POST[password]')";
 
 $result = @mysql_query($sql,$connection) or die(mysql_error());

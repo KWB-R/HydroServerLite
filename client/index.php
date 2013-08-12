@@ -2,8 +2,12 @@
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
 
+//Author : Rohit Khattar : Include File added to check removal of Setup directory. 
+
+require_once 'setupCheck.php';
+
 // set the expiration date to one hour ago
-require_once("main_config.php");
+require_once("fetchMainConfig.php");
 if (isset($_COOKIE["power"])) {
   unset($_COOKIE["power"]);
 }
@@ -100,6 +104,9 @@ alert((<?php echo "'".$ForgotPassword1."'";?>) + '\n' + (<?php echo "'".$ForgotP
 		    } elseif ($_GET['state']=="pass2"){
 			    //echo "<p class=em2>***You are not authorized to view that page!</p>";
 				echo "<p class=em2>$NotAuthorized</p>";
+		    }
+			  if ($_GET['state']=="setup"){
+				echo "<p class=em2>$setupexist</p>";
 		    }
 	    }
 	  ?>

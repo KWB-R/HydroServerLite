@@ -4,7 +4,7 @@ require_once 'internationalize.php';
 
 //check authority to be here
 require_once 'authorization_check.php';
-require_once 'main_config.php';
+require_once 'fetchMainConfig.php';
 ?>
 
 <html>

@@ -13,11 +13,15 @@ This file will be populated while deployment
 
 //MySql Database Configuration Settings
 
+if (!defined(\'DATABASE_HOST\'))
+{
 define("DATABASE_HOST", "'.$_POST['databasehost'].'"); //for example define("DATABASE_HOST", "your_database_host");
 define("DATABASE_USERNAME", "'.$_POST['databaseusername'].'"); //for example define("DATABASE_USERNAME", "your_database_username");
 define("DATABASE_NAME", "'.$_POST['databasename'].'");  //for example define("DATABASE_NAME", "your_database_name");
 define("DATABASE_PASSWORD", "'.$_POST['databasepassword'].'"); //for example define("DATABASE_PASSWORD", "your_database_password");
+}
 
+$lang="'.$_POST['lang'].'";
 
 //Cookie Settings - This is for Security!
 $www = "'.$_POST['domain'].'"; // Please change this to your websites domain name. You may also use "localhost" for testing purposes on a local server.
@@ -82,7 +86,7 @@ $connect = mysql_connect($_POST['databasehost'], $_POST['databaseusername'], $_P
     or die("Error selecting the database " . $_POST['databasename'] .
 	  mysql_error() . "");
 	  
-
+sleep(1);
 
 $sql ="INSERT INTO `moss_users`(`firstname`, `lastname`, `username`, `password`, `authority`) VALUES ('admin', 'admin', 'his_admin', PASSWORD('".$_POST['password']."'), 'admin')";
 

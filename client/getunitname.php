@@ -10,20 +10,20 @@ $type=$_GET['type'];
 $query = "SELECT * FROM units WHERE unitsType='$type'";
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
 $variables[] = array(
-        //'unit' => "Select...",
+       
 		'unit' => $SelectEllipsis,
         'unitid' => "-1" );
 
 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     
 		$variables[] = array(
-        'unit' => $row['unitsName'],
-        'unitid' => $row['unitsID']);
+        'unit' =>utf8_encode( $row['unitsName']),
+        'unitid' => utf8_encode($row['unitsID']));
 
 }
 
 $variables[] = array(
-        //'unit' => "Other/New",
+      
 		'unit' => $OtherSlashNew,
         'unitid' => "-10" );
 
