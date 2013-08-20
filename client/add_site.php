@@ -180,7 +180,10 @@ alert(<?php echo "'".$AutomaticallyEnterLongLatEle."'"; ?>);
 
 <!-- Drop Down JS -->
 <script type="text/javascript" src="js/drop_down.js"></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true&language=
+<?php
+echo $lang;
+?>"></script>
 
 <!-- Preload Images -->
 <SCRIPT language="JavaScript">

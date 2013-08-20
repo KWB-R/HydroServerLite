@@ -823,6 +823,15 @@ var source12 =
             };
 var dataAdapter12 = new $.jqx.dataAdapter(source12);   
 
+
+var localizationobj = {};
+localizationobj.pagergotopagestring = "<?php echo $gridGoTo?>:";
+localizationobj.pagershowrowsstring = "<?php echo $gridShowRows?>:";
+localizationobj.pagerrangestring = " <?php echo $gridOf?> ";
+      
+
+
+
 if (flag==1)    
 {
 
@@ -834,7 +843,6 @@ if (flag==1)
             {
              
                 source: dataAdapter12,
-               
                 columns: [
 				//{ text: 'ValueID', datafield: 'vid', width: 90 },
                   //{ text: 'Date', datafield: 'date', width: 200 },
@@ -885,6 +893,7 @@ if (flag==1)
       ?>
                 ]
             });		
+				$("#jqxgrid").on("bindingcomplete", function (event) {$("#jqxgrid").jqxGrid('localizestrings', localizationobj);});   
 
 }
 if(flag!=1)
@@ -895,7 +904,7 @@ if(flag!=1)
             {
                 width: 610,
                 source: dataAdapter12,
-                theme: 'darkblue',   
+                theme: 'darkblue', 
                 columnsresize: true,
 				sortable: true,
                 pageable: true,
@@ -954,7 +963,7 @@ if(flag!=1)
       ?>
                 ]
             });		
-		
+		$("#jqxgrid").on("bindingcomplete", function (event) {$("#jqxgrid").jqxGrid('localizestrings', localizationobj);});   
 		flag=1;		
 			
 	}

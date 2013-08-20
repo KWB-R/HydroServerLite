@@ -1,3 +1,10 @@
+
+<?php
+//This is required to get the international text strings dictionary
+$urlExtraName = "compare_3.php";
+require_once 'internationalize.php';
+
+?>
 <script type="text/javascript">
 function loadsitecomp1()
 { 
@@ -66,10 +73,10 @@ get_methods_c();
           <td colspan="4"></td>
           </tr>
         <tr>
-          <td colspan="4">Please select a Data Type for the variable</td>
+          <td colspan="4"><?php echo $SelectDataVariable?></td>
         </tr>
         <tr>
-          <td width="113"><strong>Data Type:</strong></td>
+          <td width="113"><strong><?php echo $DataType?></strong></td>
           <td width="241"><div id="typelistc"></div></td>
           <td width="24">&nbsp;</td>
           <td width="234">&nbsp;</td>
