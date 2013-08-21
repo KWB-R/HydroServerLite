@@ -38,8 +38,8 @@
 	
 //Variables for the Grid	
 
-$gridGoTo = "Go to page";
-$gridShowRows = "Show rows";
-$gridOf = "of";
+$gridGoTo = "Ir a Página";
+$gridShowRows = "Monstrar Filas";
+$gridOf = "de";
 	
 ?>
