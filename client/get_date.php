@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-//require_once 'internationalize.php';
-
 require_once 'db_config.php';
 
 // Get parameters from URL
@@ -26,7 +23,6 @@ $result = mysql_query($query);
 $result = mysql_query($query);
 if (!$result) {
   die("Invalid query: " . mysql_error());
- // die($InvalidQuery . mysql_error());
 }
 
 header("Content-type: text/xml");

@@ -1,14 +1,27 @@
 <?php
 //Display the correct navigation or redirect them to the unauthorized user page
-if ($_COOKIE['power']=="admin"){
-	$nav ="<script src=A_navbar.php></script>";
+
+	if(!isset($_COOKIE['idaho']))
+	{
+		$nav ="<script src=js/P_navbar.js></script>";
+	
 	}
-elseif ($_COOKIE['power']=="teacher"){
-	$nav ="<script src=T_navbar.php></script>";
+	else
+	{
+	
+	$some_array = unserialize(base64_decode($_COOKIE['idaho']));
+	$power1= $some_array['power'];
+
+if ($power1=="admin"){
+	$nav ="<script src=js/A_navbar.js></script>";
 	}
-elseif ($_COOKIE['power']=="student"){
-	$nav ="<script src=S_navbar.php></script>";
+elseif ($power1=="teacher"){
+	$nav ="<script src=js/T_navbar.js></script>";
+	}
+elseif ($power1=="student"){
+	$nav ="<script src=js/S_navbar.js></script>";
 	} 
 else {
-	$nav ="<script src=P_navbar.php></script>";
+	$nav ="<script src=js/P_navbar.js></script>";
+	}
 	}

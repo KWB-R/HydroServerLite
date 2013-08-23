@@ -1,12 +1,9 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+if ($power1 !="admin"){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
@@ -22,8 +19,7 @@ $result_1 = @mysql_query($sql_1,$connection)or die(mysql_error());
 $num_1 = @mysql_num_rows($result_1);
 	if ($num_1 < 1){
 
-    //$msg_1 = "<p class=em2>Sorry, there are no Methods in the database.</em></p>";
-	$msg_1 = "<p class=em2> $NoMethods </em></p>";
+    $msg_1 = "<p class=em2>Sorry, there are no Methods in the database.</em></p>";
 
 	} else {
 
@@ -41,8 +37,7 @@ $num_1 = @mysql_num_rows($result_1);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
@@ -103,16 +98,16 @@ $('#window').show();
   </tr>
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg_1"; ?><div id="msg"><p class=em2><!--Method successfully deleted!--><?php echo $MethodDeleted;?></p></div>
-    <div id="msg2"><p class=em2><!--Method successfully edited!--><?php echo $MethodEdited;?></p></div>
-      <h1><!--Edit or Delete a Method--><?php echo $EditDeleteMethod;?></h1>
-      <p><!--Please select the Method you would like to edit or delete from the drop down menu to proceed.--><?php echo $SelectMethod;?></p>
+    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right">Required fields are marked with an asterisk(*).</p><?php echo "$msg_1"; ?><div id="msg"><p class=em2>Method successfully deleted!</p></div>
+    <div id="msg2"><p class=em2>Method successfully edited!</p></div>
+      <h1>Edit or Delete a Method</h1>
+      <p>Please select the Method you would like to edit or delete from the drop down menu to proceed.</p>
       <FORM METHOD="POST" ACTION="" name="changemethod" id="changemethod">
         <table width="620" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td><strong><!--Method:--><?php echo $Method;?></strong></td>
+          <td><strong>Method:</strong></td>
           <td colspan="2" valign="top"><select name="MethodID" id="MethodID" onChange="editMethod()">
-            <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+            <option value="-1">Select....</option>
             <?php echo "$option_block"; ?></select></td>
         </tr>
         <tr>
@@ -121,7 +116,7 @@ $('#window').show();
           <td width="280" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="3" valign="top"><strong class="em2"><!--NOTE:--><?php echo $NoteColon;?></strong> <span class="em"><!--You cannot delete a Method without first deleting all data values which use the specific Method.--><?php echo $MethodNote;?></span></td>
+          <td colspan="3" valign="top"><strong class="em2">NOTE:</strong> <span class="em">You cannot delete a Method without first deleting all data values which use the specific Method.</span></td>
           </tr>
         </table>
       </FORM>
@@ -139,10 +134,9 @@ $('#window').show();
 </table>
 <div id="window">
 	<div id="windowHeader">
-		<span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span>
+		<span>Confirmation Box</span>
 	</div>
-	<!--<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yup"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>-->
-    <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yup"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
+	<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yup"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>
 </div>
 </body>
 </html>
@@ -152,8 +146,7 @@ $('#window').show();
 function deleteMethod(){
 
 	if(($("#MethodID").val())==-1){
-		//alert("Please select a Method to delete!");
-		alert(<?php echo "'".$SelectMethodDelete."'"; ?>);
+		alert("Please select a Method to delete!");
 		return false;
 		
 	}else{
@@ -177,8 +170,7 @@ function deleteMethod(){
 	
 			}else{
 				
-				//alert("Error during processing! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ProcessingError."'"; ?>);
+				alert("Error during processing! Please refresh the page and begin again.");
 				return false;
 				}
 		});		
@@ -190,8 +182,7 @@ return false;
 function editMethod(){
 	
 	if(($("#MethodID").val())==-1){
-		//alert("Please select a Method to edit!");
-		alert(<?php echo "'".$SelectMethodEdit."'"; ?>);
+		alert("Please select a Method to edit!");
 		return false;
 		
 	}else{
@@ -211,8 +202,7 @@ function editMethod(){
 			
 			}else{
 			
-				//alert("Error during request! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ErrorDuringRequest."'"; ?>);
+				alert("Error during request! Please refresh the page and begin again.");
 				return false;
 				}
 		});
@@ -225,8 +215,7 @@ function updateMethod(){
 
 	if(($("#MethodDescription2").val())==''){
 		
-		//alert("A Method Name is required!");
-		alert(<?php echo "'".$MethodNameRequired."'"; ?>);
+		alert("A Method Name is required!");
 		return false;
 	
 	}else{
@@ -255,8 +244,7 @@ function updateMethod(){
 
 			}else{
 
-				//alert("Error during processing! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ProcessingError."'"; ?>);
+				alert("Error during processing! Please refresh the page and begin again.");
 				return false;
 				}
 		});

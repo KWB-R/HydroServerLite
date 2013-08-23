@@ -1,14 +1,8 @@
-﻿<?php
-	//This is required to get the international text strings dictionary
-	require_once '../internationalize.php';
-?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client: Install</title>-->
-<title><?php echo $TitleInstall;?></title>
+<title>HydroServer Lite Web Client: Install</title>
 <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="../favicon.ico" >
 
@@ -29,11 +23,10 @@
     <td width="240" valign="top" bgcolor="#f2e6d6">
     </td>
     <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br />
-      <h1><!--Installation Complete--><?php echo $InstallationComplete;?></h1>
-        <p><!--Congratulations. You have successfully installed HydroServer Lite on your Web Server.Click Below to go to your site.--><?php echo $CongratsInstall;?></p>
-        <p><!--You can login using the Administrator password set on the previous page. The username is 'his_admin'(without the quotes).--><?php echo $Login;?></p>
-        <!--<p><a href="../index.php" class="button">Go to Site</a></p>-->
-        <p><a href="../index.php" class="button"><?php echo $GoToSite;?></a></p>
+      <h1>Installation Complete</h1>
+        <p>Congratulations. You have successfully installed HydroServer Lite on your Web Server.Click Below to go to your site.</p>
+        <p>You can login using the Administrator password set on the previous page. The username is 'his_admin'(without the quotes).</p>
+        <p><a href="../index.php" class="button">Go to Site</a></p>
         <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>

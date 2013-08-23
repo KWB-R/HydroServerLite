@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //value given from the page
 $x=$_GET["x"];
 
@@ -16,12 +13,10 @@ $result3 = @mysql_query($sql3,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result3);
 	if ($num < 1) {
 
-    //echo "<P><em2>No Types for this Site.</em></p>";
-	echo "<P><em2> $NoTypesForSite </em></p>";
+    echo "<P><em2>No Types for this Site.</em></p>";
 
 	} else {
-//$option_block3 = "<select name='VariableID' id='VariableID' onChange='showMethods(this.value)'><option value=''>Select....</option>";
-$option_block3 = "<select name='VariableID' id='VariableID' onChange='showMethods(this.value)'><option value=''> $SelectEllipsis </option>";
+$option_block3 = "<select name='VariableID' id='VariableID' onChange='showMethods(this.value)'><option value=''>Select....</option>";
 	while ($row3 = mysql_fetch_array ($result3)) {
 
 		$typeid = $row3["VariableID"];

@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
 
@@ -18,8 +15,7 @@ $result = @mysql_query($sql,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result);
 	if ($num < 1) {
 
-    //$msg = "<P><em2>Sorry, no Sources available.</em></p>";
-	$msg = "<P><em2> $SorryNoSource </em></p>";
+    $msg = "<P><em2>Sorry, no Sources available.</em></p>";
 
 	} else {
 
@@ -41,8 +37,7 @@ $result3 = @mysql_query($sql3,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result3);
 	if ($num < 1) {
 
-    //$msg3 = "<P><em2>Sorry, there are no Variables.</em></p>";
-	$msg3 = "<P><em2> $SorryNoVariable </em></p>";
+    $msg3 = "<P><em2>Sorry, there are no Variables.</em></p>";
 
 	} else {
 
@@ -63,20 +58,17 @@ $num = @mysql_num_rows($result3);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
 <script type="text/javascript">
 function show_answer(){
-//alert("If you do not see your location listed here," + '\n' + "please contact your teacher and ask them" + '\n' + "to add it before entering data.");
-alert(<?php echo "'". $IfNoSeeSite1."'";?> + '\n' + <?php echo "'". $ContactSupervisor."'";?> + '\n' + <?php echo "'". $AddIt."'";?>);
+alert("If you do not see your location listed here," + '\n' + "please contact your teacher and ask them" + '\n' + "to add it before entering data.");
 }
 
 function show_answer2(){
-//alert("If you do not see your METHOD listed here," + '\n' + "please contact your teacher and ask them" + '\n' + "to add it before entering data.");
-alert(<?php echo "'". $IfNoSeeMethod1."'";?> + '\n' + <?php echo "'". $ContactSupervisor."'";?> + '\n' + <?php echo "'". $AddIt."'";?>);
+alert("If you do not see your METHOD listed here," + '\n' + "please contact your teacher and ask them" + '\n' + "to add it before entering data.");
 }
 </script>
 
@@ -86,6 +78,7 @@ alert(<?php echo "'". $IfNoSeeMethod1."'";?> + '\n' + <?php echo "'". $ContactSu
 <link rel="stylesheet" href="styles/jqstyles/jquery.ui.timepicker.css">
 
 <script src="js/jquery-1.7.2.js"></script>
+<script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
 <script src="js/ui/jquery.ui.core.js"></script>
 <script src="js/ui/jquery.ui.widget.js"></script>
 <script src="js/ui/jquery.ui.datepicker.js"></script>
@@ -97,6 +90,7 @@ alert(<?php echo "'". $IfNoSeeMethod1."'";?> + '\n' + <?php echo "'". $ContactSu
 <script type="text/javascript" src="js/jqwidgets/jqxlistbox.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxdropdownlist.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
+
 <link rel="stylesheet" href="styles/jqstyles/demos.css">
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
@@ -117,8 +111,7 @@ var value = value2.replace(" ","");
 //minimum length is 10. example 2012-05-31
 if(value.length != 10){
 	
-	//alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Invalid date length. Date format should be YYYY-MM-DD");
-	alert(<?php echo "'".$ErrorOnRow."'"; ?>+dateid.slice(10, dateid.length)+ ": " +<?php echo "'". $InvalidDateLength."'";?>);
+	alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Invalid date length. Date format should be YYYY-MM-DD");
 	return false;
 	}
 if (isDate(value,dateid) == false){
@@ -141,30 +134,26 @@ function isDate(value,dateid) {
 
 		//Check the length of the year
 		if (OK && SplitValue[YearIndex].length != 4){
-			//alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Please enter the correct length for the YEAR.");
-			alert(<?php echo "'".$ErrorOnRow."'"; ?>+dateid.slice(10, dateid.length)+": "+<?php echo "'". $PleaseCorrectLengthYear."'";?>);
+			alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Please enter the correct length for the YEAR.");
             OK = false;
 			return OK;
         }
 		
 		//Check the length of the month
         if (OK && SplitValue[MonthIndex].length != 2){
-			//alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Please enter the correct length for the MONTH.");
-			alert(<?php echo "'".$ErrorOnRow."'"; ?>+dateid.slice(10, dateid.length)+": "+<?php echo "'".$PleaseCorrectLengthMonth."'";?>);
+			alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Please enter the correct length for the MONTH.");
             OK = false;
 			return OK;
         }
 		
 		//Check the length of the day
         if (SplitValue[DayIndex].length != 2){
-			//alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Please enter the correct length for the DAY.");
-			alert(<?php echo "'".$ErrorOnRow."'"; ?>+dateid.slice(10, dateid.length)+": "+<?php echo "'".$PleaseCorrectLengthDay."'";?>);
+			alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Please enter the correct length for the DAY.");
             OK = false;
 			return OK;
         }
 		if ((SplitValue[DayIndex] == "00") || (SplitValue[MonthIndex] == "00")){
-			//alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Incorrect date. You cannot enter 00.");
-			alert(<?php echo "'".$ErrorOnRow."'"; ?>+dateid.slice(10, dateid.length)+": "+<?php echo "'".$IncorrectDateZeros."'";?>);
+			alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Incorrect date. You cannot enter 00.");
 			OK = false;
 			return OK;
 		}		
@@ -198,8 +187,7 @@ function isDate(value,dateid) {
             }
         }
 		if (OK == false){
-			//alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Incorrect date range.");
-			alert(<?php echo "'".$ErrorOnRow."'"; ?>+dateid.slice(10, dateid.length)+": "+(<?php echo "'".$IncorrectDateRange."'";?>));
+			alert("Error on row "+dateid.slice(10, dateid.length)+": "+"Incorrect date range.");
 		}
         return OK;
     }
@@ -216,8 +204,7 @@ var strval = $('#' + timeid).val();
 
 //Minimum and maximum length is 5, for example, 01:20
 	if(strval.length < 5 || strval.length > 5){
-		//alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Time format should be five characters long and formatted HH:MM");
-		alert(<?php echo "'".$ErrorOnRow."'"; ?>+timeid.slice(10, timeid.length)+": "+<?php echo "'".$InvalidTimeFive."'";?>);
+		alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Time format should be five characters long and formatted HH:MM");
 	return false;
 	}
 
@@ -234,18 +221,15 @@ var strval = $('#' + timeid).val();
 
 	//minimum length for hours is two digits, for example, 12
 	if(horval.length != 2){
-		//alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Hours format should be two digits long.");
-		alert(<?php echo "'".$ErrorOnRow."'"; ?>+timeid.slice(10, timeid.length)+": "+<?php echo "'".$InvalidTimeHoursTwo."'";?>);
+		alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Hours format should be two digits long.");
 		return false;
 		}
 	if(horval < 0){
-		//alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Hours cannot be less than 00.");
-		alert(<?php echo "'".$ErrorOnRow."'"; ?>+timeid.slice(10, timeid.length)+": "+<?php echo "'".$InvalidTimeHoursZeros."'";?>);
+		alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Hours cannot be less than 00.");
 		return false;
 		}
 	else if(horval > 23){
-		//alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Hours cannot be greater than 23.");
-		alert(<?php echo "'".$ErrorOnRow."'"; ?>+timeid.slice(10, timeid.length)+": "+<?php echo "'".$InvalidTimeHoursTwentyThree."'";?>);
+		alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Hours cannot be greater than 23.");
 		return false;
 		}
 
@@ -253,18 +237,15 @@ var strval = $('#' + timeid).val();
 
  	//minimum length for minutes is 2, for example, 59
 	if(minval.length != 2){
-		//alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Minutes format should be two digits long.");
-		alert(<?php echo "'".$ErrorOnRow."'"; ?>+timeid.slice(10, timeid.length)+": "+<?php echo "'".$InvalidTimeMinutesTwo."'";?>);
+		alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Minutes format should be two digits long.");
 	return false;
 	} 
 	if(minval < 0){
-		//alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Minutes cannot be less than 00.");
-		alert(<?php echo "'".$ErrorOnRow."'"; ?>+timeid.slice(10, timeid.length)+": "+<?php echo "'".$InvalidTimeMinutesZeros."'";?>);
+		alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Minutes cannot be less than 00.");
 		return false;
 		}   
 	else if(minval > 59){
-		//alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Minutes cannot be greater than 59.");
-		alert(<?php echo "'".$ErrorOnRow."'"; ?>+timeid.slice(10, timeid.length)+": "+<?php echo "'".$InvalidTimeMinutesFiftyNine."'";?>);
+		alert("Error on row "+timeid.slice(10, timeid.length)+": "+"Invalid time. Minutes cannot be greater than 59.");
 		return false;
 		}
 	strval = IsNumeric(strval);
@@ -311,8 +292,7 @@ function IsNumeric(strString){
         var strChar = strString.charAt(i); 
         if (strValidChars.indexOf(strChar) == -1) 
         {
-			//alert ("Invalid character. You may only use numbers.");
-			alert (<?php echo "'".$InvalidCharacterNumbers."'";?>);
+			alert ("Invalid character. You may only use numbers.");
 			strString = strString.replace(strString[i],"");
             blnResult = false;
         } 
@@ -327,14 +307,21 @@ function IsNumeric(strString){
 
 function validatenum(valid) {
 var v = $('#' + valid).val();
+
+//Validation Override to add non-trustworthy values
+
+if (v == "*")
+{
+return true;
+}
+
 var Value = isValidNumber(v, valid);
 return Value;
 }
 
 function isValidNumber(val, valid){
       if(val==null || val.length==0){
-  		  //alert("Error on row "+valid.slice(5, valid.length)+": "+"Please enter a number in the Value box");
-		  alert(<?php echo "'".$ErrorOnRow."'"; ?>+valid.slice(5, valid.length)+": "+<?php echo "'".$EnterNumberValue."'";?>);
+  		  alert("Error on row "+valid.slice(5, valid.length)+": "+"Please enter a number in the Value box");
 		  return false;
 		  }
 
@@ -349,8 +336,7 @@ function isValidNumber(val, valid){
                   continue
             }
             if (ch < "0" || ch > "9") {
-       		    //alert("Error on row "+valid.slice(5, valid.length)+": "+"Please enter a valid number in the Value box");
-				alert(<?php echo "'".$ErrorOnRow."'"; ?>+valid.slice(5, valid.length)+": "+<?php echo "'".$EnterValidNumberValue."'";?>);
+       		    alert("Error on row "+valid.slice(5, valid.length)+": "+"Please enter a valid number in the Value box");
 			    return false;
             	}
       }
@@ -410,6 +396,31 @@ var item = $('#VariableID1').jqxDropDownList('getItem', args.index);
 if ((item != null)&&(item.label != "Select..")) {	
 //Create a another jqery list for methods
 var varid=item.value;
+
+//Got the Variable ID, go ahead to fetch the Units
+
+if (varid != -1)
+{
+$.ajax({
+  type: "GET",
+  url: "getUnit2.php?varid="+varid
+}).done(function( msg ) {
+
+	var tempid='#value1';
+	var api = $(tempid).data("tooltip");
+	api.show();
+	api.hide();
+
+	//Set the title attribute
+  	tempid='tooltip1';
+	$('.'+tempid).html(msg);
+	
+	
+	api.show();
+  
+});
+}
+
 var source1 =
         {
             datatype: "json",
@@ -442,7 +453,25 @@ for(var i=1;i<2;i++)
 addnew('value'+i);	
 }
 
-
+    $("#value1").tooltip({
+ 
+ 	 tipClass: "tooltip1",
+ 
+      // place tooltip on the right edge
+      position: "center right",
+ 
+      // a little tweaking of the position
+      offset: [-2, 10],
+ 
+      // use the built-in fadeIn/fadeOut effect
+      effect: "fade",
+ 
+      // custom opacity setting
+      opacity: 0.7
+ 
+      });
+	 
+  
 
 });
 runa();
@@ -474,40 +503,12 @@ $('input[id^="timepicker"]').change(function() {
 }
 	$(function() {
 		
-		//$( "#datepicker1" ).datepicker({ dateFormat: "yy-mm-dd" });
-		$( "#datepicker1" ).datepicker({ dateFormat: "yy-mm-dd",
-										 monthNames: [
-											<?php echo "'".$Jan."'"; ?>, 
-											<?php echo "'".$Feb."'"; ?>, 
-											<?php echo "'".$Mar."'"; ?>, 
-											<?php echo "'".$Apr."'"; ?>, 
-											<?php echo "'".$May."'"; ?>, 
-											<?php echo "'".$Jun."'"; ?>, 
-											<?php echo "'".$Jul."'"; ?>, 
-											<?php echo "'".$Aug."'"; ?>, 
-											<?php echo "'".$Sep."'"; ?>, 
-											<?php echo "'".$Oct."'"; ?>, 
-											<?php echo "'".$Nov."'"; ?>, 
-											<?php echo "'".$Dec."'"; ?>], 
-										 dayNamesMin: [
-											<?php echo "'".$Su."'"; ?>, 
-											<?php echo "'".$Mo."'"; ?>, 
-											<?php echo "'".$Tu."'"; ?>, 
-											<?php echo "'".$We."'"; ?>, 
-											<?php echo "'".$Th."'"; ?>, 
-											<?php echo "'".$Fr."'"; ?>, 
-											<?php echo "'".$Sa."'"; ?>] 
-										});
+		$( "#datepicker1" ).datepicker({ dateFormat: "yy-mm-dd" });
 		
 		
 		$( "#timepicker1" ).timepicker({
 			showOn: "focus",
     		showPeriodLabels: false,
-			hourText: <?php echo "'".$Hour."'";?>, 
-			minuteText: <?php echo "'".$Minute."'"; ?>, 
-			closeButtonText: <?php echo "'".$Done."'"; ?>, 
-			nowButtonText: <?php echo "'".$Now."'"; ?>, 
-			deselectButtonText: <?php echo "'".$Deselect."'"; ?>, 
 		});
 		
 	});
@@ -531,9 +532,29 @@ row_id.push("VariableID"+row_no);
 var newid=row_id[row_id.length-1];
 
 
-var add_html='<tr><td width="182"><div id="VariableID'+row_no+'"></div></td> <td width="249"><div id="MethodID'+row_no+'"></div></td><td width="60"><center><input type="text" id="datepicker'+row_no+'" size=10 maxlength=12 /></center></td><td width="46"><center><input type="text" id="timepicker'+row_no+'" size=7 maxlength=10></center></td><td width="51"><center><input type="text" id="value'+row_no+'" name="value'+row_no+'" onblur="runa()" size=7 maxlength=20/></center></td></tr>';
+var add_html='<tr><td width="182"><div id="VariableID'+row_no+'"></div></td> <td width="249"><div id="MethodID'+row_no+'"></div></td><td width="60"><center><input type="text" id="datepicker'+row_no+'" size=10 maxlength=12 /></center></td><td width="46"><center><input type="text" id="timepicker'+row_no+'" size=7 maxlength=10></center></td><td width="51"><center><input type="text" id="value'+row_no+'" name="value'+row_no+'" onblur="runa()" title="None set" size=7 maxlength=20/></center></td></tr>';
 
 $('#multiple tr:last').after(add_html);
+
+  //Reinatialize the message. 
+  // select all desired input fields and attach tooltips to them
+      $('#value'+row_no).tooltip({
+ 		
+	  tipClass: "tooltip" + row_no,
+		
+      // place tooltip on the right edge
+      position: "center right",
+ 
+      // a little tweaking of the position
+      offset: [-2, 10],
+ 
+      // use the built-in fadeIn/fadeOut effect
+      effect: "fade",
+ 
+      // custom opacity setting
+      opacity: 0.7
+ 
+      });
 
 //Implement required javascript functions
 
@@ -560,6 +581,27 @@ if ((item != null)&&(item.label != "Select.."))
 //Create a another jqery list for methods
 var varid=item.value;
 
+//Got the Variable ID, go ahead to fetch the Units
+
+if (varid != -1)
+{
+$.ajax({
+  type: "GET",
+  url: "getUnit2.php?varid="+varid
+}).done(function( msg ) {
+
+	var tempid='#value'+newid.slice(10, newid.length);
+	var api = $(tempid).data("tooltip");
+	api.show();
+	api.hide();
+
+	//Set the title attribute
+  	tempid='tooltip'+newid.slice(10, newid.length);
+	$('.'+tempid).html(msg);
+	api.show();
+  
+});
+}
 var source1 =
         {
             datatype: "json",
@@ -592,29 +634,7 @@ var tempid='MethodID'+newid.slice(10, newid.length);
 
 newid="datepicker"+row_no;
 
-	$('#' + newid).datepicker({ dateFormat: "yy-mm-dd",  
-								monthNames: [
-									<?php echo "'".$Jan."'"; ?>, 
-									<?php echo "'".$Feb."'"; ?>, 
-									<?php echo "'".$Mar."'"; ?>, 
-									<?php echo "'".$Apr."'"; ?>, 
-									<?php echo "'".$May."'"; ?>, 
-									<?php echo "'".$Jun."'"; ?>, 
-									<?php echo "'".$Jul."'"; ?>, 
-									<?php echo "'".$Aug."'"; ?>, 
-									<?php echo "'".$Sep."'"; ?>, 
-									<?php echo "'".$Oct."'"; ?>, 
-									<?php echo "'".$Nov."'"; ?>, 
-									<?php echo "'".$Dec."'"; ?>], 
-								dayNamesMin: [
-									<?php echo "'".$Su."'"; ?>, 
-									<?php echo "'".$Mo."'"; ?>, 
-									<?php echo "'".$Tu."'"; ?>, 
-									<?php echo "'".$We."'"; ?>, 
-									<?php echo "'".$Th."'"; ?>, 
-									<?php echo "'".$Fr."'"; ?>, 
-									<?php echo "'".$Sa."'"; ?>] 
-									});
+	$('#' + newid).datepicker({ dateFormat: "yy-mm-dd" });
 	
 $('#' + newid).change(function() {
   var result=validatedate(this.id);
@@ -625,11 +645,6 @@ newid="timepicker"+row_no;
 		$('#' + newid).timepicker({
 			showOn: "focus",
     		showPeriodLabels: false,
-			hourText: <?php echo "'".$Hour."'";?>, 
-			minuteText: <?php echo "'".$Minute."'"; ?>, 
-			closeButtonText: <?php echo "'".$Done."'"; ?>, 
-			nowButtonText: <?php echo "'".$Now."'"; ?>, 
-			deselectButtonText: <?php echo "'".$Deselect."'"; ?>, 
 		});
 
 
@@ -686,36 +701,28 @@ xmlhttp.send();
   </tr>
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <!--<td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right">Required fields are marked with an asterick (*).</p>-->
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk; ?></p>
-      <!--<h1>Enter Multiple Values Manually</h1>-->
-      <h1><?php echo $EnterMultipleValuesManually;?></h1>
-      <!--<p>Please enter the data in the below table. Don't see enough  rows? Don't worry! Start entering the values and additional rows will appear as needed.<div id="statusmsg">-->
-      <p><?php echo $EnterDataTableAppears;?><div id="statusmsg">      
-        <!--<p class=em2>Data entered successfully.-->
-        <p class=em2><?php echo $DataEnteredSuccessfully;?>
-          <!--<input type="button" name="viewdata" id="viewdata" value="View data inputed" />
-        <input type="button" name="viewdata2" id="viewdata2" value="Add more data" />-->
-        <input type="button" name="viewdata" id="viewdata" value="<?php echo $ViewDataInputed;?>" />
-        <input type="button" name="viewdata2" id="viewdata2" value="<?php echo $AddMoreData;?>" />
+    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right">Required fields are marked with an asterisk(*).</p>
+      <h1>Enter Multiple Values Manually</h1>
+      <p>Please enter the data in the below table. Don't see enough  rows? Don't worry! Start entering the values and additional rows will appear as needed.<div id="statusmsg">
+        <p class=em2>Data entered successfully.
+          <input type="button" name="viewdata" id="viewdata" value="View data inputed" />
+        <input type="button" name="viewdata2" id="viewdata2" value="Add more data" />
         </p>
       </div></blockquote>
     
       <FORM METHOD="POST" ACTION="" name="addvalue">
       <blockquote><table width="450" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <!--<td width="55" valign="top"><strong>Source:</strong></td>-->
-          <td width="55" valign="top"><strong><?php echo $Source;?></strong></td>
-          <!--<td width="370" valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1">Select....</option><?php echo "$option_block"; ?></select>*</td>-->
-          <td width="370" valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1"><?php echo $SelectEllipsis; ?></option><?php echo "$option_block"; ?></select>*</td>
+          <td width="55" valign="top"><strong>Source:</strong></td>
+          <td width="370" valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1">Select....</option><?php echo "$option_block"; ?></select>*</td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <td valign="top"><strong><!--Site:--><?php echo $Site;?></strong></td>
-          <td valign="top"><div id="txtHint"><select name="" id=""><option value="-1"><!--Select....--><?php echo $SelectEllipsis; ?></option></select>*&nbsp;<a href="#" onClick="show_answer()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>
+          <td valign="top"><strong>Site:</strong></td>
+          <td valign="top"><div id="txtHint"><select name="" id=""><option value="-1">Select....</option></select>*&nbsp;<a href="#" onClick="show_answer()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -724,11 +731,11 @@ xmlhttp.send();
       </table>
       <table width="600" border="1" cellpadding="0" cellspacing="0" id="multiple">
         <tr>
-          <td width="182"><center><strong><!--Variable:--><?php echo $Variable;?>&nbsp;*</strong></center></td>
-          <td width="249"><center><strong><!--Method:--><?php echo $Method;?>&nbsp;*</strong>&nbsp;<a href="#" onclick="show_answer2()" border="0"><img src="images/questionmark.png" border="0"></a></center></td>
-          <td width="60"><center><strong><!--Date:--><?php echo $Date;?>&nbsp;*</strong>&#8224;</center></td>
-          <td width="46"><center><strong><!--Time:--><?php echo $Time;?>&nbsp;</strong>&#8224;</center></td>
-          <td width="51"><center><strong><!--Value:--><?php echo $Value;?>&nbsp;</strong>&#8224;</center></td>
+          <td width="182"><center><strong>Variable:&nbsp;*</strong></center></td>
+          <td width="249"><center><strong>Method:&nbsp;*</strong>&nbsp;<a href="#" onclick="show_answer2()" border="0"><img src="images/questionmark.png" border="0"></a></center></td>
+          <td width="60"><center><strong>Date:&nbsp;*</strong>&#8224;</center></td>
+          <td width="46"><center><strong>Time:&nbsp;</strong>&#8224;</center></td>
+          <td width="51"><center><strong>Value:&nbsp;</strong>&#8224;</center></td>
           </tr>
         <tr>
           <td width="182" bgcolor="#0099FF">&nbsp;</td>
@@ -746,7 +753,7 @@ xmlhttp.send();
           <td width="249"><div id="MethodID1"></div></td>
           <td width="60"><center><input type="text" id="datepicker1" name="datepicker1" size=10 maxlength=12/></center></td>
           <td width="46"><center><input type="text" id="timepicker1" name="timepicker1" size=7 maxlength=10></center></td>
-          <td width="51"><center><input type="text" id="value1" name="value1" onblur="runa()" size=7 maxlength=20/></center></td>
+          <td width="51"><center><input type="text" id="value1" name="value1" onblur="runa()" title="None set" size=7 maxlength=20/></center></td>
           </tr>
       
         
@@ -754,19 +761,14 @@ xmlhttp.send();
       </table>
       </blockquote>
       <br/>
-      <!--<center><input type="SUBMIT" name="submit" value="Submit Your Data" class="button" />&nbsp;&nbsp;<input type="reset" name="Reset" value="Cancel" class="button" /></center>-->
-      <center><input type="SUBMIT" name="submit" value="<?php echo $SubmitData;?>" class="button" />&nbsp;&nbsp;<input type="reset" name="Reset" value="<?php echo $Cancel;?>" class="button" /></center>
+      <center><input type="SUBMIT" name="submit" value="Submit Your Data" class="button" />&nbsp;&nbsp;<input type="reset" name="Reset" value="Cancel" class="button" /></center>
         
       </FORM><blockquote>
-      <!--<p>&#8224;<strong>Formatting Notes:</strong><br />
+      <p>&#8224;<strong>Formatting Notes:</strong><br />
 <span class="em">Date should be formatted like this &quot;2012-05-04&quot; for 4 May  2012.<br />
 Time should be formatted like this &quot;13:45&quot; for 1:45 pm</span><span class="em"><br />
 Value must be a number, and no 
-commas are allowed</span><br />-->
-      <p>&#8224;<strong><?php echo $FormattingNotes;?></strong><br />
-<span class="em"><?php echo $FormattingNotesDate;?> <br />
-<?php echo $FormattingNotesTime;?></span><span class="em"><br />
-<?php echo $FormattingNotesValue;?></span><br />
+commas are allowed</span><br />
 </p>
 </blockquote>
     <p></p></td>
@@ -785,15 +787,13 @@ commas are allowed</span><br />-->
 
 if(($("#SourceID option:selected").val())==-1)
 {
-//alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
-alert(<?php echo "'".$SelectSource."'";?>);
+alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
 return false;
 }
 
 if(($("#SiteID option:selected").val())==-1)
 {
-//alert("Please select a Site. If you do not find it in the list, please visit the 'Add a new site' page");
-alert(<?php echo "'".$SelectSite."'"; ?>);
+alert("Please select a Site. If you do not find it in the list, please visit the 'Add a new site' page");
 return false;
 }
 
@@ -849,8 +849,7 @@ item = $('#' + checkid).jqxDropDownList('getSelectedItem');
 
 if(item.value==-1)
 {
-//alert("Error in row "+j+": Please select a Variable.");
-alert(<?php echo "'".$ErrorInRow."'"?>+j+": "+<?php echo "'".$SelectVariableMsg."'"; ?>);
+alert("Error in row "+j+": Please select a Variable.");
 return false;
 }
 
@@ -859,8 +858,7 @@ item = $('#' + checkid).jqxDropDownList('getSelectedItem');
 
 if(item.value==-1)
 {
-//alert("Error in row "+j+": Please select a Method.");
-alert(<?php echo "'".$ErrorInRow."'"?>+j+": "+<?php echo "'".$SelectMethodMsg."'"; ?>);
+alert("Error in row "+j+": Please select a Method.");
 return false;
 }
 
@@ -885,8 +883,6 @@ checkid='value'+j;
 
 if(validatenum(checkid)==false)
 {
-	//alert("Error in row "+j+": Please enter a valid value");
-	alert(<?php echo "'".$ErrorInRow."'"?>+j+": "+<?php echo "'".$EnterValidValue."'";?>);
 return false;
 }
 
@@ -901,8 +897,7 @@ switch(tv)
 case "19":
 if((vt<0)||(vt>100))
 {
-//alert("Error on row "+j+". Value has to be between 0 and 100.");
-alert(<?php echo "'".$ErrorOnRow."'"; ?> +j+"."+<?php echo "'".$ValueBetweenZeroAndHundred."'";?>);
+alert("Error on row "+j+". Value has to be between 0 and 100.");
 		return false;
 }
 break;
@@ -910,8 +905,7 @@ case "13":
 case "22":
 if((vt<0)||(vt>14))
 {
-//alert("Error on row "+j+". Value has to be between 0 and 14.");
-alert(<?php echo "'".$ErrorOnRow."'";?>+j+". "+<?php echo "'".$ValueBetweenZeroAndFourteen."'";?>);
+alert("Error on row "+j+". Value has to be between 0 and 14.");
 		return false;
 }
 break;
@@ -920,8 +914,7 @@ case "24":break;
 default:
 if(vt<0)
 {
-//alert("Error on row "+j+". Value can't be less than 0.");
-alert(<?php echo "'".$ErrorOnRow."'";?>+j+". "+<?php echo "'".$ValueLessThanZero."'";?>);
+alert("Error on row "+j+". Value can't be less than 0.");
 		return false;
 }
   break;
@@ -941,8 +934,7 @@ var final_result=1;
 
 if(valid_rows==0)
 {
-//alert("Please enter atleast one value");
-alert(<?php echo "'".$EnterOneValue."'"; ?>);
+alert("Please enter atleast one value");
 return false;	
 }
 else
@@ -1005,7 +997,7 @@ $.ajax({
 	 //Clear out all the data inputed. and create two new rows
 	 
 	  $("#multiple").find("tr:gt(0)").remove();
-	
+		document.location.reload(true);
 
 	  return true;
 	
@@ -1015,8 +1007,7 @@ $.ajax({
   else
   {alert(msg);
 	  temp_result=-1;
-	   //alert("Error in database configuration");
-	   alert(<?php echo "'".$DatabaseConfigurationError."'"; ?>);
+	   alert("Error in database configuration");
   return false;
 	  
   }

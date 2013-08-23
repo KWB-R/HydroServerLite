@@ -1,3 +1,0 @@
-<?php
-	$SrcID = "Source ID #:";
-?>

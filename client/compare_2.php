@@ -1,8 +1,5 @@
 <?php
 
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 require_once 'db_config.php';
 $query = "SELECT SiteName FROM sites WHERE SiteID=".$_GET['sid'];
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
@@ -44,7 +41,7 @@ if ((item != null)&&(item.label != "Please select a variable")) {
 	$('#varnamec').val(item.label);
 $('#window2').jqxWindow('hide');
 $('#window3').jqxWindow('show');
-$('#window3Content').load('compare_3.php', function() {
+$('#window3Content').load('compare_3.html', function() {
 loadsitecomp1();
 });
 }
@@ -57,10 +54,10 @@ loadsitecomp1();
           <td colspan="4"></td>
           </tr>
         <tr>
-          <td colspan="4"><!--Please select a Variable--><?php echo $SelectVariable;?></td>
+          <td colspan="4">Please select a Variable</td>
         </tr>
         <tr>
-          <td width="67"><strong><!--Variable:--><?php echo $Variable;?></strong></td>
+          <td width="67"><strong>Variable:</strong></td>
           <td width="239"><div id="dropdownlistc"></div></td>
           <td width="55">&nbsp;</td>
           <td width="221">&nbsp;</td>

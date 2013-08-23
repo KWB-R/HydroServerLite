@@ -47,9 +47,13 @@ $pieces3 = explode(":", $pieces2[1]);
 
 $pieces[1]=$pieces[1]-1;
 
+//Override for non-trustworthy values ..If the data is * it should not be loaded into the graph at all
+
+if (!($row['DataValue'] == -99))
+{
 $output="[Date.UTC(".$pieces[0].",".$pieces[1].",".$pieces2[0].",".$pieces3[0].",".$pieces3[1].",".$pieces3[2]."),".$row['DataValue']."]";
 echo $output;
-
+}
  if($count!=$num_rows)
 	{echo ",";}
   $count=$count+1;

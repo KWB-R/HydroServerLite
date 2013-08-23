@@ -11,25 +11,25 @@ This file will be populated while deployment
 
 //MySql Database Configuration Settings
 
-define("DATABASE_HOST", "your_database_host"); //for example define("DATABASE_HOST", "your_database_host");
-define("DATABASE_USERNAME", "your_database_username"); //for example define("DATABASE_USERNAME", "your_database_username");
-define("DATABASE_NAME", "your_database_name");  //for example define("DATABASE_NAME", "your_database_name");
-define("DATABASE_PASSWORD", "your_database_password"); //for example define("DATABASE_PASSWORD", "your_database_password");
+define("DATABASE_HOST", "localhost"); //for example define("DATABASE_HOST", "your_database_host");
+define("DATABASE_USERNAME", "root"); //for example define("DATABASE_USERNAME", "your_database_username");
+define("DATABASE_NAME", "idaho");  //for example define("DATABASE_NAME", "your_database_name");
+define("DATABASE_PASSWORD", ""); //for example define("DATABASE_PASSWORD", "your_database_password");
 
 
 //Cookie Settings - This is for Security!
-$www = "localhost"; // Please change this to your websites domain name. You may also use "localhost" for testing purposes on a local server.
+$www = "idah2o-dev.nkn.uidaho.edu"; // Please change this to your websites domain name. You may also use "localhost" for testing purposes on a local server.
 
 //Default Variables for add_site.php
-$default_datum="NAVD 88(US)";
-$default_spatial="UTM, NAD 83";
-$default_source="Your Organization";
+$default_datum="MSL";
+$default_spatial="WGS84";
+$default_source="IDAH2O";
 
 //Establish default values for MOSS data variables when adding a data value to a site(add_data_value.php)
-$UTCOffset = "-7"; 
-$UTCOffset2 = "7"; // Actually it is -7
+$UTCOffset = "-8"; 
+$UTCOffset2 = "8"; // Actually it is -7
 $CensorCode ="nc";
-$QualityControlLevelID = "0";
+$QualityControlLevelID = "1";
 $ValueAccuracy ="NULL"; 
 $OffsetValue ="NULL";
 $OffsetTypeID ="NULL";
@@ -38,26 +38,26 @@ $SampleID ="NULL";
 $DerivedFromID ="NULL";
 
 //Establish default values for new MOSS site when adding a new site to the database (add_site.php)
-$LocalX ="444719";
-$LocalY ="4455708";
-$LocalProjectionID ="12";
-$PosAccuracy_m ="5";
+$LocalX ="NULL";
+$LocalY ="NULL";
+$LocalProjectionID ="NULL";
+$PosAccuracy_m ="NULL";
 
 //Establish default values for Variable Code when adding a new variable (add_variable.php)
-$default_varcode="MYDATA"; //for example, for MOSS, it is IDCS- or IDCS-(somethinghere)-Avg
+$default_varcode="IDAH2O-"; //for example, for MOSS, it is IDCS- or IDCS-(somethinghere)-Avg
 
 
 //Establish default values for source info when adding a new source to the database (add_source.php)
-$ProfileVersion = "MYDATA"; 
+$ProfileVersion = "Unknown"; 
 
 //Name of your blog/Website homepage..(This affects the "Back to home button"
-$homename="Your Home Page";
+$homename="IDAH2O Website";
 
 //Link of your blog/Website homepage..(This affects the "Back to home button"
-$homelink="http://example.com/";
+$homelink="http://idah2o-dev.nkn.uidaho.edu";
 
 //Name of your organization
-$orgname="My Organization";
+$orgname="IDAH2O";
 
 //Name of your software version
-$HSLversion="Versión 2.0";
+$version="Version 1.0";

@@ -1,12 +1,9 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+if ($power1 !="admin"){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
@@ -22,8 +19,7 @@ $result = @mysql_query($sql,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result);
 	if ($num < 1){
 
-    //$msg = "<p class=em2>Sorry, there are no Metadata ID's in the database.</em></p>";
-	$msg = "<p class=em2> $NoMetadataIDs </em></p>";
+    $msg = "<p class=em2>Sorry, there are no Metadata ID's in the database.</em></p>";
 
 	} else {
 
@@ -41,8 +37,7 @@ $num = @mysql_num_rows($result);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
@@ -90,8 +85,7 @@ $('#window').show();
 }
 
 function show_answer(){
-//alert("The Profile Version is a label for the standard of compliance used," + '\n' + "such as ISO 19115 or ISO 8601,  which provides a " + '\n' + "complete set of ISO compliant metadata in the database.");
-alert(<?php echo "'".$ProfileVersion1. "'"; ?>+ '\n' + <?php echo "'".$ProfileVersion2. "'"; ?> + '\n' + <?php echo "'".$ProfileVersion3. "'"; ?>);
+alert("The Profile Version is a label for the standard of compliance used," + '\n' + "such as ISO 19115 or ISO 8601,  which provides a " + '\n' + "complete set of ISO compliant metadata in the database.");
 }
 
 </script>
@@ -111,20 +105,20 @@ alert(<?php echo "'".$ProfileVersion1. "'"; ?>+ '\n' + <?php echo "'".$ProfileVe
     <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote>
       <p><br />
         <?php echo "$msg"; ?></p>
-      <p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p>
+      <p class="em" align="right">Required fields are marked with an asterisk(*).</p>
       <div id="msg">
-      <p class=em2><!--Metadata successfully deleted!--><?php echo $MetadataDeleted;?></p></div>
+      <p class=em2>Metadata successfully deleted!</p></div>
     <div id="msg2">
-      <p class=em2><!--Metadata successfully edited!--><?php echo $MetadataEdited;?></p></div>
-      <h1><!--Edit or Delete a Metadata ID--><?php echo $EditDeleteMetadataID;?></h1>
-      <p><!--Please select the Metadata ID you would like to edit or delete from the drop down menu to proceed.--><?php echo $SelectMetadataID;?></p>
+      <p class=em2>Metadata successfully edited!</p></div>
+      <h1>Edit or Delete a Metadata ID</h1>
+      <p>Please select the Metadata ID you would like to edit or delete from the drop down menu to proceed.</p>
       <p>&nbsp;</p>
       <FORM METHOD="POST" ACTION="" name="changemethod" id="changemethod">
         <table width="620" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td><strong><!--Metadata Title:--><?php echo $MetadataTitleColon;?></strong></td>
+          <td><strong>Metadata Title:</strong></td>
           <td colspan="2" valign="top"><select name="MetadataID" id="MetadataID" onChange="findMD()">
-            <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+            <option value="-1">Select....</option>
             <?php echo "$option_block_md"; ?></select></td>
         </tr>
         <tr>
@@ -133,7 +127,7 @@ alert(<?php echo "'".$ProfileVersion1. "'"; ?>+ '\n' + <?php echo "'".$ProfileVe
           <td width="271" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="3" valign="top"><strong class="em2"><!--NOTE:--><?php echo $NoteColon;?></strong> <span class="em"><!--You cannot delete a Metadata ID without first deleting all Sources which use the specific Metadata ID--><?php echo $MetadataNoteText;?>.</span></td>
+          <td colspan="3" valign="top"><strong class="em2">NOTE:</strong> <span class="em">You cannot delete a Metadata ID without first deleting all Sources which use the specific Metadata ID.</span></td>
           </tr>
         <tr>
           <td colspan="3" valign="top">&nbsp;</td>
@@ -155,10 +149,9 @@ alert(<?php echo "'".$ProfileVersion1. "'"; ?>+ '\n' + <?php echo "'".$ProfileVe
 </table>
 <div id="window">
 	<div id="windowHeader">
-		<span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span>
+		<span>Confirmation Box</span>
 	</div>
-	<!--<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yesplz"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>-->
-    <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yesplz"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
+	<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yesplz"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>
 </div>
 </body>
 </html>
@@ -168,8 +161,7 @@ alert(<?php echo "'".$ProfileVersion1. "'"; ?>+ '\n' + <?php echo "'".$ProfileVe
 function deleteMD(){
 
 	if(($("#MetadataID").val())==-1){
-		//alert("Please select a Metadata Title to delete!");
-		alert(<?php echo "'".$SelectMetaDataTitle."'"; ?>);
+		alert("Please select a Metadata Title to delete!");
 		return false;
 		
 	}else{
@@ -193,8 +185,7 @@ function deleteMD(){
 	
 			}else{
 				
-				//alert("Error during processing! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ProcessingError."'"; ?>);
+				alert("Error during processing! Please refresh the page and begin again.");
 				return false;
 				}
 		});		
@@ -219,8 +210,7 @@ function findMD(){
 			
 			}else{
 			
-				//alert("Error during request! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ErrorDuringRequest."'"; ?>);
+				alert("Error during request! Please refresh the page and begin again.");
 				return false;
 				}
 		});
@@ -231,36 +221,31 @@ function updateMD(){
 
 //Validate all fields
 if(($("#MetadataID2").val())==""){
-	//alert("Please select a Metadata ID to edit.");
-	alert(<?php echo "'".$SelectMetadataIDMsg."'"; ?>);
+	alert("Please select a Metadata ID to edit.");
 	return false;
 }
 
 //Topic Category Validation
 if(($("#TopicCategory2").val())==""){
-	//alert("Please select a Topic Category for the Metadata.");
-	alert(<?php echo "'".$SelectMetadataTopicCategory."'"; ?>);
+	alert("Please select a Topic Category for the Metadata.");
 	return false;
 }
 
 //Title Validation
 if(($("#Title2").val())==""){
-	//alert("Please enter a Title for the Metadata.");
-	alert(<?php echo "'".$EnterMetadataTitle."'"; ?>);
+	alert("Please enter a Title for the Metadata.");
 	return false;
 }
 
 //Abstract Validation
 if(($("#Abstract2").val())==""){
-	//alert("Please enter an Abstract for the Metadata.");
-	alert(<?php echo "'".$EnterMetadataAbstract."'"; ?>);
+	alert("Please enter an Abstract for the Metadata.");
 	return false;
 }
 
 //Profile Version Validation
 if(($("#ProfileVersion2").val())==""){
-	//alert("Please enter a Profile Version for the contact person.");
-	alert(<?php echo "'".$EnterProfileVersionContact."'"; ?>);
+	alert("Please enter a Profile Version for the contact person.");
 	return false;
 }
 
@@ -268,8 +253,7 @@ if(($("#ProfileVersion2").val())==""){
 if(($("#MetadataLink2").val())!=""){
 	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 	if(!($("#MetadataLink2").val().match(regexp))){
-		//alert("Invalid url for Metadata Link");
-		alert(<?php echo "'".$InvalidURLMetadata."'"; ?>);
+		alert("Invalid url for Metadata Link");
 		return false;
 	}
 	
@@ -304,8 +288,7 @@ if(($("#MetadataLink2").val())!=""){
 
 			}else{
 
-				//alert("Error during processing! Please refresh the page and begin again.");
-				alert(ErrorProcessing);
+				alert("Error during processing! Please refresh the page and begin again.");
 				return false;
 				}
 		});

@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-	require_once 'internationalize.php';
-	
 //check authority to be here
 require_once 'authorization_check.php';
 
@@ -17,8 +14,7 @@ $result = @mysql_query($sql,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result);
 	if ($num < 1) {
 
-	    //$msg = "<span class='em'>Sorry, there are no SourceID names.</span>";
-		$msg = "<span class='em'> $NoSourceIDNames </span>";
+	    $msg = "<span class='em'>Sorry, there are no SourceID names.</span>";
 
 	}else{
 
@@ -44,8 +40,7 @@ $result2 = @mysql_query($sql2,$connection)or die(mysql_error());
 $num2 = @mysql_num_rows($result2);
 	if($num2 < 1){
 
-	    //$msg = "<span class='em'>Sorry, there are no Site Types.</span>";
-		$msg = "<span class='em'> $NoSiteTypes </span>";
+	    $msg = "<span class='em'>Sorry, there are no Site Types.</span>";
 
 	}else{
 
@@ -63,8 +58,7 @@ $result3 = @mysql_query($sql3,$connection)or die(mysql_error());
 
 $num3 = @mysql_num_rows($result3);
 	if($num3 < 1){
-		//$msg = "<span class='em'>Sorry, there are no Vertical Datums.</span>";
-		$msg = "<span class='em'> $NoVerticalDatums </span>";
+		$msg = "<span class='em'>Sorry, there are no Vertical Datums.</span>";
 	}else{
 		while ($row3 = mysql_fetch_array ($result3)){
 			$vd = $row3["Term"];
@@ -85,8 +79,7 @@ $result4 = @mysql_query($sql4,$connection)or die(mysql_error());
 $num4 = @mysql_num_rows($result4);
 	if($num4 < 1){
 
-	    //$msg = "<span class='em'>Sorry, there are no Vertical Datums.</span>";
-		$msg = "<span class='em'> $NoVerticalDatums </span>";
+	    $msg = "<span class='em'>Sorry, there are no Vertical Datums.</span>";
 
 	}else{
 
@@ -111,8 +104,7 @@ $num4 = @mysql_num_rows($result4);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient;?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
@@ -133,14 +125,17 @@ $num4 = @mysql_num_rows($result4);
 
 <script type="text/javascript">
 function show_answer(){
-//alert("If you do not see your SITE listed here, please contact your supervisor and ask them to add it before entering data.");
-alert(<?php echo "'".$SiteNotListedContact."'"; ?>);
+alert("If you do not see your SITE listed here, please contact your supervisor and ask them to add it before entering data.");
 }
 
 function show_answer2(){
-//alert("The current version of this software does not autmatically select the State and County. Please select them mannually.");
-alert(<?php echo "'".$SelectStateCounty."'"; ?>);
+alert("The current version of this software does not autmatically select the State and County. Please select them mannually.");
 }
+
+function show_answerSC(){
+alert("Please use the following protocol to establishing a unqiue Site Code (a 6-digit code with three sets of 2 digit unique identifiers). The first 2-digits stand for the unique 2-digit code for the 8-digit HUC identified in our Excel file that the site is within. The second 2-digits is the year the site becomes registered like 10 for 2010. The final 2-digits is the site's number starting numerically at 01 through 99, starting back over at 01 each year, for each HUC. For example, if the new site is within Lake Coeur d' Alene and the 8-digit HUC assigned is 17, was registered in 2010 use 10, and is the 12th site to be registered in that watershed then it would be 12. The Site Code would therefore be 171012.");
+}
+
 </script>
 
 <script type='text/javascript' src='js/drop_down.js'></script>
@@ -282,7 +277,7 @@ function initialize() {
 	showSites($("#SourceID option:selected").val());
 	
 	//Make the Map
-	GetSourceName();
+//	GetSourceName();
 	var myLatlng = new google.maps.LatLng(43.52764,-112.04951);
 }
 
@@ -291,8 +286,7 @@ function initialize() {
 //Function to run on form submission to implement a validation and then run an ajax request to post the data to the server and display the message that the site has been added successfully
 
 function TrainingAlert(){
-	//alert("To automatically enter the latitude, longitude, and elevation, simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.");
-	alert(<?php echo "'".$AutomaticallyEnterLongLatEle."'"; ?>);
+	alert("To automatically enter the latitude, longitude, and elevation, simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate."); 
 } 
 
 
@@ -331,9 +325,6 @@ display: none;
 --> 
 </STYLE>
 
-<!-- Creating the Site Code automatically -->
-<script type="text/javascript" src="js/create_site_code.js"></script>
-
 </head>
 
 <body background="images/bkgrdimage.jpg" onLoad="initialize()">
@@ -347,25 +338,23 @@ display: none;
 
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php //echo "$msg"; ?><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><div id="msg"><p class=em2><!--Site successfully deleted!--><?php echo $SiteSuccessfullyDeleted;?></p></div>
-    <div id="msg2"><p class=em2><!--Site successfully edited!--><?php echo $SiteSuccessfullyEdited;?></p></div>
-      <h1><!--Edit or Delete a Site--><?php echo $EditDeleteSite;?></h1>
-      <p><!--Please select the Source and Site you would like to edit or delete from the drop down menu to proceed.--><?php echo $SelectSourceSiteMenu;?></p>
+    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php //echo "$msg"; ?><p class="em" align="right">Required fields are marked with an asterisk(*).</p><div id="msg"><p class=em2>Site successfully deleted!</p></div>
+    <div id="msg2"><p class=em2>Site successfully edited!</p></div>
+      <h1>Edit or Delete a Site</h1>
+      <p>Please select the Source and Site you would like to edit or delete from the drop down menu to proceed.</p>
       <p>&nbsp;</p>
       <table width="600" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <!--<td valign="top"><strong>Source:</strong></td>-->
-          <td valign="top"><strong><?php echo $Source;?></strong></td>
-
-          <td colspan="3" valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1"><!--Select...--><?php echo $SelectEllipsis;?></option><?php echo "$option_block"; ?></select></td>
+          <td valign="top"><strong>Source:</strong></td>
+          <td colspan="3" valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1">Select....</option><?php echo "$option_block"; ?></select></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td width="78" valign="top"><strong><!--Site:--><?php echo $Site;?></strong></td>
-          <td width="522" colspan="3" valign="top"><div id="txtHint"><select name="SiteID" id="SiteID" onChange="findSite()"><option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option></select>&nbsp;<a href="#" onClick="show_answer()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>
+          <td width="78" valign="top"><strong>Site:</strong></td>
+          <td width="522" colspan="3" valign="top"><div id="txtHint"><select name="SiteID" id="SiteID" onChange="findSite()"><option value="-1">Select....</option></select>&nbsp;<a href="#" onClick="show_answer()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -393,7 +382,7 @@ marker=null;
 		var siteid=$("#SiteID").val();
 	
 		$.ajax({
-		type: "POST",
+		type: "GET",
 		url: "request_site_info.php?SiteID="+siteid}).done(function(data){
 			
 			if(data){
@@ -405,18 +394,16 @@ marker=null;
 				//To Get the Sitepicture Details
 				
 				$.ajax({
-  					type: "POST",
+  					type: "GET",
  					 url: "getsitepic.php?sc="+siteid
 					  }).done(function( msg ){
   					if(msg!=-1){
 	  
 					$("#file").hide();
-					//$("#sitepic").html(msg+"<br><div id='sitepicchange'><a href='#'>Click Here to Change the 		site picture</a></div>");
-					("#sitepic").html(msg+"<br><div id='sitepicchange'><a href='#'>" + <?php echo "'".$ClickChangePicture."'"; ?> + "</a></div>");
+					$("#sitepic").html(msg+"<br><div id='sitepicchange'><a href='#'>Click Here to Change the 		site picture</a></div>");
 						}else{
 	 					 $("#file").hide();
-	 					 //$("#sitepic").html("No Site Picture Defined.<br><div id='sitepicchange'><a href='#'>Click Here to Add a Site Picture</a></div>");
-						 $("#sitepic").html(<?php echo "'".$NoSitePictureDefined."'"; ?> + "<div id='sitepicchange'><a href='#'>" + <?php echo "'".$ClickAddSitePicture."'"; ?> + "</a></div>");
+	 					 $("#sitepic").html("No Site Picture Defined.<br><div id='sitepicchange'><a href='#'>Click Here to Add a Site Picture</a></div>");
  							 }
 					});
 
@@ -448,8 +435,7 @@ placeMarker(initialLocation);
 			
 			}else{
 			
-				//alert("Error during request! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ErrorDuringRequest."'"; ?>);
+				alert("Error during request! Please refresh the page and begin again.");
 				return false;
 				}
 		});
@@ -461,8 +447,7 @@ placeMarker(initialLocation);
 	function deleteSite(){
 
 		if(($("#SiteID").val())==-1){
-			//alert("Please select a Site to delete!");
-			alert(<?php echo "'".$SelectSiteDelete."'"; ?>);
+			alert("Please select a Site to delete!");
 			return false;
 		
 		}else{
@@ -498,8 +483,7 @@ placeMarker(initialLocation);
 	
 				}else{
 				
-					//alert("Error during processing! You cannot delete a site that has data values associated with it. Please delete the values first, then delete the site.");
-					alert(<?php echo "'".$ErrorDuringProcessingDeleteSite."'"; ?>);
+					alert("Error during processing! You cannot delete a site that has data values associated with it. Please delete the values first, then delete the site.");
 					return false;
 					}
 			});		
@@ -540,44 +524,37 @@ $("form").submit(function(){
 //Validate all fields
 
 if(($("#SourceID option:selected").val())==-1){
-	//alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
-	alert(<?php echo "'".$SelectSourceAdd."'"; ?>);
+	alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
 	return false;
 }
 
 if(($("#SiteName").val())==""){
-	//alert("Please enter a name for the site.");
-	alert(<?php echo "'".$EnterSiteName."'"?>);
+	alert("Please enter a name for the site.");
 	return false;
 }
 
 if(($("#SiteCode").val())==""){
-	//alert("Please enter a code for the site.");
-	alert(<?php echo "'".$EnterSiteCode."'"; ?>);
+	alert("Please enter a code for the site.");
 	return false;
 }
 
 if(($("#SiteType option:selected").val())==-1){
-	//alert("Please select a Site Type.");
-	alert(<?php echo "'".$SelectSiteType."'"; ?>);
+	alert("Please select a Site Type.");
 	return false;
 }	  
 
 if(($("#Latitude").val())==""){
-	//alert("Please enter the latitude for the site or select a point from the map");
-	alert(<?php echo "'".$EnterLatitude."'"; ?>);
+	alert("Please enter the latitude for the site or select a point from the map");
 	return false;
 }
 
 if(($("#Longitude").val())==""){
-	//alert("Please enter the longitude for the site or select a point from the map");
-	alert(<?php echo "'".$EnterLongitude."'"; ?>);
+	alert("Please enter the longitude for the site or select a point from the map");
 	return false;
 }
 
 if(($("#Elevation").val())==""){
-	//alert("Please enter the elevation for the site or select a point from the map");
-	alert(<?php echo "'".$EnterElevation."'"?>);
+	alert("Please enter the elevation for the site or select a point from the map");
 	return false;
 }
 
@@ -585,29 +562,24 @@ var floatRegex = '[-+]?([0-9]*\.[0-9]+|[0-9]+)';
 var myInt = $("#Latitude").val().match(floatRegex);
 
 if(myInt==null){
-	//alert("Invalid characters present in Latitude. Please correct it.");
-	alert(<?php echo "'".$InvalidLatitude."'"; ?>);
+	alert("Invalid characters present in latitude. Please correct it.");
     return false;
 }
 
 if(myInt[0]!=$("#Latitude").val()){
-	//alert("Invalid characters present in latitude. Please correct it.");
-	alert(<?php echo "'".$InvalidLatitude."'"; ?>);
+	alert("Invalid characters present in latitude. Please correct it.");
     return false;
 }
 
 myInt = $("#Longitude").val().match(floatRegex);
 
 if(myInt==null)
-{
-//alert("Invalid characters present in Longitude. Please correct it.");
-alert(<?php echo "'".$InvalidLongitude."'"; ?>);
+{alert("Invalid characters present in longitude. Please correct it.");
       return false;
 }
 
 if(myInt[0]!=$("#Longitude").val()){
-	//alert("Invalid characters present in Longitude. Please correct it.");
-	alert(<?php echo "'".$InvalidLongitude."'"; ?>);
+	alert("Invalid characters present in Longitude. Please correct it.");
     return false;
 }
 
@@ -615,28 +587,24 @@ myInt = $("#Elevation").val().match(floatRegex);
 
 
 if(myInt==null){
-	//alert("Invalid characters present in Elevation. Please correct it.");
-	alert(<?php echo "'".$InvalidElevation."'"?>);
+	alert("Invalid characters present in Elevation. Please correct it.");
     return false;
 }
 
 
 if(myInt[0]!=$("#Elevation").val()){
-	//alert("Invalid characters present in Elevation. Please correct it.");
-	alert(<?php echo "'".$InvalidElevation."'"?>);
+	alert("Invalid characters present in Elevation. Please correct it.");
     return false;
 }
 
 if(($("#state option:selected").val())==-1){
-	//alert("Please select a State.");
-	alert(<?php echo "'".$SelectState."'"; ?>);
+	alert("Please select a State.");
 	return false;
 }
 
 //Validation for the county
 if((($("#county option:selected").val())=="") && (($("#newcounty option:selected").val())=="")){
-		//alert("Please select a County.");
-		alert(<?php echo "'".$SelectCounty."'"; ?>);
+		alert("Please select a County.");
 		return false;
 	}
 
@@ -651,8 +619,7 @@ if($("#newcounty").val()==""){
 }
 
 if(county==undefined){
-	//alert("County is undefined. Please reselect the County.");
-	alert(<?php echo "'".$UndefinedCounty."'"; ?>);
+	alert("County is undefined. Please reselect the County.");
 	return false;
 }
 
@@ -660,14 +627,12 @@ if(county==undefined){
 //Validation of county done
 
 if(($("#VerticalDatum option:selected").val())==-1){
-	//alert("Please select a Vertical Datum.");
-	alert(<?php echo "'".$SelectVerticalDatum."'"; ?>);
+	alert("Please select a Vertical Datum.");
 	return false;
 }
 
 if(($("#LatLongDatumID option:selected").val())==-1){
-	//alert("Please select a Spatial Reference.");
-	alert(<?php echo "'".$SelectSpatialReference."'"; ?>);
+	alert("Please select a Spatial Reference.");
 	return false;
 }
 
@@ -694,8 +659,7 @@ var site_com = $("#com").val();
 
 	
 			formdata = new FormData();	
-			//document.getElementById("response").innerHTML = "Uploading . . ."
-			document.getElementById("response").innerHTML = <?php echo "'".$UploadEllipsis."'" ;?>
+			document.getElementById("response").innerHTML = "Uploading . . ." 
 			//Upload the image
 			var input = document.getElementById("file");
 			var file = input.files[0];
@@ -730,8 +694,7 @@ var site_com = $("#com").val();
 		
 			$("#msg3").hide(1000);
 
-							//alert("Site Edit Successful");
-							alert(<?php echo "'".$SiteEditSuccessful."'"; ?>);
+							alert("Site Edit Successful");
 							window.location.href = "edit_site.php";
 							return true;
 						}else{
@@ -762,8 +725,7 @@ var site_com = $("#com").val();
 		
 			$("#msg3").hide(1000);
 
-				//alert("Site Edit Successful");
-				alert(<?php echo "'".$SiteEditSuccessful."'"; ?>);
+				alert("Site Edit Successful");
 				window.location.href = "edit_site.php";
 				return true;
 			}
@@ -771,8 +733,7 @@ var site_com = $("#com").val();
 			
 		
 		}else{
-		  //alert("Error in database configuration");
-		  alert(<?php echo "'".$DatabaseConfigurationError."'"; ?>);
+		  alert("Error in database configuration");
 		  return false;
 		}
   
@@ -844,16 +805,14 @@ function update(location)
 	
         
       } else {
-        //alert("No results found");
-		alert(<?php echo "'".$NoResultsFound."'"; ?>);
+        alert("No results found");
       }
     } else {
-      //alert("Elevation service failed due to: " + status);
-	  alert(<?php echo "'".$ElevationServiceFailed."'"; ?>+ " " + status);
+      alert("Elevation service failed due to: " + status);
     }
   });
 
-	
+
 
 // Now to update the state
 var latlng1 = new google.maps.LatLng(location.lat(), location.lng());
@@ -862,14 +821,13 @@ geocoder.geocode({'latLng': latlng1}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[0]) {
 			
-			//$("#locationtext").html("Your selected location according to us is: " + results[0].formatted_address + ". Please select the state and county accordingly.");
-			$("#locationtext").html(<?php echo "'".$SelectedLocationIs."'"; ?> + " " + results[0].formatted_address + ". "+ <?php echo "'".$SelectStateCountyAccordingly."'"; ?>);
-			        
+			$("#locationtext").html("Your selected location according to us is: " + results[0].formatted_address + ". Please select the state and county accordingly.");
+			
+        
           
         }
       } else {
-        //alert("Geocoder failed due to: " + status);
-		alert(<?php echo "'".$GeocoderFailed."'"; ?> + " " + status);
+        alert("Geocoder failed due to: " + status);
       }
     });
 
@@ -877,6 +835,6 @@ geocoder.geocode({'latLng': latlng1}, function(results, status) {
 	
 </script>
 
-<div id="window"><div id="windowHeader"><span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span></div><div style="overflow: hidden;" id="windowContent"><center><strong><!--Are you sure?--><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yeah"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div></div>
+<div id="window"><div id="windowHeader"><span>Confirmation Box</span></div><div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yeah"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div></div>
 </body>
 </html>

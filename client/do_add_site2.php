@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 function getExtension($str) {
          $i = strrpos($str,".");
          if (!$i) { return ""; }
@@ -22,9 +19,8 @@ if (($extension != "jpg") && ($extension != "jpeg") && ($extension !=
  "png") && ($extension != "gif")) 
  		{
 		//print error message
- 			//echo 'Invalid Extension for Site Photo! Allowed extensions: jpeg,jpg,png,gif';
- 			echo $InvalidPhotoExtension;
-			$errors=1;
+ 			echo 'Invalid Extension for Site Photo! Allowed extensions: jpeg,jpg,png,gif';
+ 			$errors=1;
  		}
 		
 if($errors==0)
@@ -32,8 +28,7 @@ if($errors==0)
 $size=filesize($_FILES["images"]["tmp_name"][0]);
 if ($size > 1024*1024)
 {
-	//echo 'Image too Large. Maximum size: 1 MB(1024 kb)';
-	echo $ImageTooLarge;
+	echo 'Image too Large. Maximum size: 1 MB(1024 kb)';
 	$errors=1;
 }
 

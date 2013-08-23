@@ -1,12 +1,9 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+if ($power1 !="admin"){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
@@ -22,8 +19,7 @@ $result = @mysql_query($sql,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result);
 	if ($num < 1){
 
-    //$msg = "<p class=em2>Sorry, there are no Sources in the database.</em></p>";
-	$msg = "<p class=em2>$NoSoureces</em></p>";
+    $msg = "<p class=em2>Sorry, there are no Sources in the database.</em></p>";
 
 	} else {
 
@@ -41,8 +37,7 @@ $num = @mysql_num_rows($result);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
@@ -90,8 +85,7 @@ $('#window').show();
 }
 
 function show_answerProf(){
-//alert("The Profile Version is a label for the standard of compliance used, such as ISO 19115 or ISO 8601,  which provides a complete set of ISO compliant metadata in the database.");
-alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
+alert("The Profile Version is a label for the standard of compliance used, such as ISO 19115 or ISO 8601,  which provides a complete set of ISO compliant metadata in the database.");
 }
 
 </script>
@@ -108,21 +102,18 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
   </tr>
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php echo "$msg"; ?><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><div id="msg">
-      <p class=em2><!--Source and MetadataID successfully deleted!--><?php echo $SourceMetadataDeleted;?></p></div>
+    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php echo "$msg"; ?><p class="em" align="right">Required fields are marked with an asterisk(*).</p><div id="msg">
+      <p class=em2>Source and MetadataID successfully deleted!</p></div>
     <div id="msg2">
-      <p class=em2><!--Source successfully edited!--><?php echo $SourceEdited;?></p></div>
-      <h1><!--Edit or Delete a Source--><?php echo $EditDeleteSource;?></h1>
-      <!--<p>Please select the Source you would like to edit or delete from the drop down menu to proceed.</p>-->
-      <p><?php echo $SelectSource;?></p>
-
+      <p class=em2>Source successfully edited!</p></div>
+      <h1>Edit or Delete a Source</h1>
+      <p>Please select the Source you would like to edit or delete from the drop down menu to proceed.</p>
+      
         <table width="620" border="0" cellspacing="0" cellpadding="0">
-
-      	<tr>
-         <!-- <td><strong>Source:</strong></td> -->
-          <td><strong><?php echo $Source;?></strong></td>
+        <tr>
+          <td><strong>Source:</strong></td>
           <td colspan="2" valign="top"><select name="SourceID" id="SourceID" onChange="editSource()">
-            <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+            <option value="-1">Select....</option>
             <?php echo "$option_block_s"; ?></select></td>
         </tr>
         <tr>
@@ -131,8 +122,7 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
           <td width="280" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <!-- <<td colspan="3" valign="top"><strong class="em2"NOTE:</strong> <span class="em">You cannot delete a Source or MetadataID without first deleting all data values associated with them.</span></td>-->
-          <td colspan="3" valign="top"><strong class="em2"><?php echo $NoteColon;?></strong> <span class="em"><?php echo $NoteText;?></span></td>
+          <td colspan="3" valign="top"><strong class="em2">NOTE:</strong> <span class="em">You cannot delete a Source or MetadataID without first deleting all data values associated with them.</span></td>
           </tr>
         <tr>
           <td colspan="3" valign="top">&nbsp;</td>
@@ -153,10 +143,9 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
 </table>
 <div id="window">
 	<div id="windowHeader">
-		<span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span>
+		<span>Confirmation Box</span>
 	</div>
-	<!--<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yessir"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>-->
-    <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yessir"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
+	<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yessir"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>
 </div>
 </body>
 </html>
@@ -179,8 +168,7 @@ function editSource(){
 			
 			}else{
 			
-				//alert("Error during request! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ErrorDuringRequest."'";?>);
+				alert("Error during request! Please refresh the page and begin again.");
 				return false;
 				}
 		});
@@ -191,14 +179,12 @@ function editSource(){
 function deleteSource(){
 
 		if(($("#SourceID").val())==-1){
-			//alert("Please select a Source to delete!");
-			alert(<?php echo "'".$SelectSourceDelete."'"; ?>);
+			alert("Please select a Source to delete!");
 			return false;
 		}
 	
 		if(($("#MetadataID2").val())==""){
-			//alert("Your Source doesn't appear to have a MetadataID! Please talk to your supervisor.");
-			alert(<?php echo "'".$SourceWithoutMetadataID."'"; ?>);
+			alert("Your Source doesn't appear to have a MetadataID! Please talk to your supervisor.");
 			return false;
 		}
 	
@@ -223,8 +209,7 @@ function deleteSource(){
 	
 			}else{
 				
-				//alert("Error during processing! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ProcessingError."'"; ?>);
+				alert("Error during processing! Please refresh the page and begin again.");
 				return false;
 			}
 		});		
@@ -240,20 +225,17 @@ function updateSource(){
 
 		//Validate all fields
 		if(($("#SourceID2").val())==""){
-			//alert("Please select a Source to edit.");
-			alert(<?php echo "'".$SelectSourceEdit."'"; ?>);
+			alert("Please select a Source to edit.");
 			return false;
 		}
 
 		if(($("#Organization2").val())==""){
-			//alert("Please enter an organization for the source.");
-			alert(<?php echo "'".$EnterOrganization."'"; ?>);
+			alert("Please enter an organization for the source.");
 			return false;
 		}
 
 		if(($("#SourceDescription2").val())==""){
-			//alert("Please enter a description for the source.");
-			alert(<?php echo "'".$EnterDescription."'"; ?>);
+			alert("Please enter a description for the source.");
 			return false;
 		}
 
@@ -261,110 +243,94 @@ function updateSource(){
 		if(($("#SourceLink2").val())!=""){
 			var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 			if(!($("#SourceLink2").val().match(regexp))){
-				//alert("Invalid url for sourcelink");
-				alert(<?php echo "'".$InvalidSourceLinkURL."'"; ?>);
+				alert("Invalid url for sourcelink");
 				return false;
 			}
 		}
 
 		//Contact Name Validation
 		if(($("#ContactName2").val())==""){
-			//alert("Please enter a contact name for the source.");
-			alert(<?php echo "'".$EnterContactNameSource."'"; ?>);
+			alert("Please enter a contact name for the source.");
 			return false;
 		}
 
 		//Phone Validation
 		if(($("#Phone2").val())==""){
-			//alert("Please enter a phone number for the contact person.");
-			alert(<?php echo "'".$EnterPhoneNumber."'"; ?>);
+			alert("Please enter a phone number for the contact person.");
 			return false;
 		}
 		var regex = /^((\+?1-)?\d\d\d-)?\d\d\d-\d\d\d\d$/;
 		if(!($("#Phone2").val().match(regex))){
-			//alert("Invalid phone number");
-			alert(<?php echo "'".$InvalidPhoneNumber."'"; ?>);
+			alert("Invalid phone number");
 			return false;
 		}
 
 		//Email Validation
 		if(($("#Email2").val())==""){
-			//alert("Please enter an email address for the source.");
-			alert(<?php echo "'".$EnterEmailAddress."'"; ?>);
+			alert("Please enter an email address for the source.");
 			return false;
 		}
 		var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 		if(!($("#Email2").val().match(pattern))){
-			//alert("Invalid email address");
-			alert(<?php echo "'".$InvalidEmailAddress."'"; ?>);
+			alert("Invalid email address");
 			return false;
 		}
 
 		//Address Validation
 		if(($("#Address2").val())==""){
-			//alert("Please enter an address for the source.");
-			alert(<?php echo "'".$EnterAddress."'"; ?>);
+			alert("Please enter an address for the source.");
 			return false;
 		}
 
 		//City Validation
 		if(($("#City2").val())==""){
-			//alert("Please enter a city for the source.");
-			alert(<?php echo "'".$EnterCity."'"; ?>);
+			alert("Please enter a city for the source.");
 			return false;
 		}
 	
 		//State Validation
 		if(($("#State2 option:selected").val())==-1){
-			//alert("Please select a state for the source.");
-			alert(<?php echo "'".$SelectSourceState."'"; ?>);
+			alert("Please select a state for the source.");
 			return false;
 		}
 
 		//Zip Code Validation
 		if(($("#ZipCode2").val())==""){
-			//alert("Please enter a zip code for the source.");
-			alert(<?php echo "'".$EnterZipCode."'"; ?>);
+			alert("Please enter a zip code for the source.");
 			return false;
 		}
 		if(!($("#ZipCode2").val().match(/^\d{5}(-\d{4})?$/))){
-			//alert("Invalid zip code");
-			alert(<?php echo "'".$InvalidZipCode."'"; ?>);
+			alert("Invalid zip code");
 			return false;
 		}
 
 		//MetadataID Validation
 		if(($("#MetadataID2").val())==""){
-			//alert("Your Source doesn't appear to have a MetadataID! Please talk to your supervisor.");
-			alert(<?php echo "'".$SourceWithoutMetadataID."'"; ?>);
+			alert("Your Source doesn't appear to have a MetadataID! Please talk to your supervisor.");
 			return false;
 		}
 	
 		//Topic Category Validation
 		if(($("#TopicCategory2").val())==""){
-			//alert("Please select a Topic Category for the Metadata.");
-			alert(<?php echo "'".$SelectTopicCategory."'"; ?>);
+			alert("Please select a Topic Category for the Metadata.");
 			return false;
 		}
 
 		//Title Validation
 		if(($("#Title2").val())==""){
-			//alert("Please enter a Title for the Metadata.");
-			alert(<?php echo "'".$EnterMetadataTitle."'"; ?>);
+			alert("Please enter a Title for the Metadata.");
 			return false;
 		}
 
 		//Abstract Validation
 		if(($("#Abstract2").val())==""){
-			//alert("Please enter an Abstract for the Metadata.");
-			alert(<?php echo "'".$EnterMetadataAbstract."'"; ?>);
+			alert("Please enter an Abstract for the Metadata.");
 			return false;
 		}
 
 		//Profile Version Validation
 		if(($("#ProfileVersion2").val())==""){
-			//alert("Please enter a Profile Version for the contact person.");
-			alert(<?php echo "'".$EnterProfileVersionContact."'"; ?>);
+			alert("Please enter a Profile Version for the contact person.");
 			return false;
 		}
 
@@ -372,13 +338,11 @@ function updateSource(){
 		if(($("#MetadataLink2").val())!=""){
 			var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 			if(!($("#MetadataLink2").val().match(regexp))){
-				//alert("Invalid url for Metadata Link");
-				alert(<?php echo "'".$InvalidURLMetadata."'"; ?>);
+				alert("Invalid url for Metadata Link");
 				return false;
 			}
 		}
 //alert("Passed all validation!");
-alert(<?php echo "'".$PassedValidation."'"; ?>);
 		//Validation is now complete, so send to the processing page
 		var md_id=$("#MetadataID2").val();
 		var md_tc=$("#TopicCategory2").val();
@@ -436,15 +400,13 @@ alert(data2);
 						return true;
 
 					}else{
-						//alert("Error during processing! Please refresh the page and begin again.");
-						alert(<?php echo "'".$ProcessingError."'"; ?>);
+						alert("Error during processing! Please refresh the page and begin again.");
 						return false;
 					}
 				});
 
 			}else{
-				//alert("Error during processing! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ProcessingError."'"; ?>);
+				alert("Error during processing! Please refresh the page and begin again.");
 				return false;
 			}
 		});

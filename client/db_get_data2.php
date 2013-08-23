@@ -16,6 +16,12 @@ $num_rows = mysql_num_rows($result);
 $count=1;
  while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
   {
+	  //OVERride for non trust worhty values. 
+	  
+	 if ($row['DataValue'] == -99)
+	{
+	  $row['DataValue'] = "*";
+	}
     echocsv( $row );
    if($count!=$num_rows)
 	{echo "\r\n";}

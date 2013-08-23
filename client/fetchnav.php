@@ -1,13 +1,15 @@
 <?php
 
-if ($_COOKIE[power] ==admin){
-	$nav ="A_navbar.php";
+
+
+if ($power1 ==admin){
+	$nav ="js/A_navbar.js";
 	}
-elseif ($_COOKIE[power] ==teacher){
-	$nav ="T_navbar.php";
+elseif ($power1 ==teacher){
+	$nav ="js/T_navbar.js";
 	}
-elseif ($_COOKIE[power] ==student){
-	$nav ="S_navbar.php";
+elseif ($power1 ==student){
+	$nav ="js/S_navbar.js";
 	} 
 else {
 	header("Location: index.php?state=pass2");
@@ -15,7 +17,6 @@ else {
 	}
 
 $text=file_get_contents($nav, NULL, NULL, 16); 
-
 
 $req=str_split($text,stripos($text,"<script>"));
 

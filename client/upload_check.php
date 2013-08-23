@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 $name="uploads/";
  $name .=$_GET['name'];
 
@@ -22,9 +19,7 @@ if($flag==0)
 //First Run
 if(($data[0]!="LocalDateTime")||($data[1]!="DataValue"))	
 {
-//$msg = "Invalid column headings. The headings should be in the following format: 'LocalDateTime,DataValue'";
-$msg = $InvalidHeading;
-
+$msg = "Invalid column headings. The headings should be in the following format: 'LocalDateTime,DataValue'";
 $tracker=0;		
 		break;
 }
@@ -39,9 +34,7 @@ else
 $regex="(^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$)";
 
 if (!preg_match($regex, $data[0])) {
-   //$msg="Invalid characters present in LocalDateTime on row ".$row;
-   $msg=$InvalidTime.$row;
-
+   $msg="Invalid characters present in LocalDateTime on row ".$row;
 $tracker=0;		
 break;	
 } 
@@ -57,9 +50,7 @@ $pieces3 = explode(":", $pieces2[1]);
 if((intval($pieces[0],10)<1970)||(intval($pieces[0],10)>intval(date("Y"),10)))
 
 {
-//$msg="Invalid year for date on row ".$row;
-$msg=$InvalidYear.$row;
-
+$msg="Invalid year for date on row ".$row;
 $tracker=0;		
 break;		
 }
@@ -67,9 +58,7 @@ break;
 if((intval($pieces[1],10)<1)||(intval($pieces[1],10)>12))
 
 {
-//$msg="Invalid Month for date on row ".$row;
-$msg=$InvalidMonth.$row;
-
+$msg="Invalid Month for date on row ".$row;
 $tracker=0;		
 break;		
 }
@@ -79,8 +68,7 @@ break;
 if((intval($pieces2[0],10)<1)||(intval($pieces2[0],10)>31))
 
 {
-//$msg="Invalid Day for date on row ".$row;
-$msg=$InvalidDay.$row;
+$msg="Invalid Day for date on row ".$row;
 $tracker=0;		
 break;		
 }
@@ -100,9 +88,7 @@ $output .= $data[0];
 }
 else
 {
-//$msg = "Error in date format on Row number".$row;
-$msg = $ErrorDate.$row;
-
+$msg = "Error in date format on Row number".$row;
 $tracker=0;		
 break;	
 }
@@ -112,8 +98,7 @@ break;
 if((intval($pieces3[0],10)<0)||(intval($pieces3[0],10)>23))
 
 {
-//$msg="Invalid hour for time on row ".$row;
-$msg=$InvalidHour.$row;
+$msg="Invalid hour for time on row ".$row;
 $tracker=0;		
 break;		
 }
@@ -121,9 +106,7 @@ break;
 if((intval($pieces3[1],10)<0)||(intval($pieces3[1],10)>59))
 
 {
-//$msg="Invalid minute for time on row ".$row;
-$msg=$InvalidMin.$row;
-
+$msg="Invalid minute for time on row ".$row;
 $tracker=0;		
 break;		
 }
@@ -133,9 +116,7 @@ break;
 if((intval($pieces3[2],10)<0)||(intval($pieces3[2],10)>59))
 
 {
-//$msg="Invalid seconds for time on row ".$row;
-$msg=$InvalidSec.$row;
-
+$msg="Invalid seconds for time on row ".$row;
 $tracker=0;		
 break;		
 }
@@ -149,8 +130,7 @@ break;
 $regex="/^[\-+]?[0-9]*\.?[0-9]+$/";
 
 if (!preg_match($regex, $data[1])) {
-//   $msg="Invalid characters present in value on row ".$row;
-   $msg=$InvalidChar.$row;
+   $msg="Invalid characters present in value on row ".$row;
 $tracker=0;		
 break;	
 } 
@@ -169,9 +149,7 @@ echo ("true");
 }
 else
 {
-//echo $msg.". Please fix the error and reupload the CSV File";
-echo $msg.$PleaseFix;	
-
+echo $msg.". Please fix the error and reupload the CSV File";	
 }
 
 

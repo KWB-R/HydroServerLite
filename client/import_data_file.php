@@ -1,6 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
 
 //check authority to be here
 require_once 'authorization_check.php';
@@ -16,8 +14,7 @@ $result = @mysql_query($sql,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result);
 	if ($num < 1) {
 
-    //$msg = "<P><em2>Sorry, there are no SourceID names.</em></p>";
-    $msg = "<P><em2>$NoSourceIDNames</em></p>";
+    $msg = "<P><em2>Sorry, there are no SourceID names.</em></p>";
 
 	} else {
 
@@ -40,8 +37,7 @@ $result3 = @mysql_query($sql3,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result3);
 	if ($num < 1) {
 
-    //$msg3 = "<P><em2>Sorry, there are no Types.</em></p>";
-	$msg3 = "<P><em2>$NoType</em></p>";
+    $msg3 = "<P><em2>Sorry, there are no Types.</em></p>";
 
 	} else {
 
@@ -62,8 +58,7 @@ $num = @mysql_num_rows($result3);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
@@ -84,13 +79,11 @@ $num = @mysql_num_rows($result3);
 
 
 function show_answer(){
-//alert("If you do not see your location (Site) listed here, please contact your supervisor and ask them to add it before entering data.");
-alert(<?php echo "'".$NoLocation."'";?>);
+alert("If you do not see your location listed here," + '\n' + "please contact your teacher and ask them" + '\n' + "to add it before entering data.");
 }
 
 function show_answer2(){
-//alert("If you do not see your Method listed here, please contact your supervisor and ask them to add it before entering data.");
-alert(<?php echo "'".$NoMethod."'";?>);
+alert("If you do not see your METHOD listed here," + '\n' + "please contact your teacher and ask them" + '\n' + "to add it before entering data.");
 }
 
 function showSites(str){
@@ -161,89 +154,66 @@ xmlhttp.send();
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php include 'header.php'; ?></td>
   </tr>
   <tr>
-    <!--<td width="240" valign="top" bgcolor="#f2e6d6"><//?php include 'fetchnav.php'; ?></td>-->
-	<td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br />
-      <!--<h1>Import a Data File</h1>-->
-      <h1><?php echo $Import; ?></h1>
-      <!--<p>In order to use this option, your CSV data file must conform to SQL database's requirements; therefore, your data should look like the following example before attempting to upload it:</p>-->
-      <p><?php echo $MustConform; ?></p>
+    <td width="240" valign="top" bgcolor="#f2e6d6"><?php include 'fetchnav.php'; ?></td>
+    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><div id="statusmsg"><p class=em2>Data upload successful!&nbsp;&nbsp;<input type="button" name="viewdata" id="viewdata" value="View data Uploaded" />&nbsp;<input type="button" name="viewdata2" id="viewdata2" value="Upload more data" /></p></div>
+      <h1>Import data file</h1>
+      <p>In order to use this option, your CSV data file must conform to SQL database's requirements; therefore, your data should look like the following example before attempting to upload it:</p>
       <p>LocalDateTime,DataValue<br>
-        2012-05-31 00:00:00,10.99<br>
-        2012-05-31 00:10:00,11.01<br>
-        2012-05-31 00:20:00,11.02<br>
-        2012-05-31 00:30:00,11.04<br>
-        <!--<a href="sample_csv.txt" target="_blank">view sample text file</a></p>--> 
-        <a href="sample_csv.txt" target="_blank"><?php echo $ViewSample; ?></a></p>
-      <!--<p>If your file is prepared correctly, you may use the process below:<div id="statusmsg">-->
-      <p><?php echo $PreparedCorrectly; ?><div id="statusmsg">
-        <!--<p class=em2>Data upload successfull.
-          <input type="button" name="viewdata" id="viewdata" value="View data Uploaded" />
-        <input type="button" name="viewdata2" id="viewdata2" value="Upload more data" />
-        </p>-->
-        <p class=em2><?php echo $Success;?>
-          <input type="button" name="viewdata" id="viewdata" value="<?php echo $View; ?>" />
-        <input type="button" name="viewdata2" id="viewdata2" value="<?php echo $More; ?>" />
-        </p>
-     </div>
-     <FORM METHOD="POST" ACTION="" name="addvalue" id="addvalue">
+        2012-04-01 00:00:00,10.99<br>
+        2012-04-01 00:10:00,11.01<br>
+        2012-04-01 00:20:00,11.02<br>
+        2012-04-01 00:30:00,11.04<br>
+        2012-04-01 00:40:00,11.04<br>
+        2012-04-01 00:50:00,11.05<br>
+        2012-04-01 01:00:00,11.07<br>
+        2012-04-01 01:10:00,11.08<br>
+        <a href="sample_csv.csv" target="_blank">view sample text file</a></p>
+<p>If your file is prepared correctly, you may use the process below:
+<FORM METHOD="POST" ACTION="" name="addvalue" id="addvalue">
        <table width="500" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <!--<td valign="top"><strong>Source:</strong></td>
-          <td valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1">Select....</option><?php echo "$option_block"; ?></select></td>-->
-          <td valign="top"><strong><?php echo $Source; ?></strong></td>
-          <td valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1"><?php echo $SelectEllipsis; ?></option><?php echo "$option_block"; ?></select></td>
+          <td valign="top"><strong>Source:</strong></td>
+          <td valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1">Select....</option><?php echo "$option_block"; ?></select></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <!--<td valign="top"><strong>Site:</strong></td>
-          <td valign="top"><div id="txtHint"><select name="SiteID" id="SiteID"><option value="-1">Select....</option></select>&nbsp;<a href="#" onClick="show_answer()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>-->
-          <td valign="top"><strong><?php echo $Site; ?></strong></td>
-          <td valign="top"><div id="txtHint"><select name="SiteID" id="SiteID"><option value="-1"><?php echo $SelectEllipsis; ?></option></select>&nbsp;<a href="#" onClick="show_answer()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>
-
+          <td valign="top"><strong>Site:</strong></td>
+          <td valign="top"><div id="txtHint"><select name="SiteID" id="SiteID"><option value="-1">Select....</option></select>&nbsp;<a href="#" onClick="show_answer()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <!--<td width="55" valign="top"><strong>Type:</strong></td>
+          <td width="55" valign="top"><strong>Type:</strong></td>
           <td width="370" valign="top"><select name="VariableID" id="VariableID" onChange="showMethods(this.value)">
-            <option value="-1">Select....</option><?php echo "$option_block3"; ?></select></td>-->
-          <td width="55" valign="top"><strong><?php echo $Type; ?></strong></td>
-          <td width="370" valign="top"><select name="VariableID" id="VariableID" onChange="showMethods(this.value)">
-            <option value="-1"><?php echo $SelectEllipsis; ?></option><?php echo "$option_block3"; ?></select></td>
+            <option value="-1">Select....</option><?php echo "$option_block3"; ?></select></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <!--<td valign="top"><strong>Method:</strong></td>
-          <td valign="top"><div id="txtHint2"><select name="MethodID" id="MethodID"><option value="-1">Select....</option></select>&nbsp;<a href="#" onClick="show_answer2()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>-->
-          <td valign="top"><strong><?php echo $Method; ?></strong></td>
-          <td valign="top"><div id="txtHint2"><select name="MethodID" id="MethodID"><option value="-1"><?php echo $SelectEllipsis; ?></option></select>&nbsp;<a href="#" onClick="show_answer2()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>
+          <td valign="top"><strong>Method:</strong></td>
+          <td valign="top"><div id="txtHint2"><select name="MethodID" id="MethodID"><option value="-1">Select....</option></select>&nbsp;<a href="#" onClick="show_answer2()" border="0"><img src="images/questionmark.png" border="0"></a></div></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td width="370" valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <!--<td colspan="2" valign="top"><strong>Upload CSV file containing dates, times, and values:</strong></td>-->
-          <td colspan="2" valign="top"><strong><?php echo $UploadCSV;?></strong></td>
+          <td colspan="2" valign="top"><strong>Upload CSV file containing dates, times, and values:</strong></td>
           </tr>
         <tr>
           <td colspan="2" valign="top"> <div id="container">
     <div id="filelist"></div>
    <br>
       <input name="filename" type="text" id="filename" size="36">
-  <!--<input id="pickfiles" name="selfile" type="button" value="Select File">
-  <input id="files" name="upfile" type="button" value="Upload">-->
-  <input id="pickfiles" name="selfile" type="button" value="<?php echo $SelectFile; ?>">
-  <input id="uploadfiles" name="upfile" type="button" value="<?php echo $Upload; ?>">
+  <input id="pickfiles" name="selfile" type="button" value="Select File">
+  <input id="uploadfiles" name="upfile" type="button" value="Upload File">
           </div></td>
           </tr>
         <tr>
@@ -253,8 +223,7 @@ xmlhttp.send();
         <tr>
           <td width="55" valign="top">&nbsp;</td>
           <td valign="top">
-          <!--<input name="Button" type="button" class="button" id="submit1" value="Submit Your Data" style="width: 135px"/>-->
-          <input name="Button" type="button" class="button" id="submit1" value="<?php echo $SubmitData; ?>" style="width: 135px"/>
+          <input name="Button" type="button" class="button" id="submit1" value="Submit Your Data" style="width: 135px"/>
           
           
          </td>
@@ -337,8 +306,7 @@ var uploader = new plupload.Uploader({
 
 			Error: function(up, args) {
 				// Called when a error has occured
-				//alert("Invalid File Type Selected");
-				alert(<?php echo "'".$InvalidFile."'";?>);
+				alert("Invalid File Type Selected");
 				
 			}
 		}
@@ -390,8 +358,7 @@ function del(id2)
 	
 
 	var file1 = uploader.getFile(id2);
-	//$(file1.id).getElementsByTagName('b')[0].innerHTML = '<span>' + "Invalid File! Make changes and re-upload" + "</span>";
-	$(file1.id).getElementsByTagName('b')[0].innerHTML = '<span>' + <?php echo "'".$InvalidFileChanges."'";?> + "</span>";
+	$(file1.id).getElementsByTagName('b')[0].innerHTML = '<span>' + "Invalid File! Make changes and re-upload" + "</span>";
 	(function($){
 		$("#filename").val("Invalid File");
 	})(jQuery);
@@ -401,11 +368,8 @@ function del(id2)
 
 function check(name, id2)
 {
-	//alert(name);
 	
 	var url2 = 'upload_check.php?name='+ name;
-	
-
 
 if (window.XMLHttpRequest)
   {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -421,9 +385,8 @@ xmlhttp.onreadystatechange=function()
     {
     var msg=xmlhttp.responseText;
 	
-	if (msg="true")
-//{alert("Upload successful. Click on submit data to proceed.");
-{alert(<?php echo "'".$UploadSuccess."'";?>);
+	if (msg=="true")
+{alert("Upload successful. Click on submit data to proceed.");
 $filename=name;
 
 	}
@@ -444,8 +407,7 @@ xmlhttp.send();
 
 
 $(document).ready(function() {
-	//$("#filename").val("Please select a file....");
-	$("#filename").val(<?php echo "'".$SelectFileEllipsis."'";?>);
+	$("#filename").val("Please Select a File to Upload");
 	<?php echo $jq;?>
   var glob_siteid=1;
   var $filename="";
@@ -468,27 +430,23 @@ $("#viewdata2").click(function() {
 $("#submit1").click(function() {
 
 	if(($("#SourceID option:selected").val())==-1){
-		//alert("Please select a Source!");
-		alert(<?php echo "'".$SelectSourceMsg."'";?>);
+		alert("Please select a Source!");
 		return false;
 	}
 
 	if(($("#SiteID option:selected").val())==-1){
-		//alert("Please select a Site!");
-		alert(<?php echo "'".$SelectSite."'";?>);
+		alert("Please select a Site!");
 		return false;
 	}
 	
 	glob_siteid=$("#SiteID option:selected").val();
 	if(($("#VariableID option:selected").val())==-1){
-		//alert("Please select a Type!");
-		alert(<?php echo "'".$SelectType."'";?>);
+		alert("Please select a Type!");
 		return false;
 	}
 
 	if(($("#MethodID option:selected").val())==-1){
-		//alert("Please select a Method!");
-		alert(<?php echo "'".$SelectMethodMsg."'";?>);
+		alert("Please select a Method!");
 		return false;
 	}
 	
@@ -506,8 +464,7 @@ var methodid=$("#MethodID option:selected").val();
 
 if (typeof $filename === "undefined") 
 {
-//alert("Please upload a file");
-alert(<?php echo "'".$PleaseUpload."'";?>);
+alert("Please upload a file");
 return false;
 }
 
@@ -525,8 +482,7 @@ $.ajax({
  }
   else
   {alert(msg);
-   //alert("Error in database configuration");
-   alert(<?php echo "'".$DatabaseConfigurationError."'";?>);
+   alert("Error in database configuration");
   return false;
 	  
   }

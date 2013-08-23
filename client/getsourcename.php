@@ -1,6 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
 
 //value given from the add_site.php page
 $sid=$_GET["SourceID"];
@@ -17,9 +15,7 @@ $num_cc = @mysql_num_rows($result_cc);
 
 	if ($num_cc < 1) {
 
-	//alert("Please reselect the Source.");
-	//this might cause a problem in the calling function
-	echo($ReSelectSource);
+	alert("Please reselect the Source.");
 
 	} 
 

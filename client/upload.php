@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 /**
  * upload.php
  *
@@ -18,12 +15,6 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-//header($Expires);
-//header($LastModified . gmdate("D, d M Y H:i:s") . $GMT);
-//header($CacheControl1);
-//header($CacheControl2, false);
-//header($Pragma);
-//The above are controled keywords
 
 // Settings
 $targetDir = ini_get("upload_tmp_dir") . DIRECTORY_SEPARATOR . "plupload";
@@ -78,9 +69,7 @@ if ($cleanupTargetDir && is_dir($targetDir) && ($dir = opendir($targetDir))) {
 
 	closedir($dir);
 } else
-	//die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
-	die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": $FailTemp}, "id" : "id"}');
-
+	die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
 	
 
 // Look for the content type header
@@ -103,17 +92,14 @@ if (strpos($contentType, "multipart") !== false) {
 				while ($buff = fread($in, 4096))
 					fwrite($out, $buff);
 			} else
-				//die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-				die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": $FailInputStream}, "id" : "id"}');
+				die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
 			fclose($in);
 			fclose($out);
 			@unlink($_FILES['file']['tmp_name']);
 		} else
-			//die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
-			die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": $FailOutputStream}, "id" : "id"}');
+			die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
 	} else
-		//die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
-		die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": $FailMoveFile}, "id" : "id"}');
+		die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
 } else {
 	// Open temp file
 	$out = fopen("{$filePath}.part", $chunk == 0 ? "wb" : "ab");
@@ -125,14 +111,12 @@ if (strpos($contentType, "multipart") !== false) {
 			while ($buff = fread($in, 4096))
 				fwrite($out, $buff);
 		} else
-			//die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-			die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": $FailInputStream}, "id" : "id"}');
+			die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
 
 		fclose($in);
 		fclose($out);
 	} else
-		//die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
-		die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": $FailOutputStream}, "id" : "id"}');
+		die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
 }
 
 // Check if file has been uploaded

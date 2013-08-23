@@ -1,12 +1,10 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
 
 require_once 'db_config.php';
 
 $varid=$_GET['varid'];
 
-$select = "SELECT * FROM units WHERE unitsID='$varid'";
+$select = "SELECT * FROM units WHERE unitsID='$varid' ORDER BY `unitsName` ASC";
 
 $export = mysql_query ( $select ) or die ( "Sql error : " . mysql_error( ) );
 
@@ -36,7 +34,7 @@ $data = str_replace( "\r" , "" , $data );
 
 if ( $data == "" )
 {
-    $data = "\n(0) $RecordsFound \n";                        
+    $data = "\n(0) Records Found!\n";                        
 }
 
 echo($data);

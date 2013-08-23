@@ -1,8 +1,4 @@
 <?php
-
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
 
@@ -18,8 +14,7 @@ $result = @mysql_query($sql,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result);
 	if ($num < 1) {
 
-    //$msg = "<P><em2>Sorry, there are no SourceID names.</em></p>";
-	$msg = "<P><em2> $NoSourceIDNames </em></p>";
+    $msg = "<P><em2>Sorry, there are no SourceID names.</em></p>";
 
 	} else {
 
@@ -53,8 +48,7 @@ $result2 = @mysql_query($sql2,$connection)or die(mysql_error());
 $num2 = @mysql_num_rows($result2);
 	if ($num2 < 1) {
 
-    //$msg = "<P><em2>Sorry, there are no Site Types.</em></p>";
-	$msg = "<P><em2>$NoSiteTypes</em></p>";
+    $msg = "<P><em2>Sorry, there are no Site Types.</em></p>";
 
 	} else {
 
@@ -75,8 +69,7 @@ $result3 = @mysql_query($sql3,$connection)or die(mysql_error());
 $num3 = @mysql_num_rows($result3);
 	if ($num3 < 1) {
 
-    //$msg = "<P><em2>Sorry, there are no Vertical Datums.</em></p>";
-	$msg = "<P><em2>$NoVerticalDatums</em></p>";
+    $msg = "<P><em2>Sorry, there are no Vertical Datums.</em></p>";
 
 	} else {
 
@@ -103,8 +96,7 @@ $result4 = @mysql_query($sql4,$connection)or die(mysql_error());
 $num4 = @mysql_num_rows($result4);
 	if ($num4 < 1) {
 
-    //$msg = "<P><em2>Sorry, there are no Vertical Datums.</em></p>";
-	$msg = "<P><em2>$NoVerticalDatums</em></p>";
+    $msg = "<P><em2>Sorry, there are no Vertical Datums.</em></p>";
 
 	} else {
 
@@ -136,8 +128,7 @@ else
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
@@ -145,33 +136,27 @@ else
 <script type="text/javascript">
 
 function show_answerSC(){
-//alert("The Site Code is a unqiue identifier used by an organization that collects the data. For example, if the organization's name was McCall Outdoor Science Center and the name of the site was Boulder Creek at Jug Mountain Ranch, then your Site Code could be MOSS-BC-JMR");
-alert(<?php echo "'".$SiteCodeInfo."'"; ?>);
+alert("Please use the following protocol to establishing a unqiue Site Code (a 6-digit code with three sets of 2 digit unique identifiers). The first 2-digits stand for the unique 2-digit code for the 8-digit HUC identified in our Excel file that the site is within. The second 2-digits is the year the site becomes registered like 10 for 2010. The final 2-digits is the site's number starting numerically at 01 through 99, starting back over at 01 each year, for each HUC. For example, if the new site is within Lake Coeur d' Alene and the 8-digit HUC assigned is 17, was registered in 2010 use 10, and is the 12th site to be registered in that watershed then it would be 12. The Site Code would therefore be 171012.");
 }
 
 function show_answerState(){
-//alert("The current version of this software does not autmatically select the State and County. Please select them mannually.");
-alert(<?php echo "'".$SelectStateCounty."'"; ?>);
+alert("The current version of this software does not autmatically select the State and County. Please select them mannually.");
 }
 
 function show_answerVD(){
-//alert("The vertical datum of the elevation. Controlled Vocabulary from VerticalDatumCV. For example, MSL, which stands for Mean Sea Level.");
-alert(<?php echo "'".$VerticalDatumInfo."'"; ?>);
+alert("The vertical datum of the elevation. Controlled Vocabulary from VerticalDatumCV. For example, MSL, which stands for Mean Sea Level.");
 }
 
 function show_answerSR(){
-//alert("The spatial reference is for the purpose of recording the name and EPSG code of each Spatial Reference System used. For example, NAD83 / Idaho Central.");
-alert(<?php echo "'".$SpatialReferenceInfo."'"; ?>);
+alert("The spatial reference is for the purpose of recording the name and EPSG code of each Spatial Reference System used. For example, NAD83 / Idaho Central.");
 }
 
 function show_answerE(){
-//alert("The elevation corresponds to Mean Sea Level (MSL) vertical datum.");
-alert(<?php echo "'".$ElevationInfo."'"; ?>);
+alert("The elevation corresponds to Mean Sea Level (MSL) vertical datum.");
 }
 
 function TrainingAlert(){
-//alert("To automatically enter the latitude/longitude/elevation, simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.");
-alert(<?php echo "'".$AutomaticallyEnterLongLatEle."'"; ?>); 
+alert("To automatically enter the latitude/longitude/elevation, simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate."); 
 } 
 
 </script>
@@ -196,10 +181,9 @@ pic1.src="images/loader.gif";
 	 var elevator;
 	 
 function initialize() {
-	GetSourceName();
-	var myLatlng = new google.maps.LatLng(40.247084,-111.648071);
+	//GetSourceName();
+	var myLatlng = new google.maps.LatLng(43.52764,-112.04951);
 	
-
   
   var myOptions = {
     zoom: 14,
@@ -231,8 +215,7 @@ elevator = new google.maps.ElevationService();
        
 		;
        } else {
-         //alert(address + ' not found');
-		 alert(address + <?php echo "'".$NotFound."'"; ?>);
+         alert(address + ' not found');
        }
      });
   
@@ -293,8 +276,9 @@ function update(location)
 //Update Elevation
 
 
+//Disabling Function
 
-
+/*
   var locations = [];
   locations.push(location);
 
@@ -315,16 +299,14 @@ function update(location)
 	
         
       } else {
-        //alert("No results found");
-		alert(<?php echo "'".$NoResultsFound."'"; ?>);
+        alert("No results found");
       }
     } else {
-      //alert("Elevation service failed due to: " + status);
-	  alert(<?php echo "'".$FailedElevationService."'"; ?> +": "+ status);
+      alert("Elevation service failed due to: " + status);
     }
   });
 
-	
+	*/
 
 // Now to update the state
 var latlng1 = new google.maps.LatLng(location.lat(), location.lng());
@@ -339,8 +321,7 @@ geocoder.geocode({'latLng': latlng1}, function(results, status) {
           
         }
       } else {
-        //alert("Geocoder failed due to: " + status);
-		alert(<?php echo "'".$GeocoderFailed."'"; ?> + ": " + status);
+        alert("Geocoder failed due to: " + status);
       }
     });
 
@@ -359,9 +340,6 @@ display: none;
 --> 
 </STYLE>
 
-<!-- Creating the Site Code automatically -->
-<script type="text/javascript" src="js/create_site_code.js"></script>
-
 </head>
 
 <body background="images/bkgrdimage.jpg" onLoad="initialize()">
@@ -374,16 +352,14 @@ display: none;
   </tr>
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <!--<td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php //echo "$msg"; ?><p class="em" align="right">Required fields are marked with an asterick (*).</p>-->
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php //echo "$msg"; ?><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p>
-      <!--<h1>Add a New Site    </h1>-->
-      <h1><?php echo $AddNewSite;?></h1>      
+    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php //echo "$msg"; ?><p class="em" align="right">Required fields are marked with an asterisk(*).</p>
+      <h1>Add a New Site    </h1>
       <p>&nbsp;</p><FORM METHOD="POST" ACTION="" name="addsite" id="addsite">
       <table width="650" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td width="93"><strong><!--Source:--><?php echo $Source;?></strong></td>
+          <td width="93"><strong>Source:</strong></td>
           <td width="557"><select name="SourceID" id="SourceID" onChange="GetSourceName()">
-            <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+            <option value="-1">Select....</option>
             <?php echo "$option_block"; ?>
           </select></td>
         </tr>
@@ -392,25 +368,26 @@ display: none;
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><strong><!--Site Name:--><?php echo $SiteName;?></strong></td>
-          <td><input type="text" id="SiteName" name="SiteName" size=20 maxlength="200" onKeyUp="GetSiteName()"/>*&nbsp;<span class="em"><!--(Ex: Boulder Creek at Jug Mountain Ranch)--><?php echo $ExSiteName." ".$NoApostrophe;?></span></td>
+          <td><strong>Site Name:</strong></td>
+          <td><input type="text" id="SiteName" name="SiteName" size=20 maxlength="200"/>*&nbsp;<span class="em">(Ex: Boulder Creek at Jug Mountain Ranch)</span></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><strong><!--Site Code:--><?php echo $SiteCode;?></strong></td>
-          <td><input type="text" id="SiteCode" name="SiteCode" size=20 maxlength="200"/>*&nbsp;<a href="#" onClick="show_answerSC()" border="0"><img src="images/questionmark.png" border="0"></a>&nbsp;<span class="em"><!--(You may adjust this if needed)--><?php echo $ExSiteCode;?></span></td>
+          <td><strong>Site Code:</strong></td>
+          <td><input type="text" id="SiteCode" name="SiteCode" size=20 maxlength="200"/>
+          *&nbsp;<a href="#" onClick="show_answerSC()" border="0"><img src="images/questionmark.png" border="0"></a></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><strong><!--Site Type:--><?php echo $SiteType;?></strong></td>
+          <td><strong>Site Type:</strong></td>
           <td><select name="SiteType" id="SiteType" onChange="TrainingAlert()">
-            <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+            <option value="-1">Select....</option>
             <?php echo "$option_block2"; ?>
             </select>*</td>
         </tr>
@@ -419,10 +396,10 @@ display: none;
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Site Photo:--><?php echo $SitePhoto;?></strong></td>
+          <td valign="top"><strong>Site Photo:</strong></td>
           <td><input type="file" name="file" id="file" size="30">
             <br>
-            <!--(Photo must be in .JPG format; File will be uploaded upon submit below.)--><?php echo $ExSitePhoto;?></td>
+            (Photo must be in .JPG format; File will be uploaded upon submit below.)</td>
         </tr>
         <tr>
           <td>&nbsp;</td>
@@ -431,7 +408,7 @@ display: none;
       </table>
         <table width="650" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td colspan="4" valign="top"><strong><!--You may either enter the latitude/longitude/elevation manually or simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.--><?php echo $MapLatLongEle;?></strong></td>
+          <td colspan="4" valign="top"><strong>You may either enter the latitude/longitude/elevation manually or simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.</strong></td>
         </tr>
         <tr>
           <td width="100" valign="top">&nbsp;</td>
@@ -440,9 +417,9 @@ display: none;
           <td width="309" valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <td width="100" align="right" valign="top"><strong><!--Latitude:--><?php echo $Latitude;?>&nbsp;</strong></td>
+          <td width="100" align="right" valign="top"><strong>Latitude:&nbsp;</strong></td>
           <td width="155" valign="top"><input type="text" id="Latitude" name="Latitude" size=20 maxlength=20/>*</td>
-          <td width="86" align="right" valign="top"><strong><!--Longitude:--><?php echo $Longitude;?>&nbsp;</strong></td>
+          <td width="86" align="right" valign="top"><strong>Longitude:&nbsp;</strong></td>
           <td width="309" valign="top"><input type="text" id="Longitude" name="Longitude" size=20 maxlength=20/>*</td>
           </tr>
         <tr>
@@ -459,12 +436,12 @@ display: none;
     <td width="130">&nbsp;</td>
     <td width="520">&nbsp;</td>
   </tr>
-  <tr>
-    <td><strong><!--Elevation:--><?php echo $Elevation;?></strong></td>
-    <td><input type="text" id="Elevation" name="Elevation" size=20 maxlength=20/>
-    <!--* Meters-->* <?php echo $Meters;?>&nbsp;<a href="#" onClick="show_answerE()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+  <tr hidden="true">
+    <td><strong>Elevation:</strong></td>
+    <td><input type="text" id="Elevation" value="NULL" name="Elevation" size=20 maxlength=20/>
+    * Meters&nbsp;<a href="#" onClick="show_answerE()" border="0"><img src="images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr hidden="true">
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
@@ -476,9 +453,9 @@ display: none;
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--State:--><?php echo $State;?></strong></td>
+    <td><strong>State:</strong></td>
     <td><select name="state" id="state">
-      <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+      <option value="-1">Select....</option>
         <option value="AL">Alabama</option>
         <option value="AK">Alaska</option>
         <option value="AZ">Arizona</option>
@@ -530,7 +507,7 @@ display: none;
         <option value="WV">West Virginia</option>
         <option value="WI">Wisconsin</option>
         <option value="WY">Wyoming</option>
-		<option value="NULL"><!--International--><?php echo $International;?></option>
+		<option value="NULL">International</option>
     </select>*&nbsp;<a href="#" onClick="show_answerState()" border="0"><img src="images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>
@@ -538,19 +515,19 @@ display: none;
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--County:--><?php echo $County;?></strong></td>
-    <td><div id="county_drop_down"><select id="county" name="county"><option value=""><!--County...--><?php echo $CountyEllipsis;?></option></select>*</div>
-	 <span id="loading_county_drop_down"><img src="images/loader.gif" width="16" height="16" align="absmiddle">&nbsp;<!--Select state first...--><?php echo $SelectstateElipsis;?></span>
-	 <div id="no_county_drop_down"><!--This state has no counties.--><?php echo $StateNoCounties;?></div></td>
+    <td><strong>County:</strong></td>
+    <td><div id="county_drop_down"><select id="county" name="county"><option value="">County...</option></select>*</div>
+	 <span id="loading_county_drop_down"><img src="images/loader.gif" width="16" height="16" align="absmiddle">&nbsp;Select state first...</span>
+	 <div id="no_county_drop_down">This state has no counties.</div></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--Vertical Datum:--><?php echo $VerticalDatum;?></strong></td>
+    <td><strong>Vertical Datum:</strong></td>
     <td><select name="VerticalDatum" id="VerticalDatum">
-      <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+      <option value="-1">Select....</option>
       <?php echo "$option_block3"; ?>
     </select>*&nbsp;<a href="#" onClick="show_answerVD()" border="0"><img src="images/questionmark.png" border="0"></a></td>
   </tr>
@@ -559,9 +536,9 @@ display: none;
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--Spatial Reference:--><?php echo $SpatialReferenceColon;?></strong></td>
+    <td><strong>Spatial Reference:</strong></td>
     <td><select name="LatLongDatumID" id="LatLongDatumID">
-      <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+      <option value="-1">Select....</option>
       <?php echo "$option_block4"; ?>
     </select>*&nbsp;<a href="#" onClick="show_answerSR()" border="0"><img src="images/questionmark.png" border="0"></a></td>
   </tr>
@@ -570,17 +547,16 @@ display: none;
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--Comments:--><?php echo $Comments;?></strong></td>
+    <td><strong>Comments:</strong></td>
     <td><input type="text" id="com" name="value" size=50 maxlength=500/>
-      <span class="em">&nbsp;<!--(Optional)--><?php echo $Optional;?></span></td>
+      <span class="em">&nbsp;(Optional)</span></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <!--<td><input type="SUBMIT" name="submit" value="Add Site" class="button"/></td>-->
-    <td><input type="SUBMIT" name="submit" value="<?php echo $AddSiteButton;?>" class="button" width="auto"/></td>
+    <td><input type="SUBMIT" name="submit" value="Add Site" class="button"/></td>
     <td><div id='response'></div></td>
   </tr>
   <tr>
@@ -605,68 +581,59 @@ display: none;
 	  
 if(($("#SourceID option:selected").val())==-1)
 {
-//alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
-alert(<?php echo "'".$SelectSourceAdd."'"; ?>);
+alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
 return false;
 }
 
 if(($("#SiteName").val())=="")
 {
-//alert("Please enter a name for the site.");
-alert(<?php echo "'".$EnterSiteName."'"?>);
+alert("Please enter a name for the site.");
 return false;
 }
 
 if(($("#SiteCode").val())=="")
 {
-//alert("Please enter a code for the site.");
-alert(<?php echo "'".$Enter."'"; ?>);
+alert("Please enter a code for the site.");
 return false;
 }
 
 if(($("#SiteType option:selected").val())==-1)
 {
-//alert("Please select a Site Type.");
-alert(<?php echo "'".$SelectSiteType."'"; ?>);
+alert("Please select a Site Type.");
 return false;
 }	  
 
 if(($("#Latitude").val())=="")
 {
-//alert("Please enter the latitude for the site or select a point from the map");
-alert(<?php echo "'".$EnterLatitude."'"; ?>);
+alert("Please enter the latitude for the site or select a point from the map");
 return false;
 }
 
 if(($("#Longitude").val())=="")
 {
-//alert("Please enter the longitude for the site or select a point from the map");
-alert(<?php echo "'".$EnterLongitude."'"; ?>);
+alert("Please enter the longitude for the site or select a point from the map");
 return false;
 }
 
-if(($("#Elevation").val())=="")
+/*if(($("#Elevation").val())=="")
 {
-//alert("Please enter the elevation for the site or select a point from the map");
-alert(<?php echo "'".$EnterElevation."'"?>);
+alert("Please enter the elevation for the site or select a point from the map");
 return false;
 }
-
+*/
 
 var floatRegex = '[-+]?([0-9]*\.[0-9]+|[0-9]+)';
 var myInt = $("#Latitude").val().match(floatRegex);
 
 
 if(myInt==null)
-//{alert("Invalid characters present in latitude. Please correct it.");
-{alert(<?php echo "'".$InvalidLatitude."'"; ?>);
+{alert("Invalid characters present in latitude. Please correct it.");
       return false;
 }
 
 
 if(myInt[0]!=$("#Latitude").val())
-//{alert("Invalid characters present in latitude. Please correct it.");
-{alert(<?php echo "'".$InvalidLatitude."'"; ?>);
+{alert("Invalid characters present in latitude. Please correct it.");
       return false;
 }
 
@@ -675,50 +642,44 @@ myInt = $("#Longitude").val().match(floatRegex);
 
 
 if(myInt==null)
-//{alert("Invalid characters present in longitude. Please correct it.");
-{alert(<?php echo "'".$InvalidLongitude."'"; ?>);
+{alert("Invalid characters present in longitude. Please correct it.");
       return false;
 }
 
 
 if(myInt[0]!=$("#Longitude").val())
-//{alert("Invalid characters present in longitude. Please correct it.");
-{alert(<?php echo "'".$InvalidLongitude."'"; ?>);
+{alert("Invalid characters present in longitude. Please correct it.");
       return false;
 }
 
+/*
 myInt = $("#Elevation").val().match(floatRegex);
 
 
 if(myInt==null)
-//{alert("Invalid characters present in elevation. Please correct it.");
-{alert(<?php echo "'".$InvalidElevation."'"?>);
+{alert("Invalid characters present in elevation. Please correct it.");
       return false;
 }
 
 
 if(myInt[0]!=$("#Elevation").val())
-//{alert("Invalid characters present in elevation. Please correct it.");
-{alert(<?php echo "'".$InvalidElevation."'"?>);
+{alert("Invalid characters present in elevation. Please correct it.");
       return false;
 }
-
+*/
 if(($("#state option:selected").val())==-1)
 {
-//alert("Please select a state.");
-alert(<?php echo "'".$SelectState."'"; ?>);
+alert("Please select a state.");
 return false;
 }
 if(($("#VerticalDatum option:selected").val())==-1)
 {
-//alert("Please select a vertical datum.");
-alert(<?php echo "'".$SelectVerticalDatum."'"; ?>);
+alert("Please select a vertical datum.");
 return false;
 }
 if(($("#LatLongDatumID option:selected").val())==-1)
 {
-//alert("Please select a spatial reference.");
-alert(<?php echo "'".$SelectSpatialReference."'"; ?>);
+alert("Please select a spatial reference.");
 return false;
 }
 
@@ -752,8 +713,7 @@ formdata.append("images[]", file);
 			
 			if(res==1)
 			{
-//alert("Site successfully added");
-alert(<?php echo "'".$SiteAddedSuccessfully."'"; ?>);
+alert("Site successfully added");
 window.location.href = "add_site.php";
 	  return true;
 			}
@@ -771,8 +731,7 @@ else
 {
 
 
-//alert("Site successfully added");
-alert(<?php echo "'".$SiteAddedSuccessfully."'"; ?>);
+alert("Site successfully added");
 window.location.href = "add_site.php";
 	  return true;
 	
@@ -782,8 +741,7 @@ window.location.href = "add_site.php";
   }
   else
   {
-  //alert("Error in database configuration");
-  alert(<?php echo "'".$DatabaseConfigurationError."'"; ?>);
+  alert("Error in database configuration");
   return false;
   }
   

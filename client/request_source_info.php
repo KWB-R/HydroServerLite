@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
 
@@ -49,82 +46,66 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
 		$MetadataLink2 = $row["MetadataLink"];
 	}
 
-
+	
 		$option_block_es .= "<tr>
-          <!--<td width='130' valign='top'><strong>Source ID #:</strong></td>-->
-		  <td width='130' valign='top'><strong>$SrcID</strong></td>
-           <!--<td valign='top' width='470'><input type='text' name='SourceID2' id='SourceID2' size='5' value='$SourceID2' disabled>&nbsp;<span class='em'>(This may not be edited!)</span></td>-->
-		  <td valign='top' width='470'><input type='text' name='SourceID2' id='SourceID2' size='5' value='$SourceID2' disabled>&nbsp;<span class='em'>$MayNotEdit</span></td>
+          <td width='130' valign='top'><strong>Source ID #:</strong></td>
+          <td valign='top' width='470'><input type='text' name='SourceID2' id='SourceID2' size='5' value='$SourceID2' disabled>&nbsp;<span class='em'>(This may not be edited!)</span></td>
         </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
         </tr>
         <tr>
-           <!--<td valign='top'><strong>Organization:</strong></td>-->
-		  <td valign='top'><strong>$Organization</strong></td>
-           <!--<td valign='top'><input type='text' id='Organization2' name='Organization2' value='$Organization2' size='35' maxlength='100'/>*&nbsp;<span class='em'>(Ex: McCall Outdoor Science School)</span></td>-->
-          <td valign='top'><input type='text' id='Organization2' name='Organization2' value='$Organization2' size='35' maxlength='100'/>*&nbsp;<span class='em'>$ExTitle</span></td>
-		</tr>
+          <td valign='top'><strong>Organization:</strong></td>
+          <td valign='top'><input type='text' id='Organization2' name='Organization2' value='$Organization2' size='35' maxlength='100'/>*&nbsp;<span class='em'>(Ex: McCall Outdoor Science School)</span></td>
+        </tr>
         <tr>
           <td width='108' valign='top'>&nbsp;</td>
           <td width='22' valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Description:</strong></td>-->
-		  <td valign='top'><strong>$Description</strong></td>
-           <!--<td valign='top'><input type='text' id='SourceDescription2' name='SourceDescription2' value='$SourceDescription2' size='35' maxlength='200'/>*&nbsp;<span class='em'>(Ex: The mission of the MOSS is....)</span></td>-->
-		  <td valign='top'><input type='text' id='SourceDescription2' name='SourceDescription2' value='$SourceDescription2' size='35' maxlength='200'/>*&nbsp;<span class='em'>$ExDescipt</span></td>
+          <td valign='top'><strong>Description:</strong></td>
+          <td valign='top'><input type='text' id='SourceDescription2' name='SourceDescription2' value='$SourceDescription2' size='35' maxlength='200'/>*&nbsp;<span class='em'>(Ex: The mission of the MOSS is....)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td width='22' valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Link to Org:</strong></td>-->
-		  <td valign='top'><strong>$Link</strong></td>
+          <td valign='top'><strong>Link to Org:</strong></td>
           <td valign='top'><input type='text' id='SourceLink2' name='SourceLink2' value='$SourceLink2' size='35' maxlength='200'/>
-           <!--&nbsp;<span class='em'>(Optional, Ex: http://www.mossidaho.org)</span></td>-->
-		  &nbsp;<span class='em'>$ExMetaLink</span></td>
+          &nbsp;<span class='em'>(Optional, Ex: http://www.mossidaho.org)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-          <td valign='top'><strong>$ContactName</strong></td>
-		   <!--<td valign='top'><strong>Contact Name:</strong></td>-->
-           <!--<td valign='top'><input type='text' id='ContactName2' name='ContactName2' value='$ContactName2' size='25' maxlength='200'/>*&nbsp;<span class='em'>(Full Name)</span></td>-->
-		  <td valign='top'><input type='text' id='ContactName2' name='ContactName2' value='$ContactName2' size='25' maxlength='200'/>*&nbsp;<span class='em'>$ExName</span></td>
+          <td valign='top'><strong>Contact Name:</strong></td>
+          <td valign='top'><input type='text' id='ContactName2' name='ContactName2' value='$ContactName2' size='25' maxlength='200'/>*&nbsp;<span class='em'>(Full Name)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Phone:</strong></td>-->
-		  <td valign='top'><strong>$Phone</strong></td>
-           <!--<td valign='top'><input type='text' id='Phone2' name='Phone2' value='$Phone2' size='12' maxlength='15'/>*&nbsp;<span class='em'>(Ex: XXX-XXX-XXXX)</span></td>-->
-		  <td valign='top'><input type='text' id='Phone2' name='Phone2' value='$Phone2' size='12' maxlength='15'/>*&nbsp;<span class='em'>$ExPhone</span></td>
+          <td valign='top'><strong>Phone:</strong></td>
+          <td valign='top'><input type='text' id='Phone2' name='Phone2' value='$Phone2' size='12' maxlength='15'/>*&nbsp;<span class='em'>(Ex: XXX-XXX-XXXX)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Email:</strong></td>-->
-		  <td valign='top'><strong>$Email</strong></td>
-           <!--<td valign='top'><input type='text' id='Email2' name='Email2' value='$Email2' size='12' maxlength='50'/>*&nbsp;<span class='em'>(Ex: info@moss.org)</span></td>-->
-		  <td valign='top'><input type='text' id='Email2' name='Email2' value='$Email2' size='12' maxlength='50'/>*&nbsp;<span class='em'>$ExEmail</span></td>
-
+          <td valign='top'><strong>Email:</strong></td>
+          <td valign='top'><input type='text' id='Email2' name='Email2' value='$Email2' size='12' maxlength='50'/>*&nbsp;<span class='em'>(Ex: info@moss.org)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Address:</strong></td>-->
-		  <td valign='top'><strong>$Address</strong></td>
+          <td valign='top'><strong>Address:</strong></td>
           <td valign='top'><input type='text' id='Address2' name='Address2' value='$Address2' size='35' maxlength='100'/>*</td>
           </tr>
         <tr>
@@ -132,8 +113,7 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>City:</strong></td>-->
-		  <td valign='top'><strong>$City</strong></td>
+          <td valign='top'><strong>City:</strong></td>
           <td valign='top'><input type='text' id='City2' name='City2' value='$City2' size='25' maxlength='100'/>*</td>
           </tr>
         <tr>
@@ -141,12 +121,10 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>State:</strong></td>-->
-		  <td valign='top'><strong>$State</strong></td>
+          <td valign='top'><strong>State:</strong></td>
           <td valign='top'><select name='State2' id='State2'>
             <option value='$State2'>$State2</option>
-            <!--<option value='-1'>Select....</option>-->
-			<option value='-1'>$SelectEllipsis</option>
+            <option value='-1'>Select....</option>
             <option value='AL'>Alabama</option>
             <option value='AK'>Alaska</option>
             <option value='AZ'>Arizona</option>
@@ -198,7 +176,6 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
             <option value='WV'>West Virginia</option>
             <option value='WI'>Wisconsin</option>
             <option value='WY'>Wyoming</option>
-			<option value='NULL'>$International</option>
           </select>*</td>
           </tr>
         <tr>
@@ -206,8 +183,7 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Zip Code:</strong></td>-->
-          <td valign='top'><strong>$Zip</strong></td>  
+          <td valign='top'><strong>Zip Code:</strong></td>
           <td valign='top'><input type='text' id='ZipCode2' name='ZipCode2' value='$ZipCode2' size='5' maxlength='8'/>*</td>
           </tr>
         <tr>
@@ -215,11 +191,9 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Citation:</strong></td>-->
-		  <td valign='top'><strong>$Citation</strong></td>
+          <td valign='top'><strong>Citation:</strong></td>
           <td valign='top'><input type='text' id='Citation2' name='Citation2' value='$Citation2' size='35' maxlength='100'/>
-            <!--&nbsp;<span class='em'>(Optional, Ex: Data collected by MOSS scientists and citizen scie...)</span></td>-->
-			&nbsp;<span class='em'>$ExCitation</span></td>
+            &nbsp;<span class='em'>(Optional, Ex: Data collected by MOSS scientists and citizen scie...)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
@@ -228,22 +202,20 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
 
 //Start of MetadataID section
 	$option_block_es .= "<tr>
-           <!--<td valign='top'><strong>Metadata ID #:</strong></td>-->
-		  <td valign='top'><strong>$MetadataId</strong></td>
-           <!--<td valign='top'><input type='text' name='MetadataID2' id='MetadataID2' size='5' value='$MDID' disabled>&nbsp;<span class='em'>(This may not be edited!)</span></td>-->
-		  <td valign='top'><input type='text' name='MetadataID2' id='MetadataID2' size='5' value='$MDID' disabled>&nbsp;<span class='em'>$MayNotEdit</span></td>
+          <td valign='top'><strong>Metadata ID #:</strong></td>
+          <td valign='top'><input type='text' name='MetadataID2' id='MetadataID2' size='5' value='$MDID' disabled>&nbsp;<span class='em'>(This may not be edited!)</span></td>
         </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
         </tr>		
         <tr>
-          <td valign='top'><strong>$TopicCategory</strong></td>";
+          <td valign='top'><strong>Topic Category:</strong></td>";
 		  
 		// Pull the Topic Category data for the dropdown menu
 		$option_block_tc = "<select name='TopicCategory2' id='TopicCategory2'>
 			<option value='$TopicCategory2'>$TopicCategory2</option>
-			<option value='-1'>$SelectEllipsis</option>";
+			<option value='-1'>Select....</option>";
 
 			$sql_tc ="SELECT * FROM topiccategorycv";
 
@@ -260,49 +232,39 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
 		$option_block_tc .= "</select>*";
 		// End of Topic Category dropdown menu
 
-
-$option_block_es .= "<td valign='top'>$option_block_tc &nbsp;<span class='em'>$SelectUnknown</span></td>
- <!--<td valign='top'>$option_block_tc &nbsp;<span class='em'>(You may select Unknown)</span></td>-->
+$option_block_es .= "<td valign='top'>$option_block_tc &nbsp;<span class='em'>(You may select Unknown)</span></td>
         </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-          <!--<td valign='top'><strong>Title:</strong></td>-->
-	  <td valign='top'><strong>$Title</strong></td>
-          <!--<td valign='top'><input type='text' id='Title2' name='Title2' value='$Title2' size='25' maxlength='200'/>*&nbsp;<span class='em'>(Ex: McCall Outdoor Science School)</span></td>-->
-	  <td valign='top'><input type='text' id='Title2' name='Title2' value='$Title2' size='25' maxlength='200'/>*&nbsp;<span class='em'>$ExTitle</span></td>
+          <td valign='top'><strong>Title:</strong></td>
+          <td valign='top'><input type='text' id='Title2' name='Title2' value='$Title2' size='25' maxlength='200'/>*&nbsp;<span class='em'>(Ex: McCall Outdoor Science School)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Abstract:</strong></td>-->
-		  <td valign='top'><strong>$Abstract</strong></td>
-           <!--<td valign='top'><textarea name='Abstract2' cols='50' rows='4' id='Abstract2'>$Abstract2</textarea>*<br><span class='em'>(Ex: MOSS collects water data from Ponderosa State Park...; Or you may enter Unknown)</span></td>-->
-		  <td valign='top'><textarea name='Abstract2' cols='50' rows='4' id='Abstract2'>$Abstract2</textarea>*<br><span class='em'>$ExAbstract</span></td>
+          <td valign='top'><strong>Abstract:</strong></td>
+          <td valign='top'><textarea name='Abstract2' cols='50' rows='4' id='Abstract2'>$Abstract2</textarea>*<br><span class='em'>(Ex: MOSS collects water data from Ponderosa State Park...; Or you may enter Unknown)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Profile Version:</strong></td>-->
-		  <td valign='top'><strong>$MetaDataProfileVersion</strong></td>
-           <!--<td valign='top'><input type='text' id='ProfileVersion2' name='ProfileVersion2' value='$ProfileVersion2' size='12' maxlength='200'/>*&nbsp;<a href='#' onClick='show_answerProf()' border='0'><img src='images/questionmark.png' border='0'></a>&nbsp;<span class='em'>(Ex: ISO8601; Or you may enter Unknown)</span></td>-->
-		  <td valign='top'><input type='text' id='ProfileVersion2' name='ProfileVersion2' value='$ProfileVersion2' size='12' maxlength='200'/>*&nbsp;<a href='#' onClick='show_answerProf()' border='0'><img src='images/questionmark.png' border='0'></a>&nbsp;<span class='em'>$ExProfileVersion</span></td>
+          <td valign='top'><strong>Profile Version:</strong></td>
+          <td valign='top'><input type='text' id='ProfileVersion2' name='ProfileVersion2' value='$ProfileVersion2' size='12' maxlength='200'/>*&nbsp;<a href='#' onClick='show_answerProf()' border='0'><img src='images/questionmark.png' border='0'></a>&nbsp;<span class='em'>(Ex: ISO8601; Or you may enter Unknown)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Metadata Link:</strong></td>-->
-		  <td valign='top'><strong>$MetaLink</strong></td>
-           <!--<td valign='top'><input type='text' id='MetadataLink2' name='MetadataLink2' value='$MetadataLink2' size='35' maxlength='250'/>&nbsp;<span class='em'>(Optional, Ex: http://www.mossidaho.org)</span></td>-->
-		  <td valign='top'><input type='text' id='MetadataLink2' name='MetadataLink2' value='$MetadataLink2' size='35' maxlength='250'/>&nbsp;<span class='em'>$ExMetaLink</span></td>
+          <td valign='top'><strong>Metadata Link:</strong></td>
+          <td valign='top'><input type='text' id='MetadataLink2' name='MetadataLink2' value='$MetadataLink2' size='35' maxlength='250'/>&nbsp;<span class='em'>(Optional, Ex: http://www.mossidaho.org)</span></td>
           </tr>
         <tr>
           <td valign='top'>&nbsp;</td>
@@ -312,8 +274,7 @@ $option_block_es .= "<td valign='top'>$option_block_tc &nbsp;<span class='em'>$S
 //End of MetadataID section
 
 $option_block_es .= "<tr>
-           <!--<td colspan='2' valign='top'><input type='submit' name='submit' value='Save Edits' class='button' style='width: 85px' onClick='updateSource()'/>&nbsp;&nbsp;<input type='button' name='delete' value='Delete' class='button' style='width: 55px' onClick='confirmBox()'/>&nbsp;&nbsp;<input type='button' name='Reset' value='Cancel' class='button' style='width: 65px' onClick='clearEverything()'/></td>-->
-		  <td colspan='2' valign='top'><input type='submit' name='submit' value='$SaveEdits' class='button' style='width: auto' onClick='updateSource()'/>&nbsp;&nbsp;<input type='button' name='delete' value='$Delete' class='button' style='width: auto' onClick='confirmBox()'/>&nbsp;&nbsp;<input type='button' name='Reset' value='$Cancel' class='button' style='width: auto' onClick='clearEverything()'/></td>
+          <td colspan='2' valign='top'><input type='submit' name='submit' value='Save Edits' class='button' style='width: 85px' onClick='updateSource()'/>&nbsp;&nbsp;<input type='button' name='delete' value='Delete' class='button' style='width: 55px' onClick='confirmBox()'/>&nbsp;&nbsp;<input type='button' name='Reset' value='Cancel' class='button' style='width: 65px' onClick='clearEverything()'/></td>
           </tr>
       </table>
 	  </FORM>";

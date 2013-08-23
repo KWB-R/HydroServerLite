@@ -1,19 +1,12 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check2.php';
-
 ?>
-
 <html>
 <head>
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
-
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>    
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
@@ -68,8 +61,7 @@ function track_loc(){
        if (status == google.maps.GeocoderStatus.OK) {
         searchLocationsNear2(results[0].geometry.location);
        } else {
-         //alert(address + ' not found');
-		 alert(address +  <?php echo "'".$NotFound."'";?>)
+         alert(address + ' not found');
        }
      });
   
@@ -105,14 +97,14 @@ function loadall()
     var name = markerNodes[i].getAttribute("name");
     var sitecode = markerNodes[i].getAttribute("sitecode");
 	var lat = markerNodes[i].getAttribute("lat");
-	var long = markerNodes[i].getAttribute("lng");
+	var long1 = markerNodes[i].getAttribute("lng");
     var distance = parseFloat(markerNodes[i].getAttribute("distance"));
     var latlng = new google.maps.LatLng(
         parseFloat(markerNodes[i].getAttribute("lat")),
         parseFloat(markerNodes[i].getAttribute("lng")));
 	var type = markerNodes[i].getAttribute("sitetype");
 	var siteid = markerNodes[i].getAttribute("siteid");
-	    create_source(latlng, name, sitecode, type, lat, long, siteid, i);
+	    create_source(latlng, name, sitecode, type, lat, long1, siteid, i);
     bounds.extend(latlng);
   }
 
@@ -127,7 +119,7 @@ function loadall()
 
   map.fitBounds(bounds);
   map.panToBounds(bounds);
-  map.setZoom(15);
+  //map.setZoom(10);
 	 });
 	
 	}
@@ -174,8 +166,7 @@ function create_source(latlng, name, sitecode, type, lat, long, siteid, i)
        if (status == google.maps.GeocoderStatus.OK) {
         searchLocationsNear(results[0].geometry.location);
        } else {
-         //alert(address + ' not found');
-		 alert(address + <?php echo "'".$NotFound."'";?>);
+         alert(address + ' not found');
        }
      });
    }
@@ -380,14 +371,13 @@ else
              <td>&nbsp;</td>
            </tr>
            <tr>
-             <!--<td>To search for a data collection sites, simply type in the city or hit the button "Find sites near me!" to show sites within a 300 mile radius of your present geographic location. (Note: Sites in which there is no data will NOT be displayed below.)</td>-->
-             <td><?php echo $ToSearch; ?></td>
+             <td>To search for a data collection sites, simply type in the city or hit the button "Find sites near me!" to show sites within a 300 mile radius of your present geographic location. (Note: Sites in which there is no data will NOT be displayed below.)</td>
            </tr>
             <tr>
              <td>&nbsp;</td>
            </tr>
             <tr>
-             <!--<td><input type="text" id="addressInput" size="10"/>
+             <td><input type="text" id="addressInput" size="10"/>
                <select name="radiusSelect" id="radiusSelect">
                  <option value="25" selected>25mi</option>
                  <option value="50">50mi</option>
@@ -399,20 +389,7 @@ else
                </select>
                <input type="button" onClick="searchLocations()" value="Search"/>
                <input type='button' onClick="loadall()" value="Reset Search"/>
-             <input type='button' onClick="track_loc()" value="Find sites near me!"/></td>-->
-             <td><input type="text" id="addressInput" size="10"/>
-               <select name="radiusSelect" id="radiusSelect">
-                 <option value="25" selected><?php echo $TwentyFive; ?></option>
-                 <option value="50"><?php echo $Fifty; ?></option>
-                 <option value="100"><?php echo $OneHundred; ?></option>
-                 <option value="200"><?php echo $TwoHundred; ?></option>
-                 <option value="300"><?php echo $ThreeHundred; ?></option>
-                 <option value="400"><?php echo $FourHundred; ?></option>
-                 <option value="500"><?php echo $FiveHundred; ?></option>
-               </select>
-               <input type="button" onClick="searchLocations()" value="<?php echo $Search;?>"/>
-               <input type='button' onClick="loadall()" value="<?php echo $ResetSearch;?>"/>
-             <input type='button' onClick="track_loc()" value="<?php echo $FindSites; ?>"/></td>
+             <input type='button' onClick="track_loc()" value="Find sites near me!"/></td>
            </tr>
            
            <tr>

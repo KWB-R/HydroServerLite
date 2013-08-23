@@ -1,6 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
 
 require_once 'db_config.php';
 
@@ -36,8 +34,7 @@ $data = str_replace( "\r" , "" , $data );
 
 if ( $data == "" )
 {
-    //$data = "\n(0) Records Found!\n";  
-	$data = "\n(0) " + $RecordsFound  + "\n";                      
+    $data = "\n(0) Records Found!\n";                        
 }
 
 echo($data);

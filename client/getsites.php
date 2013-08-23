@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //value given from the page
 $q=$_GET["q"];
 
@@ -16,12 +13,10 @@ $result2 = @mysql_query($sql2,$connection)or die(mysql_error());
 $num = @mysql_num_rows($result2);
 	if ($num < 1) {
 
-    //echo "<span class='em'>No Sites for this Source.</span>";
-	 echo "<span class='em'>". $NoSitesSource ."</span>";
+    echo "<span class='em'>No Sites for this Source.</span>";
 
 	} else {
-//$option_block2 = "<select name='SiteID' id='SiteID' onChange='showTypes(this.value)'><option value='-1'>Select....</option>";
-$option_block2 = "<select name='SiteID' id='SiteID' onChange='showTypes(this.value)'><option value='-1'>".$SelectEllipsis."</option>";
+$option_block2 = "<select name='SiteID' id='SiteID' onChange='showTypes(this.value)'><option value='-1'>Select....</option>";
 	while ($row2 = mysql_fetch_array ($result2)) {
 
 		$siteid = $row2["SiteID"];
@@ -31,7 +26,7 @@ $option_block2 = "<select name='SiteID' id='SiteID' onChange='showTypes(this.val
 
 		}
 	}
-$option_block2 .= "</select>*&nbsp;<a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>";
+$option_block2 .= "</select>&nbsp;<a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>";
 echo $option_block2;
 mysql_close($connection);
 ?>

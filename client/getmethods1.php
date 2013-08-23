@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //value given from the page
 $m=$_GET["m"];
 
@@ -16,13 +13,11 @@ $result4 = @mysql_query($sql4,$connection)or die(mysql_error());
 $num4 = @mysql_num_rows($result4);
 	if ($num4 < 1) {
 
-    //$msg4 = "<P><em2>No Methods for this Variable.</em></p>";
-	$msg4 = "<P><em2>".$NoMethodsVariable."</em></p>";
+    $msg4 = "<P><em2>No Methods for this Variable.</em></p>";
 
 	} else {
 		
-	//$option_block4 = "<select name='MethodID' id='MethodID'><option value='-1'>Select....</option>";
-	$option_block4 = "<select name='MethodID' id='MethodID'><option value='-1'>".$SelectEllipsis."</option>";
+	$option_block4 = "<select name='MethodID' id='MethodID'><option value='-1'>Select....</option>";
 
 // works to here	
 

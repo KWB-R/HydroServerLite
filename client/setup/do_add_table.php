@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $host = $_POST['databasehost'];
    $user = $_POST['databaseusername'];
    $pass = $_POST['databasepassword'];

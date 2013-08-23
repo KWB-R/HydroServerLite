@@ -1,16 +1,10 @@
 <?php
 
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
-//check authority to be here
-//require_once 'authorization_check.php';
-
 //connect to server and select database
 require_once 'database_connection.php';
 require_once 'main_config.php';
 
-if (!isset($_COOKIE['power'])){
+if (!isset($_COOKIE['idaho'])){
 //Check to see if the perosn is an authorized user and display their first name
 $sql ="SELECT * FROM moss_users WHERE username='$_POST[username]' AND password= password('$_POST[password]')";
 
@@ -22,14 +16,57 @@ $num = mysql_num_rows($result);
 		//get the person's first name and authority
 		while ($row = mysql_fetch_assoc($result)) {
 		$firstname = $row['firstname'];
+		$lastname = $row['lastname'];
 		$auth = $row['authority'];
+		$username=$row['username'];
 		}
 		$uname ="$firstname";
 	} else {
 		header("Location: index.php?state=pass");
 		exit;
 	}
+	
+	$some_array = array('power' => $auth, 'uname' => $username, 'firstname' => $firstname, 'lastname' => $lastname);
+	$strtstr=base64_encode(serialize($some_array));
+	if ($auth == "admin"){
+	$nav = "<script src=js/A_navbar.js></script>";
+	$t=time() +14000;
+	setcookie('idaho', $strtstr, $t , $www);
+	}
+
+	elseif ($auth == "teacher"){
+	$nav = "<script src=js/T_navbar.js></script>";
+	setcookie('idaho', $strtstr, time() +14000 , $www);
+	}
+
+	elseif ($auth == "student"){
+	$nav = "<script src=js/S_navbar.js></script>";
+	setcookie('idaho', $strtstr, time() +14000 , $www);
+	}
+
+	else {
+	header("Location: index.php?state=pass2");
+	exit;	
+	}	
+	
 }
+else
+{
+$some_array = unserialize(base64_decode($_COOKIE['idaho']));
+	$power1= $some_array['power'];
+	
+	if($power1 =='admin'){
+	$nav ="<script src=js/A_navbar.js></script>";
+	}
+	elseif ($power1 =='teacher'){
+	$nav ="<script src=js/T_navbar.js></script>";
+	}
+	elseif ($power1 =='student'){
+	$nav ="<script src=js/S_navbar.js></script>";
+	} 
+
+}
+
 
 //Count the number of Sites
 	$sql_sites ="SELECT * FROM sites";
@@ -48,7 +85,7 @@ $num = mysql_num_rows($result);
 	$num_datapts = mysql_num_rows($result_datapts);
 	
 //Count the number of Variables
-	$sql_vars ="SELECT * FROM varmeth";
+	$sql_vars ="SELECT * FROM variables";
 
 	$result_vars = @mysql_query($sql_vars,$connection) or die(mysql_error());
 
@@ -66,65 +103,13 @@ $num = mysql_num_rows($result);
 //Check the cookie or set it (based on authority) if not already
 // or redirect the user elsewhere if unauthorized
 
-if (isset($_COOKIE['power'])){
 
-	if($_COOKIE['power'] =='admin'){
-	//$nav ="<script src=js/A_navbar.js></script>";
-	$nav ="<script src=A_navbar.php></script>";
-	}
-	elseif ($_COOKIE['power'] =='teacher'){
-	//$nav ="<script src=js/T_navbar.js></script>";
-	$nav ="<script src=T_navbar.php></script>";
-	}
-	elseif ($_COOKIE['power'] =='student'){
-	//$nav ="<script src=js/S_navbar.js></script>";
-	$nav ="<script src=S_navbar.php></script>";
-	} 
-}else{
-	if ($auth == "admin"){
-	//$nav = "<script src=js/A_navbar.js></script>";
-	$nav = "<script src=A_navbar.php></script>";
-	$cookie_name = "power";
-	$cookie_value = $auth;
-	$cookie_expire = time()+14400;
-	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
-	}
-
-	elseif ($auth == "teacher"){
-	//$nav = "<script src=js/T_navbar.js></script>";
-	$nav = "<script src=T_navbar.php></script>";
-	$cookie_name = "power";
-	$cookie_value = $auth;
-	$cookie_expire = time()+14400;
-	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
-	}
-
-	elseif ($auth == "student"){
-	//$nav = "<script src=js/S_navbar.js></script>";
-	$nav = "<script src=S_navbar.php></script>";
-	$cookie_name = "power";
-	$cookie_value = $auth;
-	$cookie_expire = time()+14400;
-	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
-	}
-
-	else {
-	
-	//header("Location: index.php?state=pass2");
-	echo("out");
-	exit;	
-	}	
-}
 
 ?>
 
 <html>
 <head>
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
@@ -182,8 +167,7 @@ function track_loc(){
        if (status == google.maps.GeocoderStatus.OK) {
         searchLocationsNear2(results[0].geometry.location);
        } else {
-         //alert(address + ' not found');
-		 alert(address + <?php echo "'".$NotFound."'";?>);
+         alert(address + ' not found');
        }
      });
   
@@ -204,8 +188,7 @@ function track_loc(){
  // searchLocations2(initialLocation);
 }
 
-function loadall()
-{
+function loadall(){
 	clearLocations();
 	option_num=0;
 	 var searchUrl = 'db_display_all.php';
@@ -277,8 +260,7 @@ function create_source(latlng, name, sitecode, type, lat, long, siteid, i)
        if (status == google.maps.GeocoderStatus.OK) {
         searchLocationsNear(results[0].geometry.location);
        } else {
-         //alert(address + ' not found');
-		 alert(address + <?php echo "'".$NotFound."'";?>);
+         alert(address + ' not found');
        }
      });
    }
@@ -294,8 +276,7 @@ function create_source(latlng, name, sitecode, type, lat, long, siteid, i)
      locationSelect.innerHTML = "";
      var option = document.createElement("option");
      option.value = "none";
-     //option.innerHTML = "Click here for a list of Sites: ";
-     option.innerHTML = <?php echo "'".$ClickHere."'";?>;
+     option.innerHTML = "Click here for a list of Sites: ";
      locationSelect.appendChild(option);
    }
 
@@ -312,8 +293,7 @@ function create_source(latlng, name, sitecode, type, lat, long, siteid, i)
        var bounds = new google.maps.LatLngBounds();
        
 	   if (markerNodes.length==0)
-	   //{alert("No Sites Found. Please Alter Search Terms");}
-	   {alert(<?php echo "'".$NoSites."'";?>);}
+	   {alert("No Sites Found. Please Alter Search Terms");}
 	   for (var i = 0; i < markerNodes.length; i++) {
         var name = markerNodes[i].getAttribute("name");
         var sitecode = markerNodes[i].getAttribute("sitecode");
@@ -381,8 +361,7 @@ $.ajax({
   if(msg!=-1)
   {
 
- //var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here to visit the site</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
- var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>"+ <?php echo "'".$SiteType."'";?> +type+"<br/> "+<?php echo "'".$Latitude."'";?> +lat+"<br/>"+  <?php echo "'".$Longitude."'";?>  +long+"<br/>"+ <?php echo "'".$Source."'";?> + "<a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>" + <?php echo "'".$VisitSite."'";?> + "</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
+ var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here to visit the site</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
 
  var marker = new google.maps.Marker({
     map: map,
@@ -398,9 +377,7 @@ $.ajax({
 else
 {
 
-// var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here to visit the site</a></div>";
-  var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>" + <?php echo "'".$SiteType."'";?> +type+"<br/>" + <?php echo "'".$Latitude."'";?> +lat+"<br/>"+ <?php echo "'".$Longitude."'";?> +long+"<br/>" + <?php echo "'".$Source."'";?> +"<a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>"+ <?php echo "'".$VisitSite."'";?> +"</a></div>";
-
+ var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here to visit the site</a></div>";
 
  var marker = new google.maps.Marker({
     map: map,
@@ -476,9 +453,8 @@ else
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
     <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br />
-    <!--<h2>Welcome <?php echo "$uname"; ?> to the <?php echo "$orgname"; ?> Data Portal!</h2>-->
-    <h2><?php echo $Welcome; ?> <?php echo "$uname"; ?> <?php echo $ToThe;?> <?php echo "$orgname"; ?> <?php echo $DataPortal; ?></h2>
-    <p><strong><!--This system is running HydroServer Lite--> <?php echo $ThisSystemRuns;?> <?php echo "$HSLversion"; ?> <!--and your database contains--> <?php echo $DatabaseContains; ?> <?php echo "$num_sites"; ?> <!--Sites,--><?php echo $Sites; ?> <?php echo "$num_datapts"; ?> <!--data points,--><?php echo $DataPoints;?> <?php echo "$num_vars"; ?> <!--Variables, and--><?php echo $Variables; ?> <?php echo "$num_u"; ?> <!--users.--><?php echo $users; ?></strong></p>
+    <h2>Welcome <?php echo "$uname"; ?> to the <?php echo "$orgname"; ?> Data Portal!</h2>
+    <p><strong>This system is running the MWS Web App <?php echo "$version"; ?> and your database contains <?php echo "$num_sites"; ?> Sites, <?php echo "$num_datapts"; ?> data points, <?php echo "$num_vars"; ?> Variables, and <?php echo "$num_u"; ?> users.</strong></p>
       <table width="630" border="0">
         <tr>
           <td>&nbsp;</td>
@@ -490,9 +466,7 @@ else
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <!--<td><p>To search for a data collection sites, simply type in the city or hit the button &quot;Find sites near me!&quot; to show sites within a 300 mile radius of your present geographic location. (Note: Sites in which there is no data will NOT be displayed below.)</p></td>-->
-          <td><p><?php echo $SearchDataHome; ?></p></td>
-
+          <td><p>To search for a data collection sites, simply type in the city or hit the button &quot;Find sites near me!&quot; to show sites within a 300 mile radius of your present geographic location. (Note: Sites in which there is no data will NOT be displayed below.)</p></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
@@ -500,27 +474,17 @@ else
         <tr>
           <td><input type="text" id="addressInput" size="10"/>
             <select name="radiusSelect" id="radiusSelect">
-              <option value="25" selected><?php echo $TwentyFive; ?></option>
-              <option value="50"><?php echo $Fifty; ?></option>
-              <option value="100"><?php echo $OneHundred; ?></option>
-              <option value="200"><?php echo $TwoHundred; ?></option>
-              <option value="300"><?php echo $ThreeHundred; ?></option>
-              <option value="400"><?php echo $FourHundred; ?></option>
-              <option value="500"><?php echo $FiveHundred; ?></option>
-              <!--<option value="25" selected>25mi</option>
+              <option value="25" selected>25mi</option>
               <option value="50">50mi</option>
               <option value="100">100mi</option>
               <option value="200">200mi</option>
               <option value="300">300mi</option>
               <option value="400">400mi</option>
-              <option value="500">500mi</option>-->
+              <option value="500">500mi</option>
             </select>
-            <!--<input type="button" onClick="searchLocations()" value="Search"/>
+            <input type="button" onClick="searchLocations()" value="Search"/>
             <input type='button' onClick="loadall()" value="Reset Search"/>
-            <input type='button' onClick="track_loc()" value="Find Sites Near Me!"/></td>-->
-            <input type="button" onClick="searchLocations()" value="<?php echo $Search; ?>"/>
-            <input type='button' onClick="loadall()" value="<?php echo $ResetSearch; ?>"/>
-            <input type='button' onClick="track_loc()" value="<?php echo $FindSites; ?>"/></td>
+            <input type='button' onClick="track_loc()" value="Find Sites Near Me!"/></td>
         </tr>
         <tr>
           <td>&nbsp;</td>

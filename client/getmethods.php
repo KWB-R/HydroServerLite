@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //value given from the page
 $m=$_GET["m"];
 
@@ -21,16 +18,14 @@ $num_m = @mysql_num_rows($result);
 	if ($num_m < 1) {		
 		$methods[] = array(
         'methodid' => "-1",
-        //'methodname' => "No Methods Available" );
-		'methodname' => $NoMethodsAvailable );
+        'methodname' => "No Methods Available" );
 		} 
 
 	else {
 
 				$methods[] = array(
         'methodid' => "-1",
-        //'methodname' => "Select Method..." );
-		'methodname' => $SelectMethodElipsis );
+        'methodname' => "Select Method..." );
 
 	$methodstr = explode(",", $row2['MethodID']);
 	

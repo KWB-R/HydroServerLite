@@ -1,13 +1,9 @@
 <?php
-
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+if ($power1 !="admin"){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
@@ -17,9 +13,7 @@ if ($_COOKIE[power] !="admin"){
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
-
+<title>IDAH2O Web App</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
@@ -89,18 +83,14 @@ varmeth+=",";
   </tr>
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <!--<td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right">Required fields are marked with an asterick (*).</p><div id="msg"><p class=em2>Method successfully added!</p></div>-->
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk; ?></p><div id="msg"><p class=em2><?php echo $MethodSuccessfully;?></p></div>
-      <!--<h1>Add a New Method</h1>-->
-      <h1><?php echo $AddNewMethod;?></h1>
+    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right">Required fields are marked with an asterisk(*).</p><div id="msg"><p class=em2>Method successfully added!</p></div>
+      <h1>Add a New Method</h1>
       <p>&nbsp;</p>
       <FORM METHOD="POST" ACTION="" name="addmethod" id="addmethod">
         <table width="620" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <!--<td width="80" valign="top"><strong>Method Name:</strong></td>-->
-          <td width="80" valign="top"><strong><?php echo $MethodName; ?></strong></td>
-          <!--<td colspan="2" valign="top"><input type="text" id="MethodDescription" name="MethodDescription" size=20 maxlength=100"/>*&nbsp;<span class="em">(Ex: YSI DO 200 Meter)</span></td>-->
-          <td colspan="2" valign="top"><input type="text" id="MethodDescription" name="MethodDescription" size=20 maxlength=100"/>*&nbsp;<span class="em"><?php echo $ExampleMethodName;?></span></td>
+          <td width="80" valign="top"><strong>Method Name:</strong></td>
+          <td colspan="2" valign="top"><input type="text" id="MethodDescription" name="MethodDescription" size=20 maxlength=100"/>*&nbsp;<span class="em">(Ex: YSI DO 200 Meter)</span></td>
         </tr>
         <tr>
           <td width="80" valign="top">&nbsp;</td>
@@ -108,10 +98,8 @@ varmeth+=",";
           <td width="280" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <!--<td valign="top"><strong>Method Link:</strong></td>-->
-          <td valign="top"><strong><?php echo $MethodLinkColon;?></strong></td>
-          <!--<td colspan="2" valign="top"><input type="text" id="MethodLink" name="MethodLink" size=20 maxlength=200"/>&nbsp;<span class="em">(Optional; Ex: http://www.ysi.com/productsdetail.php?DO200-35)</span></td>-->
-          <td colspan="2" valign="top"><input type="text" id="MethodLink" name="MethodLink" size=20 maxlength=200"/>&nbsp;<span class="em"><?php echo $ExMethodLink;?></span></td>
+          <td valign="top"><strong>Method Link:</strong></td>
+          <td colspan="2" valign="top"><input type="text" id="MethodLink" name="MethodLink" size=20 maxlength=200"/>&nbsp;<span class="em">(Optional; Ex: http://www.ysi.com/productsdetail.php?DO200-35)</span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -119,10 +107,8 @@ varmeth+=",";
           <td valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <!--<td colspan="3" valign="top"><strong>Please select the Variable(s) below used by this method:</strong> <br>
-            (Select all that apply by holding the &quot;Ctrl&quot; key down and selecting multiple options):</td>-->
-            <td colspan="3" valign="top"><strong><?php echo $SelectVariablesBelow1;?><br>
-            <?php echo $SelectAllThatApply;?></td>
+          <td colspan="3" valign="top"><strong>Please select the Variable(s) below used by this method:</strong> <br>
+            (Select all that apply by holding the &quot;Ctrl&quot; key down and selecting multiple options):</td>
           </tr>
         <tr>
           <td colspan="3" valign="top">&nbsp;</td>
@@ -135,8 +121,7 @@ varmeth+=",";
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <!--<td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="Add Method" class="button" style="width: 135px"/></td>-->
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddMethodButton;?>" class="button" style="width: auto"/></td>
+          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="Add Method" class="button" style="width: 135px"/></td>
           </tr>
       </table></FORM>
       <p>&nbsp;</p>
