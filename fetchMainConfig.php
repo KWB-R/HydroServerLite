@@ -1,22 +1,53 @@
 <?php
+
+if (!isset($_SESSION))
+{
 session_start();
-if ($_SESSION['mainpath'])
+}
+$urlAdd="";
+if (isset ($urlExtra))
 {
-$str = str_replace('\\', '/', $_SESSION['mainpath']);
-if (isset($urlExtra))
+$urlAdd=$urlExtra;
+}
+
+
+if (isset($_SESSION['mainpath']))
 {
-require_once($urlExtra.$str);
+
+//Check if the file exists, if not,clear session variables and proceed to get the static file
+
+if (file_exists($_SESSION['mainpath']))
+{
+
+require_once($urlAdd.$_SESSION['mainpath']);
 
 }
 else
 {
-require_once($str);
 
-}
+unset($_SESSION['mainpath']);
+
+if (file_exists($urlAdd."main_config.php"))
+{
+require_once($urlAdd."main_config.php");
 }
 else
 {
-require_once("main_config.php");
+header ("Location: setup/index.php");
+}
 }
 
+}
+else
+{
+
+if (file_exists($urlAdd."main_config.php"))
+{
+require_once($urlAdd."main_config.php");
+}
+else
+{
+header ("Location: setup/index.php");
+}
+}
 ?>
