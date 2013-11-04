@@ -10,22 +10,21 @@ if (isset ($urlExtra))
 $urlAdd=$urlExtra;
 }
 
-
+	
 if (isset($_SESSION['mainpath']))
 {
 
 //Check if the file exists, if not,clear session variables and proceed to get the static file
-
-if (file_exists($_SESSION['mainpath']))
+$str = str_replace('\\', '/', $_SESSION['mainpath']);
+if (file_exists($str))
 {
-
-require_once($urlAdd.$_SESSION['mainpath']);
+require_once($urlAdd.$str);
 
 }
 else
 {
 
-unset($_SESSION['mainpath']);
+//unset($_SESSION['mainpath']);
 
 if (file_exists($urlAdd."main_config.php"))
 {

@@ -18,7 +18,6 @@
 	require("fetchMainConfig.php");
 	}
 	$lang_code = $lang;	
-	
 	if (isset($urlExtraName))
 	{
 
