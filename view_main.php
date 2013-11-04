@@ -275,7 +275,7 @@ $.ajax({
   if(msg!=-1)
   {
 
- var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
+ var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: "+type+"<br/>Latitude: "+parseFloat(lat).toFixed(4)+"<br/>Longitude: "+parseFloat(long).toFixed(4)+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
 
  var marker = new google.maps.Marker({
     map: map,
@@ -292,7 +292,7 @@ else
 {
 
  //var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here for site details and data</a></div>";
- var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/><?php echo $SiteType; ?> "+type+"<br/><?php echo $Latitude; ?> "+lat+"<br/><?php echo $Longitude;?> "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'><?php echo $VisitSite; ?></a></div>";
+ var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/><?php echo $SiteType; ?> "+type+"<br/><?php echo $Latitude; ?> "+parseFloat(lat).toFixed(4)+"<br/><?php echo $Longitude;?> "+parseFloat(long).toFixed(4)+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'><?php echo $VisitSite; ?></a></div>";
 
  var marker = new google.maps.Marker({
     map: map,

@@ -293,7 +293,7 @@
 //for the header
 	//Initial translation provided by Shane Hayden
 	//
-	$BackTo = "Regresar a";
+	$BackTo = "";
 	//goes back to the home website	
 	
 //For Date Picker	
