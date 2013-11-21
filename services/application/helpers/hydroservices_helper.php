@@ -851,7 +851,7 @@ if (!function_exists('get_table_name')) {
 if (!function_exists('to_xml')) {
 
 	function to_xml($xml_tag, $value) {
-	   return "<$xml_tag><![CDATA[$value]]></$xml_tag>";
+	   return "<$xml_tag>$value</$xml_tag>";
 	}
 }
 
@@ -1039,7 +1039,7 @@ if (!function_exists('db_GetSiteByCode')) {
 	            $ci->db->_error_message() . "</p>");
 	    }
 
-	    $sitesArray = fn_GetSiteArray($result);
+	    $sitesArray = fn_GetSiteArray($result, $siteTag, $siteTagType);
 
 	    return $sitesArray[0]; //what if no site is found?
 	}
