@@ -1584,7 +1584,7 @@ if (!function_exists('db_GetOffset')) {
 		
 		foreach ($result->result_array() as $row) {	
 	        $row = $result->row("0","array");
-	        $retVal = '<offset offsetTypeID="' . $offsetID . '">';
+	        $retVal = '<offset offsetTypeID="' . $row["OffsetTypeID"] . '">';
 		    $retVal .= '<offsetDescription>' . $row["OffsetDescription"] . "</offsetDescription>";
 	        $retVal .= "<unitName>" . $row["unitsName"] . "</unitName>";
 	        $retVal .= "<unitType>" . $row["unitsType"] . "</unitType>";
