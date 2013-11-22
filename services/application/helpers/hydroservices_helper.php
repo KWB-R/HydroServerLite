@@ -1421,7 +1421,7 @@ if (!function_exists('db_GetValues_OneSeries')) {
 
 	    $data_values_table = get_table_name('DataValues');
 	    $samples_table = get_table_name('Samples');
-		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.DataValue, s.LabSampleCode");
+		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.DataValue, s.LabSampleCode, d.OffsetTypeID, d.OffsetValue");
 		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
 		$ci->db->where("d.SiteID",$siteID);
 		$ci->db->where("d.VariableID",$variableID);
@@ -1446,12 +1446,14 @@ if (!function_exists('db_GetValues_OneSeries')) {
 	        $retVal .= ' methodCode="' . $methodID . '" ';
 	        $retVal .= ' sourceCode="' . $sourceID . '" ';
 	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
+			$retVal .= ($row['OffsetValue'] != ''? 'offsetTypeCode="'.$row['OffsetTypeID'].'"'.' offsetValue="'.$row['OffsetValue'].'"':'');
 	        $retVal .= ' qualityControlLevelCode="' . $qcID . '" ';
 	        $retVal .= ">".$row["DataValue"]."</value>";
 	    }
 	    $retVal .= db_GetQualityControlLevelByID($qcID);
 	    $retVal .= db_GetMethodByID($methodID);
 	    $retVal .= db_GetSourceByID($sourceID);
+		$retVal .= db_GetOffset();
 	
 	    $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
 	
@@ -1559,6 +1561,34 @@ if (!function_exists('db_GetMethodByID')) {
 	    $retVal .= "<methodDescription>" . $row["MethodDescription"] . "</methodDescription>";
 	    $retVal .= "<methodLink>" . $row["MethodLink"] . "</methodLink>";
 	    $retVal .= "</method>";
+	    return $retVal;
+	}
+}
+
+if (!function_exists('db_GetOffset')) {
+
+	function db_GetOffset() {
+	    $ci = &get_instance();
+
+		$offsetID = 0; //change to the real offset type id
+	    $offsettypes_table = get_table_name("OffsetTypes");
+		$units_table = get_table_name("Units");
+		$ci->db->select("o.offsetDescription, u.unitsName, u.unitsType, u.unitsAbbreviation");
+		$ci->db->join($units_table." u","o.OffsetUnitsID = u.unitsID","LEFT");
+
+	    $result = $ci->db->get($offsettypes_table." o");
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+	
+	    $row = $result->row("0","array");
+	    $retVal = '<offset offsetTypeID="' . $offsetID . '">';
+		$retVal .= '<offsetDescription>' . $row["offsetDescription"] . "</offsetDescription>";
+	    $retVal .= "<unitName>" . $row["unitsName"] . "</unitName>";
+	    $retVal .= "<unitType>" . $row["unitsType"] . "</unitType>";
+		$retVal .= "<unitAbbreviation>" . $row["unitsAbbreviation"] . "</unitAbbreviation>";
+	    $retVal .= "</offset>";
 	    return $retVal;
 	}
 }
