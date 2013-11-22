@@ -1573,7 +1573,7 @@ if (!function_exists('db_GetOffset')) {
 		$offsetID = 0; //change to the real offset type id
 	    $offsettypes_table = get_table_name("OffsetTypes");
 		$units_table = get_table_name("Units");
-		$ci->db->select("o.offsetDescription, u.unitsName, u.unitsType, u.unitsAbbreviation");
+		$ci->db->select("o.OffsetTypeID, o.OffsetDescription, u.unitsName, u.unitsType, u.unitsAbbreviation");
 		$ci->db->join($units_table." u","o.OffsetUnitsID = u.unitsID","LEFT");
 
 	    $result = $ci->db->get($offsettypes_table." o");
@@ -1581,14 +1581,16 @@ if (!function_exists('db_GetOffset')) {
 	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
 	            $ci->db->_error_message() . "</p>");
 	    }
-	
-	    $row = $result->row("0","array");
-	    $retVal = '<offset offsetTypeID="' . $offsetID . '">';
-		$retVal .= '<offsetDescription>' . $row["offsetDescription"] . "</offsetDescription>";
-	    $retVal .= "<unitName>" . $row["unitsName"] . "</unitName>";
-	    $retVal .= "<unitType>" . $row["unitsType"] . "</unitType>";
-		$retVal .= "<unitAbbreviation>" . $row["unitsAbbreviation"] . "</unitAbbreviation>";
-	    $retVal .= "</offset>";
+		
+		foreach ($result->result_array() as $row) {	
+	        $row = $result->row("0","array");
+	        $retVal = '<offset offsetTypeID="' . $offsetID . '">';
+		    $retVal .= '<offsetDescription>' . $row["OffsetDescription"] . "</offsetDescription>";
+	        $retVal .= "<unitName>" . $row["unitsName"] . "</unitName>";
+	        $retVal .= "<unitType>" . $row["unitsType"] . "</unitType>";
+		    $retVal .= "<unitAbbreviation>" . $row["unitsAbbreviation"] . "</unitAbbreviation>";
+	        $retVal .= "</offset>";
+		}
 	    return $retVal;
 	}
 }
