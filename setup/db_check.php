@@ -1,11 +1,6 @@
 ﻿<?php
 
 
-/*$_POST['databasehost']="128.187.103.13";
-$_POST['databaseusername']="WWO_Admin";
-$_POST['databasepassword']="isaiah4118";
-$_POST['databasename']="wwltest1";
-echo(1);*/
 
 
 $connect = mysql_connect($_POST['databasehost'], $_POST['databaseusername'], $_POST['databasepassword'])
@@ -13,7 +8,7 @@ $connect = mysql_connect($_POST['databasehost'], $_POST['databaseusername'], $_P
 	       mysql_error() . "");
 
 // Make my_db the current database
-$db_selected = mysql_select_db('my_db', $connect);
+$db_selected = mysql_select_db($_POST['databasename'], $connect);
 
 if (!$db_selected) {
   // If we couldn't, then it either doesn't exist, or we can't see it.

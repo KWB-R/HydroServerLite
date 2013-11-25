@@ -1,10 +1,25 @@
 ﻿<?php
 
+//Check if this a single install or not? If Single then proceed differently
+$singleInstall = 0;
+if ($_POST['single']=="Yes")
+	{
+		$singleInstall = 1;
+	}
+
+$worldInstall = 0;
+if ($_POST['worldwater']=="Yes")
+	{
+		$worldInstall = 1;
+	}
+
+if (!$singleInstall)
+{
 //Set the Session into the new directory
 session_start();
 $_SESSION["mainpath"]="..\\".$_POST['dir']."\main_config.php";
 $_SESSION["dir"]=$_POST['dir'];
-
+}
 function recurse_copy($src,$dst) { 
     $dir = opendir($src); 
     @mkdir($dst); 
@@ -89,18 +104,36 @@ $orgname="'.$_POST['orgname'].'";
 
 //Name of your software version
 $HSLversion="'.$_POST['sversion'].'";
+';
 
+
+if (!$singleInstall)
+{
+	
+$string.= '
 if(file_exists("../'.$_POST['dir'].'/headerConfig.php"))
 {
 	include("../'.$_POST['dir'].'/headerConfig.php");
 }
+
+//Type of Installation Being Run!
+$singleInstall = "No"; //Please Specify either "Yes" or "No". By default this is set to "Yes" unless this is an install on worldwater servers. 
 ';
+}
+else
+{
+	$string.= '
+//Type of Installation Being Run!
+$singleInstall = "Yes"; //Please Specify either "Yes" or "No". By default this is set to "Yes" unless this is an install on worldwater servers. 
+';
+}
 
 //Create the main_config file in the mentioned directory
 
+
+if(!$singleInstall)
+{
 //first create the dir. 
-
-
 umask(0000);
 mkdir("../../".$_POST['dir'], 0777) or die ("Unable to Create the directory. Contact Ken Clark and bug him until he fixes it!");
 
@@ -122,7 +155,18 @@ if (!copy($file, $newfile)) {
 //Copy the new files for the LP Manager
 umask(0000);
 recurse_copy('lpManager', '../../'.$_POST['dir'].'/manageLP');
+}
+else
+{
+	
+$fp = fopen("../main_config.php", "w") or die("can't open file");
+fwrite($fp, $string);
+fclose($fp);
+	
+}
 
+if ((!$singleInstall)&&($worldInstall))
+{
 //Run an update for the names.php file. 
 umask(0000);
 $namesHandler = fopen("../../names.php", "a") or die ("Cant open names.php for editing");
@@ -131,6 +175,8 @@ $contentToWrite = "\n<?php echo '<li><a href=\"/interactive/" .$_POST['dir']."\"
 
 fwrite($namesHandler, $contentToWrite) or die ("Could not write to the names file");
 fclose($namesHandler);
+
+}
 //Create the admin username and password. 
 
 $connect = mysql_connect($_POST['databasehost'], $_POST['databaseusername'], $_POST['databasepassword'])
@@ -141,9 +187,10 @@ $connect = mysql_connect($_POST['databasehost'], $_POST['databaseusername'], $_P
     or die("Error selecting the database " . $_POST['databasename'] .
 	  mysql_error() . "");
 
-//To write here a while loop that checks for the Tables existence.  
-	  
-sleep(5);
+//While loop checks if the table has been created or not. If created then good else keeps looping. 
+while(mysql_num_rows(mysql_query("SHOW TABLES LIKE 'moss_users'"))!=1) 
+{
+}
 
 $sql ="INSERT INTO `moss_users`(`firstname`, `lastname`, `username`, `password`, `authority`) VALUES ('admin', 'admin', 'his_admin', PASSWORD('".$_POST['password']."'), 'admin')";
 
