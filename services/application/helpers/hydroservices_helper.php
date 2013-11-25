@@ -1386,12 +1386,6 @@ if (!function_exists('db_GetValues')) {
 	    if ($numSeries == 0) {
 	        return "<values />";
 	    }
-	    else if ($numSeries == 1) {
-	
-	        $row = $result->row("0","array");
-	
-	        return db_GetValues_OneSeries($row["SiteID"], $row["VariableID"], $row["MethodID"], $row["SourceID"], $row["QualityControlLevelID"], $beginTime, $endTime);
-	    }
 	    else {
 	    	$arrMethod = array();
 	    	$arrSource = array();
@@ -1414,63 +1408,19 @@ if (!function_exists('db_GetValues')) {
 	}
 }
 
-if (!function_exists('db_GetValues_OneSeries')) {
-
-	function db_GetValues_OneSeries($siteID, $variableID, $methodID, $sourceID, $qcID, $beginTime, $endTime) {
-	    $ci = &get_instance();
-
-	    $data_values_table = get_table_name('DataValues');
-	    $samples_table = get_table_name('Samples');
-		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.DataValue, s.LabSampleCode, d.OffsetTypeID, d.OffsetValue");
-		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
-		$ci->db->where("d.SiteID",$siteID);
-		$ci->db->where("d.VariableID",$variableID);
-		$ci->db->where("d.MethodID",$methodID);
-		$ci->db->where("d.SourceID",$sourceID);
-		$ci->db->where("d.QualityControlLevelID",$qcID);
-	
-		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
-			$ci->db->where("d.LocalDateTime >=",$beginTime);
-			$ci->db->where("d.LocalDateTime <=",$endTime);
-	    }
-
-	    $result = $ci->db->get($data_values_table." d");
-	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
-	    }
-	    $retVal = "<values>";
-	    foreach ($result->result_array() as $row) {
-	        $retVal .= '<value censorCode="nc" dateTime="' . $row["LocalDateTime"] . '"';
-	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . $row["DateTimeUTC"] . '" ';
-	        $retVal .= ' methodCode="' . $methodID . '" ';
-	        $retVal .= ' sourceCode="' . $sourceID . '" ';
-	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
-			$retVal .= ($row['OffsetValue'] != ''? 'offsetTypeCode="'.$row['OffsetTypeID'].'"'.' offsetValue="'.$row['OffsetValue'].'"':'');
-	        $retVal .= ' qualityControlLevelCode="' . $qcID . '" ';
-	        $retVal .= ">".$row["DataValue"]."</value>";
-	    }
-	    $retVal .= db_GetQualityControlLevelByID($qcID);
-	    $retVal .= db_GetMethodByID($methodID);
-	    $retVal .= db_GetSourceByID($sourceID);
-		$retVal .= db_GetOffset();
-	
-	    $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
-	
-	    $retVal .= "</values>";
-	
-	    return $retVal;
-	}
-}
-
 if (!function_exists('db_GetValues_MultipleSeries')) {
 
 	function db_GetValues_MultipleSeries($siteID, $variableID, $arrMethod, $arrSource, $arrQC, $beginTime, $endTime) {
 	    $ci = &get_instance();
+		
+		$arrCensorCode = array();
+		$arrSample = array();
+		$arrOffset = array();
+		$arrQualifier = array();
 
 	    $samples_table = get_table_name('Samples');
-		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.MethodID, d.SourceID, d.QualityControlLevelID, d.DataValue, s.LabSampleCode");
-		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
+		$qualifiers_table = get_table_name('Qualifiers');
+		$ci->db->select("CensorCode, LocalDateTime, UTCOffset, DateTimeUTC, MethodID, SourceID, QualityControlLevelID, DataValue, OffsetTypeID, OffsetValue, SampleID, QualifierID");
 		$ci->db->where("d.SiteID",$siteID);
 		$ci->db->where("d.VariableID",$variableID);
 
@@ -1485,13 +1435,28 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 	            $ci->db->_error_message() . "</p>");
 	    }
 	    $retVal = "<values>";
-	    //$metadata = 'methodCode="' . $methodID . '" sourceCode="' . $sourceID . '" qualityControlLevelCode="' . $qcID . '"';
+
 	    foreach ($result->result_array() as $row) {
-	        $retVal .= '<value censorCode="nc" dateTime="' . $row["LocalDateTime"] . '"';
+		    $censorCode = $row["CensorCode"];
+			$sampleID = $row["SampleID"];
+			$offsetTypeID = $row["OffsetTypeID"];
+			if (!in_array($censorCode,$arrCensorCode)) {
+					$arrCensorCode[] = $censorCode;
+				}
+			if (!in_array($sampleID,$arrSample)) {
+					$arrSample[] = $sampleID;
+				}
+			if (!in_array($offsetTypeID,$arrOffset)) {
+					$arrOffset[] = $offsetTypeID;
+				}
+			
+	        $retVal .= '<value censorCode="' . $censorCode . '" dateTime="' . $row["LocalDateTime"] . '"';
 	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . $row["DateTimeUTC"] . '"';
 	        $retVal .= ' methodCode="' . $row["MethodID"] . '" ';
 	        $retVal .= ' sourceCode="' . $row["SourceID"] . '" ';
-	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
+	        $retVal .= ($sampleID != ''? ' labSampleCode="'.$sampleID.'"':'');
+			$retVal .= ($row['OffsetValue'] != ''? ' offsetTypeCode="'.$row['OffsetTypeID'].'"'.' offsetValue="'.$row['OffsetValue'].'"':'');
+			$retVal .= ($row['QualifierID'] != ''? ' qualifierCode="'.$row['QualifierID'].'"':'');
 	        $retVal .= ' qualityControlLevelCode="' . $row["QualityControlLevelID"] . '" ';
 	        $retVal .= ">".$row["DataValue"]."</value>";
 	    }
@@ -1507,10 +1472,64 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 		foreach ($arrSource as $row) {
 	    	$retVal .= db_GetSourceByID($row);
 		}
+			
+		foreach ($arrSample as $row) {
+		    if ($row != '') {
+		        $retVal .= db_GetSampleByID($row);
+			}
+		}
+		
+		foreach ($arrOffset as $row) {
+		    if ($row != '') {
+		        $retVal .= db_GetOffsetTypeByID($row);
+			}
+		}
+		
+		foreach ($arrCensorCode as $row) {
+		    if ($row != '') {
+		        $retVal .= db_GetCensorCode($row);
+		    }
+		}
+		
+		foreach ($arrQualifier as $row) {
+		    if ($row != '') {
+			    $retVal .= db_GetQualifierByID($row);
+			}
+		}
 
-	    $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
-	
 	    $retVal .= "</values>";
+	    return $retVal;
+	}
+}
+
+//TODO rewrite according to LBR
+if (!function_exists('db_GetQualifierByID')) {
+
+	function db_GetQualifierByID($qualifierID) {
+	    return "<qualifier>" . $qualifierID . "</qualifier>";
+	}
+}
+
+if (!function_exists('db_GetCensorCode')) {
+
+	function db_GetCensorCode($cc) {
+	    $ci = &get_instance();
+
+    	$cc_table = get_table_name("CensorCodeCV");
+
+		$ci->db->select("Term, Definition");
+		$ci->db->where("Term",$cc);
+
+	    $result = $ci->db->get($cc_table);
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+	
+	    $row = $result->row("0","array");
+	    $retVal = '<censorCode><censorCode>' . $row["Term"] . '</censorCode>';
+	    $retVal .= "<censorCodeDescription>" . $row["Definition"] . "</censorCodeDescription>";
+	    $retVal .= "</censorCode>";
 	    return $retVal;
 	}
 }
@@ -1565,12 +1584,11 @@ if (!function_exists('db_GetMethodByID')) {
 	}
 }
 
-if (!function_exists('db_GetOffset')) {
+if (!function_exists('db_GetOffsetTypeByID')) {
 
-	function db_GetOffset() {
+	function db_GetOffsetTypeByID($offsetID) {
 	    $ci = &get_instance();
 
-		$offsetID = 0; //change to the real offset type id
 	    $offsettypes_table = get_table_name("OffsetTypes");
 		$units_table = get_table_name("Units");
 		$ci->db->select("o.OffsetTypeID, o.OffsetDescription, u.unitsName, u.unitsType, u.unitsAbbreviation");
@@ -1626,6 +1644,15 @@ if (!function_exists('db_GetSourceByID')) {
 	    $retVal .= "<citation>" . $row["Citation"] . "</citation>";
 	    $retVal .= "</source>";
 	    return $retVal;
+	}
+}
+
+//TODO rewrite according to LittleBear XML!!
+if (!function_exists('db_GetSampleByID')) {
+
+	function db_GetSampleByID($sampleID) {
+
+	    return '<sample>' . $sampleID . '</sample>';
 	}
 }
 //end of re-write from wof_read_db
