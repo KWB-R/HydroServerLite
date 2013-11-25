@@ -9,7 +9,7 @@ require_once 'authorization_check.php';
 require_once 'database_connection.php';
 
 //Display the appropriate user authority to add depending on the user's authority
-if ($_COOKIE["power"] == "admin"){
+if ($_COOKIE[power] == "admin"){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE (authority='teacher' OR authority='student') ORDER BY username";
 	$result = @mysql_query($sql,$connection)or die(mysql_error());
@@ -24,7 +24,7 @@ if ($_COOKIE["power"] == "admin"){
 		}
 	}
 }
-elseif ($_COOKIE["power"] == "teacher"){
+elseif ($_COOKIE[power] == "teacher"){
 	//select the users
 	$sql ="SELECT username FROM moss_users WHERE authority LIKE 'student' ORDER BY username";
 	$result = @mysql_query($sql,$connection)or die(mysql_error());
@@ -39,7 +39,7 @@ elseif ($_COOKIE["power"] == "teacher"){
 		}
 	}
 }
-elseif ($_COOKIE["power"] == "student"){
+elseif ($_COOKIE[power] == "student"){
 	header("Location: unauthorized.php");
 	exit;	
 	}
@@ -60,7 +60,7 @@ elseif ($_COOKIE["power"] == "student"){
 <body background="images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>

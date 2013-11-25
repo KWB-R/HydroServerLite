@@ -39,10 +39,7 @@ $methodstr=explode(",", $Variable);
 foreach($methodstr as &$value){
 
 //Go get the current value for the Method in the varmeth table
-//$sql3 ="SELECT MethodID FROM varmeth WHERE VariableID='$value'";
-
-//change varmeth to seriescatalog
-$sql3 ="SELECT MethodID FROM seriescatalog WHERE VariableID='$value'";
+$sql3 ="SELECT MethodID FROM varmeth WHERE VariableID='$value'";
 
 $result3 = @mysql_query($sql3,$connection)or die(mysql_error());
 
@@ -55,10 +52,7 @@ $num3 = @mysql_num_rows($result3);
 	$newmethodstr = $array['MethodID'] . "," . $MethodID;
 	
 	//Post the new result for the Method in the varmeth table
-//$sql4 ="UPDATE `varmeth` SET MethodID='$newmethodstr' WHERE VariableID='$value'";
-
-//change varmeth to seriescatalog
-$sql4 ="UPDATE `seriescatalog` SET MethodID='$newmethodstr' WHERE VariableID='$value'";
+$sql4 ="UPDATE `varmeth` SET MethodID='$newmethodstr' WHERE VariableID='$value'";
 
 	$result4 = @mysql_query($sql4,$connection)or die(mysql_error());
 	

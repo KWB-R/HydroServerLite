@@ -1,4 +1,4 @@
 <?php
-	$BackTo = "Back to the";
+	$BackTo = "";
 	//goes back to the home website
 ?>

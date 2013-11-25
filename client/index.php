@@ -1,9 +1,10 @@
 <?php
+
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
 
 // set the expiration date to one hour ago
-require_once("main_config.php");
+require_once("fetchMainConfig.php");
 if (isset($_COOKIE["power"])) {
   unset($_COOKIE["power"]);
 }
@@ -42,7 +43,7 @@ alert((<?php echo "'".$ForgotPassword1."'";?>) + '\n' + (<?php echo "'".$ForgotP
 <body background="images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
@@ -50,8 +51,19 @@ alert((<?php echo "'".$ForgotPassword1."'";?>) + '\n' + (<?php echo "'".$ForgotP
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6">
     <p>&nbsp;</p>
+    <p>
+      <center>
+        <strong><a href="view_main.php" class="button"><img src='images/icons/SearchData.png' alt="" width="8" border='0' />&nbsp;&nbsp;<?php echo $SearchData; ?></a></strong>
+      </center>
+    </p>
+    <p>
+      <center>
+        <strong><a href="help.php" class="button"><img src='images/icons/Help.png' alt="" border='0' />&nbsp;&nbsp;<?php echo $Help; ?></a></strong>
+      </center>
+    </p>
+    <p>&nbsp; </p>
     <FORM METHOD="POST" ACTION="home.php" name="login" id="login">
-    <table width="200" border="0" align="center" cellpadding="0" cellspacing="0">
+      <table width="200" border="0" align="center" cellpadding="0" cellspacing="0">
         <tr>
           <td><center>
             <!--<font face="Arial, Helvetica, sans-serif" size="4"><strong>Returning Users</strong></font>-->
@@ -87,12 +99,13 @@ alert((<?php echo "'".$ForgotPassword1."'";?>) + '\n' + (<?php echo "'".$ForgotP
           <!--<td><center><A HREF="#" onclick="show_alert()">Forgot your password?</a></center></td>-->
           <td><center><A HREF="#" onclick="show_alert()"><?php echo $ForgotPW; ?></a></center></td>
         </tr>
-    </table></FORM>
+  </table></FORM>
     <p>&nbsp;</p>
     <!--<p><center><strong><a href="view_main.php" class="button"><img src='images/icons/SearchData.png' border='0'>&nbsp;&nbsp;Search Data</a></strong>
     </center></p><p><center><strong><a href="help.php" class="button"><img src='images/icons/Help.png' border='0'>&nbsp;&nbsp;Help Center</a></strong></center></p></td>-->
-    <p><center><strong><a href="view_main.php" class="button"><img src='images/icons/SearchData.png' width="8" border='0'>&nbsp;&nbsp;<?php echo $SearchData; ?></a></strong>
-    </center></p><p><center><strong><a href="help.php" class="button"><img src='images/icons/Help.png' border='0'>&nbsp;&nbsp;<?php echo $Help; ?></a></strong></center></p></td>
+    <p><center>
+    </center>
+    </p><p>&nbsp;</p></td>
     <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br />
       <p>
 	  <?php 

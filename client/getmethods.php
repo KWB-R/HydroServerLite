@@ -8,10 +8,7 @@ $m=$_GET["m"];
 //connect to server and select database
 require_once 'db_config.php';
 
-//$query = "SELECT MethodID FROM varmeth WHERE VariableID='".$m."'";
-
-//change varmeth to seriescatalog
-$query = "SELECT MethodID FROM seriescatalog WHERE VariableID='".$m."'";
+$query = "SELECT MethodID FROM varmeth WHERE VariableID='".$m."'";
 
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
 
@@ -47,8 +44,8 @@ $num_m = @mysql_num_rows($result);
 			
 
 	$methods[] = array(
-        'methodid' => $rows["MethodID"],
-        'methodname' =>$rows["MethodDescription"] );
+        'methodid' => utf8_encode($rows["MethodID"]),
+        'methodname' => utf8_encode($rows["MethodDescription"]) );
 
 
 			}

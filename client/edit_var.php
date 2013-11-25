@@ -506,7 +506,7 @@ $.ajax({
 $("#jqxWidget").jqxListBox('clearSelection'); 	
 $.ajax({
   type: "POST",
-  url: "getvar_seriescatalog.php?varid="+$("#varid").val()
+  url: "getvarmeth.php?varid="+$("#varid").val()
 }).done(function( msg ) {
   if(msg)
   {
@@ -969,7 +969,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 <body background="images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php include 'header.php'; ?></td>
@@ -1707,7 +1707,7 @@ var f_cat=$('#gc').jqxDropDownList('getSelectedItem').label;
 
 	$.ajax({
 	type: "POST",
-	url: "do_edit_var_seriescatalog.php?vmeth="+varmeth+"&varid="+$('#varid').val()}).done(function(msg){
+	url: "do_edit_varmeth.php?vmeth="+varmeth+"&varid="+$('#varid').val()}).done(function(msg){
 		if(msg==1){
 			
 		}else{

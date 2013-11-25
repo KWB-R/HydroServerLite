@@ -12,10 +12,7 @@ if(isset($_GET['del'])){
 	$result1 = @mysql_query($sql1,$connect)or die(mysql_error());
 
 	if($result1){
-		//$sql_vm="DELETE FROM `varmeth` WHERE `VariableID`='$varid'";
-
-		//change varmeth to seriescatalog
-		$sql_vm="DELETE FROM `seriescatalog` WHERE `VariableID`='$varid'";
+		$sql_vm="DELETE FROM `varmeth` WHERE `VariableID`='$varid'";
 		$result_vm = @mysql_query($sql_vm,$connect)or die(mysql_error());
 	}
 

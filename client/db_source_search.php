@@ -34,9 +34,9 @@ $row1 = @mysql_fetch_assoc($result1);
 
 $node = $dom->createElement("source");
 $newnode = $parnode->appendChild($node);
-$newnode->setAttribute("sourcename", $row1['Organization']);
-$newnode->setAttribute("sourcecode", $row1['SourceID']);
-$newnode->setAttribute("sourcelink", $row1['SourceLink']);
+$newnode->setAttribute("sourcename", utf8_encode($row1['Organization']));
+$newnode->setAttribute("sourcecode", utf8_encode($row1['SourceID']));
+$newnode->setAttribute("sourcelink", utf8_encode($row1['SourceLink']));
 }
 
 //Output the XML DATA to be fed into the google maps api

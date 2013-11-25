@@ -14,13 +14,14 @@ $query = "SELECT ValueID, DataValue, LocalDateTime FROM datavalues";
 $query .= " WHERE SiteID='$siteid' and VariableID='$varid' and MethodID='$methodid' and LocalDateTime between '".$startdate."' and '".$enddate."' ORDER BY LocalDateTime ASC";
 
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
-$query2 = "SELECT VariableunitsID FROM variables";
+$query2 = "SELECT VariableunitsID, NoDataValue FROM variables";
 $query2 .= " WHERE VariableID=".$varid;
 
 $result2 = mysql_query($query2) or die("SQL Error 1: " . mysql_error());
 
 $unitid = mysql_fetch_array($result2, MYSQL_ASSOC);
 $unitid = $unitid['VariableunitsID'];
+$NoValue = $unitid['NoDataValue'];
 $query3 = "SELECT * FROM units";
 $query3 .= " WHERE unitsID=".$unitid;
 $result3 = mysql_query($query3) or die("SQL Error 1: " . mysql_error());
@@ -48,13 +49,19 @@ $pieces3 = explode(":", $pieces2[1]);
 $pieces[1]=$pieces[1]-1;
 
 $output="[Date.UTC(".$pieces[0].",".$pieces[1].",".$pieces2[0].",".$pieces3[0].",".$pieces3[1].",".$pieces3[2]."),".$row['DataValue']."]";
-echo $output;
 
+//Check for NoDataValue (Default is -9999))
+
+if (!($row['DataValue'] == $NoValue))
+{
+echo $output;
  if($count!=$num_rows)
 	{echo ",";}
   $count=$count+1;
   
   echo ("\r\n");
+
+}
 
 }
 

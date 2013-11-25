@@ -1,7 +1,4 @@
 <?php
-//This is required to get the international text strings dictionary
-require_once 'internationalize.php';
-
 
 //check authority to be here
 //require_once 'authorization_check.php';

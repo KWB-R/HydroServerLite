@@ -14,6 +14,6 @@
 //JS Variables	
 	$Error = "Error in Database. Please contact your Web Admin";
 	$SelectAtLeastOne = "Please select at least one variable!";
-	$VarmethFail = "SeriesCatalog table failed to update!";
+	$VarmethFail = "Varmeth table failed to update!";
 	$EditFail = "Editing failed! Please refresh the page and try again.";
 ?>

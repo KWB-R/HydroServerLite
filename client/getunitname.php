@@ -17,7 +17,7 @@ $variables[] = array(
 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     
 		$variables[] = array(
-        'unit' => $row['unitsName'],
+        'unit' => utf8_encode($row['unitsName']),
         'unitid' => $row['unitsID']);
 
 }

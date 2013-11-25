@@ -8,10 +8,7 @@ $badValue = $_GET['MethodID']; // 5 in this example
 //connect to server and select data
 require_once 'database_connection.php';
 
-//$sql_find ="SELECT * FROM varmeth WHERE MethodID !=''";
-
-//change varmeth to seriescatalog
-$sql_find ="SELECT * FROM seriescatalog WHERE MethodID !=''";
+$sql_find ="SELECT * FROM varmeth WHERE MethodID !=''";
 
 $result_f = @mysql_query($sql_find,$connection)or die(mysql_error());
 
@@ -26,10 +23,7 @@ $result_f = @mysql_query($sql_find,$connection)or die(mysql_error());
 
 				if($parts.length==1 && $part==$badValue){
 					$part = '';
-					//$sql_upd ="UPDATE varmeth SET MethodID=$part WHERE VariableID='$v_id'";
-					
-					//change varmeth to seriescatalog
-					$sql_upd ="UPDATE seriescatalog SET MethodID=$part WHERE VariableID='$v_id'";
+					$sql_upd ="UPDATE varmeth SET MethodID=$part WHERE VariableID='$v_id'";
 					$result_upd = @mysql_query($sql_upd,$connection)or die(mysql_error());
 
 				}elseif($parts.length==2){
@@ -37,10 +31,7 @@ $result_f = @mysql_query($sql_find,$connection)or die(mysql_error());
 						$part = '';
 						};
 					$newStr = implode($parts);
-					//$sql_upd ="UPDATE varmeth SET MethodID='$newStr' WHERE VariableID='$v_id'";
-					
-					//change varmeth to seriescatalog
-					$sql_upd ="UPDATE seriescatalog SET MethodID='$newStr' WHERE VariableID='$v_id'";
+					$sql_upd ="UPDATE varmeth SET MethodID='$newStr' WHERE VariableID='$v_id'";
 					$result_upd = @mysql_query($sql_upd,$connection)or die(mysql_error());
 
 				}else{
@@ -48,10 +39,7 @@ $result_f = @mysql_query($sql_find,$connection)or die(mysql_error());
 						$part = '';
 						};
 					$newStr = implode(",", array_filter($parts));
-					//$sql_upd ="UPDATE varmeth SET MethodID='$newStr' WHERE VariableID='$v_id'";
-					
-					//change varmeth to seriescatalog
-					$sql_upd ="UPDATE seriescatalog SET MethodID='$newStr' WHERE VariableID='$v_id'";
+					$sql_upd ="UPDATE varmeth SET MethodID='$newStr' WHERE VariableID='$v_id'";
 					$result_upd = @mysql_query($sql_upd,$connection)or die(mysql_error());
 				};
 			};

@@ -153,6 +153,7 @@
 	$VariableName = "Nombre de la Variable:";
 	$VariableUnitType = "Unidad del Tipo de Variable:";
 	$VerticalDatum = "Dátum Vertical:";
+	$VisitSite = "Seleccione aqui para visitar el sitio";
 	$WebClient = "HydroServer Interactivo Cliente Web";
 	$Welcome = "Bienvenido";
 	$Yes = "Si";
@@ -266,9 +267,6 @@
 
 //These are for the variables found in the js folder
 	//to be left in common
-	$RegisterWeb = "Registre la Web";
-	$WebService = "Servicio Web";
-	$RegisterHIS = "Registrarse en HIS ​​Central";
 	$SearchData = "Buscar datos";
 	$Help = "Centro de Ayuda";
 	$Home = "Principal";
@@ -280,7 +278,7 @@
 	$ChangeUserPasswordNav = "Cambiar la contraseña de Usuario";
 	//Remove User above
 	$AddData = "Adicionar Datos";
-	$AddSingleValue = "Adicionar un Simple Valor";
+	$AddSingleValue = "Adicionar un Único Valor";
 	$AddMultipleValues = "Adicionar Multiples Valores";
 	//$Import called above
 	$ViewModifyData = "Visualizar/Modificar Datos";
@@ -295,7 +293,7 @@
 //for the header
 	//Initial translation provided by Shane Hayden
 	//
-	$BackTo = "Regresar a";
+	$BackTo = "";
 	//goes back to the home website	
 	
 //For Date Picker	
