@@ -2,7 +2,7 @@
 //2013-05-23 Initial translation provided by Stephen Bolster 
 //2013-05-23 Translation reviewed by 
 	$WebClientHome = "Cliente Interactivo de Web HydroServer: Página Principal";
-	$Returning = "Usuarios Frecuentes";
+	$Returning = "Gestionar Datos";
 	$Login = "Ingresar";
 	$ForgotPW = "¿Olvidó su contraseña?";
 	$Incorrect = "***¡Nombre de usuario  y / o contraseña incorrectos!";

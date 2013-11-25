@@ -9,7 +9,7 @@ require_once 'db_config.php';
 $query = "SELECT * FROM valuetypecv";
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
 $variables[] = array(
-      
+        //'vtterm' => "Select...",
 		'vtterm' => $SelectEllipsis,
         'vtdef' => "-1" );
 
@@ -22,7 +22,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 }
 
 $variables[] = array(
-        
+        //'vtterm' => "Other/New",
 		'vtterm' => $OtherSlashNew,
         'vtdef' => "-10" );
 

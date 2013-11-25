@@ -642,7 +642,16 @@ function plot_chart()
 {
 
 var unit_yaxis="unit";
-//	alert("");
+//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+if (varid != -1)
+{
+$.ajax({
+  type: "GET",
+  url: "getUnit2.php?varid="+varid
+}).done(function( msg ) {
+  unit_yaxis = msg;
+});
+}
 
 //Chaning Complete Data loading technique..need to create a php page that will output javascript...
 
@@ -823,18 +832,18 @@ var source12 =
             };
 var dataAdapter12 = new $.jqx.dataAdapter(source12);   
 
-
-var localizationobj = {};
-localizationobj.pagergotopagestring = "<?php echo $gridGoTo?>:";
-localizationobj.pagershowrowsstring = "<?php echo $gridShowRows?>:";
-localizationobj.pagerrangestring = " <?php echo $gridOf?> ";
-      
+//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+var unitGrid = "Unit: None";
 
 
-
-if (flag==1)    
+$.ajax({
+  type: "GET",
+  url: "getUnit2.php?varid="+varid
+}).done(function( msg ) {
+  unitGrid = msg;
+  
+  if (flag==1)    
 {
-
 
  
 
@@ -843,22 +852,17 @@ if (flag==1)
             {
              
                 source: dataAdapter12,
+               
                 columns: [
-				//{ text: 'ValueID', datafield: 'vid', width: 90 },
-                  //{ text: 'Date', datafield: 'date', width: 200 },
-	              //{ text: 'Value', datafield: 'Value', width: 200}
-				 
 				  { text: 'ValueID', datafield: 'vid', width: 90 },
-                  { text: '<?php echo $Date; ?>', datafield: 'date', width: 200 },
-	              { text: '<?php echo $Value; ?>', datafield: 'Value', width: 200} <?php
+                  { text: 'Date', datafield: 'date', width: 200 },
+	             { text: 'Value (' + unitGrid +')' , datafield: 'Value', width: 200} <?php
       if(isset($_COOKIE['power']))
 	  {
 		echo(",
 				  
-				   //{ text: 'Edit', datafield: 'Edit', columntype: 'button', cellsrenderer: function () {
-                     //return 'Edit';
-					{ text: '$Edit', datafield: '$Edit', columntype: 'button', cellsrenderer: function () {
-                     return '$Edit';
+				   { text: 'Edit', datafield: 'Edit', columntype: 'button', cellsrenderer: function () {
+                     return 'Edit';
                  }, buttonclick: function (row) {
                      // open the popup window when the user clicks a button.
                      editrow = row;
@@ -893,7 +897,6 @@ if (flag==1)
       ?>
                 ]
             });		
-				$("#jqxgrid").on("bindingcomplete", function (event) {$("#jqxgrid").jqxGrid('localizestrings', localizationobj);});   
 
 }
 if(flag!=1)
@@ -904,31 +907,23 @@ if(flag!=1)
             {
                 width: 610,
                 source: dataAdapter12,
-                theme: 'darkblue', 
+                theme: 'darkblue',   
                 columnsresize: true,
 				sortable: true,
                 pageable: true,
                 autoheight: true,
 				 editable: false,
 				   selectionmode: 'singlecell',
-				 
                 columns: [
-				//{ text: 'ValueID', datafield: 'vid', width: 90 },
-                 // { text: 'Date', datafield: 'date', width: 200 },
-	              //{ text: 'Value', datafield: 'Value', width: 200}
-				{ text: 'ValueID', datafield: 'vid', width: 90 },
-                  { text: '<?php echo $Date; ?>', datafield: 'date', width: 200 },
-	              { text: '<?php echo $Value; ?>', datafield: 'Value', width: 200}
-								
-	<?php
+			  { text: 'ValueID', datafield: 'vid', width: 90 },
+                  { text: 'Date', datafield: 'date', width: 200 },
+	          { text: 'Value (' + unitGrid +')', datafield: 'Value', width: 200} <?php
       if(isset($_COOKIE['power']))
 	  {
 		echo(",
 				  
-				   //{ text: 'Edit', datafield: 'Edit', columntype: 'button', cellsrenderer: function () {
-                     //return 'Edit';
-				   { text: '$Edit', datafield: '$Edit', columntype: 'button', cellsrenderer: function () {
-                     return '$Edit';
+				   { text: 'Edit', datafield: 'Edit', columntype: 'button', cellsrenderer: function () {
+                     return 'Edit';
                  }, buttonclick: function (row) {
                      // open the popup window when the user clicks a button.
                      editrow = row;
@@ -963,26 +958,20 @@ if(flag!=1)
       ?>
                 ]
             });		
-		$("#jqxgrid").on("bindingcomplete", function (event) {$("#jqxgrid").jqxGrid('localizestrings', localizationobj);});   
 		flag=1;		
 			
 	}
 	
-
-	
+});
 //Editing functionality
-
 
   // initialize the popup window and buttons.
 
 $("#popupWindow").jqxWindow({ width: 250, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel"), modalOpacity: 0.01 });
-$( "#timepicker" ).timepicker({ showOn: "focus", showPeriodLabels: false, hourText: <?php echo "'".$Hour."'";?>, minuteText: <?php echo "'".$Minute."'"; ?>, closeButtonText: <?php echo "'".$Done."'"; ?>, nowButtonText: <?php echo "'".$Now."'"; ?>, deselectButtonText: <?php echo "'".$Deselect."'"; ?> });
+$( "#timepicker" ).timepicker({ showOn: "focus", showPeriodLabels: false });
 $("#delval").jqxButton({ theme: 'darkblue' });
 $("#Cancel").jqxButton({ theme: 'darkblue' });
 $("#Save").jqxButton({ theme: 'darkblue'});
-
-
-
 //Delete Value
 $("#delval").click(function () {
 
@@ -998,7 +987,6 @@ $("#delval").click(function () {
 //Remove that row from the table
 $('#jqxgrid').jqxGrid('deleterow', editrow);        
 $("#popupWindow").jqxWindow('hide');
-
 
  
   }
@@ -1099,7 +1087,7 @@ $("#popupWindow_new").jqxWindow('show');
 var offset = $("#jqxgrid").offset();
 $("#popupWindow_new").jqxWindow({ position: { x: parseInt(offset.left) + 220, y: parseInt(offset.top) + 60} });
 $("#date_new").jqxDateTimeInput({ width: '125px', height: '25px', theme: 'darkblue', formatString: "MM/dd/yyyy", textAlign: "center" });
-$( "#timepicker_new" ).timepicker({ showOn: "focus", showPeriodLabels: false, hourText: <?php echo "'".$Hour."'";?>, minuteText: <?php echo "'".$Minute."'"; ?>, closeButtonText: <?php echo "'".$Done."'"; ?>, nowButtonText: <?php echo "'".$Now."'"; ?>, deselectButtonText: <?php echo "'".$Deselect."'"; ?> });
+$( "#timepicker_new" ).timepicker({ showOn: "focus", showPeriodLabels: false });
 
  });
 
@@ -1250,7 +1238,7 @@ loadmap();
 <body background="images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>

@@ -1,10 +1,12 @@
 ﻿<?php
+
 //This page is intended to hold all commonly used terms so that they only have
 //to be translated once.
 	//authoridad del usarios
 	$Administrator = "Administrador";
 	$Teacher = "Gerente";
 	$Student = "Técnico";
+	
 	$Abstract = "Resumen:";
 	$AddNewUser = "Adicionar un Nuevo Usuario"; 
 	$Address = "Dirección:";
@@ -32,7 +34,6 @@
 	$Date = "Fecha:";
 	$Delete = "Remover";
 	$Description = "Descripción:";
-	$Edit = "Editar:";
 	$Elevation= "Elevación:";
 	$Email = "Correo Electrónico:";
 	$ExAbstract = "(Ej.: MOSS acquiere datos hidrologicos del Parque Estatal Ponderosa...; ó usted puede entrar Desconocido)";
@@ -61,7 +62,7 @@
 	$International = "Internacional";
 	$LastName = "Apellido:";
 	$Latitude = "Latitud:";
-	$Link  = "Enlace a la Organización:";
+	$Link  = "Enlazar con el Orig:";
 	$Longitude = "Longitud:";
 	$MayNotEdit = "(Esto no puede ser editado!)";
 	$MediumDefinition = "Definición de la Medición de la Muestra:";
@@ -152,6 +153,7 @@
 	$VariableName = "Nombre de la Variable:";
 	$VariableUnitType = "Unidad del Tipo de Variable:";
 	$VerticalDatum = "Dátum Vertical:";
+	$VisitSite = "Seleccione aqui para visitar el sitio";
 	$WebClient = "HydroServer Interactivo Cliente Web";
 	$Welcome = "Bienvenido";
 	$Yes = "Si";
@@ -262,8 +264,6 @@
 	$UnitExists = "La unidad ya existe. No se puede adicionar otra vez. Por favor seleccionela del menú desplegable";
 	$SelectCategoryMsg = "Por favor seleccione la categoría.";
 	$NotFound = " No encontrado";
-	$ClickHere = "Seleccione de una lista de sitios: ";
-	$NoSites = "Ningun sitio encontrado. Por favor cambiar los términos de búsqueda.";
 
 //These are for the variables found in the js folder
 	//to be left in common
@@ -293,7 +293,7 @@
 //for the header
 	//Initial translation provided by Shane Hayden
 	//
-	$BackTo = "Regresar a";
+	$BackTo = "";
 	//goes back to the home website	
 	
 //For Date Picker	

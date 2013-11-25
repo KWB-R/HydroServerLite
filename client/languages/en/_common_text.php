@@ -122,9 +122,9 @@
 	$SpeciationDef = "Speciation Definition:";
 	$State = "State:";
 	$StateNoCounties = "This state has no counties.";
-	$Student = "Contributor";
+	$Student = "Student";
 	$SubmitData = "Submit Your Data";
-	$Teacher = "Coordinator";
+	$Teacher = "Teacher";
 	$ThreeHundred = "300 miles";
 	$TwentyFive = "25 miles";
 	$Time = "Time:";
@@ -260,9 +260,6 @@
 	$UnitExists = "The unit already exists. Cannot Add again. Please select it from the drop down list";
 	$SelectCategoryMsg = "Please select the Category.";
 	$NotFound = " not found";
-	$ClickHere = "Click here for a list of Sites: ";
-	$NoSites = "No Sites Found. Please Alter Search Terms";
-
 	
 //These are for the variables found in the js folder
 	//to be left in common

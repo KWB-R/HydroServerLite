@@ -25,7 +25,7 @@ $option_block2 = "<select name='SiteID' id='SiteID' onChange='showTypes(this.val
 	while ($row2 = mysql_fetch_array ($result2)) {
 
 		$siteid = $row2["SiteID"];
-		$sitename = $row2["SiteName"];
+		$sitename = utf8_encode($row2["SiteName"]);
 
 		$option_block2 .= "<option value='".$siteid."'>".$sitename."</option>";
 

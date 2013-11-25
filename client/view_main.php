@@ -40,7 +40,7 @@ var browserSupportFlag =  new Boolean();
       map = new google.maps.Map(document.getElementById("map"), {
         center: new google.maps.LatLng(44, -160),
         zoom: 12,
-		mapTypeId: 'roadmap',
+        mapTypeId: 'roadmap',
         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
       });
       infoWindow = new google.maps.InfoWindow();
@@ -113,6 +113,7 @@ function loadall()
 	var type = markerNodes[i].getAttribute("sitetype");
 	var siteid = markerNodes[i].getAttribute("siteid");
 	    create_source(latlng, name, sitecode, type, lat, long, siteid, i);
+	
     bounds.extend(latlng);
   }
 
@@ -134,7 +135,6 @@ function loadall()
 	
 
 function create_source(latlng, name, sitecode, type, lat, long, siteid, i)
-
 {
 	//To Get The Sources Available on That Site
 
@@ -191,8 +191,7 @@ function create_source(latlng, name, sitecode, type, lat, long, siteid, i)
      locationSelect.innerHTML = "";
      var option = document.createElement("option");
      option.value = "none";
-     option.innerHTML = <?php echo "'".$ClickHere."'"; ?>;
-	 //option.innerHTML = "Click here for a list of Sites: ";
+     option.innerHTML = "Click here for a list of Sites: ";
      locationSelect.appendChild(option);
    }
 
@@ -209,8 +208,7 @@ function create_source(latlng, name, sitecode, type, lat, long, siteid, i)
        var bounds = new google.maps.LatLngBounds();
        
 	   if (markerNodes.length==0)
-	   //{alert("No Sites Found. Please Alter Search Terms");}
-	   {alert(<?php echo "'".$NoSites."'"; ?>);}
+	   {alert("No Sites Found. Please Alter Search Terms");}
 	   for (var i = 0; i < markerNodes.length; i++) {
         var name = markerNodes[i].getAttribute("name");
         var sitecode = markerNodes[i].getAttribute("sitecode");
@@ -277,8 +275,7 @@ $.ajax({
   if(msg!=-1)
   {
 
- //var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
-  var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/><?php echo $SiteType; ?> "+type+"<br/><?php echo $Latitude; ?> "+lat+"<br/><?php echo $Longitude;?> "+long+"<br/><?php echo $Source; ?> <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'><?php echo $ClickHereDetails; ?></a></div>";
+ var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: "+type+"<br/>Latitude: "+parseFloat(lat).toFixed(4)+"<br/>Longitude: "+parseFloat(long).toFixed(4)+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
 
  var marker = new google.maps.Marker({
     map: map,
@@ -295,7 +292,7 @@ else
 {
 
  //var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here for site details and data</a></div>";
- var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/><?php echo $SiteType; ?> "+type+"<br/><?php echo $Latitude; ?> "+lat+"<br/><?php echo $Longitude;?> "+long+"<br/><?php echo $Source; ?> <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'><?php echo $ClickHereDetails; ?></a></div>";
+ var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/><?php echo $SiteType; ?> "+type+"<br/><?php echo $Latitude; ?> "+parseFloat(lat).toFixed(4)+"<br/><?php echo $Longitude;?> "+parseFloat(long).toFixed(4)+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'><?php echo $VisitSite; ?></a></div>";
 
  var marker = new google.maps.Marker({
     map: map,
@@ -322,8 +319,7 @@ else
 		
       var option = document.createElement("option");
       option.value = option_num;
-      //option.innerHTML = name + " (Source : " + sourcename + ")";
-	  option.innerHTML = name + " (<?php echo "'".$Source."'"; ?>  " + sourcename + ")";
+      option.innerHTML = name + " (Source : " + sourcename + ")";
       locationSelect.appendChild(option);
    option_num=option_num+1;
     }
@@ -365,7 +361,7 @@ else
 
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>

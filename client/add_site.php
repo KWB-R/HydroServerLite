@@ -180,10 +180,7 @@ alert(<?php echo "'".$AutomaticallyEnterLongLatEle."'"; ?>);
 
 <!-- Drop Down JS -->
 <script type="text/javascript" src="js/drop_down.js"></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true&language=
-<?php
-echo $lang;
-?>"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>
 
 <!-- Preload Images -->
 <SCRIPT language="JavaScript">
@@ -370,7 +367,7 @@ display: none;
 <body background="images/bkgrdimage.jpg" onLoad="initialize()">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
@@ -423,8 +420,7 @@ display: none;
         </tr>
         <tr>
           <td valign="top"><strong><!--Site Photo:--><?php echo $SitePhoto;?></strong></td>
-          <td><!--<input type="button" id="pseudobutton" value="Aprire the File" style="z-index:2">-->
-			<input type="file" name="file" id="file" size="30" value="File" >
+          <td><input type="file" name="file" id="file" size="30">
             <br>
             <!--(Photo must be in .JPG format; File will be uploaded upon submit below.)--><?php echo $ExSitePhoto;?></td>
         </tr>

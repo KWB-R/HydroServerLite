@@ -11,7 +11,7 @@ $query = "SELECT * FROM units WHERE unitsType='$type'";
 // get data and store in a json array
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
 $variables[] = array(
-      
+        //'unit' => "Select...",
 		'unit' => $SelectEllipsis,
         'id' => "-1" );
 
@@ -19,7 +19,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     
 		$variables[] = array(
         'unit' => utf8_encode($row['unitsName']),
-        'id' => utf8_encode($row['unitsID']));
+        'id' => $row['unitsID']);
 
 }
 

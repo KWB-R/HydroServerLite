@@ -45,7 +45,7 @@ $num_m = @mysql_num_rows($result);
 
 	$methods[] = array(
         'methodid' => utf8_encode($rows["MethodID"]),
-        'methodname' =>utf8_encode($rows["MethodDescription"]) );
+        'methodname' => utf8_encode($rows["MethodDescription"]) );
 
 
 			}

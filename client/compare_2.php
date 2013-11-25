@@ -1,7 +1,6 @@
 <?php
 
 //This is required to get the international text strings dictionary
-$urlExtraName = "_common.php";
 require_once 'internationalize.php';
 
 require_once 'db_config.php';
@@ -41,7 +40,7 @@ $('#dropdownlistc').bind('select', function (event) {
 var args = event.args;
 var item = $('#dropdownlistc').jqxDropDownList('getItem', args.index);
 //Check if a valid value is selected and process futher to display dates
-if ((item != null)&&(item.label != "<?php echo $SelectVariable?>")) {
+if ((item != null)&&(item.label != "Please select a variable")) {
 	$('#varnamec').val(item.label);
 $('#window2').jqxWindow('hide');
 $('#window3').jqxWindow('show');

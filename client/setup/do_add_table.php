@@ -1,9 +1,11 @@
 ﻿<?php
-   
-   $host = $_POST['databasehost'];
+
+
+
+$host = $_POST['databasehost'];
    $user = $_POST['databaseusername'];
    $pass = $_POST['databasepassword'];
-   
+  
 $mysqli = new mysqli($host,$user,$pass,$_POST['databasename']);
 
  
@@ -40,26 +42,7 @@ if ($mysqli->errno) {
  */
  
  
-/*
-*Check if the tables already exist before over writing. 
-*
-*Author : Rohit Khattar (rohit@byu.net)
-*/
-
-$res =  $mysqli->Query("SHOW TABLES LIKE 'datavalues'");
-
-if(isset($res->num_rows)) {
-	if (! ($res->num_rows > 0))
-	{
-		mysqli_multi_query($mysqli,$sql);		
-	}
-} 
-else
-{
-	mysqli_multi_query($mysqli,$sql);
-
-}
- 
+mysqli_multi_query($mysqli,$sql);
 
 $mysqli->close();
 

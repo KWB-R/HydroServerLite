@@ -35,14 +35,6 @@
 		$SixM = "6m";
 		$OneY = "1Y";
 	$All = "All";
-	
-
-//Variables for the Grid	
-
-$gridGoTo = "Go to Page";
-$gridShowRows = "Show rows";
-$gridOf = "of";
-
 ?>
 
 

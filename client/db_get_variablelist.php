@@ -1,6 +1,5 @@
 <?php
 //This is required to get the international text strings dictionary
-$urlExtraName = "_common.php";
 require_once 'internationalize.php';
 
 require_once 'db_config.php';
@@ -19,8 +18,8 @@ $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
 
 $variables[] = array(
         'variableid' => "-1",
-       // 'variablename' => "Please select a variable" );
-		'variablename' => $SelectVariable );
+        'variablename' => "Please select a variable" );
+		//'variablename' => $SelectVariable );
 	
 $temp=1;
 
@@ -29,7 +28,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 if($row['VariableName']!=null){
 		$variables[] = array(
         'variableid' => $temp,
-        'variablename' => utf8_encode($row['VariableName']));
+        'variablename' => $row['VariableName']);
 $temp=$temp+1;
 }
 }

@@ -14,7 +14,7 @@ $methods[] = array(
     
 		$methods[] = array(
         'methodid' => $row['MethodID'],
-        'methodname' => utf8_encode($row['MethodDescription']));
+        'methodname' => $row['MethodDescription']);
 	}
 
 
