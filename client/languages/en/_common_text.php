@@ -122,9 +122,9 @@
 	$SpeciationDef = "Speciation Definition:";
 	$State = "State:";
 	$StateNoCounties = "This state has no counties.";
-	$Student = "Student";
+	$Student = "Contributor";
 	$SubmitData = "Submit Your Data";
-	$Teacher = "Teacher";
+	$Teacher = "Coordinator";
 	$ThreeHundred = "300 miles";
 	$TwentyFive = "25 miles";
 	$Time = "Time:";
