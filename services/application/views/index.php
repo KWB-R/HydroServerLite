@@ -55,6 +55,14 @@ Once you are a registered user, you will be able to login and upload your own da
 					</div>
 				</div> 
 			</div>
+			<div class="info_container">
+			    <label class="info_label"><a href="<?php echo base_url('wfs/write_xml');?>" class="info_link">WFS Services</a></label>
+				<div class="info_content">
+					<div class="link_desc">
+						&nbsp;Wfs 1.0.0.
+					</div>
+				</div> 
+			</div>
 		</div>
 	</div>
 
