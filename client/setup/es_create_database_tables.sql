@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `methods` (
 --
 
 INSERT INTO `methods` (`MethodID`, `MethodDescription`, `MethodLink`) VALUES
-(1, 'No method specified', NULL);
+(1, 'Ningún Método Especificado', NULL);
 
 -- --------------------------------------------------------
 
@@ -651,7 +651,7 @@ CREATE TABLE IF NOT EXISTS `spatialreferences` (
 --
 
 INSERT INTO `spatialreferences` (`SpatialReferenceID`, `SRSID`, `SRSName`, `IsGeographic`, `Notes`) VALUES
-(0, NULL, 'Desconocido', 0, 'The spatial reference system is unknown'),
+(0, NULL, 'Desconocido', 0, 'El sistema de referencia espacial es desconocido'),
 (1, 4267, 'NAD27', 1, NULL),
 (2, 4269, 'NAD83', 1, NULL),
 (3, 4326, 'WGS84', 1, NULL),
