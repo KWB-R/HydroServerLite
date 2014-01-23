@@ -420,7 +420,7 @@ else
              <td>&nbsp;</td>
            </tr>
              <tr>
-             <td><div><select name="locationSelect" id="locationSelect" style="width:100%;visibility:hidden"></select></div></td>
+             <td><div><select name="locationSelect" id="locationSelect" style="width:100%;"></select></div></td>
            </tr>
            
            

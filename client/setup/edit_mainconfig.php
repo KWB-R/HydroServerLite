@@ -1,13 +1,13 @@
 ﻿<?php
 	//This is required to get the international text strings dictionary
 	 $setup="yes";
-	 $worldWaterSetup="Yes"; //This parameter is only used for connecting to worldwater database and should only be run from within the server. 
+	 $worldWaterSetup="No"; //This parameter is only used for connecting to worldwater database and should only be run from within the server. 
 	 //To use world water server or your custom server : Enter the above option as Yes and then please configure the database settings below:
-	 $serverDBHost = 	"worldwater.byu.edu" ;//Your server Name : For example - "worldwater.byu.edu"
-	 $serverDBUName = 	"WWO_Admin" ;//Your server Username : For example - "Adam"
-	 $serverDBPass = 	"isaiah4118" ;//Your server Password : For example - "*********"	 
+	 $serverDBHost = 	"" ;//Your server Name : For example - "worldwater.byu.edu"
+	 $serverDBUName = 	"" ;//Your server Username : For example - "Adam"
+	 $serverDBPass = 	"" ;//Your server Password : For example - "*********"	 
 	 
-	 $singleInstall="No"; //Once again, this is only for advanced users to change. For people who are intending to have multiple installations on their servers. 
+	 $singleInstall="Yes"; //Once again, this is only for advanced users to change. For people who are intending to have multiple installations on their servers. 
 	 
 	require_once 'internationalize.php';
 ?>

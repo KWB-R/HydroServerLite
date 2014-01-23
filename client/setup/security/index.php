@@ -1,8 +1,8 @@
 <?php
 
 //Editing made on pages to make sure that in case of world water the landing page is shown or else its redirected to the default view in case of a multiinstallation. 
-$WorldWater = "Yes"; //Use "Yes" If this is on world water servers. 
-$MainDir = "main"; //This is the location to the main directory where all the files are contained on the server. 
+$WorldWater = "No"; //Use "Yes" If this is on world water servers. 
+$MainDir = "workingHSL"; //This is the location to the main directory where all the files are contained on the server. 
 
 //The landing page in each directory. This will contain the MainConfig file for the specific page. 
 //Check the URL for the page. 

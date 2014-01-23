@@ -1,6 +1,6 @@
 <?php
 //This is required to get the international text strings dictionary
-    $urlExtra="..//";
+   // $urlExtra="../";
 	$urlExtraName="footer.php";
 	require 'internationalize.php';
 ?>

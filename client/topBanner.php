@@ -1,6 +1,6 @@
 <?php
 
-//require_once("fetchMainConfig.php");
+require_once("fetchMainConfig.php");
 
 $sourceBanner ="images/WebClientBanner.png";
 
