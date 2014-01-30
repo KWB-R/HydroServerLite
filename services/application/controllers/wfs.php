@@ -29,7 +29,7 @@ class Wfs extends CI_Controller
 				$features	= $this->wfs_model->get_features( 1, 1 );
 			}
 			header('Content-Type:text/xml; charset=UTF-8', TRUE);
-			$features			= $this->wfs_model->check_features($features);
+			//$features			= $this->wfs_model->check_features($features);
 			$data['watermlurl']	= htmlspecialchars(base_url() . 'services/' . 'cuahsi_1_1.asmx/GetValuesObject?location=' . $this->config->item('service_code') . ':' . trim($features->SiteCode) . '&variable=' . $this->config->item('service_code') . ':' . trim($features->VariableCode));
 			$data['feat']		= $features;
 			
