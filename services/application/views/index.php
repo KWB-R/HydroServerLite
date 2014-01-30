@@ -1,25 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8"/>
-	<title>Hydrodata</title>
-	<link rel="shortcut icon" href="<?=base_url()?>assets/images/favicon.ico" type="image/x-icon" />
-	<link rel="bookmark" href="<?=base_url()?>assets/images/favicon.ico" />
+<?php $this->load->view('header'); ?>
 
-	<link href="<?=base_url()?>assets/css/style.css" rel="stylesheet"/>
-
-	<link href="<?=base_url()?>assets/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet"/>
-
-	<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui-1.10.3.custom.min.js"></script>
-
-</head>
-<body>
-</script>
-<div id="container">
-	<h1>Welcome to Hydrodata Server</h1>
-
-	<div id="body">
 		<p>
 		The HydroServer Lite Interactive Web Client is an online software tool that helps store, organize, and publish data provided by citizen scientists.
 		</p>
@@ -56,7 +36,7 @@ Once you are a registered user, you will be able to login and upload your own da
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('wfs/write_xml');?>" class="info_link">WFS Services</a></label>
+			    <label class="info_label"><a href="<?php echo base_url('wfs/variables');?>" class="info_link">WFS Services</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Wfs 1.0.0.
@@ -64,10 +44,5 @@ Once you are a registered user, you will be able to login and upload your own da
 				</div> 
 			</div>
 		</div>
-	</div>
-
-	<p class="footer"><font color=#000000 face=Arial, Helvetica, sans-serif size=2><i>Copyright &copy; 2012. <a href='http://hydroserverlite.codeplex.com/' target='_blank' class='reversed'>Hydroserver Lite</a>. All Rights Reserved. <a href='http://hydroserverlite.codeplex.com/team/view' target='_blank' class='reversed'>Meet the Developers</a></i></font></p>
-</div>
-
-</body>
-</html>
+	
+<?php $this->load->view('footer'); ?>

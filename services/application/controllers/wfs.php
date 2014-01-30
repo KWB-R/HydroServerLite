@@ -12,9 +12,57 @@ class Wfs extends CI_Controller
 	{
 		// TO DO: check to see the conditions of the different attribute
 		// what to display and when to display
-		header('Content-Type:text/xml; charset=UTF-8', TRUE);
-		$data['feature_types'] = $this->wfs_model->get_features();
-		$this->load->view('capabilities', $data);		 
+		
+		if( ($this->input->get('request') == 'GetFeature') || ($this->input->get('REQUEST') == 'GetFeature') || ($this->input->post('request') == 'GetFeature') || ($this->input->post('REQUEST') == 'GetFeature') )
+		{
+			if( $this->input->get('SRSNAME') != NULL || strlen($this->input->get('SRSNAME')) > 0 )
+			{
+				$srsname	= explode(':', $this->input->get('SRSNAME'));
+				$srsname	= explode('-', $srsname[1]);
+				$siteID		= $srsname[0];
+				$variableID = $srsname[1];
+				$features	= $this->wfs_model->get_features( $siteID, $variableID );
+			}
+			else
+			{
+				//by default we choose a variable to display the features
+				$features	= $this->wfs_model->get_features( 1, 1 );
+			}
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			$features			= $this->wfs_model->check_features($features);
+			$data['watermlurl']	= htmlspecialchars(base_url() . 'services/' . 'cuahsi_1_1.asmx/GetValuesObject?location=' . $this->config->item('service_code') . ':' . trim($features->SiteCode) . '&variable=' . $this->config->item('service_code') . ':' . trim($features->VariableCode));
+			$data['feat']		= $features;
+			
+			$this->load->view('get_feature', $data);
+		}
+		else if(($this->input->get('request') == 'DescribeFeatureType') || ($this->input->get('REQUEST') == 'DescribeFeatureType') || ($this->input->post('request') == 'DescribeFeatureType') || ($this->input->post('REQUEST') == 'DescribeFeatureType'))
+		{
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			
+			$this->load->view('describe_feature_type');		 
+		}
+		else if(($this->input->get('request') == 'GetCapabilities') || ($this->input->get('REQUEST') == 'GetCapabilities') || ($this->input->post('request') == 'GetCapabilities') || ($this->input->post('REQUEST') == 'GetCapabilities'))
+		{
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			$data['sites']		= $this->wfs_model->get_sites();
+			$data['variableID'] = $this->input->get('VariableID') ? $this->input->get('VariableID') : 1;
+			
+			$this->load->view('get_capabilities', $data);
+		}
+		else
+		{
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			$this->load->view('request_error');
+		}
+	}
+	
+	function variables()
+	{
+		// show the variables from the Variables table in DB
+		// based on them do the listing of the sites and seriescatalog on REQUESTS
+		$data['variables'] = $this->wfs_model->get_variables();
+		//print_r($variables);
+		$this->load->view('variables', $data);
 	}
 	
 	function wfs_server()

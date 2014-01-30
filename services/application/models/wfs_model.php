@@ -2,11 +2,45 @@
 
 class Wfs_Model extends CI_Model
 {
-	public function get_features()
+	public function get_features( $siteID, $variableID )
 	{
-		$this->db->group_by('SiteName');
-		$result = $this->db->get('seriescatalog');
-		return $result->result();		
+		$this->db->select('*');
+		$this->db->where('seriescatalog.VariableID', $variableID);
+		$this->db->where('sites.SiteID', $siteID);
+		$this->db->from('seriescatalog');
+		$this->db->join('sites', 'sites.SiteID = seriescatalog.SiteID');
+
+		$result = $this->db->get();
+		return $result->row();		
+	}
+	
+	public function get_sites()
+	{
+		//$this->db->limit(1);
+		$this->db->order_by('SiteID', 'Asc');
+		$result = $this->db->get('sites');
+		return $result->result();
+	}
+	
+	public function get_variables()
+	{
+		$this->db->order_by('VariableID', 'Asc');
+		$result = $this->db->get('variables');
+		return $result->result();
+	}
+	
+	public function check_features( $features )
+	{
+		if( $features->BeginDateTimeUTC == '1950-01-01 00:00:00')
+		{
+			$features->BeginDateTimeUTC = '';
+		}
+		
+		if( $features->EndDateTimeUTC == '1952-08-01 00:00:00' )
+		{
+			$features->EndDateTimeUTC = '';
+		}
+		return $features;
 	}
 	
 	// Methods for Server response/requests delivery
