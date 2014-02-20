@@ -32,12 +32,12 @@ xsi:schemaLocation="http://www.opengis.net/wfs http://wfs.plansystem.dk:80/geose
             </SchemaDescriptionLanguage>
             <DCPType>
                <HTTP>
-                  <Get onlineResource="<?php echo base_url('wfs/write_xml?'); ?>"/>
+                  <Get onlineResource="<?php echo base_url('index.php/wfs/write_xml?'); ?>"/>
                </HTTP>
             </DCPType>
             <DCPType>
 			   <HTTP>
-				  <Post onlineResource="<?php echo base_url('wfs/write_xml'); ?>"/>
+				  <Post onlineResource="<?php echo base_url('indexp.php/wfs/write_xml'); ?>"/>
 			   </HTTP>
             </DCPType>
          </DescribeFeatureType>
@@ -47,24 +47,24 @@ xsi:schemaLocation="http://www.opengis.net/wfs http://wfs.plansystem.dk:80/geose
             </ResultFormat>
             <DCPType>
                <HTTP>
-                  <Get onlineResource="<?php echo base_url('wfs/write_xml?'); ?>"/>
+                  <Get onlineResource="<?php echo base_url('index.php/wfs/write_xml?'); ?>"/>
                </HTTP>
             </DCPType>
             <DCPType>
 			   <HTTP>
-				  <Post onlineResource="<?php echo base_url('wfs/write_xml'); ?>"/>
+				  <Post onlineResource="<?php echo base_url('index.php/wfs/write_xml'); ?>"/>
 			   </HTTP>
             </DCPType>
          </GetFeature>
          <Transaction>
             <DCPType>
                <HTTP>
-                  <Get onlineResource="<?php echo base_url('wfs/write_xml?'); ?>"/>
+                  <Get onlineResource="<?php echo base_url('index.php/wfs/write_xml?'); ?>"/>
                </HTTP>
             </DCPType>
             <DCPType>
 			   <HTTP>
-				  <Post onlineResource="<?php echo base_url('wfs/write_xml'); ?>"/>
+				  <Post onlineResource="<?php echo base_url('index.php/wfs/write_xml'); ?>"/>
 			   </HTTP>
             </DCPType>
          </Transaction>
@@ -82,19 +82,16 @@ xsi:schemaLocation="http://www.opengis.net/wfs http://wfs.plansystem.dk:80/geose
 		</Operations>
     <?php
     
-	foreach( $sites as $site )
-	{
-		//	 STANDARD NAME/TITLE/ABSTRACT attributes for features
-		
-		echo "<FeatureType>\n";
-		echo "<Name>" . str_replace(" ", "-", $site->SiteName) . "</Name>\n";
-		echo "<Title>" . $site->SiteName . "</Title>\n";
-		echo "<SRS>EPSG:" . $site->SiteID . '-' . $variableID . "</SRS>\n";
-		echo "<Keywords>" . $site->SiteName . "</Keywords>\n";
-		echo "<LatLongBoundingBox minx='$site->Latitude' miny='$site->Longitude' maxx='' maxy='' ></LatLongBoundingBox>\n";
-		echo "<Abstract></Abstract>\n";
-		echo "</FeatureType>\n";	
-	}
+	//	 STANDARD NAME/TITLE/ABSTRACT attributes for features	
+	echo "<FeatureType>\n";
+	echo "<Name>" . 'hydroserver-' . $bbox->VariableID . "</Name>\n";
+	echo "<Title>" . $bbox->VariableName . "</Title>\n";
+	echo "<SRS>EPSG:4326</SRS>\n";
+	echo "<Keywords>" . $bbox->SampleMedium . "</Keywords>\n";
+	echo "<LatLongBoundingBox minx='$bbox->xmin' miny='$bbox->ymin' maxx='$bbox->xmax' maxy='$bbox->ymax' ></LatLongBoundingBox>\n";
+	echo "<Abstract></Abstract>\n";
+	echo "</FeatureType>\n";	
+	
     ?>
 	</FeatureTypeList>
 </WFS_Capabilities>

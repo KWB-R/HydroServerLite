@@ -2,16 +2,20 @@
 
 class Wfs_Model extends CI_Model
 {
-	public function get_features( $siteID, $variableID )
+	public function get_features( $variableID )
 	{
-		$this->db->select('*');
+		$this->db->select('sites.SiteID, sites.SiteName, sites.SiteCode, VariableCode, Latitude, Longitude, BeginDateTimeUTC, EndDateTimeUTC, SourceDescription'); 
 		$this->db->where('seriescatalog.VariableID', $variableID);
-		$this->db->where('sites.SiteID', $siteID);
 		$this->db->from('seriescatalog');
 		$this->db->join('sites', 'sites.SiteID = seriescatalog.SiteID');
 
 		$result = $this->db->get();
-		return $result->row();		
+		return $result->result();		
+	}
+	
+	public function get_watermlurl($feat)
+	{
+			return htmlspecialchars(base_url() . 'services/' . 'cuahsi_1_1.asmx/GetValuesObject?location=' . $this->config->item('service_code') . ':' . trim($feat->SiteCode) . '&variable=' . $this->config->item('service_code') . ':' . trim($feat->VariableCode));
 	}
 	
 	public function get_sites()
@@ -20,6 +24,21 @@ class Wfs_Model extends CI_Model
 		$this->db->order_by('SiteID', 'Asc');
 		$result = $this->db->get('sites');
 		return $result->result();
+	}
+	
+	public function get_boundingbox($variableID)
+	{
+		$this->db->select('VariableID, VariableName, SampleMedium, MIN(longitude) as xmin,MAX(longitude) as xmax,MIN(latitude) as ymin,MAX(latitude) as ymax');
+		$this->db->where('seriescatalog.VariableID', $variableID);
+		$this->db->from('sites');
+		$this->db->join('seriescatalog', 'seriescatalog.SiteID = sites.SiteID');
+
+		$result = $this->db->get();
+		return $result->row();		
+		
+		//$this->db->order_by('SiteID', 'Asc');
+		//$result = $this->db->get('sites');
+		//return $result->result();
 	}
 	
 	public function get_variables()

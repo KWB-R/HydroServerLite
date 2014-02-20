@@ -5,7 +5,7 @@
 			foreach( $variables as $variable ) {
 			?>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('wfs/write_xml?VariableID=' . $variable->VariableID . '&request=GetCapabilities');?>" class="info_link"><?php echo $variable->VariableCode; ?></a></label>
+			    <label class="info_label"><a href="<?php echo '../wfs/write_xml?VariableID=' . $variable->VariableID . '&request=GetCapabilities';?>" class="info_link"><?php echo $variable->VariableCode; ?></a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;<?php echo $variable->VariableName;?>

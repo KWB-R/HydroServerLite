@@ -12,7 +12,7 @@ Once you are a registered user, you will be able to login and upload your own da
 		<br />
 		<div id="base_info">
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('test');?>" class="info_link">REST Service Test</a></label>
+			    <label class="info_label"><a href="<?php echo 'index.php/test';?>" class="info_link">REST Service Test</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;You can perform tests on all of the methods in Hydrodata Server on this page. In this case the test for REST Service.
@@ -20,15 +20,15 @@ Once you are a registered user, you will be able to login and upload your own da
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('cuahsi_1_1.asmx');?>" class="info_link">SOAP Web Service</a></label>
+			    <label class="info_label"><a href="<?php echo 'index.php/cuahsi_1_1.asmx';?>" class="info_link">SOAP Web Service</a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;Hydrodata soap service page.
+						&nbsp;Hydroserver soap service page.
 					</div>
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('updatecv.php');?>" class="info_link">Update Controlled Vocabulary</a></label>
+			    <label class="info_label"><a href="<?php echo 'index.php/updatecv.php';?>" class="info_link">Update Controlled Vocabulary</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Update Controlled Vocabulary from HIS Central.
@@ -36,7 +36,7 @@ Once you are a registered user, you will be able to login and upload your own da
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo base_url('wfs/variables');?>" class="info_link">WFS Services</a></label>
+			    <label class="info_label"><a href="<?php echo 'index.php/wfs/variables';?>" class="info_link">WFS Services</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Wfs 1.0.0.
