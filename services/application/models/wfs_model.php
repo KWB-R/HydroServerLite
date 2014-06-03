@@ -2,15 +2,57 @@
 
 class Wfs_Model extends CI_Model
 {
+	public function get_feature_SQ( $siteID )
+	{
+		$this->db->select('sites.SiteID, sites.SiteName, sites.SiteCode, VariableCode,VariableName, Latitude, Longitude, BeginDateTimeUTC, EndDateTimeUTC, SourceDescription'); 
+		$this->db->where('seriescatalog.SiteCode', $siteID);
+		$this->db->from('seriescatalog');
+		$this->db->join('sites', 'sites.SiteID = seriescatalog.SiteID');
+
+		$result = $this->db->get();
+		return $result->result();		
+	}
+	
 	public function get_features( $variableID )
 	{
-		$this->db->select('sites.SiteID, sites.SiteName, sites.SiteCode, VariableCode, Latitude, Longitude, BeginDateTimeUTC, EndDateTimeUTC, SourceDescription'); 
+		$this->db->select('sites.SiteID, sites.SiteName, sites.SiteCode, VariableCode,VariableName, Latitude, Longitude, BeginDateTimeUTC, EndDateTimeUTC, SourceDescription'); 
 		$this->db->where('seriescatalog.VariableID', $variableID);
 		$this->db->from('seriescatalog');
 		$this->db->join('sites', 'sites.SiteID = seriescatalog.SiteID');
 
 		$result = $this->db->get();
 		return $result->result();		
+	}
+	
+	public function get_features_all ()
+	
+	{
+		
+		//Subquery procedure as just using a simple join returns only one row
+		//Also made changes to db_active_rec to use the protected functions compile and reset. 
+		//May not be the best method, but this hack gets it working
+		
+		//Also min is reduced and Max is added by 0.001 to make a slight difference else the extents are not recognised where only one site exists.  
+		
+		$this->db
+        ->select(' longitude , latitude , SiteID')
+        ->from('sites') ; 
+
+		$subquery = $this->db->_compile_select();
+
+		$this->db->_reset_select(); 
+
+		$query  =   $this->db
+					
+                    ->select('VariableID, VariableName, DataType, VariableCode,VariableunitsName, SampleMedium, (MIN( longitude )-0.001) AS xmin, (MAX( longitude )+0.001) AS xmax, (MIN( latitude )-0.001) AS ymin, (MAX( latitude )+0.001) AS ymax')
+                    ->from('seriescatalog')
+					->group_by('VariableID')
+					->where('VariableID !=', 'NULL')
+                    ->join("($subquery)  sitess","seriescatalog.SiteID = sitess.SiteID")
+                    ->get();
+					
+		return $query->result();		
+			
 	}
 	
 	public function get_watermlurl($feat)
@@ -28,7 +70,7 @@ class Wfs_Model extends CI_Model
 	
 	public function get_boundingbox($variableID)
 	{
-		$this->db->select('VariableID, VariableName, SampleMedium, MIN(longitude) as xmin,MAX(longitude) as xmax,MIN(latitude) as ymin,MAX(latitude) as ymax');
+		$this->db->select('VariableID, VariableName, SampleMedium, (MIN( longitude )-0.001) AS xmin, (MAX( longitude )+0.001) AS xmax, (MIN( latitude )-0.001) AS ymin, (MAX( latitude )+0.001) AS ymax');
 		$this->db->where('seriescatalog.VariableID', $variableID);
 		$this->db->from('sites');
 		$this->db->join('seriescatalog', 'seriescatalog.SiteID = sites.SiteID');
@@ -39,6 +81,18 @@ class Wfs_Model extends CI_Model
 		//$this->db->order_by('SiteID', 'Asc');
 		//$result = $this->db->get('sites');
 		//return $result->result();
+	}
+	
+	public function get_boundingbox_SQ($siteID)
+	{
+		$this->db->select('VariableID, VariableName, SampleMedium, (MIN( longitude )-0.001) AS xmin, (MAX( longitude )+0.001) AS xmax, (MIN( latitude )-0.001) AS ymin, (MAX( latitude )+0.001) AS ymax');
+		$this->db->where('seriescatalog.SiteCode', $siteID);
+		$this->db->from('sites');
+		$this->db->join('seriescatalog', 'seriescatalog.SiteID = sites.SiteID');
+
+		$result = $this->db->get();
+		return $result->row();		
+	
 	}
 	
 	public function get_variables()

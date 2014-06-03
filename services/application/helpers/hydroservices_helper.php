@@ -1,4 +1,6 @@
 <?php
+
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -619,6 +621,59 @@ if (!function_exists('wof_GetValues')) {
 	}
 }
 
+if (!function_exists('wof_GetValues_2')) {
+
+	function wof_GetValues_2($location, $variable, $startDate, $endDate ) {
+    	
+		//get the short variable code and short site code
+    	$shortSiteCode = $location;
+    	$shortVariableCode = $variable;
+    	$pos1 = strpos($location, ":");
+    	if ($pos1 >= 0) {
+        	$split1 = explode(":", $location);
+        	$shortSiteCode = $split1[1];
+    	}
+    	$pos2 = strpos($variable, ":");
+	    if ($pos2 >= 0) {
+	        $split2 = explode(":", $variable);
+	        $shortVariableCode = $split2[1];
+	    }
+ 		
+		//Printing WaterML 2 Header
+		
+		$retVal = '<wml2:Collection xmlns:wml2="http://www.opengis.net/waterml/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wml="http://www.cuahsi.org/waterML/1.1/" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:om="http://www.opengis.net/om/2.0" xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:op="http://schemas.opengis.net/op" xmlns:sf="http://www.opengis.net/sampling/2.0" xmlns:sams="http://www.opengis.net/samplingSpatial/2.0" xmlns:sam="http://www.opengis.net/sampling/2.0" xmlns:wml1_0="http://www.cuahsi.org/waterML/1.0/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gss="http://www.isotc211.org/2005/gss" xsi:schemaLocation="http://www.opengis.net/waterml/2.0 http://schemas.opengis.net/waterml/2.0/waterml2.xsd" gml:id="generated_collection_doc">';
+		
+	/*	$retVal .= "<gml:description>";
+			$retVal .= "Enter Desscription Here, Possibly Generate Dynamically";
+		$retVal .= "</gml:description>";*/
+		
+		$retVal .= '<wml2:metadata>
+						<wml2:DocumentMetadata gml:id="HIS.DMD.1">
+							<wml2:generationDate>'. date('c') .'</wml2:generationDate>
+							<wml2:version xlink:href="http://www.opengis.net/waterml/2.0" xlink:title="WaterML 2.0"/>
+							<wml2:generationSystem>WaterML2 Data Generator for HydroServerLite Servers in PHP.</wml2:generationSystem>
+						</wml2:DocumentMetadata>
+					</wml2:metadata>';
+		
+		$headerSection = $retVal;
+		
+		$retVal='';
+		
+		$retVal .= db_GetSiteByCodeWML2($shortSiteCode);
+	
+		 $retVal .= db_GetResultWML2($shortSiteCode, $shortVariableCode, $startDate, $endDate);
+	
+		$retVal .= '</wml2:Collection>';
+		
+		//Generating dictionaries
+		
+		$dictContent = genDictsWML2();
+		
+	    return $headerSection.$dictContent.$retVal;
+	}
+}
+
+
 if (!function_exists('wof_GetValuesForASite')) {
 
 	function wof_GetValuesForASite($site, $startDate, $endDate) {
@@ -1045,6 +1100,99 @@ if (!function_exists('db_GetSiteByCode')) {
 	}
 }
 
+if (!function_exists('db_GetSiteByCodeWML2')) {
+
+	function db_GetSiteByCodeWML2($shortCode, $justValue = 0) {
+		$ci = &get_instance();
+
+	    $sr_table = get_table_name('SpatialReferences');
+		$sites_table = get_table_name('Sites');
+		$series_catalog_table = get_table_name('SeriesCatalog');
+
+		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
+
+		if ($siteSC->num_rows() > 0) {
+			$where = '';
+		    foreach ($siteSC->result_array() as $row) {
+		        $where .= '"' . $row["SiteID"] . '",';
+		    }
+		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
+	    }
+
+		$ci->db->distinct();
+		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments, s.PosAccuracy_m");
+		$ci->db->join($sr_table." sr","s.LocalProjectionID = sr.SpatialReferenceID","LEFT");
+		$ci->db->where("s.SiteCode",$shortCode);
+
+		if (isset($whereID)) {
+			$ci->db->where("s.SiteID IN",$whereID,FALSE);
+		}
+
+		$result = $ci->db->get($sites_table." s");
+
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+
+	    //Process the first site found
+		
+		
+		$sitesArray = $result->result_array();
+		$fSite=$sitesArray[0];
+		
+		if ($justValue==1):
+			return $fSite;
+		endif;
+		
+		$retText = '<wml2:samplingFeatureMember>
+					  <wml2:MonitoringPoint gml:id="site_'.$fSite['SiteCode'].'">
+						<gml:identifier codeSpace="">'.$fSite['SiteCode'].'</gml:identifier>
+						<gml:name>'.$fSite['SiteName'].'</gml:name>
+						<sam:sampledFeature xlink:title="Unsepecified Sampled Feature" xlink:role="http://hiscentral.cuahsi.org/wml/site" xlink:href="urn:ogc:def:nil:OGC:unknown"/> 
+						<sam:parameter>
+						  <om:NamedValue>
+							<om:name xlink:href="http://www.cuahsi.org/waterml2/params/elevation_m/" xlink:title="elevation in meters" />
+							<om:value xsi:type="xsd:string">'.$fSite['Elevation_m'].'</om:value>
+						  </om:NamedValue>
+						</sam:parameter>
+						<sam:parameter>
+						  <om:NamedValue>
+							<om:name xlink:href="http://www.cuahsi.org/waterml2/params/verticalDatum/" xlink:title="Vertical Datum" />
+							<om:value xsi:type="xsd:string">'.$fSite['VerticalDatum'].'</om:value>
+						  </om:NamedValue>
+						</sam:parameter>
+						<sam:parameter>
+						  <om:NamedValue>
+							<om:name xlink:href="http://www.cuahsi.org/waterml2/params/County" xlink:title="County" />
+							<om:value xsi:type="xsd:string">'.$fSite['County'].'</om:value>
+						  </om:NamedValue>
+						</sam:parameter>
+						<sam:parameter>
+						  <om:NamedValue>
+							<om:name xlink:href="http://www.cuahsi.org/waterml2/params/State" xlink:title="State" />
+							<om:value xsi:type="xsd:string">'.$fSite['State'].'</om:value>
+						  </om:NamedValue>
+						</sam:parameter>
+						<sam:parameter>
+						  <om:NamedValue>
+							<om:name xlink:href="http://www.cuahsi.org/waterml2/params/Site Comments" xlink:title="Site Comments" />
+							<om:value xsi:type="xsd:string">'.$fSite['Comments'].'</om:value>
+						  </om:NamedValue>
+						</sam:parameter>
+						<sams:shape>
+						  <gml:Point gml:id="'.$fSite['SiteCode'].'_pos">
+							<gml:pos srsName="EPSG:4269">'.$fSite['Latitude'].' '.$fSite['Longitude'].'</gml:pos>
+						  </gml:Point>
+						</sams:shape>
+					  </wml2:MonitoringPoint>
+				  </wml2:samplingFeatureMember>';
+
+	    return $retText; 
+	}
+}
+
+
 if (!function_exists('db_GetSiteByID')) {
 
 	function db_GetSiteByID($siteID, $siteTag = "siteInfo", $siteTagType = "") {
@@ -1354,6 +1502,131 @@ if (!function_exists('db_GetVariableByCode')) {
 	}
 }
 
+if (!function_exists('db_GetVariableByCodeWML2')) {
+
+	function db_GetVariableByCodeWML2($varID = NULL,$methodID = NULL,$justValues=0) {
+	    $ci = &get_instance();
+
+	    $variables_table = get_table_name('Variables');
+		$units_table = get_table_name('Units');
+		$variableNameCV_table = get_table_name('variablenamecv');
+
+	    //run SQL query
+		$ci->db->select("VariableID, VariableCode, VariableName, ValueType, DataType, GeneralCategory, SampleMedium,vn.Definition,
+	   u1.UnitsName AS \"VariableUnitsName\", u1.UnitsType AS \"VariableUnitsType\", u1.UnitsAbbreviation AS \"VariableUnitsAbbreviation\", VariableUnitsID, NoDataValue, IsRegular, u2.UnitsName AS \"TimeUnitsName\", u2.UnitsType AS \"TimeUnitsType\", u2.UnitsAbbreviation AS \"TimeUnitsAbbreviation\", TimeUnitsID, TimeSupport, Speciation");
+		$ci->db->join($units_table." u1","v.VariableUnitsID = u1.UnitsID","LEFT");
+		$ci->db->join($units_table." u2","v.TimeUnitsID = u2.UnitsID");
+		$ci->db->join($variableNameCV_table." vn","v.VariableName = vn.Term");
+
+	    if (!is_null($varID)) {
+	    	$ci->db->where("VariableID",$varID);
+	    }
+
+	    $result = $ci->db->get($variables_table." v");
+	
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+	
+	    $retVal = '';
+		
+		//Just Processing the first Variable found. 
+		
+		$variablesResult = $result->result_array();
+		$variableOP = $variablesResult[0];
+		
+		if($justValues==1):
+		return $variableOP;
+		endif;
+		
+		
+		$methodsOP = db_GetMethodByIDWML2($methodID);
+		
+		//Genertaing ISO Time period from HIS Parameters
+		
+		$timeInterval = "P";
+		if ($variableOP['TimeUnitsType'] == "Time"):
+		$timeInterval.="T";
+		endif;
+		$unitISO = strtoupper($variableOP['TimeUnitsAbbreviation']);
+		$timeInterval.= $variableOP['TimeSupport'].$unitISO[0];
+		
+		
+		//To also add to the dictionary
+		
+		$dictEntry = '
+		<gml:dictionaryEntry>
+			<gml:Definition gml:id="'.$variableOP['VariableCode'].'">
+		
+				<gml:identifier codeSpace="http://hiscentral.cuahsi.org/wml/variable">'.$variableOP['VariableCode'].'</gml:identifier>
+				<gml:name codeSpace="http://hiscentral.cuahsi.org/ontology/">Unmapped</gml:name>
+				<gml:name codeSpace="http://hiscentral.cuahsi.org/wml/vocabulary/">'.$variableOP['VariableName'].'</gml:name>
+			</gml:Definition>
+		</gml:dictionaryEntry>';
+		
+		addToLocalDictionaryWML2("phenomena",$dictEntry);
+		
+		//Adding Method info to the dictionary
+		
+		$dictEntry = '
+		<gml:dictionaryEntry>
+		<gml:Definition gml:id="methodCode--'.$methodID.'">
+		<gml:identifier codeSpace="http://hiscentral.cuahsi.org/wml/method">'.$methodID.'</gml:identifier>
+		<gml:name codeSpace="http://hiscentral.cuahsi.org/wml/method">
+		'.$methodsOP['MethodDescription'].'
+		</gml:name>
+		</gml:Definition>
+		</gml:dictionaryEntry>';
+		
+		addToLocalDictionaryWML2("method",$dictEntry);
+		
+		$retVal= '<om:procedure>
+				<wml2:ObservationProcess gml:id="'.$variableOP['VariableName'].'-'.$variableOP['VariableID'].'">
+					<gml:description>'.$variableOP['Definition'].'</gml:description>
+					
+					<gml:identifier codeSpace="urn:cuashi/his/methodCode">'.$methodID.'</gml:identifier>
+					<wml2:processType xlink:href="http://www.opengis.net/def/waterml/2.0/processType/ManualMethod" xlink:title="'.$methodsOP['MethodDescription'].'" />
+					<wml2:aggregationDuration>'.$timeInterval.'</wml2:aggregationDuration>
+					<wml2:processReference xlink:href="'.$methodsOP['MethodLink'].'" xlink:title="'.$methodsOP['MethodDescription'].'" />
+					
+					<wml2:parameter>
+						<om:NamedValue>
+							<om:name xlink:title="valueType" xlink:href="valueType" />
+							<om:value xsi:type="xsd:string">'.$variableOP['ValueType'].'</om:value>
+						</om:NamedValue>
+					</wml2:parameter>
+					<wml2:parameter>
+						<om:NamedValue>
+							<om:name xlink:title="dataType" xlink:href="http://hiscentral.cuahsi.org/wml/dataType"/>
+							<om:value xsi:type="xsd:string">'.$variableOP['DataType'].'</om:value>
+						</om:NamedValue>
+					</wml2:parameter>
+					<wml2:parameter>
+						<om:NamedValue>
+							<om:name xlink:title="noDataValue" xlink:href="noDataValue" />
+							<om:value xsi:type="xsd:string">'.$variableOP['NoDataValue'].'</om:value>
+						</om:NamedValue>
+					</wml2:parameter>
+					<wml2:parameter>
+						<om:NamedValue>
+							<om:name xlink:title="sampleMedium" xlink:href="sampleMedium" />
+							<om:value xsi:type="xsd:string">'.$variableOP['SampleMedium'].'</om:value>
+						</om:NamedValue>
+					</wml2:parameter>
+					<wml2:parameter>
+						<om:NamedValue>
+							<om:name xlink:title="speciation" xlink:href="speciation" />
+							<om:value xsi:type="xsd:string">'.$variableOP['Speciation'].'</om:value>
+						</om:NamedValue>
+					</wml2:parameter>
+				</wml2:ObservationProcess>
+			</om:procedure>';
+		
+	    return $retVal;
+	}
+}
+
 if (!function_exists('db_GetValues')) {
 
 	function db_GetValues($siteCode, $variableCode, $beginTime, $endTime) {
@@ -1414,6 +1687,251 @@ if (!function_exists('db_GetValues')) {
 	}
 }
 
+if (!function_exists('db_GetResultWML2')) {
+
+	function db_GetResultWML2($siteCode, $variableCode, $beginTime, $endTime) {
+	    $ci = &get_instance();
+
+	    //first get the metadata
+		// implement sql query (because of complex query date range that too difficult if still using active record) with escape string to avoid from SQL injection
+		$querymeta = "SELECT SiteID, VariableID, MethodID, SourceID, QualityControlLevelID,BeginDateTime,EndDateTime, SampleMedium FROM " . get_table_name('SeriesCatalog');
+    	$querymeta .= " WHERE SiteCode = ? AND VariableCode = ? ";
+
+		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+			$querymeta .= " AND ( (BeginDateTime <= ? AND EndDateTime >= ? ) OR (BeginDateTime >= ? AND BeginDateTime <= ? ) OR (EndDateTime >= ? AND EndDateTime <= ?) )";
+  		}
+
+		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+			$arr_param = array($siteCode,$variableCode,$beginTime,$endTime,$beginTime,$endTime,$beginTime,$endTime);
+		} else {
+			$arr_param = array($siteCode,$variableCode);
+		}
+
+		$result = $ci->db->query($querymeta,$arr_param);
+	
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+	
+	    $numSeries = $result->num_rows();
+		$flag = 0;
+		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+		
+		$flag = 1; //Begintime end time specfied by user. 
+		}
+			
+	    if ($numSeries == 0) {
+		
+	        return '<wml2:observationMember><om:OM_Observation gml:id="HIS.TimeSeries"><wml2:MeasurementTimeseries gml:id="HIS.TS.1"/></om:OM_Observation></wml2:observationMember>';
+	    }
+	    else if ($numSeries == 1) {
+			
+			$retVal ='';
+					
+			$retVal .= '<wml2:observationMember>';
+		 	 $retVal .= ' <om:OM_Observation gml:id="HIS.TimeSeries">';
+		  
+		  
+			
+			$row = $result->row("0","array");
+			
+			if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {} else {
+				$beginTime=$row["BeginDateTime"];
+				$endTime=$row["EndDateTime"];
+			}
+			
+			//Creating observation Metadata
+			
+			$retVal .= generateObsMetadata($row["SourceID"],$row["SampleMedium"]);
+			
+			$beginDateTimeOP = date_create_from_format('Y-m-d H:i:s', $beginTime)->format('c');
+			$endDateTimeOP = date_create_from_format('Y-m-d H:i:s', $endTime)->format('c');
+			
+			$retVal .= '<om:phenomenonTime>
+							<gml:TimePeriod gml:id="phen_time-1">
+								<gml:beginPosition>'.$beginDateTimeOP.'</gml:beginPosition>
+								<gml:endPosition>'.$endDateTimeOP.'</gml:endPosition>
+							</gml:TimePeriod>
+						</om:phenomenonTime>
+						<om:resultTime>
+							<gml:TimeInstant gml:id="eor-1">
+								<gml:timePosition>'.$endDateTimeOP.'</gml:timePosition>
+							</gml:TimeInstant>
+						</om:resultTime>';
+			
+			$retVal .= db_GetVariableByCodeWML2($row["VariableID"],$row["MethodID"]);
+			
+			$retVal .= '<om:observedProperty xlink:href="#'.$variableCode.'" xlink:title="Unmapped"/>';
+
+			//Get Feature of interest
+			$siteInfo = db_GetSiteByCodeWML2($siteCode, 1);
+			$retVal .= '<om:featureOfInterest xlink:href="#site_'.$siteCode.'" xlink:title="'.$siteInfo['SiteName'].', '.$siteInfo['State'].'" />';
+	
+			$retVal .=  db_GetValues_OneSeriesWML2($row["SiteID"], $row["VariableID"], $row["MethodID"], $row["SourceID"], $row["QualityControlLevelID"], $beginTime, $endTime);
+			
+			 $retVal .= '</om:OM_Observation>';
+		  
+			$retVal .= '</wml2:observationMember>';
+			
+			return $retVal;		
+	        
+	    }
+	    else {
+			$i=0;
+			
+			$retVal ='';
+			
+			foreach ($result->result_array() as $row) {
+				$i+=1;	
+				$retVal .= '<wml2:observationMember>';
+				 $retVal .= ' <om:OM_Observation gml:id="HIS.TimeSeries.'.$i.'">';
+				
+				if ($flag!=1){
+					$beginTime=$row["BeginDateTime"];
+					$endTime=$row["EndDateTime"];
+				}
+				
+				//Creating observation Metadata
+				
+				$retVal .= generateObsMetadata($row["SourceID"],$row["SampleMedium"]);
+				
+				$beginDateTimeOP = date_create_from_format('Y-m-d H:i:s', $beginTime)->format('c');
+				$endDateTimeOP = date_create_from_format('Y-m-d H:i:s', $endTime)->format('c');
+				
+				$retVal .= '<om:phenomenonTime>
+								<gml:TimePeriod gml:id="phen_time-'.$i.'">
+									<gml:beginPosition>'.$beginDateTimeOP.'</gml:beginPosition>
+									<gml:endPosition>'.$endDateTimeOP.'</gml:endPosition>
+								</gml:TimePeriod>
+							</om:phenomenonTime>
+							<om:resultTime>
+								<gml:TimeInstant gml:id="eor-'.$i.'">
+									<gml:timePosition>'.$endDateTimeOP.'</gml:timePosition>
+								</gml:TimeInstant>
+							</om:resultTime>';
+				
+				$retVal .= db_GetVariableByCodeWML2($row["VariableID"],$row["MethodID"]);
+				
+				$retVal .= '<om:observedProperty xlink:href="#'.$variableCode.'" xlink:title="Unmapped"/>';
+	
+				//Get Feature of interest
+				$siteInfo = db_GetSiteByCodeWML2($siteCode, 1);
+					$retVal .= '<om:featureOfInterest xlink:href="#site_'.$siteCode.'" xlink:title="'.$siteInfo['SiteName'].', '.$siteInfo['State'].'" />';
+				
+				$retVal .=  db_GetValues_OneSeriesWML2($row["SiteID"], $row["VariableID"], $row["MethodID"], $row["SourceID"], $row["QualityControlLevelID"], $beginTime, $endTime);
+				
+				 $retVal .= '</om:OM_Observation>';
+			  
+				$retVal .= '</wml2:observationMember>';
+			
+			
+			}
+			
+	        return $retVal;
+	    }
+	}
+}
+
+if (!function_exists('generateObsMetadata')) {
+
+	function generateObsMetadata($sourceID=NULL,$sampleMedium = "Unknown") {
+		
+		$sourceInfo = db_GetSourceByID($sourceID,1);
+		$metadataInfo = db_GetISOMetadataByID($sourceInfo['MetadataID']);
+		
+		$retVal = '<om:metadata>
+					<wml2:ObservationMetadata>
+						<gmd:contact gco:nilReason="inapplicable"/>
+						<gmd:dateStamp gco:nilReason="inapplicable"/>
+						<gmd:locale>
+							<gmd:PT_Locale>
+								<gmd:languageCode>
+									<gmd:LanguageCode codeList="LanguageCode" codeListValue="EN-US">English-United States</gmd:LanguageCode>
+								</gmd:languageCode>
+								<gmd:characterEncoding>
+									<gmd:MD_CharacterSetCode codeList="MD_CharacterSetCode" codeListValue="utf8">UTF 8</gmd:MD_CharacterSetCode>
+								</gmd:characterEncoding>
+							</gmd:PT_Locale>
+						</gmd:locale>';
+						
+						
+		$retVal .= '<gmd:identificationInfo><gmd:MD_DataIdentification id="source_'.$sourceID.'">
+					<gmd:citation>
+						<gmd:CI_Citation>
+							<gmd:title>
+								<gco:CharacterString>
+								'.$sourceInfo['Citation'].'
+								</gco:CharacterString>
+							</gmd:title>
+						<gmd:date gco:nilReason="inapplicable"/>
+						</gmd:CI_Citation>
+					</gmd:citation>
+					<gmd:abstract>
+						<gco:CharacterString>
+							'.$metadataInfo['Abstract'].'
+						</gco:CharacterString>
+					</gmd:abstract>
+					<gmd:pointOfContact>
+						<gmd:CI_ResponsibleParty>
+							<gmd:individualName>
+								<gmd:LocalisedCharacterString locale="#EN-US">'.$sourceInfo['ContactName'].'</gmd:LocalisedCharacterString>
+							</gmd:individualName>
+							<gmd:organisationName>
+								<gmd:LocalisedCharacterString locale="#EN-US">
+									'.$sourceInfo['Organization'].'
+								</gmd:LocalisedCharacterString>
+							</gmd:organisationName>
+							<gmd:contactInfo>
+								<gmd:CI_Contact>
+									<gmd:phone>
+										<gmd:CI_Telephone>
+											<gmd:voice>
+												<gco:CharacterString>'.$sourceInfo['Phone'].'</gco:CharacterString>
+											</gmd:voice>
+										</gmd:CI_Telephone>
+									</gmd:phone>
+									<gmd:address>
+										<gmd:CI_Address>
+											<gmd:deliveryPoint>
+												<gco:CharacterString>'.$sourceInfo['Address'].'</gco:CharacterString>
+											</gmd:deliveryPoint>
+											<gmd:electronicMailAddress>
+												<gco:CharacterString>'.$sourceInfo['Email'].'</gco:CharacterString>
+											</gmd:electronicMailAddress>
+										</gmd:CI_Address>
+									</gmd:address>
+									<gmd:onlineResource>
+										<gmd:CI_OnlineResource>
+											<gmd:linkage>
+												<gmd:URL>'.$sourceInfo['SourceLink'].'</gmd:URL>
+											</gmd:linkage>
+										</gmd:CI_OnlineResource>
+									</gmd:onlineResource>
+								</gmd:CI_Contact>
+							</gmd:contactInfo>
+							<gmd:role>
+							<gmd:CI_RoleCode codeList="ISOTC211/19115" codeSpace="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="principalInvestigator"/>
+							</gmd:role>
+						</gmd:CI_ResponsibleParty>
+					</gmd:pointOfContact>
+					<gmd:language>
+					<gco:CharacterString>EN-US</gco:CharacterString>
+					</gmd:language>
+					</gmd:MD_DataIdentification>
+					</gmd:identificationInfo>';
+
+		$retVal .= '<wml2:sampledMedium xlink:href="http://hiscentral.cuahsi.org/wml/sampledMedium" xlink:title="'.$sampleMedium.'"/>';						
+		$retVal .= '</wml2:ObservationMetadata>
+				</om:metadata>';
+				
+		return $retVal;
+		
+	}
+	
+}
+
+
 if (!function_exists('db_GetValues_OneSeries')) {
 
 	function db_GetValues_OneSeries($siteID, $variableID, $methodID, $sourceID, $qcID, $beginTime, $endTime) {
@@ -1456,6 +1974,114 @@ if (!function_exists('db_GetValues_OneSeries')) {
 	    $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
 	
 	    $retVal .= "</values>";
+	
+	    return $retVal;
+	}
+}
+
+if (!function_exists('db_GetValues_OneSeriesWML2')) {
+
+	function db_GetValues_OneSeriesWML2($siteID, $variableID, $methodID, $sourceID, $qcID, $beginTime, $endTime) {
+	    $ci = &get_instance();
+
+	    $data_values_table = get_table_name('DataValues');
+	    $samples_table = get_table_name('Samples');
+		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.DataValue, s.LabSampleCode");
+		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
+		$ci->db->where("d.SiteID",$siteID);
+		$ci->db->where("d.VariableID",$variableID);
+		$ci->db->where("d.MethodID",$methodID);
+		$ci->db->where("d.SourceID",$sourceID);
+		$ci->db->where("d.QualityControlLevelID",$qcID);
+	
+		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+			$ci->db->where("d.LocalDateTime >=",$beginTime);
+			$ci->db->where("d.LocalDateTime <=",$endTime);
+	    }
+
+	    $result = $ci->db->get($data_values_table." d");
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+		$retVal = '<om:result><wml2:MeasurementTimeseries gml:id="HIS.TS.1">';
+		
+		$beginDateTimeOP = date_create_from_format('Y-m-d H:i:s', $beginTime)->format('c');
+		$endDateTimeOP = date_create_from_format('Y-m-d H:i:s', $endTime)->format('c');
+		
+		
+		$retVal.= '<wml2:metadata>
+					<wml2:MeasurementTimeseriesMetadata>
+					  <wml2:temporalExtent>
+						  <gml:TimePeriod gml:id="time-period.1">
+							  <gml:beginPosition>'.$beginDateTimeOP.'</gml:beginPosition>
+							  <gml:endPosition>'.$endDateTimeOP.'</gml:endPosition>
+						  </gml:TimePeriod>
+					  </wml2:temporalExtent>
+				  </wml2:MeasurementTimeseriesMetadata>
+				  </wml2:metadata>';
+		
+		
+		$methodInfo = db_GetMethodByIDWML2($methodID);
+		
+		$variableInfo = db_GetVariableByCodeWML2($variableID,$methodID,1);
+		
+		//Genertaing ISO Time period from HIS Parameters
+		$timeInterval = "P";
+		if ($variableInfo['TimeUnitsType'] == "Time"):
+		$timeInterval.="T";
+		endif;
+		$unitISO = strtoupper($variableInfo['TimeUnitsAbbreviation']);
+		$timeInterval.= $variableInfo['TimeSupport'].$unitISO[0];
+		
+		//Define Default Point Metadata
+		
+		$retVal .= '<wml2:defaultPointMetadata>
+						<wml2:DefaultTVPMeasurementMetadata>
+						<wml2:quality xlink:href="http://www.opengis.net/def/waterml/2.0/quality/good" xlink:title="not censored"/>'.
+						'<wml2:qualifier>
+							<swe:Text definition="#methodCode--'.$methodID.'">
+								<swe:value>
+								'.$methodInfo['MethodDescription'].'
+								</swe:value>
+							</swe:Text>
+						</wml2:qualifier>'.
+						db_GetQualityControlLevelByIDWML2($qcID).
+						'<wml2:source xlink:href="#'.$sourceID.'"/>'.
+						'<wml2:uom code="'.$variableInfo['VariableUnitsAbbreviation'].'"/>
+						<wml2:interpolationType xlink:href="http://his.cuahsi.org/cv/dataType/'.$variableInfo['DataType'].'" xlink:title="'.$variableInfo['DataType'].'"/>
+						<wml2:aggregationDuration>'.$timeInterval.'</wml2:aggregationDuration>'.
+						'</wml2:DefaultTVPMeasurementMetadata>
+					</wml2:defaultPointMetadata>';
+		
+		//Adding censor code data to dictionary
+		
+			$dictEntry = '
+		<gml:dictionaryEntry>
+		<gml:Definition gml:id="censorCode-nc">
+		<gml:identifier codeSpace="http://hiscentral.cuahsi.org/wml/censored">nc</gml:identifier>
+		<gml:name codeSpace="http://hiscentral.cuahsi.org/wml/censored">not censored</gml:name>
+		</gml:Definition>
+		</gml:dictionaryEntry>';
+		
+		addToLocalDictionaryWML2("censorCode",$dictEntry);
+		
+		//Printing Values
+		
+		foreach ($result->result_array() as $row) {
+			
+			$dateOP = date_create_from_format('Y-m-d H:i:s', $row['DateTimeUTC'])->setTimezone(new DateTimeZone('UTC'))->format('c');
+	        $retVal .= '<wml2:point>
+							<wml2:MeasurementTVP>
+								<wml2:time>'.$dateOP.'</wml2:time>
+								<wml2:value>'.$row['DataValue'].'</wml2:value>
+						</wml2:MeasurementTVP>
+				</wml2:point>
+				';
+	    }
+		
+		$retVal.= '</wml2:MeasurementTimeseries></om:result>';
+
 	
 	    return $retVal;
 	}
@@ -1513,6 +2139,57 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 	}
 }
 
+if (!function_exists('db_GetQualityControlLevelByIDWML2')) {
+
+	function db_GetQualityControlLevelByIDWML2($qcID) {
+	    $ci = &get_instance();
+
+    	$qc_table = get_table_name("QualityControlLevels");
+
+		$ci->db->select("QualityControlLevelCode, Definition, Explanation");
+		$ci->db->where("QualityControlLevelID",$qcID);
+
+	    $result = $ci->db->get($qc_table);
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+	
+	    $row = $result->row("0","array");
+		//To also add to the dictionary
+		
+		$dictEntry = '
+		<gml:dictionaryEntry>
+			<gml:Definition gml:id="qclevel-'.$row["QualityControlLevelCode"].'">
+				  <gml:identifier codeSpace="http://hiscentral.cuahsi.org/wml/qualityControlLevelCode">'.$row["QualityControlLevelCode"].'</gml:identifier>
+				  <gml:name codeSpace="http://hiscentral.cuahsi.org/wml/qualityControlLevelCode">'.$row["Definition"].'</gml:name>
+				  <gml:remarks>'.$row["Explanation"].'</gml:remarks>
+			</gml:Definition>
+      </gml:dictionaryEntry>';
+		
+		addToLocalDictionaryWML2("quality",$dictEntry);
+		
+		$retVal = '<wml2:processing xlink:href="http://hiscentral.cuahsi.org/wml/qualityControl'.$row["QualityControlLevelCode"].'" xlink:title="'.$row["Definition"].'" />';
+	    return $retVal;
+	}
+}
+
+if (!function_exists('addToLocalDictionaryWML2')) {
+
+	function addToLocalDictionaryWML2($dict,$dictEntry) {
+		
+		//Maintains the dictionary for building the local dictionary at the end
+		global $dictionary;
+
+		if (array_key_exists($dict,$dictionary)):
+			$dictionary[$dict][] = $dictEntry;
+		else:
+			$dictionary[$dict] =array($dictEntry);
+		endif;
+		
+	}
+}
+
 if (!function_exists('db_GetQualityControlLevelByID')) {
 
 	function db_GetQualityControlLevelByID($qcID) {
@@ -1563,13 +2240,53 @@ if (!function_exists('db_GetMethodByID')) {
 	}
 }
 
+if (!function_exists('db_GetMethodByIDWML2')) {
+
+	function db_GetMethodByIDWML2($methodID) {
+	    $ci = &get_instance();
+
+	    $method_table = get_table_name("Methods");
+		$ci->db->select("MethodDescription, MethodLink");
+		$ci->db->where("MethodID",$methodID);
+
+	    $result = $ci->db->get($method_table);
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+	
+	    $row = $result->row("0","array");
+	    return $row;
+	}
+}
+
+if (!function_exists('db_GetISOMetadataByID')) {
+
+	function db_GetISOMetadataByID($metadataID) {
+	    $ci = &get_instance();
+
+	    $metadata_table = get_table_name('isometadata');
+		$ci->db->where("MetadataID",$metadataID);
+
+	    $result = $ci->db->get($metadata_table);
+	    if (!$result) {
+	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
+	            $ci->db->_error_message() . "</p>");
+	    }
+	    $row = $result->row("0","array");
+	
+		return $row;
+		
+	}
+}
+
 if (!function_exists('db_GetSourceByID')) {
 
-	function db_GetSourceByID($sourceID) {
+	function db_GetSourceByID($sourceID,$justValues = 0) {
 	    $ci = &get_instance();
 
 	    $sources_table = get_table_name('Sources');
-		$ci->db->select("Organization, SourceDescription, ContactName, Phone, Email, Address, City, State, ZipCode, SourceLink, Citation");
+		$ci->db->select("Organization, SourceDescription, ContactName, Phone, Email, Address, City, State, ZipCode, SourceLink, Citation, MetadataID");
 		$ci->db->where("SourceID",$sourceID);
 
 	    $result = $ci->db->get($sources_table);
@@ -1578,6 +2295,10 @@ if (!function_exists('db_GetSourceByID')) {
 	            $ci->db->_error_message() . "</p>");
 	    }
 	    $row = $result->row("0","array");
+	
+		if ($justValues ==1):
+		return $row;
+		endif;
 	
 	    $retVal = '<source sourceID="' . $sourceID . '">';
 	    $retVal .= "<sourceCode>" . $sourceID . "</sourceCode>";
@@ -1597,3 +2318,27 @@ if (!function_exists('db_GetSourceByID')) {
 	}
 }
 //end of re-write from wof_read_db
+
+if (!function_exists('genDictsWML2')) {
+
+	function genDictsWML2() {
+	  
+	  	global $dictionary;
+		
+		$retVal = '';
+		
+		foreach ($dictionary as $dictName => $dictEntries):
+		
+			$retVal .= '<wml2:localDictionary><gml:Dictionary gml:id="'.$dictName.'">
+						<gml:identifier codeSpace="http://hiscentral.cuahsi.org/waterml2/dictionaries/">'.$dictName.'</gml:identifier>';
+			foreach (array_unique($dictEntries) as $dictEntry):
+				$retVal .=$dictEntry;
+			endforeach;
+			$retVal .='</gml:Dictionary></wml2:localDictionary>';
+		endforeach;
+	  
+	  
+	  
+	    return $retVal;
+	}
+}

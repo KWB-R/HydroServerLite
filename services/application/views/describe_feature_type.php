@@ -5,7 +5,8 @@
 		   xmlns='http://www.w3.org/2001/XMLSchema' 
 		   xmlns:gml='http://www.opengis.net/gml' elementFormDefault='qualified' version='1.0'>
 	<xs:import namespace='http://www.opengis.net/gml' schemaLocation='http://schemas.opengis.net/gml/2.1.2/feature.xsd'/>
-	<xs:element name='hydro_site' type='tows:hydro_siteType' substitutionGroup='gml:_Feature' />
+
+	
 	<xs:complexType name='hydro_siteType'>
 		<xs:complexContent>
 			<xs:extension base='gml:AbstractFeatureType'>
@@ -18,7 +19,8 @@
 					</xs:element>    
 					<xs:element name ='lon' type='double' nillable='true' minOccurs='0' maxOccurs='1'/>
 					<xs:element name ='lat' type='double' nillable='true' minOccurs='0' maxOccurs='1'/>
-					<xs:element name ='watermlurl' nillable='false' minOccurs='1' maxOccurs='1'/>
+					<xs:element name ='waterml2url' nillable='false' minOccurs='1' maxOccurs='1'/>
+                    <xs:element name ='watermlurl' nillable='false' minOccurs='1' maxOccurs='1'/>
 					<xs:element name ='graphurl' nillable='false' minOccurs='0' maxOccurs='1'/>
 					<xs:element name ='downloadurl' nillable='false' minOccurs='0' maxOccurs='1'/>
 					<xs:element name ='begindate' nillable='false' minOccurs='1' maxOccurs='1'/>
@@ -30,4 +32,5 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:element name='hydro_site' type='tows:hydro_siteType' substitutionGroup='gml:_Feature' />
 </xs:schema>

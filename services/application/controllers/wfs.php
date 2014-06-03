@@ -12,47 +12,206 @@ class Wfs extends CI_Controller
 	{
 		// TO DO: check to see the conditions of the different attribute
 		// what to display and when to display
-		
-		if( ($this->input->get('request') == 'GetFeature') || ($this->input->get('REQUEST') == 'GetFeature') || ($this->input->post('request') == 'GetFeature') || ($this->input->post('REQUEST') == 'GetFeature') )
+		header('Content-Type:text/xml; charset=UTF-8', TRUE);
+	
+		if( $this->input->get('version') == NULL && $this->input->post('version') == NULL && $this->input->get('VERSION') == NULL && $this->input->post('VERSION') == NULL)
 		{
-			if( $this->input->get('VariableID') != NULL || strlen($this->input->get('VariableID')) > 0 )
-			{
-				$variableID	= $this->input->get('VariableID');
-				$features	= $this->wfs_model->get_features( $variableID );
-			}
-			else
-			{
-				//by default we choose a variable to display the features
-				$features	= $this->wfs_model->get_features( 1 );
-			}
-			header('Content-Type:text/xml; charset=UTF-8', TRUE);
-
-			$data['features'] = $features;
-			$data['variableID'] = $variableID;
-			
-			$this->load->view('get_feature', $data);
-		}
-		else if(($this->input->get('request') == 'DescribeFeatureType') || ($this->input->get('REQUEST') == 'DescribeFeatureType') || ($this->input->post('request') == 'DescribeFeatureType') || ($this->input->post('REQUEST') == 'DescribeFeatureType'))
-		{
-			header('Content-Type:text/xml; charset=UTF-8', TRUE);
-			
-			$this->load->view('describe_feature_type');		 
-		}
-		else if(($this->input->get('request') == 'GetCapabilities') || ($this->input->get('REQUEST') == 'GetCapabilities') || ($this->input->post('request') == 'GetCapabilities') || ($this->input->post('REQUEST') == 'GetCapabilities'))
-		{
-			header('Content-Type:text/xml; charset=UTF-8', TRUE);
-			
-			$varid = $this->input->get('VariableID') ? $this->input->get('VariableID') : 1;
-			$data['variableID'] = $varid;
-			$data['bbox']		= $this->wfs_model->get_boundingbox($varid);
-			
-			$this->load->view('get_capabilities', $data);
+			//No version found
+			$version = "2.0.0";
 		}
 		else
 		{
+		
+			if ($this->input->get('version'))
+				$version=$this->input->get('version');
+			if ($this->input->post('version'))
+				$version=$this->input->post('version');
+			if ($this->input->get('VERSION'))
+				$version=$this->input->get('VERSION');
+			if ($this->input->post('VERSION'))
+				$version=$this->input->post('VERSION');
+
+		}
+		
+		//Get The Request
+		
+			if( $this->input->get('request') == NULL && $this->input->post('request') == NULL && $this->input->get('REQUEST') == NULL && $this->input->post('REQUEST') == NULL)
+		{
+			//No request found
 			header('Content-Type:text/xml; charset=UTF-8', TRUE);
 			$this->load->view('request_error');
+			return;
 		}
+		else
+		{
+		
+			if ($this->input->get('request'))
+				$request=$this->input->get('request');
+			if ($this->input->post('request'))
+				$request=$this->input->post('request');
+			if ($this->input->get('REQUEST'))
+				$request=$this->input->get('REQUEST');
+			if ($this->input->post('REQUEST'))
+				$request=$this->input->post('REQUEST');
+
+		}
+	
+		//Get stored Query if exists and verify if this query has been defined. 
+		
+		$definedQuery = "urn:ogc:def:query:OGC-WFS::GetFeatureById";
+		
+			
+		//Get The Request
+		
+			if( $this->input->get('STOREDQUERY_ID') == NULL && $this->input->post('STOREDQUERY_ID') == NULL)
+		{
+			//No stored query id found
+			$queryID = NULL;
+		}
+		else
+		{
+		
+			if ($this->input->get('STOREDQUERY_ID'))
+				$queryID=$this->input->get('STOREDQUERY_ID');
+			if ($this->input->post('STOREDQUERY_ID'))
+				$queryID=$this->input->post('STOREDQUERY_ID');
+			
+			if($queryID != $definedQuery):
+				$this->load->view('get_feature_error'); return;
+			endif;
+			
+			$id=NULL;
+			
+			if ($this->input->get('ID'))
+				$id=$this->input->get('ID');
+			if ($this->input->post('ID'))
+				$id=$this->input->post('ID');
+				
+			if ($id==NULL):
+				$this->load->view('get_feature_error'); return;
+			endif;
+			
+		}
+		
+		
+	
+		switch($request):
+		
+		//Query for stored
+		case 'GETFEATURES':
+		case 'GETFEATURE':
+		case 'GetFeatures':
+		case 'GetFeature':
+			//Get TypeNames from the URL, if no type name specified load the error view: 
+			
+			if( $this->input->get('typeNames') == NULL && $this->input->post('typeNames') == NULL && $this->input->get('TYPENAME') == NULL && $this->input->post('TYPENAME') == NULL)
+			{
+				//No typename Found
+				if (!($queryID && $id!=NULL)):
+				$this->load->view('get_feature_error'); return;
+				endif;
+				$typeNames  = "dumb_1";
+			}
+			else
+			{
+			
+				if ($this->input->get('typeNames'))
+					$typeNames=$this->input->get('typeNames');
+				if ($this->input->post('typeNames'))
+					$typeNames=$this->input->post('typeNames');
+				if ($this->input->get('TYPENAME'))
+					$typeNames=$this->input->get('TYPENAME');
+				if ($this->input->post('TYPENAME'))
+					$typeNames=$this->input->post('TYPENAME');
+
+			}
+			
+			//Version can be entered as two different parameters , determining the version here...if not specified it will be set to version 2.0.0
+			
+			//Assuming here that only one typename is being passed. Getting the variable code outofit
+
+		  $parts=explode("_",$typeNames);
+		  
+		  $variableID =1; 
+
+		  if (count($parts)>1)
+		  {
+			  $variableID=$parts[count($parts)-1];
+		  }
+			
+			$data['variableID'] = $variableID;
+			
+			//If query defined and Id is not null
+			
+			if ($queryID && $id!=NULL):
+			
+			//We are directly fetching the site. We don't need the variable id. 
+			
+			$data['features'] = array_slice($this->wfs_model->get_feature_SQ( $id ), 0, 1);
+			$data['bounding'] = 	$this->wfs_model->get_boundingbox_SQ( $id );
+			
+			else:
+			
+				$data['features'] = $this->wfs_model->get_features( $variableID );
+				$data['bounding'] = $this->wfs_model->get_boundingbox( $variableID );
+			
+			endif;
+			
+			switch($version):
+					case '1.0.0' : $this->load->view('get_feature', $data); break;
+					case '2.0.0' : $this->load->view('get_feature_v2', $data); break;
+					default : //Defaulting to version 2.0.0
+						 $this->load->view('get_feature_v2', $data); break;
+				endswitch;
+		
+		
+		break;
+		case 'DescribeFeatureType':
+	
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			
+			switch($version):
+				case '1.0.0' : $this->load->view('describe_feature_type'); break;
+				case '2.0.0' : $this->load->view('describe_feature_type_v2'); break;
+				default : //Defaulting to version 2.0.0
+					 $this->load->view('describe_feature_type_v2'); break;
+			endswitch;
+
+		break;
+		case 'GetCapabilities':
+		
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			$data['variables']  = $this->wfs_model->get_features_all();		
+				
+			//Adding Version Control Here. To enable support for Version 2.0.0 since as of now it doesnt matter which version is being used. 
+			switch($version):
+				case '1.0.0' : $this->load->view('get_capabilities', $data); break;
+				case '2.0.0' : $this->load->view('get_capabilities_v2', $data); break;
+				default : //Defaulting to version 2.0.0
+					 $this->load->view('get_capabilities_v2', $data); break;
+			endswitch;
+
+		break;
+		case 'DescribeStoredQueries':
+		
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			//This feature only exists in version 2.0.0, so no support for version 1.0.0
+			$this->load->view('dec_stored_queries'); 
+			
+		break;
+		
+		case 'ListStoredQueries':
+		
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			//This feature only exists in version 2.0.0, so no support for version 1.0.0
+			$this->load->view('list_stored_queries'); 
+		break;
+
+		default:
+			header('Content-Type:text/xml; charset=UTF-8', TRUE);
+			$this->load->view('request_error');
+		endswitch;
+		
 	}
 	
 	function variables()

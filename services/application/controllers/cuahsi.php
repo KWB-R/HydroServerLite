@@ -168,6 +168,8 @@ class Cuahsi extends CI_Controller {
 	public function GetValues()
 	{
 		if ($this->validate_token()) {
+			
+			
 			if (!isset($_REQUEST['location'])) {
 	            echo "Missing parameter: location";
 	            exit;
@@ -176,14 +178,38 @@ class Cuahsi extends CI_Controller {
 	            echo "Missing parameter: variable";
 	            exit;
 	        }
+
+			
 	        $location = $_REQUEST["location"];
 	        $variable = $_REQUEST["variable"];
 	        $startDate = isset($_REQUEST["startDate"])? $_REQUEST["startDate"]:"";
 	        $endDate = isset($_REQUEST["endDate"])? $_REQUEST["endDate"]:"";
-	        write_XML_header();
-	        echo '<string>';
-	        echo htmlspecialchars(wof_GetValues($location, $variable, $startDate, $endDate));
-	        echo "</string>";
+	        
+			//Adding Version checking here to enable support for WaterML 2.0. Note : Only function changed is the Get_Values operation. Maybe some day all the WaterOneFlow services
+			//will be upgraded to WaterML 2.0 . But until then , just this is supported. This is the data service endpoint that will be served to the users of WFS services. 
+			
+			if(!isset($_REQUEST['version']))
+			{
+				//No version found defaulting to 2
+				$version = "2.0";
+			}
+			else
+			{
+				$version=$_REQUEST['version'];
+			}
+			
+			write_XML_header();
+			
+			if($version=="2.0"):
+				global $dictionary;
+				$dictionary = array();
+				echo wof_GetValues_2($location, $variable, $startDate, $endDate);
+			else:
+				echo '<string>';
+				echo htmlspecialchars(wof_GetValues($location, $variable, $startDate, $endDate));
+				echo "</string>";
+			endif;
+			
 	        exit;
    		}
 	}

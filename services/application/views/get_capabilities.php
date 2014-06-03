@@ -2,7 +2,7 @@
 xmlns="http://www.opengis.net/wfs"
 xmlns:ogc="http://www.opengis.net/ogc"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://www.opengis.net/wfs http://wfs.plansystem.dk:80/geoserver/schemas/wfs/1.0.0/WFS-capabilities.xsd">
+xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/wfs.xsd">
    <Service>
 		<Name>WebFeatureServer</Name>
 		<Title>HydroServerLite WFS</Title>
@@ -37,7 +37,7 @@ xsi:schemaLocation="http://www.opengis.net/wfs http://wfs.plansystem.dk:80/geose
             </DCPType>
             <DCPType>
 			   <HTTP>
-				  <Post onlineResource="<?php echo base_url('indexp.php/wfs/write_xml'); ?>"/>
+				  <Post onlineResource="<?php echo base_url('index.php/wfs/write_xml'); ?>"/>
 			   </HTTP>
             </DCPType>
          </DescribeFeatureType>
@@ -80,18 +80,20 @@ xsi:schemaLocation="http://www.opengis.net/wfs http://wfs.plansystem.dk:80/geose
 			<Update/>
 			<Delete/>
 		</Operations>
-    <?php
-    
-	//	 STANDARD NAME/TITLE/ABSTRACT attributes for features	
-	echo "<FeatureType>\n";
-	echo "<Name>" . 'hydroserver-' . $bbox->VariableID . "</Name>\n";
-	echo "<Title>" . $bbox->VariableName . "</Title>\n";
-	echo "<SRS>EPSG:4326</SRS>\n";
-	echo "<Keywords>" . $bbox->SampleMedium . "</Keywords>\n";
-	echo "<LatLongBoundingBox minx='$bbox->xmin' miny='$bbox->ymin' maxx='$bbox->xmax' maxy='$bbox->ymax' ></LatLongBoundingBox>\n";
-	echo "<Abstract></Abstract>\n";
-	echo "</FeatureType>\n";	
+      <?php
+	
+	foreach ($variables as $variable):
+		echo "<FeatureType>\n";
+			echo "<Name>hydroserver_$variable->VariableID"."</Name>";
+			echo "<Title>Variable Code:$variable->VariableCode</Title>\n";
+			echo "<Abstract>Variable Data Type: $variable->DataType</Abstract>\n";
+			echo "<SRS>EPSG:4326</SRS>\n";
+			echo "<Keywords>" . $variable->SampleMedium . "</Keywords>\n";
+			echo "<LatLongBoundingBox minx='$variable->xmin' miny='$variable->ymin' maxx='$variable->xmax' maxy='$variable->ymax' ></LatLongBoundingBox>\n";	
+		echo "</FeatureType>\n";
+	endforeach;
 	
     ?>
+    
 	</FeatureTypeList>
 </WFS_Capabilities>
