@@ -141,7 +141,7 @@ if (!function_exists('RunService')) {
   				echo "HTTP/1.0 500 Internal Server Error";
 			}
 		} else {
-  			header("Content-Type: text/html");
+  			header('Content-Type: text/html');
   			$asmx_file_name = APPPATH.'views/asmx_page.html';
   			header("Content-Length: " . filesize($asmx_file_name));
   			header("File-Name: " . $asmx_file_name);
@@ -169,13 +169,13 @@ if (!function_exists('get_random_site')) {
 		if ($siteSC->num_rows() > 0) {
 			$where = '';
 		    foreach ($siteSC->result_array() as $row) {
-		        $where .= '"' . $row["SiteID"] . '",';
+		        $where .= '"' . $row['SiteID'] . '",';
 		    }
 		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
 	    }
 
 		$ci->db->distinct();
-		$ci->db->select("SiteCode");
+		$ci->db->select('SiteCode');
 
 		if (isset($whereID)) {
 			$ci->db->where("SiteID IN",$whereID,FALSE);
@@ -346,7 +346,7 @@ if (!function_exists('wof_read_site_array')) {
 if (!function_exists('wof_GetShortSiteCode')) {
 	//given a full site code NETWORK:CODE returns the CODE part
 	function wof_GetShortSiteCode($full_site_code) {  
-  		return substr($full_site_code, strpos($full_site_code, ':') + 1);
+		return substr($full_site_code, strpos($full_site_code, ':') + 1);
 	}
 }
 
@@ -356,6 +356,14 @@ if (!function_exists('wof_GetSiteNetwork')) {
   		return substr($full_site_code, 0, strpos($full_site_code, ':'));
 	}
 }
+
+if (!function_exists('wof_GetShortVariableCode')) {
+    //given a full variable code VOCABULARY:CODE returns the CODE part
+	function wof_GetShortVariableCode($full_variable_code) {
+	    return substr($full_variable_code, strpos($full_variable_code, ':') + 1);
+	}
+}
+
 
 if (!function_exists('wof_start')) {
 	//this function writes the header, the xml declaration and the SOAP:Envelope elements
@@ -490,8 +498,13 @@ if (!function_exists('wof_GetSiteInfoByCode')) {
 	function wof_GetSiteInfoByCode($sitecode, $includeSeriesCatalog) {
   		$split = explode(":", $sitecode);
   		$shortcode = $split[1]; 
-  		$retVal = "<site>";
-  		$retVal .= db_GetSiteByCode($shortcode);
+		$arrcodes = array();
+		$arrcodes[] = $shortcode;
+  		$retVal = '<site>';
+		$arrsites = db_GetSites('siteInfo','',$arrcodes);
+		foreach($arrsites as $site_xml) {
+		    $retVal .= $site_xml;
+		}
  
   		if ($includeSeriesCatalog) {
     		$retVal .=  db_GetSeriesCatalog($shortcode);
@@ -511,11 +524,16 @@ if (!function_exists('wof_GetSiteInfo')) {
   		$retVal .= $fullSiteCode;
   		$retVal .= '" /></criteria></queryInfo>';
  
-  		$split = explode(":", $fullSiteCode);
+  		$split = explode(':', $fullSiteCode);
   		$shortcode = $split[1];
+		$arrcodes = array();
+		$arrcodes[] = $shortcode;
 
-  		$retVal .= "<site>";
-  		$retVal .= db_GetSiteByCode($shortcode, "siteInfo", "");
+  		$retVal .= '<site>';
+		$arrsites = db_GetSites('siteInfo', '', $arrcodes);
+		foreach($arrsites as $site_xml) {
+		    $retVal .= $site_xml;
+		}
   		$retVal .= db_GetSeriesCatalog($shortcode);
   		$retVal .= '</site>';
   		$retVal .= '</sitesResponse>';
@@ -533,12 +551,17 @@ if (!function_exists('wof_GetSiteInfo_REST')) {
   		$retVal .= $fullSiteCode;
   		$retVal .= '" /></criteria></queryInfo>';
 
-  		$split = explode(":", $fullSiteCode);
+  		$split = explode(':', $fullSiteCode);
   		$shortcode = $split[1];
+		$arrcodes = array();
+		$arrcodes[] = $shortcode;
 
   		$retVal .= "<site>";
   		$xsi = 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/';
-  		$retVal .= db_GetSiteByCode($shortcode, "siteInfo", $xsi);
+		$arrsites = db_GetSites('siteInfo', $xsi, $arrcodes);
+		foreach($arrsites as $site_xml) {
+  		    $retVal .= $site_xml;
+		}
   		$retVal .=  db_GetSeriesCatalog($shortcode);
   		$retVal .= '</site>';
   		$retVal .= '</sitesResponse>';
@@ -567,7 +590,19 @@ if (!function_exists('wof_GetSites')) {
 	function wof_GetSites($site = NULL) {
   		$retVal = '<sitesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/">';
   		$retVal .= wof_queryInfo_GetSites($site);
-  		$retVal .= db_GetSites($site);
+		//TODO check short/long code of site
+		$arrcodes = array();
+		foreach($site as $longcode) {
+		    if (isset($longcode)) {
+		        $arrcodes[] = wof_GetShortSiteCode($longcode);
+		    }
+		}
+		$my_sites = db_GetSites('siteInfo','',$arrcodes);
+		foreach($my_sites as $site_xml) {
+		    $retVal .= '<site>';
+		    $retVal .= $site_xml;
+			$retVal .= '</site>';
+		}
   		$retVal .= '</sitesResponse>';
   		return $retVal;
 	}
@@ -579,7 +614,12 @@ if (!function_exists('wof_GetSitesByBox')) {
   		//TODO add support for IncludeSeries (now assumed FALSE)
   		$retVal = '<sitesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/">';
   		$retVal .= wof_queryInfo_SitesByBox($north, $south, $east, $west, $IncludeSeries);
-  		$retVal .= db_GetSitesByBox($west, $south, $east, $north);
+		$my_sites = db_GetSites('site', '', array(),NULL, $west, $south, $east, $north);
+		foreach($my_sites as $site_xml) {
+		    $retVal .= '<site>';
+		    $retVal .= $site_xml;
+			$retVal .= '</site>';
+		}
   		$retVal .= '</sitesResponse>';
   		return $retVal;
 	}
@@ -589,25 +629,21 @@ if (!function_exists('wof_GetValues')) {
 
 	function wof_GetValues($location, $variable, $startDate, $endDate ) {
     	//get the short variable code and short site code
-    	$shortSiteCode = $location;
-    	$shortVariableCode = $variable;
-    	$pos1 = strpos($location, ":");
-    	if ($pos1 >= 0) {
-        	$split1 = explode(":", $location);
-        	$shortSiteCode = $split1[1];
-    	}
-    	$pos2 = strpos($variable, ":");
-	    if ($pos2 >= 0) {
-	        $split2 = explode(":", $variable);
-	        $shortVariableCode = $split2[1];
-	    }
+    	$shortSiteCode = wof_GetShortSiteCode($location);
+    	$shortVariableCode = wof_GetShortVariableCode($variable);
  
 	    $retVal = '<timeSeriesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 	    $retVal .= wof_queryInfo_Values($location, $variable, $startDate, $endDate);
 	    $retVal .= '<timeSeries>';
+		
+		$arrcodes = array();
+		$arrcodes[] = $shortSiteCode;
   
 	    //write site information
-	    $retVal .= db_GetSiteByCode($shortSiteCode, "sourceInfo", "SiteInfoType");
+		$arrsites = db_GetSites('sourceInfo', 'SiteInfoType',$arrcodes);
+		foreach($arrsites as $site_xml) {
+	        $retVal .= $site_xml;
+		}
  
 	    //write variable information
 	    $retVal .= db_GetVariableByCode($shortVariableCode);
@@ -677,23 +713,22 @@ if (!function_exists('wof_GetValues_2')) {
 if (!function_exists('wof_GetValuesForASite')) {
 
 	function wof_GetValuesForASite($site, $startDate, $endDate) {
-	    $shortSiteCode = $site;
-	    $pos1 = strpos($site, ":");
-	    if ($pos1 >= 0) {
-	        $split1 = explode(":", $site);
-	        $shortSiteCode = $split1[1];
-	    }
+	    $shortSiteCode = wof_GetShortSiteCode($site);
+	    $arrcodes = array();
+		$arrcodes[] = $shortSiteCode;
 
 	    $retVal = '<timeSeriesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 	    $retVal .= wof_queryInfo_ValuesForSite($site, $startDate, $endDate);
 	    $variableCodes = db_GetVariableCodesBySite($shortSiteCode);
-	    $siteInformation = db_GetSiteByCode($shortSiteCode, "sourceInfo", "SiteInfoType");
+	    $arrsites = db_GetSites('sourceInfo', 'SiteInfoType', $arrcodes);
 
 	    foreach($variableCodes as $varCode ) {
 	        $retVal .= '<timeSeries>';
 
 	        //write site information
-	        $retVal .= $siteInformation;
+			foreach($arrsites as $site_xml) {
+	            $retVal .= $site_xml;
+			}
 
 	        //write variable information
 	        $retVal .= db_GetVariableByCode($varCode);
@@ -701,10 +736,10 @@ if (!function_exists('wof_GetValuesForASite')) {
 	        //write list of data values
 	        $retVal .= db_GetValues($shortSiteCode, $varCode, $startDate, $endDate);
 
-        	$retVal .= "</timeSeries>";
+        	$retVal .= '</timeSeries>';
     	}
 
-	    $retVal .= "</timeSeriesResponse>";
+	    $retVal .= '</timeSeriesResponse>';
 	    return $retVal;
 	}
 }
@@ -731,7 +766,7 @@ if (!function_exists('wof_GetVariableInfo')) {
 	  	//checking for variable code: send NULL or send the short code
   		$short_code = NULL;
   		if (strlen($variable) > 0) {
-    		$short_code = substr($variable, strpos($variable, ':') + 1);
+    		$short_code = wof_GetShortVariableCode($variable);
   		}
 
   		$retVal .= '<variables>';
@@ -883,7 +918,6 @@ if (!function_exists('GetVariablesObject')) {
 	  	wof_finish();
 	}
 }
-//end of re-write from wof
 
 //re-write from REST service
 if (!function_exists('write_XML_header')) {
@@ -892,6 +926,13 @@ if (!function_exists('write_XML_header')) {
 	function write_XML_header() {
 	    header("Content-type: text/xml; charset=utf-8'");
 	    echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
+	}
+}
+
+
+if (!function_exists('db_ShowDbError')) {
+	function db_ShowDbError($last_query, $error_message) {  
+		return '<p>Error in executing the SQL query '.$last_query.': '.$error_message.'</p>';
 	}
 }
 
@@ -906,7 +947,7 @@ if (!function_exists('get_table_name')) {
 if (!function_exists('to_xml')) {
 
 	function to_xml($xml_tag, $value) {
-	   return "<$xml_tag><![CDATA[$value]]></$xml_tag>";
+	   return "<$xml_tag>$value</$xml_tag>";
 	}
 }
 
@@ -930,63 +971,62 @@ if (!function_exists('db_GetSeriesCatalog')) {
 	   	$methods_table = get_table_name('Methods');
 	   
 	   	//run SQL query
-		$ci->db->select("s.VariableID, s.VariableCode, s.VariableName, s.ValueType, s.DataType, s.GeneralCategory, s.SampleMedium, s.VariableUnitsName, u.UnitsType AS \"VariableUnitsType\", u.UnitsAbbreviation AS \"VariableUnitsAbbreviation\", s.VariableUnitsID, v.NoDataValue, v.IsRegular, s.TimeUnitsName, tu.UnitsType AS \"TimeUnitsType\", tu.UnitsAbbreviation AS \"TimeUnitsAbbreviation\", s.TimeUnitsID, s.TimeSupport, s.Speciation, s.ValueCount, s.BeginDateTime, s.EndDateTime, s.BeginDateTimeUTC, s.EndDateTimeUTC, s.SourceID, s.Organization, s.SourceDescription, s.Citation, s.QualityControlLevelID, s.QualityControlLevelCode, qc.Definition, s.MethodID, s.MethodDescription, m.MethodLink");
-		$ci->db->join($variables_table." v","s.VariableID = v.VariableID","LEFT");
-		$ci->db->join($units_table." u","s.VariableUnitsID = u.UnitsID","LEFT");
-		$ci->db->join($units_table." tu","s.TimeUnitsID = tu.UnitsID","LEFT");
-		$ci->db->join($qc_table." qc","s.QualityControlLevelID = qc.QualityControlLevelID","LEFT");
-		$ci->db->join($methods_table." m","m.MethodID = s.MethodID","LEFT");
-		$ci->db->where("SiteCode",$shortSiteCode);
+		$ci->db->select('s.VariableID, s.VariableCode, s.VariableName, s.ValueType, s.DataType, s.GeneralCategory, s.SampleMedium, s.VariableUnitsName, u.UnitsType AS "VariableUnitsType", u.UnitsAbbreviation AS "VariableUnitsAbbreviation", s.VariableUnitsID, v.NoDataValue, v.IsRegular, s.TimeUnitsName, tu.UnitsType AS "TimeUnitsType", tu.UnitsAbbreviation AS "TimeUnitsAbbreviation", s.TimeUnitsID, s.TimeSupport, s.Speciation, s.ValueCount, s.BeginDateTime, s.EndDateTime, s.BeginDateTimeUTC, s.EndDateTimeUTC, s.SourceID, s.Organization, s.SourceDescription, s.Citation, s.QualityControlLevelID, s.QualityControlLevelCode, qc.Definition, s.MethodID, s.MethodDescription, m.MethodLink');
+		$ci->db->join($variables_table.' v','s.VariableID = v.VariableID','LEFT');
+		$ci->db->join($units_table.' u','s.VariableUnitsID = u.UnitsID','LEFT');
+		$ci->db->join($units_table.' tu','s.TimeUnitsID = tu.UnitsID','LEFT');
+		$ci->db->join($qc_table.' qc','s.QualityControlLevelID = qc.QualityControlLevelID','LEFT');
+		$ci->db->join($methods_table.' m','m.MethodID = s.MethodID','LEFT');
+		$ci->db->where('SiteCode',$shortSiteCode);
 
-	    $result = $ci->db->get($seriescatalog_table." s");
+	    $result = $ci->db->get($seriescatalog_table.' s');
 	
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
 	
 	    $retVal = '<seriesCatalog>';
 	
 	    foreach ($result->result_array() as $row) {
 			$serviceCode = $ci->config->item('service_code');
-			$variableID = $row["VariableID"];
-	        $variableName = $row["VariableName"];
-			$variableCode = $row["VariableCode"];
-			$valueType = $row["ValueType"];
-			$dataType = $row["DataType"];
-			$generalCategory = $row["GeneralCategory"];
-			$sampleMedium = $row["SampleMedium"];
-			$isRegular = $row["IsRegular"] ? "true" : "false";
-			$beginTime = str_replace(" ", "T", $row["BeginDateTime"]); //1995-01-02T06:00:00
-	        $endTime = str_replace(" ", "T", $row["EndDateTime"]); //2011-10-01T07:00:00
-	        $beginTimeUTC = str_replace(" ", "T", $row["BeginDateTimeUTC"]); //1995-01-02T12:00:00
-	        $endTimeUTC = str_replace(" ", "T", $row["EndDateTimeUTC"]); //2011-10-01T12:00:00
-			$methodID = $row["MethodID"];
+			$variableID = $row['VariableID'];
+	        $variableName = $row['VariableName'];
+			$variableCode = $row['VariableCode'];
+			$valueType = $row['ValueType'];
+			$dataType = $row['DataType'];
+			$generalCategory = $row['GeneralCategory'];
+			$sampleMedium = $row['SampleMedium'];
+			$isRegular = $row['IsRegular'] ? 'true' : 'false';
+			$beginTime = str_replace(' ', 'T', $row['BeginDateTime']); //1995-01-02T06:00:00
+	        $endTime = str_replace(' ', 'T', $row['EndDateTime']); //2011-10-01T07:00:00
+	        $beginTimeUTC = str_replace(' ', 'T', $row['BeginDateTimeUTC']); //1995-01-02T12:00:00
+	        $endTimeUTC = str_replace(' ', 'T', $row['EndDateTimeUTC']); //2011-10-01T12:00:00
+			$methodID = $row['MethodID'];
 			
-			$retVal .= "<series>";
+			$retVal .= '<series>';
 			$retVal .= variableFromDataRow($row);
-	        $retVal .= to_xml("valueCount", $row["ValueCount"]);
-	        $retVal .= "<variableTimeInterval xsi:type=\"TimeIntervalType\">";     
-	        $retVal .= to_xml("beginDateTime", $beginTime);
-	        $retVal .= to_xml("endDateTime", $endTime);
-	        $retVal .= to_xml("beginDateTimeUTC", $beginTimeUTC);
-	        $retVal .= to_xml("endDateTimeUTC", $endTimeUTC);
-	        $retVal .= "</variableTimeInterval>";
-	        $retVal .= "<method " . to_attribute("methodID", $methodID) . ">";
-	        $retVal .= to_xml("methodCode", $methodID);
-	        $retVal .= to_xml("methodDescription", $row["MethodDescription"]);
-	        $retVal .= to_xml("methodLink", $row["MethodLink"]);
-	        $retVal .= "</method>";
-	        $retVal .= "<source " . to_attribute("sourceID", $row["SourceID"]) . ">";
-	        $retVal .= to_xml("organization", $row["Organization"]);
-	        $retVal .= to_xml("sourceDescription", $row["SourceDescription"]);
-	        $retVal .= to_xml("citation", $row["Citation"]);
-	        $retVal .= "</source>";
-	        $retVal .= "<qualityControlLevel " . to_attribute("qualityControlLevelID", $row["QualityControlLevelID"]) . ">";
-	        $retVal .= to_xml("qualityControlLevelCode", $row["QualityControlLevelCode"]);
-	        $retVal .= to_xml("definition", $row["Definition"]);
-	        $retVal .= "</qualityControlLevel>";
-	        $retVal .= "</series>";
+	        $retVal .= to_xml('valueCount', $row['ValueCount']);
+	        $retVal .= '<variableTimeInterval xsi:type="TimeIntervalType">';     
+	        $retVal .= to_xml('beginDateTime', $beginTime);
+	        $retVal .= to_xml('endDateTime', $endTime);
+	        $retVal .= to_xml('beginDateTimeUTC', $beginTimeUTC);
+	        $retVal .= to_xml('endDateTimeUTC', $endTimeUTC);
+	        $retVal .= '</variableTimeInterval>';
+	        $retVal .= '<method '.to_attribute('methodID', $methodID).'>';
+	        $retVal .= to_xml('methodCode', $methodID);
+	        $retVal .= to_xml('methodDescription', $row['MethodDescription']);
+	        $retVal .= to_xml('methodLink', $row['MethodLink']);
+	        $retVal .= '</method>';
+	        $retVal .= '<source '.to_attribute('sourceID', $row['SourceID']).'>';
+	        $retVal .= to_xml('organization', $row['Organization']);
+	        $retVal .= to_xml('sourceDescription', $row['SourceDescription']);
+	        $retVal .= to_xml('citation', $row['Citation']);
+	        $retVal .= '</source>';
+	        $retVal .= '<qualityControlLevel '.to_attribute('qualityControlLevelID',$row['QualityControlLevelID']).'>';
+	        $retVal .= to_xml('qualityControlLevelCode', $row['QualityControlLevelCode']);
+	        $retVal .= to_xml('definition', $row['Definition']);
+	        $retVal .= '</qualityControlLevel>';
+	        $retVal .= '</series>';
 	    }
 	    $retVal .= '</seriesCatalog>';
 	    return $retVal;
@@ -995,7 +1035,7 @@ if (!function_exists('db_GetSeriesCatalog')) {
 
 if (!function_exists('fn_GetSiteArray')) {
 
-	function fn_GetSiteArray($sites, $siteTag = "siteInfo", $siteTagType = "") {
+	function fn_GetSiteArray($sites, $siteTag = 'siteInfo', $siteTagType = '') {
 		$ci = &get_instance();
 	   	$siteArray[0] = '';
 	    $siteIndex = 0;
@@ -1007,47 +1047,52 @@ if (!function_exists('fn_GetSiteArray')) {
 	
 	    foreach ($sites->result_array() as $row) {
 	        $retVal = '';
-	        $retVal .= "<" . $fullSiteTag . ">";
-	        $retVal .= to_xml("siteName", $row["SiteName"]);
-	        $retVal .= '<siteCode network="' . $ci->config->item('service_code') . '">' . $row["SiteCode"] . "</siteCode>";
-	        $retVal .= "<geoLocation>";
-			$retVal .="<geogLocation xsi:type=\"LatLonPointType\">";
-	        $retVal .= to_xml("latitude", $row["Latitude"]);
-			$retVal .= to_xml("longitude", $row["Longitude"]);
-			$retVal .= "</geogLocation>";
+	        $retVal .= '<'.$fullSiteTag.'>';
+	        $retVal .= to_xml('siteName', $row['SiteName']);
+	        $retVal .= '<siteCode network="'.$ci->config->item('service_code').'">'.$row['SiteCode'].'</siteCode>';
+	        $retVal .='<geoLocation>';
+			$srs = $row['SRSID'];
+			$srsAttribute = '';
+			if ($srs != '') {
+			    $srsAttribute = ' '.to_attribute('srs', 'EPSG:'.$srs);
+			}
+			$retVal .='<geogLocation xsi:type="LatLonPointType"'.$srsAttribute.'>';
+	        $retVal .= to_xml('latitude', $row['Latitude']);
+			$retVal .= to_xml('longitude', $row['Longitude']);
+			$retVal .= '</geogLocation>';
 	
 	        // local projection info (optional)
-	        $localProjectionID = $row["LocalProjectionID"];
-	        $localX = $row["LocalX"];
-	        $localY = $row["LocalY"];
+	        $localProjectionID = $row['LocalProjectionID'];
+	        $localX = $row['LocalX'];
+	        $localY = $row['LocalY'];
 	        if ($localProjectionID != '' and $localX != '' and $localY != '') {
 	            $retVal .= '<localSiteXY projectionInformation="' . $localProjectionID . '" >';
 	            $retVal .= '<X>' . $localX . '</X><Y>' . $localY . '</Y></localSiteXY>';
 	        }
 	
-	        $retVal .= "</geoLocation>";
+	        $retVal .= '</geoLocation>';
 	
-	        $elevation_m = $row["Elevation_m"];
+	        $elevation_m = $row['Elevation_m'];
 	        if ($elevation_m != '') {
-	            $retVal .= to_xml("elevation_m", $elevation_m);
+	            $retVal .= to_xml('elevation_m', $elevation_m);
 	        }
-	        $verticalDatum = $row["VerticalDatum"];
+	        $verticalDatum = $row['VerticalDatum'];
 	        if ($verticalDatum != '') {
-	            $retVal .= to_xml("verticalDatum", $verticalDatum);
+	            $retVal .= to_xml('verticalDatum', $verticalDatum);
 	        }
-	        $county = $row["County"];
+	        $county = $row['County'];
 	        if ($county != '') {
 	            $retVal .= '<siteProperty name="County">'.$county.'</siteProperty>';
 	        }
-	        $state = $row["State"];
+	        $state = $row['State'];
 	        if ($state != '') {
 	            $retVal .= '<siteProperty name="State">'.$state.'</siteProperty>';
 	        }
-	        $comments = $row["Comments"];
+	        $comments = $row['Comments'];
 	        if ($comments != '') {
 	            $retVal .= '<siteProperty name="SiteComments">'.$comments.'</siteProperty>';
 	        }
-	        $posAccuracy_m = $row["PosAccuracy_m"];
+	        $posAccuracy_m = $row['PosAccuracy_m'];
 	        if ($posAccuracy_m != '') {
 	            $retVal .= '<siteProperty name="PosAccuracy_m">'.$posAccuracy_m.'</siteProperty>';
 	        }
@@ -1059,6 +1104,7 @@ if (!function_exists('fn_GetSiteArray')) {
 	}
 }
 
+<<<<<<< HEAD
 if (!function_exists('db_GetSiteByCode')) {
 
 	function db_GetSiteByCode($shortCode, $siteTag = "siteInfo", $siteTagType = "") {
@@ -1234,171 +1280,50 @@ if (!function_exists('db_GetSiteByID')) {
 	}
 }
 
+=======
+>>>>>>> remotes/origin/services
 if (!function_exists('db_GetSites')) {
 
-	function db_GetSites($site = NULL) {
+	// in this function the query parameter is the siteID or it is an array of site codes
+	// the siteTag and siteTagType are used for properly formating the siteInfo xml element
+	// in getValues, siteTag must be 'sourceInfo'. in getSiteInfo it must be 'siteInfo'.
+	// use the optional west, south, east, north params for specifying the bounding box.
+	function db_GetSites($siteTag, $siteTagType, $arrSiteCodes, $siteID=NULL,
+	    $west=NULL, $south=NULL, $east=NULL, $north=NULL) {
 		$ci = &get_instance();
 
 	    $sr_table = get_table_name('SpatialReferences');
 		$sites_table = get_table_name('Sites');
-		$series_catalog_table = get_table_name('SeriesCatalog');
-
-		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
-
-		if ($siteSC->num_rows() > 0) {
-			$where = '';
-		    foreach ($siteSC->result_array() as $row) {
-		        $where .= '"' . $row["SiteID"] . '",';
-		    }
-		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
-	    }
+		$sc_table = get_table_name('SeriesCatalog');
 
 		$ci->db->distinct();
-		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments, s.PosAccuracy_m");
-		$ci->db->join($sr_table." sr","s.LocalProjectionID = sr.SpatialReferenceID","LEFT");
-
-		if (isset($whereID)) {
-			$ci->db->where("s.SiteID IN",$whereID,FALSE);
+		$ci->db->select('s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, 
+		sr.SRSID, sr2.SRSName, s.LocalProjectionID, s.LocalX, s.LocalY, 
+		s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments, s.PosAccuracy_m');
+		$ci->db->join($sr_table.' sr','s.LatLongDatumID = sr.SpatialReferenceID','LEFT');
+		$ci->db->join($sr_table.' sr2','s.LocalProjectionID = sr2.SpatialReferenceID','LEFT');
+		$ci->db->join($sc_table.' sc','s.SiteID = sc.SiteID','INNER');
+		
+		if (isset($siteID)) {
+		    $ci->db->where('s.SiteID',$siteID);
+		} elseif ( count($arrSiteCodes) > 0 ) {
+		    $ci->db->where_in('s.SiteCode',$arrSiteCodes);
+		}
+		
+		// optional geographic bounding region parameters
+		if (isset($west) && isset($south) && isset($east) && isset($north)) {
+		    $ci->db->where('Longitude >=',$west);
+		    $ci->db->where('Longitude <=',$east);
+		    $ci->db->where('Latitude >=',$south);
+		    $ci->db->where('Latitude <=',$north);
 		}
 
-		$where = '';
-		if (is_array($site) && count($site) > 0) {
-			foreach($site as $row) {
-				$param_site = explode(":",$row);
-				if (count($param_site) > 1) {
-		        	$where .= '"' . $param_site[1] . '",';
-				} else {
-		        	$where .= '"' . $param_site[0] . '",';
-				}
-			}
-
-	    	$whereCode = "(".substr($where, 0, strlen($where) - 1).")";
-			$ci->db->where("s.SiteCode IN",$whereCode,FALSE);
-		}
-
-		$result = $ci->db->get($sites_table." s");
+		$result = $ci->db->get($sites_table.' s');
 
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+		    die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
-
-	    $sitesArray = fn_GetSiteArray($result);
-	    $retVal = '';
-	
-	    foreach ($sitesArray as $siteRow) {
-	        $retVal .= "<site>";
-	        $retVal .= $siteRow;
-	        $retVal .= "</site>";
-	    }
-	    return $retVal;
-	}
-}
-
-if (!function_exists('db_GetSitesByCodes')) {
-
-	function db_GetSitesByCodes($fullSiteCodeArray) {
-		$ci = &get_instance();
-
-	    $where = '';
-	    foreach ($fullSiteCodeArray as $fullCode) {
-	        $split = explode(":", $fullCode);
-	        $shortCode = $split[1];
-	        $where .= '"' . $shortCode . '",';
-	    }
-	    $whereStr = "(".substr($where, 0, strlen($where) - 1).")";
-
-		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
-
-		if ($siteSC->num_rows() > 0) {
-			$where = '';
-		    foreach ($siteSC->result_array() as $row) {
-		        $where .= '"' . $row["SiteID"] . '",';
-		    }
-		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
-	    }
-
-	    $sr_table = get_table_name('SpatialReferences');
-		$sites_table = get_table_name('Sites');
-		$series_catalog_table = get_table_name('SeriesCatalog');
-
-		$ci->db->distinct();
-		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments, s.PosAccuracy_m");
-		$ci->db->join($sr_table." sr","s.LocalProjectionID = sr.SpatialReferenceID","LEFT");
-
-		if (isset($whereID)) {
-			$ci->db->where("s.SiteID IN",$whereID,FALSE);
-		}
-
-		$ci->db->where("s.SiteCode IN",$whereStr,FALSE);
-
-		$result = $ci->db->get($sites_table." s");
-
-	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
-	    }
-
-
-	    $sitesArray = fn_GetSiteArray($result);
-
-	    $retVal = '';
-	    foreach ($sitesArray as $site) {
-	        $retVal .= "<site>";
-	        $retVal .= $site;
-	        $retVal .= "</site>";
-	    }
-	    return $retVal;
-	}
-}
-
-if (!function_exists('db_GetSitesByBox')) {
-
-	function db_GetSitesByBox($west, $south, $east, $north) {
-		$ci = &get_instance();
-
-	    $sr_table = get_table_name('SpatialReferences');
-		$sites_table = get_table_name('Sites');
-		$series_catalog_table = get_table_name('SeriesCatalog');
-
-		$siteSC = $ci->db->select("SiteID")->get($series_catalog_table);
-
-		if ($siteSC->num_rows() > 0) {
-			$where = '';
-		    foreach ($siteSC->result_array() as $row) {
-		        $where .= '"' . $row["SiteID"] . '",';
-		    }
-		    $whereID = "(".substr($where, 0, strlen($where) - 1).")";
-	    }
-
-		$ci->db->distinct();
-		$ci->db->select("s.SiteName, s.SiteID, s.SiteCode, s.Latitude, s.Longitude, sr.SRSID, s.LocalProjectionID, s.LocalX, s.LocalY, s.Elevation_m, s.VerticalDatum, s.State, s.County, s.Comments, s.PosAccuracy_m");
-		$ci->db->join($sr_table." sr","s.LocalProjectionID = sr.SpatialReferenceID","LEFT");
-		$ci->db->where("Longitude >=",$west);
-		$ci->db->where("Longitude <=",$east);
-		$ci->db->where("Latitude >=",$south);
-		$ci->db->where("Latitude <=",$north);
-
-		if (isset($whereID)) {
-			$ci->db->where("s.SiteID IN",$whereID,FALSE);
-		}
-
-		$result = $ci->db->get($sites_table." s");
-
-	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
-	    }
-
-	    $sitesArray = fn_GetSiteArray($result);
-
-	    $retVal = '';
-	    foreach ($sitesArray as $site) {
-	        $retVal .= "<site>";
-	        $retVal .= $site;
-	        $retVal .= "</site>";
-	    }
-	    return $retVal;
+	    return fn_GetSiteArray($result, $siteTag, $siteTagType);
 	}
 }
 
@@ -1407,20 +1332,17 @@ if (!function_exists('db_GetVariableCodesBySite')) {
 	function db_GetVariableCodesBySite($shortSiteCode) {
 		$ci = &get_instance();
 
-		$ci->db->select("VariableCode");
-		$ci->db->where("SiteCode",$shortSiteCode);
+		$ci->db->select('VariableCode');
+		$ci->db->where('SiteCode',$shortSiteCode);
 
 	    $result = $ci->db->get(get_table_name('SeriesCatalog'));
 	
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
 	    $retVal = array();
-	    $nr = 0;
 	    foreach ($result->result_array() as $ret) {
-	        $retVal[$nr] = $ret["VariableCode"];
-	        $nr++;
+	        $retVal[] = $ret['VariableCode'];
 	    }
 	    return $retVal;
 	}
@@ -1430,40 +1352,41 @@ if (!function_exists('variableFromDataRow')) {
 
 	function variableFromDataRow($row) {
 		$ci = &get_instance();
-	    $variableID = $row["VariableID"];
-	    $variableName = $row["VariableName"];
-	    $variableCode = $row["VariableCode"];
-		$valueType = $row["ValueType"];
-		$dataType = $row["DataType"];
-		$generalCategory = $row["GeneralCategory"];
-		$sampleMedium = $row["SampleMedium"];
-		$isRegular = $row["IsRegular"] ? "true" : "false";
+	    $variableID = $row['VariableID'];
+	    $variableName = $row['VariableName'];
+	    $variableCode = $row['VariableCode'];
+		$valueType = $row['ValueType'];
+		$dataType = $row['DataType'];
+		$generalCategory = $row['GeneralCategory'];
+		$sampleMedium = $row['SampleMedium'];
+		$isRegular = $row['IsRegular'] ? 'true' : 'false';
 			
-		$retVal = "<variable>";
-		$retVal .= "<variableCode vocabulary=\"" . $ci->config->item('service_code') . "\" default=\"true\" variableID=\"" . $variableID . "\" >" . $variableCode . "</variableCode>";
-		$retVal .= to_xml("variableName",$variableName);
-	    $retVal .= to_xml("valueType", $valueType);
-	    $retVal .= to_xml("dataType", $dataType);
-	    $retVal .= to_xml("generalCategory", $generalCategory);
-	    $retVal .= to_xml("sampleMedium", $sampleMedium);
-	    $retVal .= "<unit>";
-	    $retVal .= to_xml("unitName",$row["VariableUnitsName"]);
-		$retVal .= to_xml("unitType", $row["VariableUnitsType"]);
-	    $retVal .= to_xml("unitAbbreviation", $row["VariableUnitsAbbreviation"]);
-	    $retVal .= to_xml("unitCode", $row["VariableUnitsID"]);
-		$retVal .= "</unit>";
-	    $retVal .= to_xml("noDataValue", $row["NoDataValue"]);
-	    $retVal .= "<timeScale " . to_attribute("isRegular", $isRegular) . ">";
-	    $retVal .= "<unit>";
-	    $retVal .= to_xml("unitName", $row["TimeUnitsName"]);
-		$retVal .= to_xml("unitType", $row["TimeUnitsType"]);
-	    $retVal .= to_xml("unitAbbreviation", $row["TimeUnitsAbbreviation"]);
-	    $retVal .= to_xml("unitCode", $row["TimeUnitsID"]);
-		$retVal .= "</unit>";
-	    $retVal .= to_xml("timeSupport",$row["TimeSupport"]);
-	    $retVal .= "</timeScale>";
-	    $retVal .= to_xml("speciation", $row["Speciation"]);
-	    $retVal .= "</variable>";	
+		$retVal = '<variable>';
+		$sc = $ci->config->item('service_code');
+		$retVal .= '<variableCode vocabulary="'.$sc.'" default="true" variableID="'.$variableID.'" >'.$variableCode.'</variableCode>';
+		$retVal .= to_xml('variableName',$variableName);
+	    $retVal .= to_xml('valueType', $valueType);
+	    $retVal .= to_xml('dataType', $dataType);
+	    $retVal .= to_xml('generalCategory', $generalCategory);
+	    $retVal .= to_xml('sampleMedium', $sampleMedium);
+	    $retVal .= '<unit>';
+	    $retVal .= to_xml('unitName',$row['VariableUnitsName']);
+		$retVal .= to_xml('unitType', $row['VariableUnitsType']);
+	    $retVal .= to_xml('unitAbbreviation', $row['VariableUnitsAbbreviation']);
+	    $retVal .= to_xml('unitCode', $row['VariableUnitsID']);
+		$retVal .= '</unit>';
+	    $retVal .= to_xml('noDataValue', $row['NoDataValue']);
+	    $retVal .= '<timeScale ' . to_attribute('isRegular', $isRegular) . '>';
+	    $retVal .= '<unit>';
+	    $retVal .= to_xml('unitName', $row['TimeUnitsName']);
+		$retVal .= to_xml('unitType', $row['TimeUnitsType']);
+	    $retVal .= to_xml('unitAbbreviation', $row['TimeUnitsAbbreviation']);
+	    $retVal .= to_xml('unitCode', $row['TimeUnitsID']);
+		$retVal .= '</unit>';
+	    $retVal .= to_xml('timeSupport',$row['TimeSupport']);
+	    $retVal .= '</timeScale>';
+	    $retVal .= to_xml('speciation', $row['Speciation']);
+	    $retVal .= '</variable>';	
 		return $retVal;
 	}
 }
@@ -1477,20 +1400,19 @@ if (!function_exists('db_GetVariableByCode')) {
 		$units_table = get_table_name('Units');
 
 	    //run SQL query
-		$ci->db->select("VariableID, VariableCode, VariableName, ValueType, DataType, GeneralCategory, SampleMedium,
-	   u1.UnitsName AS \"VariableUnitsName\", u1.UnitsType AS \"VariableUnitsType\", u1.UnitsAbbreviation AS \"VariableUnitsAbbreviation\", VariableUnitsID, NoDataValue, IsRegular, u2.UnitsName AS \"TimeUnitsName\", u2.UnitsType AS \"TimeUnitsType\", u2.UnitsAbbreviation AS \"TimeUnitsAbbreviation\", TimeUnitsID, TimeSupport, Speciation");
-		$ci->db->join($units_table." u1","v.VariableUnitsID = u1.UnitsID","LEFT");
-		$ci->db->join($units_table." u2","v.TimeUnitsID = u2.UnitsID");
+		$ci->db->select('VariableID, VariableCode, VariableName, ValueType, DataType, GeneralCategory, SampleMedium,
+	   u1.UnitsName AS "VariableUnitsName", u1.UnitsType AS "VariableUnitsType", u1.UnitsAbbreviation AS "VariableUnitsAbbreviation", VariableUnitsID, NoDataValue, IsRegular, u2.UnitsName AS "TimeUnitsName", u2.UnitsType AS "TimeUnitsType", u2.UnitsAbbreviation AS "TimeUnitsAbbreviation", TimeUnitsID, TimeSupport, Speciation');
+		$ci->db->join($units_table.' u1','v.VariableUnitsID = u1.UnitsID','LEFT');
+		$ci->db->join($units_table.' u2','v.TimeUnitsID = u2.UnitsID');
 
 	    if (!is_null($shortvariablecode)) {
-	    	$ci->db->where("VariableCode",$shortvariablecode);
+	    	$ci->db->where('VariableCode',$shortvariablecode);
 	    }
 
-	    $result = $ci->db->get($variables_table." v");
+	    $result = $ci->db->get($variables_table.' v');
 	
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
 	
 	    $retVal = '';
@@ -1632,16 +1554,18 @@ if (!function_exists('db_GetValues')) {
 	function db_GetValues($siteCode, $variableCode, $beginTime, $endTime) {
 	    $ci = &get_instance();
 
-	    //first get the metadata
-		// implement sql query (because of complex query date range that too difficult if still using active record) with escape string to avoid from SQL injection
-		$querymeta = "SELECT SiteID, VariableID, MethodID, SourceID, QualityControlLevelID FROM " . get_table_name('SeriesCatalog');
-    	$querymeta .= " WHERE SiteCode = ? AND VariableCode = ? ";
+	    // first get the metadata
+		// implement sql query (because of complex query date range that too difficult if still using active record) 
+		// with escape string to avoid from SQL injection
+		$sc_table = get_table_name('SeriesCatalog');
+		$querymeta = 'SELECT SiteID, VariableID, MethodID, SourceID, QualityControlLevelID FROM '.$sc_table;
+    	$querymeta .= ' WHERE SiteCode = ? AND VariableCode = ? ';
 
-		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
-			$querymeta .= " AND ( (BeginDateTime <= ? AND EndDateTime >= ? ) OR (BeginDateTime >= ? AND BeginDateTime <= ? ) OR (EndDateTime >= ? AND EndDateTime <= ?) )";
+		if ((isset($beginTime) && $beginTime != '') && (isset($endTime) && $endTime != '')) {
+			$querymeta .= ' AND ( (BeginDateTime <= ? AND EndDateTime >= ? ) OR (BeginDateTime >= ? AND BeginDateTime <= ? ) OR (EndDateTime >= ? AND EndDateTime <= ?) )';
   		}
 
-		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
+		if ((isset($beginTime) && $beginTime != '') && (isset($endTime) && $endTime != '')) {
 			$arr_param = array($siteCode,$variableCode,$beginTime,$endTime,$beginTime,$endTime,$beginTime,$endTime);
 		} else {
 			$arr_param = array($siteCode,$variableCode);
@@ -1650,20 +1574,13 @@ if (!function_exists('db_GetValues')) {
 		$result = $ci->db->query($querymeta,$arr_param);
 	
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
 	
 	    $numSeries = $result->num_rows();
 	
 	    if ($numSeries == 0) {
-	        return "<values />";
-	    }
-	    else if ($numSeries == 1) {
-	
-	        $row = $result->row("0","array");
-	
-	        return db_GetValues_OneSeries($row["SiteID"], $row["VariableID"], $row["MethodID"], $row["SourceID"], $row["QualityControlLevelID"], $beginTime, $endTime);
+	        return '<values />';
 	    }
 	    else {
 	    	$arrMethod = array();
@@ -1681,6 +1598,7 @@ if (!function_exists('db_GetValues')) {
 				}
 			}
 	
+<<<<<<< HEAD
 	        $row = $result->row("0","array");
 	        return db_GetValues_MultipleSeries($row["SiteID"], $row["VariableID"], $arrMethod, $arrSource, $arrQC, $beginTime, $endTime);
 	    }
@@ -1966,16 +1884,11 @@ if (!function_exists('db_GetValues_OneSeries')) {
 	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
 	        $retVal .= ' qualityControlLevelCode="' . $qcID . '" ';
 	        $retVal .= ">".$row["DataValue"]."</value>";
+=======
+	        $row = $result->row('0','array');
+	        return db_GetValues_MultipleSeries($row['SiteID'], $row['VariableID'], $arrMethod, $arrSource, $arrQC, $beginTime, $endTime);
+>>>>>>> remotes/origin/services
 	    }
-	    $retVal .= db_GetQualityControlLevelByID($qcID);
-	    $retVal .= db_GetMethodByID($methodID);
-	    $retVal .= db_GetSourceByID($sourceID);
-	
-	    $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
-	
-	    $retVal .= "</values>";
-	
-	    return $retVal;
 	}
 }
 
@@ -2091,33 +2004,59 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 
 	function db_GetValues_MultipleSeries($siteID, $variableID, $arrMethod, $arrSource, $arrQC, $beginTime, $endTime) {
 	    $ci = &get_instance();
+		
+		$arrCensorCode = array();
+		$arrSample = array();
+		$arrOffset = array();
+		$arrQualifier = array();
 
 	    $samples_table = get_table_name('Samples');
-		$ci->db->select("d.LocalDateTime, d.UTCOffset, d.DateTimeUTC, d.MethodID, d.SourceID, d.QualityControlLevelID, d.DataValue, s.LabSampleCode");
-		$ci->db->join($samples_table." s","d.SampleID = s.SampleID","LEFT");
-		$ci->db->where("d.SiteID",$siteID);
-		$ci->db->where("d.VariableID",$variableID);
+		$qualifiers_table = get_table_name('Qualifiers');
+		$ci->db->select('CensorCode, LocalDateTime, UTCOffset, DateTimeUTC, MethodID, SourceID, QualityControlLevelID, DataValue, OffsetTypeID, OffsetValue, d.SampleID, 
+		s.LabSampleCode, d.QualifierID, q.QualifierCode');
+		$ci->db->where('d.SiteID',$siteID);
+		$ci->db->where('d.VariableID',$variableID);
+		$ci->db->join($samples_table.' s','d.SampleID = s.SampleID','LEFT');
+		$ci->db->join($qualifiers_table.' q','d.QualifierID = q.QualifierID','LEFT');
 
-		if ((isset($beginTime) && $beginTime != "") && (isset($endTime) && $endTime != "")) {
-			$ci->db->where("d.LocalDateTime >=",$beginTime);
-			$ci->db->where("d.LocalDateTime <=",$endTime);
+		if ((isset($beginTime) && $beginTime != '') && (isset($endTime) && $endTime != '')) {
+			$ci->db->where('d.LocalDateTime >=',$beginTime);
+			$ci->db->where('d.LocalDateTime <=',$endTime);
 	    }
 	
 	    $result = $ci->db->get(get_table_name('DataValues')." d");
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
-	    $retVal = "<values>";
-	    //$metadata = 'methodCode="' . $methodID . '" sourceCode="' . $sourceID . '" qualityControlLevelCode="' . $qcID . '"';
+	    $retVal = '<values>';
+
 	    foreach ($result->result_array() as $row) {
-	        $retVal .= '<value censorCode="nc" dateTime="' . $row["LocalDateTime"] . '"';
-	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . $row["DateTimeUTC"] . '"';
-	        $retVal .= ' methodCode="' . $row["MethodID"] . '" ';
-	        $retVal .= ' sourceCode="' . $row["SourceID"] . '" ';
-	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
-	        $retVal .= ' qualityControlLevelCode="' . $row["QualityControlLevelID"] . '" ';
-	        $retVal .= ">".$row["DataValue"]."</value>";
+		    $censorCode = $row['CensorCode'];
+			$sampleCode = $row['LabSampleCode'];
+			$offsetTypeID = $row['OffsetTypeID'];
+			$qualifierCode = $row['QualifierCode'];
+			if (!in_array($censorCode,$arrCensorCode)) {
+					$arrCensorCode[] = $censorCode;
+				}
+			if (!in_array($sampleCode,$arrSample)) {
+					$arrSample[] = $sampleCode;
+				}
+			if (!in_array($offsetTypeID,$arrOffset)) {
+					$arrOffset[] = $offsetTypeID;
+				}
+			if (!in_array($qualifierCode,$arrQualifier)) {
+					$arrQualifier[] = $qualifierCode;
+				}
+			
+	        $retVal .= '<value censorCode="'.$censorCode.'" dateTime="'.$row['LocalDateTime'].'"';
+	        $retVal .= ' timeOffset="'.$row['UTCOffset'].'" dateTimeUTC="' . $row['DateTimeUTC'] . '"';
+	        $retVal .= ' methodCode="'.$row['MethodID'].'" ';
+	        $retVal .= ' sourceCode="'.$row['SourceID'].'" ';
+	        $retVal .= ($sampleCode != ''? ' labSampleCode="'.$sampleCode.'"':'');
+			$retVal .= ($row['OffsetValue'] != ''? ' offsetTypeCode="'.$offsetTypeID.'"'.' offsetValue="'.$row['OffsetValue'].'"':'');
+			$retVal .= ($qualifierCode != ''? ' qualifierCode="'.$qualifierCode.'"':'');
+	        $retVal .= ' qualityControlLevelCode="'.$row["QualityControlLevelID"].'" ';
+	        $retVal .= ">".$row['DataValue'].'</value>';
 	    }
 
 		foreach ($arrQC as $row) {
@@ -2131,10 +2070,77 @@ if (!function_exists('db_GetValues_MultipleSeries')) {
 		foreach ($arrSource as $row) {
 	    	$retVal .= db_GetSourceByID($row);
 		}
+			
+		foreach ($arrSample as $row) {
+		    if ($row != '') {
+		        $retVal .= db_GetSampleByID($row);
+			}
+		}
+		
+		foreach ($arrOffset as $row) {
+		    if ($row != '') {
+		        $retVal .= db_GetOffsetTypeByID($row);
+			}
+		}
+		
+		foreach ($arrCensorCode as $row) {
+		    if ($row != '') {
+		        $retVal .= db_GetCensorCode($row);
+		    }
+		}
+		
+		foreach ($arrQualifier as $row) {
+		    if ($row != '') {
+			    $retVal .= db_GetQualifierByCode($row);
+			}
+		}
 
-	    $retVal .= "<censorCode><censorCode>nc</censorCode><censorCodeDescription>not censored</censorCodeDescription></censorCode>";
+	    $retVal .= '</values>';
+	    return $retVal;
+	}
+}
+
+
+if (!function_exists('db_GetQualifierByCode')) {
+
+	function db_GetQualifierByCode($qualifierCode) {
+		$ci = &get_instance();
+    	$qualifiers_table = get_table_name('Qualifiers');
+		$ci->db->select('QualifierID, QualifierCode, QualifierDescription');
+		$ci->db->where('QualifierCode',$qualifierCode);
+
+	    $result = $ci->db->get($qualifiers_table);
+	    if (!$result) {
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
+	    }	
+	    $row = $result->row('0','array');
+		$retVal = '<qualifier qualifierID="'.$row['QualifierID'].'">';
+		$retVal .='<qualifierCode>'.$qualifierCode.'</qualifierCode>';
+	    $retVal .='<qualifierDescription>'.$row["QualifierDescription"].'</qualifierDescription>';
+	    $retVal .='</qualifier>';
+	    return $retVal;
+	}
+}
+
+if (!function_exists('db_GetCensorCode')) {
+
+	function db_GetCensorCode($cc) {
+	    $ci = &get_instance();
+
+    	$cc_table = get_table_name('CensorCodeCV');
+
+		$ci->db->select('Term, Definition');
+		$ci->db->where('Term',$cc);
+
+	    $result = $ci->db->get($cc_table);
+	    if (!$result) {
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
+	    }
 	
-	    $retVal .= "</values>";
+	    $row = $result->row('0','array');
+	    $retVal = '<censorCode><censorCode>'.$row['Term'].'</censorCode>';
+	    $retVal .= '<censorCodeDescription>'.$row["Definition"].'</censorCodeDescription>';
+	    $retVal .= '</censorCode>';
 	    return $retVal;
 	}
 }
@@ -2197,21 +2203,20 @@ if (!function_exists('db_GetQualityControlLevelByID')) {
 
     	$qc_table = get_table_name("QualityControlLevels");
 
-		$ci->db->select("QualityControlLevelCode, Definition, Explanation");
-		$ci->db->where("QualityControlLevelID",$qcID);
+		$ci->db->select('QualityControlLevelCode, Definition, Explanation');
+		$ci->db->where('QualityControlLevelID',$qcID);
 
 	    $result = $ci->db->get($qc_table);
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
 	
-	    $row = $result->row("0","array");
-	    $retVal = '<qualityControlLevel qualityControlLevelID="' . $qcID . '">';
-	    $retVal .= "<qualityControlLevelCode>" . $row["QualityControlLevelCode"] . "</qualityControlLevelCode>";
-	    $retVal .= "<definition>" . $row["Definition"] . "</definition>";
-	    $retVal .= "<explanation>" . $row["Explanation"] . "</explanation>";
-	    $retVal .= "</qualityControlLevel>";
+	    $row = $result->row('0','array');
+	    $retVal = '<qualityControlLevel qualityControlLevelID="'.$qcID.'">';
+	    $retVal .= '<qualityControlLevelCode>'.$row['QualityControlLevelCode'].'</qualityControlLevelCode>';
+	    $retVal .= '<definition>'.$row['Definition'].'</definition>';
+	    $retVal .= '<explanation>'.$row['Explanation'].'</explanation>';
+	    $retVal .= '</qualityControlLevel>';
 	    return $retVal;
 	}
 }
@@ -2221,21 +2226,53 @@ if (!function_exists('db_GetMethodByID')) {
 	function db_GetMethodByID($methodID) {
 	    $ci = &get_instance();
 
-	    $method_table = get_table_name("Methods");
-		$ci->db->select("MethodDescription, MethodLink");
-		$ci->db->where("MethodID",$methodID);
+	    $method_table = get_table_name('Methods');
+		$ci->db->select('MethodDescription, MethodLink');
+		$ci->db->where('MethodID',$methodID);
 
 	    $result = $ci->db->get($method_table);
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
 	
-	    $row = $result->row("0","array");
-	    $retVal = '<method methodID="' . $methodID . '"><methodCode>' . $methodID . "</methodCode>";
-	    $retVal .= "<methodDescription>" . $row["MethodDescription"] . "</methodDescription>";
-	    $retVal .= "<methodLink>" . $row["MethodLink"] . "</methodLink>";
-	    $retVal .= "</method>";
+	    $row = $result->row('0','array');
+	    $retVal = '<method methodID="' . $methodID . '"><methodCode>' . $methodID . '</methodCode>';
+	    $retVal .= '<methodDescription>' . $row['MethodDescription'] . '</methodDescription>';
+	    $retVal .= '<methodLink>' . $row['MethodLink'] . '</methodLink>';
+	    $retVal .= '</method>';
+	    return $retVal;
+	}
+}
+
+if (!function_exists('db_GetOffsetTypeByID')) {
+
+	function db_GetOffsetTypeByID($offsetID) {
+	    $ci = &get_instance();
+
+	    $offsettypes_table = get_table_name('OffsetTypes');
+		$units_table = get_table_name('Units');
+		$ci->db->select('o.OffsetTypeID, o.OffsetDescription, 
+		u.unitsID, u.unitsName, u.unitsType, u.unitsAbbreviation');
+		$ci->db->join($units_table.' u','o.OffsetUnitsID = u.unitsID','LEFT');
+		$ci->db->where('OffsetTypeID',$offsetID);
+
+	    $result = $ci->db->get($offsettypes_table." o");
+	    if (!$result) {
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
+	    }
+		
+		foreach ($result->result_array() as $row) {	
+	        $row = $result->row('0','array');
+	        $retVal = '<offset offsetTypeID="'.$offsetID.'">';
+			$retVal .='<offsetTypeCode>'.$offsetID.'</offsetTypeCode>';
+		    $retVal .= '<offsetDescription>'.$row['OffsetDescription'].'</offsetDescription>';
+	        $retVal .= '<unitName>'.$row['unitsName'].'</unitName>';
+	        $retVal .= '<unitType>'.$row['unitsType'].'</unitType>';
+		    $retVal .= '<unitAbbreviation>'.$row['unitsAbbreviation'].'</unitAbbreviation>';
+			$retVal .= '<unitCode>'.$row['unitsID'].'</unitCode>';
+			$retVal .= '<offsetIsVertical>true</offsetIsVertical>';
+	        $retVal .= '</offset>';
+		}
 	    return $retVal;
 	}
 }
@@ -2286,16 +2323,28 @@ if (!function_exists('db_GetSourceByID')) {
 	    $ci = &get_instance();
 
 	    $sources_table = get_table_name('Sources');
+<<<<<<< HEAD
 		$ci->db->select("Organization, SourceDescription, ContactName, Phone, Email, Address, City, State, ZipCode, SourceLink, Citation, MetadataID");
 		$ci->db->where("SourceID",$sourceID);
 
 	    $result = $ci->db->get($sources_table);
+=======
+		$metadata_table = get_table_name('ISOMetadata');
+		$ci->db->select('s.Organization, s.SourceDescription, s.ContactName, 
+		s.Phone, s.Email, s.Address, s.City, s.State, s.ZipCode, s.SourceLink, s.Citation,
+		m.TopicCategory, m.Title, m.Abstract, m.ProfileVersion');
+		$ci->db->join($metadata_table.' m','s.MetadataID = m.MetadataID','LEFT');
+
+		$ci->db->where('SourceID',$sourceID);
+		
+	    $result = $ci->db->get($sources_table.' s');
+>>>>>>> remotes/origin/services
 	    if (!$result) {
-	        die("<p>Error in executing the SQL query " . $ci->db->last_query() . ": " .
-	            $ci->db->_error_message() . "</p>");
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
 	    }
-	    $row = $result->row("0","array");
+	    $row = $result->row('0','array');
 	
+<<<<<<< HEAD
 		if ($justValues ==1):
 		return $row;
 		endif;
@@ -2340,5 +2389,67 @@ if (!function_exists('genDictsWML2')) {
 	  
 	  
 	    return $retVal;
+=======
+	    $retVal = '<source sourceID="'.$sourceID.'">';
+	    $retVal .= '<sourceCode>'.$sourceID.'</sourceCode>';
+	    $retVal .= '<organization>'.$row['Organization'].'</organization>';
+	    $retVal .= '<sourceDescription>'.$row['SourceDescription'].'</sourceDescription>';
+		$retVal .= '<metadata>';
+		$retVal .= '<topicCategory>'.$row['TopicCategory'].'</topicCategory>';
+		$retVal .= '<title>'.$row['Title'].'</title>';
+		$retVal .= '<abstract>'.$row['Abstract'].'</abstract>';
+		$retVal .= '<profileVersion>'.$row['ProfileVersion'].'</profileVersion>';
+		$retVal .= '</metadata>';
+	    $retVal .= '<contactInformation>';
+	    $retVal .= '<contactName>'.$row['ContactName'].'</contactName>';
+	    $retVal .= '<typeOfContact>main</typeOfContact>';
+	    $retVal .= '<email>'.$row["Email"].'</email>';
+	    $retVal .= '<phone>'.$row["Phone"].'</phone>';
+	    $retVal .= '<address xsi:type="xsd:string">'.$row['Address'].', '.$row['City'].', '.$row['State'].', '.$row['ZipCode'];
+	    $retVal .= '</address></contactInformation>';
+	    $retVal .= '<sourceLink>'.$row['SourceLink'].'</sourceLink>';
+	    $retVal .= '<citation>'.$row['Citation'].'</citation>';
+		
+	    $retVal .= '</source>';
+	    return $retVal;
+	}
+}
+
+
+if (!function_exists('db_GetSampleByCode')) {
+
+	function db_GetSampleByID($sampleCode) {
+
+	    $samples_table = get_table_name('Samples');
+		$labmethods_table = get_table_name('LabMethods');
+		
+		$ci->db->select('s.SampleID, s.SampleType, s.LabSampleCode, 
+		s.LabMethodID, m.LabName, m.LabOrganization, m.LabMethodName, 
+		m.LabMethodDescription, m.LabMethodLink');
+		$ci->db->join($labmethods_table.' m','s.LabMethodID = m.LabMethodID','LEFT');
+
+		$ci->db->where('LabSampleCode',$sampleCode);
+		
+	    $result = $ci->db->get($samples_table.' s');
+	    if (!$result) {
+	        die(db_ShowDbError($ci->db->last_query(),$ci->db->_error_message()));
+	    }
+	    $row = $result->row("0","array");	
+		
+		$retVal = '<sample sampleID="'.$row['SampleID'].'">';		
+		$retVal .= '<labSampleCode>'.$sampleCode.'</labSampleCode>';
+		$retVal .= '<sampleType>'.$row['SampleType'].'</sampleType>';
+		$retVal .= '<labMethod>';
+		$retVal .='<labCode>'.$row['LabCode'].'</labCode>';
+		$retVal .='<labName>'.$row['LabName'].'</labName>';
+		$retVal .='<labOrganization>'.$row['LabOrganization'].'</labOrganization>';
+		$retVal .='<labMethodName>'.$row['LabMethodName'].'</labMethodName>';
+		$retVal .='<labMethodDescription>'.$row['LabMethodDescription'].'</labMethodDescription>';
+		$retVal .='<labMethodLink>'.$row['LabMethodLink'].'</labMethodLink>';
+		$retVal .='</labMethod>';
+		$retVal .='</sample>';
+		
+		return $retVal;
+>>>>>>> remotes/origin/services
 	}
 }

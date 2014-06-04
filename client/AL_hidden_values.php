@@ -1,6 +1,6 @@
 <?php
 
-require_once 'main_config.php';
+require_once 'fetchMainConfig.php';
 
 //create next increment ValueID in the table
 $next_increment ="0";

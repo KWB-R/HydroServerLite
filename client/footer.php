@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: text/javascript');
 //This is required to get the international text strings dictionary
-require_once ('../internationalize.php');
+require_once ('internationalize.php');
 //include '_text.php';
 
 ?>

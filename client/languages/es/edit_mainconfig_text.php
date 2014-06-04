@@ -12,6 +12,7 @@
 	$DatabaseUsername = "Nombre de usuario de la base de datos:";
 	$DatabasePassword = "Contraseñas de la base de datos:";
 	$DatabaseName = "Nombre de la base de datos:";
+	$LanguageCode = "Código del Idioma";
 	$ConfigurationSettingsLook = "Opciones de configuración de apariencia y funcionalidad del sitio web";
 	$OrganizationName = "Nombre de la Organización:";
 	$OrganizationNameEx = "(Ej: McCall Escuela de Ciencias al Aire Libre)";

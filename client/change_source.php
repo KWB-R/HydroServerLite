@@ -101,7 +101,7 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
 <body background="images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" bgcolor="#3c3c3c" align="right" valign="middle" ><?php require_once 'header.php'; ?></td>
