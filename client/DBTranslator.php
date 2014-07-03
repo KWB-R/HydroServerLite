@@ -248,11 +248,11 @@ if (mysql_num_rows($result2) > 0 )
 
 if ($rev ==1 )
 {
-	return utf8_decode($row['EngText']);
+	return $row['EngText'];
 }
 else
 {
-	return utf8_decode($row['SpanishText']);
+	return $row['SpanishText'];
 }
 
 }
