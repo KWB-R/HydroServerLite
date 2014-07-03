@@ -7,8 +7,8 @@ require_once 'authorization_check.php';
 
 $SiteID = $_GET['SiteID'];
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //start of the main option block for the table
 $option_block_esite = "<FORM METHOD='POST' ACTION='' name='editsite' id='editsite'><table width='600' border='0' cellspacing='0' cellpadding='0'>";
@@ -16,10 +16,9 @@ $option_block_esite = "<FORM METHOD='POST' ACTION='' name='editsite' id='editsit
 //Pull the data from the appropriate table using the MetadataID # provided
 $sql_esite ="SELECT * FROM sites WHERE SiteID='$SiteID'";
 
-$result_esite = @mysql_query($sql_esite,$connection)or die(mysql_error());
+$result_esite = transQuery($sql_esite,0,1);
 
-	while ($row = mysql_fetch_array($result_esite)){
-			
+			foreach ($result_esite as $row) {
 // 		$SiteID = $row["SiteID"];
 	//Some of these variables have been changed to not coinside with /_common_text.php as part of internationalization
        	//$SiteCode = $row["SiteCode"];
@@ -92,9 +91,9 @@ $option_block_esite .= "<tr>
 
 	$sql_st ="SELECT * FROM sitetypecv";
 
-	$result_st = @mysql_query($sql_st,$connection)or die(mysql_error());
+	$result_st = transQuery($sql_st,0,1);
 
-	while ($row = mysql_fetch_array ($result_st)){
+	foreach ($result_st as $row) {
 
 		$Term = $row["Term"];
        	//$Definition = $row["Definition"];
@@ -256,13 +255,10 @@ $option_block_esite .= "<td>$option_block_st*</td></tr><tr>
 	<option value='$VerticalDatumSQL'>$VerticalDatumSQL</option>
 	<option value='-1'>$SelectEllipsis</option>";
 
-
-
 	$sql_vdcv ="SELECT * FROM verticaldatumcv";
 
-	$result_vdcv = @mysql_query($sql_vdcv,$connection)or die(mysql_error());
-
-	while ($row = mysql_fetch_array ($result_vdcv)){
+	$result_vdcv = transQuery($sql_vdcv,0,1);
+	foreach ($result_vdcv as $row) {
 
 		$Term = $row['Term'];
        	//$Definition = $row['Definition'];
@@ -285,9 +281,9 @@ $option_block_esite .= "<td>$option_block_vd*</td>
 //Pull the Spatial Reference data for current Site
 	$sql_lld ="SELECT * FROM spatialreferences WHERE SpatialReferenceID='$LatLongDatumID'";
 
-	$result_lld = @mysql_query($sql_lld,$connection)or die(mysql_error());
+	$result_lld = transQuery($sql_lld,0,1);
 
-	while ($row = mysql_fetch_array ($result_lld)){
+	foreach ($result_lld as $row) {
 
 		$SpatialReferenceID_orginal = $row['SpatialReferenceID'];
        	$SRSName_orginal = $row['SRSName'];
@@ -301,9 +297,9 @@ $option_block_esite .= "<td>$option_block_vd*</td>
 
 	$sql_sr ="SELECT * FROM spatialreferences";
 
-	$result_sr = @mysql_query($sql_sr,$connection)or die(mysql_error());
+	$result_sr = transQuery($sql_sr,0,1);
 
-	while ($row = mysql_fetch_array ($result_sr)){
+	foreach ($result_sr as $row) {
 
 		$SpatialReferenceID = $row['SpatialReferenceID'];
        	$SRSName = $row['SRSName'];

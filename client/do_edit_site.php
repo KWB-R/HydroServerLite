@@ -16,13 +16,14 @@ $datum=$_GET['datum'];
 $state=$_GET['state'];
 $county=$_GET['county'];
 $coms=$_GET['com'];
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $sql ="UPDATE `sites` SET `SiteCode`='$sitecode',`SiteName`='$sitename',`Latitude`='$lat',`Longitude`='$lng',`LatLongDatumID`='$llid',`SiteType`='$type',`Elevation_m`='$elev',`VerticalDatum`='$datum',`State`='$state',`County`='$county',`Comments`='$coms' WHERE `SiteID`='$siteid'";
-$result = @mysql_query($sql,$connect)or die(mysql_error());
+$result = transQuery($sql,1,-1);
 
 $sql4 = "UPDATE `seriescatalog` SET `SiteCode`='$sitecode',`SiteName`='$sitename',`SiteType`='$type' WHERE `SiteID`='$siteid'";
-$result4 = @mysql_query($sql4,$connect)or die(mysql_error());
+$result4 = transQuery($sql4,1,-1);
 echo($result);
 
 ?>

@@ -10,13 +10,13 @@ require_once 'internationalize.php';
 //check authority to be here
 require_once 'authorization_check.php';
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //add the user's data
 $sql ="DELETE FROM moss_users WHERE username='$_POST[username]'";
 
-$result = @mysql_query($sql,$connection)or die(mysql_error());
+$result = transQuery($sql,0,-1);
 
 //get a good message for display upon success
 if ($result) {
@@ -28,12 +28,11 @@ $msg ="<p class=em2>$Congrats $_POST[username]. $Another</p>";
 if ($_COOKIE[power] == "admin"){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE (authority='teacher' OR authority='student') ORDER BY username";
-	$result = @mysql_query($sql,$connection)or die(mysql_error());
-	$num = @mysql_num_rows($result);
-	if ($num < 1) {
+	$result = transQuery($sql,0,0);
+	if (count($result) < 1) {
     	$msg2 = "<P><em2>$sorry</em></p>";
 	} else {
-	while ($row = mysql_fetch_array ($result)) {
+	foreach ($result as $row) {
 		$users = $row["username"];
 		$option_block .= "<option value=$users>$users</option>";
 		}
@@ -42,12 +41,11 @@ if ($_COOKIE[power] == "admin"){
 elseif ($_COOKIE[power] == "teacher"){
 	//select the users
 	$sql ="SELECT username FROM moss_users WHERE authority LIKE 'student' ORDER BY username";
-	$result = @mysql_query($sql,$connection)or die(mysql_error());
-	$num = @mysql_num_rows($result);
-	if ($num < 1) {
+		$result = transQuery($sql,0,0);
+	if (count($result) < 1) {
     	$msg2 = "<P><em2>$sorry</em></p>";
 	} else {
-	while ($row = mysql_fetch_array ($result)) {
+	foreach ($result as $row) {
 		$users = $row["username"];
 		$option_block .= "<option value=$users>$users</option>";
 		}
@@ -66,7 +64,8 @@ elseif ($_COOKIE[power] == "student"){
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 </head>
 
 <body background="images/bkgrdimage.jpg">

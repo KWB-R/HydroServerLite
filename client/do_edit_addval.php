@@ -1,8 +1,8 @@
 <?php
 //check authority to be here
 //require_once 'authorization_check.php';
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 $SiteID = $_GET['sid'];
 $VariableID = $_GET['varid'];
 $MethodID = $_GET['mid'];
@@ -12,8 +12,8 @@ $DataValue = $_GET['val'];
 
 $query12 = "Select SourceID FROM seriescatalog WHERE `MethodID`='$MethodID' and `VariableID`='$VariableID' and `SiteID`='$SiteID'";
 
-$result12 = mysql_query($query12,$connection) or die("SQL Error 1: " . mysql_error());
-$row = mysql_fetch_array($result12, MYSQL_ASSOC);
+$result12 = transQuery($query12,0,0);
+$row = $result12[0];
 
 $SourceID = $row['SourceID'];
 
@@ -32,7 +32,7 @@ $DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
 //add the all variables to the datavalues table
 $sql7 ="INSERT INTO `datavalues`(`ValueID`, `DataValue`, `ValueAccuracy`, `LocalDateTime`, `UTCOffset`, `DateTimeUTC`, `SiteID`, `VariableID`, `OffsetValue`, `OffsetTypeID`, `CensorCode`, `QualifierID`, `MethodID`, `SourceID`, `SampleID`, `DerivedFromID`, `QualityControlLevelID`) VALUES ('$ValueID', '$DataValue', '$ValueAccuracy', '$LocalDateTime', '$UTCOffset', '$DateTimeUTC', '$SiteID', '$VariableID', '$OffsetValue', $OffsetTypeID, '$CensorCode', '$QualifierID', '$MethodID', '$SourceID', $SampleID, '$DerivedFromID', '$QualityControlLevelID')";
 
-$result7 = @mysql_query($sql7,$connection)or die(mysql_error());
+$result7 = transQuery($sql7,0,-1);
 
 require_once 'update_series_catalog_function.php';
 

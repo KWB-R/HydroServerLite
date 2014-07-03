@@ -1,6 +1,7 @@
 <?php
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 // get data and store in a json array
 $query = "SELECT DISTINCT VariableID FROM seriescatalog";
@@ -9,9 +10,9 @@ $varname = $_GET['varname'];
 $datatype = $_GET['type'];
 $query .= " WHERE SiteID=".$siteid." AND VariableName='".$varname."'"." AND DataType='".$datatype."'";
 
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
+$result = transQuery($query,1,0);
 
-$row = mysql_fetch_array($result, MYSQL_ASSOC);
+$row = $result[0];
 $output = $row['VariableID'];
 
 echo $output;

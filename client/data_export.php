@@ -3,7 +3,8 @@
 header( 'Content-Type: text/csv' );
 header('Content-Disposition: attachment; filename=data.csv');
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $siteid=$_GET['siteid'];
 $varid=$_GET['varid'];
@@ -14,7 +15,7 @@ $methodid=$_GET['meth'];
 $query = "SELECT ValueID, DataValue, LocalDateTime FROM datavalues";
 $query .= " WHERE SiteID=".$siteid." and VariableID=".$varid." and MethodID='$methodid' and LocalDateTime between '".$startdate."' and '".$enddate."' ORDER BY LocalDateTime ASC";
 
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
+$result = transQuery($query,0,0);
 
 //Echo the details
 
@@ -25,8 +26,8 @@ echo("HYDROSERVER WEB - DATA EXPORT\r\n");
 $query2 = "SELECT SiteID, SiteName, SiteCode, Latitude, Longitude FROM sites";
 $query2 .= " WHERE SiteID=".$siteid;
 
-$result2 = mysql_query($query2) or die("SQL Error 1: " . mysql_error());
-$row2 = mysql_fetch_array($result2, MYSQL_ASSOC);
+$result2 = transQuery($query2,0,0);
+$row2 = $result2[0];
 
 
 echo("Site: ".$row2['SiteName']."(".$row2['SiteCode'].") Latitude: ".$row2['Latitude']." Longitude: ".$row2['Longitude']."\r\n");
@@ -36,8 +37,8 @@ echo("Site: ".$row2['SiteName']."(".$row2['SiteCode'].") Latitude: ".$row2['Lati
 $query2 = "SELECT VariableID, VariableName, DataType FROM variables";
 $query2 .= " WHERE VariableID=".$varid;
 
-$result2 = mysql_query($query2) or die("SQL Error 1: " . mysql_error());
-$row2 = mysql_fetch_array($result2, MYSQL_ASSOC);
+$result2 = transQuery($query2,0,1);
+$row2 = $result2[0];
 
 $varname = str_replace(",", "", $row2['VariableName']);
 
@@ -52,9 +53,9 @@ echo("The below data is from: ".$startdate." to ".$enddate."\r\n");
 echo("ValueID,DataValue,LocalDateTime\r\n");
 
 
-$num_rows = mysql_num_rows($result);
+$num_rows = count($result);
 $count=1;
- while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
+ foreach ($result as $row) 
   {
     echocsv( $row );
    if($count!=$num_rows)

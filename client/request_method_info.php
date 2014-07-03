@@ -7,8 +7,8 @@ require_once 'internationalize.php';
 
 $MID = $_GET['MethodID'];
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $option_block_e = "<FORM METHOD='POST' ACTION='' name='editmethod' id='editmethod'><table width='632' border='0'>";
 
@@ -16,10 +16,9 @@ $option_block_e = "<FORM METHOD='POST' ACTION='' name='editmethod' id='editmetho
 
 $sql_e ="SELECT * FROM methods WHERE MethodID='$MID'";
 
-$result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
+$result_e = transQuery($sql_e,0,1);
 
-	while ($single_array = mysql_fetch_array($result_e)){
-			
+		foreach ($result_e as $single_array) {	
    		$MethodID = $single_array["MethodID"];
        	$MethodDesc = $single_array["MethodDescription"];
 		$MethodLink = $single_array["MethodLink"];

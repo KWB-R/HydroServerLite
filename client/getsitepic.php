@@ -1,24 +1,19 @@
 <?php
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 $siteid=$_GET['sc'];
 $query1 = "SELECT picname FROM sitepic";
 $query1 .= " WHERE SiteID=".$siteid;
 
-$result1 = mysql_query($query1) or die("SQL Error 1: " . mysql_error());
+$result1 = transQuery($query1,0,0);
 
-
-if(mysql_num_rows($result1)<1)
+if(count($result1)<1)
 {
-
-
-echo("-1");
-	
+echo("-1");	
 }
-
 else
 {
-
-$row1 = mysql_fetch_array($result1, MYSQL_ASSOC);
+$row1 = $result1[0];
 echo("<img src='imagesite/small/".$row1['picname']."' width='100' height='100'>");
 }

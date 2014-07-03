@@ -5,16 +5,16 @@ require 'fetchMainConfig.php';
 //create next increment SourceID in the table
 $next_increment ="0";
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //add the next SourceID's
 
 $sql ="SHOW TABLE STATUS LIKE 'sources'";
 
-$result = @mysql_query($sql,$connection)or die(mysql_error());
+$result = transQuery($sql,0,0);
 
-$row = mysql_fetch_assoc($result);
+$row = $result[0];
 
 $SourceID = $row['Auto_increment'];
 

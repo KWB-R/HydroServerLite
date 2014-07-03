@@ -12,21 +12,20 @@ $vartype=$_GET['vartype'];
 
 
 //First check if the same entry exists in the table
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $sql="SELECT * FROM `units` WHERE unitsName='$varname'";
-$result = @mysql_query($sql,$connect)or die(mysql_error());
-$row=mysql_num_rows($result);
-if($row>0)
-//{echo("The unit already exists. Cannot Add again. Please select it from the drop down list");}
+$result = transQuery($sql,1,1);
+if(count($result)>0)
 {echo "false|" . $UnitExists;}
 
 else
 {	$sql1="INSERT INTO `units`(`unitsName`, `unitsType`, `unitsAbbreviation`) VALUES ('$varname','$vartype','$vardef')";
-	$result1 = @mysql_query($sql1,$connect)or die(mysql_error());
+	$result1 = transQuery($sql1,1,-1);
 	$sql2="SELECT `unitsID` FROM `units` WHERE `unitsAbbreviation`='$vardef' and `unitsType`='$vartype' and `unitsName`='$varname'";
-	$result2 = @mysql_query($sql2,$connect)or die(mysql_error());
-	$row2=mysql_fetch_array ($result2);
+	$result2 = transQuery($sql2,1,0);
+	$row2=$result2[0];
 	echo("true|" . $row2['unitsID']);
 	}
 ?>

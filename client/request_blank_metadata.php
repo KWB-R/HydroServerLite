@@ -5,23 +5,20 @@ require_once 'internationalize.php';
 //check authority to be here
 require_once 'authorization_check.php';
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //get list of TopicCategories to choose from
 $sql2 ="Select Term FROM topiccategorycv";
 
-$result2 = @mysql_query($sql2,$connection)or die(mysql_error());
+$result2 = transQuery($sql2,0,1);
+	if (count($result2) < 1) {
 
-$num2 = @mysql_num_rows($result2);
-	if ($num2 < 1) {
-
-    //$msg_tc = "<P><em2>Sorry, no data available.</em></p>";
     $msg_tc = "<P><em2>$NoData</em></p>";
 
 	} else {
 
-	while ($row2 = mysql_fetch_array ($result2)) {
+	foreach ($result2 as $row2){
 
 		$metaTerm = $row2["Term"];
 		

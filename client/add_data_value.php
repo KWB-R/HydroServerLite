@@ -2,27 +2,24 @@
 
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
-
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //add the SourceID's
 $sql ="Select distinct SourceID, Organization FROM seriescatalog";
 
-$result = @mysql_query($sql,$connection)or die(mysql_error());
+$result = transQuery($sql,0,0);
 
-$num = @mysql_num_rows($result);
+$num = count($result);
 	if ($num < 1) {
 
-    //$msg = "<P><em2>Sorry, no Sources available.</em></p>";
 	$msg = "<P><em2> $SorryNoSource </em></p>";
 
 	} else {
 
-	while ($row = mysql_fetch_array ($result)) {
+	foreach ($result as $row) {
 
 		$sourceid = $row["SourceID"];
 		$sourcename = $row["Organization"];
@@ -35,17 +32,16 @@ $num = @mysql_num_rows($result);
 //add the Variables
 $sql3 ="Select * FROM variables ORDER BY VariableName ASC";
 
-$result3 = @mysql_query($sql3,$connection)or die(mysql_error());
+$data = transQuery($sql3,0,1);
 
-$num = @mysql_num_rows($result3);
+$num = count($data);
 	if ($num < 1) {
 
-    //$msg3 = "<P><em2>Sorry, there are no Variables.</em></p>";
 	$msg3 = "<P><em2>$SorryNoVariable</em></p>";
 
 	} else {
 
-	while ($row3 = mysql_fetch_array ($result3)) {
+	foreach ($data as $row3) {
 
 		$typeid = $row3["VariableID"];
 		$typename = $row3["VariableName"];
@@ -84,7 +80,9 @@ alert(<?php echo "'". $IfNoSeeMethod1."'";?> + '\n' + <?php echo "'". $ContactSu
 
 <link rel="stylesheet" href="styles/jqstyles/jquery.ui.all.css">
 <link rel="stylesheet" href="styles/jqstyles/jquery.ui.timepicker.css">
-<script src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
+
 <script src="js/ui/jquery.ui.core.js"></script>
 <script src="js/ui/jquery.ui.widget.js"></script>
 <script src="js/ui/jquery.ui.datepicker.js"></script>

@@ -9,20 +9,20 @@ require_once 'internationalize.php';
 $varname=$_GET['varname'];
 $vardef=$_GET['vardef'];
 
-//First check if the same entry exists in the table
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $sql="SELECT * FROM `samplemediumcv` WHERE Term='$varname'";
-$result = @mysql_query($sql,$connect)or die(mysql_error());
-$row=mysql_num_rows($result);
-if($row>0)
+$result = transQuery($sql,1,0);
+
+if(count($result)>0)
 //{echo("The Sample Medium already exists. Cannot Add again. Please select it from the drop down list");}
 {echo $TheSampleExists;}
 
 else
 
 {	$sql1="INSERT INTO `samplemediumcv`(`Term`, `Definition`) VALUES ('$varname','$vardef')	";
-	$result1 = @mysql_query($sql1,$connect)or die(mysql_error());
+	$result1 = transQuery($sql1,1,-1);
 	echo($result1);
 	}
 ?>

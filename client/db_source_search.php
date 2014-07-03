@@ -1,7 +1,6 @@
 <?php
-
-
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 // Get parameters from URL
 $siteid = $_GET["siteid"];
@@ -15,22 +14,19 @@ header("Content-type: text/xml");
 
 //Search the Data Table for SourceIDs
 
-
-
-
 $query = sprintf("SELECT DISTINCT SourceID, SiteID FROM seriescatalog WHERE SiteID ='%s'",
   mysql_real_escape_string($siteid));
-$result = mysql_query($query);
+$result = transQuery($query,0,0);
 
-while ($row = @mysql_fetch_assoc($result)){
+foreach ($result as $row) {
 //Search Details of Each Source ID Returned
 
 $sourceid=$row['SourceID'];
 $query1 = sprintf("SELECT SourceID, Organization, SourceLink FROM sources WHERE SourceID ='%s'",
   mysql_real_escape_string($sourceid));
-$result1 = mysql_query($query1);
+$result1 = transQuery($query1,0,0);
 
-$row1 = @mysql_fetch_assoc($result1);
+$row1 = $result1[0];
 
 $node = $dom->createElement("source");
 $newnode = $parnode->appendChild($node);

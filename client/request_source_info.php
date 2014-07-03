@@ -7,18 +7,17 @@ require_once 'authorization_check.php';
 
 $SID = $_GET['SourceID'];
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $option_block_es = "<FORM METHOD='POST' ACTION='' name='editsource' id='editsource'><table width='600' border='0' cellspacing='0' cellpadding='0'>";
 
 //Delete the MethodID # provided
 $sql_e ="SELECT * FROM sources WHERE SourceID='$SID'";
 
-$result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
+$result_e = transQuery($sql_e,0,1);
 
-	while ($single_array = mysql_fetch_array($result_e)){
-			
+		foreach ($result_e as $single_array) {	
    		$SourceID2 = $single_array["SourceID"];
        	$Organization2 = $single_array["Organization"];
 		$SourceDescription2 = $single_array["SourceDescription"];
@@ -37,9 +36,9 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
 	//Pull the Metadata ID for the dropdown menu	
 	$sql_isomd ="SELECT * FROM isometadata WHERE MetadataID='$MetadataID2'";
 
-	$result_isomd = @mysql_query($sql_isomd,$connection)or die(mysql_error());
+	$result_isomd = transQuery($sql_isomd,0,1);
 
-	while ($row = mysql_fetch_array ($result_isomd)){
+	foreach ($result_isomd as $row) {
 
        	$MDID = $row["MetadataID"];
 		$TopicCategory2 = $row["TopicCategory"];
@@ -247,9 +246,9 @@ $result_e = @mysql_query($sql_e,$connection)or die(mysql_error());
 
 			$sql_tc ="SELECT * FROM topiccategorycv";
 
-			$result_tc = @mysql_query($sql_tc,$connection)or die(mysql_error());
+			$result_tc = transQuery($sql_tc,0,1);
 
-			while ($row = mysql_fetch_array ($result_tc)){
+			foreach ($result_tc as $row) {
 
 				$Term = $row["Term"];
 		       	$Definition = $row["Definition"];

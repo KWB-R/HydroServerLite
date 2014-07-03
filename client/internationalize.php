@@ -5,13 +5,18 @@
 	
 	//If running setup, the Language is loaded from the user's session variable
 	
+	if (!isset($_SESSION))
+	{
+		session_start();
+	}
+	
 	if (isset($setup))
 	{
-		if (!isset($_SESSION))
-		{
-			session_start();
-		}
 		$lang=$_SESSION['setupLang'];
+	}
+	elseif (isset($_SESSION['lang']))
+	{
+		$lang=$_SESSION['lang'];
 	}
 	else
 	{

@@ -12,29 +12,26 @@ if ((!$_POST['firstname']) || (!$_POST['lastname']) || (!$_POST['username']) || 
 //check authority to be here
 require_once 'authorization_check.php';
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //add the user's data
 $sql ="INSERT INTO moss_users(firstname, lastname, username, password, authority) VALUES ('$_POST[firstname]', '$_POST[lastname]', '$_POST[username]', PASSWORD('$_POST[password]'), '$_POST[authority]')";
 
-$result = @mysql_query($sql,$connection)or die(mysql_error());
+$result = transQuery($sql,0,-1);
 
 //get a good message for display upon success
 if ($result){ 
 
-//$msg = "<p class=em2>Congratulations, you've registered $_POST[firstname]. Would you like to add another?</p>";
 $msg = "<p class=em2> $Congrats  $_POST[firstname].  $AddAnother  </p>";
 	}
 
 
 //Display the appropriate user authority to add depending on the user's authority
 if ($_COOKIE[power] == "admin"){
-	//$selection = "<select name=authority id=authority><option value=>Select....</option><option value=admin>Administrator</option><option value=teacher>Teacher</option><option value=student>Student</option></select>";
 	$selection = "<select name=authority id=authority><option value=>".$SelectEllipsis."</option><option value=admin>".$Administrator."</option><option value=teacher>".$Teacher."</option><option value=student>".$Student."</option></select>";	
 	}
 elseif ($_COOKIE[power] == "teacher"){
-	//$selection = "<select name=authority id=authority><option value=>Select....</option><option value=teacher>Teacher</option><option value=student>Student</option></select>";
 	$selection = "<select name=authority id=authority><option value=>".$SelectEllipsis."</option><option value=teacher>".$Teacher."</option><option value=student>".$Student."</option></select>";
 	}
 elseif ($_COOKIE[power] == "student"){
@@ -47,14 +44,14 @@ elseif ($_COOKIE[power] == "student"){
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
 <title><?php echo $WebClient; ?></title>
 
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 <!-- JQuery JS -->
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 
 <script type="text/javascript" src="js/create_username.js"></script>
 </head>
@@ -135,7 +132,6 @@ elseif ($_COOKIE[power] == "student"){
         </tr>
         <tr>
           <td width="95" valign="top">&nbsp;</td>
-          <!--<td valign="top"><input type="SUBMIT" name="submit" value="Add User" class="button"/></td>-->
           <td valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddUser;?>" class="button"/></td>
           <td valign="top">&nbsp;</td>
           

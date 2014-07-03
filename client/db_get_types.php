@@ -1,30 +1,26 @@
 <?php
-require_once 'db_config.php';
 
+require_once 'DBTranslator.php';
 
 // get data and store in a json array
-$query = "Select * FROM variables ORDER BY VariableName ASC";
-
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
 
 
+$query = "Select VariableID,VariableName,DataType FROM variables ORDER BY VariableName ASC";
+$data = transQuery($query,0,1);
 
 
 $variables[] = array(
         'variableid' => "-1",
         'variablename' => "Select...." );
-	
 
 
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    
+foreach ($data as $row) {
 
-		$variables[] = array(
+    $variables[] = array(
         'variableid' => $row['VariableID'],
         'variablename' => $row['VariableName']. ' ' ."(".$row["DataType"].")");
-
+	
 }
-
 
 echo json_encode($variables);
 ?>

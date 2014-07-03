@@ -2,11 +2,12 @@
 
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
-require_once 'db_config.php';
 $query = "SELECT SiteName FROM sites WHERE SiteID=".$_GET['sid'];
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
-$row = mysql_fetch_array($result, MYSQL_ASSOC);
+$result = transQuery($query,0,0);
+$row = $result[0];
 ?>
 
 <script type="text/javascript">

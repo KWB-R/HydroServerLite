@@ -1,9 +1,10 @@
 <?php
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //redirect anyone that is not an administrator
 if ($_COOKIE[power] !="admin"){
@@ -11,31 +12,21 @@ if ($_COOKIE[power] !="admin"){
 	exit;	
 	}
 
-//connect to server and select database
-require_once 'database_connection.php';
+
 
 //filter the Site results after Source is selected
 $sql ="SELECT * FROM sources";
+$result = transQuery($sql,0,0);
 
-$result = @mysql_query($sql,$connection)or die(mysql_error());
-
-$num = @mysql_num_rows($result);
-	if ($num < 1){
-
-    //$msg = "<p class=em2>Sorry, there are no Sources in the database.</em></p>";
-	$msg = "<p class=em2>$NoSoureces</em></p>";
-
+	if (count($result) < 1){
+		$msg = "<p class=em2>$NoSoureces</em></p>";
 	} else {
-
-		while ($row = mysql_fetch_array ($result)){
-
+		foreach ($result as $row) {
 			$s_id = $row["SourceID"];
 			$s_org = $row["Organization"];
-
 			$option_block_s .= "<option value=$s_id>$s_org</option>";
 		}
 	}
-
 ?>
 
 <html>
@@ -49,7 +40,8 @@ $num = @mysql_num_rows($result);
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
 <script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
@@ -378,7 +370,7 @@ function updateSource(){
 			}
 		}
 //alert("Passed all validation!");
-alert(<?php echo "'".$PassedValidation."'"; ?>);
+//alert(<?php echo "'".$PassedValidation."'"; ?>);
 		//Validation is now complete, so send to the processing page
 		var md_id=$("#MetadataID2").val();
 		var md_tc=$("#TopicCategory2").val();
@@ -390,9 +382,7 @@ alert(<?php echo "'".$PassedValidation."'"; ?>);
 		$.ajax({
 		type: "POST",
 		url: "update_metadata.php?MetadataID2="+md_id+"&TopicCategory2="+md_tc+"&Title2="+md_title+"&Abstract2="+md_ab+"&ProfileVersion2="+md_pv+"&MetadataLink2="+md_link}).done(function(data){
-alert(data);
 			if(data==1){
-				
 				//Validation is now complete, so send info to the processing page
 				var source_ID=$("#SourceID2").val();
 				var source_org=$("#Organization2").val();
@@ -407,13 +397,32 @@ alert(data);
 				var source_zc=$("#ZipCode2").val();
 				var source_c=$("#Citation2").val();
 				var source_md=$("#MetadataID2").val();
-
+				
+				var urlForUpdate1 = "update_source.php?SourceID2="+source_ID+"&Organization2="+source_org+"&SourceDescription2="+source_d+"&SourceLink2="+source_l+"&ContactName2="+source_cn+"&Phone2="+source_p+"&Email2="+source_e+"&Address2="+source_a+"&City2="+source_city+"&State2="+source_st+"&ZipCode2="+source_zc+"&Citation2="+source_c+"&MetadataID2="+source_md;
+				
+				var urlForUpdate = "update_source.php";
+				
+				var dataForUpdate = {
+				SourceID2:source_ID,
+				Organization2:source_org,
+				SourceDescription2:source_d,
+				SourceLink2:source_l,
+				ContactName2:source_cn,
+				Phone2:source_p,
+				Email2:source_e,
+				Address2:source_a,
+				City2:source_city,
+				State2:source_st,
+				ZipCode2:source_zc,
+				Citation2:source_c,
+				MetadataID2:source_md
+				};
+				
 				$.ajax({
 				type: "POST",
-				url: "update_source.php?SourceID2="+source_ID+"&Organization2="+source_org+"&SourceDescription2="+source_d+"&SourceLink2="+source_l+"&ContactName2="+source_cn+"&Phone2="+source_p+"&Email2="+source_e+"&Address2="+source_a+"&City2="+source_city+"&State2="+source_st+"&ZipCode2="+source_zc+"&Citation2="+source_c+"&MetadataID2="+source_md}).done(function(data2){
-alert(data2);
+				url: urlForUpdate,
+				data:dataForUpdate}).done(function(data2){
 					if(data2==1){
-
 						$("#msg2").show(2000);
 						$("#msg2").hide(3000);
 						$("#SourceID2").val("");
@@ -436,15 +445,13 @@ alert(data2);
 						return true;
 
 					}else{
-						//alert("Error during processing! Please refresh the page and begin again.");
-						alert(<?php echo "'".$ProcessingError."'"; ?>);
+						alert(<?php echo "'".$ProcessingError."'"; ?> + data2);
 						return false;
 					}
 				});
 
 			}else{
-				//alert("Error during processing! Please refresh the page and begin again.");
-				alert(<?php echo "'".$ProcessingError."'"; ?>);
+				alert(<?php echo "'".$ProcessingError."'"; ?> + data);
 				return false;
 			}
 		});

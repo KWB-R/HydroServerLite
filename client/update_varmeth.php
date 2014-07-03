@@ -2,17 +2,16 @@
 //check authority to be here
 require_once 'authorization_check.php';
 
-// Need to fix ashtya's tire at 5pm
-$badValue = $_GET['MethodID']; // 5 in this example
+$badValue = $_GET['MethodID']; 
 
 //connect to server and select data
 require_once 'database_connection.php';
 
 $sql_find ="SELECT * FROM varmeth WHERE MethodID !=''";
 
-$result_f = @mysql_query($sql_find,$connection)or die(mysql_error());
+$result_f = transQuery($sql_find,0,0);
 
-	while ($row_f = mysql_fetch_array ($result_f)){
+	foreach ($result_f as $row_f) {
 
 		$v_id = $row_f["VariableID"];
 		$m_id = $row_f["MethodID"];
@@ -24,7 +23,7 @@ $result_f = @mysql_query($sql_find,$connection)or die(mysql_error());
 				if($parts.length==1 && $part==$badValue){
 					$part = '';
 					$sql_upd ="UPDATE varmeth SET MethodID=$part WHERE VariableID='$v_id'";
-					$result_upd = @mysql_query($sql_upd,$connection)or die(mysql_error());
+					$result_upd = transQuery($sql_upd,0,-1);
 
 				}elseif($parts.length==2){
 					if ($part==$badValue){
@@ -32,7 +31,7 @@ $result_f = @mysql_query($sql_find,$connection)or die(mysql_error());
 						};
 					$newStr = implode($parts);
 					$sql_upd ="UPDATE varmeth SET MethodID='$newStr' WHERE VariableID='$v_id'";
-					$result_upd = @mysql_query($sql_upd,$connection)or die(mysql_error());
+					$result_upd = transQuery($sql_upd,0,-1);
 
 				}else{
 					if($part==$badValue){
@@ -40,7 +39,7 @@ $result_f = @mysql_query($sql_find,$connection)or die(mysql_error());
 						};
 					$newStr = implode(",", array_filter($parts));
 					$sql_upd ="UPDATE varmeth SET MethodID='$newStr' WHERE VariableID='$v_id'";
-					$result_upd = @mysql_query($sql_upd,$connection)or die(mysql_error());
+					$result_upd = transQuery($sql_upd,0,-1);
 				};
 			};
 	};

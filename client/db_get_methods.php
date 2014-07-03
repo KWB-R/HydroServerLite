@@ -1,5 +1,7 @@
 <?php
-require_once 'db_config.php';
+
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 // get data and store in a json array
 $query = "SELECT MethodID, MethodDescription FROM seriescatalog";
@@ -7,14 +9,9 @@ $siteid = $_GET['siteid'];
 $varid = $_GET['varid'];
 $query .= " WHERE SiteID=".$siteid." AND VariableID='".$varid."'";
 
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
+$result = transQuery($query,0,1);
 
-
-
-
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    
-
+foreach ($result as $row) {
 		$methods[] = array(
         'methodid' => $row['MethodID'],
         'methodname' => $row['MethodDescription']);

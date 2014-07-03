@@ -1,5 +1,6 @@
 <?php
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 // get data and store in a json array
 $query = "SELECT DISTINCT DataType FROM seriescatalog";
@@ -7,20 +8,16 @@ $siteid = $_GET['siteid'];
 $varname = $_GET['varname'];
 $query .= " WHERE SiteID=".$siteid." AND VariableName='".$varname."'";
 
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
+$result = transQuery($query,1,1);
 
-
-
-
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    
+foreach ($result as $row) {
 	if($row['DataType']=="Average")
-{	
-$dataid=1;}
-else
-{
+	{	
+	$dataid=1;}
+	else
+	{
 	$dataid=2;
-}
+	}
 		$variables[] = array(
         'dataid' => $dataid,
         'dataname' => $row['DataType']);

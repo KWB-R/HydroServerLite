@@ -22,7 +22,6 @@ if (($extension != "jpg") && ($extension != "jpeg") && ($extension !=
  "png") && ($extension != "gif")) 
  		{
 		//print error message
- 			//echo 'Invalid Extension for Site Photo! Allowed extensions: jpeg,jpg,png,gif';
  			echo $InvalidPhotoExtension;
 			$errors=1;
  		}
@@ -32,7 +31,6 @@ if($errors==0)
 $size=filesize($_FILES["images"]["tmp_name"][0]);
 if ($size > 1024*1024)
 {
-	//echo 'Image too Large. Maximum size: 1 MB(1024 kb)';
 	echo $ImageTooLarge;
 	$errors=1;
 }
@@ -84,7 +82,8 @@ imagedestroy($tmp1);
 //Fetch the siteid
 
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 
 $siteid=$_GET['siteid'];
@@ -93,10 +92,10 @@ $siteid=$_GET['siteid'];
 //Before adding the entry, delete all previous entries
 
 $query4="DELETE FROM `sitepic` WHERE `siteid`='$siteid'";
-$result4 = mysql_query($query4) or die("SQL Error 222: " . mysql_error());
+$result4 = transQuery($query4,0,-1);
 
 $query3 = "INSERT INTO `sitepic`(`siteid`, `picname`) VALUES ('$siteid','$tempname')";
-$result3 = mysql_query($query3) or die("SQL Error 2: " . mysql_error());
+$result3 = transQuery($query3,0,-1);
 
 echo($result3);
 

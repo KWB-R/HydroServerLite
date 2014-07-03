@@ -1,23 +1,25 @@
 <?php
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
-
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 
 // get data and store in a json array
-$query = "SELECT * FROM valuetypecv";
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
+$query = "SELECT Term,Definition FROM valuetypecv";
+
+$data = transQuery($query,0,1);
+
 $variables[] = array(
         //'vtterm' => "Select...",
 		'vtterm' => $SelectEllipsis,
         'vtdef' => "-1" );
 
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+foreach ($data as $row) {
     
 		$variables[] = array(
-        'vtterm' => utf8_encode($row['Term']),
-        'vtdef' => utf8_encode($row['Definition']));
+        'vtterm' => $row['Term'],
+        'vtdef' => $row['Definition']);
 
 }
 

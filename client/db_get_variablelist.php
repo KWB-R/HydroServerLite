@@ -2,7 +2,8 @@
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 
 // get data and store in a json array
@@ -10,20 +11,15 @@ $query = "SELECT DISTINCT VariableName FROM seriescatalog";
 $siteid = $_GET['siteid'];
 $query .= " WHERE SiteID=".$siteid;
 
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
-
-
-
-
+$result = transQuery($query,0,1);
 
 $variables[] = array(
         'variableid' => "-1",
         'variablename' => "Please select a variable" );
-		//'variablename' => $SelectVariable );
 	
 $temp=1;
 
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	foreach ($result as $row) {
     
 if($row['VariableName']!=null){
 		$variables[] = array(

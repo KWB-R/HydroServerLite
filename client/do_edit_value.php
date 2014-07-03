@@ -1,7 +1,8 @@
 <?php
 //Editing exiting variable
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $vid=$_GET['vid'];
 
@@ -11,7 +12,7 @@ if(isset($_GET['del']))
 	//Perform Delete
 
 $sql1="DELETE FROM `datavalues` WHERE `ValueID`='$vid'";
-$result1 = @mysql_query($sql1,$connect)or die(mysql_error());
+$result1 = transQuery($sql1,0,-1);
 echo($result1);
 }
 else
@@ -35,6 +36,6 @@ $DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
 
 $sql1="UPDATE `datavalues` SET `DataValue`='$val',`LocalDateTime`='$LocalDateTime',`DateTimeUTC`='$DateTimeUTC' WHERE `ValueID`='$vid'";
 
-	$result1 = @mysql_query($sql1,$connect)or die(mysql_error());
+	$result1 = transQuery($sql1,0,-1);
 	echo($result1);}
 ?>

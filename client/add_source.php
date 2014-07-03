@@ -1,58 +1,42 @@
 <?php
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
-
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //get list of TopicCategories to choose from
-$sql2 ="Select Term FROM topiccategorycv";
-
-$result2 = @mysql_query($sql2,$connection)or die(mysql_error());
-
-$num2 = @mysql_num_rows($result2);
-	if ($num2 < 1) {
-
-    //$msg2 = "<P><em2>Sorry, no data available.</em></p>";
+$sql ="Select Term FROM topiccategorycv";
+$result = transQuery($sql,0,1);
+$num = count($result);
+	if (count($result) < 1) {
 	$msg2 = "<P><em2> $NoData </em></p>";
-
 	} else {
-
-	while ($row2 = mysql_fetch_array ($result2)) {
-
-		$metaTerm = $row2["Term"];
-		
+	foreach ($result as $row) {
+		$metaTerm = $row["Term"];
 		$option_block2 .= "<option value=$metaTerm>$metaTerm</option>";
-
 		}
 	}
-
 ?>
 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
 <title><?php echo $WebClient; ?></title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 
 <script type="text/javascript">
 
 $(document).ready(function(){
-
 	$("#msg").hide();
-
 });
-
 </script>
-
 </head>
 <body background="images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
@@ -64,8 +48,6 @@ $(document).ready(function(){
   </tr>
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <!--<td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right">Required fields are marked with an asterick (*).</p><div id="msg"><p class=em2>Source successfully added!</p></div>
-      <h1>Add a New Source</h1>-->
       <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><div id="msg"><p class=em2><?php echo $SourceSuccessfullyAdded;?></p></div>
       <h1><?php echo $AddNewSource;?></h1>
       <p>&nbsp;</p>
@@ -348,56 +330,47 @@ $("#addsource").submit(function(){
 	var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 
 	if(!($("#Email").val().match(pattern))){
-		//alert("Invalid email address");
 		alert(<?php echo "'".$InvalidEmailAddress."'"; ?>);
 		return false;
 	}
 
 	if(($("#Address").val())==""){
-		//alert("Please enter an address for the source.");
 		alert(<?php echo "'".$EnterAddress."'"; ?>);
 		return false;
 	}
 	
 	if(($("#City").val())==""){
-		//alert("Please enter a city for the source.");
 		alert(<?php echo "'".$EnterCity."'"; ?>);
 		return false;
 	}
 
 	if(($("#state option:selected").val())==-1){
-		//alert("Please select a state for the source.");
 		alert(<?php echo "'".$SelectSourceState."'"; ?>);
 		return false;
 	}
 
 	if(($("#ZipCode").val())==""){
-		//alert("Please enter a zip code for the source.");
 		alert(<?php echo "'".$EnterZipCode."'"; ?>);
 		return false;
 	}
 
 	if(!($("#ZipCode").val().match(/^\d{5}(-\d{4})?$/))){
-		//alert("Invalid zip code");
 		alert(<?php echo "'".$InvalidZipCode."'"; ?>);
 		return false;
 	}
 
 	//Validate MetadataID info
 	if(($("#TopicCategory option:selected").val())==-1){
-		//alert("Please select a topic category for the Metadata.");
 		alert(<?php echo "'".$SelectTopicCategory."'"; ?>);
 		return false;
 	}
 
 	if(($("#Title").val())==""){
-		//alert("Please enter a title for the Metadata.");
 		alert(<?php echo "'".$EnterMetadataTitle."'"; ?>);
 		return false;
 	}
 
 	if(($("#Abstract").val())==""){
-		//alert("Please enter an Abstract for the Metadata.");
 		alert(<?php echo "'".$EnterMetadataAbstract."'"; ?>);
 		return false;
 	}
@@ -405,7 +378,6 @@ $("#addsource").submit(function(){
 	if(($("#MetadataLink").val())!=""){
 		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 			if(!($("#ContactName").val().match(regexp))){
-				//alert("Invalid url for Metadata Link");
 				alert(<?php echo "'".$InvalidURLMetadata."'"; ?>);
 				return false;
 			}
@@ -438,8 +410,7 @@ $("#addsource").submit(function(){
 				}, 5000);
 			return true;
 		}else{
-			//alert("Error during processing! Please refresh the page and try again.");
-			alert(<?php echo "'".$ProcessingError."'";?>);
+			alert(<?php echo "'".$ProcessingError."'";?> + data);
 			return false;
 		}
 		

@@ -31,7 +31,8 @@ elseif ($_COOKIE[power] == "student"){
 <link rel="bookmark" href="favicon.ico" >
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 <!-- JQuery JS -->
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 
 <script type="text/javascript" src="js/create_username.js"></script>
 </head>

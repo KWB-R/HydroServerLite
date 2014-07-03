@@ -16,14 +16,14 @@ $localtimestamp = strtotime($LocalDateTime);
 $ms = $UTCOffset * 3600;
 $utctimestamp = $localtimestamp - ($ms);
 $DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
-	
-//connect to server and select database
-require_once 'database_connection.php';
+
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //add the all variables to the datavalues table
 $sql7 ="INSERT INTO `datavalues`(`DataValue`, `ValueAccuracy`, `LocalDateTime`, `UTCOffset`, `DateTimeUTC`, `SiteID`, `VariableID`, `OffsetValue`, `OffsetTypeID`, `CensorCode`, `QualifierID`, `MethodID`, `SourceID`, `SampleID`, `DerivedFromID`, `QualityControlLevelID`) VALUES ('$DataValue', $ValueAccuracy, '$LocalDateTime', '$UTCOffset', '$DateTimeUTC', '$SiteID', '$VariableID', $OffsetValue, $OffsetTypeID, '$CensorCode', '$QualifierID', '$MethodID', '$SourceID', $SampleID, '$DerivedFromID', '$QualityControlLevelID')";
 
-$result7 = @mysql_query($sql7,$connection)or die(mysql_error());
+$result7 = transQuery($sql7,0,-1);
 
 require_once 'update_series_catalog_function.php';
 

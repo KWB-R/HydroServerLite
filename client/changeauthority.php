@@ -1,33 +1,29 @@
 <?php
-	//This is required to get the international text strings dictionary
-	require_once 'internationalize.php';
+//This is required to get the international text strings dictionary
+require_once 'internationalize.php';
+//check authority to be here
+require_once 'authorization_check.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
-	//check authority to be here
-	require_once 'authorization_check.php';
-
-	//redirect anyone that is not an administrator
-	if ($_COOKIE[power] !="admin"){
-		header("Location: index.php?state=pass2");
-		exit;	
-		}
-
-	//connect to server and select database
-	require_once 'database_connection.php';
-
-	//add the user's data
-	$sql ="SELECT username FROM moss_users WHERE (authority='teacher' OR authority='student') ORDER BY username";
-	$result = @mysql_query($sql,$connection)or die(mysql_error());
-	$num = @mysql_num_rows($result);
-	$msg = ""; 
-	if ($num < 1) {
-    	//$msg = "<P><em2>Sorry, there are no users.</em></p>";
-		$msg = "<P><em2>$SorryNoUsers</em></p>";
-	} else {
-		while ($row = mysql_fetch_array ($result)) {
-			$users = $row["username"];
-			$option_block .= "<option value=$users>$users</option>";
-		}
+//redirect anyone that is not an administrator
+if ($_COOKIE[power] !="admin"){
+	header("Location: index.php?state=pass2");
+	exit;	
 	}
+
+//add the user's data
+$sql ="SELECT username FROM moss_users WHERE (authority='teacher' OR authority='student') ORDER BY username";
+$result = transQuery($sql,0,0);
+$msg = ""; 
+if (count($result) < 1) {
+	$msg = "<P><em2>$SorryNoUsers</em></p>";
+} else {
+	foreach ($result as $row) {
+		$users = $row["username"];
+		$option_block .= "<option value=$users>$users</option>";
+	}
+}
 ?>
 
 <html>
@@ -38,7 +34,8 @@
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 </head>
 
 <body background="images/bkgrdimage.jpg">

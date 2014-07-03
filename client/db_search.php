@@ -3,7 +3,9 @@
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
+
 
 // Get parameters from URL
 $center_lat = $_GET["lat"];
@@ -23,9 +25,9 @@ $query = sprintf("SELECT SiteID, SiteCode,SiteName, Latitude, Longitude, SiteTyp
   mysql_real_escape_string($center_lng),
   mysql_real_escape_string($center_lat),
   mysql_real_escape_string($radius));
-$result = mysql_query($query);
 
-$result = mysql_query($query);
+$result = transQuery($query,0,0);
+
 if (!$result) {
   die("Invalid query: " . mysql_error());
 }
@@ -33,15 +35,15 @@ if (!$result) {
 header("Content-type: text/xml");
 
 // Iterate through the rows, adding XML nodes for each
-while ($row = @mysql_fetch_assoc($result)){
+	foreach ($result as $row) {
 
 $query1 = "SELECT * FROM seriescatalog WHERE SiteID=".$row['SiteID']." and VariableID IS NULL";
-$result1 = mysql_query($query1);
-$rows=mysql_num_rows($result1);
+$result1 = transQuery($query1,0,0);
+$rows=count($result1);
 
 $query2 = "SELECT * FROM seriescatalog WHERE SiteID=".$row['SiteID'];
-$result2 = mysql_query($query2);
-$rows2=mysql_num_rows($result2);
+$result2 = transQuery($query2,0,0);
+$rows2=count($result2);
 
 	if ((($rows==1)&&($rows==$rows2))||($rows2==0)) {
 	
@@ -58,7 +60,7 @@ $rows2=mysql_num_rows($result2);
   $newnode->setAttribute("lat", $row['Latitude']);
   $newnode->setAttribute("lng", $row['Longitude']);
   $newnode->setAttribute("distance", $row['distance']);
-  $newnode->setAttribute("sitetype", $row['SiteType']);
+  $newnode->setAttribute("sitetype", translateWord($row['SiteType']));
 		
 	}
 	

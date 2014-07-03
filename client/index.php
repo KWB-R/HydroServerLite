@@ -1,7 +1,26 @@
 <?php
 
+//Clear the session variable for language so that default language loading can happen. 
+
+//However if langchange variable is set in the url, then session remains in place
+if (!isset($_GET["langChang"]))
+{
+if (!isset($_SESSION))
+	{
+		session_start();
+	}
+	if (isset($_SESSION['lang']))
+	{
+		unset($_SESSION['lang']);
+	}
+	
+	
+}
+
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
+
+
 
 // set the expiration date to one hour ago
 require_once("fetchMainConfig.php");
@@ -16,7 +35,6 @@ setcookie ("power", null, -3600, $www);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client: Homepage</title>-->
 <title><?php echo $WebClientHome; ?></title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
@@ -24,15 +42,14 @@ setcookie ("power", null, -3600, $www);
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 
 <!-- JQuery JS -->
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
 
 <script type="text/javascript">
 function show_alert()
 {
-//alert("If you have forgotten your password," + '\n' + "please contact your direct supervisor" + '\n' + "and they can reset it for you. Thank You!");
 alert((<?php echo "'".$ForgotPassword1."'";?>) + '\n' + (<?php echo "'".$ForgotPassword2."'";?>) + '\n' + (<?php echo "'".$ForgotPassword3."'";?>));
 }
-
 </script>
 
 </head>
@@ -43,7 +60,7 @@ alert((<?php echo "'".$ForgotPassword1."'";?>) + '\n' + (<?php echo "'".$ForgotP
     <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
-    <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
+    <td colspan="2" align="left" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
   </tr>
   <tr>
     <td width="240" valign="top" bgcolor="#f2e6d6">

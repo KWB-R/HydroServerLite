@@ -7,15 +7,14 @@ require_once 'authorization_check.php';
 
 $MetaID = $_GET['MetadataID'];
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //Pull the data from the appropriate table using the MetadataID # provided
 $sql_emd ="SELECT * FROM isometadata WHERE MetadataID='$MetaID'";
 
-$result_emd = @mysql_query($sql_emd,$connection)or die(mysql_error());
-
-	while ($single_array = mysql_fetch_array($result_emd)){
+$result_emd = transQuery($sql_emd,0,1);
+foreach ($result_emd as $single_array) {
 			
    		$MetadataID2 = $single_array["MetadataID"];
        	$TopicCategory2 = $single_array["TopicCategory"];
@@ -49,9 +48,9 @@ $option_block_tc = "<select name='TopicCategory2' id='TopicCategory2'>
 
 $sql_tc ="SELECT * FROM topiccategorycv";
 
-$result_tc = @mysql_query($sql_tc,$connection)or die(mysql_error());
+$result_tc = transQuery($sql_tc,0,1);
 
-	while ($row = mysql_fetch_array ($result_tc)){
+	foreach ($result_tc as $row) {
 
 		$Term = $row["Term"];
        	$Definition = $row["Definition"];

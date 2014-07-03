@@ -6,21 +6,21 @@ require_once 'internationalize.php';
 //check authority to be here
 //require_once 'authorization_check.php';
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 require_once 'fetchMainConfig.php';
 
 if (!isset($_COOKIE['power'])){
 //Check to see if the perosn is an authorized user and display their first name
 $sql ="SELECT * FROM moss_users WHERE username='$_POST[username]' AND password= password('$_POST[password]')";
 
-$result = @mysql_query($sql,$connection) or die(mysql_error());
+$result = transQuery($sql,0,0);
 
 //get the number of rows in the result set
-$num = mysql_num_rows($result);
-	if ($num != 0) {
+
+	if (count($result)!= 0) {
 		//get the person's first name and authority
-		while ($row = mysql_fetch_assoc($result)) {
+		foreach ($result as $row) {
 		$firstname = $row['firstname'];
 		$auth = $row['authority'];
 		}
@@ -32,36 +32,35 @@ $num = mysql_num_rows($result);
 }
 
 //Count the number of Sites
-	$sql_sites ="SELECT * FROM sites";
+	$sql_sites ="SELECT COUNT(*) AS count FROM sites";
 
-	$result_sites = @mysql_query($sql_sites,$connection) or die(mysql_error());
-
+	$result_sites = transQuery($sql_sites,0,0);
 	//Get the number of rows in the result set
-	$num_sites = mysql_num_rows($result_sites);
+	$num_sites = $result_sites[0]['count'];
 
 //Count the number of Data Points
-	$sql_datapts ="SELECT * FROM datavalues";
+	$sql_datapts ="SELECT COUNT(*) AS count  FROM datavalues";
 
-	$result_datapts = @mysql_query($sql_datapts,$connection) or die(mysql_error());
+	$result_datapts = transQuery($sql_datapts,0,0);
 
 	//Get the number of rows in the result set
-	$num_datapts = mysql_num_rows($result_datapts);
+	$num_datapts =$result_datapts[0]['count'];
 	
 //Count the number of Variables
-	$sql_vars ="SELECT * FROM varmeth";
+	$sql_vars ="SELECT COUNT(*) AS count FROM varmeth";
 
-	$result_vars = @mysql_query($sql_vars,$connection) or die(mysql_error());
+	$result_vars = transQuery($sql_vars,0,0);
 
 	//Get the number of rows in the result set
-	$num_vars = mysql_num_rows($result_vars);
+	$num_vars = $result_vars[0]['count'];
 	
 //Count the number of Users
-	$sql_users ="SELECT * FROM moss_users";
+	$sql_users ="SELECT COUNT(*) AS count  FROM moss_users";
 
-	$result_u = @mysql_query($sql_users,$connection) or die(mysql_error());
+	$result_u = transQuery($sql_users,0,0);
 
 	//Get the number of rows in the result set
-	$num_u = mysql_num_rows($result_u);
+	$num_u = $result_u[0]['count'];
 
 //Check the cookie or set it (based on authority) if not already
 // or redirect the user elsewhere if unauthorized
@@ -69,46 +68,46 @@ $num = mysql_num_rows($result);
 if (isset($_COOKIE['power'])){
 
 	if($_COOKIE['power'] =='admin'){
-	//$nav ="<script src=js/A_navbar.js></script>";
+	
 	$nav ="<script src=A_navbar.php></script>";
 	}
 	elseif ($_COOKIE['power'] =='teacher'){
-	//$nav ="<script src=js/T_navbar.js></script>";
+	
 	$nav ="<script src=T_navbar.php></script>";
 	}
 	elseif ($_COOKIE['power'] =='student'){
-	//$nav ="<script src=js/S_navbar.js></script>";
+
 	$nav ="<script src=S_navbar.php></script>";
 	} 
 }else{
 	if ($auth == "admin"){
-	//$nav = "<script src=js/A_navbar.js></script>";
+	
 	$nav = "<script src=A_navbar.php></script>";
 	$cookie_name = "power";
 	$cookie_value = $auth;
 	$cookie_expire = time()+14400;
 	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire);
+	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
 	}
 
 	elseif ($auth == "teacher"){
-	//$nav = "<script src=js/T_navbar.js></script>";
+	
 	$nav = "<script src=T_navbar.php></script>";
 	$cookie_name = "power";
 	$cookie_value = $auth;
 	$cookie_expire = time()+14400;
 	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire);
+	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
 	}
 
 	elseif ($auth == "student"){
-	//$nav = "<script src=js/S_navbar.js></script>";
+
 	$nav = "<script src=S_navbar.php></script>";
 	$cookie_name = "power";
 	$cookie_value = $auth;
 	$cookie_expire = time()+14400;
 	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire);
+	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
 	}
 
 	else {
@@ -130,10 +129,10 @@ if (isset($_COOKIE['power'])){
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>    
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
             
-            
-	<script type="text/javascript">
+<script type="text/javascript">
     //<![CDATA[
 
 //Populate the Javascript Array

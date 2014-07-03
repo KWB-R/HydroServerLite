@@ -2,7 +2,8 @@
 //This is required to get the international text strings dictionary
 //require_once 'internationalize.php';
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 // Get parameters from URL
 $siteid = $_GET["siteid"];
@@ -21,18 +22,16 @@ $query = sprintf("SELECT BeginDateTime, EndDateTime, SiteName FROM seriescatalog
   mysql_real_escape_string($siteid),
   mysql_real_escape_string($varid),
   mysql_real_escape_string($methodid));
-$result = mysql_query($query);
+$result = transQuery($query,0,0);
 
-$result = mysql_query($query);
 if (!$result) {
   die("Invalid query: " . mysql_error());
- // die($InvalidQuery . mysql_error());
 }
 
 header("Content-type: text/xml");
 
 // Iterate through the rows, adding XML nodes for each
-while ($row = @mysql_fetch_assoc($result)){
+foreach ($result as $row) {
   $node = $dom->createElement("dates");
   $newnode = $parnode->appendChild($node);
   $newnode->setAttribute("date_from", $row['BeginDateTime']);

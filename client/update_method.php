@@ -6,8 +6,8 @@ $MID = $_GET['MethodID2'];
 $MethodD = $_GET['MethodDescription2'];
 $MethodL = $_GET['MethodLink2'];
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //Update the fields for the MethodID # provided
 if ($MethodL ==''){
@@ -16,7 +16,7 @@ if ($MethodL ==''){
 	$sql_up ="UPDATE methods SET MethodDescription='$MethodD',MethodLink='$MethodL' WHERE MethodID='$MID'";
 }
 
-$result_up = @mysql_query($sql_up,$connection)or die(mysql_error());
+$result_up = transQuery($sql_up,1,-1);
 
 echo ($result_up);
 

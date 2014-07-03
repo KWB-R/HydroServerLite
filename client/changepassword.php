@@ -1,39 +1,32 @@
 <?php
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
-
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //Display the appropriate user authority to add depending on the user's authority
 if ($_COOKIE[power] == "admin"){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE (authority='teacher' OR authority='student') ORDER BY username";
-	$result = @mysql_query($sql,$connection)or die(mysql_error());
-	$num = @mysql_num_rows($result);
-	if ($num < 1) {
-    	//$msg = "<P><em2>Sorry, there are no users.</em></p>";
+	$result = transQuery($sql,0,0);
+	if (count($result) < 1){
 		$msg = "<P><em2>$SorryNoUsers</em></p>";
 	} else {
-	while ($row = mysql_fetch_array ($result)) {
+	foreach ($result as $row) {
 		$users = $row["username"];
 		$option_block .= "<option value=$users>$users</option>";
 		}
 	}
 }
 elseif ($_COOKIE[power] == "teacher"){
-	//select the users
 	$sql ="Select username FROM moss_users WHERE authority='student' ORDER BY username";
-	$result = @mysql_query($sql,$connection)or die(mysql_error());
-	$num = @mysql_num_rows($result);
-	if ($num < 1) {
-    	//$msg = "<P><em2>Sorry, there are no users.</em></p>";
+	$result = transQuery($sql,0,0);
+	if (count($result) < 1){
 		$msg = "<P><em2>" + $NoUsers + "</em></p>";
 	} else {
-	while ($row = mysql_fetch_array ($result)) {
+	foreach ($result as $row) {
 		$users = $row["username"];
 		$option_block .= "<option value=$users>$users</option>";
 		}
@@ -49,12 +42,12 @@ elseif ($_COOKIE[power] == "student"){
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
 <title><?php echo $WebClient; ?></title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 </head>
 
 <body background="images/bkgrdimage.jpg">

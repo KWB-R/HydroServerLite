@@ -3,8 +3,8 @@
 	 $setup="yes";
 	 $worldWaterSetup="No"; //This parameter is only used for connecting to worldwater database and should only be run from within the server. 
 	 //To use world water server or your custom server : Enter the above option as Yes and then please configure the database settings below:
-	 $serverDBHost = 	"" ;//Your server Name : For example - "worldwater.byu.edu"
-	 $serverDBUName = 	"" ;//Your server Username : For example - "Adam"
+	 $serverDBHost = 	"localhost" ;//Your server Name : For example - "worldwater.byu.edu"
+	 $serverDBUName = 	"root" ;//Your server Username : For example - "Adam"
 	 $serverDBPass = 	"" ;//Your server Password : For example - "*********"	 
 	 
 	 $singleInstall="Yes"; //Once again, this is only for advanced users to change. For people who are intending to have multiple installations on their servers. 

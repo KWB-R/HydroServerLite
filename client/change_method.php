@@ -1,9 +1,10 @@
 <?php
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
-
 //check authority to be here
 require_once 'authorization_check.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //redirect anyone that is not an administrator
 if ($_COOKIE[power] !="admin"){
@@ -11,37 +12,24 @@ if ($_COOKIE[power] !="admin"){
 	exit;	
 	}
 
-//connect to server and select database
-require_once 'database_connection.php';
 
-//filter the Site results after Source is selected
-$sql_1 ="SELECT * FROM methods WHERE MethodID >= 3";
+$sql ="SELECT * FROM methods WHERE MethodID >= 2";
+$result = transQuery($sql,0,1);
 
-$result_1 = @mysql_query($sql_1,$connection)or die(mysql_error());
-
-$num_1 = @mysql_num_rows($result_1);
-	if ($num_1 < 1){
-
-    //$msg_1 = "<p class=em2>Sorry, there are no Methods in the database.</em></p>";
+	if (count($result) < 1){
 	$msg_1 = "<p class=em2> $NoMethods </em></p>";
-
 	} else {
-
-		while ($row_1 = mysql_fetch_array ($result_1)){
-
-			$m_id = $row_1["MethodID"];
-			$m_desc = $row_1["MethodDescription"];
-
+		foreach ($result as $row) {
+			$m_id = $row["MethodID"];
+			$m_desc = $row["MethodDescription"];
 			$option_block .= "<option value=$m_id>$m_desc</option>";
 		}
 	}
-
 ?>
 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
 <title><?php echo $WebClient; ?></title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
@@ -49,7 +37,8 @@ $num_1 = @mysql_num_rows($result_1);
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
 <script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
@@ -141,7 +130,6 @@ $('#window').show();
 	<div id="windowHeader">
 		<span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span>
 	</div>
-	<!--<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yup"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>-->
     <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yup"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
 </div>
 </body>

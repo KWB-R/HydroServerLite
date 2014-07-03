@@ -26,7 +26,8 @@ if ($_COOKIE[power] !="admin"){
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
 <script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>

@@ -11,18 +11,16 @@ if ((!$_POST['username']) || (!$_POST['password'])) {
 	exit;
 }
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //add the user's data
 $sql ="UPDATE moss_users SET password=PASSWORD('$_POST[password]') WHERE username='$_POST[username]'";
 
-$result = @mysql_query($sql,$connection)or die(mysql_error());
+$result = transQuery($sql,0,-1);
 
 //get a good message for display upon success
 if ($result) {
-
-//$msg ="<p class=em2>Congratulations, you're changed the password of $_POST[username]. Would you like to do another?</p>";
 $msg ="<p class=em2>".$CongratulationsChangedPassword." ". $_POST[username].". ". $AddAnother. "</p>";
 }
 
@@ -30,13 +28,11 @@ $msg ="<p class=em2>".$CongratulationsChangedPassword." ". $_POST[username].". "
 if ($_COOKIE[power] == "admin"){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE (authority='teacher' OR authority='student') ORDER BY username";
-	$result = @mysql_query($sql,$connection)or die(mysql_error());
-	$num = @mysql_num_rows($result);
-	if ($num < 1) {
-    	//$msg2 = "<P><em2>Sorry, there are no users.</em></p>";
+	$result = transQuery($sql,0,0);
+	if (count($result) < 1) {
 		$msg2 = "<P><em2> $SorryNoUsers </em></p>";
 	} else {
-	while ($row = mysql_fetch_array ($result)) {
+	foreach ($result as $row) {
 		$users = $row["username"];
 		$option_block .= "<option value=$users>$users</option>";
 		}
@@ -45,13 +41,11 @@ if ($_COOKIE[power] == "admin"){
 elseif ($_COOKIE[power] == "teacher"){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE authority='student' ORDER BY username";
-	$result = @mysql_query($sql,$connection)or die(mysql_error());
-	$num = @mysql_num_rows($result);
-	if ($num < 1) {
-    	//$msg2 = "<P><em2>Sorry, there are no users.</em></p>";
+	$result = transQuery($sql,0,0);
+	if (count($result) < 1) {
 		$msg2 = "<P><em2> $SorryNoUsers </em></p>";
 	} else {
-	while ($row = mysql_fetch_array ($result)) {
+	foreach ($result as $row) {
 		$users = $row["username"];
 		$option_block .= "<option value=$users>$users</option>";
 		}
@@ -71,7 +65,8 @@ elseif ($_COOKIE[power] == "student"){
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 </head>
 
 <body background="images/bkgrdimage.jpg">

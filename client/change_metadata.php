@@ -11,37 +11,27 @@ if ($_COOKIE[power] !="admin"){
 	exit;	
 	}
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //filter the Site results after Source is selected
 $sql ="SELECT * FROM isometadata";
+$result = transQuery($sql,0,1);
 
-$result = @mysql_query($sql,$connection)or die(mysql_error());
-
-$num = @mysql_num_rows($result);
-	if ($num < 1){
-
-    //$msg = "<p class=em2>Sorry, there are no Metadata ID's in the database.</em></p>";
-	$msg = "<p class=em2> $NoMetadataIDs </em></p>";
-
+	if (count($result) < 1){
+   	$msg = "<p class=em2> $NoMetadataIDs </em></p>";
 	} else {
-
-		while ($row = mysql_fetch_array ($result)){
-
+		foreach ($result as $row) {
 			$md_id = $row["MetadataID"];
 			$md_title = $row["Title"];
-
 			$option_block_md .= "<option value=$md_id>$md_title</option>";
 		}
 	}
-
 ?>
 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
 <title><?php echo $WebClient; ?></title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
@@ -49,7 +39,8 @@ $num = @mysql_num_rows($result);
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
 <script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>

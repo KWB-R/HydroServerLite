@@ -4,14 +4,14 @@ require_once 'authorization_check.php';
 
 $MetaID = $_GET['MetadataID'];
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //Delete the MetadataID # provided
 
 $sql_del_m ="DELETE FROM isometadata WHERE MetadataID='$MetaID'";
 
-$result_del_m = @mysql_query($sql_del_m,$connection)or die(mysql_error());
+$result_del_m = transQuery($sql_del_m,0,-1);
 
 echo ($result_del_m);
 

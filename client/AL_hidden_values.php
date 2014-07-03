@@ -1,21 +1,12 @@
 <?php
-
-require_once 'fetchMainConfig.php';
-
 //create next increment ValueID in the table
 $next_increment ="0";
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
-//connect to server and select database
-require_once 'database_connection.php';
-
-//add the SourceID's
-
+//Get the auto increment value
 $sql ="SHOW TABLE STATUS LIKE 'datavalues'";
-
-$result = @mysql_query($sql,$connection)or die(mysql_error());
-
-$row = mysql_fetch_assoc($result);
-
+$result = transQuery($sql,0,0);
+$row = $result[0];
 $ValueID = $row['Auto_increment'];
-
 ?>

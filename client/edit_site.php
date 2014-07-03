@@ -1,28 +1,22 @@
 <?php
 //This is required to get the international text strings dictionary
-	require_once 'internationalize.php';
-	
+require_once 'internationalize.php';	
 //check authority to be here
 require_once 'authorization_check.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
-//connect to server and select database
-require_once 'database_connection.php';
 require_once 'fetchMainConfig.php';
-
 //add the SourceID's options
 $sql ="Select * FROM sources";
 
-$result = @mysql_query($sql,$connection)or die(mysql_error());
-
-$num = @mysql_num_rows($result);
-	if ($num < 1) {
-
-	    //$msg = "<span class='em'>Sorry, there are no SourceID names.</span>";
+$result = transQuery($sql,0,1);
+	if (count($result) < 1) {
 		$msg = "<span class='em'> $NoSourceIDNames </span>";
 
 	}else{
 
-	while ($row = mysql_fetch_array ($result)) {
+	foreach ($result as $row) {
 
 		$sourceid = $row["SourceID"];
 		$sourcename = $row["Organization"];
@@ -39,17 +33,14 @@ $num = @mysql_num_rows($result);
 //add the SiteType options
 $sql2 ="Select * FROM sitetypecv";
 
-$result2 = @mysql_query($sql2,$connection)or die(mysql_error());
+$result2 = transQuery($sql2,0,1);
 
-$num2 = @mysql_num_rows($result2);
-	if($num2 < 1){
-
-	    //$msg = "<span class='em'>Sorry, there are no Site Types.</span>";
+	if(count($result2) < 1){
 		$msg = "<span class='em'> $NoSiteTypes </span>";
 
 	}else{
 
-		while ($row2 = mysql_fetch_array ($result2)) {
+		foreach ($result2 as $row2) {
 
 			$sitetype = $row2["Term"];
 			$option_block2 .= "<option value='$sitetype'>$sitetype</option>";
@@ -59,14 +50,13 @@ $num2 = @mysql_num_rows($result2);
 //add the VerticalDatum options
 $sql3 ="Select * FROM verticaldatumcv";
 
-$result3 = @mysql_query($sql3,$connection)or die(mysql_error());
+$result3 = transQuery($sql3,0,1);
 
-$num3 = @mysql_num_rows($result3);
-	if($num3 < 1){
-		//$msg = "<span class='em'>Sorry, there are no Vertical Datums.</span>";
+	if(count($result3) < 1){
+		
 		$msg = "<span class='em'> $NoVerticalDatums </span>";
 	}else{
-		while ($row3 = mysql_fetch_array ($result3)){
+		foreach ($result3 as $row3) {
 			$vd = $row3["Term"];
 
 			if($vd==$default_datum){
@@ -80,17 +70,14 @@ $num3 = @mysql_num_rows($result3);
 //add the LatLongDatumID options
 $sql4 ="Select * FROM spatialreferences";
 
-$result4 = @mysql_query($sql4,$connection)or die(mysql_error());
+$result4 = transQuery($sql4,0,1);
 
-$num4 = @mysql_num_rows($result4);
-	if($num4 < 1){
-
-	    //$msg = "<span class='em'>Sorry, there are no Vertical Datums.</span>";
+	if(count($result4) < 1){
 		$msg = "<span class='em'> $NoVerticalDatums </span>";
 
 	}else{
 
-		while ($row4 = mysql_fetch_array ($result4)){
+		foreach ($result4 as $row4) {
 
 			$srid = $row4["SpatialReferenceID"];
 			$srsname = $row4["SRSName"];
@@ -119,7 +106,8 @@ $num4 = @mysql_num_rows($result4);
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
 <script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
 <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>

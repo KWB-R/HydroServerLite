@@ -32,6 +32,8 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 
 
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $sitecode= $_GET['sc'];
 $source= $_GET['source'];
@@ -45,47 +47,34 @@ $datum=$_GET['datum'];
 $state=$_GET['state'];
 $county=$_GET['county'];
 $coms=$_GET['com'];
-require_once 'db_config.php';
-
 
 
 $sql ="INSERT INTO `sites`(`SiteCode`, `SiteName`, `Latitude`, `Longitude`, `LatLongDatumID`, `SiteType`, `Elevation_m`, `VerticalDatum`, `State`, `County`, `Comments`) VALUES ('$sitecode', '$sitename', '$lat', '$lng', '$llid', '$type', '$elev', '$datum', '$state', '$county', '$coms')";
 
-$result = @mysql_query($sql,$connect)or die(mysql_error());
+$result = transQuery($sql,1,-1);
 
 //Fetch the SiteID of the Inserted site
 
 $sql2="SELECT `SiteID` FROM `sites` WHERE `SiteCode`='$sitecode'";
-$result2 = @mysql_query($sql2,$connect)or die(mysql_error());
-$row2=mysql_fetch_array ($result2);
+$result2 = transQuery($sql2,0,0);
+$row2=$result2[0];
 $siteid=$row2['SiteID'];
 
 
 $sql3="SELECT * FROM `sources` WHERE SourceID='$source'";
 
-$result3 = @mysql_query($sql3,$connect)or die(mysql_error());
-
-$row3=mysql_fetch_array ($result3);
+$result3 = transQuery($sql3,0,0);
+$row3=$result3[0];
 
 $org=$row3['Organization'];
 $desc=$row3['SourceDescription'];
 $cita=$row3['Citation'];
 $vc=0;
 
-
-
 $sql4 = sprintf("INSERT INTO `seriescatalog`(`SiteID`, `SiteCode`, `SiteName`, `SiteType`, `SourceID`, `Organization`, `SourceDescription`, `Citation`, `ValueCount`) VALUES ('$siteid', '$sitecode', '$sitename', '$type', '$source', '$org', %s, '$cita', '$vc')",
              
                        GetSQLValueString($desc, "text"));
 					  
-
-
-$result4 = @mysql_query($sql4,$connect)or die(mysql_error());
-
-
+$result4 = transQuery($sql4,1,-1);
 echo($result4);
-
-
-
-
 ?>

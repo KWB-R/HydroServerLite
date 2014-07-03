@@ -98,8 +98,8 @@ if (!isset($_POST['Citation'])){
 //get hidden default values
 require_once 'source_hidden_values.php';
 
-//connect to server and select database
-require_once 'database_connection.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 //Create a new Metadata
 if (!isset($_POST['TopicCategory'])){
@@ -137,22 +137,21 @@ $MetadataLink = $_POST['MetadataLink'];
 //Enter the provided data into the ISO Metadata table
 $sql2 ="INSERT INTO  `isometadata`(`TopicCategory`, `Title`, `Abstract`, `ProfileVersion`, `MetadataLink`) VALUES ('$TopicCategory', '$Title', '$Abstract', '$ProfileVersion', '$MetadataLink')";
 
-$result2 = @mysql_query($sql2,$connection)or die(mysql_error());
+$result2 = transQuery($sql2,1,-1);
 
 //Now get the # of the MetadataID, so we can add it to the Source info when it is posted
 $sql3 ="SELECT `MetadataID` FROM `isometadata` WHERE `MetadataLink`='$MetadataLink' and `ProfileVersion`='$ProfileVersion' and `Abstract`='$Abstract' and `Title`='$Title' and `TopicCategory`='$TopicCategory'";
 
-$result3 = @mysql_query($sql3,$connection)or die(mysql_error());
+$result3 = transQuery($sql3,1,0);
 
-$row3 = mysql_fetch_array($result3, MYSQL_ASSOC);
-
-	$MetadataID = $row3['MetadataID'];
+$row3 =$result3[0];
+$MetadataID = $row3['MetadataID'];
 
 
 //Enter the provided data into the Sources table
 $sql3 ="INSERT INTO `sources`(`SourceID`, `Organization`, `SourceDescription`, `SourceLink`, `ContactName`, `Phone`, `Email`, `Address`, `City`, `State`, `ZipCode`, `Citation`, `MetadataID`) VALUES ('$SourceID', '$Organization', '$SourceDescription', '$SourceLink', '$ContactName', '$Phone', '$Email', '$Address', '$City', '$State', '$ZipCode', '$Citation', '$MetadataID')";
 
-$result3 = @mysql_query($sql3,$connection)or die(mysql_error());
+$result3 = transQuery($sql3,0,-1);
 
 echo($result3);
 

@@ -2,20 +2,17 @@
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 $varid=$_GET['varid'];
 
 $select = "SELECT * FROM units WHERE unitsID='$varid'";
 
-$export = mysql_query ( $select ) or die ( "Sql error : " . mysql_error( ) );
-
-$fields = mysql_num_fields ( $export );
-
+$export = transQuery( $select,0,1 ) ;
 $data="";
 
-while( $row = mysql_fetch_row( $export ) )
-{
+foreach ($export as $row) {
     $line = '';
     foreach( $row as $value )
     {                                            

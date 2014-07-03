@@ -13,7 +13,9 @@ require_once 'fetchMainConfig.php';
 <!--<title>HydroServer Lite Web Client</title>-->
 <title><?php echo $WebClient; ?></title>
 
-<script src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
+
 
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
 <link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />

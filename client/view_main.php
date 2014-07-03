@@ -16,7 +16,9 @@ require_once 'authorization_check2.php';
 
 <link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>    
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script> 
+
             
             
 	<script type="text/javascript">

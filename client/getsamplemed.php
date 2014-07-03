@@ -2,27 +2,26 @@
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
 
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 
 // get data and store in a json array
 $query = "SELECT * FROM samplemediumcv";
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
+$result = transQuery($query,0,1);
 $variables[] = array(
-        //'smterm' => "Select...",
 		'smterm' => $SelectEllipsis,
         'smdef' => "-1" );
 
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+foreach ($result as $row) {
     
 		$variables[] = array(
-        'smterm' => utf8_encode($row['Term']),
-        'smdef' => utf8_encode($row['Definition']));
+        'smterm' => $row['Term'],
+        'smdef' => $row['Definition']);
 
 }
 
 $variables[] = array(
-        //'smterm' => "Other/New",
 		'smterm' => $OtherSlashNew ,
         'smdef' => "-10" );
 

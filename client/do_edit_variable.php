@@ -1,7 +1,8 @@
 <?php
 
 //Editing exiting variable
-require_once 'db_config.php';
+//All queries go through a translator. 
+require_once 'DBTranslator.php';
 
 if(isset($_GET['del'])){
 	
@@ -9,11 +10,11 @@ if(isset($_GET['del'])){
 	$varid=$_GET['varid'];
 
 	$sql1="DELETE FROM `variables` WHERE `VariableID`='$varid'";
-	$result1 = @mysql_query($sql1,$connect)or die(mysql_error());
+	$result1 = transQuery($sql1,0,-1);
 
 	if($result1){
 		$sql_vm="DELETE FROM `varmeth` WHERE `VariableID`='$varid'";
-		$result_vm = @mysql_query($sql_vm,$connect)or die(mysql_error());
+		$result_vm = transQuery($sql_vm,0,-1);
 	}
 
 	echo($result1);
@@ -44,7 +45,7 @@ if(isset($_GET['del'])){
 
 	$sql1="UPDATE `variables` SET `VariableCode`='$vc',`VariableName`='$vn',`Speciation`='$sp',`VariableunitsID`='$unit',`SampleMedium`='$sm',`ValueType`='$vt',`IsRegular`='$isr',`TimeSupport`='$ts',`TimeunitsID`='$tid',`DataType`='$dt',`GeneralCategory`='$cat',`NoDataValue`='$nod' WHERE `VariableID`='$varid'";
 
-	$result1 = @mysql_query($sql1,$connect)or die(mysql_error());
+	$result1 = transQuery($sql1,1,-1);
 
 	echo($result1);
 
