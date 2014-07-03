@@ -1,5 +1,9 @@
 <?php
 
+//Change made on 7/3/2014 - Rohit Khattar : Adding a debugging mode, if this variable is set to 1, all the queries made will be sent to the screen!
+
+$debugMode = 0;
+
 require_once 'db_config.php';
 
 function transQuery($inputquery,$sendTrans = 1 ,$returnTrans = 1)
@@ -32,6 +36,8 @@ if ($lang == "en")
 //Check if the database is in spanish and the language set is not spanish: This means reverse translation needs to happen! This should be exciting :P
 
 $sql2="SELECT Term FROM datatypecv LIMIT 0,1";
+global $debugMode;
+if ($debugMode==1 ) {echo $sql2;}
 $result2 = @mysql_query($sql2,$connect)or die("Error" .mysql_error());
 $row = mysql_fetch_assoc($result2);
 if ($row['Term'] == "Acumulativo"):
@@ -77,8 +83,9 @@ return $translatedResult;
 
 function makeRequest($query)
 {
-	
+global $debugMode;
 global $connect;
+if ($debugMode==1 ) {echo $query;}
 $finalResult = @mysql_query($query,$connect)or die(mysql_error());	
 return $finalResult;
 	
@@ -86,6 +93,7 @@ return $finalResult;
 
 function translateQuery($inputquery)
 {
+global $debugMode;
 global $connect;
 //Split query into pieces
 
@@ -108,6 +116,7 @@ if (in_array($key,$ignore))
 }
 $key1=utf8_encode($key);
 $sql2="SELECT EngText FROM  `spanish` WHERE  `SpanishText` =  '$key1' LIMIT 0 , 1";
+if ($debugMode==1 ) {echo $sql2;}
 $result2 = @mysql_query($sql2,$connect)or die("Error" .mysql_error());
 if (mysql_num_rows($result2) > 0 ):
 $row = mysql_fetch_assoc($result2);
@@ -125,6 +134,7 @@ return $inputquery;
 
 function translateQueryRev($inputquery)
 {
+global $debugMode;
 global $connect;
 //Split query into pieces
 
@@ -147,6 +157,7 @@ if (in_array($key,$ignore))
 }
 $key1=utf8_encode($key);
 $sql2="SELECT SpanishText FROM  `spanish` WHERE  `EngText` =  '$key1' LIMIT 0 , 1";
+if ($debugMode==1 ) {echo $sql2;}
 $result2 = @mysql_query($sql2,$connect)or die("Error" .mysql_error());
 if (mysql_num_rows($result2) > 0 ):
 $row = mysql_fetch_assoc($result2);
@@ -165,6 +176,7 @@ return $inputquery;
 
 function translateResult($result,$returnTrans=1,$rev=0)
 {
+global $debugMode;
 
 global $connect;
 //Translate the Response
@@ -200,7 +212,7 @@ return $outputData;
 
 function translateWord($value,$rev=0)
 {
-	
+global $debugMode;
 global $forceTrans;
 
 if ($forceTrans != 1):
@@ -228,7 +240,7 @@ else
 {
 	$sql2="SELECT SpanishText FROM  `spanish` WHERE  `EngText` =  '$value' LIMIT 0 , 1";	
 }
-
+if ($debugMode==1 ) {echo $sql2;}
 $result2 = @mysql_query($sql2,$connect)or die(mysql_error());
 if (mysql_num_rows($result2) > 0 )
 {$row = mysql_fetch_assoc($result2);

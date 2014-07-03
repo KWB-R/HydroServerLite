@@ -16,7 +16,15 @@ $( document ).ready(function() {
   $.post( './changeLang.php',{lang:$(this).text()}).done(function( data ) {
 	  if (data == "langChanged")
 	  {
-		window.location = "?langChang=1";
+	  //Check URL for existing GET Parameters
+	  var extra = "";
+	  if(document.URL.indexOf("?")!=-1)
+	  {
+		extra = document.URL.split("?")[1];
+		extra = extra.replace("langChang=1&&","");
+	  }
+	
+		window.location = "?langChang=1&&" + extra;
 	  }
 	  else
 	  {
