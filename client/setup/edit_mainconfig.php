@@ -1,6 +1,15 @@
 ﻿<?php
 	//This is required to get the international text strings dictionary
-	require_once '../internationalize.php';
+	 $setup="yes";
+	 $worldWaterSetup="No"; //This parameter is only used for connecting to worldwater database and should only be run from within the server. 
+	 //To use world water server or your custom server : Enter the above option as Yes and then please configure the database settings below:
+	 $serverDBHost = 	"" ;//Your server Name : For example - "worldwater.byu.edu"
+	 $serverDBUName = 	"" ;//Your server Username : For example - "Adam"
+	 $serverDBPass = 	"" ;//Your server Password : For example - "*********"	 
+	 
+	 $singleInstall="Yes"; //Once again, this is only for advanced users to change. For people who are intending to have multiple installations on their servers. 
+	 
+	require_once 'internationalize.php';
 ?>
 
 
@@ -18,6 +27,33 @@
 <!-- JQuery JS -->
 <script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript">
+
+$(document).ready(function() {
+ $("#wwdb").change(function () {
+
+	var val = $("#wwdb").val();
+	
+	if(val==1)
+	{
+	//Hide the Database settings Except Name	
+	$("#dbSet").hide();
+	$("#dbSet3").hide();
+	$("#dbSet2").hide();
+	}
+	else
+	{
+	$("#Database Host").val("");
+	$("#Database User Name").val("");
+	$("#Database Password").val("");
+	
+		
+	$("#dbSet").show();
+	$("#dbSet3").show();
+	$("#dbSet2").show();	
+	}
+ });
+});
+
 function show_answerDH(){
 alert("This may be either localhost or the server's IP address such as 8.23.154.5 if you are using a different server to host the database than the software.");
 }
@@ -128,12 +164,11 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   
   <tr>
     
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br />
+   <td width="960" valign="top" bgcolor="#FFFFFF"><blockquote><br />
       <form name="form1" id="form1" method="post" action="">
-<table width="800" border="0" align="center" style="background-color: #FFFFFF;">
+<table width="720" border="0" align="center" style="background-color: #FFFFFF;">
   <tr>
-    <td><table width="600" border="0" align="center" style="background-color: #FFFFFF;">
-  <tr>
+    <td><table width="720" border="0" align="center" style="background-color: #FFFFFF;"> <tr>
     <td colspan="3">&nbsp;</td>
   </tr>
   <tr>
@@ -170,22 +205,29 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   <tr>
     <td colspan="3"><span class='confighead'><!--Configuration settings for MySql Database --><?php echo $MySQLConfiguration;?></span></td>
   </tr>
+  <?php if ($worldWaterSetup == "Yes")
+ echo '
   <tr>
     <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
+    <td>Use WorldWater Database?</td>
+    <td>
+      <select name="wwdb" id="wwdb">
+		<option value="-1"><?php echo $SelectEllipsis; ?></option>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+      </select></td>
+  </tr>'; ?>
+  <tr id="dbSet">
     <td width="19">&nbsp;</td>
     <td width="146"><!--Database Host:      --><?php echo $DatabaseHost;?></td>
     <td width="416"><input type="text" id="Database Host" name="databasehost" value="" />&nbsp;<a href="#" onClick="show_answerDH()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
     </tr>
-  <tr>
+  <tr id="dbSet2">
     <td width="19">&nbsp;</td>
     <td width="146"><!--Database Username:      --><?php echo $DatabaseUsername;?></td>
     <td><input type="text" id="Database User Name" name="databaseusername" value="" />&nbsp;</td>
   </tr>
-  <tr>
+  <tr id="dbSet3">
     <td width="19">&nbsp;</td>
     <td width="146"><!--Database Password:      --><?php echo $DatabasePassword;?></td>
     <td><input type="text" id="Database Password" name="databasepassword" value="" /></td>
@@ -194,6 +236,22 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td>&nbsp;</td>
     <td><!--Database Name: --><?php echo $DatabaseName;?></td>
     <td><input type="text" id="Database Name" name="databasename" value="" />&nbsp;<a href="#" onClick="show_answerDN()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    </tr>
+  <tr>
+    <?php if ($singleInstall != "Yes")
+ echo '
+  <tr>
+    <td>&nbsp;</td>
+    <!-- @TODO : Add language conversion to the below file-->
+    <td>Directory</td>
+    <td><input type="text" id="Directory" name="dir" value="" />&nbsp;</td>
+    </tr>
+  <tr>';?>
+  <tr>
+    <td>&nbsp;</td>
+    <!-- @TODO : Add language conversion to the below file-->
+    <td>Language Code ('en','es')</td>
+    <td><input type="text" id="LangCode" name="lang" value="" />&nbsp;</td>
     </tr>
   <tr>
     <td>&nbsp;</td>
@@ -269,7 +327,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><!--Profile Version:--><?php echo $ProfileVersion;?></td>
+    <td><!--Profile Version:--><?php echo $MetaDataProfileVersion;?></td>
     <td><input type="text" id="Profile Version" name="profilev" value="" />&nbsp;<a href="#" onClick="show_answerPV()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>
@@ -408,6 +466,8 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   </tr>
   <tr>
     <td>&nbsp;</td>
+    <input type="hidden" name="worldwater" value="<?php echo $worldWaterSetup;?>">
+    <input type="hidden" name="single" value="<?php echo $singleInstall;?>">
     <!--<td colspan="2"><input type="SUBMIT" id="submit" value="Save Settings" class="button" style="width: 115px" />&nbsp;&nbsp;<input type="reset" id="Reset" value="Cancel" class="button" style="width: 70px" /></td>-->
     <td colspan="2"><input type="SUBMIT" id="submit" value="<?php echo $SaveSettings; ?>" class="button" style="width: auto" />&nbsp;&nbsp;<input type="reset" id="Reset" value="<?php echo $Cancel;?>" class="button" style="width: auto" /></td>
     <td width="1">&nbsp;</td>
@@ -443,14 +503,30 @@ var fal=0;
 	if ((($(this).val())=="")&&(($(this).attr('name'))!="databasepassword"))
 	{ 
 	
-		$(this).focus();
+	if ($("#wwdb").val()==1)
+	{
+	
+	
+	$("#Database\\ Host").val("<?php echo $serverDBHost;?>");
+	$("#Database\\ User\\ Name").val("<?php echo $serverDBUName;?>");
+	$("#Database\\ Password").val("<?php echo $serverDBPass;?>");
+	
+	if ($(this).attr('name')=="databaseusername")
+	{
+		return true;	
+	}
+	if ($(this).attr('name')=="databasehost")
+	{
+		return true;	
+	}		
+	}
+	
+	$(this).focus();
 		//$(this).hide('slow',function(){$(this).show('slow');alert("Cannot Leave "+$(this).attr('id')+" Blank");});
 		$(this).hide('slow',function(){$(this).show('slow');alert(<?php echo "'".$CannotLeave."'";?> + " " +$(this).attr('id')+" " + <?php echo "'".$Blank."'";?>);});
 		fal=1;
-		return false;
-		
+		return false;	
 	}
-	
 	});
 
 if (fal==1)
@@ -463,12 +539,10 @@ $.post("db_check.php", $("#form1").serialize(),  function( data ) {
 	  alert(data);
   return false;
   }
-  
-		      });
-
-//Database Check Completed. Now to run a script to insert the tables into the database. 
-
-$.ajax({
+  else
+  {
+	
+	$.ajax({
   type: "POST",
   url: "do_add_table.php",
   data: $("#form1").serialize()
@@ -496,16 +570,15 @@ $.ajax({
   }
   else
   {
+  alert(msg);
   //alert("Error in database configuration.Could Not Add the base tables.");
   alert(<?php echo "'".$ErrorDatabaseTables."'";?>);
-  
   return false;
   }
-  
-});
-
-
-
+});    
+  }
+		      });
+//Database Check Completed. Now to run a script to insert the tables into the database. 
 	return false;
 });
 

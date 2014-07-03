@@ -451,6 +451,8 @@ $(document).ready(function() {
   var $filename="";
   
   $("#viewdata").click(function() {
+	  var siteid=$("#SiteID option:selected").val();
+glob_siteid=siteid;
 	window.location.href = "details.php?siteid="+glob_siteid;
 	
 });	

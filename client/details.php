@@ -642,7 +642,16 @@ function plot_chart()
 {
 
 var unit_yaxis="unit";
-//	alert("");
+//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+if (varid != -1)
+{
+$.ajax({
+  type: "GET",
+  url: "getUnit2.php?varid="+varid
+}).done(function( msg ) {
+  unit_yaxis = msg;
+});
+}
 
 //Chaning Complete Data loading technique..need to create a php page that will output javascript...
 
@@ -823,9 +832,18 @@ var source12 =
             };
 var dataAdapter12 = new $.jqx.dataAdapter(source12);   
 
-if (flag==1)    
-{
+//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+var unitGrid = "Unit: None";
 
+
+$.ajax({
+  type: "GET",
+  url: "getUnit2.php?varid="+varid
+}).done(function( msg ) {
+  unitGrid = msg;
+  
+  if (flag==1)    
+{
 
  
 
@@ -838,7 +856,7 @@ if (flag==1)
                 columns: [
 				  { text: 'ValueID', datafield: 'vid', width: 90 },
                   { text: 'Date', datafield: 'date', width: 200 },
-	              { text: 'Value', datafield: 'Value', width: 200} <?php
+	             { text: 'Value (' + unitGrid +')' , datafield: 'Value', width: 200} <?php
       if(isset($_COOKIE['power']))
 	  {
 		echo(",
@@ -899,7 +917,7 @@ if(flag!=1)
                 columns: [
 			  { text: 'ValueID', datafield: 'vid', width: 90 },
                   { text: 'Date', datafield: 'date', width: 200 },
-	              { text: 'Value', datafield: 'Value', width: 200} <?php
+	          { text: 'Value (' + unitGrid +')', datafield: 'Value', width: 200} <?php
       if(isset($_COOKIE['power']))
 	  {
 		echo(",
@@ -944,7 +962,7 @@ if(flag!=1)
 			
 	}
 	
-
+});
 //Editing functionality
 
   // initialize the popup window and buttons.
@@ -1220,7 +1238,7 @@ loadmap();
 <body background="images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>

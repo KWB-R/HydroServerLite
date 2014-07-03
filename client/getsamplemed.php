@@ -16,8 +16,8 @@ $variables[] = array(
 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     
 		$variables[] = array(
-        'smterm' => $row['Term'],
-        'smdef' => $row['Definition']);
+        'smterm' => utf8_encode($row['Term']),
+        'smdef' => utf8_encode($row['Definition']));
 
 }
 

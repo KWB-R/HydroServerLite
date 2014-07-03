@@ -1,6 +1,6 @@
 <?php
 	$WebClientHome = "HydroServer Lite Web Client: Homepage";
-	$Returning = "Returning Users";
+	$Returning = "Manage Data";
 	$Login = "Login";
 	$ForgotPW = "Forgot your password?";
 	$SearchData = "Search Data";

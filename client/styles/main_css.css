@@ -34,7 +34,7 @@ p {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12pt;
 	font-style: italic;
-	color: #F00;
+	color: #0f9900;
 	font-weight: bold;
 }
 
@@ -106,6 +106,8 @@ td {
 	text-align: left;
 	position:relative;
 	behavior: url(styles/PIE.php);
+	cursor: pointer;
+	cursor: hand;
 }
 
 .menuhead2 {

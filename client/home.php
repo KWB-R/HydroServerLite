@@ -8,7 +8,7 @@ require_once 'internationalize.php';
 
 //connect to server and select database
 require_once 'database_connection.php';
-require_once 'main_config.php';
+require_once 'fetchMainConfig.php';
 
 if (!isset($_COOKIE['power'])){
 //Check to see if the perosn is an authorized user and display their first name
@@ -88,7 +88,7 @@ if (isset($_COOKIE['power'])){
 	$cookie_value = $auth;
 	$cookie_expire = time()+14400;
 	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
+	setcookie($cookie_name, $cookie_value, $cookie_expire);
 	}
 
 	elseif ($auth == "teacher"){
@@ -98,7 +98,7 @@ if (isset($_COOKIE['power'])){
 	$cookie_value = $auth;
 	$cookie_expire = time()+14400;
 	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
+	setcookie($cookie_name, $cookie_value, $cookie_expire);
 	}
 
 	elseif ($auth == "student"){
@@ -108,7 +108,7 @@ if (isset($_COOKIE['power'])){
 	$cookie_value = $auth;
 	$cookie_expire = time()+14400;
 	$cookie_domain = $www;
-	setcookie($cookie_name, $cookie_value, $cookie_expire, $cookie_domain);
+	setcookie($cookie_name, $cookie_value, $cookie_expire);
 	}
 
 	else {
@@ -382,7 +382,7 @@ $.ajax({
   {
 
  //var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here to visit the site</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
- var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>"+ <?php echo "'".$SiteType."'";?> +type+"<br/> "+<?php echo "'".$Latitude."'";?> +lat+"<br/>"+  <?php echo "'".$Longitude."'";?>  +long+"<br/>"+ <?php echo "'".$Source."'";?> + "<a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>" + <?php echo "'".$VisitSite."'";?> + "</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
+ var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>"+ <?php echo "'".$SiteType."'";?> +type+"<br/> "+<?php echo "'".$Latitude."'";?> +parseFloat(lat).toFixed(4)+"<br/>"+  <?php echo "'".$Longitude."'";?>  +parseFloat(long).toFixed(4)+"<br/>"+ <?php echo "'".$Source."'";?> + "<a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>" + <?php echo "'".$VisitSite."'";?> + "</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>"+msg+"</div>";
 
  var marker = new google.maps.Marker({
     map: map,
@@ -399,7 +399,7 @@ else
 {
 
 // var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site type: "+type+"<br/>Latitude: "+lat+"<br/>Longitude: "+long+"<br/>Source: <a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>Click here to visit the site</a></div>";
-  var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>" + <?php echo "'".$SiteType."'";?> +type+"<br/>" + <?php echo "'".$Latitude."'";?> +lat+"<br/>"+ <?php echo "'".$Longitude."'";?> +long+"<br/>" + <?php echo "'".$Source."'";?> +"<a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>"+ <?php echo "'".$VisitSite."'";?> +"</a></div>";
+  var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>" + <?php echo "'".$SiteType."'";?> +type+"<br/>" + <?php echo "'".$Latitude."'";?> +parseFloat(lat).toFixed(4)+"<br/>"+ <?php echo "'".$Longitude."'";?> +parseFloat(long).toFixed(4)+"<br/>" + <?php echo "'".$Source."'";?> +"<a href='"+sourcelink+"' target='_blank'>"+sourcename+"</a><br/><a href='details.php?siteid="+siteid+"'>"+ <?php echo "'".$VisitSite."'";?> +"</a></div>";
 
 
  var marker = new google.maps.Marker({
@@ -468,7 +468,7 @@ else
 <body background="images/bkgrdimage.jpg" onLoad="load()">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="images/WebClientBanner.png" width="960" height="200" alt="logo" /></td>
+    <td colspan="2"><?php include "topBanner.php" ; ?></td>
   </tr>
   <tr>
     <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php include 'header.php'; ?></td>
@@ -527,7 +527,7 @@ else
         </tr>
         <tr>
           <td><div>
-            <select name="locationSelect" id="locationSelect" style="width:100%;visibility:hidden">
+            <select name="locationSelect" id="locationSelect" style="width:100%;">
             </select>
           </div></td>
         </tr>

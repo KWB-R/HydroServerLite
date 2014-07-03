@@ -14,5 +14,5 @@
 	$NotFound = ' no encontrado';
 	$ClickHere = "Seleccione de una lista de sitios: ";
 	$NoSites = "Ningun sitio encontrado";
-	$VisitSite = "Seleccione aqui para visitar el sitio";
+	
 ?>

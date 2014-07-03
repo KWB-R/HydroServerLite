@@ -2,7 +2,7 @@
 
 
 
-require_once 'main_config.php';
+require_once 'fetchMainConfig.php';
 
 //create next increment SiteID in the table
 $next_increment ="0";
