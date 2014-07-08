@@ -906,7 +906,7 @@ if (!function_exists('get_table_name')) {
 if (!function_exists('to_xml')) {
 
 	function to_xml($xml_tag, $value) {
-	   return "<$xml_tag><![CDATA[$value]]></$xml_tag>";
+	   return "<$xml_tag>$value</$xml_tag>";
 	}
 }
 
@@ -931,11 +931,11 @@ if (!function_exists('db_GetSeriesCatalog')) {
 	   
 	   	//run SQL query
 		$ci->db->select("s.VariableID, s.VariableCode, s.VariableName, s.ValueType, s.DataType, s.GeneralCategory, s.SampleMedium, s.VariableUnitsName, u.UnitsType AS \"VariableUnitsType\", u.UnitsAbbreviation AS \"VariableUnitsAbbreviation\", s.VariableUnitsID, v.NoDataValue, v.IsRegular, s.TimeUnitsName, tu.UnitsType AS \"TimeUnitsType\", tu.UnitsAbbreviation AS \"TimeUnitsAbbreviation\", s.TimeUnitsID, s.TimeSupport, s.Speciation, s.ValueCount, s.BeginDateTime, s.EndDateTime, s.BeginDateTimeUTC, s.EndDateTimeUTC, s.SourceID, s.Organization, s.SourceDescription, s.Citation, s.QualityControlLevelID, s.QualityControlLevelCode, qc.Definition, s.MethodID, s.MethodDescription, m.MethodLink");
-		$ci->db->join($variables_table." v","s.VariableID = v.VariableID","LEFT");
-		$ci->db->join($units_table." u","s.VariableUnitsID = u.UnitsID","LEFT");
-		$ci->db->join($units_table." tu","s.TimeUnitsID = tu.UnitsID","LEFT");
-		$ci->db->join($qc_table." qc","s.QualityControlLevelID = qc.QualityControlLevelID","LEFT");
-		$ci->db->join($methods_table." m","m.MethodID = s.MethodID","LEFT");
+		$ci->db->join($variables_table." v","s.VariableID = v.VariableID","INNER");
+		$ci->db->join($units_table." u","s.VariableUnitsID = u.UnitsID","INNER");
+		$ci->db->join($units_table." tu","s.TimeUnitsID = tu.UnitsID","INNER");
+		$ci->db->join($qc_table." qc","s.QualityControlLevelID = qc.QualityControlLevelID","INNER");
+		$ci->db->join($methods_table." m","m.MethodID = s.MethodID","INNER");
 		$ci->db->where("SiteCode",$shortSiteCode);
 
 	    $result = $ci->db->get($seriescatalog_table." s");
@@ -1094,7 +1094,7 @@ if (!function_exists('db_GetSiteByCode')) {
 	            $ci->db->_error_message() . "</p>");
 	    }
 
-	    $sitesArray = fn_GetSiteArray($result);
+	    $sitesArray = fn_GetSiteArray($result, $siteTag, $siteTagType);
 
 	    return $sitesArray[0]; //what if no site is found?
 	}
