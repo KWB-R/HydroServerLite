@@ -14,9 +14,7 @@
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="bookmark" href="favicon.ico" >
 
-<script type="text/javascript" src="js/jquery.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
 <script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
@@ -588,8 +586,16 @@ $("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to
 $("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to, day_to)); 
 //Plot the Chart with default limits
 
-date_from_sql=date1.getFullYear() + '-' + add_zero((date1.getMonth())) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
-date_to_sql=date2.getFullYear() + '-' + add_zero((date2.getMonth()+2)) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
+//If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12. 
+
+var monthBegin = date1.getMonth();
+if (monthBegin == 0) { monthBegin=1;}
+
+var monthEnd =  date2.getMonth()+2;
+if (monthEnd > 12) { monthEnd=12;}
+
+date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
+date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
 //$("#fromdatedrop").jqxDropDownButton('setContent', "Select start date");
 $("#fromdatedrop").jqxDropDownButton('setContent', <?php echo "'".$SelectStart."'";?> );
 //$("#todatedrop").jqxDropDownButton('setContent', "Select end date");
@@ -1259,16 +1265,16 @@ loadmap();
         <tr>
           <td colspan="4"><?php  
 
-//All queries go through a translator. 
-require_once 'DBTranslator.php';
+require_once 'db_config.php';
 
 // get data and store in a json array
 $query = "SELECT DISTINCT SiteName, SiteType, Latitude, Longitude FROM sites";
 $siteid = $_GET['siteid'];
 $query .= " WHERE SiteID=".$siteid;
 
-$result = transQuery($query,0,1);
-$row =$result[0];
+$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
+$row = mysql_fetch_array($result, MYSQL_ASSOC);
+//echo("<p align='center'><b>Site: </b>".$row['SiteName']."</p>");
 echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
 
 ?></td>
@@ -1351,32 +1357,41 @@ echo("<b>Site: </b>".$row['SiteName']."<br/>");
 $query1 = "SELECT picname FROM sitepic";
 $query1 .= " WHERE SiteID=".$siteid;
 
-$result1 = transQuery($query1,0,0) ;
+$result1 = mysql_query($query1) or die("SQL Error 1: " . mysql_error());
 
 
-if(count($result1)<1)
+if(mysql_num_rows($result1)<1)
 {
+
+
+//echo("<br><br>No Images found for this site. <a href='edit_site.php'>Click here to add some</a>");
 echo("<br><br>  $NoImages  <a href='edit_site.php'> $ClickHere </a>");
+	
 }
 
 else
 {
 
-$row1 = $result1[0];
+$row1 = mysql_fetch_array($result1, MYSQL_ASSOC);
 echo("<br><br><img src='imagesite/".$row1['picname']."' width='368' height='250'>");
 }
 
+
+
+//echo("<br/><br/><b>Type: </b>".$row['SiteType']."<br/><br/><b>Latitude: </b>".$row['Latitude']."<br/><br/><b>Longitude: </b>".$row['Longitude']);
 echo("<br/><br/><b>$Type </b>".$row['SiteType']."<br/><br/><b>$Latitude </b>".$row['Latitude']."<br/><br/><b>$Longitude </b>".$row['Longitude']);
 
 $query = "SELECT DISTINCT VariableName FROM seriescatalog";
 $siteid = $_GET['siteid'];
 $query .= " WHERE SiteID=".$siteid;
 
-$result = transQuery($query,0,1);
+$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
+//echo("<br/><br/><b>Measurements taken here: </b>");
 echo("<br/><br/><b>$Measurements</b>");
-$num_rows = count($result);
+$num_rows = mysql_num_rows($result);
 $count=1;
-foreach ($result as $row) {
+while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+{
 if($row['VariableName']!="")
 {	
 	echo($row['VariableName']);
@@ -1512,9 +1527,11 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
      <?php
       if(isset($_COOKIE['power']))
 	  {
+		//echo("<input type='button' value='Add new row to the above table' id='addnew' /> <br/>  <br/>");
 		echo("<input type='button' value=$AddRow id='addnew' /> <br/>  <br/>");
 	  }
       ?>
+        <!--<input type="button" value="Download the above data" id='export' />-->
         <input type="button" value="<?php echo $DownloadData;?>" id='export' />
         </div>
       </div>
