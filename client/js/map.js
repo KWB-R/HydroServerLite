@@ -11,6 +11,7 @@ var markers = [];
 var infoWindow;
 var locationSelect;
 var xml = "-1";
+var markerCluster;
 
 function load() {
 
@@ -33,7 +34,8 @@ function load() {
         };
         updateHeights();
         loadall();
-    }
+		markerCluster = new MarkerClusterer(map);
+	}
 }
 // Update the height of the map Container to make sure it will fit inside of the window
 //   in which it is displayed. This is mostly for when it is used inside an iFrame on
@@ -83,6 +85,7 @@ function track_loc() {
 function loadall() {
     clearLocations();
     option_num = 0;
+	var markerCount=0;
     var searchUrl = 'db_display_all.php';
     downloadUrl(searchUrl, function (data) {
         var xml = parseXml(data);
@@ -93,7 +96,7 @@ function loadall() {
             alert("Trouble accessing the data store. Please contact an Administrator!");
         }
         var bounds = new google.maps.LatLngBounds();
-
+		markerCount=markerNodes.length;
             for (var i = 0; i < markerNodes.length; i++) {
                 var name = markerNodes[i].getAttribute("name");
                 var sitecode = markerNodes[i].getAttribute("sitecode");
@@ -117,12 +120,13 @@ function loadall() {
                 //bounds.extend(latlng2);
                 map.setZoom(10);
             }
-       
+		
+	  
         map.fitBounds(bounds);
         map.panToBounds(bounds);
         map.setZoom(15);
     });
-
+return markerCount;
 }
 
 
@@ -264,13 +268,13 @@ function createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourc
             var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>" + msg + "</div>";
 
             var marker = new google.maps.Marker({
-                map: map,
                 position: latlng
             });
             google.maps.event.addListener(marker, 'mouseover', function () {
                 infoWindow.setContent(html);
                 infoWindow.open(map, marker);
             });
+			markerCluster.addMarker(marker);
             markers.push(marker);
 
         }
@@ -279,13 +283,14 @@ function createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourc
             var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div>";
 
             var marker = new google.maps.Marker({
-                map: map,
+ 
                 position: latlng
             });
             google.maps.event.addListener(marker, 'mouseover', function () {
                 infoWindow.setContent(html);
                 infoWindow.open(map, marker);
             });
+			markerCluster.addMarker(marker);
             markers.push(marker);
 
         }

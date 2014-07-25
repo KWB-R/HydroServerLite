@@ -6,6 +6,7 @@
 	//<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>    
 	//<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 	//<script src="js/map.js" type="text/javascript"></script>
+	//<script src="js/markerclusterer.js" type="text/javascript"></script>
 	echo $JS_JQuery;
 echo $JS_Maps;
 ?>

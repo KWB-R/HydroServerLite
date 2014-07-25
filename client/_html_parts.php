@@ -69,7 +69,7 @@ PageBody2;
 PageBody3;
 
 	echo $HTML_1;
-	include 'topbanner.php';
+	require_once 'topBanner.php';
 	echo $HTML_1A;
 	require_once 'header.php'; 
 	echo $HTML_2;
@@ -246,7 +246,9 @@ Globalization;
 
 $JS_Maps =  <<<GoogleMaps
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script> 
+			<script src="js/markerclusterer.js" type="text/javascript"></script>
 			<script src="js/map.js" type="text/javascript"></script>
+			
 			
 GoogleMaps;
 

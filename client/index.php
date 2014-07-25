@@ -12,12 +12,15 @@ if (!isset($_SESSION))
 	{
 		unset($_SESSION['lang']);
 	}
+	if (isset($_SESSION['power']))
+	{
+		unset($_SESSION['power']);
+	}
 		
 }
 
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
-
 require_once("fetchMainConfig.php");
 require_once("session_handler.php");
 require_once "authorization_check.php";
