@@ -5,7 +5,7 @@ require_once 'internationalize.php';
 require_once 'authorization_check.php';
 //All queries go through a translator. 
 require_once 'DBTranslator.php';
-
+require_once "_html_parts.php";
 require_once 'fetchMainConfig.php';
 //add the SourceID's options
 $sql ="Select * FROM sources";
@@ -93,31 +93,24 @@ $result4 = transQuery($sql4,0,1);
 		}
 	}
 
+HTML_Render_Head();
+
+echo $CSS_Main;
+
+echo $JS_JQuery;
+
+echo $JS_Forms;
+
+echo $CSS_JQX;
+
+echo $JS_GetTheme;
+
+echo $JS_JQX;
+
+echo $JS_DropDown;
+
 ?>
 
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient;?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
-<script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
-<script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxwindow.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxpanel.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxtabs.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxcheckbox.js"></script>
-
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript">
 function show_answer(){
@@ -302,6 +295,7 @@ if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 xmlhttp.onreadystatechange=function(){
 	if(xmlhttp.readyState==4 && xmlhttp.status==200){
 		document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+   setHintHandlers();
     }
 }
 xmlhttp.open("GET","getsites2.php?q="+str,true);
@@ -322,27 +316,16 @@ display: none;
 <!-- Creating the Site Code automatically -->
 <script type="text/javascript" src="js/create_site_code.js"></script>
 
-</head>
-
-<body background="images/bkgrdimage.jpg" onLoad="initialize()">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
-  </tr>
-
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php //echo "$msg"; ?><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><div id="msg"><p class=em2><!--Site successfully deleted!--><?php echo $SiteSuccessfullyDeleted;?></p></div>
+	<?php 
+	echo $JS_CreateUserName;
+	HTML_Render_Body_Start(); ?>
+<br /><?php //echo "$msg"; ?><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><div id="msg"><p class=em2><!--Site successfully deleted!--><?php echo $SiteSuccessfullyDeleted;?></p></div>
     <div id="msg2"><p class=em2><!--Site successfully edited!--><?php echo $SiteSuccessfullyEdited;?></p></div>
-      <h1><!--Edit or Delete a Site--><?php echo $EditDeleteSite;?></h1>
-      <p><!--Please select the Source and Site you would like to edit or delete from the drop down menu to proceed.--><?php echo $SelectSourceSiteMenu;?></p>
+      <h1><?php echo $EditDeleteSite;?></h1>
+      <p><?php echo $SelectSourceSiteMenu;?></p>
       <p>&nbsp;</p>
       <table width="600" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <!--<td valign="top"><strong>Source:</strong></td>-->
           <td valign="top"><strong><?php echo $Source;?></strong></td>
 
           <td colspan="3" valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1"><!--Select...--><?php echo $SelectEllipsis;?></option><?php echo "$option_block"; ?></select></td>
@@ -363,13 +346,7 @@ display: none;
 	<p>&nbsp;</p>
       <div id="msg3"></div>
     <p>&nbsp;</p>
-    </blockquote>
-    <p></p></td>
-  </tr>
-  <tr>
-    <script src="js/footer.js"></script>
-  </tr>
-</table>
+	<?php HTML_Render_Body_End(); ?>
 
 <script>
 
@@ -407,7 +384,7 @@ marker=null;
 						 $("#sitepic").html(<?php echo "'".$NoSitePictureDefined."'"; ?> + "<div id='sitepicchange'><a href='#'>" + <?php echo "'".$ClickAddSitePicture."'"; ?> + "</a></div>");
  							 }
 					});
-
+        setHintHandlers();
 						$("#sitepic").click(function(){
 							$("#file").show();
 						});
@@ -436,7 +413,6 @@ placeMarker(initialLocation);
 			
 			}else{
 			
-				//alert("Error during request! Please refresh the page and begin again.");
 				alert(<?php echo "'".$ErrorDuringRequest."'"; ?>);
 				return false;
 				}
@@ -449,7 +425,6 @@ placeMarker(initialLocation);
 	function deleteSite(){
 
 		if(($("#SiteID").val())==-1){
-			//alert("Please select a Site to delete!");
 			alert(<?php echo "'".$SelectSiteDelete."'"; ?>);
 			return false;
 		
@@ -486,7 +461,6 @@ placeMarker(initialLocation);
 	
 				}else{
 				
-					//alert("Error during processing! You cannot delete a site that has data values associated with it. Please delete the values first, then delete the site.");
 					alert(<?php echo "'".$ErrorDuringProcessingDeleteSite."'"; ?>);
 					return false;
 					}
@@ -682,7 +656,6 @@ var site_com = $("#com").val();
 
 	
 			formdata = new FormData();	
-			//document.getElementById("response").innerHTML = "Uploading . . ."
 			document.getElementById("response").innerHTML = <?php echo "'".$UploadEllipsis."'" ;?>
 			//Upload the image
 			var input = document.getElementById("file");
@@ -718,7 +691,6 @@ var site_com = $("#com").val();
 		
 			$("#msg3").hide(1000);
 
-							//alert("Site Edit Successful");
 							alert(<?php echo "'".$SiteEditSuccessful."'"; ?>);
 							window.location.href = "edit_site.php";
 							return true;
@@ -750,7 +722,6 @@ var site_com = $("#com").val();
 		
 			$("#msg3").hide(1000);
 
-				//alert("Site Edit Successful");
 				alert(<?php echo "'".$SiteEditSuccessful."'"; ?>);
 				window.location.href = "edit_site.php";
 				return true;
@@ -759,7 +730,6 @@ var site_com = $("#com").val();
 			
 		
 		}else{
-		  //alert("Error in database configuration");
 		  alert(<?php echo "'".$DatabaseConfigurationError."'"; ?>);
 		  return false;
 		}

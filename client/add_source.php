@@ -6,6 +6,8 @@ require_once 'authorization_check.php';
 //All queries go through a translator. 
 require_once 'DBTranslator.php';
 
+$msg2 = '';
+
 //get list of TopicCategories to choose from
 $sql ="Select Term FROM topiccategorycv";
 $result = transQuery($sql,0,1);
@@ -18,37 +20,22 @@ $num = count($result);
 		$option_block2 .= "<option value=$metaTerm>$metaTerm</option>";
 		}
 	}
+		require_once "_html_parts.php";
+	HTML_Render_Head();
+		
+		echo $CSS_Main;
+		
+		echo $JS_JQuery;
 ?>
-
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $WebClient; ?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
-
 <script type="text/javascript">
 
 $(document).ready(function(){
 	$("#msg").hide();
 });
 </script>
-</head>
-<body background="images/bkgrdimage.jpg">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-      <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><div id="msg"><p class=em2><?php echo $SourceSuccessfullyAdded;?></p></div>
+    	<?php HTML_Render_Body_Start(); ?>
+
+<br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><div id="msg"><p class=em2><?php echo $SourceSuccessfullyAdded;?></p></div>
       <h1><?php echo $AddNewSource;?></h1>
       <p>&nbsp;</p>
       <FORM METHOD="POST" ACTION="" name="addsource" id="addsource">
@@ -268,12 +255,7 @@ $(document).ready(function(){
           </tr>
       </table></FORM>
     <p>&nbsp;</p>
-    </blockquote></td>
-  </tr>
-  <tr>
-    <script src="js/footer.js"></script>
-  </tr>
-</table>
+   	<?php HTML_Render_Body_End(); ?>
 
 <script>
 
@@ -418,5 +400,4 @@ $("#addsource").submit(function(){
 return false;
 });
 </script>
-</body>
-</html>
+

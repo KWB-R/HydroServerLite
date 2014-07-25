@@ -4,37 +4,18 @@ require_once 'internationalize.php';
 
 
 //check authority to be here
-require_once 'authorization_check2.php';
+require_once 'authorization_check.php';
 
-?>
+require_once "_html_parts.php";
+HTML_Render_Head();
 
-<html>
-<head>
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<!-- JQuery JS -->
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
+echo $CSS_Main;
 
-</head>
+echo $JS_JQuery;
 
-<body background="images/bkgrdimage.jpg" onLoad="load()">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br />
-         <!--<h1>Help Center (FAQ's)</h1>
-         <p>If you need help with a part of the website, please review our Frequently Asked Questions below.</p>-->
-         <h1><?php echo $FAQ; ?></h1>
+HTML_Render_Body_Start(); ?>
+<br />
+<h1><?php echo $FAQ; ?></h1>
          <p><?php echo $ReviewBelow; ?></p>
          <!--<p><a href="#Register">How do I register for an account?</a><br>
          <a href="#Bug">Need to report a bug?</a><br>
@@ -101,12 +82,4 @@ The HydroServer Lite Interactive Web Client is an open source software developed
 <p><strong><a name="CreatSite" id="CreatSite"></a><?php echo $CreateWebsite; ?></strong><br>
 <?php echo $CreateWebsitePara1; ?> <a href="http://idahoepscor.org/" target="_blank">Idaho EPSCoR</a>. <?php echo $CreateWebsitePara2; ?> <a href="http://www.cuahsi.org/" title="Link to CUAHSI" target="_blank"><?php echo $Consortium; ?></a>, <?php echo $CreateWebsitePara3; ?>   <a href="http://hydroserverlite.codeplex.com/" target="_blank"><?php echo $Here; ?></a>.</p>
          <p>&nbsp;</p>
-    </blockquote>
-    </td>
-  </tr>
-  <tr>
-    <script src="js/footer.js"></script>
-  </tr>  
-</table>
-</body>
-</html>
+   	<?php HTML_Render_Body_End(); ?>

@@ -22,6 +22,7 @@
 	{
 	require("fetchMainConfig.php");
 	}
+	
 	$lang_code = $lang;	
 	if (isset($urlExtraName))
 	{
@@ -48,7 +49,8 @@
 	//Check If files exist before opening
 
 if (file_exists($page_text))
-{	include($page_text);}
+	{
+	include($page_text);}
 if (file_exists($common_text)){
 	include_once($common_text);
 }

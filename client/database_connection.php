@@ -1,5 +1,6 @@
 <?php
 require_once 'fetchMainConfig.php';
+require_once 'objects/objects.php';
   
   $connection = mysql_connect(DATABASE_HOST, DATABASE_USERNAME, DATABASE_PASSWORD)
     or die("<p>Error connecting to database: " . 

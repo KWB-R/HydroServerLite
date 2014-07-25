@@ -6,6 +6,10 @@ require_once 'authorization_check.php';
 //All queries go through a translator. 
 require_once 'DBTranslator.php';
 
+	$option_block = "";
+	$option_block2 = "";
+	$option_block3 = "";
+	$option_block4 = "";
 //add the SourceID's options
 $sql ="Select * FROM sources";
 
@@ -82,252 +86,30 @@ $result4 = transQuery($sql4,0,1);
 	}
 	}
 
+
+require_once "_html_parts.php";
+	
+	HTML_Render_Head();
+
+	echo $CSS_Main;
+	
+	echo $JS_JQuery;
+
+	echo $JS_Forms;
+	
+	echo $JS_DropDown;
 ?>
-
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript">
-
-function show_answerSC(){
-//alert("The Site Code is a unqiue identifier used by an organization that collects the data. For example, if the organization's name was McCall Outdoor Science Center and the name of the site was Boulder Creek at Jug Mountain Ranch, then your Site Code could be MOSS-BC-JMR");
-alert(<?php echo "'".$SiteCodeInfo."'"; ?>);
-}
-
-function show_answerState(){
-//alert("The current version of this software does not autmatically select the State and County. Please select them mannually.");
-alert(<?php echo "'".$SelectStateCounty."'"; ?>);
-}
-
-function show_answerVD(){
-//alert("The vertical datum of the elevation. Controlled Vocabulary from VerticalDatumCV. For example, MSL, which stands for Mean Sea Level.");
-alert(<?php echo "'".$VerticalDatumInfo."'"; ?>);
-}
-
-function show_answerSR(){
-//alert("The spatial reference is for the purpose of recording the name and EPSG code of each Spatial Reference System used. For example, NAD83 / Idaho Central.");
-alert(<?php echo "'".$SpatialReferenceInfo."'"; ?>);
-}
-
-function show_answerE(){
-//alert("The elevation corresponds to Mean Sea Level (MSL) vertical datum.");
-alert(<?php echo "'".$ElevationInfo."'"; ?>);
-}
-
-function TrainingAlert(){
-//alert("To automatically enter the latitude/longitude/elevation, simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.");
-alert(<?php echo "'".$AutomaticallyEnterLongLatEle."'"; ?>); 
-} 
-
-</script>
-<!-- JQuery JS -->
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
-
-<!-- Drop Down JS -->
-<script type="text/javascript" src="js/drop_down.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>
-
-<!-- Preload Images -->
-<SCRIPT language="JavaScript">
-<!--
-pic1 = new Image(16, 16); 
-pic1.src="images/loader.gif";
-//-->
-</SCRIPT>
-
-<script type="text/javascript">
-     var map;
-	 var marker=null;
-	 var elevator;
-	 
-function initialize() {
-	GetSourceName();
-	var myLatlng = new google.maps.LatLng(40.247084,-111.648071);
-	
-
-  
-  var myOptions = {
-    zoom: 14,
-    center: myLatlng,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-	disableDoubleClickZoom : true
-  }
-  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-elevator = new google.maps.ElevationService();
-  google.maps.event.addListener(map, 'dblclick', function(event) {
-	 
-	// $('#Latitude').value('askjhsdf');
-
-    placeMarker(event.latLng);
-  });
-}
-
- if(navigator.geolocation) {
-    browserSupportFlag = true;
-    navigator.geolocation.getCurrentPosition(function(position) {
-      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-	   
-	    var geocoder = new google.maps.Geocoder();
-     geocoder.geocode({location: initialLocation}, function(results, status) {
-       if (status == google.maps.GeocoderStatus.OK) {
-		 
-		  map.setCenter(results[0].geometry.location);  
-		   
-       
-		;
-       } else {
-         //alert(address + ' not found');
-		 alert(address + <?php echo "'".$NotFound."'"; ?>);
-       }
-     });
-  
-	   
-	   
-    }, function() {
-      handleNoGeolocation(browserSupportFlag);
-    });
-  }
-  // Browser doesn't support Geolocation
-   else {
-    browserSupportFlag = false;
-    handleNoGeolocation(browserSupportFlag);
-  }
-  
-
-
-function placeMarker(location) {
- 
- 
- if(marker==null)
- {
-  marker = new google.maps.Marker({
-      position: location,
-      map: map,
-	  draggable: true
-  });
-  
-  google.maps.event.addListener(marker, 'dragend', function(event) {
-	 
-//Again Update the Latitude longitude values
-update(event.latLng)
-//    placeMarker(event.latLng);
-  });
-  
-  
-  //Update values in the 
-  update(location)
-  
- }
- else
- {
-	marker.setPosition(location); 
-//Update Values into the form	
-update(location)
-
- }
-  map.setCenter(location);
-}
-
-function update(location)
-{
-	
-	
-	$("#Latitude").val(parseFloat(location.lat()).toFixed(5));
-	$("#Longitude").val(parseFloat(location.lng()).toFixed(5));
-
-//Update Elevation
-
-
-
-
-  var locations = [];
-  locations.push(location);
-
-  // Create a LocationElevationRequest object using the array's one value
-  var positionalRequest = {
-    'locations': locations
-  }
-
-  // Initiate the location request
-  elevator.getElevationForLocations(positionalRequest, function(results, status) {
-    if (status == google.maps.ElevationStatus.OK) {
-
-      // Retrieve the first result
-      if (results[0]) {
-
-        // Open an info window indicating the elevation at the clicked position
-        $("#Elevation").val(parseFloat(results[0].elevation).toFixed(1));
-	
-        
-      } else {
-        //alert("No results found");
-		alert(<?php echo "'".$NoResultsFound."'"; ?>);
-      }
-    } else {
-      //alert("Elevation service failed due to: " + status);
-	  alert(<?php echo "'".$FailedElevationService."'"; ?> +": "+ status);
-    }
-  });
-
-	
-
-// Now to update the state
-var latlng1 = new google.maps.LatLng(location.lat(), location.lng());
-var geocoder = new google.maps.Geocoder();
-geocoder.geocode({'latLng': latlng1}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        if (results[0]) {
-			
-			$("#locationtext").html("Your selected location according to us is: " + results[0].formatted_address + ". Please select the state and county accordingly.");
-			
-        
-          
-        }
-      } else {
-		alert(<?php echo "'".$GeocoderFailed."'"; ?> + ": " + status);
-      }
-    });
-
-}
- 
-//Function to run on form submission to implement a validation and then run an ajax request to post the data to the server and display the message that the site has been added successfully
-
+<script type="text/javascript" src="js/site_maps.js"></script>
+<script>
+$( document ).ready(function() {
+  initialize();
+});
 </script>
-
-<STYLE TYPE="text/css">
-<!--
-#county_drop_down, #no_county_drop_down, #loading_county_drop_down
-{
-display: none;
-}
---> 
-</STYLE>
-
-<!-- Creating the Site Code automatically -->
-<script type="text/javascript" src="js/create_site_code.js"></script>
-
-</head>
-
-<body background="images/bkgrdimage.jpg" onLoad="initialize()">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <!--<td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php //echo "$msg"; ?><p class="em" align="right">Required fields are marked with an asterick (*).</p>-->
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php //echo "$msg"; ?><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p>
-      <!--<h1>Add a New Site    </h1>-->
+<?php 
+	echo $JS_SiteCreate;
+HTML_Render_Body_Start(); ?>
+<br /><?php //echo "$msg"; ?><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p>
       <h1><?php echo $AddNewSite;?></h1>      
       <p>&nbsp;</p><FORM METHOD="POST" ACTION="" name="addsite" id="addsite">
       <table width="650" border="0" cellspacing="0" cellpadding="0">

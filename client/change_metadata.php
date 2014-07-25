@@ -6,7 +6,7 @@ require_once 'internationalize.php';
 require_once 'authorization_check.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+	if (!isAdmin()){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
@@ -27,30 +27,20 @@ $result = transQuery($sql,0,1);
 			$option_block_md .= "<option value=$md_id>$md_title</option>";
 		}
 	}
+require_once "_html_parts.php";
+	HTML_Render_Head();
+	
+	echo $CSS_JQX;
+	
+	echo $JS_GetTheme;
+	
+	echo $JS_JQuery;
+	
+	echo $JS_JQX;
+	
+	echo $CSS_Main;
+	
 ?>
-
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $WebClient; ?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
-<script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
-<script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxwindow.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxpanel.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxtabs.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxcheckbox.js"></script>
-
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript">
 
@@ -81,25 +71,12 @@ $('#window').show();
 }
 
 function show_answer(){
-//alert("The Profile Version is a label for the standard of compliance used," + '\n' + "such as ISO 19115 or ISO 8601,  which provides a " + '\n' + "complete set of ISO compliant metadata in the database.");
 alert(<?php echo "'".$ProfileVersion1. "'"; ?>+ '\n' + <?php echo "'".$ProfileVersion2. "'"; ?> + '\n' + <?php echo "'".$ProfileVersion3. "'"; ?>);
 }
 
 </script>
 
-</head>
-
-<body background="images/bkgrdimage.jpg">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" bgcolor="#3c3c3c" align="right" valign="middle" ><?php require_once 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote>
+	<?php HTML_Render_Body_Start(); ?>
       <p><br />
         <?php echo "$msg"; ?></p>
       <p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p>
@@ -146,20 +123,17 @@ alert(<?php echo "'".$ProfileVersion1. "'"; ?>+ '\n' + <?php echo "'".$ProfileVe
 </table>
 <div id="window">
 	<div id="windowHeader">
-		<span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span>
+		<span><?php echo $ConfirmationBox;?></span>
 	</div>
-	<!--<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yesplz"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>-->
     <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yesplz"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
 </div>
-</body>
-</html>
+	<?php HTML_Render_Body_End(); ?>
 
 <script>
 //When the "Delete" button is clicked, validate the Metadata ID selected and then submit the request
 function deleteMD(){
 
 	if(($("#MetadataID").val())==-1){
-		//alert("Please select a Metadata Title to delete!");
 		alert(<?php echo "'".$SelectMetaDataTitle."'"; ?>);
 		return false;
 		
@@ -183,8 +157,6 @@ function deleteMD(){
 				return true;
 	
 			}else{
-				
-				//alert("Error during processing! Please refresh the page and begin again.");
 				alert(<?php echo "'".$ProcessingError."'"; ?>);
 				return false;
 				}
@@ -210,7 +182,6 @@ function findMD(){
 			
 			}else{
 			
-				//alert("Error during request! Please refresh the page and begin again.");
 				alert(<?php echo "'".$ErrorDuringRequest."'"; ?>);
 				return false;
 				}
@@ -222,35 +193,30 @@ function updateMD(){
 
 //Validate all fields
 if(($("#MetadataID2").val())==""){
-	//alert("Please select a Metadata ID to edit.");
 	alert(<?php echo "'".$SelectMetadataIDMsg."'"; ?>);
 	return false;
 }
 
 //Topic Category Validation
 if(($("#TopicCategory2").val())==""){
-	//alert("Please select a Topic Category for the Metadata.");
 	alert(<?php echo "'".$SelectMetadataTopicCategory."'"; ?>);
 	return false;
 }
 
 //Title Validation
 if(($("#Title2").val())==""){
-	//alert("Please enter a Title for the Metadata.");
 	alert(<?php echo "'".$EnterMetadataTitle."'"; ?>);
 	return false;
 }
 
 //Abstract Validation
 if(($("#Abstract2").val())==""){
-	//alert("Please enter an Abstract for the Metadata.");
 	alert(<?php echo "'".$EnterMetadataAbstract."'"; ?>);
 	return false;
 }
 
 //Profile Version Validation
 if(($("#ProfileVersion2").val())==""){
-	//alert("Please enter a Profile Version for the contact person.");
 	alert(<?php echo "'".$EnterProfileVersionContact."'"; ?>);
 	return false;
 }
@@ -259,7 +225,6 @@ if(($("#ProfileVersion2").val())==""){
 if(($("#MetadataLink2").val())!=""){
 	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 	if(!($("#MetadataLink2").val().match(regexp))){
-		//alert("Invalid url for Metadata Link");
 		alert(<?php echo "'".$InvalidURLMetadata."'"; ?>);
 		return false;
 	}
@@ -295,7 +260,6 @@ if(($("#MetadataLink2").val())!=""){
 
 			}else{
 
-				//alert("Error during processing! Please refresh the page and begin again.");
 				alert(ErrorProcessing);
 				return false;
 				}

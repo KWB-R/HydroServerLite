@@ -1,61 +1,32 @@
-﻿<?php
-	//check authority to be here
-	require_once 'authorization_check2.php';
-	
-	//This is required to get the international text strings dictionary
+<?php
+	header('Content-Type: text/html; charset=utf-8');
+	require_once 'authorization_check.php';
 	include('internationalize.php');
-	//include("languages/es/details_text.php");
-	//include("languages/es/_common_text.php");
+
+	require_once "_html_parts.php";
+	HTML_Render_Head();
+
+	echo $JS_JQuery;
+
+	echo $JS_JQueryUI;
+
+	echo $JS_JQX;
+
+	echo $JS_GetTheme;
+
+	echo $JS_Globalization; // this is the only page that calls this. This is also the only refernce to MooTools
+
+	echo $JS_Maps;
+
+	echo $CSS_JQX;
+
+	echo $CSS_Main;
+
+	echo $CSS_JQuery_UI;
+
+	echo $CSS_JQStyles;
+
 ?>
-<html>
-<head>
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxlistbox.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdropdownlist.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdropdownbutton.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxpanel.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdatetimeinput.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxcalendar.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxtooltip.js"></script>
-<script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jqwidgets/globalization/jquery.global.js"></script>
-<script src="js/highstock.js" type="text/javascript"></script>
-<script src="js/modules/exporting.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxtabs.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxcheckbox.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxmenu.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxgrid.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxgrid.selection.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxgrid.columnsresize.js"></script> 
-<script type="text/javascript" src="js/jqwidgets/jqxgrid.pager.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxgrid.sort.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxgrid.edit.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxwindow.js"></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script> 
-
-
-
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.classic.css" type="text/css" />
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<link rel="stylesheet" href="styles/jqstyles/jquery.ui.all.css">
-<link rel="stylesheet" href="styles/jqstyles/jquery.ui.timepicker.css">
-<script src="js/ui/jquery.ui.core.js"></script>
-<script src="js/ui/jquery.ui.widget.js"></script>
-<script src="js/ui/jquery.ui.datepicker.js"></script>
-<script src="js/ui/jquery.ui.timepicker.js"></script>
-<link rel="stylesheet" href="styles/jqstyles/demos.css">
-
 
 <!--Main Script to display the data-->
 <script type="text/javascript">
@@ -82,7 +53,6 @@ var strval = $("#timepicker").val();
 
 //Minimum and maximum length is 5, for example, 01:20
 	if(strval.length < 5 || strval.length > 5){
-		/*alert("Invalid time. Time format should be five characters long and formatted HH:MM");*/
 		alert(<?php echo "'".$InvalidTimeFive."'";?>);
 	return false;
 	}
@@ -100,17 +70,14 @@ var strval = $("#timepicker").val();
 
 	//minimum length for hours is two digits, for example, 12
 	if(horval.length != 2){
-		/*alert("Invalid time. Hours format should be two digits long.");*/
 		alert(<?php echo "'".$InvalidTimeHoursTwo."'";?>);
 		return false;
 		}
 	if(horval < 0){
-		/*alert("Invalid time. Hours cannot be less than 00.");*/
 		alert(<?php echo "'".$InvalidTimeHoursZeros."'";?>);		
 		return false;
 		}
 	else if(horval > 23){
-		/*alert("Invalid time. Hours cannot be greater than 23.");*/
 		alert(<?php echo "'".$InvalidTimeHoursTwentyThree."'";?>);
 		return false;
 		}
@@ -119,17 +86,14 @@ var strval = $("#timepicker").val();
 
  	//minimum length for minutes is 2, for example, 59
 	if(minval.length != 2){
-		/*alert("Invalid time. Minutes format should be two digits long.");*/
 		alert(<?php echo "'".$InvalidTimeMinutesTwo."'";?>);
 	return false;
 	} 
 	if(minval < 0){
-		/*alert("Invalid time. Minutes cannot be less than 00.");*/
 		alert(<?php echo "'".$InvalidTimeMinutesZeros."'";?>);
 		return false;
 		}   
 	else if(minval > 59){
-		/*alert("Invalid time. Minutes cannot be greater than 59.");*/
 		alert(<?php echo "'".$InvalidTimeMinutesFiftyNine."'";?>);
 		return false;
 		}
@@ -176,7 +140,6 @@ function IsNumeric(strString){
         var strChar = strString.charAt(i); 
         if (strValidChars.indexOf(strChar) == -1) 
         {
-			/*alert ("Invalid character. You may only use numbers.");*/
 			alert (<?php echo "'".$InvalidCharacterNumbers."'"; ?>);
 			strString = strString.replace(strString[i],"");
             blnResult = false;
@@ -194,7 +157,6 @@ var strval = $("#timepicker_new").val();
 
 //Minimum and maximum length is 5, for example, 01:20
 	if(strval.length < 5 || strval.length > 5){
-		/*alert("Invalid time. Time format should be five characters long and formatted HH:MM");*/
 		alert(<?php echo "'".$InvalidTimeFive."'";?>);
 	return false;
 	}
@@ -212,17 +174,14 @@ var strval = $("#timepicker_new").val();
 
 	//minimum length for hours is two digits, for example, 12
 	if(horval.length != 2){
-		/*alert("Invalid time. Hours format should be two digits long.");*/
 		alert(<?php echo "'".$InvalidTimeHoursTwo."'";?>);
 		return false;
 		}
 	if(horval < 0){
-		/*alert("Invalid time. Hours cannot be less than 00.");*/
 		alert(<?php echo "'".$InvalidTimeHoursZeros."'";?>);		
 		return false;
 		}
 	else if(horval > 23){
-		/*alert("Invalid time. Hours cannot be greater than 23.");*/
 		alert(<?php echo "'".$InvalidTimeHoursTwentyThree."'";?>);
 		return false;
 		}
@@ -231,17 +190,14 @@ var strval = $("#timepicker_new").val();
 
  	//minimum length for minutes is 2, for example, 59
 	if(minval.length != 2){
-		/*alert("Invalid time. Minutes format should be two digits long.");*/
 		alert(<?php echo "'".$InvalidTimeMinutesTwo."'";?>);
 	return false;
 	} 
 	if(minval < 0){
-		/*alert("Invalid time. Minutes cannot be less than 00.");*/
 		alert(<?php echo "'".$InvalidTimeMinutesZeros."'";?>);
 		return false;
 		}   
 	else if(minval > 59){
-		/*alert("Invalid time. Minutes cannot be greater than 59.");*/
 		alert(<?php echo "'".$InvalidTimeMinutesFiftyNine."'";?>);
 		return false;
 		}
@@ -261,7 +217,6 @@ return Value;
 
 function isValidNumber(val){
       if(val==null || val.length==0){
-  		  /*alert("Please enter a number in the Value box");*/
    		  alert(<?php echo "'".$EnterNumberValue."'";?>);
 
 		  return false;
@@ -278,7 +233,6 @@ function isValidNumber(val){
                   continue
             }
             if (ch < "0" || ch > "9") {
-       		    /*alert("Please enter a valid number in the Value box");*/
 		    alert(<?php echo "'".$EnterValidNumberValue."'";?>);
 			    return false;
             	}
@@ -297,7 +251,6 @@ return Value;
 
 function isValidNumber(val){
       if(val==null || val.length==0){
-  		  /*alert("Please enter a number in the Value box");*/
    		  alert(<?php echo "'".$EnterNumberValue."'";?>);
 		  return false;
 		  }
@@ -313,7 +266,6 @@ function isValidNumber(val){
                   continue
             }
             if (ch < "0" || ch > "9") {
-       		    /*alert("Please enter a valid number in the Value box");*/
 		    alert(<?php echo "'".$EnterValidNumberValue."'";?>);
 			    return false;
             	}
@@ -539,9 +491,7 @@ date_to=String($(this).attr("date_to"));
 //Call the next function to display the data
 
 $('#daterange').html("");
-//$('#daterange').empty();
 $('#daterange').prepend('<p><strong>'+<?php echo "'".$DatesAvailable."'";?>+'</strong> ' + date_from + ' <strong>'+<?php echo "'".$To."'";?>+'</strong> ' + date_to +'</p>');
-//$('#daterange').prepend('<p><strong>Dates Available:</strong> ' + date_from + ' <strong>to</strong> ' + date_to +'</p>');
 
 $("#jqxDateTimeInput").jqxDateTimeInput({ width: '250px', height: '25px', theme: 'darkblue'});
 $("#jqxDateTimeInput").jqxDateTimeInput({ formatString: 'd' });
@@ -596,9 +546,7 @@ if (monthEnd > 12) { monthEnd=12;}
 
 date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
 date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
-//$("#fromdatedrop").jqxDropDownButton('setContent', "Select start date");
 $("#fromdatedrop").jqxDropDownButton('setContent', <?php echo "'".$SelectStart."'";?> );
-//$("#todatedrop").jqxDropDownButton('setContent', "Select end date");
 $("#todatedrop").jqxDropDownButton('setContent', <?php echo "'".$SelectEnd."'";?> );
 
 plot_chart();	
@@ -694,7 +642,6 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
           
         },
     title: {
-        //text: 'Data of '+sitename+' from '+ date_chart_from + ' to ' + date_chart_to,
 	text: <?php echo "'".$Dataof."'"; ?>+" "+sitename+" "+ <?php echo "'".$From."'"; ?>+" "+ date_chart_from +" "+  <?php echo "'".$To."'"; ?>+" " + date_chart_to,
 		style: {
                 fontSize: '12px'
@@ -707,7 +654,6 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
         },
 	
 	 subtitle: {
-        //text: 'Click and Drag to Zoom a certain Portion'
 	text: <?php echo "'".$ClickDrag."'"; ?>
     },
 	
@@ -718,7 +664,6 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
                 year: '%b.%Y'
             },
 			title: {
-                //text: 'Time',
 		text: <?php echo "'".$TimeMsg."'"; ?>,
 				margin: 30
             }
@@ -745,37 +690,30 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 				{
                     type: 'day',
                     count: 1,
-                    //text: '1d'
 		    text: <?php echo "'".$OneD."'"; ?>
                 },
 				{
                     type: 'day',
                     count: 3,
-                    //text: '3d'
 		    		text: <?php echo "'".$ThreeD."'"; ?>
                 }, {
                     type: 'week',
                     count: 1,
-                    //text: '1w'
 		    		text: <?php echo "'".$OneW."'"; ?>
                 }, {
                     type: 'month',
                     count: 1,
-                    //text: '1m'
 		   			text: <?php echo "'".$OneM."'"; ?>
                 }, {
                     type: 'month',
                     count: 6,
-                    //text: '6m'
 		   			text: <?php echo "'".$SixM."'"; ?>
                 }, {
                     type: 'year',
                     count: 1,
-                    //text: '1y'
 		    		text: <?php echo "'".$OneY."'"; ?>
                 }, {
                     type: 'all',
-                    //text: 'All'
 		    		text: <?php echo "'".$All."'"; ?>
                 }],
             selected: 6
@@ -865,7 +803,7 @@ $.ajax({
 				  { text: 'ValueID', datafield: 'vid', width: 90 },
                   { text: 'Date', datafield: 'date', width: 200 },
 	             { text: 'Value (' + unitGrid +')' , datafield: 'Value', width: 200} <?php
-      if(isset($_COOKIE['power']))
+     if(isLoggedIn())
 	  {
 		echo(",
 				  
@@ -926,7 +864,7 @@ if(flag!=1)
 			  { text: 'ValueID', datafield: 'vid', width: 90 },
                   { text: 'Date', datafield: 'date', width: 200 },
 	          { text: 'Value (' + unitGrid +')', datafield: 'Value', width: 200} <?php
-      if(isset($_COOKIE['power']))
+      	if(isLoggedIn())
 	  {
 		echo(",
 				  
@@ -1022,7 +960,6 @@ switch(varid)
 case "19":
 if((vt<0)||(vt>100))
 {
-//alert("Value has to be between 0 and 100.");
 alert(<?php echo "'".$ValueBetweenZeroAndHundred."'";?>);
 		return false;
 }
@@ -1031,7 +968,6 @@ case "13":
 case "22":
 if((vt<0)||(vt>14))
 {
-//alert("Value has to be between 0 and 14.");
 alert(<?php echo "'".$ValueBetweenZeroAndFourteen."'";?>);
 		return false;
 }
@@ -1041,7 +977,6 @@ case "24":break;
 default:
 if(vt<0)
 {
-//alert("Value can't be less than 0.");
 alert(<?php echo "'".$ValueLessThanZero."'";?>);
 		return false;
 }
@@ -1089,7 +1024,7 @@ $("#popupWindow_new").jqxWindow({ width: 250, resizable: false, theme: 'darkblue
 $("#Cancel_new").jqxButton({ theme: 'darkblue' });
 $("#Save_new").jqxButton({ theme: 'darkblue'});
   <?php
-      if(isset($_COOKIE['power']))
+      if(isLoggedIn())
 	  {
 		echo('$("#addnew").jqxButton({ width: \'250\', height: \'25\', theme: \'darkblue\'});
 $("#addnew").bind(\'click\', function () {
@@ -1120,7 +1055,6 @@ switch(varid)
 case "19":
 if((vt<0)||(vt>100))
 {
-//alert("Value has to be between 0 and 100.");
 alert(<?php echo "'".$ValueBetweenZeroAndHundred."'";?>);
 		return false;
 }
@@ -1129,7 +1063,6 @@ case "13":
 case "22":
 if((vt<0)||(vt>14))
 {
-//alert("Value has to be between 0 and 14.");
 alert(<?php echo "'".$ValueBetweenZeroAndFourteen."'";?>);
 		return false;
 }
@@ -1139,7 +1072,6 @@ case "24":break;
 default:
 if(vt<0)
 {
-//alert("Value can't be less than 0.");
 alert(<?php echo "'".$ValueLessThanZero."'";?>);
 		return false;
 }
@@ -1172,7 +1104,6 @@ $("#popupWindow_new").jqxWindow('hide');
   }
   else
   {
-	//alert("Error in Database Configuration");
 	alert(<?php echo "'".$DatabaseConfigurationError."'"; ?>);
 	
 	return false;  
@@ -1248,18 +1179,8 @@ loadmap();
 .button a:active { color: #FFF; text-decoration: none}
  </STYLE>
 
-</head>
-<body background="images/bkgrdimage.jpg">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td valign="middle" bgcolor="#FFFFFF" width="720"><blockquote>
+<?php HTML_Render_Body_Start(); ?>
+
       <p>&nbsp;</p>
       <table width="630" border="0">
         <tr>
@@ -1274,7 +1195,7 @@ $query .= " WHERE SiteID=".$siteid;
 
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
 $row = mysql_fetch_array($result, MYSQL_ASSOC);
-//echo("<p align='center'><b>Site: </b>".$row['SiteName']."</p>");
+
 echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
 
 ?></td>
@@ -1286,9 +1207,7 @@ echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
           <td width="221">&nbsp;</td>
         </tr>
         <tr>
-          <!--<td><strong>Variable:</strong></td>-->
     	  <td><strong><?php echo $Variable; ?></strong></td>
-
           <td><div id="dropdownlist"></div></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
@@ -1300,11 +1219,9 @@ echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <!--<td><div id='typelist_text'><strong>Type:</strong></div></td>-->
           <td><div id='typelist_text'><strong><?php echo $Type; ?> </strong></div></td>
 
           <td><div id='typelist'></div></td>
-          <!--<td><div id='methodlist_text'><strong>Method:</strong></div></td>-->
           <td><div id='methodlist_text'><strong><?php echo $Method; ?></strong></div></td>
           <td><div id='methodlist'></div></td>
         </tr>
@@ -1334,14 +1251,10 @@ echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <!--<td colspan="4"><div id="loadingtext" class="loading">Please Wait....Data is loading....<br/>-->
            <td colspan="4"><div id="loadingtext" class="loading"><?php echo $PleaseWait; ?><br/>
     </div>
   <div id='jqxtabs'>
     <ul style='margin-left: 20px;'>
-      <!--<li>Site Information</li>
-      <li>Data Plot</li>
-      <li>Data Table</li>-->
       <li><?php echo $SiteInfo; ?></li>
       <li><?php echo $DataPlot; ?></li>
       <li><?php echo $DataTable; ?></li>
@@ -1363,10 +1276,7 @@ $result1 = mysql_query($query1) or die("SQL Error 1: " . mysql_error());
 if(mysql_num_rows($result1)<1)
 {
 
-
-//echo("<br><br>No Images found for this site. <a href='edit_site.php'>Click here to add some</a>");
-echo("<br><br>  $NoImages  <a href='edit_site.php'> $ClickHere </a>");
-	
+echo("<br><br>  $NoImages  <a href='edit_site.php'> $ClickHere </a>");	
 }
 
 else
@@ -1378,7 +1288,6 @@ echo("<br><br><img src='imagesite/".$row1['picname']."' width='368' height='250'
 
 
 
-//echo("<br/><br/><b>Type: </b>".$row['SiteType']."<br/><br/><b>Latitude: </b>".$row['Latitude']."<br/><br/><b>Longitude: </b>".$row['Longitude']);
 echo("<br/><br/><b>$Type </b>".$row['SiteType']."<br/><br/><b>$Latitude </b>".$row['Latitude']."<br/><br/><b>$Longitude </b>".$row['Longitude']);
 
 $query = "SELECT DISTINCT VariableName FROM seriescatalog";
@@ -1386,7 +1295,6 @@ $siteid = $_GET['siteid'];
 $query .= " WHERE SiteID=".$siteid;
 
 $result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
-//echo("<br/><br/><b>Measurements taken here: </b>");
 echo("<br/><br/><b>$Measurements</b>");
 $num_rows = mysql_num_rows($result);
 $count=1;
@@ -1404,8 +1312,6 @@ if($row['VariableName']!="")
 
 
 ?>
- <!--<br/><br/>
-Selected the wrong site? No worries! Click <a href="view_main.php" style="color:#00F">here</a> to go back to the map. </div>-->
  <br/><br/>
 <?php echo $WrongSite; ?><a href="view_main.php" style="color:#00F"><?php echo $Here; ?></a> <?php echo $GoBack; ?> </div>
 
@@ -1413,7 +1319,6 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
    
       <div id="container" style="height: 470px"></div>
 <!-- Button to compare data values-->
- <!--<input type="button" style=" float:right" value="Compare with other Data Values" id='compare' />-->
   <input type="button" style=" float:right" value="<?php echo $Compare;?>" id='compare' />
 
 
@@ -1421,12 +1326,10 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
     <div>
       <div id="jqxgrid"></div>
         <div id="popupWindow">
-            <!--<div>Edit</div>-->
             <div><?php echo $Edit; ?></div>
             <div style="overflow: hidden;">
                 <table>
                     <tr>
-                        <!--<TD colspan="2">You may change the below values. Please hit Save once you are done making the required changes.</td>-->
                         <TD colspan="2"><?php echo $ChangeValues; ?></td>
 
                     </tr>
@@ -1435,7 +1338,6 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
           <td>&nbsp;</td>
         </tr>
                     <tr>
-                        <!--<td align="right">Date:</td>-->
                         <td align="right"><?php echo $Date; ?></td>
 
                         <td align="left"><div id="date"</div></td>
@@ -1445,7 +1347,6 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
           <td>&nbsp;</td>
         </tr>
                     <tr>
-                        <!--<td align="right">Time:</td>-->
                         <td align="right"><?php echo $Time;?></td>
                         <td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime()" size="10"></td>
                     </tr>
@@ -1455,7 +1356,6 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
         </tr>
           
                     <tr>
-                        <!--<td align="right">Value:</td>-->
                         <td align="right"><?php echo $Value; ?> </td>
                         <td align="left"><input id="value" onBlur="validatenum()"/></td>
                     </tr>
@@ -1467,18 +1367,15 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
                     <tr>
                         <td align="right"></td>
                         <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save" value="<?php echo $Save;?>" /><input id="delval" type="button" value="<?php echo $Delete;?>" />&nbsp;<input id="Cancel" type="button" value="<?php echo $Cancel; ?>" /></td>
-			<!--<td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save" value="Save" /><input id="delval" type="button" value="Delete" />&nbsp;<input id="Cancel" type="button" value="Cancel" /></td>-->
                     </tr>
                 </table>
             </div>
        </div>
           <div id="popupWindow_new">
-            <!--<div>Add</div>-->
             <div><?php echo $Add; ?></div>
             <div style="overflow: hidden;">
                 <table>
                     <tr>
-                        <!--<TD colspan="2">Enter the values below. Please hit Save once you are done entering.</td>-->
                         <TD colspan="2"><?php echo $EnterValues; ?></td>
                     </tr>
                     <tr>
@@ -1486,7 +1383,6 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
           <td>&nbsp;</td>
         </tr>
                     <tr>
-                        <!--<td align="right">Date:</td>-->
                         <td align="right"><?php echo $Date; ?></td>
                         <td align="left"><div id="date_new"</div></td>
                     </tr>
@@ -1495,7 +1391,6 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
           <td>&nbsp;</td>
         </tr>
                     <tr>
-                        <!--<td align="right">Time:</td>-->
                         <td align="right"><?php echo $Time; ?></td>
                         <td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime_new()" size="10"></td>
                     </tr>
@@ -1505,7 +1400,6 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
         </tr>
           
                     <tr>
-                        <!--<td align="right">Value:</td>-->
                         <td align="right"><?php echo $Value; ?></td>
                         <td align="left"><input id="value_new" onBlur="validatenum_new()"/></td>
                     </tr>
@@ -1516,7 +1410,6 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
              
                     <tr>
                         <td align="right"></td>
-                       <!--<td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save_new" value="Save" /><input id="Cancel_new" type="button" value="Cancel" /></td>--> 
                        <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save_new" value="<?php echo $Save; ?>" /><input id="Cancel_new" type="button" value="<?php echo $Cancel; ?>" /></t>
                     </tr>
                 </table>
@@ -1525,13 +1418,11 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
          <br/>
       <div style="alignment-adjust: middle; float:right;">
      <?php
-      if(isset($_COOKIE['power']))
+	if(isLoggedIn())
 	  {
-		//echo("<input type='button' value='Add new row to the above table' id='addnew' /> <br/>  <br/>");
 		echo("<input type='button' value=$AddRow id='addnew' /> <br/>  <br/>");
 	  }
       ?>
-        <!--<input type="button" value="Download the above data" id='export' />-->
         <input type="button" value="<?php echo $DownloadData;?>" id='export' />
         </div>
       </div>
@@ -1543,65 +1434,41 @@ Selected the wrong site? No worries! Click <a href="view_main.php" style="color:
           <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
-      </table></blockquote>
-    <p>&nbsp;</p></td>
-  </tr>
-    <tr>
-    <script src="js/footer.js"></script>
-    </tr>
-</table>
+      </table>
 
 <div id="window">
  <div id="windowHeader">
- <!--<span>Compare two values</span>-->
  <span><?php echo $CompareTwo; ?></span>
    </div>
  <div style="overflow: hidden;" id="windowContent">
- 
- 
  </div>
   </div>
-
 <div id="window2">
  <div id="window2Header">
- <!--<span>Compare two values</span>-->
  <span><?php echo $CompareTwo; ?></span>
    </div>
  <div style="overflow: hidden;" id="window2Content">
- 
- 
  </div>
   </div>
   <div id="window3">
  <div id="window3Header">
- <!--<span>Compare two values</span>-->
  <span><?php echo $CompareTwo; ?></span>
    </div>
  <div style="overflow: hidden;" id="window3Content">
- 
- 
  </div>
   </div>
    <div id="window4">
  <div id="window4Header">
- <span>Compare two values</span>
+ <span><?php echo $CompareTwo; ?></span>
    </div>
  <div style="overflow: hidden;" id="window4Content">
- 
- 
  </div>
   </div>
-  
    <div id="window5">
  <div id="window5Header">
- <!--<span>Compare two values</span>-->
  <span><?php echo $CompareTwo; ?></span>
    </div>
  <div style="overflow: hidden;" id="window5Content">
- 
- 
  </div>
   </div>
-  
-</body>
-</html>
+	<?php HTML_Render_Body_End(); ?>

@@ -1,7 +1,7 @@
 <?php
 //This is required to get the international text strings dictionary
 require_once 'internationalize.php';
-
+require_once "_html_parts.php";
 //check authority to be here
 require_once 'authorization_check.php';
 
@@ -50,9 +50,7 @@ $result_e = transQuery($sql_e,0,1);
 
 
 		$option_block_es .= "<tr>
-          <!--<td width='130' valign='top'><strong>Source ID #:</strong></td>-->
 		  <td width='130' valign='top'><strong>$SrcID</strong></td>
-           <!--<td valign='top' width='470'><input type='text' name='SourceID2' id='SourceID2' size='5' value='$SourceID2' disabled>&nbsp;<span class='em'>(This may not be edited!)</span></td>-->
 		  <td valign='top' width='470'><input type='text' name='SourceID2' id='SourceID2' size='5' value='$SourceID2' disabled>&nbsp;<span class='em'>$MayNotEdit</span></td>
         </tr>
         <tr>
@@ -60,9 +58,7 @@ $result_e = transQuery($sql_e,0,1);
           <td valign='top'>&nbsp;</td>
         </tr>
         <tr>
-           <!--<td valign='top'><strong>Organization:</strong></td>-->
 		  <td valign='top'><strong>$Organization</strong></td>
-           <!--<td valign='top'><input type='text' id='Organization2' name='Organization2' value='$Organization2' size='35' maxlength='100'/>*&nbsp;<span class='em'>(Ex: McCall Outdoor Science School)</span></td>-->
           <td valign='top'><input type='text' id='Organization2' name='Organization2' value='$Organization2' size='35' maxlength='100'/>*&nbsp;<span class='em'>$ExTitle</span></td>
 		</tr>
         <tr>
@@ -70,9 +66,7 @@ $result_e = transQuery($sql_e,0,1);
           <td width='22' valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Description:</strong></td>-->
 		  <td valign='top'><strong>$Description</strong></td>
-           <!--<td valign='top'><input type='text' id='SourceDescription2' name='SourceDescription2' value='$SourceDescription2' size='35' maxlength='200'/>*&nbsp;<span class='em'>(Ex: The mission of the MOSS is....)</span></td>-->
 		  <td valign='top'><input type='text' id='SourceDescription2' name='SourceDescription2' value='$SourceDescription2' size='35' maxlength='200'/>*&nbsp;<span class='em'>$ExDescipt</span></td>
           </tr>
         <tr>
@@ -80,10 +74,8 @@ $result_e = transQuery($sql_e,0,1);
           <td width='22' valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Link to Org:</strong></td>-->
 		  <td valign='top'><strong>$Link</strong></td>
           <td valign='top'><input type='text' id='SourceLink2' name='SourceLink2' value='$SourceLink2' size='35' maxlength='200'/>
-           <!--&nbsp;<span class='em'>(Optional, Ex: http://www.mossidaho.org)</span></td>-->
 		  &nbsp;<span class='em'>$ExMetaLink</span></td>
           </tr>
         <tr>
@@ -92,8 +84,6 @@ $result_e = transQuery($sql_e,0,1);
           </tr>
         <tr>
           <td valign='top'><strong>$ContactName</strong></td>
-		   <!--<td valign='top'><strong>Contact Name:</strong></td>-->
-           <!--<td valign='top'><input type='text' id='ContactName2' name='ContactName2' value='$ContactName2' size='25' maxlength='200'/>*&nbsp;<span class='em'>(Full Name)</span></td>-->
 		  <td valign='top'><input type='text' id='ContactName2' name='ContactName2' value='$ContactName2' size='25' maxlength='200'/>*&nbsp;<span class='em'>$ExName</span></td>
           </tr>
         <tr>
@@ -101,9 +91,7 @@ $result_e = transQuery($sql_e,0,1);
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Phone:</strong></td>-->
 		  <td valign='top'><strong>$Phone</strong></td>
-           <!--<td valign='top'><input type='text' id='Phone2' name='Phone2' value='$Phone2' size='12' maxlength='15'/>*&nbsp;<span class='em'>(Ex: XXX-XXX-XXXX)</span></td>-->
 		  <td valign='top'><input type='text' id='Phone2' name='Phone2' value='$Phone2' size='12' maxlength='15'/>*&nbsp;<span class='em'>$ExPhone</span></td>
           </tr>
         <tr>
@@ -111,9 +99,7 @@ $result_e = transQuery($sql_e,0,1);
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Email:</strong></td>-->
 		  <td valign='top'><strong>$Email</strong></td>
-           <!--<td valign='top'><input type='text' id='Email2' name='Email2' value='$Email2' size='12' maxlength='50'/>*&nbsp;<span class='em'>(Ex: info@moss.org)</span></td>-->
 		  <td valign='top'><input type='text' id='Email2' name='Email2' value='$Email2' size='12' maxlength='50'/>*&nbsp;<span class='em'>$ExEmail</span></td>
 
           </tr>
@@ -122,7 +108,6 @@ $result_e = transQuery($sql_e,0,1);
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Address:</strong></td>-->
 		  <td valign='top'><strong>$Address</strong></td>
           <td valign='top'><input type='text' id='Address2' name='Address2' value='$Address2' size='35' maxlength='100'/>*</td>
           </tr>
@@ -131,7 +116,6 @@ $result_e = transQuery($sql_e,0,1);
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>City:</strong></td>-->
 		  <td valign='top'><strong>$City</strong></td>
           <td valign='top'><input type='text' id='City2' name='City2' value='$City2' size='25' maxlength='100'/>*</td>
           </tr>
@@ -140,11 +124,9 @@ $result_e = transQuery($sql_e,0,1);
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>State:</strong></td>-->
 		  <td valign='top'><strong>$State</strong></td>
           <td valign='top'><select name='State2' id='State2'>
             <option value='$State2'>$State2</option>
-            <!--<option value='-1'>Select....</option>-->
 			<option value='-1'>$SelectEllipsis</option>
             <option value='AL'>Alabama</option>
             <option value='AK'>Alaska</option>
@@ -205,7 +187,6 @@ $result_e = transQuery($sql_e,0,1);
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Zip Code:</strong></td>-->
           <td valign='top'><strong>$Zip</strong></td>  
           <td valign='top'><input type='text' id='ZipCode2' name='ZipCode2' value='$ZipCode2' size='5' maxlength='8'/>*</td>
           </tr>
@@ -214,10 +195,8 @@ $result_e = transQuery($sql_e,0,1);
           <td valign='top'>&nbsp;</td>
           </tr>
         <tr>
-           <!--<td valign='top'><strong>Citation:</strong></td>-->
 		  <td valign='top'><strong>$Citation</strong></td>
           <td valign='top'><input type='text' id='Citation2' name='Citation2' value='$Citation2' size='35' maxlength='100'/>
-            <!--&nbsp;<span class='em'>(Optional, Ex: Data collected by MOSS scientists and citizen scie...)</span></td>-->
 			&nbsp;<span class='em'>$ExCitation</span></td>
           </tr>
         <tr>
@@ -227,9 +206,7 @@ $result_e = transQuery($sql_e,0,1);
 
 //Start of MetadataID section
 	$option_block_es .= "<tr>
-           <!--<td valign='top'><strong>Metadata ID #:</strong></td>-->
 		  <td valign='top'><strong>$MetadataId</strong></td>
-           <!--<td valign='top'><input type='text' name='MetadataID2' id='MetadataID2' size='5' value='$MDID' disabled>&nbsp;<span class='em'>(This may not be edited!)</span></td>-->
 		  <td valign='top'><input type='text' name='MetadataID2' id='MetadataID2' size='5' value='$MDID' disabled>&nbsp;<span class='em'>$MayNotEdit</span></td>
         </tr>
         <tr>

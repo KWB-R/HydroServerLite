@@ -8,7 +8,7 @@ if (isset($topBannerCustom))
 {
 	$sourceBanner = $topBannerCustom;	
 }
-
+if(isset($lpManagerMode)):
 if ($lpManagerMode)
 {
 	if ($sourceBanner =="images/WebClientBanner.png")
@@ -23,7 +23,7 @@ if ($lpManagerMode)
 		$sourceBanner="..\/".array_pop($pieces);
 	}
 }
-
+endif;
 
 echo '<img src="'.$sourceBanner.'" width="960" height="90" alt="logo" />';
 

@@ -27,7 +27,7 @@ $result2 = transQuery($sql2,0,0);
 
 		}
 	}
-$option_block2 .= "</select>&nbsp;<a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>";
+$option_block2 .= "</select>&nbsp;<span class=\"hint\" title=\"If you do not see your site listed here, please contact your supervisor and ask them to add it before entering data.\">?</span>";
 echo $option_block2;
 mysql_close($connection);
 ?>

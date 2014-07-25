@@ -25,7 +25,7 @@ $msg ="<p class=em2>".$CongratulationsChangedPassword." ". $_POST[username].". "
 }
 
 //Display the appropriate user authority to add depending on the user's authority
-if ($_COOKIE[power] == "admin"){
+if (isAdmin()){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE (authority='teacher' OR authority='student') ORDER BY username";
 	$result = transQuery($sql,0,0);
@@ -38,7 +38,7 @@ if ($_COOKIE[power] == "admin"){
 		}
 	}
 }
-elseif ($_COOKIE[power] == "teacher"){
+elseif (isTeacher()){
 	//select the users
 	$sql ="Select username FROM moss_users WHERE authority='student' ORDER BY username";
 	$result = transQuery($sql,0,0);
@@ -51,36 +51,22 @@ elseif ($_COOKIE[power] == "teacher"){
 		}
 	}
 }
-elseif ($_COOKIE[power] == "student"){
+elseif (isStudent()){
 	header("Location: unauthorized.php");
 	exit;	
 	}
 
-?>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
-</head>
 
-<body background="images/bkgrdimage.jpg">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php require_once 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <!--<td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right">Required fields are marked with an asterick (*).</p><?php echo "$msg"; ?><?php echo "$msg2"; ?>-->
-	<td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk; ?></p><?php echo "$msg"; ?><?php echo "$msg2"; ?>
+	require_once "_html_parts.php";
+	HTML_Render_Head();
+	
+	echo $CSS_Main;
+	
+	echo $JS_JQuery;
+
+	HTML_Render_Body_Start(); ?>
+
+<br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk; ?></p><?php echo "$msg"; ?><?php echo "$msg2"; ?>
       <!--<h1>Change a User's Password</h1>-->
 	  <h1><?php echo $ChangeUserPassword; ?></h1>
       <p>&nbsp;</p>
@@ -118,12 +104,5 @@ elseif ($_COOKIE[power] == "student"){
 	  <p>&nbsp;</p>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
-    </blockquote>
-    <p></p></td>
-  </tr>
-  <tr>
-    <script src="js/footer.js"></script>
-  </tr>
-</table>
-</body>
-</html>
+    
+	<?php HTML_Render_Body_End(); ?>

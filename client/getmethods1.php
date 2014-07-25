@@ -31,7 +31,7 @@ $num4 = count($result4);
 					}
 		}
 	}
-$option_block4 .= "</select>*&nbsp;<a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>";
+$option_block4 .= "</select><span class=\"required\">*</span><a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>";
 
 echo $option_block4;
 mysql_close($connect);

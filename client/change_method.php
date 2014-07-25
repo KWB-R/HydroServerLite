@@ -7,11 +7,11 @@ require_once 'authorization_check.php';
 require_once 'DBTranslator.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+	if (!isAdmin()){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
-
+require_once "_html_parts.php";
 
 $sql ="SELECT * FROM methods WHERE MethodID >= 2";
 $result = transQuery($sql,0,1);
@@ -25,30 +25,19 @@ $result = transQuery($sql,0,1);
 			$option_block .= "<option value=$m_id>$m_desc</option>";
 		}
 	}
+	HTML_Render_Head();
+
+	echo $CSS_JQX;
+	
+	echo $JS_GetTheme;
+
+	echo $JS_JQuery;
+	
+	echo $JS_JQX;
+	
+	echo $CSS_Main;
 ?>
 
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $WebClient; ?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
-<script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
-<script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxwindow.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxpanel.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxtabs.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxcheckbox.js"></script>
-
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript">
 
@@ -80,22 +69,12 @@ $('#window').show();
 
 </script>
 
-</head>
+	<?php HTML_Render_Body_Start(); ?>
 
-<body background="images/bkgrdimage.jpg">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" bgcolor="#3c3c3c" align="right" valign="middle" ><?php require_once 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg_1"; ?><div id="msg"><p class=em2><!--Method successfully deleted!--><?php echo $MethodDeleted;?></p></div>
-    <div id="msg2"><p class=em2><!--Method successfully edited!--><?php echo $MethodEdited;?></p></div>
-      <h1><!--Edit or Delete a Method--><?php echo $EditDeleteMethod;?></h1>
-      <p><!--Please select the Method you would like to edit or delete from the drop down menu to proceed.--><?php echo $SelectMethod;?></p>
+<br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg_1"; ?><div id="msg"><p class=em2><!--Method successfully deleted!--><?php echo $MethodDeleted;?></p></div>
+    <div id="msg2"><p class=em2><?php echo $MethodEdited;?></p></div>
+      <h1><?php echo $EditDeleteMethod;?></h1>
+      <p><?php echo $SelectMethod;?></p>
       <FORM METHOD="POST" ACTION="" name="changemethod" id="changemethod">
         <table width="620" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -119,28 +98,19 @@ $('#window').show();
     <p>&nbsp;</p>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
-    </blockquote>
-    <p>&nbsp;</p></td>
-  </tr>
-  <tr>
-    <script src="js/footer.js"></script>
-  </tr>
-</table>
 <div id="window">
 	<div id="windowHeader">
 		<span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span>
 	</div>
     <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yup"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
 </div>
-</body>
-</html>
+	<?php HTML_Render_Body_End(); ?>
 
 <script>
 //When the "Delete" button is clicked, validate the method selected and then submit the request
 function deleteMethod(){
 
 	if(($("#MethodID").val())==-1){
-		//alert("Please select a Method to delete!");
 		alert(<?php echo "'".$SelectMethodDelete."'"; ?>);
 		return false;
 		
@@ -165,7 +135,6 @@ function deleteMethod(){
 	
 			}else{
 				
-				//alert("Error during processing! Please refresh the page and begin again.");
 				alert(<?php echo "'".$ProcessingError."'"; ?>);
 				return false;
 				}
@@ -178,7 +147,6 @@ return false;
 function editMethod(){
 	
 	if(($("#MethodID").val())==-1){
-		//alert("Please select a Method to edit!");
 		alert(<?php echo "'".$SelectMethodEdit."'"; ?>);
 		return false;
 		
@@ -199,7 +167,6 @@ function editMethod(){
 			
 			}else{
 			
-				//alert("Error during request! Please refresh the page and begin again.");
 				alert(<?php echo "'".$ErrorDuringRequest."'"; ?>);
 				return false;
 				}
@@ -213,7 +180,6 @@ function updateMethod(){
 
 	if(($("#MethodDescription2").val())==''){
 		
-		//alert("A Method Name is required!");
 		alert(<?php echo "'".$MethodNameRequired."'"; ?>);
 		return false;
 	
@@ -243,7 +209,6 @@ function updateMethod(){
 
 			}else{
 
-				//alert("Error during processing! Please refresh the page and begin again.");
 				alert(<?php echo "'".$ProcessingError."'"; ?>);
 				return false;
 				}

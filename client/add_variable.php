@@ -5,96 +5,25 @@ require_once 'internationalize.php';
 //check authority to be here
 require_once 'authorization_check.php';
 require_once 'fetchMainConfig.php';
+require_once "_html_parts.php";
+
+// This is an undefined variable; I cannot find it referenced anywhere except
+// on add_variable.php and edit_var.php pages.
+$default_timesupport = "";
+
+HTML_Render_Head();
+
+echo $JS_JQuery;
+
+echo $CSS_JQX;
+
+echo $JS_JQX;
+
+echo $JS_Forms;
+
+echo $CSS_Main;
 ?>
 
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
-
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
-
-
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-
-<script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxlistbox.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxcombobox.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdropdownlist.js"></script>
-
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
-
-<script type="text/javascript">
-
-function show_answerVC(){
-//alert("An arbitrary code used by your organization to specify a specific variable record. For example, IDCS- could be used for International Data Collection System.");
-alert(<?php echo "'" . $ArbitraryCode . "'" ?>);
-}
-
-function show_answerVDef(){
-//alert("If creating a new variable, specify the definition here. Variables that already exist within the database are provided with definitions.");
-alert(<?php echo "'".$VariableDefinitionMsg."'"; ?>);
-}
-
-function show_answerSpec(){
-//alert("A code used to identify how the data value is expressed. For example, total phosphorous is expressed as P.");
-alert(<?php echo "'".$ValueCode."'"; ?>);
-}
-
-function show_answerVUT(){
-//alert("The general category for the kind of units your variable has.");
-alert(<?php echo "'".$UnitsCategory."'"; ?>);
-}
-
-function show_answerUnit(){
-//alert("The unit of measurement for this variable.");
-alert(<?php echo "'".$UnitsMeasure."'"; ?>);
-}
-
-function show_answerUT(){
-//alert("The length or volume/time associated with the variable.");
-alert(<?php echo "'".$UTAssociated."'"; ?>);
-}
-
-function show_answerSM(){
-//alert("The medium the sample or observation was taken from or made.");
-alert(<?php echo "'".$ObservationMedium."'"; ?>);
-}
-
-function show_answerVType(){
-//alert("The type of data value being recorded. For example, this variable was measured in the field or part of a simulation, etc.");
-alert(<?php echo "'".$DataTypeMsg."'"; ?>);
-}
-
-function show_answerROV(){
-//alert("Whether the data values are from a regularly sampled time series.");
-alert(<?php echo "'".$RegularlySampledTime."'"; ?>);
-}
-
-function show_answerTS(){
-//alert("Numerical value that indicates the temporal footprint of the data values. 0 indicates instantaneous samples (samples taken at random or irregular intervals). Other values indicate the time over which data values are aggregated. For example, the value was collected every 10 minutes.");
-alert(<?php echo "'".$TemporalFootprint."'"; ?>);
-}
-
-function show_answerCat(){
-//alert("The general scientific category this variable being measured fits into.");
-alert(<?php echo "'".$ScientificCategory."'"; ?>);
-}
-
-function show_answerMeth(){
-//alert("The methods specifically used to collect this variable.");
-alert(<?php echo "'".$VariableCollectionMethod."'"; ?>);
-}
-
-</script>
 
 <script type="text/javascript">
 var unitsid=0;
@@ -116,7 +45,7 @@ $(document).ready(function(){
 	$("#newvarnameb").hide();
 
 //Default starter for Variable Code
-//	var d_varcode = $default_varcode;
+//	var d_varcode = $_SITE_default_varcode;
 
 //	$("#VariableCode").val(d_varcode);
 
@@ -156,7 +85,6 @@ $("#new_spec1").hide();
  {
 //If user selects other option
 	$("#specdef").removeAttr("disabled");	 
-	 //$("#specdef").val("Please enter a definition");
 	 $("#specdef").val(<?php echo "'".$EnterDefinition."'"; ?>);
 //Show the other box
 $("#new_spec").show(200);
@@ -549,23 +477,14 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         });
 	});
 </script>
-</head>
 
-<body background="images/bkgrdimage.jpg">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c"><?php include 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote>
-      <p><br /><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p>
+	<?php HTML_Render_Body_Start(); ?>
+
+
+      <p><br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p>
        <div id="msg">
-          <p class=em2><!--Variable successfully added!--><?php echo $VariableSuccessfullyAdded;?></p></div>
-        <h1><!--Add a New Variable--><?php echo $AddNewVariable;?></h1>
+          <p class=em2><?php echo $VariableSuccessfullyAdded;?></p></div>
+        <h1><?php echo $AddNewVariable;?></h1>
       <form action="" method="post" name="add_var" id="add_var">
         <table width="600" border="0" cellspacing="0" cellpadding="0">
           <tr>
@@ -573,18 +492,18 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
             <td colspan="3" valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <td valign="top"><strong><!--Variable Code:--><?php echo $VariableCode;?></strong></td>
+          <td valign="top"><strong><?php echo $VariableCode;?></strong></td>
           <td colspan="3" valign="top">
-          <input type="text" id="var_code" name="VariableCode" value="<?php echo $default_varcode; ?>" size="15" />*&nbsp;<a href="#" onClick="show_answerVC()" border="0"><img src="images/questionmark.png" border="0"></a>&nbsp;<span class='em'><!--(Ex: IDCS-22 or IDCS-22-Avg)--><?php echo $VariableCodeExample;?></span></td>
+          <input type="text" id="var_code" name="VariableCode" value="<?php echo $_SITE_default_varcode; ?>"  /><span class="required">*</span><span class="hint" title="<?php echo $ArbitraryCode?>">?</span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <td valign="top"><strong><!--Variable Name:--><?php echo $VariableName;?></strong></td>
+          <td valign="top"><strong><?php echo $VariableName;?></strong></td>
           <td valign="top"><div id="varname"></div></td>
-          <td colspan="2" valign="top">*</td>
+          <td colspan="2" valign="top"><span class="required">*</span></td>
           </tr>
         <tbody id="newvarnameb">
         <tr>
@@ -593,7 +512,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><!--New Variable Name:--><?php echo $NewVarName;?></strong>&nbsp;<input type="text" id="newvarname" name="newvarname" value="" size="32" />*</td>
+          <td colspan="3" valign="top"><strong><?php echo $NewVarName;?></strong>&nbsp;<input type="text" id="newvarname" name="newvarname" value="" class="medium" /><span class="required">*</span></td>
         </tr>
         </tbody>
         <tr>
@@ -601,17 +520,17 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Variable Definition:--><?php echo $VariableDefinition;?></strong></td>
-          <td colspan="3" valign="top"><input name="vardef" type="text" id="vardef" value="" size="60" maxlength="200" />*&nbsp;<a href="#" onClick="show_answerVDef()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td valign="top"><strong><?php echo $VariableDefinition;?></strong></td>
+          <td colspan="3" valign="top"><input name="vardef" type="text" id="vardef" value="" class="long" maxlength="200" /><span class="required">*</span><span class="hint" title="<?php echo $VariableDefinitionMsg; ?>">?</span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td width="175" valign="top"><strong><!--Speciation:--><?php echo $Speciation;?></strong></td>
+          <td width="175" valign="top"><strong><?php echo $Speciation;?></strong></td>
           <td valign="top"><div id="specdata"></div></td>
-          <td colspan="2" valign="top">*&nbsp;<a href="#" onClick="show_answerSpec()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo $ValueCode; ?>">?</span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -620,7 +539,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 
         <tr id="new_spec">
           <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><!--New Speciation:--><?php echo $NewSpeciation;?></strong>&nbsp;<input type="text" id="other_spec" name="other_spec" value="" size="15" />*</td>
+          <td colspan="3" valign="top"><strong><?php echo $NewSpeciation;?></strong>&nbsp;<input type="text" id="other_spec" name="other_spec" value="" size="15" /><span class="required">*</span></td>
         </tr>
 		<tr id="new_spec1">
           <td valign="top">&nbsp;</td>
@@ -628,8 +547,8 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           </tr>
           
         <tr>
-          <td valign="top"><strong><!--Speciation Definition:--><?php echo $SpeciationDef;?></strong></td>
-          <td colspan="3" valign="top"><input name="specdef" type="text" id="specdef" value="" size="28" maxlength="200" />*&nbsp;</td>
+          <td valign="top"><strong><?php echo $SpeciationDef;?></strong></td>
+          <td colspan="3" valign="top"><input name="specdef" type="text" id="specdef" value="" class="medium" maxlength="200" /><span class="required">*</span></td>
         </tr>
         
         
@@ -638,9 +557,9 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td height="30" valign="top"><strong><!--Variable Unit Type:--><?php echo $VariableUnitType;?></strong></td>
+          <td height="30" valign="top"><strong><?php echo $VariableUnitType;?></strong></td>
           <td width="252" valign="top"><div id="unittype"></div></td>
-          <td colspan="2" valign="top">*&nbsp;<a href="#" onClick="show_answerVUT()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo $UnitsCategory; ?>">?</span></td>
           </tr>
         <tbody id="unitreq">
         <tr>
@@ -648,9 +567,9 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><div id="unittext"><strong><!--Unit:--><?php echo $Unit;?></strong></div></td>
+          <td valign="top"><div id="unittext"><strong><?php echo $Unit;?></strong></div></td>
           <td valign="top"><div id="unit"></div></td>
-          <td colspan="2" valign="top"><span id="unitreq">*&nbsp;<a href="#" onClick="show_answerUnit()" border="0"><img src="images/questionmark.png" border="0"></a></span></td>
+          <td colspan="2" valign="top"><span id="unitreqSpan"><span class="required">*</span><span class="hint" title="<?php echo $UnitsMeasure; ?>">?</span></span></td>
           </tr>
         </tbody>
         <tbody id="newunit">
@@ -660,7 +579,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><span class=em2><!--New Unit Definition:--><?php echo $NewUnitDefinitionColon;?></span></td>
+          <td colspan="3" valign="top"><span class=em2><?php echo $NewUnitDefinitionColon;?></span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -668,7 +587,8 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><!--Unit Type:--><?php echo $UnitType;?></strong>&nbsp;<input type="text" id="new_unit_type" name="new_unit_type" value="" size="32" />*<a href="#" onClick="show_answerUT()" border="0"><img src="images/questionmark.png" border="0"></a>&nbsp;</td>
+          <td colspan="3" valign="top"><strong><?php echo $UnitType;?></strong>
+		&nbsp;<input type="text" id="new_unit_type" name="new_unit_type" value="" class="medium" /><span class="required">*</span><span class="hint" title="<?php echo $UTAssociated; ?>">?</span></td>
         </tr>
           </tbody>
         <tbody id="newunitonly">
@@ -680,7 +600,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         
         <tr>
           <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><!--Unit Name:--><?php echo $UnitName;?></strong>&nbsp;<input type="text" id="new_unit_name" name="new_unit_name" value="" size="32" />*</td>
+          <td colspan="3" valign="top"><strong><?php echo $UnitName;?></strong>&nbsp;<input type="text" id="new_unit_name" name="new_unit_name" value="" class="medium" /><span class="required">*</span></td>
         </tr>
         
         <tr>
@@ -689,7 +609,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><!--Unit Abbreviation:--><?php echo $UnitAbbreviation;?></strong>&nbsp;<input type="text" id="new_unit_abb" name="new_unit_abb" value="" size="32" />*</td>
+          <td colspan="3" valign="top"><strong><?php echo $UnitAbbreviation;?></strong>&nbsp;<input type="text" id="new_unit_abb" name="new_unit_abb" value="" class="medium" /><span class="required">*</span></td>
         </tr>
         </tbody>
     
@@ -698,9 +618,9 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Sample Medium: --><?php echo $SampleMedium;?></strong></td>
+          <td valign="top"><strong><?php echo $SampleMedium;?></strong></td>
           <td valign="top"><div id="samplemedium"></div></td>
-          <td colspan="2" valign="top">*&nbsp;<a href="#" onClick="show_answerSM()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo $ObservationMedium; ?>">?</span></td>
           </tr>
         <tbody id="smother">
         <tr>
@@ -709,7 +629,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><!--New Sample Medium:--><?php echo $NewSampleMedium;?></strong>&nbsp;<input type="text" id="smnew" name="smnew" value="" size="32" />*</td>
+          <td colspan="3" valign="top"><strong><?php echo $NewSampleMedium;?></strong>&nbsp;<input type="text" id="smnew" name="smnew" value=""  class="medium" /><span class="required">*</span></td>
         </tr>
            </tbody>
         <tr>
@@ -717,8 +637,8 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Sample Med. Definition:--><?php echo $MediumDefinition;?></strong></td>
-          <td colspan="3" valign="top"><input name="smdef" type="text" id="smdef" value="" size="60" maxlength="200" />*</td>
+          <td valign="top"><strong><?php echo $MediumDefinition;?></strong></td>
+          <td colspan="3" valign="top"><input name="smdef" type="text" id="smdef" value=""  class="long" maxlength="200" /><span class="required">*</span></td>
         </tr>
         
      
@@ -727,9 +647,9 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Value Type:--><?php echo $ValueType;?></strong></td>
+          <td valign="top"><strong><?php echo $ValueType;?></strong></td>
           <td valign="top"><div id="valuetype"></div></td>
-          <td colspan="2" valign="top">*&nbsp;<a href="#" onClick="show_answerVType()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo $DataTypeMsg; ?>">?</span></td>
           </tr>
         <tbody id="valuetypenewb">
         <tr>
@@ -738,7 +658,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><!--Value Type New:--><?php echo $ValueTypeNew;?></strong>&nbsp;<input type="text" id="valuetypenew" name="valuetypenew" value="" size="32" />*</td>
+          <td colspan="3" valign="top"><strong><?php echo $ValueTypeNew;?></strong>&nbsp;<input type="text" id="valuetypenew" name="valuetypenew" value="" class="medium" /><span class="required">*</span></td>
         </tr>
         </tbody>
         <tr>
@@ -746,61 +666,61 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Value Type Definition:--><?php echo $ValueTypeDefinition;?></strong></td>
-          <td colspan="3" valign="top"><input name="vtdef" type="text" id="vtdef" value="" size="60" maxlength="200" />*&nbsp;</td>
+          <td valign="top"><strong><?php echo $ValueTypeDefinition;?></strong></td>
+          <td colspan="3" valign="top"><input name="vtdef" type="text" id="vtdef" value="" class="long" maxlength="200" /><span class="required">*</span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td height="18" valign="top"><strong><!--Regularity of Value:--><?php echo $Regularity;?></strong></td>
+          <td height="18" valign="top"><strong><?php echo $Regularity;?></strong></td>
           <td valign="top"><div id="isreg"></div></td>
-          <td colspan="2" valign="top">*&nbsp;<a href="#" onClick="show_answerROV()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo $RegularlySampledTime; ?>">?</span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Time Support:--><?php echo $TimeSupport;?></strong></td>
-          <td colspan="3" valign="top"><input type="text" id="tsup" name="tsup" value="<?php echo $default_timesupport; ?>" size="15" />*&nbsp;<a href="#" onClick="show_answerTS()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td valign="top"><strong><?php echo $TimeSupport;?></strong></td>
+          <td colspan="3" valign="top"><input type="text" id="tsup" name="tsup" value="<?php echo $default_timesupport; ?>"  /><span class="required">*</span>
+		<span class="hint" title="<?php echo $TemporalFootprint; ?>">?</span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Time Unit:--><?php echo $TimeUnit;?></strong></td>
+          <td valign="top"><strong><?php echo $TimeUnit;?></strong></td>
           <td valign="top"><div id="timeunit"></div></td>
-          <td colspan="2" valign="top">*&nbsp;</td>
+          <td colspan="2" valign="top"><span class="required">*</span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Data Type:--><?php echo $DataType;?></strong></td>
+          <td valign="top"><strong><?php echo $DataType;?></strong></td>
           <td valign="top"><div id="datatype"></div></td>
-          <td colspan="2" valign="top">*&nbsp;</td>
+          <td colspan="2" valign="top"><span class="required">*</span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Data Type Definition:--><?php echo $DataTypeDefinition;?></strong></td>
-          <!--<td colspan="3"><textarea name="dtdef" cols="45" rows="4" readonly id="dtdef"><!--Please select a data type to view its definition--><!--<?php echo $SelectData;?></textarea>*&nbsp;</td>-->
-          <td colspan="3"><textarea name="dtdef" cols="45" rows="4" readonly id="dtdef"><?php echo $SelectData;?></textarea>*&nbsp;</td>
+          <td valign="top"><strong><?php echo $DataTypeDefinition;?></strong></td>
+          <td colspan="3"><textarea name="dtdef" cols="45" rows="4" readonly id="dtdef"><?php echo $SelectData;?></textarea><span class="required">*</span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Category:--><?php echo $Category;?></strong></td>
+          <td valign="top"><strong><?php echo $Category;?></strong></td>
           <td valign="top"><div id="gc"></div></td>
-          <td width="133" valign="top">*&nbsp;<a href="#" onClick="show_answerCat()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td width="133" valign="top"><span class="required">*</span><span class="hint" title="<?php echo $ScientificCategory; ?>">?</span></td>
           <td width="40" valign="top">&nbsp;</td>
         </tr>
         <tr>
@@ -808,17 +728,16 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Category Definition:--><?php echo $CategoryDefinition;?></strong></td>
-          <!--<td colspan="3" valign="top"><input name="gcdef" type="text" id="gcdef" value="Please select a category to view its definition" size="60" readonly>*&nbsp;</td>-->
-          <td colspan="3" valign="top"><input name="gcdef" type="text" id="gcdef" value="<?php echo $SelectCategory;?>" size="60" readonly>*&nbsp;</td>
+          <td valign="top"><strong><?php echo $CategoryDefinition;?></strong></td>
+          <td colspan="3" valign="top"><input name="gcdef" type="text" id="gcdef" value="<?php echo $SelectCategory;?>" class="long" readonly><span class="required">*</span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="4" valign="top"><strong><!--Please select the Method(s) below used by this Variable:--><?php echo $SelectMethods;?></strong> <br>
-<!--(Select all that apply by holding the &quot;Ctrl&quot; key down and selecting multiple options):--><?php echo $SelectAllThatApply;?></td>
+          <td colspan="4" valign="top"><strong><?php echo $SelectMethods;?></strong> <br>
+<?php echo $SelectAllThatApply;?></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -826,7 +745,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td colspan="2" valign="top"><div id='jqxWidget'></div></td>
-          <td valign="top">*&nbsp;<a href="#" onClick="show_answerMeth()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+          <td valign="top"><span class="required">*</span><span class="hint" title="<?php echo $VariableCollectionMethod; ?>">?</span></td>
           <td valign="top">&nbsp;</td>
         </tr>
         <tr>
@@ -834,34 +753,25 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <!--<td colspan="4" valign="top"><input type="SUBMIT" name="submit" value="Add Variable" class="button" /></td>-->
           <td colspan="4" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddVariableButton;?>" class="button" /></td>
           </tr>
       </table>
     </FORM></p>
-</blockquote>
-    <p></p></td>
-  </tr>
-  <tr>
-    <script src="js/footer.js"></script>
-  </tr>
-</table>
-</body>
-</html>
+
+	<?php HTML_Render_Body_End(); ?>
+
 
 <script>
 
 //Calls a function to validate all fields when the submit button is hit.
 $("form").submit(function(){
 if(($("#var_code").val())==""){
-		//alert("Please enter a Variable Code!");
 		alert(<?php echo "'".$EnterVariableCode."'"; ?>);
 		return false;
 	}
 	
 	if(($("#var_code").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
 {
-		//alert("Invalid Variable code. VaraibleCodes cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
 		alert(<?php echo "'".$InvalidVariableCode."'"; ?>);
 		return false;
 	}
@@ -873,7 +783,6 @@ var checkitem = $('#varname').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 //alert("Please select a variable name or select Other/New from the drop down to enter a new variable name!");
 	 alert(<?php echo "'".$SelectVariableName."'"; ?>);
 		return false;    
    }
@@ -884,14 +793,12 @@ var checkitem = $('#varname').jqxDropDownList('getSelectedItem');
 	
 	//Check if new fields are filled
 	if(($("#newvarname").val())==""){
-		//alert("Please enter a new variable name!");
 		alert(<?php echo "'".$EnterNewVariable."'"; ?>);
 		return false;
 	}
 	
 	if(($("#newvarname").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
 {
-		//alert("Invalid Variable name. Varaible Name cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
 		alert(<?php echo "'".$InvalidVariableName."'"; ?>);
 		return false;
 	}
@@ -899,7 +806,6 @@ var checkitem = $('#varname').jqxDropDownList('getSelectedItem');
 	 
 	 
 	 if((($("#vardef").val())=="")||(($("#vardef").val())=="Please enter a definition")){
-		//alert("Please enter the definition for the new variable");
 		alert(<?php echo "'".$EnterDefinitionNewVariable."'"; ?>);
 		return false;
 	}  
@@ -927,9 +833,8 @@ checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 //alert("Please select a Speciation or select Other/New from the drop down to enter a new Speciation!");
+	alert(<?php echo "'".$SelectSpeciation."'"; ?>);    
 		return false;
-		alert(<?php echo "'".$SelectSpeciation."'"; ?>);    
    }
    
    if(checkitem.value=="-10")
@@ -938,13 +843,11 @@ checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
 	
 	//Check if new fields are filled
 	if(($("#other_spec").val())==""){
-		//alert("Please enter a new Speciation!");
 		alert(<?php echo "'".$SelectNewSpeciation."'"; ?>);
 		return false;
 	}
 
 	 if((($("#specdef").val())=="")||(($("#specdef").val())=="Please enter a definition")){
-		//alert("Please enter the definition for the NEW Speciation");
 		alert(<?php echo "'".$EnterDefinitionNewSpeciation."'"; ?>);
 		return false;
 	}  
@@ -969,7 +872,7 @@ checkitem = $('#unittype').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 //alert("Please select a Variable Unit Type or select Other/New from the drop down to enter a new Unit Type!");
+
 	 alert(<?php echo "'".$SelectVariableUnitType."'"; ?>);
 		return false;    
    }
@@ -983,7 +886,6 @@ var unititem = $('#unit').jqxDropDownList('getSelectedItem');
 
 if ((unititem == null)||(unititem.value=="-1"))
    {
-	 //alert("Please select a Unit or select Other/New from the drop down to enter a new Unit!");
 	 alert(<?php echo "'".$SelectUnit."'"; ?>);
 		return false;    
    }
@@ -995,13 +897,11 @@ if ((unititem == null)||(unititem.value=="-1"))
 	
 	//Check if new fields are filled
 	if(($("#new_unit_name").val())==""){
-		//alert("Please enter a name for the new Unit!");
 		alert(<?php echo "'".$EnterNameNewUnit."'"; ?>);
 		return false;
 	}
 
 	 if(($("#new_unit_abb").val())==""){
-		//alert("Please enter an abbreviation for the new Unit!");
 		alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
 		return false;
 	}  
@@ -1035,19 +935,16 @@ if ((unititem == null)||(unititem.value=="-1"))
 	
 	//Check if new fields are filled
 	if(($("#new_unit_name").val())==""){
-		//alert("Please enter a name for the new Unit!");
 		alert(<?php echo "'".$EnterNameNewUnit."'"; ?>);
 		return false;
 	}
 
 	 if(($("#new_unit_abb").val())==""){
-		//alert("Please enter an abbreviation for the new Unit!");
 		alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
 		return false;
 	}  
 
  if(($("#new_unit_type").val())==""){
-		//alert("Please enter the type of the new unit!");
 		alert(<?php echo "'".$EnterTypeNewUnit."'"; ?>);
 		return false;
 	}  
@@ -1084,7 +981,6 @@ checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 //alert("Please select a Sample Medium or select Other/New from the drop down to enter a new Sample Medium!");
 	 alert(<?php echo "'".$SelectMedium."'"; ?>);
 		return false;    
    }
@@ -1095,21 +991,20 @@ checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
 	
 	//Check if new fields are filled
 	if(($("#smnew").val())==""){
-		//alert("Please enter a new Sample Medium!");
 		alert(<?php echo "'".$EnterNewSampleMedium."'"; ?>);
 		return false;
 	}
 	
 	if(($("#smnew").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
 {
-		//alert("Invalid new Sample Medium. Sample Medium cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
+
 		alert(<?php echo "'".$InvalidSampleMedium."'"; ?>);
 		return false;
 	}
 
 	 
 	 if((($("#smdef").val())=="")||(($("#smdef").val())=="Please enter a definition")){
-		//alert("Please enter the definition for the new Sample Medium");
+
 		alert(<?php echo "'".$EnterDefinitionNewSampleMedium."'"; ?>);
 		return false;
 	}  
@@ -1139,7 +1034,6 @@ checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 //alert("Please select a Value Type or select Other/New from the drop down to enter a new Value Type!");
 	 alert(<?php echo "'".$SelectValueType."'"; ?>);
 		return false;    
    }
@@ -1150,21 +1044,18 @@ checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
 	
 	//Check if new fields are filled
 	if(($("#valuetypenew").val())==""){
-		//alert("Please enter a new Value Type!");
 		alert(<?php echo "'".$EnterNewValueType."'"; ?>);
 		return false;
 	}
 	
 	if(($("#valuetypenew").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
 {
-		//alert("Invalid new Value Type. Value Type cannot contain any characters other than A-Z (case insensitive), 0-9, period (.), dash (-), and underscore (_).");
 		alert(<?php echo "'".$InvalidValueType."'"; ?>);
 		return false;
 	}
 
 	 
 	 if((($("#vtdef").val())=="")||(($("#vtdef").val())=="Please enter a definition")){
-		//alert("Please enter the definition for the new Value Type");
 		alert(<?php echo "'".$EnterDefinitionNewValueType."'";?>);
 		return false;
 	} 
@@ -1194,7 +1085,6 @@ checkitem = $('#isreg').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 //alert("Please select the Regularity of the value.");
 	 alert(<?php echo "'".$SelectRegularity."'"; ?>);
 		return false;    
    }
@@ -1203,7 +1093,6 @@ checkitem = $('#isreg').jqxDropDownList('getSelectedItem');
 checkitem = $('#timeunit').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1")){
-		//alert("Please select the Time unit.");
 		alert(<?php echo "'".$SelectTimeUnit."'"; ?>);
 		return false;    
    }
@@ -1211,7 +1100,6 @@ checkitem = $('#timeunit').jqxDropDownList('getSelectedItem');
 checkitem = $('#datatype').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1")){
-		//alert("Please select the Data Type.");
 		alert(<?php echo "'".$SelectDataTypeMsg."'"; ?>);
 		return false;    
    }
@@ -1219,14 +1107,13 @@ checkitem = $('#datatype').jqxDropDownList('getSelectedItem');
 checkitem = $('#gc').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1")){
-		//alert("Please select the Category.");
+
 		alert(<?php echo "'".$SelectCategoryMsg."'"; ?>);
 		return false;    
    }
 
 
 if(($("#tsup").val())==""){
-		//alert("Please enter a Time Support Value! 0 is used to indicate data values that are instantaneous. Other values indicate the time over which the data values are implicitly or explicitly averaged or aggregated.");
 		alert(<?php echo "'".$EnterTimeSupportValue."'"; ?>);
 		return false;
 	}
@@ -1277,7 +1164,6 @@ checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
 	}
 
 if(varmeth==""){
-	//alert("Please select at least one Method!");
 	alert(<?php echo "'".$SelectOneMethod."'"; ?>);
 	return false;
 	}

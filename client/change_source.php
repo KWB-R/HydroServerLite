@@ -7,7 +7,7 @@ require_once 'authorization_check.php';
 require_once 'DBTranslator.php';
 
 //redirect anyone that is not an administrator
-if ($_COOKIE[power] !="admin"){
+	if (!isAdmin()){
 	header("Location: index.php?state=pass2");
 	exit;	
 	}
@@ -27,31 +27,22 @@ $result = transQuery($sql,0,0);
 			$option_block_s .= "<option value=$s_id>$s_org</option>";
 		}
 	}
+
+	require_once "_html_parts.php";
+	HTML_Render_Head();
+	
+	echo $CSS_JQX;
+	
+	echo $JS_GetTheme;
+	
+	echo $JS_JQuery;
+	
+	echo $JS_Forms;
+	
+	echo $JS_JQX;
+
+	echo $CSS_Main;
 ?>
-
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--<title>HydroServer Lite Web Client</title>-->
-<title><?php echo $WebClient; ?></title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="bookmark" href="favicon.ico" >
-
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
-<link rel="stylesheet" href="js/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
-<script type="text/javascript" src="js/gettheme.js"></script>
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
-<script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxwindow.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxpanel.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxtabs.js"></script>
-<script type="text/javascript" src="js/jqwidgets/jqxcheckbox.js"></script>
-
-<link href="styles/main_css.css" rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript">
 
@@ -82,30 +73,17 @@ $('#window').show();
 }
 
 function show_answerProf(){
-//alert("The Profile Version is a label for the standard of compliance used, such as ISO 19115 or ISO 8601,  which provides a complete set of ISO compliant metadata in the database.");
 alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
 }
 
 </script>
 
-</head>
-
-<body background="images/bkgrdimage.jpg">
-<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td colspan="2"><?php include "topBanner.php" ; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2" bgcolor="#3c3c3c" align="right" valign="middle" ><?php require_once 'header.php'; ?></td>
-  </tr>
-  <tr>
-    <td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
-    <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br /><?php echo "$msg"; ?><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><div id="msg">
-      <p class=em2><!--Source and MetadataID successfully deleted!--><?php echo $SourceMetadataDeleted;?></p></div>
+	<?php HTML_Render_Body_Start(); ?>
+<br /><?php echo "$msg"; ?><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><div id="msg">
+      <p class=em2><?php echo $SourceMetadataDeleted;?></p></div>
     <div id="msg2">
-      <p class=em2><!--Source successfully edited!--><?php echo $SourceEdited;?></p></div>
-      <h1><!--Edit or Delete a Source--><?php echo $EditDeleteSource;?></h1>
-      <!--<p>Please select the Source you would like to edit or delete from the drop down menu to proceed.</p>-->
+      <p class=em2><?php echo $SourceEdited;?></p></div>
+      <h1><?php echo $EditDeleteSource;?></h1>
       <p><?php echo $SelectSource;?></p>
 
         <table width="620" border="0" cellspacing="0" cellpadding="0">
@@ -123,7 +101,6 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
           <td width="280" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <!-- <<td colspan="3" valign="top"><strong class="em2"NOTE:</strong> <span class="em">You cannot delete a Source or MetadataID without first deleting all data values associated with them.</span></td>-->
           <td colspan="3" valign="top"><strong class="em2"><?php echo $NoteColon;?></strong> <span class="em"><?php echo $NoteText;?></span></td>
           </tr>
         <tr>
@@ -136,22 +113,14 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
       
     <div id="msg3"></div>
     <p>&nbsp;</p>
-    </blockquote>
-    <p>&nbsp;</p></td>
-  </tr>
-  <tr>
-    <script src="js/footer.js"></script>
-  </tr>
-</table>
+
 <div id="window">
 	<div id="windowHeader">
-		<span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span>
+		<span><?php echo $ConfirmationBox;?></span>
 	</div>
-	<!--<div style="overflow: hidden;" id="windowContent"><center><strong>Are you sure?</strong><br /><br /><input name="Yes" type="button" value="Yes" id="Yessir"/>&nbsp;<input name="No" type="button" value="No" id="No"/></center></div>-->
     <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yessir"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
 </div>
-</body>
-</html>
+	<?php HTML_Render_Body_End(); ?>
 
 <script>
 //When a selection from the Source dropdown menu, a query is used to fill in the form.
@@ -167,11 +136,11 @@ function editSource(){
 				
 				$("#msg3").html(data);
 				$("#msg3").show(500);
+            setHintHandlers();
 				return true;
 			
 			}else{
 			
-				//alert("Error during request! Please refresh the page and begin again.");
 				alert(<?php echo "'".$ErrorDuringRequest."'";?>);
 				return false;
 				}
@@ -183,13 +152,11 @@ function editSource(){
 function deleteSource(){
 
 		if(($("#SourceID").val())==-1){
-			//alert("Please select a Source to delete!");
 			alert(<?php echo "'".$SelectSourceDelete."'"; ?>);
 			return false;
 		}
 	
 		if(($("#MetadataID2").val())==""){
-			//alert("Your Source doesn't appear to have a MetadataID! Please talk to your supervisor.");
 			alert(<?php echo "'".$SourceWithoutMetadataID."'"; ?>);
 			return false;
 		}
@@ -215,7 +182,6 @@ function deleteSource(){
 	
 			}else{
 				
-				//alert("Error during processing! Please refresh the page and begin again.");
 				alert(<?php echo "'".$ProcessingError."'"; ?>);
 				return false;
 			}
@@ -232,19 +198,16 @@ function updateSource(){
 
 		//Validate all fields
 		if(($("#SourceID2").val())==""){
-			//alert("Please select a Source to edit.");
 			alert(<?php echo "'".$SelectSourceEdit."'"; ?>);
 			return false;
 		}
 
 		if(($("#Organization2").val())==""){
-			//alert("Please enter an organization for the source.");
 			alert(<?php echo "'".$EnterOrganization."'"; ?>);
 			return false;
 		}
 
 		if(($("#SourceDescription2").val())==""){
-			//alert("Please enter a description for the source.");
 			alert(<?php echo "'".$EnterDescription."'"; ?>);
 			return false;
 		}
@@ -253,7 +216,6 @@ function updateSource(){
 		if(($("#SourceLink2").val())!=""){
 			var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 			if(!($("#SourceLink2").val().match(regexp))){
-				//alert("Invalid url for sourcelink");
 				alert(<?php echo "'".$InvalidSourceLinkURL."'"; ?>);
 				return false;
 			}
@@ -261,101 +223,86 @@ function updateSource(){
 
 		//Contact Name Validation
 		if(($("#ContactName2").val())==""){
-			//alert("Please enter a contact name for the source.");
 			alert(<?php echo "'".$EnterContactNameSource."'"; ?>);
 			return false;
 		}
 
 		//Phone Validation
 		if(($("#Phone2").val())==""){
-			//alert("Please enter a phone number for the contact person.");
 			alert(<?php echo "'".$EnterPhoneNumber."'"; ?>);
 			return false;
 		}
 		var regex = /^((\+?1-)?\d\d\d-)?\d\d\d-\d\d\d\d$/;
 		if(!($("#Phone2").val().match(regex))){
-			//alert("Invalid phone number");
 			alert(<?php echo "'".$InvalidPhoneNumber."'"; ?>);
 			return false;
 		}
 
 		//Email Validation
 		if(($("#Email2").val())==""){
-			//alert("Please enter an email address for the source.");
 			alert(<?php echo "'".$EnterEmailAddress."'"; ?>);
 			return false;
 		}
 		var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 		if(!($("#Email2").val().match(pattern))){
-			//alert("Invalid email address");
 			alert(<?php echo "'".$InvalidEmailAddress."'"; ?>);
 			return false;
 		}
 
 		//Address Validation
 		if(($("#Address2").val())==""){
-			//alert("Please enter an address for the source.");
 			alert(<?php echo "'".$EnterAddress."'"; ?>);
 			return false;
 		}
 
 		//City Validation
 		if(($("#City2").val())==""){
-			//alert("Please enter a city for the source.");
 			alert(<?php echo "'".$EnterCity."'"; ?>);
 			return false;
 		}
 	
 		//State Validation
 		if(($("#State2 option:selected").val())==-1){
-			//alert("Please select a state for the source.");
 			alert(<?php echo "'".$SelectSourceState."'"; ?>);
 			return false;
 		}
 
 		//Zip Code Validation
 		if(($("#ZipCode2").val())==""){
-			//alert("Please enter a zip code for the source.");
 			alert(<?php echo "'".$EnterZipCode."'"; ?>);
 			return false;
 		}
 		if(!($("#ZipCode2").val().match(/^\d{5}(-\d{4})?$/))){
-			//alert("Invalid zip code");
 			alert(<?php echo "'".$InvalidZipCode."'"; ?>);
 			return false;
 		}
 
 		//MetadataID Validation
 		if(($("#MetadataID2").val())==""){
-			//alert("Your Source doesn't appear to have a MetadataID! Please talk to your supervisor.");
 			alert(<?php echo "'".$SourceWithoutMetadataID."'"; ?>);
 			return false;
 		}
 	
 		//Topic Category Validation
 		if(($("#TopicCategory2").val())==""){
-			//alert("Please select a Topic Category for the Metadata.");
 			alert(<?php echo "'".$SelectTopicCategory."'"; ?>);
 			return false;
 		}
 
 		//Title Validation
 		if(($("#Title2").val())==""){
-			//alert("Please enter a Title for the Metadata.");
 			alert(<?php echo "'".$EnterMetadataTitle."'"; ?>);
 			return false;
 		}
 
 		//Abstract Validation
 		if(($("#Abstract2").val())==""){
-			//alert("Please enter an Abstract for the Metadata.");
 			alert(<?php echo "'".$EnterMetadataAbstract."'"; ?>);
 			return false;
 		}
 
 		//Profile Version Validation
 		if(($("#ProfileVersion2").val())==""){
-			//alert("Please enter a Profile Version for the contact person.");
 			alert(<?php echo "'".$EnterProfileVersionContact."'"; ?>);
 			return false;
 		}
@@ -364,7 +311,7 @@ function updateSource(){
 		if(($("#MetadataLink2").val())!=""){
 			var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 			if(!($("#MetadataLink2").val().match(regexp))){
-				//alert("Invalid url for Metadata Link");
+
 				alert(<?php echo "'".$InvalidURLMetadata."'"; ?>);
 				return false;
 			}
