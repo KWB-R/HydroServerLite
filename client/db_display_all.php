@@ -8,6 +8,27 @@ $dom = new DOMDocument("1.0");
 $node = $dom->createElement("markers");
 $parnode = $dom->appendChild($node);
 
+//ChangeEdit : 07/30/2014 : The old way took a lot of time as it sent out a query for each of the site. Changing it, new way!
+
+$query = "SELECT * FROM sites where SiteID in (SELECT DISTINCT `SiteID` FROM `seriescatalog` WHERE `VariableID` is not null)";
+$result = transQuery($query,0,0);
+if (!$result) {
+  die('Invalid query: ' . mysql_error());
+}
+header("Content-type: text/xml");
+// Iterate through the rows, adding XML nodes for each
+foreach ($result as $row) {
+ $node = $dom->createElement("marker");
+  $newnode = $parnode->appendChild($node);
+  $newnode->setAttribute("name", $row['SiteName']);
+  $newnode->setAttribute("siteid", $row['SiteID']);
+   $newnode->setAttribute("sitecode", $row['SiteCode']);
+  $newnode->setAttribute("lat", $row['Latitude']);
+  $newnode->setAttribute("lng", $row['Longitude']);
+  $newnode->setAttribute("sitetype", translateWord($row['SiteType']));
+  $newnode->setAttribute("distance", $dist);	}
+  
+/*
 // Select all the rows in the markers table
 $dist=0;
 $query = "SELECT * FROM sites WHERE 1";
@@ -46,7 +67,7 @@ $rows2=count($result2);
 	}
 	
 }
-
+*/
 echo $dom->saveXML();
 mysql_close($connect);
 ?>
