@@ -76,9 +76,6 @@ function track_loc() {
         browserSupportFlag = false;
         handleNoGeolocation(browserSupportFlag);
     }
-
-
-
     // searchLocations2(initialLocation);
 }
 
@@ -104,11 +101,16 @@ function loadall() {
                 var long = markerNodes[i].getAttribute("lng");
                 var distance = parseFloat(markerNodes[i].getAttribute("distance"));
                 var latlng = new google.maps.LatLng(
-            parseFloat(markerNodes[i].getAttribute("lat")),
-            parseFloat(markerNodes[i].getAttribute("lng")));
+				parseFloat(markerNodes[i].getAttribute("lat")),
+				parseFloat(markerNodes[i].getAttribute("lng")));
                 var type = markerNodes[i].getAttribute("sitetype");
                 var siteid = markerNodes[i].getAttribute("siteid");
-                create_source(latlng, name, sitecode, type, lat, long, siteid, i);
+				var sourcename = markerNodes[i].getAttribute("sourcename");
+                var sourcecode = markerNodes[i].getAttribute("sourcecode");
+				var sourcelink = markerNodes[i].getAttribute("sourcelink");
+				var sitepic = markerNodes[i].getAttribute("sitepic");
+				//Changed the SQL query to avoid multiple calls for each site and its source details Rohit 8/5/2014
+                create_source(latlng, name, sitecode, type, lat, long, siteid, i,sourcename,sourcecode,sourcelink,sitepic);
                 bounds.extend(latlng);
             }
 
@@ -124,39 +126,17 @@ function loadall() {
 	  
         map.fitBounds(bounds);
         map.panToBounds(bounds);
-        map.setZoom(15);
+        //map.setZoom(15);
     });
 return markerCount;
 }
 
 
-function create_source(latlng, name, sitecode, type, lat, long, siteid, i) {
+function create_source(latlng, name, sitecode, type, lat, long, siteid, i, sourcename, sourcecode, sourcelink,sitepic) {
     //To Get The Sources Available on That Site
-
-    var searchUrl_sources = 'db_source_search.php?siteid=' + siteid;
-
-    downloadUrl(searchUrl_sources, function (data) {
-        var xml5 = parseXml(data);
-        var sourcenodes = xml5.documentElement.getElementsByTagName("source");
-        var sourcename;
-        var sourcecode;
-        var sourcelink;
-        for (var j = 0; j < sourcenodes.length; j++) {
-            sourcename = sourcenodes[j].getAttribute("sourcename");
-            sourcecode = sourcenodes[j].getAttribute("sourcecode");
-            sourcelink = sourcenodes[j].getAttribute("sourcelink");
-        }
-
-        if (sourcelink == undefined) {
-            sourcelink = "";
-        }
-
-        if ((sourcename != undefined) && (sourcecode != undefined)) {
-            createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourcecode, sourcelink, siteid);
-            createOption(name, i, sourcename);
-        }
-
-    });
+	//No longer sending individual requests. This is just a intermediate step now. No actual processing done here. 
+	createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourcecode, sourcelink, siteid,sitepic);
+    createOption(name, i, sourcename);
 
 }
 
@@ -179,8 +159,11 @@ function clearLocations() {
         markers[i].setMap(null);
     }
     markers.length = 0;
-
-    locationSelect.innerHTML = "";
+	markers = [];
+	if(markerCluster != undefined)
+	{
+	markerCluster.clearMarkers();
+    }locationSelect.innerHTML = "";
     var option = document.createElement("option");
     option.value = "none";
     option.innerHTML = "Click here for a list of Sites: ";
@@ -255,52 +238,27 @@ function searchLocationsNear2(center) {
     });
 }
 
-function createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourcecode, sourcelink, siteid) {
-
-    //send out an ajax request to retrieve the picname
-
-    $.ajax({
-        type: "POST",
-        url: "getsitepic.php?sc=" + siteid
-    }).done(function (msg) {
-        if (msg != -1) {
-
-            var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>" + msg + "</div>";
-
-            var marker = new google.maps.Marker({
-                position: latlng
-            });
-            google.maps.event.addListener(marker, 'mouseover', function () {
-                infoWindow.setContent(html);
-                infoWindow.open(map, marker);
-            });
-			markerCluster.addMarker(marker);
-            markers.push(marker);
-
-        }
-        else {
-
-            var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div>";
-
-            var marker = new google.maps.Marker({
- 
-                position: latlng
-            });
-            google.maps.event.addListener(marker, 'mouseover', function () {
-                infoWindow.setContent(html);
-                infoWindow.open(map, marker);
-            });
-			markerCluster.addMarker(marker);
-            markers.push(marker);
-
-        }
-    });
-
-
-
-
-
-
+function createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourcecode, sourcelink, siteid,sitepic) {
+	
+	//Sending out a request each time we want to get site picture is super redundant and will slow down the process considerably. 
+	//Figured out a join so that the image is going to be provided by the first request only. 
+	if(sitepic!="")
+	{
+		var image = "<img src='imagesite/small/"+sitepic +"' width='100' height='100'>";	
+        var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>" + image + "</div>";
+	
+	}
+	else
+	{
+		var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div>";	
+	}
+   
+	var marker = new google.maps.Marker({position: latlng});
+	google.maps.event.addListener(marker, 'mouseover', function () {
+		infoWindow.setContent(html);
+		infoWindow.open(map, marker);});
+	markerCluster.addMarker(marker);
+	markers.push(marker);
 }
 
 

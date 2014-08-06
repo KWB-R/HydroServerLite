@@ -10,7 +10,14 @@ $parnode = $dom->appendChild($node);
 
 //ChangeEdit : 07/30/2014 : The old way took a lot of time as it sent out a query for each of the site. Changing it, new way!
 
-$query = "SELECT * FROM sites where SiteID in (SELECT DISTINCT `SiteID` FROM `seriescatalog` WHERE `VariableID` is not null)";
+$query = "SELECT DISTINCT `seriescatalog`.`SiteID`,y.*,
+sources.Organization, sources.SourceID, sources.SourceLink
+FROM `seriescatalog` 
+LEFT OUTER JOIN ((SELECT sites.SiteID,SiteName,SiteCode,Latitude,Longitude, SiteType, sitepic.picname from sites 
+LEFT JOIN (sitepic)
+ON (sites.SiteID=sitepic.siteid)) y,sources) 
+ON (y.SiteID=`seriescatalog`.`SiteID` AND `seriescatalog`.`SourceID`=sources.SourceID) 
+WHERE `VariableID` is not null and ValueCount>0";
 $result = transQuery($query,0,0);
 if (!$result) {
   die('Invalid query: ' . mysql_error());
@@ -18,15 +25,20 @@ if (!$result) {
 header("Content-type: text/xml");
 // Iterate through the rows, adding XML nodes for each
 foreach ($result as $row) {
- $node = $dom->createElement("marker");
-  $newnode = $parnode->appendChild($node);
-  $newnode->setAttribute("name", $row['SiteName']);
-  $newnode->setAttribute("siteid", $row['SiteID']);
-   $newnode->setAttribute("sitecode", $row['SiteCode']);
-  $newnode->setAttribute("lat", $row['Latitude']);
-  $newnode->setAttribute("lng", $row['Longitude']);
-  $newnode->setAttribute("sitetype", translateWord($row['SiteType']));
-  $newnode->setAttribute("distance", $dist);	}
+	$node = $dom->createElement("marker");
+	$newnode = $parnode->appendChild($node);
+	$newnode->setAttribute("name", $row['SiteName']);
+	$newnode->setAttribute("siteid", $row['SiteID']);
+	$newnode->setAttribute("sitecode", $row['SiteCode']);
+	$newnode->setAttribute("lat", $row['Latitude']);
+	$newnode->setAttribute("lng", $row['Longitude']);
+	$newnode->setAttribute("sitetype", translateWord($row['SiteType']));
+	$newnode->setAttribute("distance", $dist);
+	$newnode->setAttribute("sourcename", $row['Organization']);
+	$newnode->setAttribute("sourcecode", $row['SourceID']);
+	$newnode->setAttribute("sourcelink", $row['SourceLink']);
+	$newnode->setAttribute("sitepic", $row['picname']);
+  }
   
 /*
 // Select all the rows in the markers table
