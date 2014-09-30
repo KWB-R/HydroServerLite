@@ -21,7 +21,7 @@ function getRequestedPage(){
 function isPostBack(){
 	return ($_SERVER["REQUEST_METHOD"] == "POST");	
 }
-$AnonymousPages = array("/home.php","/index.php","/view_main.php","/login_handler.php","/help.php");
+$AnonymousPages = array("/home.php","/index.php","/view_main.php","/login_handler.php","/help.php","/details.php");
 
 if (!isLoggedIn()){
 	// home.php handles login. This is probably not the best. It should he handled by a login page.
