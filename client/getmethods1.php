@@ -15,7 +15,7 @@ $num4 = count($result4);
 	$msg4 = "<P><em2>".$NoMethodsVariable."</em></p>";
 	} else {
 		$result4 = $result4 [0]; //To get the first row from the results
-		$option_block4 = "<select name='MethodID' id='MethodID'><option value='-1'>".$SelectEllipsis."</option>";
+		$option_block4 = "<select class=\"form-control\" name='MethodID' id='MethodID'><option value='-1'>".$SelectEllipsis."</option>";
 		$methodstr=explode(",", $result4['MethodID']);
 	
 		foreach($methodstr as &$value){
@@ -31,7 +31,7 @@ $num4 = count($result4);
 					}
 		}
 	}
-$option_block4 .= "</select><span class=\"required\">*</span><a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>";
+$option_block4 .= "</select><span class=\"required\">*</span><span class=\"hint\" title=\"".$IfNoSeeMethod1.$ContactSupervisor.$AddIt."\">?</span>";
 
 echo $option_block4;
 mysql_close($connect);

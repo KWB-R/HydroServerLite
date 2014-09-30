@@ -5,8 +5,9 @@ html, body {
 }
 
 body {
-    background: #9ab7e3 url(../../images/bkgrdimage-light.jpg) repeat-x left top;
+    background: #9ab7e3 url(../../images/bkgrdimage-light.jpg) repeat left top;
     margin: 0px;
+	background-size: 100% 100%;
     padding: 0px;
     width: 100%;
     font-family: Arial;
@@ -535,8 +536,8 @@ form ul.login a {
     #nav ul {
         list-style: none;
         padding: 0;
-        width: 150px;
-        border: 1px solid #000;
+       // width: 150px;
+       // border: 1px solid #000;
         z-index: 501;
     }
 
@@ -830,4 +831,67 @@ ul.messages {
     position: absolute;
     display: inline-block;
     color: #000000;
+}
+
+.masthead{
+  width:100%;
+}
+
+.mainContainer{	
+	background-color:#FFF;
+	margin-top:-20px;
+	
+}
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 970px;
+    }
+	.mainContainer{
+		  max-width: 970px;
+	}
+}
+
+.footer{
+	background-color:#0971B3;
+	color:#FFF;
+	font:Arial, Helvetica, sans-serif;
+	size:2;
+	text-align:center;	
+	
+}
+
+
+/* make sidebar nav vertical */ 
+@media (min-width: 768px) {
+  .sidebar-nav .navbar .navbar-collapse {
+    padding: 0;
+    max-height: none;
+	
+  }
+  .sidebar-nav .navbar{
+	border:0px;
+  
+  }
+  
+  
+  .sidebar-nav .navbar ul {
+    float: none;
+  }
+  .sidebar-nav .navbar ul:not {
+    display: block;
+  }
+  .sidebar-nav .navbar li {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+.form-control{
+    width:94%;
+    float:left;
 }

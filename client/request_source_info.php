@@ -10,7 +10,7 @@ $SID = $_GET['SourceID'];
 //All queries go through a translator. 
 require_once 'DBTranslator.php';
 
-$option_block_es = "<FORM METHOD='POST' ACTION='' name='editsource' id='editsource'><table width='600' border='0' cellspacing='0' cellpadding='0'>";
+$option_block_es = "<FORM METHOD='POST' ACTION='' class='form-horizontal' name='editsource' id='editsource'><table width='600' border='0' cellspacing='0' cellpadding='0'>";
 
 //Delete the MethodID # provided
 $sql_e ="SELECT * FROM sources WHERE SourceID='$SID'";
@@ -49,83 +49,70 @@ $result_e = transQuery($sql_e,0,1);
 	}
 
 
-		$option_block_es .= "<tr>
-		  <td width='130' valign='top'><strong>$SrcID</strong></td>
-		  <td valign='top' width='470'><input type='text' name='SourceID2' id='SourceID2' size='5' value='$SourceID2' disabled>&nbsp;<span class='em'>$MayNotEdit</span></td>
-        </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-        </tr>
-        <tr>
-		  <td valign='top'><strong>$Organization</strong></td>
-          <td valign='top'><input type='text' id='Organization2' name='Organization2' value='$Organization2' size='35' maxlength='100'/>*&nbsp;<span class='em'>$ExTitle</span></td>
-		</tr>
-        <tr>
-          <td width='108' valign='top'>&nbsp;</td>
-          <td width='22' valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-		  <td valign='top'><strong>$Description</strong></td>
-		  <td valign='top'><input type='text' id='SourceDescription2' name='SourceDescription2' value='$SourceDescription2' size='35' maxlength='200'/>*&nbsp;<span class='em'>$ExDescipt</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td width='22' valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-		  <td valign='top'><strong>$Link</strong></td>
-          <td valign='top'><input type='text' id='SourceLink2' name='SourceLink2' value='$SourceLink2' size='35' maxlength='200'/>
-		  &nbsp;<span class='em'>$ExMetaLink</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-          <td valign='top'><strong>$ContactName</strong></td>
-		  <td valign='top'><input type='text' id='ContactName2' name='ContactName2' value='$ContactName2' size='25' maxlength='200'/>*&nbsp;<span class='em'>$ExName</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-		  <td valign='top'><strong>$Phone</strong></td>
-		  <td valign='top'><input type='text' id='Phone2' name='Phone2' value='$Phone2' size='12' maxlength='15'/>*&nbsp;<span class='em'>$ExPhone</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-		  <td valign='top'><strong>$Email</strong></td>
-		  <td valign='top'><input type='text' id='Email2' name='Email2' value='$Email2' size='12' maxlength='50'/>*&nbsp;<span class='em'>$ExEmail</span></td>
-
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-		  <td valign='top'><strong>$Address</strong></td>
-          <td valign='top'><input type='text' id='Address2' name='Address2' value='$Address2' size='35' maxlength='100'/>*</td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-		  <td valign='top'><strong>$City</strong></td>
-          <td valign='top'><input type='text' id='City2' name='City2' value='$City2' size='25' maxlength='100'/>*</td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-		  <td valign='top'><strong>$State</strong></td>
-          <td valign='top'><select name='State2' id='State2'>
+		$option_block_es .= "
+	<div class=\"form-group\">
+    <label for=\"SourceID2\" class=\"col-sm-3 control-label\">$SrcID</label>
+    <div class=\"col-sm-9\">
+	  <input class='form-control' type='text' name='SourceID2' id='SourceID2' size='5' value='$SourceID2' disabled>&nbsp;<span class='em'>$MayNotEdit</span>
+    </div></div>
+	<div class=\"form-group\">
+    <label for=\"Organization2\" class=\"col-sm-3 control-label\">$Organization</label>
+    <div class=\"col-sm-9\">
+<input class='form-control' type='text' id='Organization2' name='Organization2' value='$Organization2' size='35' maxlength='100'/>*&nbsp;<span class='em'>$ExTitle</span></div>
+</div>
+	<div class=\"form-group\">
+    <label for=\"SourceDescription2\" class=\"col-sm-3 control-label\">$Description</label>
+    <div class=\"col-sm-9\">
+	 <input class='form-control' type='text' id='SourceDescription2' name='SourceDescription2' value='$SourceDescription2' size='35' maxlength='200'/>*&nbsp;<span class='em'>$ExDescipt</span>
+    </div>
+	</div>
+	
+	<div class=\"form-group\">
+    <label for=\"SourceLink2\" class=\"col-sm-3 control-label\">$Link</label>
+    <div class=\"col-sm-9\">
+	<input class='form-control' type='text' id='SourceLink2' name='SourceLink2' value='$SourceLink2' size='35' maxlength='200'/>
+		  &nbsp;<span class='em'>$ExMetaLink</span>
+    </div>
+	</div>
+	
+	<div class=\"form-group\">
+    <label for=\"ContactName2\" class=\"col-sm-3 control-label\">$ContactName</label>
+    <div class=\"col-sm-9\">
+	<input class='form-control' type='text' id='ContactName2' name='ContactName2' value='$ContactName2' size='25' maxlength='200'/>*&nbsp;<span class='em'>$ExName</span>
+    </div>
+	</div>
+	
+	<div class=\"form-group\">
+    <label for=\"Phone2\" class=\"col-sm-3 control-label\">$Phone</label>
+    <div class=\"col-sm-9\">
+<input class='form-control' type='text' id='Phone2' name='Phone2' value='$Phone2' size='12' maxlength='15'/>*&nbsp;<span class='em'>$ExPhone</span> </div>
+	</div>
+	
+	<div class=\"form-group\">
+    <label for=\"Email2\" class=\"col-sm-3 control-label\">$Email</label>
+    <div class=\"col-sm-9\">
+	<input class='form-control' type='text' id='Email2' name='Email2' value='$Email2' size='12' maxlength='50'/>*&nbsp;<span class='em'>$ExEmail</span>
+    </div>
+	</div>
+	
+	<div class=\"form-group\">
+    <label for=\"Address2\" class=\"col-sm-3 control-label\">$Address</label>
+    <div class=\"col-sm-9\">
+	<input class='form-control' type='text' id='Address2' name='Address2' value='$Address2' size='35' maxlength='100'/>*
+    </div>
+	</div>
+	
+	<div class=\"form-group\">
+    <label for=\"City2\" class=\"col-sm-3 control-label\">$City</label>
+    <div class=\"col-sm-9\">
+	<input class='form-control' type='text' id='City2' name='City2' value='$City2' size='25' maxlength='100'/>*
+    </div>
+	</div>
+	
+    <div class=\"form-group\">
+    <label for=\"State2\" class=\"col-sm-3 control-label\">$State</label>
+    <div class=\"col-sm-9\">
+	<select class=\"form-control\" name='State2' id='State2'>
             <option value='$State2'>$State2</option>
 			<option value='-1'>$SelectEllipsis</option>
             <option value='AL'>Alabama</option>
@@ -180,44 +167,43 @@ $result_e = transQuery($sql_e,0,1);
             <option value='WI'>Wisconsin</option>
             <option value='WY'>Wyoming</option>
 			<option value='NULL'>$International</option>
-          </select>*</td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-          <td valign='top'><strong>$Zip</strong></td>  
-          <td valign='top'><input type='text' id='ZipCode2' name='ZipCode2' value='$ZipCode2' size='5' maxlength='8'/>*</td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-		  <td valign='top'><strong>$Citation</strong></td>
-          <td valign='top'><input type='text' id='Citation2' name='Citation2' value='$Citation2' size='35' maxlength='100'/>
-			&nbsp;<span class='em'>$ExCitation</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-        </tr>";
+          </select>*
+    </div>
+	</div>
+        
+	<div class=\"form-group\">
+    <label for=\"ZipCode2\" class=\"col-sm-3 control-label\">$Zip</label>
+    <div class=\"col-sm-9\">
+	<input class='form-control' type='text' id='ZipCode2' name='ZipCode2' value='$ZipCode2' size='5' maxlength='8'/>*
+    </div>
+	</div>
+	<div class=\"form-group\">
+    <label for=\"Citation2\" class=\"col-sm-3 control-label\">$Citation</label>
+    <div class=\"col-sm-9\">
+	<input class='form-control' type='text' id='Citation2' name='Citation2' value='$Citation2' size='35' maxlength='100'/>
+			&nbsp;<span class='em'>$ExCitation</span>
+    </div>
+	</div>
+   ";
 
 //Start of MetadataID section
-	$option_block_es .= "<tr>
-		  <td valign='top'><strong>$MetadataId</strong></td>
-		  <td valign='top'><input type='text' name='MetadataID2' id='MetadataID2' size='5' value='$MDID' disabled>&nbsp;<span class='em'>$MayNotEdit</span></td>
-        </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-        </tr>		
-        <tr>
-          <td valign='top'><strong>$TopicCategory</strong></td>";
+	$option_block_es .= "
+	
+	<div class=\"form-group\">
+    <label for=\"MetadataID2\" class=\"col-sm-3 control-label\">$MetadataId</label>
+    <div class=\"col-sm-9\">
+	<input class='form-control' type='text' name='MetadataID2' id='MetadataID2' size='5' value='$MDID' disabled>&nbsp;<span class='em'>$MayNotEdit</span>
+    </div>
+	</div>
+	<div class=\"form-group\">
+    <label for=\"TopicCategory2\" class=\"col-sm-3 control-label\">$TopicCategory</label>
+    <div class=\"col-sm-9\">
+
+    
+     ";
 		  
 		// Pull the Topic Category data for the dropdown menu
-		$option_block_tc = "<select name='TopicCategory2' id='TopicCategory2'>
+		$option_block_tc = "<select class=\"form-control\" name='TopicCategory2' id='TopicCategory2'>
 			<option value='$TopicCategory2'>$TopicCategory2</option>
 			<option value='-1'>$SelectEllipsis</option>";
 
@@ -237,58 +223,37 @@ $result_e = transQuery($sql_e,0,1);
 		// End of Topic Category dropdown menu
 
 
-$option_block_es .= "<td valign='top'>$option_block_tc &nbsp;<span class='em'>$SelectUnknown</span></td>
- <!--<td valign='top'>$option_block_tc &nbsp;<span class='em'>(You may select Unknown)</span></td>-->
-        </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-          <!--<td valign='top'><strong>Title:</strong></td>-->
-	  <td valign='top'><strong>$Title</strong></td>
-          <!--<td valign='top'><input type='text' id='Title2' name='Title2' value='$Title2' size='25' maxlength='200'/>*&nbsp;<span class='em'>(Ex: McCall Outdoor Science School)</span></td>-->
-	  <td valign='top'><input type='text' id='Title2' name='Title2' value='$Title2' size='25' maxlength='200'/>*&nbsp;<span class='em'>$ExTitle</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-           <!--<td valign='top'><strong>Abstract:</strong></td>-->
-		  <td valign='top'><strong>$Abstract</strong></td>
-           <!--<td valign='top'><textarea name='Abstract2' cols='50' rows='4' id='Abstract2'>$Abstract2</textarea>*<br><span class='em'>(Ex: MOSS collects water data from Ponderosa State Park...; Or you may enter Unknown)</span></td>-->
-		  <td valign='top'><textarea name='Abstract2' cols='50' rows='4' id='Abstract2'>$Abstract2</textarea>*<br><span class='em'>$ExAbstract</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-           <!--<td valign='top'><strong>Profile Version:</strong></td>-->
-		  <td valign='top'><strong>$MetaDataProfileVersion</strong></td>
-           <!--<td valign='top'><input type='text' id='ProfileVersion2' name='ProfileVersion2' value='$ProfileVersion2' size='12' maxlength='200'/>*&nbsp;<a href='#' onClick='show_answerProf()' border='0'><img src='images/questionmark.png' border='0'></a>&nbsp;<span class='em'>(Ex: ISO8601; Or you may enter Unknown)</span></td>-->
-		  <td valign='top'><input type='text' id='ProfileVersion2' name='ProfileVersion2' value='$ProfileVersion2' size='12' maxlength='200'/>*&nbsp;<a href='#' onClick='show_answerProf()' border='0'><img src='images/questionmark.png' border='0'></a>&nbsp;<span class='em'>$ExProfileVersion</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>
-        <tr>
-           <!--<td valign='top'><strong>Metadata Link:</strong></td>-->
-		  <td valign='top'><strong>$MetaLink</strong></td>
-           <!--<td valign='top'><input type='text' id='MetadataLink2' name='MetadataLink2' value='$MetadataLink2' size='35' maxlength='250'/>&nbsp;<span class='em'>(Optional, Ex: http://www.mossidaho.org)</span></td>-->
-		  <td valign='top'><input type='text' id='MetadataLink2' name='MetadataLink2' value='$MetadataLink2' size='35' maxlength='250'/>&nbsp;<span class='em'>$ExMetaLink</span></td>
-          </tr>
-        <tr>
-          <td valign='top'>&nbsp;</td>
-          <td valign='top'>&nbsp;</td>
-          </tr>";
+$option_block_es .= "$option_block_tc &nbsp;<span class='em'>$SelectUnknown</span></div>
+	</div>
+ <div class=\"form-group\">
+    <label for=\"Title2\" class=\"col-sm-3 control-label\">$Title</label>
+    <div class=\"col-sm-9\">
+<input class='form-control' type='text' id='Title2' name='Title2' value='$Title2' size='25' maxlength='200'/>*&nbsp;<span class='em'>$ExTitle</span>
+    </div>
+	</div>
+      <div class=\"form-group\">
+    <label for=\"Abstract2\" class=\"col-sm-3 control-label\">$Abstract</label>
+    <div class=\"col-sm-9\">
+<textarea name='Abstract2' cols='50' rows='4' id='Abstract2'>$Abstract2</textarea>*<br><span class='em'>$ExAbstract</span>
+    </div>
+	</div>
+	  <div class=\"form-group\">
+    <label for=\"ProfileVersion2\" class=\"col-sm-3 control-label\">$MetaDataProfileVersion</label>
+    <div class=\"col-sm-9\">
+<input class='form-control' type='text' id='ProfileVersion2' name='ProfileVersion2' value='$ProfileVersion2' size='12' maxlength='200'/>*&nbsp;<a href='#' onClick='show_answerProf()' border='0'><img src='images/questionmark.png' border='0'></a>&nbsp;<span class='em'>$ExProfileVersion</span>    </div>
+	</div>
+	 <div class=\"form-group\">
+    <label for=\"MetadataLink2\" class=\"col-sm-3 control-label\">$MetaLink</label>
+    <div class=\"col-sm-9\">
+<input class='form-control' type='text' id='MetadataLink2' name='MetadataLink2' value='$MetadataLink2' size='35' maxlength='250'/>&nbsp;<span class='em'>$ExMetaLink</span>    </div>
+	</div>
+           
+      ";
 
 //End of MetadataID section
 
 $option_block_es .= "<tr>
-           <!--<td colspan='2' valign='top'><input type='submit' name='submit' value='Save Edits' class='button' style='width: 85px' onClick='updateSource()'/>&nbsp;&nbsp;<input type='button' name='delete' value='Delete' class='button' style='width: 55px' onClick='confirmBox()'/>&nbsp;&nbsp;<input type='button' name='Reset' value='Cancel' class='button' style='width: 65px' onClick='clearEverything()'/></td>-->
+          
 		  <td colspan='2' valign='top'><input type='submit' name='submit' value='$SaveEdits' class='button' style='width: auto' onClick='updateSource()'/>&nbsp;&nbsp;<input type='button' name='delete' value='$Delete' class='button' style='width: auto' onClick='confirmBox()'/>&nbsp;&nbsp;<input type='button' name='Reset' value='$Cancel' class='button' style='width: auto' onClick='clearEverything()'/></td>
           </tr>
       </table>

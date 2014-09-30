@@ -25,6 +25,6 @@ if ($lpManagerMode)
 }
 endif;
 
-echo '<img src="'.$sourceBanner.'" width="960" height="90" alt="logo" />';
+echo '<img src="'.$sourceBanner.'" alt="logo" class="img-responsive center-block" />';
 
 ?>

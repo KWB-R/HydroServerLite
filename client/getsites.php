@@ -17,7 +17,7 @@ if (count($result2) < 1) {
 	} else {
 	// ShowTypes does not appear to be anywhere in the code set. Not sure what this is doing.
 		// This appears to be the only reference to this script anywhere.	
-$option_block2 = "<select name='SiteID' id='SiteID' onChange='showTypes(this.value)'><option value='-1'>".$SelectEllipsis."</option>";
+$option_block2 = "<select class=\"form-control\" name='SiteID' id='SiteID' onChange='showTypes(this.value)'><option value='-1'>".$SelectEllipsis."</option>";
 	foreach ($result2 as $row2) {
 
 		$siteid = $row2["SiteID"];

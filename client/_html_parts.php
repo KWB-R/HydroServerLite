@@ -32,8 +32,9 @@ function HTML_Render_Head($PageTitle = ""){
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>$WebClient $HeaderAddon</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=9"/>
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 		<link rel="bookmark" href="favicon.ico" />
 		
@@ -44,28 +45,24 @@ function HTML_Render_Body_Start(){
 	$HTML_1 = <<<PageBody1
 	</head>
 	<body>
-		<table width="960" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
-			<tr>
-				<td colspan="2">		
+	    <div class="container">
+		<div class="masthead">
 PageBody1;
 	$HTML_1A = 	<<<PartA
-	</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="right" valign="middle" bgcolor="#3c3c3c">
+			</div>
+
+<!-- /container -->
 PartA;
 			
 	$HTML_2 = <<<PageBody2
-				</td>
-			</tr>
-			<tr>
-				<td width="240" valign="top">
-				
+			
+				      <div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
+        <div class="col-md-3">
 PageBody2;
 	$HTML_3 = <<<PageBody3
-				</td>
-				<td width="720" valign="top">
-				
+			</div>
+       
+     
 PageBody3;
 
 	echo $HTML_1;
@@ -122,12 +119,10 @@ function showMessages($key,$class){
 	unset($_SESSION[$key]);
 }
 function HTML_Render_Body_End(){
-	$HTML_1 =   "</td>
-			</tr>
-			<tr>";
+	$HTML_1 =   " </div>   <!-- Closing row -->";
 	
-	$HTML_1A = '</tr>
-		</table>
+	$HTML_1A = '
+	</div>     <!-- Closing Container -->	
 		<div id="popUp">
 			<h1 id="popTitle"><span id="popTitleText">Details</span>
 				<span id="popClose" onclick="$(this).parent().parent().hide(1000);">X</span>
@@ -151,7 +146,10 @@ function HTML_Render_Body_End(){
 
 
 $CSS_Main =  <<<CSSMain
+		<!-- Bootstrap -->
+		<link href="styles/bootstrap/bootstrap.min.css" rel="stylesheet">
 		<link href="styles/default/main_css.css" rel="stylesheet" type="text/css" media="screen" />
+		
 		
 CSSMain;
 
@@ -177,6 +175,7 @@ JQXStyles;
 $JS_JQuery =  <<<JQueryScripts
 			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/common.js"></script> 
+			<script src="js/bootstrap.min.js"></script>
 			
 JQueryScripts;
 

@@ -10,9 +10,9 @@ echo $CSS_Main;
 
 HTML_Render_Body_Start();
 
-echo "<div style='height:500px;'>";
+echo "<div class='col-md-9' style='height:500px;'>";
 require_once "map.php"; 
-echo "</div>";
+echo "</div></div>";
 
 HTML_Render_Body_End();
 ?>

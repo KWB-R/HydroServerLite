@@ -70,37 +70,32 @@ $('#window').show();
 </script>
 
 	<?php HTML_Render_Body_Start(); ?>
-
+<div class='col-md-9'>
 <br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg_1"; ?><div id="msg"><p class=em2><!--Method successfully deleted!--><?php echo $MethodDeleted;?></p></div>
     <div id="msg2"><p class=em2><?php echo $MethodEdited;?></p></div>
       <h1><?php echo $EditDeleteMethod;?></h1>
       <p><?php echo $SelectMethod;?></p>
-      <FORM METHOD="POST" ACTION="" name="changemethod" id="changemethod">
-        <table width="620" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td><strong><!--Method:--><?php echo $Method;?></strong></td>
-          <td colspan="2" valign="top"><select name="MethodID" id="MethodID" onChange="editMethod()">
-            <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
-            <?php echo "$option_block"; ?></select></td>
-        </tr>
-        <tr>
-          <td width="60" valign="top">&nbsp;</td>
-          <td width="280" valign="top">&nbsp;</td>
-          <td width="280" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="3" valign="top"><strong class="em2"><!--NOTE:--><?php echo $NoteColon;?></strong> <span class="em"><!--You cannot delete a Method without first deleting all data values which use the specific Method.--><?php echo $MethodNote;?></span></td>
-          </tr>
-        </table>
-      </FORM>
+      <FORM METHOD="POST" class="form-horizontal" ACTION="" name="changemethod" id="changemethod">
       
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><?php echo $Method; ?></label>
+        <div class="col-sm-9">
+     	  <select name="MethodID" class="form-control" id="MethodID" onChange="editMethod()">
+          <option value="-1"><?php echo $SelectEllipsis;?></option>
+            <?php echo "$option_block"; ?></select>
+           <span class="help-block"><br/><?php echo $NoteColon;?><?php echo $MethodNote;?></span>
+		</div>             
+      </div>
+      </FORM>
+     
     <div id="msg3"></div>
+     </div>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
 <div id="window">
 	<div id="windowHeader">
-		<span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span>
+		<span><?php echo $ConfirmationBox;?></span>
 	</div>
     <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yup"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
 </div>

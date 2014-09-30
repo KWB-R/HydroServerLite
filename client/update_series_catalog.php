@@ -1,9 +1,27 @@
 <?php
 
+if(isset($_GET['db']))
+{
+$db= $_GET['db'];
+//If a database is provided, it will only update that database!
+require_once '../'.$_GET['db'].'/main_config.php';
+$connection = mysql_connect(DATABASE_HOST, DATABASE_USERNAME, DATABASE_PASSWORD)
+    or die("<p>Error connecting to database: " . 
+	       mysql_error() . "</p>");
+mysql_set_charset ("utf8");
+  //echo "<p>Connected to MySQL!</p>";
+  
+  $db = mysql_select_db(DATABASE_NAME,$connection)
+    or die("<p>Error selecting the database " . DATABASE_NAME .
+	  mysql_error() . "</p>");
+}
+else
+{
 require_once 'database_connection.php';
+}
 require_once 'update_series_catalog_function.php';
 
-//echo 'Testing UpdateSeriesCatalog!';
+echo 'Testing UpdateSeriesCatalog!';
 db_UpdateSeriesCatalog_All();
 
 function get_table_name($uppercase_table_name) {
@@ -30,14 +48,14 @@ function db_UpdateSeriesCatalog_All() {
   
   $result_array = mysql_fetch_rowsarr($result, MYSQL_NUM);
   foreach($result_array as $r) {
-   // echo "<p>executing db_UpdateSeriesCatalog({$r[0]}, {$r[1]}, {$r[2]}, {$r[3]}, {$r[4]}</p>";
+    echo "<p>executing db_UpdateSeriesCatalog({$r[0]}, {$r[1]}, {$r[2]}, {$r[3]}, {$r[4]}</p>";
     $status = update_series_catalog($r[0], $r[1], $r[2], $r[3], $r[4]);
 	$result_status["inserted"] += $status["inserted"];
 	$result_status["updated"] += $status["updated"];
   }
   
- // echo "<p>rows inserted: " . $result_status["inserted"] . "</p>";
- // echo "<p>rows updated: " . $result_status["updated"] . "</p>";
+  echo "<p>rows inserted: " . $result_status["inserted"] . "</p>";
+  echo "<p>rows updated: " . $result_status["updated"] . "</p>";
 }
 
 function mysql_fetch_rowsarr($result, $numass=MYSQL_BOTH) {

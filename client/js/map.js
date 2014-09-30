@@ -16,6 +16,8 @@ var markerCluster;
 function load() {
 
     var mp = document.getElementById("map");
+	
+	//Attaching an event handler for resizing of div
     if (mp != null) {
         map = new google.maps.Map(mp, { //document.getElementById("map"), {
             center: new google.maps.LatLng(44, -160),
@@ -32,10 +34,16 @@ function load() {
                 google.maps.event.trigger(markers[markerNum], 'mouseover');
             }
         };
-        updateHeights();
+      updateHeights();
         loadall();
 		markerCluster = new MarkerClusterer(map);
 	}
+	
+	$("#map").resize(function() {
+		google.maps.event.trigger(map, 'resize');
+		
+	});
+	
 }
 // Update the height of the map Container to make sure it will fit inside of the window
 //   in which it is displayed. This is mostly for when it is used inside an iFrame on
@@ -47,6 +55,7 @@ function updateHeights() {
     var locationHeight = $("#mapLocations").height();
     var newContHeight = totalHeight - filterHeight - locationHeight;
     $("#mapContainer").height(newContHeight);
+
 }
 
 function track_loc() {
@@ -245,12 +254,12 @@ function createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourc
 	if(sitepic!="")
 	{
 		var image = "<img src='imagesite/small/"+sitepic +"' width='100' height='100'>";	
-        var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>" + image + "</div>";
+        var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a target='_blank' href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>" + image + "</div>";
 	
 	}
 	else
 	{
-		var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div>";	
+		var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a target='_blank' href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div>";	
 	}
    
 	var marker = new google.maps.Marker({position: latlng});

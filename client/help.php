@@ -14,6 +14,7 @@ echo $CSS_Main;
 echo $JS_JQuery;
 
 HTML_Render_Body_Start(); ?>
+<div class='col-md-9'>
 <br />
 <h1><?php echo $FAQ; ?></h1>
          <p><?php echo $ReviewBelow; ?></p>
@@ -82,4 +83,5 @@ The HydroServer Lite Interactive Web Client is an open source software developed
 <p><strong><a name="CreatSite" id="CreatSite"></a><?php echo $CreateWebsite; ?></strong><br>
 <?php echo $CreateWebsitePara1; ?> <a href="http://idahoepscor.org/" target="_blank">Idaho EPSCoR</a>. <?php echo $CreateWebsitePara2; ?> <a href="http://www.cuahsi.org/" title="Link to CUAHSI" target="_blank"><?php echo $Consortium; ?></a>, <?php echo $CreateWebsitePara3; ?>   <a href="http://hydroserverlite.codeplex.com/" target="_blank"><?php echo $Here; ?></a>.</p>
          <p>&nbsp;</p>
+		 </div>
    	<?php HTML_Render_Body_End(); ?>

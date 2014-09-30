@@ -79,6 +79,7 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
 </script>
 
 	<?php HTML_Render_Body_Start(); ?>
+	<div class='col-md-9'>
 <br /><?php echo "$msg"; ?><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><div id="msg">
       <p class=em2><?php echo $SourceMetadataDeleted;?></p></div>
     <div id="msg2">
@@ -86,12 +87,12 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
       <h1><?php echo $EditDeleteSource;?></h1>
       <p><?php echo $SelectSource;?></p>
 
-        <table width="620" border="0" cellspacing="0" cellpadding="0">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
 
       	<tr>
          <!-- <td><strong>Source:</strong></td> -->
           <td><strong><?php echo $Source;?></strong></td>
-          <td colspan="2" valign="top"><select name="SourceID" id="SourceID" onChange="editSource()">
+          <td colspan="2" valign="top"><select class="form-control" name="SourceID" id="SourceID" onChange="editSource()">
             <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
             <?php echo "$option_block_s"; ?></select></td>
         </tr>
@@ -119,6 +120,7 @@ alert(<?php echo "'".$ProfileVersionLabel."'"; ?>);
 		<span><?php echo $ConfirmationBox;?></span>
 	</div>
     <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yessir"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div>
+</div>
 </div>
 	<?php HTML_Render_Body_End(); ?>
 

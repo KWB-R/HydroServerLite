@@ -49,7 +49,7 @@ require_once 'authorization_check.php';
 	
 	var dataAdapter = new $.jqx.dataAdapter(source);
                 // Create a jqxListBox
-                $("#jqxWidget").jqxListBox({source: dataAdapter, theme: 'darkblue', multiple: true, width: 400, height: 300, displayMember: "variablename", valueMember: "variableid"});
+                $("#jqxWidget").jqxListBox({source: dataAdapter, theme: 'darkblue', multiple: true, width: '80%', height: 300, displayMember: "variablename", valueMember: "variableid"});
 
 	 $("#jqxWidget").bind('change', function () {
 					var items = $("#jqxWidget").jqxListBox('getItems');
@@ -73,51 +73,34 @@ varmeth+=",";
 	});
 </script>
 	<?php HTML_Render_Body_Start(); ?>
+    <div class='col-md-9'>
 <br /><p class="em" align="right"><span class="requiredInstructions"><?php echo $RequiredFieldsAsterisk; ?></span></p><div id="msg"><p class=em2><?php echo $MethodSuccessfully;?></p></div>
       <h1><?php echo $AddNewMethod;?></h1>
       <p>&nbsp;</p>
-      <FORM METHOD="POST" ACTION="" name="addmethod" id="addmethod">
-        <table width="620" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td width="80" valign="top"><strong><?php echo $MethodName; ?></strong></td>
-          <td colspan="2" valign="top"><input type="text" id="MethodDescription" name="MethodDescription" maxlength=100"/><span class="required">*</span><span class="em"><?php echo $ExampleMethodName;?></span></td>
-        </tr>
-        <tr>
-          <td width="80" valign="top">&nbsp;</td>
-          <td width="260" valign="top">&nbsp;</td>
-          <td width="280" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-
-          <td valign="top"><strong><?php echo $MethodLinkColon;?></strong></td>
-          <td colspan="2" valign="top"><input type="text" id="MethodLink" name="MethodLink" maxlength=200"/>&nbsp;<span class="em"><?php echo $ExMethodLink;?></span></td>
-          </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td valign="top">&nbsp;</td>
-          <td valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-        
-            <td colspan="3" valign="top"><strong><?php echo $SelectVariablesBelow1;?><br>
-            <?php echo $SelectAllThatApply;?></td>
-          </tr>
-        <tr>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="2" valign="top"><div id='jqxWidget'></div></td>
-          <td valign="top"><span class="required">*</span></td>
-          </tr>
-        <tr>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddMethodButton;?>" class="button" style="width: auto"/></td>
-          </tr>
-      </table></FORM>
+      <FORM METHOD="POST" class="form-horizontal" ACTION="" name="addmethod" id="addmethod">
+      
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><?php echo $MethodName; ?></label>
+        <div class="col-sm-9">
+     	   <input type="text" class="form-control" id="MethodDescription" name="MethodDescription" /><span class="required">*</span>
+           <span class="help-block"><br/><?php echo $ExampleMethodName;?></span>
+		</div>             
+      </div>
+      
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><?php echo $MethodLinkColon;?></label>
+        <div class="col-sm-9">
+     	   <input type="text" class="form-control" id="MethodLink" name="MethodLink" maxlength="200"/>
+           <span class="help-block"><br/><?php echo $ExMethodLink;?></span>
+		</div>             
+      </div>
+      <?php echo $SelectVariablesBelow1;?><span class="required">*</span><br>
+      <span class="help-block"><?php echo $SelectAllThatApply;?></span>
+      <div id='jqxWidget'></div>
+       <input type="SUBMIT" name="submit" value="<?php echo $AddMethodButton;?>" class="button" style="width: auto"/>
+        </FORM>
       <p>&nbsp;</p>
-    
+    </div>
 	<?php HTML_Render_Body_End(); ?>
 
 <script>

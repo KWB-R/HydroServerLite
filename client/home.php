@@ -19,7 +19,7 @@ $uname = $_SESSION['username'] ;
 	$num_sites = $result_sites[0]['count'];
 
 //Count the number of Data Points
-	$sql_datapts ="SELECT COUNT(*) AS count  FROM datavalues";
+	$sql_datapts ="SELECT SUM(ValueCount) as count FROM seriescatalog";
 
 	$result_datapts = transQuery($sql_datapts,0,0);
 
@@ -56,13 +56,9 @@ $uname = $_SESSION['username'] ;
          
 	HTML_Render_Body_Start(); 
 	?>
-
+	<div class='col-md-9' style='height:auto;min-height:500px'>
     <h2><?php echo $Welcome; ?> <?php echo "$uname"; ?> <?php echo $ToThe;?> <?php echo $_SITE_orgname; ?> <?php echo $DataPortal; ?></h2>
-    <p><strong> <?php echo $ThisSystemRuns;?> <?php echo "$_SITE_HSLversion"; ?>  <?php echo $DatabaseContains; ?> <?php echo "$num_sites"; ?> <!--Sites,--><?php echo $Sites; ?> <?php echo "$num_datapts"; ?> <!--data points,--><?php echo $DataPoints;?> <?php echo "$num_vars"; ?> <!--Variables, and--><?php echo $Variables; ?> <?php echo "$num_u"; ?> <!--users.--><?php echo $users; ?></strong></p>
-      <table width="630" border="0">
-        <tr>
-          <td height="600px" ><?php  require "map.php"; ?></td>
-        </tr>
-      </table>
-    
+    <p><strong> <?php echo $ThisSystemRuns;?> <?php echo "$_SITE_HSLversion"; ?>  <?php echo $DatabaseContains; ?> <?php echo "$num_sites"; ?> <?php echo $Sites; ?> <?php echo "$num_datapts"; ?> <?php echo $DataPoints;?> <?php echo "$num_vars"; ?> <?php echo $Variables; ?> <?php echo "$num_u"; ?> <?php echo $users; ?></strong></p>
+     <?php  require "map.php"; ?>
+    </div></div>
 	<?php HTML_Render_Body_End(); ?>

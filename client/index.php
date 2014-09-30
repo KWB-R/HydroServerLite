@@ -53,15 +53,12 @@ if (isset($_GET['state'])) {
 }
 ?>
 	  </p>
-	<div class="welcome">
-      <h1>Welcome</h1>
+	
+	 <div class="col-md-6"> <h1>Welcome</h1>
  		 <p><?php echo $Paragraph1; ?></p>
         <p><?php echo $Paragraph2; ?></p>
-        <p><?php echo $Paragraph3; ?></p>
-
-	<img src="images/homepage_shot.jpg" alt="site picture"/>
-        </div>
-    
+        <p><?php echo $Paragraph3; ?></p></div>
+     <div class="col-md-3"><img src="images/homepage_shot.jpg" class="img-responsive" alt="site picture"/></div>
 <?php HTML_Render_Body_End(); ?>
 <script type="text/javascript">
 

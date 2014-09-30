@@ -22,11 +22,31 @@ elseif(isStudent())
 else
 	$menuName =  "Public";
 
-echo "<div id='nav'><h1>$menuName Navigation</h1><ul>";
+	//Removed id=nav from here for now, will add it back after styling is merged. 
+	
+echo "<div id='nav' class=\"sidebar-nav\"><h1></h1>
+";
+
+echo '       <div class="navbar navbar-default" role="navigation">
+<div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <span class="visible-xs navbar-brand">'.$menuName.' Navigation</span>
+        </div>
+		
+		   <div class="navbar-collapse collapse sidebar-navbar-collapse">
+          <ul class="nav navbar-nav">
+		';
 
 if (isAdmin()){
-	echo "<li><h2>Site Management</h2>";
-	echo "<ul>";
+	echo '<li class=\"dropdown\">
+	
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Site Management<b class="caret"></b></a>';
+	echo "<ul class=\"dropdown-menu\">";
 	echo "<li class=\"versions\"><a href='versions.php'>Versions</a>";
 	//echo "<li class=\"aliases\"><a href='edit_aliases.php'>Aliases</a>";
 	echo "</ul>";
@@ -36,7 +56,7 @@ if (isAdmin()){
 // teacher admin
 if (isTeacher() || isAdmin()){
 	echo "<li><h2>Database Management</h2>";
-	echo "<ul>";
+	echo "<ul class=\"dropdown-menu\">";
 	if (isAdmin()){
 		// > admin
 		echo "<li class=\"add_source\"><a href='add_source.php'>Add a ".$__Source->Capitalized."</a>";
@@ -109,9 +129,10 @@ if(isLoggedIn())	{
 }
 
 
-echo "</ul>";
+
 //echo "<img class=\"footer\" src=\"images/nav-footer.jpg\" />";
-echo "</div>";
+echo "</ul>
+        </div></div></div>";
 
 if(!isLoggedIn()){
 ?>

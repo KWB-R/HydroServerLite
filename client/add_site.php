@@ -109,14 +109,15 @@ $( document ).ready(function() {
 <?php 
 	echo $JS_SiteCreate;
 HTML_Render_Body_Start(); ?>
+<div class='col-md-9'>
 <br /><?php //echo "$msg"; ?><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p>
       <h1><?php echo $AddNewSite;?></h1>      
-      <p>&nbsp;</p><FORM METHOD="POST" ACTION="" name="addsite" id="addsite">
-      <table width="650" border="0" cellspacing="0" cellpadding="0">
+      <p>&nbsp;</p><FORM class="form-horizontal" METHOD="POST" ACTION="" name="addsite" id="addsite">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td width="93"><strong><!--Source:--><?php echo $Source;?></strong></td>
-          <td width="557"><select name="SourceID" id="SourceID" onChange="GetSourceName()">
-            <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+          <td><strong><?php echo $Source;?></strong></td>
+          <td><select class="form-control" name="SourceID" id="SourceID" onChange="GetSourceName()">
+            <option value="-1"><?php echo $SelectEllipsis;?></option>
             <?php echo "$option_block"; ?>
           </select></td>
         </tr>
@@ -125,25 +126,25 @@ HTML_Render_Body_Start(); ?>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><strong><!--Site Name:--><?php echo $SiteName;?></strong></td>
-          <td><input type="text" id="SiteName" name="SiteName" size=20 maxlength="200" onKeyUp="GetSiteName()"/>*&nbsp;<span class="em"><!--(Ex: Boulder Creek at Jug Mountain Ranch)--><?php echo $ExSiteName." ".$NoApostrophe;?></span></td>
+          <td><strong><?php echo $SiteName;?></strong></td>
+          <td><input class="form-control"type="text" id="SiteName" name="SiteName" size=20 maxlength="200" onKeyUp="GetSiteName()"/>*&nbsp;<span class="em"><?php echo $ExSiteName." ".$NoApostrophe;?></span></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><strong><!--Site Code:--><?php echo $SiteCode;?></strong></td>
-          <td><input type="text" id="SiteCode" name="SiteCode" size=20 maxlength="200"/>*&nbsp;<a href="#" onClick="show_answerSC()" border="0"><img src="images/questionmark.png" border="0"></a>&nbsp;<span class="em"><!--(You may adjust this if needed)--><?php echo $ExSiteCode;?></span></td>
+          <td><strong><?php echo $SiteCode;?></strong></td>
+          <td><input class="form-control" type="text" id="SiteCode" name="SiteCode" size=20 maxlength="200"/>*&nbsp;<a href="#" onClick="show_answerSC()" border="0"><img src="images/questionmark.png" border="0"></a>&nbsp;<span class="em"><?php echo $ExSiteCode;?></span></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><strong><!--Site Type:--><?php echo $SiteType;?></strong></td>
-          <td><select name="SiteType" id="SiteType" onChange="TrainingAlert()">
-            <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+          <td><strong><?php echo $SiteType;?></strong></td>
+          <td><select class="form-control" name="SiteType" id="SiteType" onChange="TrainingAlert()">
+            <option value="-1"><?php echo $SelectEllipsis;?></option>
             <?php echo "$option_block2"; ?>
             </select>*</td>
         </tr>
@@ -152,50 +153,43 @@ HTML_Render_Body_Start(); ?>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td valign="top"><strong><!--Site Photo:--><?php echo $SitePhoto;?></strong></td>
-          <td><input type="file" name="file" id="file" size="30">
+          <td valign="top"><strong><?php echo $SitePhoto;?></strong></td>
+          <td><input class="form-control" type="file" name="file" id="file" size="30">
             <br>
-            <!--(Photo must be in .JPG format; File will be uploaded upon submit below.)--><?php echo $ExSitePhoto;?></td>
+            <?php echo $ExSitePhoto;?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
       </table>
-        <table width="650" border="0" cellspacing="0" cellpadding="0">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td colspan="4" valign="top"><strong><!--You may either enter the latitude/longitude/elevation manually or simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.--><?php echo $MapLatLongEle;?></strong></td>
+		<div class ="row">
+		<?php echo $MapLatLongEle;?>
+		</div>
+		<div class="form-group">
+		<label for="Latitude" class="col-sm-2 control-label"><?php echo $Latitude;?></label>
+		<div class="col-sm-4">
+		<input class="form-control"  type="text" id="Latitude" name="Latitude" maxlength=20/>*
+		</div>
+		<label for="Longitude" class="col-sm-2 control-label"><?php echo $Longitude;?></label>
+		<div class="col-sm-4">
+		<input class="form-control" type="text" id="Longitude" name="Longitude" maxlength=20/>*
+		</div>
+		</div>
+        <tr>
+          <div id="map_canvas" style="width:100%; height:450px"></div>
         </tr>
-        <tr>
-          <td width="100" valign="top">&nbsp;</td>
-          <td width="155" valign="top">&nbsp;</td>
-          <td width="86" valign="top">&nbsp;</td>
-          <td width="309" valign="top">&nbsp;</td>
-          </tr>
-        <tr>
-          <td width="100" align="right" valign="top"><strong><!--Latitude:--><?php echo $Latitude;?>&nbsp;</strong></td>
-          <td width="155" valign="top"><input type="text" id="Latitude" name="Latitude" size=20 maxlength=20/>*</td>
-          <td width="86" align="right" valign="top"><strong><!--Longitude:--><?php echo $Longitude;?>&nbsp;</strong></td>
-          <td width="309" valign="top"><input type="text" id="Longitude" name="Longitude" size=20 maxlength=20/>*</td>
-          </tr>
-        <tr>
-          <td width="100" valign="top">&nbsp;</td>
-          <td width="155" valign="top">&nbsp;</td>
-          <td width="86" valign="top">&nbsp;</td>
-          <td width="309" valign="top">&nbsp;</td>
-          </tr>
-        <tr>
-          <td colspan="4" valign="top"><div id="map_canvas" style="width:650px; height:450px"></div></td>
-        </tr>
-      </table><table width="650" border="0" cellspacing="0" cellpadding="0">
+      </table><table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="130">&nbsp;</td>
     <td width="520">&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--Elevation:--><?php echo $Elevation;?></strong></td>
-    <td><input type="text" id="Elevation" name="Elevation" size=20 maxlength=20/>
-    <!--* Meters-->* <?php echo $Meters;?>&nbsp;<a href="#" onClick="show_answerE()" border="0"><img src="images/questionmark.png" border="0"></a></td>
+    <td><strong><?php echo $Elevation;?></strong></td>
+    <td><input class="form-control" type="text" id="Elevation" name="Elevation" size=20 maxlength=20/>
+    * <?php echo $Meters;?>&nbsp;<a href="#" onClick="show_answerE()" border="0"><img src="images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -209,9 +203,9 @@ HTML_Render_Body_Start(); ?>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--State:--><?php echo $State;?></strong></td>
-    <td><select name="state" id="state">
-      <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+    <td><strong><?php echo $State;?></strong></td>
+    <td><select class="form-control" name="state" id="state">
+      <option value="-1"><?php echo $SelectEllipsis;?></option>
         <option value="AL">Alabama</option>
         <option value="AK">Alaska</option>
         <option value="AZ">Arizona</option>
@@ -263,7 +257,7 @@ HTML_Render_Body_Start(); ?>
         <option value="WV">West Virginia</option>
         <option value="WI">Wisconsin</option>
         <option value="WY">Wyoming</option>
-		<option value="NULL"><!--International--><?php echo $International;?></option>
+		<option value="NULL"><?php echo $International;?></option>
     </select>*&nbsp;<a href="#" onClick="show_answerState()" border="0"><img src="images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>
@@ -271,19 +265,19 @@ HTML_Render_Body_Start(); ?>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--County:--><?php echo $County;?></strong></td>
-    <td><div id="county_drop_down"><select id="county" name="county"><option value=""><!--County...--><?php echo $CountyEllipsis;?></option></select>*</div>
-	 <span id="loading_county_drop_down"><img src="images/loader.gif" width="16" height="16" align="absmiddle">&nbsp;<!--Select state first...--><?php echo $SelectstateElipsis;?></span>
-	 <div id="no_county_drop_down"><!--This state has no counties.--><?php echo $StateNoCounties;?></div></td>
+    <td><strong><?php echo $County;?></strong></td>
+    <td><div id="county_drop_down"><select class="form-control" id="county" name="county"><option value=""><?php echo $CountyEllipsis;?></option></select>*</div>
+	 <span id="loading_county_drop_down"><img src="images/loader.gif" width="16" height="16" align="absmiddle">&nbsp;<?php echo $SelectstateElipsis;?></span>
+	 <div id="no_county_drop_down"><?php echo $StateNoCounties;?></div></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--Vertical Datum:--><?php echo $VerticalDatum;?></strong></td>
-    <td><select name="VerticalDatum" id="VerticalDatum">
-      <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+    <td><strong><?php echo $VerticalDatum;?></strong></td>
+    <td><select class="form-control" name="VerticalDatum" id="VerticalDatum">
+      <option value="-1"><?php echo $SelectEllipsis;?></option>
       <?php echo "$option_block3"; ?>
     </select>*&nbsp;<a href="#" onClick="show_answerVD()" border="0"><img src="images/questionmark.png" border="0"></a></td>
   </tr>
@@ -292,9 +286,9 @@ HTML_Render_Body_Start(); ?>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--Spatial Reference:--><?php echo $SpatialReferenceColon;?></strong></td>
-    <td><select name="LatLongDatumID" id="LatLongDatumID">
-      <option value="-1"><!--Select....--><?php echo $SelectEllipsis;?></option>
+    <td><strong><?php echo $SpatialReferenceColon;?></strong></td>
+    <td><select class="form-control" name="LatLongDatumID" id="LatLongDatumID">
+      <option value="-1"><?php echo $SelectEllipsis;?></option>
       <?php echo "$option_block4"; ?>
     </select>*&nbsp;<a href="#" onClick="show_answerSR()" border="0"><img src="images/questionmark.png" border="0"></a></td>
   </tr>
@@ -303,16 +297,16 @@ HTML_Render_Body_Start(); ?>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong><!--Comments:--><?php echo $Comments;?></strong></td>
-    <td><input type="text" id="com" name="value" size=50 maxlength=500/>
-      <span class="em">&nbsp;<!--(Optional)--><?php echo $Optional;?></span></td>
+    <td><strong><?php echo $Comments;?></strong></td>
+    <td><input class="form-control" type="text" id="com" name="value" size=50 maxlength=500/>
+      <span class="em">&nbsp;<?php echo $Optional;?></span></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <!--<td><input type="SUBMIT" name="submit" value="Add Site" class="button"/></td>-->
+    
     <td><input type="SUBMIT" name="submit" value="<?php echo $AddSiteButton;?>" class="button" width="auto"/></td>
     <td><div id='response'></div></td>
   </tr>
@@ -323,13 +317,8 @@ HTML_Render_Body_Start(); ?>
       </table>
 </FORM>
      
-    </blockquote>
-    <p></p></td>
-  </tr>
-  <tr>
-    <script src="js/footer.js"></script>
-  </tr>
-</table>
+ </div>
+   	<?php HTML_Render_Body_End(); ?>
 
 <script>
 

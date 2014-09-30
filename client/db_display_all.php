@@ -17,7 +17,8 @@ LEFT OUTER JOIN ((SELECT sites.SiteID,SiteName,SiteCode,Latitude,Longitude, Site
 LEFT JOIN (sitepic)
 ON (sites.SiteID=sitepic.siteid)) y,sources) 
 ON (y.SiteID=`seriescatalog`.`SiteID` AND `seriescatalog`.`SourceID`=sources.SourceID) 
-WHERE `VariableID` is not null and ValueCount>0";
+WHERE `VariableID` is not null and ValueCount>0
+ORDER BY y.SiteName";
 $result = transQuery($query,0,0);
 if (!$result) {
   die('Invalid query: ' . mysql_error());

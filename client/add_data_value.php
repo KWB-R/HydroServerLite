@@ -93,15 +93,16 @@ echo $CSS_Main;
 </script>
 
 <?php HTML_Render_Body_Start(); ?>
+<div class='col-md-9'>
 <br /><p class="em" align="right"><span class="requiredInstructions"><?php echo $RequiredFieldsAsterisk; ?> </span></p><?php echo "$msg"; ?>&nbsp;<?php echo "$msg3"; ?>&nbsp;<?php echo "$msg4"; ?>
         <div id="msg"><p class=em2><?php echo $ValueSuccessfully; ?></p></div>
         <h1><?php echo $EnterSingleDataValue; ?></h1>
         <p>&nbsp;</p>
       <FORM METHOD="POST" ACTION="" name="addvalue" id="addvalue">
-        <table width="600" border="0" cellspacing="0" cellpadding="0">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td valign="top"><strong><!--Source:--> <?php echo $Source; ?></strong></td>
-          <td valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1"><!--Select....--><?php echo $SelectEllipsis; ?></option><?php echo "$option_block"; ?></select><span class="required">*</span></td>
+          <td valign="top"><strong> <?php echo $Source; ?></strong></td>
+          <td valign="top"><select class="form-control" name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1"><?php echo $SelectEllipsis; ?></option><?php echo "$option_block"; ?></select><span class="required">*</span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -109,7 +110,7 @@ echo $CSS_Main;
           </tr>
         <tr>
           <td valign="top"><strong><?php echo $Site; ?></strong></td>
-          <td valign="top"><div id="txtHint"><select name="SiteID" id="SiteID"><option value="-1"><?php echo $SelectElipsis; ?></option></select><span class="required">*</span><span class="hint" title="If you do not see your <?php echo $__Site->Capitalized; ?> listed here, please contact your supervisor and ask them to add it before entering data.">?</span></div> 
+          <td valign="top"><div id="txtHint"><select class="form-control form-inline" name="SiteID" id="SiteID"><option value="-1"><?php echo $SelectElipsis; ?></option></select><span class="required">*</span><span class="hint" title="If you do not see your <?php echo $__Site->Capitalized; ?> listed here, please contact your supervisor and ask them to add it before entering data.">?</span></div> 
 </td>
           </tr>
         <tr>
@@ -118,31 +119,31 @@ echo $CSS_Main;
           </tr>
         <tr>
           <td width="55" valign="top"><strong><?php echo $Variable; ?></strong></td>
-          <td width="370" valign="top"><select name="VariableID" id="VariableID" onChange="showMethods(this.value)"><option value="-1"><?php echo $SelectElipsis; ?></option><?php echo "$option_block3"; ?></select><span class="required">*</span></td>
+          <td width="370" valign="top"><select class="form-control" name="VariableID" id="VariableID" onChange="showMethods(this.value)"><option value="-1"><?php echo $SelectElipsis; ?></option><?php echo "$option_block3"; ?></select><span class="required">*</span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <td valign="top"><strong><?php echo $Method; ?>:</strong></td>
-          <td valign="top"><div id="txtHint2"><select name="MethodID" id="MethodID"><option value="-1"><?php echo $SelectElipsis; ?></option></select><span class="required">*</span><span class="hint" title="<?php echo "'". $IfNoSeeMethod1."'";?> + '\n' + <?php echo "'". $ContactSupervisor."'";?> + '\n' + <?php echo "'". $AddIt."'";?>"></span></div></td>
+          <td valign="top"><strong><?php echo $Method; ?></strong></td>
+          <td valign="top"><div id="txtHint2"><select class="form-control" name="MethodID" id="MethodID"><option value="-1"><?php echo $SelectElipsis; ?></option></select><span class="required">*</span><span class="hint" title="<?php echo "'". $IfNoSeeMethod1."'";?> + '\n' + <?php echo "'". $ContactSupervisor."'";?> + '\n' + <?php echo "'". $AddIt."'";?>">?</span></div></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td width="370" valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <td width="55" valign="top"><strong><!--Date:--><?php echo $Date; ?></strong></td>
-          <td valign="top"><input type="text" id="datepicker" name="datepicker" onChange="return validateDate()"><span class="required">*</span><span class="em"><?php echo $DateFormatExample; ?></span></td>
+          <td width="55" valign="top"><strong><?php echo $Date; ?></strong></td>
+          <td valign="top"><input class="form-control" type="text" id="datepicker" name="datepicker" onChange="return validateDate()"><span class="required">*</span><span class="help-block"><br /><?php echo $DateFormatExample; ?></span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
           <td valign="top">&nbsp;</td>
           </tr>
         <tr>
-          <td width="55" valign="top"><strong><!--Time:--><?php echo $Time; ?></strong></td>
-          <td valign="top"><input type="text" id="timepicker" name="timepicker" onChange="return validateTime()" class="short"><span class="required">*</span><span class="em"><?php echo $TimeFormatExample; ?></span></td>
+          <td width="55" valign="top"><strong><?php echo $Time; ?></strong></td>
+          <td valign="top"><input class="form-control" type="text" id="timepicker" name="timepicker" onChange="return validateTime()" class="short"><span class="required">*</span><span class="help-block"><br /><?php echo $TimeFormatExample; ?></span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -150,7 +151,7 @@ echo $CSS_Main;
           </tr>
         <tr>
           <td width="55" valign="top"><strong><?php echo $Value; ?></strong></td>
-          <td valign="top"><input type="text" id="value" name="value" class="short" maxlength=20 onBlur="return validateNum()"/><span class="required">*</span><span class="em"><?php echo $NumberNoCommas; ?></span></td>
+          <td valign="top"><input class="form-control" type="text" id="value" name="value" class="short" maxlength=20 onBlur="return validateNum()"/><span class="required">*</span><span class="help-block"><br /><?php echo $NumberNoCommas; ?></span></td>
           </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -168,6 +169,7 @@ echo $CSS_Main;
       <p>&nbsp;</p>
     </blockquote>
     <p></p>
+	</div>
 	<?php HTML_Render_Body_End(); ?>
 <script>
 

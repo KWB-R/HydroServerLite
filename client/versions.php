@@ -13,6 +13,7 @@ echo $CSS_Main;
 //echo $JS_Maps;	
 
 HTML_Render_Body_Start(); 
+echo "<div class='col-md-9'>";
 
 echo "<p>Use this page to verify application versions are high enough to run all required features..</p>";
 
@@ -39,4 +40,5 @@ if ($dbConn = DAL::Get()->_DatabaseObject())
 
 	
 	echo "</ul>";
+	echo "</div>";
 HTML_Render_Body_End(); ?>
