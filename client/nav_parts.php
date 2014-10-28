@@ -29,7 +29,7 @@ echo "<div id='nav' class=\"sidebar-nav\"><h1></h1>
 
 echo '       <div class="navbar navbar-default" role="navigation">
 <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -38,7 +38,7 @@ echo '       <div class="navbar navbar-default" role="navigation">
           <span class="visible-xs navbar-brand">'.$menuName.' Navigation</span>
         </div>
 		
-		   <div class="navbar-collapse collapse sidebar-navbar-collapse">
+		   <div class="navbar-collapse collapse sidebar-navbar-collapse" id="navbarCollapse">
           <ul class="nav navbar-nav">
 		';
 
