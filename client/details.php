@@ -598,7 +598,7 @@ function plot_chart()
 {
 
 var unit_yaxis="unit";
-//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
 if (varid != -1)
 {
 $.ajax({

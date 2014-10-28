@@ -10,7 +10,7 @@ $query1="SELECT u.`unitsAbbreviation` FROM `variables` v INNER JOIN units u ON v
 $export = transQuery($query1,1,1);
 if ($row = $export[0])
 {
-	$data = $row[0];
+	$data = $row['unitsAbbreviation'];
 	if ($data == "None")
 	{
 		$data="Unit:None";	
