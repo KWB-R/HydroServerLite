@@ -13,16 +13,16 @@
 	
 		
 	$Citation = "<p> 
-	$AuthorL, $AuthorF ($Year), $title, http://$url, Brigham Young University, Provo, Utah. (Updated regulary.)
+	$AuthorL, $AuthorF ($Year), $title, http://$url, Brigham Young University, Provo, Utah. (Updated regularly.)
 	</p>";
 	$Citation2 = "<p> 
-	$AuthorL, $AuthorF. and $AuthorF2, $AuthorL2 ($Year), $title, http://$url, Brigham Young University, Provo, Utah. (Updated regulary.)
+	$AuthorL, $AuthorF. and $AuthorF2, $AuthorL2 ($Year), $title, http://$url, Brigham Young University, Provo, Utah. (Updated regularly.)
 	</p>";
 	$Citation3 = "<p> 
-	$AuthorL, $AuthorF, $AuthorF2, $AuthorL2 and $AuthorF3, $AuthorL3 ($Year), $title, http://$url, Brigham Young University, Provo, Utah. (Updated regulary.)
+	$AuthorL, $AuthorF, $AuthorF2, $AuthorL2 and $AuthorF3, $AuthorL3 ($Year), $title, http://$url, Brigham Young University, Provo, Utah. (Updated regularly.)
 	</p>";
 	$CitationAl = "<p> 
-	$AuthorL, $AuthorF, $AuthorF2, $AuthorL2, $AuthorF3, $AuthorL3 et al. ($Year), $title, http://$url, Brigham Young University, Provo, Utah. (Updated regulary.)
+	$AuthorL, $AuthorF, $AuthorF2, $AuthorL2, $AuthorF3, $AuthorL3 et al. ($Year), $title, http://$url, Brigham Young University, Provo, Utah. (Updated regularly.)
 	</p>";
 	
 	
