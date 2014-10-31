@@ -397,7 +397,7 @@ void SubmitHttpRequest()
   ShowSerialData();
  
   Sim900Serial.println("AT+HTTPACTION=0");//submit the request 
-  delay(10000);//the delay is very important, the delay time is base on the return from the website, if the return datas are very large, the time required longer.
+  delay(10000);//the delay is very important, the delay time is based on the return from the website, if the return datas are very large, the time required is longer.
   //while(!Sim900Serial.available());
  
   ShowSerialData();

@@ -69,7 +69,7 @@ alert(<?php echo "'".$TimeSupportInfo."'";?>);
 }
 
 function show_answerDN(){
-//alert("The name of the database when the tables of data will be stored.");
+//alert("The name of the database where the tables of data will be stored.");
 alert(<?php echo "'".$DatabaseNameInfo."'";?>);
 }
 
