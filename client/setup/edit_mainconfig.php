@@ -1,13 +1,13 @@
 ﻿<?php
 	//This is required to get the international text strings dictionary
 	 $setup="yes";
-	 $worldWaterSetup="No"; //This parameter is only used for connecting to worldwater database and should only be run from within the server. 
+	 $worldWaterSetup="Yes"; //This parameter is only used for connecting to worldwater database and should only be run from within the server. 
 	 //To use world water server or your custom server : Enter the above option as Yes and then please configure the database settings below:
-	 $serverDBHost = 	"localhost" ;//Your server Name : For example - "worldwater.byu.edu"
-	 $serverDBUName = 	"root" ;//Your server Username : For example - "Adam"
-	 $serverDBPass = 	"" ;//Your server Password : For example - "*********"	 
+	 $serverDBHost = 	"worldwater.byu.edu" ;//Your server Name : For example - "worldwater.byu.edu"
+	 $serverDBUName = 	"WWO_Admin" ;//Your server Username : For example - "Adam"
+	 $serverDBPass = 	"isaiah4118" ;//Your server Password : For example - "*********"	 
 	 
-	 $singleInstall="Yes"; //Once again, this is only for advanced users to change. For people who are intending to have multiple installations on their servers. 
+	 $singleInstall="No"; //Once again, this is only for advanced users to change. For people who are intending to have multiple installations on their servers. 
 	 
 	require_once 'internationalize.php';
 ?>
@@ -29,6 +29,33 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
+	
+ $("input[name='setuptype']").change(radioValueChanged);
+ 
+ //As default displays only basic setup
+ $("tr#advSetup").hide();
+	var tempvalue=document.getElementById('Profile Version');
+	tempvalue.value = "Unknown";
+	
+	var tempvalue=document.getElementById('localx');
+	tempvalue.value = "NULL";
+	
+	var tempvalue=document.getElementById('localy');
+	tempvalue.value = "NULL";
+	
+	var tempvalue=document.getElementById('localpid');
+	tempvalue.value = "NULL";
+	
+	var tempvalue=document.getElementById('posaccuracy');
+	tempvalue.value = "NULL";
+	
+	var tempvalue=document.getElementById('Vertical datum');
+	tempvalue.value = "Unknown";
+	
+	var tempvalue=document.getElementById('Spatial Reference');
+	tempvalue.value = "Unknown";
+	
+	
  $("#wwdb").change(function () {
 
 	var val = $("#wwdb").val();
@@ -53,6 +80,69 @@ $(document).ready(function() {
 	}
  });
 });
+
+
+//This function changes the visibility of certain configuration fields 
+//for the main setup screen. The more detailed settings are only shown 
+//in the advanced setup and are not shown and filled with default values
+//when in basic mode
+function radioValueChanged(){
+		
+if ($("input[type=radio][name='setuptype'][value='Basic']").is(':checked')) 		{
+	$("tr#advSetup").hide();
+	var tempvalue=document.getElementById('Profile Version');
+	tempvalue.value = "Unknown";
+	
+	var tempvalue=document.getElementById('localx');
+	tempvalue.value = "NULL";
+	
+	var tempvalue=document.getElementById('localy');
+	tempvalue.value = "NULL";
+	
+	var tempvalue=document.getElementById('localpid');
+	tempvalue.value = "NULL";
+	
+	var tempvalue=document.getElementById('posaccuracy');
+	tempvalue.value = "NULL";
+	
+	var tempvalue=document.getElementById('Vertical datum');
+	tempvalue.value = "Unknown";
+	
+	var tempvalue=document.getElementById('Spatial Reference');
+	tempvalue.value = "Unknown";
+	
+	
+   
+	
+	}
+else{
+	$("tr#advSetup").show();
+	var tempvalue=document.getElementById('Profile Version');
+	tempvalue.value = "";
+	
+	var tempvalue=document.getElementById('localx');
+	tempvalue.value = "";
+	
+	var tempvalue=document.getElementById('localy');
+	tempvalue.value = "";
+	
+	var tempvalue=document.getElementById('localpid');
+	tempvalue.value = "";
+	
+	var tempvalue=document.getElementById('posaccuracy');
+	tempvalue.value = "";
+	
+	var tempvalue=document.getElementById('Vertical datum');
+	tempvalue.value = "";
+	
+	var tempvalue=document.getElementById('Spatial Reference');
+	tempvalue.value = "";
+	
+	var tempvalue = document.getElementById('source');
+	tempvalue.value = "";
+	}
+}
+	
 
 function show_answerDH(){
 alert("This may be either localhost or the server's IP address such as 8.23.154.5 if you are using a different server to host the database than the software.");
@@ -159,7 +249,8 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
 <body background="../images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="../images/WebClientBanner.png" width="960" height="200" alt="Adventure Learning Banner" /></td>
+    <td colspan="2"><img src="../images/WebClientBanner.png" width="960" height="90" alt="Adventure Learning Banner" /></td>
+   
   </tr>
   
   <tr>
@@ -168,9 +259,9 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
       <form name="form1" id="form1" method="post" action="">
 <table width="720" border="0" align="center" style="background-color: #FFFFFF;">
   <tr>
-    <td><table width="720" border="0" align="center" style="background-color: #FFFFFF;"> <tr>
-    <td colspan="3">&nbsp;</td>
-  </tr>
+    <td><table width="720" border="0" align="center" style="background-color: #FFFFFF;"><!--< <tr>
+    <!--<td colspan="3">&nbsp;</td>
+  </tr>-->
   <tr>
     <td colspan="3"><center>
       <h2 class="config"><!--HydroServer Lite: Editing your site's main configuration file--><?php echo $MainConfigTitle;?></h2></center></td>
@@ -203,6 +294,20 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td colspan="3"><h3><!--Please enter your default settings below....--><?php echo $EnterDefaultSettings;?></h3></td>
   </tr>
   <tr>
+  	<td colspan="3">
+  	SETUP TYPE:
+  	<form action="">
+    	<input type="radio" name="setuptype" value="Basic" checked="checked" >Basic
+        <input type="radio" name="setuptype" value="Advanced" >Advanced<br>
+    </form>
+    </td>
+    </tr>
+  <tr>
+    <td width="19">&nbsp;</td>
+    <td colspan="2">&nbsp;</td>
+    </tr>
+  <tr>
+  <tr>
     <td colspan="3"><span class='confighead'><!--Configuration settings for MySql Database --><?php echo $MySQLConfiguration;?></span></td>
   </tr>
   <?php if ($worldWaterSetup == "Yes")
@@ -220,7 +325,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   <tr id="dbSet">
     <td width="19">&nbsp;</td>
     <td width="146"><!--Database Host:      --><?php echo $DatabaseHost;?></td>
-    <td width="416"><input type="text" id="Database Host" name="databasehost" value="" />&nbsp;<a href="#" onClick="show_answerDH()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td width="416"><input type="text" id="Database Host" name="databasehost" value="" />&nbsp;<a href="#" onClick="show_answerDH(); return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
     </tr>
   <tr id="dbSet2">
     <td width="19">&nbsp;</td>
@@ -235,7 +340,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   <tr>
     <td>&nbsp;</td>
     <td><!--Database Name: --><?php echo $DatabaseName;?></td>
-    <td><input type="text" id="Database Name" name="databasename" value="" />&nbsp;<a href="#" onClick="show_answerDN()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Database Name" name="databasename" value="" />&nbsp;<a href="#" onClick="show_answerDN();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
     </tr>
   <tr>
     <?php if ($singleInstall != "Yes")
@@ -317,68 +422,68 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td width="19">&nbsp;</td>
     <td colspan="2">&nbsp;</td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td colspan="3"><span class="confighead"><!--Configuration settings for adding a new Source--><?php echo $ConfigurationSettingsSource;?></span></td>
     </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Profile Version:--><?php echo $MetaDataProfileVersion;?></td>
-    <td><input type="text" id="Profile Version" name="profilev" value="" />&nbsp;<a href="#" onClick="show_answerPV()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Profile Version" name="profilev" value="" />&nbsp;<a href="#" onClick="show_answerPV();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td colspan="3"><span class='confighead'><!--Configuration settings for adding Sites --><?php echo $ConfigurationSettingsSites;?></span></td>
     </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Source: --><?php echo $Source;?></td>
     <td><input type="text" id="source" name="source" value="" />&nbsp;<span class='em'><!--(Ex: McCall Outdoor Science School)--><?php echo $OrganizationNameEx;?></span></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Local X:--><?php echo $LocalX;?></td>
-    <td><input type="text" id="localx" name="localx" value="" />&nbsp;<a href="#" onClick="show_answerLX()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="localx" name="localx" value="" />&nbsp;<a href="#" onClick="show_answerLX();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
     </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Local Y:--><?php echo $LocalY;?></td>
-    <td><input type="text" id="localy" name="localy" value="" />&nbsp;<a href="#" onClick="show_answerLY()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="localy" name="localy" value="" />&nbsp;<a href="#" onClick="show_answerLY();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Local Projection ID:--><?php echo $LocalProjectionID;?></td>
-    <td><input type="text" id="localpid" name="localpid" value="" />&nbsp;<a href="#" onClick="show_answerLPID()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="localpid" name="localpid" value="" />&nbsp;<a href="#" onClick="show_answerLPID();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--PosAccuracy_m:--><?php echo $PosAccuracy;?></td>
-    <td><input type="text" id="posaccuracy" name="posaccuracy" value="" />&nbsp;<a href="#" onClick="show_answerPA()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="posaccuracy" name="posaccuracy" value="" />&nbsp;<a href="#" onClick="show_answerPA();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td width="19">&nbsp;</td>
     <td><!--Vertical Datum:--><?php echo $VerticalDatum;?>&nbsp;</td>
-    <td><input type="text" id="Vertical datum" name="vdatum" value="" />&nbsp;<a href="#" onClick="show_answerVD()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Vertical datum" name="vdatum" value="" />&nbsp;<a href="#" onClick="show_answerVD();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td width="19">&nbsp;</td>
     <td><!-- Spatial Reference: --><?php echo $SpatialReference;?></td>
-    <td><input type="text" id="Spatial Reference" name="spatialref" value="" />&nbsp;<a href="#" onClick="show_answerSR()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Spatial Reference" name="spatialref" value="" />&nbsp;<a href="#" onClick="show_answerSR();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td width="19">&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -394,12 +499,12 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   <tr>
     <td>&nbsp;</td>
     <td><!--Variable Code: --><?php echo $VariableCode;?></td>
-    <td><input type="text" id="Variable Code" name="varcode" value="" />&nbsp;<a href="#" onClick="show_answerVC()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Variable Code" name="varcode" value="" />&nbsp;<a href="#" onClick="show_answerVC();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td><!-- Time Support: --><?php echo $TimeSupport;?></td>
-    <td><input type="text" id="Time Support" name="timesupport" value=""/>&nbsp;<a href="#" onClick="show_answerTS()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Time Support" name="timesupport" value=""/>&nbsp;<a href="#" onClick="show_answerTS();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -417,47 +522,47 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
   <tr>
     <td width="19">&nbsp;</td>
     <td><!--UTCOffset: --><?php echo $UTCOffset;?></td>
-    <td><input type="text" id="UTC Offset" name="utcoffset1" value="" />&nbsp;<a href="#" onClick="show_answerUTC1()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="UTC Offset" name="utcoffset1" value="" />&nbsp;<a href="#" onClick="show_answerUTC1();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td><!--UTCOffset 2: --><?php echo $UTCOffsetTwo;?></td>
-    <td><input type="text" id="UTC Offset 2" name="utcoffset2" value="" />&nbsp;<a href="#" onClick="show_answerUTC2()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="UTC Offset 2" name="utcoffset2" value="" />&nbsp;<a href="#" onClick="show_answerUTC2();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Censor Code: --><?php echo $CensorCode;?></td>
-    <td><input type="text" id="Censor Code" name="censorcode" value="nc" />&nbsp;<a href="#" onClick="show_answerCC()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Censor Code" name="censorcode" value="nc" />&nbsp;<a href="#" onClick="show_answerCC();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Quality Control Level: --><?php echo $QualityControlLevel;?></td>
-    <td><input type="text" id="Quality Control Level" name="qcl" value="0" />&nbsp;<a href="#" onClick="show_answerQCL()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Quality Control Level" name="qcl" value="0" />&nbsp;<a href="#" onClick="show_answerQCL();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Value Accuracy: --><?php echo $ValueAccuracy;?></td>
-    <td><input type="text" id="Value Accuracy" name="valueacc" value="NULL" />&nbsp;<a href="#" onClick="show_answerVA()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Value Accuracy" name="valueacc" value="NULL" />&nbsp;<a href="#" onClick="show_answerVA();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Offset Type ID:--><?php echo $OffsetTypeID;?></td>
-    <td><input type="text" id="Offset Type ID" name="offsettype" value="NULL" />&nbsp;<a href="#" onClick="show_answerOTID()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Offset Type ID" name="offsettype" value="NULL" />&nbsp;<a href="#" onClick="show_answerOTID();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Qualifier ID: --><?php echo $QualifierID;?></td>
-    <td><input type="text" id="Qualifier ID" name="qualifier" value="1" />&nbsp;<a href="#" onClick="show_answerQ()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Qualifier ID" name="qualifier" value="1" />&nbsp;<a href="#" onClick="show_answerQ();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Sample ID: --><?php echo $SampleID;?></td>
-    <td><input type="text" id="sampleid" name="sampleid" value="NULL" />&nbsp;<a href="#" onClick="show_answerSID()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="sampleid" name="sampleid" value="NULL" />&nbsp;<a href="#" onClick="show_answerSID();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr id="advSetup">
     <td>&nbsp;</td>
     <td><!--Derived From ID: --><?php echo $DerivedFromID;?></td>
-    <td><input type="text" id="Derived from ID" name="derived" value="NULL" />&nbsp;<a href="#" onClick="show_answerDFID()" border="0"><img src="../images/questionmark.png" border="0"></a></td>
+    <td><input type="text" id="Derived from ID" name="derived" value="NULL" />&nbsp;<a href="#" onClick="show_answerDFID();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -495,6 +600,10 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
 
 
 $("form").submit(function(){
+
+var tempvalue=document.getElementById('Organisation Name');
+document.getElementById('source').value=tempvalue.value;
+
 var fal=0;
 //Iterate through each input field. 
 
