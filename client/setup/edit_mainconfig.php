@@ -524,7 +524,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td><!--UTCOffset: --><?php echo $UTCOffset;?></td>
     <td><input type="text" id="UTC Offset" name="utcoffset1" value="" />&nbsp;<a href="#" onClick="show_answerUTC1();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
   </tr>
-  <tr>
+  <tr hidden="true"> <!--Hiding this as it is no longer useful. We just get the value from the one on the top-->
     <td>&nbsp;</td>
     <td><!--UTCOffset 2: --><?php echo $UTCOffsetTwo;?></td>
     <td><input type="text" id="UTC Offset 2" name="utcoffset2" value="" />&nbsp;<a href="#" onClick="show_answerUTC2();return false;" border="0"><img src="../images/questionmark.png" border="0"></a></td>
@@ -603,6 +603,14 @@ $("form").submit(function(){
 
 var tempvalue=document.getElementById('Organisation Name');
 document.getElementById('source').value=tempvalue.value;
+
+if(!($.isNumeric($("[id='UTC Offset']").val())))
+{
+	$("[id='UTC Offset']").focus();
+		$("[id='UTC Offset']").hide('slow',function(){$("[id='UTC Offset']").show('slow');alert("Please enter a numeric value for UTCOffset");});
+	return false;	
+}
+$("[id='UTC Offset 2']").val(-1 * $("[id='UTC Offset']").val());
 
 var fal=0;
 //Iterate through each input field. 
