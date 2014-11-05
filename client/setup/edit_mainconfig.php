@@ -179,7 +179,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td colspan="3"><h3><!--Welcome, Administrator!--><?php echo $AdminWelcome;?></h3></td>
   </tr>
   <tr>
-    <td colspan="3"><!--Please take a few minutes to change all of the fields below to setup your application with the correct default settings needed for it to run properly. If you have any questions during the process, please click the information icon next to the field or refer to the example provided.--><?php echo $MainConfigDirections;?></td>
+    <td colspan="3"><!--Please take a few minutes to change all of the fields below to set up your application with the correct default settings needed for it to run properly. If you have any questions during the process, please click the information icon next to the field or refer to the example provided.--><?php echo $MainConfigDirections;?></td>
   </tr>
   <tr>
     <td colspan="3">&nbsp;</td>
@@ -193,7 +193,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td width="19">&nbsp;</td>
     <td><span class='confighead'><!--New password:--><?php echo $NewPassword ;?></span>&nbsp;</td>
     <td><input type="text" id="password" name="password" value="" />
-      &nbsp;<span class='em'><!--(Must be entered  now.)--><?php echo $EnterNow;?></span></td>
+      &nbsp;<span class='em'><!--(Must be entered now.)--><?php echo $EnterNow;?></span></td>
   </tr>
   <tr>
     <td width="19">&nbsp;</td>
