@@ -282,7 +282,7 @@ $("#addsource").submit(function(){
 			return false;
 		}
 	}
-
+23.456.7890
 	if(($("#ContactName").val())==""){
 		//alert("Please enter a contact name for the source.");
 		alert(<?php echo "'".$EnterContactName."'"; ?>);
@@ -296,7 +296,7 @@ $("#addsource").submit(function(){
 	}
 
 	//Phone Validation
-	var regex = /^((\+?1-)?\d\d\d-)?\d\d\d-\d\d\d\d$/;
+	var regex = "/^([+]*([0-9]{1})*[- .(]*([0-9]{3})*[- .)]*[0-9]{3}[- .]*[0-9]{4})+$"/;
 	if(!($("#Phone").val().match(regex))){
 		//alert("Invalid phone number");
 		alert(<?php echo "'".$InvalidPhoneNumber."'"; ?>);
