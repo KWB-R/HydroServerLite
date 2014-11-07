@@ -122,6 +122,14 @@ function loadall() {
                 //bounds.extend(latlng2);
                 map.setZoom(10);
             }
+			//This sets the map center when there are no makers present	(Jeremy Fowler)
+			 if (markerNodes.length == 0) {
+                var center = new google.maps.LatLng (40,-111);
+                var latlng1 = new google.maps.LatLng(center.lat + 0.001, center.lon + 0.001);
+                var latlng2 = new google.maps.LatLng(center.lat - 0.001, center.lon - 0.001);
+                bounds.extend(latlng1);
+                bounds.extend(latlng2);
+                map.setZoom(1.5);
 		
 	  
         map.fitBounds(bounds);
