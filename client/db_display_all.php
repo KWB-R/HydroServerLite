@@ -10,6 +10,16 @@ $parnode = $dom->appendChild($node);
 
 //ChangeEdit : 07/30/2014 : The old way took a lot of time as it sent out a query for each of the site. Changing it, new way!
 
+//ChangeEdit: 11/10/2014: Option to display sites without data
+$allSites = 0;
+if (isset($_GET["all"])) {
+	if ($_GET["all"] == 1) {
+		$allSites = 1;
+	} else {
+		$allSites = 0;
+	}
+}
+
 $query = "SELECT DISTINCT `seriescatalog`.`SiteID`,y.*,
 sources.Organization, sources.SourceID, sources.SourceLink
 FROM `seriescatalog` 
@@ -18,10 +28,24 @@ LEFT JOIN (sitepic)
 ON (sites.SiteID=sitepic.siteid)) y,sources) 
 ON (y.SiteID=`seriescatalog`.`SiteID` AND `seriescatalog`.`SourceID`=sources.SourceID) 
 WHERE `VariableID` is not null and ValueCount>0";
+
+if ($allSites == 1) {
+	$query = "SELECT DISTINCT `seriescatalog`.`SiteID`,y.*,
+sources.Organization, sources.SourceID, sources.SourceLink
+FROM `seriescatalog` 
+LEFT OUTER JOIN ((SELECT sites.SiteID,SiteName,SiteCode,Latitude,Longitude, SiteType, sitepic.picname from sites 
+LEFT JOIN (sitepic)
+ON (sites.SiteID=sitepic.siteid)) y,sources) 
+ON (y.SiteID=`seriescatalog`.`SiteID` AND `seriescatalog`.`SourceID`=sources.SourceID)";
+} 
+
 $result = transQuery($query,0,0);
 if (!$result) {
   die('Invalid query: ' . mysql_error());
 }
+
+
+
 header("Content-type: text/xml");
 // Iterate through the rows, adding XML nodes for each
 foreach ($result as $row) {
