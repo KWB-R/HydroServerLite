@@ -137,6 +137,7 @@ if(!$singleInstall)
 $filename = "../../".$_POST['dir'];
 if (!file_exists($filename)){
 //create the dir. 
+
 umask(0000);
 mkdir("../../".$_POST['dir'], 0777);
 
