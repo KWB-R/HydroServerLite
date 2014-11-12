@@ -123,7 +123,7 @@ function loadall() {
                 var latlng2 = new google.maps.LatLng(center.lat - 0.001, center.lon - 0.001);
                 //bounds.extend(latlng1);
                 //bounds.extend(latlng2);
-                map.setZoom(10);
+                map.setZoom(1.5);
             }
 			//This sets the map center when there are no makers present	(Jeremy Fowler)
 			 if (markerNodes.length == 0) {
