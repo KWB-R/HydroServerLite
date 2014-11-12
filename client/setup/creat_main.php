@@ -142,7 +142,7 @@ mkdir("../../".$_POST['dir'], 0777);
 
 }
 else{
-echo "The directory $dirname already exists. Please choose a different name.";
+echo "The directory already exists. Please choose a different name.";
 exit;
 }
 
