@@ -18,7 +18,7 @@ function load() {
     var mp = document.getElementById("map");
     if (mp != null) {
         map = new google.maps.Map(mp, { //document.getElementById("map"), {
-            center: new google.maps.LatLng(44, -160),
+            center: new google.maps.LatLng(40.249,-111.649),
             zoom: 12,
             mapTypeId: 'roadmap',
             mapTypeControlOptions: { style: google.maps.MapTypeControlStyle.DROPDOWN_MENU }
@@ -124,7 +124,7 @@ function loadall() {
             }
 			//This sets the map center when there are no makers present	(Jeremy Fowler)
 			 if (markerNodes.length == 0) {
-                var center = new google.maps.LatLng (40,-111);
+                var center = new google.maps.LatLng (40.249,-111.649);
                 var latlng1 = new google.maps.LatLng(center.lat + 0.001, center.lon + 0.001);
                 var latlng2 = new google.maps.LatLng(center.lat - 0.001, center.lon - 0.001);
                 bounds.extend(latlng1);
