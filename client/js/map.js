@@ -84,6 +84,9 @@ function loadall() {
     option_num = 0;
 	var markerCount=0;
     var searchUrl = 'db_display_all.php';
+	if (document.getElementById("allSitesCheck").checked) {
+		searchUrl = 'db_display_all.php?all=1';
+	}
     downloadUrl(searchUrl, function (data) {
         var xml = parseXml(data);
         var markerNodes = new Array();
@@ -92,7 +95,7 @@ function loadall() {
         } else {
             alert("Trouble accessing the data store. Please contact an Administrator!");
         }
-        var bounds = new google.maps.LatLngBounds();
+        var bounds = new google.maps.LatLngBounds();		
 		markerCount=markerNodes.length;
             for (var i = 0; i < markerNodes.length; i++) {
                 var name = markerNodes[i].getAttribute("name");
