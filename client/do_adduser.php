@@ -107,8 +107,8 @@ echo $JS_CreateUserName;
           <td valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td width="95" valign="top">&nbsp;</td>
-          <td valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddUser;?>" class="button"/></td>
+          <td width="95" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddUser;?>" class="button"/></td>
+          <td valign="top"><input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" /></td>
           <td valign="top">&nbsp;</td>
           
         </tr>

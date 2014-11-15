@@ -753,7 +753,8 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="4" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddVariableButton;?>" class="button" /><input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" /></td>
+          <td colspan="4" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddVariableButton;?>" class="button" />
+		<input type="button" id="resetButton" class="button" value='<?php echo $Cancel?>' /></div></td>
           </tr>
       </table>
     </FORM></p>
@@ -762,6 +763,36 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 
 
 <script>
+//Reset function
+
+$('#resetButton').click(function () {
+	$("#add_var")[0].reset();
+	unitsid=0;
+$("#new_spec").hide();
+$("#new_spec1").hide();
+$("#unit").hide();
+$("#unittext").hide();
+$("#newunit").hide();
+$("#smother").hide();
+$("#newunitonly").hide();
+$("#valuetypenewb").hide();
+$("#newvarnameb").hide();
+$("#varname").jqxDropDownList('selectIndex', 0 );
+$("#specdata").jqxDropDownList('selectIndex', 0 );
+$("#unittype").jqxDropDownList('selectIndex', 0 );
+$("#unit").jqxDropDownList('selectIndex', 0 );
+$("#samplemedium").jqxDropDownList('selectIndex', 0 );
+$("#valuetype").jqxDropDownList('selectIndex', 0 );
+$("#isreg").jqxDropDownList('selectIndex', 0 ); 
+$("#timeunit").jqxDropDownList('selectIndex', 0 );
+$("#datatype").jqxDropDownList('selectIndex', 0 );
+$("#gc").jqxDropDownList('selectIndex', 0 );
+$("#jqxWidget").jqxListBox('clearSelection');
+$("#dtdef").val("Please select a data type to view its definition");
+$("#gcdef").val("Please select a category to view its definition");
+ $("html, body").animate({ scrollTop: 0 }, "slow");
+});
+
 
 //Calls a function to validate all fields when the submit button is hit.
 $("form").submit(function(){
