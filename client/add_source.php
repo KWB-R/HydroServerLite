@@ -251,7 +251,7 @@ $(document).ready(function(){
         </tr>
         <tr>
           <!--<td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="Add Source" class="button" /></td>-->
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddSourceButton;?>" class="button" /></td>
+          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddSourceButton;?>" class="button" /><input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" /></td>
           </tr>
       </table></FORM>
     <p>&nbsp;</p>
