@@ -233,6 +233,7 @@ xmlhttp.send();
           <td width="55" valign="top">&nbsp;</td>
           <td valign="top">
            <input name="Button" type="button" class="button" id="submit1" value="<?php echo $SubmitData; ?>" style="width: 135px"/>
+           <input name= "Cancel" type="button" class="button" id="submit2" value = "Cancel" onClick="history.back();"/>
         </td>
           </tr>
       </table>
