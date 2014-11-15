@@ -333,7 +333,9 @@ HTML_Render_Body_Start(); ?>
   <tr>
     <!--<td><input type="SUBMIT" name="submit" value="Add Site" class="button"/></td>-->
     <td><input type="SUBMIT" name="submit" value="<?php echo $AddSiteButton;?>" class="button" width="auto"/></td>
-    <td><div id='response'></div></td>
+    <td><div id='response'>
+      <input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" />
+    </div></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
