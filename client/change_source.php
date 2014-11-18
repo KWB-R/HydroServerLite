@@ -232,7 +232,8 @@ function updateSource(){
 			alert(<?php echo "'".$EnterPhoneNumber."'"; ?>);
 			return false;
 		}
-		var regex = "/^([+]*([0-9]{1})*[- .(]*([0-9]{3})*[- .)]*[0-9]{3}[- .]*[0-9]{4})+$"/;
+		
+		var regex = /^[0-9+\(\)#\.\s\/ext-]+$/
 		if(!($("#Phone2").val().match(regex))){
 			alert(<?php echo "'".$InvalidPhoneNumber."'"; ?>);
 			return false;
