@@ -30,7 +30,7 @@ echo $JS_CreateUserName;
 <br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg"; ?></p>
       <h1><?php echo $AddNewUser; ?></h1>
       <p>&nbsp;</p>
-      <FORM METHOD="POST" ACTION="do_adduser.php" name="newuser">
+      <FORM METHOD="POST" ACTION="?" name="newuser">
       <table width="600" border="0" cellspacing="0" cellpadding="0">
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $FirstName; ?></strong></td>
@@ -54,9 +54,9 @@ echo $JS_CreateUserName;
         </tr>
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $UserName; ?></strong></td>
-          <td valign="top"><input type="text" id="username" name="username" maxlength="25" />
+          <td valign="top"><div id=""checkusername"><input type="text" id="username" name="username" maxlength="25" /></div>
           <div class="em"></div></td>
-		  <td valign="top"><span class="em"><span class="required">*</span><?php echo $FirstLastNameExample; ?></span></td>
+		  <td valign="top"><span class="em"><span id="user-result"></span><span class="required">*</span><?php echo $FirstLastNameExample; ?></span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -65,7 +65,7 @@ echo $JS_CreateUserName;
         </tr>
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $Password; ?></strong></td>
-          <td valign="top"><input type="text" name="password" maxlength=25 /><div class="em"></div></td>
+          <td valign="top"><input type="text" name="password" maxlength=25 id ="password"/><div class="em"></div></td>
           <td valign="top"><span class="em"><span class="required">*</span><?php echo $CaseSensitive; ?></span></td>
         </tr>
         <tr>
@@ -96,3 +96,43 @@ echo $JS_CreateUserName;
       <p>&nbsp;</p>
     
 	<?php HTML_Render_Body_End(); ?>
+    
+<script type= "text/javascript">
+$(document).ready(function(){
+$("#username").blur(function (e){
+	var username = $("#username").val();
+    $.post("check_username.php",{ username :username}, function(data){
+    $("#user-result").html(data);
+    });
+});
+
+$("form").submit(function(){
+
+if(($("#firstname").val())==""){
+		alert("Please enter your First Name");
+		return false;
+	}
+if(($("#lastname").val())==""){
+		alert("Please enter your Last Name");
+		return false;
+	}
+if(($("#password").val())==""){
+		alert("Please enter a Password");
+		return false;
+	} 
+if(($("#authority").val())==""){
+		alert("Please Select an Authority");
+		return false;
+	}        
+//final validation
+	var username = $("#username").val();
+    $.post("check_username.php",{ username :username}, function(result){
+    if(result=='<img src="images/not-available.png" />'){
+    alert ("The Username already exists. Please choose a different one.");
+    return false;
+    }
+});
+    
+});
+});
+</script>
