@@ -35,7 +35,7 @@
 	}else{ // Already logged in.
 		if (isset( $_GET["logout"])){ 
 			session_destroy();
-			header("Location: http://worldwater.byu.edu?");
+			header("Location: index.php?");
 		}
 	}
 	
