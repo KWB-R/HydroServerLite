@@ -1,19 +1,24 @@
 <?php
-//connect to database
-mysql_connect('DATABASE_HOST', 'DATABASE_USERNAME', 'DATABASE_PASSWORD');
-mysql_select_db('DATABASE_NAME');
 
-//get the username
-$username = mysql_real_escape_string($_POST['username']);
+include "db_config.php";
 
-//mysql query to check for username
-$result = mysql_query('select username from users where username = "'. $username .'"');
+//received username value from registration page
+$username = $_POST["username"]; 
+if(isset($_POST["username"]))
 
-//Final authentication for username
-if(mysql_num_rows($result)>0){
-	echo 0;
-}else{
-	echo 1;
+{
+  
+  $query = "Select username FROM moss_users WHERE  username = '$username'"; 
+  //check username in db
+  $result =  @mysql_query($query,$connect)or die("Error" .mysql_error());
+  
+  $username_exist = mysql_num_rows($result); //records count
+  
+  //if returned value is more than 0, username is not available
+  if($username_exist>0) {
+      echo('<img src="images/not-available.png" />');
+  }else{
+      echo('<img src="images/available.png" />');
+  }
 }
-
 ?>
