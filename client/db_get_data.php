@@ -20,15 +20,16 @@ $query2 .= " WHERE VariableID=".$varid;
 
 $result2 = transQuery($query2,0,0);
 
-$unitid = $result2[0];
-$unitid = $unitid['VariableunitsID'];
-$NoValue = $unitid['NoDataValue'];
+$unitid = $result2[0]['VariableunitsID'];
+$NoValue = $result2[0]['NoDataValue'];
+
 $query3 = "SELECT * FROM units";
 $query3 .= " WHERE unitsID=".$unitid;
 $result3 = transQuery($query3,0,1);
 $result3 = $result3[0];
 
 $unit=$result3['unitsType'];
+
 
 echo("var data_test = [\r\n");
 
