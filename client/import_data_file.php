@@ -8,13 +8,16 @@ require_once 'authorization_check.php';
 //All queries go through a translator. 
 require_once 'DBTranslator.php';
 
+
+$msg = "";
+$msg3 = "";
 //add the SourceID's
 $sql ="Select * FROM sources";
 
 $result = transQuery($sql,0,1);
 
 	if (count($result) < 1) {
-    $msg = "<P><em2>$NoSourceIDNames</em></p>";
+    $msg = "<P class=em2>Sorry there are no sources. Please add a source. You cannot import data without a source.</em></p>";
 
 	} else {
 
@@ -35,7 +38,7 @@ $sql3 ="Select * FROM variables ORDER BY VariableName ASC";
 $result3 = transQuery($sql3,0,1);
 
 	if (count($result3) < 1) {
-	$msg3 = "<P><em2>$NoType</em></p>";
+	$msg3 = "<P class=em2>Sorry, there are no variables. Please create a variable. You cannot import data without any variables.</em></p>";
 
 	} else {
 
@@ -156,7 +159,7 @@ xmlhttp.send();
 	<td width="240" valign="top" bgcolor="#f2e6d6"><?php echo "$nav"; ?></td>
     <td width="720" valign="top" bgcolor="#FFFFFF"><blockquote><br />
       <!--<h1>Import a Data File</h1>-->
-      <h1><?php echo $Import; ?></h1>
+      <h1><?php echo $Import; ?></h1><?php echo "$msg"; ?>&nbsp;<?php echo "$msg3"; ?>&nbsp;
       <!--<p>In order to use this option, your CSV data file must conform to SQL database's requirements; therefore, your data should look like the following example before attempting to upload it:</p>-->
       <p><?php echo $MustConform; ?></p>
       <p>LocalDateTime,DataValue<br>
