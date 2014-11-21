@@ -22,7 +22,7 @@ if (isAdmin()){
 	}
 }
 elseif (isTeacher()){
-	$sql ="Select username FROM moss_users WHERE (authority= 'teacher' OR'student') ORDER BY username";
+	$sql ="Select username FROM moss_users WHERE (authority ='student') ORDER BY username";
 	$result = transQuery($sql,0,0);
 	if (count($result) < 1){
 		$msg = "<P><em2>" + $NoUsers + "</em></p>";
