@@ -10,8 +10,8 @@ function GetFirstLetter(){
 	newLtr = document.newuser.firstname.value.substr(0,1); // "R" from Rex
 	
 	var newFirst = newLtr.toLowerCase(); // becomes "r"
-
-	document.newuser.username.value = newFirst; //output current result, which is "r"
+	
+	return newFirst;
 }
 
 
@@ -19,15 +19,17 @@ function GetFirstLetter(){
 
 function GetLastName(){
 
-	var FirstPiece="";
+	var FirstPiece=GetFirstLetter();
 	
 	var lastN="";
-
-	FirstPiece = document.newuser.username.value;
-
+	
 	lastN = document.newuser.lastname.value; // "Burch"
 	
 	var newLast = lastN.toLowerCase(); // becomes "burch"
-
-	document.newuser.username.value = (FirstPiece + newLast); //output combined results, which would be "rburch"
+	var newUN = FirstPiece + newLast;
+	
+	if (document.newuser.username.value !=newUN)
+	{
+	document.newuser.username.value = newUN; //output combined results, which would be "rburch"
+	}
 }
