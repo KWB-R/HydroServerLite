@@ -15,18 +15,22 @@ require_once 'authorization_check.php';
 //All queries go through a translator. 
 require_once 'DBTranslator.php';
 
-//add the user's data
-$sql ="INSERT INTO moss_users(firstname, lastname, username, password, authority) VALUES ('$_POST[firstname]', '$_POST[lastname]', '$_POST[username]', PASSWORD('$_POST[password]'), '$_POST[authority]')";
+
+//Checking for an existing user
+$sql ="Select username FROM moss_users WHERE username ='$_POST[username]' ORDER BY username";
+$result = transQuery($sql,0,0);
+//adding a new user if there isn't one already
+if (count($result) < 1){
+	
+	$sql ="INSERT INTO moss_users(firstname, lastname, username, password, authority) VALUES ('$_POST[firstname]', '$_POST[lastname]', '$_POST[username]', PASSWORD('$_POST[password]'), '$_POST[authority]')";
 
 $result = transQuery($sql,0,-1);
 
 //get a good message for display upon success
 if ($result){ 
-
 $msg = "<p class=em2> $Congrats  $_POST[firstname].  $AddAnother  </p>";
 	}
-
-
+}
 //Display the appropriate user authority to add depending on the user's authority
 if (isAdmin()){
 	$selection = "<select name=authority id=authority><option value=>".$SelectEllipsis."</option><option value=admin>".$Administrator."</option><option value=teacher>".$Teacher."</option><option value=student>".$Student."</option></select>";	
@@ -53,21 +57,21 @@ echo $JS_CreateUserName;
 <br /><p class="em" align="right"><<?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg"; ?>
 	  <h1><?php echo $AddNewUser; ?></h1>
       <p>&nbsp;</p>
-      <FORM METHOD="POST" ACTION="do_adduser.php">
+      <FORM METHOD="POST" ACTION="do_adduser.php" onsubmit="return false">
       <table width="600" border="0" cellspacing="0" cellpadding="0">
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $FirstName; ?></strong></td>
-          <td width="153" valign="top"><input type="text" name="firstname" size=25 maxlength=50 onBlur="GetFirstLetter()" /></td>
-          <td width="352" valign="top"><span class="required">*</span></td>
+          <td width="157" valign="top"><input type="text" name="firstname" maxlength="50" /></td>
+          <td width="348" valign="top"><span class="required">*</span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
-          <td width="153" valign="top">&nbsp;</td>
-          <td width="352" valign="top">&nbsp;</td>
+          <td width="157" valign="top">&nbsp;</td>
+          <td width="348" valign="top">&nbsp;</td>
         </tr>
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $LastName; ?></strong></td>
-          <td valign="top"><input type="text" name="lastname" size=25 maxlength=50 onBlur="GetLastName()" /></td>
+          <td valign="top"><input type="text" name="lastname" maxlength="50" onBlur="GetLastName()" /></td>
           <td valign="top"><span class="required">*</span></td>
         </tr>
         <tr>
@@ -77,9 +81,9 @@ echo $JS_CreateUserName;
         </tr>
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $UserName; ?></strong></td>
-          <td valign="top"><input type="text" name="username" maxlength=25 />
+          <td valign="top"><input type="text" id="username" name="username" maxlength="25" />
           <div class="em"></div></td>
-		  <td valign="top"><span class="em"><span class="required">*</span><?php echo $FirstLastNameExample; ?></span></td>
+		  <td valign="top"><span class="em"><span id="user-result"></span><span class="required">*</span><?php echo $FirstLastNameExample; ?></span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -88,7 +92,7 @@ echo $JS_CreateUserName;
         </tr>
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $Password; ?></strong></td>
-          <td valign="top"><input type="text" name="password" maxlength=25 /><div class="em"></div></td>
+          <td valign="top"><input type="text" name="password" id="password" maxlength=25 /><div class="em"></div></td>
           <td valign="top"><span class="em"><span class="required">*</span><?php echo $CaseSensitive; ?></span></td>
         </tr>
         <tr>
@@ -113,6 +117,7 @@ echo $JS_CreateUserName;
           
         </tr>
       </table></FORM>
+      <div id="checkStatus" hidden="true"></div>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
@@ -121,4 +126,70 @@ echo $JS_CreateUserName;
       <p>&nbsp;</p>
     
 	<?php HTML_Render_Body_End(); ?>
+    
+<script type= "text/javascript">
+$(document).ready(function(){
 
+
+$("#username").blur(function (e){
+	var username = $("#username").val();
+    $.post("check_username.php",{ username :username}, function(data){
+    $("#user-result").html(data);
+	if(data == '<img src="images/not-available.png" />'){
+		$("#checkStatus").html(1);
+	}
+	else
+	{
+		$("#checkStatus").html(0);
+	}
+    });
+});
+
+
+$("#lastname").blur(function (e){
+	var username = $("#username").val();
+    $.post("check_username.php",{ username :username}, function(data){
+    $("#user-result").html(data);
+	if(data == '<img src="images/not-available.png" />'){
+	$("#checkStatus").html(1);
+	}
+	else
+	{
+		$("#checkStatus").html(0);
+	}
+    });
+});
+
+$("form").submit(function(e){
+
+if(($("#firstname").val())==""){
+		alert("Please enter your First Name");
+		return false;
+	}
+if(($("#lastname").val())==""){
+		alert("Please enter your Last Name");
+		return false;
+	}
+if(($("#username").val())==""){
+		alert("Please enter a Username");
+		return false;
+	}
+
+if(($("#password").val())==""){
+		alert("Please enter a Password");
+		return false;
+	} 
+if(($("#authority").val())==""){
+		alert("Please Select an Authority");
+		return false;
+	}
+
+if($("#checkStatus").html()==1)
+{
+	alert("Username already exists. Please choose a different one.");
+	return false;	
+}
+
+});
+});
+</script>
