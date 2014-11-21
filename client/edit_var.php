@@ -20,8 +20,10 @@ $default_timesupport = "";
 	
 	echo $CSS_JQStyles;
 	
+	echo $CSS_JQX;
+	
 	echo $JS_JQX;
-
+	
 	
 ?>
 
@@ -927,7 +929,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         <tr>
           <td valign="top"><strong><?php echo $VariableCode; ?></strong></td>
           <td valign="top">
-         <input type="text" id="var_code" name="VariableCode" value=""  /><span class="required">*</span><span class="hint" title="<?php echo $ArbitraryCode?>">?</span></td>
+         <input type="text" id="var_code" name="VariableCode" value="" size="15" /><span class="required">*</span><span class="hint" title="<?php echo $ArbitraryCode?>">?</span></td>
 
   <td colspan="2" valign="top">&nbsp;</td>
           </tr>
