@@ -1,13 +1,8 @@
 ﻿<?php
 	//This is required to get the international text strings dictionary
 	 $setup="yes";
-	 $worldWaterSetup="Yes"; //This parameter is only used for connecting to worldwater database and should only be run from within the server. 
 	 //To use world water server or your custom server : Enter the above option as Yes and then please configure the database settings below:
-	 $serverDBHost = 	"worldwater.byu.edu" ;//Your server Name : For example - "worldwater.byu.edu"
-	 $serverDBUName = 	"WWO_Admin" ;//Your server Username : For example - "Adam"
-	 $serverDBPass = 	"isaiah4118" ;//Your server Password : For example - "*********"	 
 	 
-	 $singleInstall="No"; //Once again, this is only for advanced users to change. For people who are intending to have multiple installations on their servers. 
 	 
 	require_once 'internationalize.php';
 ?>
@@ -159,7 +154,7 @@ alert(<?php echo "'".$TimeSupportInfo."'";?>);
 }
 
 function show_answerDN(){
-//alert("The name of the database when the tables of data will be stored.");
+//alert("The name of the database where the tables of data will be stored.");
 alert(<?php echo "'".$DatabaseNameInfo."'";?>);
 }
 
@@ -250,7 +245,6 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
     <td colspan="2"><img src="../images/WebClientBanner.png" width="960" height="90" alt="Adventure Learning Banner" /></td>
-   
   </tr>
   
   <tr>
@@ -270,7 +264,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td colspan="3"><h3><!--Welcome, Administrator!--><?php echo $AdminWelcome;?></h3></td>
   </tr>
   <tr>
-    <td colspan="3"><!--Please take a few minutes to change all of the fields below to setup your application with the correct default settings needed for it to run properly. If you have any questions during the process, please click the information icon next to the field or refer to the example provided.--><?php echo $MainConfigDirections;?></td>
+    <td colspan="3"><!--Please take a few minutes to change all of the fields below to set up your application with the correct default settings needed for it to run properly. If you have any questions during the process, please click the information icon next to the field or refer to the example provided.--><?php echo $MainConfigDirections;?></td>
   </tr>
   <tr>
     <td colspan="3">&nbsp;</td>
@@ -284,7 +278,7 @@ alert(<?php echo "'".$DerivedFromIDInfo."'";?>);
     <td width="19">&nbsp;</td>
     <td><span class='confighead'><!--New password:--><?php echo $NewPassword ;?></span>&nbsp;</td>
     <td><input type="text" id="password" name="password" value="" />
-      &nbsp;<span class='em'><!--(Must be entered  now.)--><?php echo $EnterNow;?></span></td>
+      &nbsp;<span class='em'><!--(Must be entered now.)--><?php echo $EnterNow;?></span></td>
   </tr>
   <tr>
     <td width="19">&nbsp;</td>

@@ -97,9 +97,10 @@ if (isStudent() || isTeacher() || isAdmin()){
 echo "<li class=\"search\"><a href='view_main.php'>Search Data</a></li>";
 echo "<li class=\"help\"><a href='help.php'>Help Center</a></li>";
 
-if (getRequestedPage() != "/index.php")	{
-	echo "<li class=\"home\"><a href='index.php'>Back to Home</a></li>";
-}
+//Commented out because this home button wasn't necessary, or it could be used later for something else...
+//if (getRequestedPage() != "/index.php")	{
+	//echo "<li class=\"home\"><a href='index.php'>Back to Home</a></li>";
+//}
 
 if(isLoggedIn())	{
 	echo "<li class=\"home\"><a href='home.php'>Home</a></li>";

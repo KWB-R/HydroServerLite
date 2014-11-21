@@ -9,6 +9,7 @@
 	$users = "usuarios.";
 	$SearchDataHome = "Para buscar sitios de recolección de datos, ingrese la ciudad o seleccione donde dice &quot;¡Buscar Sitios Cercanos a Mí!&quot; para encontrar sitios dentro de un radio de 300 millas de su local. (Nota: Los sitios en donde no hay información NO seran desplegados abajo.)";
 	$FindSites = "Busque sitios cerca de mí!";
+	$AllSites = "todos los sitios";
 	
 //JS Variables
 	$NotFound = ' no encontrado';

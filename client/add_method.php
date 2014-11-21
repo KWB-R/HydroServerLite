@@ -113,7 +113,7 @@ varmeth+=",";
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddMethodButton;?>" class="button" style="width: auto"/></td>
+          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddMethodButton;?>" class="button" style="width: auto"/><input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" /></td>
           </tr>
       </table></FORM>
       <p>&nbsp;</p>

@@ -1275,8 +1275,12 @@ $result1 = mysql_query($query1) or die("SQL Error 1: " . mysql_error());
 
 if(mysql_num_rows($result1)<1)
 {
-
-echo("<br><br>  $NoImages  <a href='edit_site.php'> $ClickHere </a>");	
+if(isLoggedIn())
+	  {
+		echo("<br><br>  $NoImages  <a href='edit_site.php'> $ClickHere </a>");	
+	}
+else {	
+		echo("<br><bf> $NoImages");
 }
 
 else

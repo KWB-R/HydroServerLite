@@ -251,7 +251,7 @@ $(document).ready(function(){
         </tr>
         <tr>
           <!--<td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="Add Source" class="button" /></td>-->
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddSourceButton;?>" class="button" /></td>
+          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddSourceButton;?>" class="button" /><input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" /></td>
           </tr>
       </table></FORM>
     <p>&nbsp;</p>
@@ -282,7 +282,7 @@ $("#addsource").submit(function(){
 			return false;
 		}
 	}
-
+23.456.7890
 	if(($("#ContactName").val())==""){
 		//alert("Please enter a contact name for the source.");
 		alert(<?php echo "'".$EnterContactName."'"; ?>);
@@ -296,7 +296,7 @@ $("#addsource").submit(function(){
 	}
 
 	//Phone Validation
-	var regex = /^((\+?1-)?\d\d\d-)?\d\d\d-\d\d\d\d$/;
+	var regex = "/^([+]*([0-9]{1})*[- .(]*([0-9]{3})*[- .)]*[0-9]{3}[- .]*[0-9]{4})+$"/;
 	if(!($("#Phone").val().match(regex))){
 		//alert("Invalid phone number");
 		alert(<?php echo "'".$InvalidPhoneNumber."'"; ?>);

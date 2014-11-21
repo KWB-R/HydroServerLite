@@ -35,7 +35,7 @@
 	}else{ // Already logged in.
 		if (isset( $_GET["logout"])){ 
 			session_destroy();
-			header("Location: index.php?state=pass3");
+			header("Location: index.php?");
 		}
 	}
 	

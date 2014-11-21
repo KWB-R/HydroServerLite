@@ -34,7 +34,7 @@ echo $JS_CreateUserName;
       <table width="600" border="0" cellspacing="0" cellpadding="0">
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $FirstName; ?></strong></td>
-          <td width="157" valign="top"><input type="text" id="firstname" name="firstname" maxlength="50" onBlur="GetFirstLetter()"/></td>
+          <td width="157" valign="top"><input type="text" id="firstname" name="firstname" maxlength="50"/></td>
           <td width="348" valign="top"><span class="required">*</span></td>
         </tr>
         <tr>
@@ -56,7 +56,7 @@ echo $JS_CreateUserName;
 		  <td width="95" valign="top"><strong><?php echo $UserName; ?></strong></td>
           <td valign="top"><input type="text" id="username" name="username" maxlength="25" />
           <div class="em"></div></td>
-		  <td valign="top"><span class="em"><span class="required">*</span><?php echo $FirstLastNameExample; ?></span></td>
+		  <td valign="top"><span class="em"><span id="user-result"></span><span class="required">*</span><?php echo $FirstLastNameExample; ?></span></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>
@@ -65,7 +65,7 @@ echo $JS_CreateUserName;
         </tr>
         <tr>
 		  <td width="95" valign="top"><strong><?php echo $Password; ?></strong></td>
-          <td valign="top"><input type="text" name="password" maxlength=25 /><div class="em"></div></td>
+          <td valign="top"><input type="text" name="password" maxlength=25 id ="password"/><div class="em"></div></td>
           <td valign="top"><span class="em"><span class="required">*</span><?php echo $CaseSensitive; ?></span></td>
         </tr>
         <tr>
@@ -84,15 +84,82 @@ echo $JS_CreateUserName;
           <td valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td width="95" valign="top">&nbsp;</td>
-          <td valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddUser;?>" class="button"/></td>
+          <td width="95" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddUser;?>" class="button"/></td>
+          <td valign="top"><input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" /></td>
           <td valign="top">&nbsp;</td>
         </tr>
       </table></FORM>
-
+<div id="checkStatus" hidden="true"></div>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
     
 	<?php HTML_Render_Body_End(); ?>
+    
+<script type= "text/javascript">
+$(document).ready(function(){
+
+
+$("#username").blur(function (e){
+	var username = $("#username").val();
+    $.post("check_username.php",{ username :username}, function(data){
+    $("#user-result").html(data);
+	if(data == '<img src="images/not-available.png" />'){
+		$("#checkStatus").html(1);
+	}
+	else
+	{
+		$("#checkStatus").html(0);
+	}
+    });
+});
+
+
+$("#lastname").blur(function (e){
+	var username = $("#username").val();
+    $.post("check_username.php",{ username :username}, function(data){
+    $("#user-result").html(data);
+	if(data == '<img src="images/not-available.png" />'){
+	$("#checkStatus").html(1);
+	}
+	else
+	{
+		$("#checkStatus").html(0);
+	}
+    });
+});
+
+$("form").submit(function(e){
+
+if(($("#firstname").val())==""){
+		alert("Please enter your First Name");
+		return false;
+	}
+if(($("#lastname").val())==""){
+		alert("Please enter your Last Name");
+		return false;
+	}
+if(($("#username").val())==""){
+		alert("Please enter a Username");
+		return false;
+	}
+
+if(($("#password").val())==""){
+		alert("Please enter a Password");
+		return false;
+	} 
+if(($("#authority").val())==""){
+		alert("Please Select an Authority");
+		return false;
+	}
+
+if($("#checkStatus").html()==1)
+{
+	alert("Username already exists. Please choose a different one.");
+	return false;	
+}
+
+});
+});
+</script>

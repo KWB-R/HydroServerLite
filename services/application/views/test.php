@@ -27,7 +27,7 @@ $(document).ready(function() {
 		}
 
 		$.ajax({
-			url:"<?=base_url()?>cuahsi/method_get_params/" + $(this).val(),
+			url:"<?=base_url()?>/index.php/cuahsi/method_get_params/" + $(this).val(),
 			success: function(response){
 				$("#method_param").html(response);
 				$(document).tooltip();
@@ -48,7 +48,7 @@ $(document).ready(function() {
 	$("#btnGenerator").click(function(e) {
 	    $.ajax({
            type: "POST",
-           url: "<?=base_url()?>cuahsi/generate_url/",
+           url: "<?=base_url()?>/index.php/cuahsi/generate_url/",
            data: $("#form_url_generator").serialize(), // serializes the form's elements.
            success: function(data)
            {
@@ -64,7 +64,7 @@ function remove(obj) {
 }
 </script>
 <div id="container">
-	<h1>Hydrodata Web Tester</h1>
+	<h1>WaterOneFlow Web Service Tester</h1>
 
 	<div id="body">
 		<form id="form_url_generator">
@@ -74,19 +74,19 @@ function remove(obj) {
 				<div class="content">
 					<select id="method" name="method" title="Select service method here.">
 						<option value="">.: Select Method :.</option>
-						<option class="opt" value="GetSiteInfo">GetSiteInfo</option>
-						<option class="opt" value="GetSiteInfoMultpleObject">GetSiteInfoMultpleObject</option>
-						<option class="opt" value="GetSiteInfoObject">GetSiteInfoObject</option>
-						<option class="opt" value="GetSites">GetSites</option>
-						<option class="opt" value="GetSitesByBoxObject">GetSitesByBoxObject</option>
 						<option class="opt" value="GetSitesObject">GetSitesObject</option>
-						<option class="opt" value="GetValues">GetValues</option>
-						<option class="opt" value="GetValuesForASiteObject">GetValuesForASiteObject</option>
-						<option class="opt" value="GetValuesObject">GetValuesObject</option>
-						<option class="opt" value="GetVariableInfo">GetVariableInfo</option>
-						<option class="opt" value="GetVariableInfoObject">GetVariableInfoObject</option>
-						<option class="opt" value="GetVariables">GetVariables</option>
 						<option class="opt" value="GetVariablesObject">GetVariablesObject</option>
+						<option class="opt" value="GetSiteInfoObject">GetSiteInfoObject</option>
+						<option class="opt" value="GetValuesObject">GetValuesObject</option>
+						<option class="opt" value="GetSitesByBoxObject">GetSitesByBoxObject</option>
+						<option class="opt" value="GetVariableInfoObject">GetVariableInfoObject</option>
+						<option class="opt" value="GetSiteInfoMultpleObject">GetSiteInfoMultpleObject</option>
+						<option class="opt" value="GetValuesForASiteObject">GetValuesForASiteObject</option>
+						<option class="opt" value="GetSites">GetSites</option>
+						<option class="opt" value="GetSiteInfo">GetSiteInfo</option>
+						<option class="opt" value="GetVariables">GetVariables</option>
+						<option class="opt" value="GetValues">GetValues</option>
+						<option class="opt" value="GetVariableInfo">GetVariableInfo</option>
 					</select>
 				</div> 
 			</div>
@@ -106,7 +106,7 @@ function remove(obj) {
 
 	</div>
 
-	<p class="footer"><font color=#000000 face=Arial, Helvetica, sans-serif size=2><i>Copyright &copy; 2012. <a href='http://hydroserverlite.codeplex.com/' target='_blank' class='reversed'>Hydroserver Lite</a>. All Rights Reserved. <a href='http://hydroserverlite.codeplex.com/team/view' target='_blank' class='reversed'>Meet the Developers</a></i></font></p>
+	<p class="footer"><font color=#000000 face=Arial, Helvetica, sans-serif size=2><i>Copyright &copy; 2014. <a href='http://hydroserverlite.codeplex.com/' target='_blank' class='reversed'>Hydroserver Lite</a>. All Rights Reserved. <a href='http://hydroserverlite.codeplex.com/team/view' target='_blank' class='reversed'>Meet the Developers</a></i></font></p>
 </div>
 
 </body>
