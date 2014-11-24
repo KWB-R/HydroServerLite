@@ -6,6 +6,10 @@ require_once 'authorization_check.php';
 //All queries go through a translator. 
 require_once 'DBTranslator.php';
 
+//These variables are for the notification about their respective privileges.
+$Admin_notification = "";
+
+
 //redirect anyone that is not an administrator
 if (!isAdmin()){
 	header("Location: index.php?state=pass2");
@@ -26,6 +30,7 @@ if (count($result) < 1) {
 		$option_block .= "<option value=$users>$users</option>";
 	}
 }
+$Admin_notification = "As an Administrator you have all of the user privileges except removing or changing the password of another Administrator once they are added. ";
 
 HTML_Render_Head();
 
@@ -73,7 +78,15 @@ HTML_Render_Body_Start(); ?>
           </tr>
         </table>
   </form>
+	<p><br>
+	  </p>
+	<p><br>
+		</p>
+	  <p class="em" align="center"><?php echo $Admin_notification;?></p><?php echo "$msg"; ?></p>
 <p>&nbsp;</p>
       <p>&nbsp;</p>
+	  <p>&nbsp;</p>
+	  <p>&nbsp;</p>
+	  <p>&nbsp;</p>
       <p>&nbsp;</p>
     	<?php HTML_Render_Body_End(); ?>
