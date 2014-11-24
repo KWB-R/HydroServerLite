@@ -4,8 +4,13 @@ require_once("fetchMainConfig.php");
 
 $sourceBanner ="images/WebClientBanner.png";
 
-if (isset($topBannerCustom))
+//Changed to "re" include the script. 
+$configPath = $_SESSION['mainpath'];
+$configPath = str_replace("main_config","headerConfig",$configPath);
+$configPath = str_replace("\\","/",$configPath);
+if (file_exists($configPath))
 {
+	require($configPath);
 	$sourceBanner = $topBannerCustom;	
 }
 if(isset($lpManagerMode)):
