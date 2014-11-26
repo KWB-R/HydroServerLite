@@ -47,19 +47,28 @@
 
 $active_group = 'default';
 $active_record = TRUE;
-if (file_exists(BASEPATH.'../../client/main_config.php')) {
-	require_once BASEPATH.'../../client/main_config.php';
 
+if (file_exists(BASEPATH.'../../main_config.php')) {
+	require_once BASEPATH.'../../main_config.php';
+
+	$db['default']['hostname'] = DATABASE_HOST;
+	$db['default']['username'] = DATABASE_USERNAME;
+	$db['default']['password'] = DATABASE_PASSWORD;
+	$db['default']['database'] = DATABASE_NAME;
+	
+} else if (file_exists(BASEPATH.'../../client/main_config.php')) {
+	require_once BASEPATH.'../../client/main_config.php';
 	$db['default']['hostname'] = DATABASE_HOST;
 	$db['default']['username'] = DATABASE_USERNAME;
 	$db['default']['password'] = DATABASE_PASSWORD;
 	$db['default']['database'] = DATABASE_NAME;
 
 } else {
-	$db['default']['hostname'] = 'localhost';
-	$db['default']['username'] = 'root';
-	$db['default']['password'] = '';
-	$db['default']['database'] = 'hydroserverlite';
+	//CHANGE THE DATABASE CONNECTION SETTINGS HERE
+	$db['default']['hostname'] = 'hostname';
+	$db['default']['username'] = 'user';
+	$db['default']['password'] = 'password';
+	$db['default']['database'] = 'database';
 }
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';

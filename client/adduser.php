@@ -6,12 +6,18 @@ require_once 'internationalize.php';
 require_once 'authorization_check.php';
 require_once "_html_parts.php";
 
+//These variables are for the notification about their respective privileges.
+$Admin_notification = "";
+$Teacher_notification = "";
+
 //Display the appropriate user authority to add depending on the user's authority
 if (isAdmin()){
 	$selection = "<select name=authority id=authority><option value=>".$SelectEllipsis."</option><option value=admin>".$Administrator."</option><option value=teacher>".$Teacher."</option><option value=student>".$Student."</option></select>";			
+	$Admin_notification = "As an Administrator you have all of the user privileges except removing or changing the password of another Administrator once they are added. ";
 	}
-elseif (isTeacher()){
-	$selection = "<select name=authority id=authority><option value=>".$SelectEllipsis."</option><option value=teacher>".$Teacher."</option><option value=student>".$Student."</option></select>";
+	elseif (isTeacher()){
+	$Admin_selection = "<select name=authority id=authority><option value=>".$SelectEllipsis."</option><option value=teacher>".$Teacher."</option><option value=student>".$Student."</option></select>";
+	$Teacher_notification = "As a Teacher you will not be able to remove another Teacher's profile or change their password once they are added. You will only be able to change the profile and password of a Student.";
 	}
 elseif (isStudent()){
 	header("Location: index.php?state=pass2");
@@ -27,8 +33,8 @@ echo $JS_JQuery;
 echo $JS_CreateUserName;
 //#type $__User Alias
  HTML_Render_Body_Start(); ?>
-<br /><p class="em" align="right"><?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg"; ?></p>
-      <h1><?php echo $AddNewUser; ?></h1>
+<p class="em" align="right"><?php echo $RequiredFieldsAsterisk; ?></p><?php echo "$msg"; ?></p>
+	      <h1><?php echo $AddNewUser; ?></h1>
       <p>&nbsp;</p>
       <FORM METHOD="POST" ACTION="do_adduser.php" name="newuser">
       <table width="600" border="0" cellspacing="0" cellpadding="0">
@@ -89,10 +95,13 @@ echo $JS_CreateUserName;
           <td valign="top">&nbsp;</td>
         </tr>
       </table></FORM>
+	  <p><br>
+	  </p>
+	  <p><br>
+		</p>
+	  <p class="em" align="center"><?php echo $Admin_notification;?></p><?php echo "$msg"; ?></p>
+	  <p class="em" align="center"><?php echo $Teacher_notification;?></p><?php echo "$msg"; ?></p>
 <div id="checkStatus" hidden="true"></div>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
       <p>&nbsp;</p>
     
 	<?php HTML_Render_Body_End(); ?>

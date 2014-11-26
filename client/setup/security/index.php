@@ -71,6 +71,8 @@ header ("Location: ../".$MainDir."/");
         <a class="button2" href="<?php echo $link; ?>">Enter Database</a>
            <p>&nbsp;</p>
         <a class="button2" href="manageLP/index.php">Edit this page</a>
+		<p>&nbsp;</p>
+		<a class="button2" href="services">Web Services</a> 
 
 </div>
     </div>
