@@ -20,6 +20,12 @@ class upload extends CI_Controller {
 		$postdata = file_get_contents('php://input');
 		
 		$data = json_decode($postdata);
+		
+		if (json_last_error() !== '') {
+			header('HTTP/1.0 400 Bad request');
+			echo '{"status": "400", "message":"the data is not in valid json format"}';
+			exit;
+		}
 		//print_r($data);
 		
 		// checking user name and password
