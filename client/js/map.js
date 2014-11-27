@@ -10,6 +10,7 @@ var infoWindow;
 var locationSelect;
 var xml = "-1";
 var markerCluster;
+var flag = 0;
 
 function load() {
 
@@ -36,6 +37,35 @@ function load() {
         loadall();
         markerCluster = new MarkerClusterer(map);
     }
+	
+	google.maps.event.addListener(map, 'zoom_changed', function() {
+    zoomLevel = map.getZoom();
+	if(zoomLevel>=19)
+	{
+	if(flag==0)
+		//disable clustering
+	{		markerCluster.clearMarkers();
+		for (var i = 0; i < markers.length; i++) { 
+          markers[i].setOptions({map: map, visible:true});
+        }
+		flag=1;}
+	}
+	else
+	{
+		if(flag==1)
+		{
+			//enable clustering
+			flag=0;
+			/*  for (var i = 0; i < markers.length; i++) { 
+          markers[i].setOptions({ map:null, visible: false});
+        }*/
+        markerCluster = new MarkerClusterer(map,markers);
+		}
+	}
+	
+});
+	
+	
 }
 
 // Update the height of the map Container to make sure it will fit inside of the window
@@ -263,9 +293,26 @@ function createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourc
     } else {
         var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='details.php?siteid=" + siteid + "'>Click here for site details and data</a></div>";
     }
+	
+	var allMarkers = markers;
+	var finalLatLng = latlng;
+	
+	if (allMarkers.length != 0) {
+    for (i=0; i < allMarkers.length; i++) {
+        var existingMarker = allMarkers[i];
+        var pos = existingMarker.getPosition();
 
+        //if a marker already exists in the same position as this marker
+        if (latlng.equals(pos)) {
+            //update the position of the coincident marker by applying a small multipler to its coordinates
+            var newLat = latlng.lat() + (Math.random() -.5) / 2000;// * (Math.random() * (max - min) + min);
+            var newLng = latlng.lng() + (Math.random() -.5) / 2000;// * (Math.random() * (max - min) + min);
+            finalLatLng = new google.maps.LatLng(newLat,newLng);
+        }
+    }
+}
     var marker = new google.maps.Marker({
-        position: latlng
+        position: finalLatLng
     });
     google.maps.event.addListener(marker, 'mouseover', function() {
         infoWindow.setContent(html);
