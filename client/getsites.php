@@ -29,5 +29,4 @@ $option_block2 = "<select name='SiteID' id='SiteID' onChange='showTypes(this.val
 	}
 $option_block2 .= "</select><span class=\"required\">*</span><span class=\"hint\" title=\"If you do not see your site listed here, please contact your supervisor and ask them to add it before entering data.\">?</span>";
 echo $option_block2;
-mysql_close($connection);
 ?>
