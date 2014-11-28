@@ -22,6 +22,7 @@ echo $JS_JQX;
 echo $JS_Forms;
 
 echo $CSS_Main;
+
 ?>
 
 
@@ -67,7 +68,7 @@ var url="getspec.php";
                 };
                 var dataAdapter = new $.jqx.dataAdapter(source);
 
-                // Create a jqxComboBox
+                // Create a jqxComboBox for Speciation
 $("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "specterm", valueMember: "specdef", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#specdata").bind('select', function (event) {
@@ -112,7 +113,7 @@ var url2="getunittype.php";
                 };
                 var dataAdapter2 = new $.jqx.dataAdapter(source2);
 
-// Create a jqxComboBox for the var unit types
+// Create a jqxComboBox for the var unit types. 
 $("#unittype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter2, displayMember: "unitype", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
 
 $("#unittype").bind('select', function (event) {
@@ -144,7 +145,7 @@ var url3="getunitname.php?type="+item.label;
                 };
                 var dataAdapter3 = new $.jqx.dataAdapter(source3);
 	
-// Create a jqxComboBox for the var unit types
+// Create a jqxComboBox for the var unit types (this is for the units box that shows up once a variable type has been selected
 $("#unit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter3, displayMember: "unit", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
 
 $("#unit").bind('select', function (event) {

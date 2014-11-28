@@ -26,5 +26,13 @@ $variables[] = array(
         'unitid' => "-10" );
 
 
-echo json_encode($variables);
+//These slices pick off the parts of the array that I want up in the front and then sorts the bulk of the elements and then places them back together.		
+$slicedBodyArray = array_slice($variables,1,-1);
+$rowOneSlice = array_slice($variables,0,1);
+$lastRowSlice = array_slice ($variables,-1,1);
+
+sort($slicedBodyArray); 
+$newArray = array_merge ($rowOneSlice, $slicedBodyArray, $lastRowSlice);
+
+echo json_encode($newArray);
 ?>
