@@ -97,6 +97,27 @@ if (isStudent() || isTeacher() || isAdmin()){
 echo "<li class=\"search\"><a href='view_main.php'>Search Data</a></li>";
 echo "<li class=\"help\"><a href='help.php'>Help Center</a></li>";
 
+
+//Check session variable being set or not. 
+
+if (!isset($_SESSION))
+{
+session_start();
+}
+
+if (isset($_SESSION['mainpath']))
+{
+$servicesPath = str_replace("main_config.php","services\\",$_SESSION['mainpath']);
+$servicesPath = str_replace("\\","/",$servicesPath);
+}
+else
+{
+$servicesPath = "../services";
+}
+
+echo "<li class=\"search\"><a href='".$servicesPath."'>Web Services</a></li>";
+
+
 //Commented out because this home button wasn't necessary, or it could be used later for something else...
 //if (getRequestedPage() != "/index.php")	{
 	//echo "<li class=\"home\"><a href='index.php'>Back to Home</a></li>";

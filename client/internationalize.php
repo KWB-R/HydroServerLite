@@ -24,6 +24,15 @@
 	}
 	
 	$lang_code = $lang;	
+	
+	//A check to see if the file is within 4 hours? and existing. 
+	
+	// Send a query to the server to get a view for that $lang_code
+	
+	//Build the file with all the vars making sure if var for that lang does not exist, english takes over
+	
+	//Include that file and end the script. However if any errors occur, continue the script. 
+	
 	if (isset($urlExtraName))
 	{
 
