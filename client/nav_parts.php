@@ -62,6 +62,7 @@ if (isTeacher() || isAdmin()){
 	echo "<ul>";
 	echo "<li class=\"add_user\"><a href='adduser.php'>Add ".$__User->Capitalized."</a></li>";
 	echo "<li class=\"edit_user\"><a href='changepassword.php'>Change ".$__User->Capitalized."'s Password</a></li>";
+	echo "<li class=\"edit_user\"><a href='change_yourpassword.php'>Change "." Your Password</a></li>";
 	// > admin
 	if (isAdmin())
 		echo "<li class=\"change_authority\"><a href='changeauthority.php'>Change ".$__User->Capitalized."'s Authority</a></li>";
