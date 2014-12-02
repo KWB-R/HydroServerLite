@@ -7,6 +7,12 @@ require_once 'authorization_check.php';
 require_once 'DBTranslator.php';
 require_once "_html_parts.php";
 $option_block="";
+
+//These variables are for the notification about their respective privileges.
+$Admin_notification = "";
+$Teacher_notification = "";
+
+
 //Display the appropriate user authority to add depending on the user's authority
 if (isAdmin()){
 	//select the users
@@ -20,6 +26,7 @@ if (isAdmin()){
 		$option_block .= "<option value=$users>$users</option>";
 		}
 	}
+	$Admin_notification = "As an Administrator you have all of the user privileges except removing or changing the password of another Administrator once they are added. ";
 }
 elseif (isTeacher()){
 	$sql ="Select username FROM moss_users WHERE (authority ='student') ORDER BY username";
@@ -32,6 +39,7 @@ elseif (isTeacher()){
 		$option_block .= "<option value=$users>$users</option>";
 		}
 	}
+	$Teacher_notification = "As a Teacher you will not be able to remove another Teacher's profile or change their password once they are added. You will only be able to change the profile and password of a Student.";
 }
 elseif (isStudent()){
 	header("Location: unauthorized.php");
@@ -45,7 +53,7 @@ elseif (isStudent()){
 	echo $JS_JQuery;
 
 	HTML_Render_Body_Start(); ?>
-<br /><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg"; ?>
+<p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo $RequiredFieldsAsterisk;?></p><?php echo "$msg"; ?>
       <h1><?php echo $ChangeUserPassword;?></h1>
       <p>&nbsp;</p>
       <FORM METHOD="POST" ACTION="do_changepassword.php">
@@ -73,7 +81,14 @@ elseif (isStudent()){
         </tr>
       </table>
   </FORM>
+	<p><br>
+	  </p>
+	  <p><br>
+		</p>
+	  <p class="em" align="center"><?php echo $Admin_notification;?></p><?php echo "$msg"; ?></p>
+	  <p class="em" align="center"><?php echo $Teacher_notification;?></p><?php echo "$msg"; ?></p>
       <p>&nbsp;</p>
+	  <p>&nbsp;</p>
 	  <p>&nbsp;</p>
       <p>&nbsp;</p>
       <p>&nbsp;</p>

@@ -251,13 +251,18 @@ $(document).ready(function(){
         </tr>
         <tr>
           <!--<td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="Add Source" class="button" /></td>-->
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddSourceButton;?>" class="button" /><input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" /></td>
+          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddSourceButton;?>" class="button" /> <input id="resetButton" type="button" name="resetButton" value="<?php echo $Cancel; ?>" class="button" style="width: auto" />
           </tr>
       </table></FORM>
     <p>&nbsp;</p>
    	<?php HTML_Render_Body_End(); ?>
 
 <script>
+$("#resetButton").click(function() {
+	$("form")[0].reset();
+	 $("html, body").animate({ scrollTop: 0 }, "slow");
+  return false;
+});
 
 $("#addsource").submit(function(){
 
@@ -275,14 +280,14 @@ $("#addsource").submit(function(){
 	}
 
 	if(($("#SourceLink").val())!=""){
-		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+		var regexp = "/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/";
 		if(!($("#SourceLink").val().match(regexp))){
 			//alert("Invalid url for sourcelink");
 			alert(<?php echo "'".$InvalidSourceLinkURL."'"; ?>);
 			return false;
 		}
 	}
-23.456.7890
+
 	if(($("#ContactName").val())==""){
 		//alert("Please enter a contact name for the source.");
 		alert(<?php echo "'".$EnterContactName."'"; ?>);
@@ -296,7 +301,7 @@ $("#addsource").submit(function(){
 	}
 
 	//Phone Validation
-	var regex = "/^([+]*([0-9]{1})*[- .(]*([0-9]{3})*[- .)]*[0-9]{3}[- .]*[0-9]{4})+$"/;
+	var regex = "/^([+]*([0-9]{1})*[- .(]*([0-9]{3})*[- .)]*[0-9]{3}[- .]*[0-9]{4})+$/";
 	if(!($("#Phone").val().match(regex))){
 		//alert("Invalid phone number");
 		alert(<?php echo "'".$InvalidPhoneNumber."'"; ?>);
@@ -309,7 +314,7 @@ $("#addsource").submit(function(){
 		return false;
 	}
 
-	var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+	var pattern="/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/";
 
 	if(!($("#Email").val().match(pattern))){
 		alert(<?php echo "'".$InvalidEmailAddress."'"; ?>);
@@ -336,7 +341,7 @@ $("#addsource").submit(function(){
 		return false;
 	}
 
-	if(!($("#ZipCode").val().match(/^\d{5}(-\d{4})?$/))){
+	if(!($("#ZipCode").val().match("/^\d{5}(-\d{4})?$/"))){
 		alert(<?php echo "'".$InvalidZipCode."'"; ?>);
 		return false;
 	}
@@ -358,7 +363,7 @@ $("#addsource").submit(function(){
 	}
 
 	if(($("#MetadataLink").val())!=""){
-		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+		var regexp = "/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/";
 			if(!($("#ContactName").val().match(regexp))){
 				alert(<?php echo "'".$InvalidURLMetadata."'"; ?>);
 				return false;

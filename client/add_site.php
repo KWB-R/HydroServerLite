@@ -334,7 +334,7 @@ HTML_Render_Body_Start(); ?>
     <!--<td><input type="SUBMIT" name="submit" value="Add Site" class="button"/></td>-->
     <td><input type="SUBMIT" name="submit" value="<?php echo $AddSiteButton;?>" class="button" width="auto"/></td>
     <td><div id='response'>
-      <input type="reset" name="Reset" value="<?php echo $Cancel; ?>" class="button" style="width: auto" />
+      <input id="resetButton" type="button" name="resetButton" value="<?php echo $Cancel; ?>" class="button" style="width: auto" />
     </div></td>
   </tr>
   <tr>
@@ -353,6 +353,13 @@ HTML_Render_Body_Start(); ?>
 </table>
 
 <script>
+
+
+$("#resetButton").click(function() {
+	$("form")[0].reset();
+	 $("html, body").animate({ scrollTop: 0 }, "slow");
+  return false;
+});
 
     $("form").submit(function() {
       //Validate all fields

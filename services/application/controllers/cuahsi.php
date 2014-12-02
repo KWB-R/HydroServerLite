@@ -503,7 +503,7 @@ class Cuahsi extends CI_Controller {
 					  	<div class=\"param_container\">
 						  	<label>Variable</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"variable\" name=\"variable\" value=\"".get_random_variable()."\" class=\"must\" title=\"Fill with variable code.\" />
+							  	<input type=\"text\" id=\"variable\" name=\"variable\" value=\"".$this->config->item('service_code').":".get_random_variable()."\" class=\"must\" title=\"Fill with variable code.\" />
 						  	</div>
 					  	</div>";
 		          	break;
@@ -512,7 +512,7 @@ class Cuahsi extends CI_Controller {
 				  		<div class=\"param_container\">
 						  	<label>Variable</label>
 						  	<div class=\"content\">
-							  	<input type=\"text\" id=\"variable\" name=\"variable\" value=\"".get_random_variable()."\" class=\"must\" title=\"Fill with variable code.\" />
+							  	<input type=\"text\" id=\"variable\" name=\"variable\" value=\"".$this->config->item('service_code').":".get_random_variable()."\" class=\"must\" title=\"Fill with variable code.\" />
 						  	</div>
 					  	</div>";
 		          	break;

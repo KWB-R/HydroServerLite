@@ -1,13 +1,13 @@
 <?php $this->load->view('header'); ?>
 
 		<p>
-		The HydroServer Lite Interactive Web Client is an online software tool that helps store, organize, and publish data provided by citizen scientists.
+		The HydroServer Lite Web Services API provide access to scientific data from the ODM database on this server.
 		</p>
 		<p>
-What are citizen scientists? They can be anyone who collects and shares scientific data with professional scientists to achieve common goals.
+You can connect to the web services with HydroDesktop, HydroExcel and  QGIS software.
 		</p>
 		<p>
-Once you are a registered user, you will be able to login and upload your own data into our database to provide valuable input into the research being done in your area as well as around the world. 
+Programmers can use Python, R or other programming language to automate the data retrieval.
 		</p>
 		<br />
 		<div id="base_info">
@@ -15,7 +15,15 @@ Once you are a registered user, you will be able to login and upload your own da
 			    <label class="info_label"><a href="<?php echo 'index.php/test';?>" class="info_link">REST Service Test</a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;You can perform tests on all of the methods in Hydrodata Server on this page. In this case the test for REST Service.
+						&nbsp;You can perform tests on all of the WaterML web service methods on this page. In this case the test for REST Service.
+					</div>
+				</div> 
+			</div>
+			<div class="info_container">
+			    <label class="info_label"><a href="<?php echo 'index.php/cuahsi_1_1.asmx?WSDL';?>" class="info_link">SOAP Service WSDL</a></label>
+				<div class="info_content">
+					<div class="link_desc">
+						&nbsp;copy the link to HydroDesktop: <strong><?=base_url()?>index.php/cuahsi_1_1.asmx?WSDL</strong>
 					</div>
 				</div> 
 			</div>
@@ -23,7 +31,7 @@ Once you are a registered user, you will be able to login and upload your own da
 			    <label class="info_label"><a href="<?php echo 'index.php/cuahsi_1_1.asmx';?>" class="info_link">SOAP Web Service</a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;Hydroserver soap service page.
+						&nbsp;Hydroserver SOAP service test page.
 					</div>
 				</div> 
 			</div>
