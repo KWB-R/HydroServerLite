@@ -755,7 +755,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         </tr>
         <tr>
           <td colspan="4" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddVariableButton;?>" class="button" />
-		<input type="button" id="resetButton" class="button" value='<?php echo $Cancel?>' /></div></td>
+		<input type="button" id="resetButton" class="button" value="<?php echo $Cancel?>" /></div></td>
           </tr>
       </table>
     </FORM></p>
