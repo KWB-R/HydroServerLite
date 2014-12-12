@@ -6,8 +6,8 @@ and then shows the english phrase if there is no translated term yet
 <?php
 	//Connects to the database
 	$mysqlserver="worldwater.byu.edu";
-	$mysqlusername="WWO_Admin";
-	$mysqlpassword="isaiah4118";
+	$mysqlusername="langreader";
+	$mysqlpassword="readHSLlang@9";
 	$error=0;
 	$link=mysqli_connect($mysqlserver, $mysqlusername, $mysqlpassword) or $error=1;
 
