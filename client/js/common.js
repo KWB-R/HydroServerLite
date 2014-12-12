@@ -12,8 +12,11 @@ jQuery.browser = {};
 })();
 
 $( document ).ready(function() {
-  $(document.body).on("click", '#langChange' ,function() {
-  $.post( './changeLang.php',{lang:$(this).text()}).done(function( data ) {
+	
+	var exitLang = 	$("#existingLanguage").text();
+	$('#langChange option[value="'+exitLang+'"]').attr("selected",true);
+  $(document.body).on("change", '#langChange' ,function() {
+  $.post( './changeLang.php',{lang:$(this).val()}).done(function( data ) {
 	  if (data == "langChanged")
 	  {
 	  //Check URL for existing GET Parameters
@@ -23,7 +26,7 @@ $( document ).ready(function() {
 		extra = document.URL.split("?")[1];
 		extra = extra.replace("langChang=1&&","");
 	  }
-	
+		
 		window.location = "?langChang=1&&" + extra;
 	  }
 	  else
@@ -32,6 +35,5 @@ $( document ).ready(function() {
 		return false;  
 	  }
   });
-
 
 });});

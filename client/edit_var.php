@@ -1215,7 +1215,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         <tr>
           <td width="175" valign="top">&nbsp;</td>
           <!--<td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="Save Edits" class="button" /> <input type="button" id="del" name="del" value="Delete Variable" class="button" /></td>-->
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value=<?php echo $SaveEdits; ?> class="button" /> <input type="button" id="del" name="del" value=<?php echo $DeleteVariables; ?> class="button" /></td>
+          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value=<?php echo $SaveEdits; ?> class="button" /> <input type="button" id="del" name="del" value="<?php echo $DeleteVariables; ?>" class="button" /></td>
         </tr>
      
       </table>

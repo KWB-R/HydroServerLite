@@ -25,14 +25,15 @@
 	
 	$lang_code = $lang;	
 	
-	//A check to see if the file is within 4 hours? and existing. 
-	
-	// Send a query to the server to get a view for that $lang_code
-	
-	//Build the file with all the vars making sure if var for that lang does not exist, english takes over
-	
-	//Include that file and end the script. However if any errors occur, continue the script. 
-	
+	include("download_terms.php");
+	$filePath = "languages/".$lang_code.".php";
+	if(file_exists($filePath))
+	{
+		include($filePath);
+	}
+	else
+	{
+	$lang_code="en";
 	if (isset($urlExtraName))
 	{
 
@@ -54,7 +55,7 @@
 	}
 	$page_text = $urlAddon."languages/" . $lang_code . "/" . $lang_file;
 	$common_text = $urlAddon."languages/" . $lang_code . "/_common_text.php";
-		
+	
 	//Check If files exist before opening
 
 if (file_exists($page_text))
@@ -63,4 +64,7 @@ if (file_exists($page_text))
 if (file_exists($common_text)){
 	include_once($common_text);
 }
+	
+	}
+	
 ?>
