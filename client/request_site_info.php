@@ -43,9 +43,21 @@ $result_esite = transQuery($sql_esite,0,1);
 		$CountySQL = $row["County"];
 		//$Comments = $row["Comments"];
 		$CommentsSQL = $row["Comments"];
+		
+		//inserted by Jeremy Dec. 13, 2014
+		$siteID_numberSQL = $row["SiteID"];
+		//end of addition
+		
 	};
 
 $option_block_esite .= "<tr>
+		<td width='93'><strong>Site ID:</strong></td>
+		  <td>
+		  <font size='4' color='black'>$siteID_numberSQL</font>
+		  </td>		 
+		</tr>
+		<td>&nbsp;</td>				
+		<tr>
        	  <td width='93'><strong>$SiteName</strong></td>
           <td width='557'><input type='text' id='SiteName' name='SiteName' value='$SiteNameSQL' size='20' maxlength='200' onKeyUp='GetSiteName()'/>*&nbsp;<span class='em'>$ExSiteName</span></td>
         </tr>

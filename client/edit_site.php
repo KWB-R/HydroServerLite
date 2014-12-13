@@ -29,30 +29,7 @@ $result = transQuery($sql,0,1);
 		}
 	}
 }
-$sql0 ="Select * FROM sites";
 
-//site ID query. Edited by Fowler Nov. 25, 2014
-$result0 = transQuery($sql0,0,1);
-	if (count($result0) != 0) {
-		$msg = "<span class='em'> $NoSourceNames </span>";
-		print_r(howdy);
-		print_r($msg);
-
-	}else{
-	print_r($siteid);
-	foreach ($result0 as $row0) {
-		
-		$siteid = $row0["ID"];
-		$site_id_name = $row0["Organization"];
-
-		if ($site_id_name==$default_source){
-			$option_block .= "<option selected='selected' value=$sourceid>$sourcename</option>";
-
-		}else{
-			$option_block .= "<option value=$sourceid>$sourcename</option>";
-		}
-	}
-}
 
 
 
