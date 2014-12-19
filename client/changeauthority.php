@@ -30,7 +30,7 @@ if (count($result) < 1) {
 		$option_block .= "<option value=$users>$users</option>";
 	}
 }
-$Admin_notification = "As an Administrator you have all of the user privileges except removing or changing the password of another Administrator once they are added. ";
+$Admin_notification = "As an Administrator you have all of the user privileges, however, once a user is changed from a student or teacher to administrator you will no longer be able to remove or change their profile.";
 
 HTML_Render_Head();
 

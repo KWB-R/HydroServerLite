@@ -68,7 +68,7 @@ elseif (isStudent()){
         </tr>
         <tr>
           <td valign="top"><strong><!--New Password:--><?php echo $NewPassword;?></strong></td>
-          <td valign="top"><input type="text" name="password" size="25" maxlength="25" />*</td>
+          <td valign="top"><input type="text" name="password" size="16" maxlength="25" />*</td>
         </tr>
         <tr>
           <td valign="top">&nbsp;</td>

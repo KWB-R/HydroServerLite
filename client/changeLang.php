@@ -6,14 +6,12 @@ if (!isset($_SESSION))
 }
 
 
-$lang = "en";
+$lang = "English";
 
-if ($_POST["lang"]):
-	switch ($_POST["lang"]):
-		case "English":$lang="en";break;
-		case "Spanish":$lang="es";break;
-	endswitch;
-endif;
+if(isset($_POST['lang']))
+{
+	$lang=$_POST['lang'];	
+}
 
 $_SESSION['lang']=$lang;
 

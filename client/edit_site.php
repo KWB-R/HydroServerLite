@@ -30,6 +30,9 @@ $result = transQuery($sql,0,1);
 	}
 }
 
+
+
+
 //add the SiteType options
 $sql2 ="Select * FROM sitetypecv";
 

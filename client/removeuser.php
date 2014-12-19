@@ -27,7 +27,7 @@ if (isAdmin()){
 		$option_block .= "<option value=$users>$users</option>";
 		}
 	}
-	$Admin_notification = "As an Administrator you have all of the user privileges except removing or changing the password of another Administrator once they are added.  ";
+	$Admin_notification = "As an Administrator you have all of the user privileges except removing or changing the profile of another Administrator once they are added.  ";
 }
 elseif (isTeacher()){
 	//select the users
