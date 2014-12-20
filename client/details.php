@@ -598,7 +598,7 @@ function plot_chart()
 {
 
 var unit_yaxis="unit";
-//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
 if (varid != -1)
 {
 $.ajax({
@@ -1273,17 +1273,18 @@ $query1 .= " WHERE SiteID=".$siteid;
 $result1 = mysql_query($query1) or die("SQL Error 1: " . mysql_error());
 
 
-if(mysql_num_rows($result1)<1)
-{
+if(mysql_num_rows($result1)<1) {
 
-echo("<br><br>  $NoImages  <a href='edit_site.php'> $ClickHere </a>");	
-}
+	if(isLoggedIn()) {
+		echo("<br><br>  $NoImages  <a href='edit_site.php'> $ClickHere </a>");	
+		}
+	else {	
+		echo("<br><bf> $NoImages");
+	}
 
-else
-{
-
-$row1 = mysql_fetch_array($result1, MYSQL_ASSOC);
-echo("<br><br><img src='imagesite/".$row1['picname']."' width='368' height='250'>");
+} else {
+	$row1 = mysql_fetch_array($result1, MYSQL_ASSOC);
+	echo("<br><br><img src='imagesite/".$row1['picname']."' width='368' height='250'>");
 }
 
 

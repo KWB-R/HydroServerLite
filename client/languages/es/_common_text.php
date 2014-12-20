@@ -22,6 +22,7 @@
 	$ChangePassword = "Cambiar Contraseña";
 	$ChangeUserAuthority = "Cambiar la entidad de un usuario";
 	$ChangeUserPassword = "Cambiar la contraseña de un usuario";
+	$ChangeYourPassword = "Cambiar su contraseña";
 	$Citation = "Cita:";
 	$City = "Ciudad:";
 	$Comments = "Comentarios:";
@@ -74,6 +75,7 @@
 	$MethodName = "Nombre del Método :";
 	$NewAuthority = "Nueva Entidad:";
 	$NewPassword = "Nueva Contraseña:";
+	$NewPassword1 = "Confirmar Contraseña:";
 	$NewSampleMedium = "Nuevo Muestra Medio:";
 	$NewSpeciation = "Nueva Especiación:";
 	$NewVarName = "Nuevo Nombre de la Variable:";

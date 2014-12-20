@@ -1,5 +1,5 @@
 // JavaScript created by Rex Burch 
-//Further edits to make it work : Rohit Khattar : 9/18/2014
+
 
 //Take the first letter from the first name provided
 
@@ -7,11 +7,11 @@ function GetFirstLetter(){
 
 	var newLtr="";
 
-	newLtr = $("#firstname").val().substr(0,1); // "R" from Rex
+	newLtr = document.newuser.firstname.value.substr(0,1); // "R" from Rex
 	
 	var newFirst = newLtr.toLowerCase(); // becomes "r"
-
-	$("#username").val(newFirst) ; //output current result, which is "r"
+	
+	return newFirst;
 }
 
 
@@ -19,15 +19,17 @@ function GetFirstLetter(){
 
 function GetLastName(){
 
-	var FirstPiece="";
+	var FirstPiece=GetFirstLetter();
 	
 	var lastN="";
-
-	FirstPiece = $("#username").val();
-
-	lastN = $("#lastname").val(); // "Burch"
+	
+	lastN = document.newuser.lastname.value; // "Burch"
 	
 	var newLast = lastN.toLowerCase(); // becomes "burch"
+	var newUN = FirstPiece + newLast;
 	
-	$("#username").val(FirstPiece + newLast); //output combined results, which would be "rburch"
+	if (document.newuser.username.value !=newUN)
+	{
+	document.newuser.username.value = newUN; //output combined results, which would be "rburch"
+	}
 }

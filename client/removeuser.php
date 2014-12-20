@@ -6,6 +6,11 @@ require_once 'authorization_check.php';
 //All queries go through a translator. 
 require_once 'DBTranslator.php';
 
+//These variables are for the notification about their respective privileges.
+$Admin_notification = "";
+$Teacher_notification = "";
+
+$option_block="";
 if (isset($_POST['username'])) {
 if ((!$_POST['username'])) {
 	header("Location: changeauthority.php");
@@ -32,6 +37,7 @@ if (isAdmin()){
 		$option_block .= "<option value=$users>$users</option>";
 		}
 	}
+	$Admin_notification = "As an Administrator you have all of the user privileges except removing or changing the profile of another Administrator once they are added.  ";
 }
 elseif (isTeacher()){
 	//select the users
@@ -45,6 +51,7 @@ elseif (isTeacher()){
 		$option_block .= "<option value=$users>$users</option>";
 		}
 	}
+	$Teacher_notification = "As a Teacher you will not be able to remove another Teacher's profile or change their password once they are added. You will only be able to change the profile and password of a Student.";
 }
 	elseif (isStudent()){
 	header("Location: unauthorized.php");
@@ -77,5 +84,20 @@ elseif (isTeacher()){
      <div class="col-md-3 col-md-offset-9">
      <input type="SUBMIT" name="submit" value=<?php echo $RemoveUser; ?> class="button" style="width:auto" /></div>  
   </FORM>
+    
+			<p><br>
+			</p>
+			<p><br>
+			</p>
+			<p class="em" align="center"><?php echo $Admin_notification;?></p><?php echo "$msg"; ?></p>
+			<p class="em" align="center"><?php echo $Teacher_notification;?></p><?php echo "$msg"; ?></p>
+      <p>&nbsp;</p>
+	  <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+    
 </div>
 <?php HTML_Render_Body_End(); ?>

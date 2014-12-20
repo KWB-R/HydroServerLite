@@ -65,6 +65,9 @@ $route["test"] 										= "cuahsi/test";
 $route["updatecv.php"] 								= "updatecv";
 // end of Test Page routing
 
+// Upload page routing
+$route["upload.php"] 								= "upload";
+
 $route['404_override'] = '';
 
 

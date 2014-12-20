@@ -2,3 +2,12 @@ WaterOneFlow_PHP_2.2.zip
 *~
 .metadata
 .zip
+.DS_Store
+
+application/cache/*
+!application/cache/index.html
+!application/cache/.htaccess
+
+application/logs/*
+!application/logs/index.html
+!application/logs/.htaccess

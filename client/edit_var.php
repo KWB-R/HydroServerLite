@@ -5,7 +5,7 @@ require_once 'internationalize.php';
 //check authority to be here
 require_once 'authorization_check.php';
 
-require_once "_html_parts.php";
+require_once '_html_parts.php';
 	
 	
 // This is an undefined variable; I cannot find it referenced anywhere except
@@ -20,8 +20,10 @@ $default_timesupport = "";
 	
 	echo $CSS_JQStyles;
 	
+	echo $CSS_JQX;
+	
 	echo $JS_JQX;
-
+	
 	
 ?>
 
@@ -119,7 +121,7 @@ var unitsid=0;
 //Default Parameter
 //Can be linked to the config page
 var nodatavalue=-9999;
-var time_support=0;
+//var time_support=0;
 var varmeth="";
 
 	$(document).ready(function(){
@@ -927,7 +929,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         <tr>
           <td valign="top"><strong><?php echo $VariableCode; ?></strong></td>
           <td valign="top">
-         <input type="text" id="var_code" name="VariableCode" value=""  /><span class="required">*</span><span class="hint" title="<?php echo $ArbitraryCode?>">?</span></td>
+         <input type="text" id="var_code" name="VariableCode" value="" size="15" /><span class="required">*</span><span class="hint" title="<?php echo $ArbitraryCode?>">?</span></td>
 
   <td colspan="2" valign="top">&nbsp;</td>
           </tr>
@@ -1213,7 +1215,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         <tr>
           <td width="175" valign="top">&nbsp;</td>
           <!--<td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="Save Edits" class="button" /> <input type="button" id="del" name="del" value="Delete Variable" class="button" /></td>-->
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value=<?php echo $SaveEdits; ?> class="button" /> <input type="button" id="del" name="del" value=<?php echo $DeleteVariables; ?> class="button" /></td>
+          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value=<?php echo $SaveEdits; ?> class="button" /> <input type="button" id="del" name="del" value="<?php echo $DeleteVariables; ?>" class="button" /></td>
         </tr>
      
       </table>
@@ -1621,7 +1623,7 @@ var f_cat=$('#gc').jqxDropDownList('getSelectedItem').label;
 
 	$.ajax({
 	type: "POST",
-	url: "do_edit_variable.php?varcode="+f_vc+"&varname="+f_vn+"&sp="+f_sp+"&unit="+f_un+"&sm="+f_sm+"&vt="+f_vt+"&isreg="+isreg+"&ts="+time_support+"&tid="+f_tid+"&dt="+f_dt+"&cat="+f_cat+"&nodata="+nodatavalue+"&varid="+$('#varid').val()}).done(function(msg){
+	url: "do_edit_variable.php?varcode="+f_vc+"&varname="+f_vn+"&sp="+f_sp+"&unit="+f_un+"&sm="+f_sm+"&vt="+f_vt+"&isreg="+isreg+"&ts="+$("#tsup").val()+"&tid="+f_tid+"&dt="+f_dt+"&cat="+f_cat+"&nodata="+nodatavalue+"&varid="+$('#varid').val()}).done(function(msg){
 		if(msg==1){
 
 			$("#msg").show(1600);

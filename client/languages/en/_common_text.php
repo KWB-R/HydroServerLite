@@ -17,6 +17,7 @@
 	$ChangePassword = "Change Password";
 	$ChangeUserAuthority = "Change a User's Authority";
 	$ChangeUserPassword = "Change a User's Password";
+	$ChangeYourPassword = "Change Your Password";
 	$Citation = "Citation:";
 	$City = "City:";
 	$Comments = "Comments:";
@@ -69,6 +70,7 @@
 	$MethodName = "Method Name:";
 	$NewAuthority = "New Authority:";
 	$NewPassword = "New Password:";
+	$NewPassword1 = "Confirm Password:";
 	$NewSampleMedium = "New Sample Medium:";
 	$NewSpeciation = "New Speciation:";
 	$NewVarName = "New Variable Name:";

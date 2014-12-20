@@ -13,14 +13,13 @@ $vardef=$_GET['vardef'];
 require_once 'DBTranslator.php';
 
 $sql="SELECT * FROM `samplemediumcv` WHERE Term='$varname'";
-$result = transQuery($sql,1,0);
+$result = transQuery($sql,1,1);
 
 if(count($result)>0)
 //{echo("The Sample Medium already exists. Cannot Add again. Please select it from the drop down list");}
 {echo $TheSampleExists;}
 
 else
-
 {	$sql1="INSERT INTO `samplemediumcv`(`Term`, `Definition`) VALUES ('$varname','$vardef')	";
 	$result1 = transQuery($sql1,1,-1);
 	echo($result1);

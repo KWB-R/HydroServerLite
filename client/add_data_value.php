@@ -23,7 +23,7 @@ $result = transQuery($sql,0,0);
 $num = count($result);
 	if ($num < 1) {
 
-	$msg = "<P><em2> $SorryNoSource </em></p>";
+	$msg = "<P class=em2> $SorryNoSource Please add a source. Data values cannot be added without a source.</p>";
 
 	} else {
 
@@ -45,7 +45,7 @@ $data = transQuery($sql3,0,1);
 $num = count($data);
 	if ($num < 1) {
 
-	$msg3 = "<P><em2>$SorryNoVariable</em></p>";
+	$msg3 = "<P class= em2>$SorryNoVariable Please add a variable. Data values cannot be added without a variable.</p>";
 
 	} else {
 

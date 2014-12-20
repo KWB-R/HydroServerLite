@@ -82,6 +82,7 @@ if (isTeacher() || isAdmin()){
 	echo "<ul>";
 	echo "<li class=\"add_user\"><a href='adduser.php'>Add ".$__User->Capitalized."</a></li>";
 	echo "<li class=\"edit_user\"><a href='changepassword.php'>Change ".$__User->Capitalized."'s Password</a></li>";
+	echo "<li class=\"edit_user\"><a href='change_yourpassword.php'>Change "." Your Password</a></li>";
 	// > admin
 	if (isAdmin())
 		echo "<li class=\"change_authority\"><a href='changeauthority.php'>Change ".$__User->Capitalized."'s Authority</a></li>";
@@ -117,9 +118,31 @@ if (isStudent() || isTeacher() || isAdmin()){
 echo "<li class=\"search\"><a href='view_main.php'>Search Data</a></li>";
 echo "<li class=\"help\"><a href='help.php'>Help Center</a></li>";
 
-if (getRequestedPage() != "/index.php")	{
-	echo "<li class=\"home\"><a href='index.php'>Back to Home</a></li>";
+
+//Check session variable being set or not. 
+
+if (!isset($_SESSION))
+{
+session_start();
 }
+
+if (isset($_SESSION['mainpath']))
+{
+$servicesPath = str_replace("main_config.php","services\\",$_SESSION['mainpath']);
+$servicesPath = str_replace("\\","/",$servicesPath);
+}
+else
+{
+$servicesPath = "../services";
+}
+
+echo "<li class=\"search\"><a href='".$servicesPath."'>Web Services</a></li>";
+
+
+//Commented out because this home button wasn't necessary, or it could be used later for something else...
+//if (getRequestedPage() != "/index.php")	{
+	//echo "<li class=\"home\"><a href='index.php'>Back to Home</a></li>";
+//}
 
 if(isLoggedIn())	{
 	echo "<li class=\"home\"><a href='home.php'>Home</a></li>";

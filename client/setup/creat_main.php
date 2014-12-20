@@ -133,9 +133,19 @@ $singleInstall = "Yes"; //Please Specify either "Yes" or "No". By default this i
 
 if(!$singleInstall)
 {
-//first create the dir. 
+//checking for an existing directory
+$filename = "../../".$_POST['dir'];
+if (!file_exists($filename)){
+//create the dir. 
+
 umask(0000);
-mkdir("../../".$_POST['dir'], 0777) or die ("Unable to Create the directory. Contact Ken Clark and bug him until he fixes it!");
+mkdir("../../".$_POST['dir'], 0777);
+
+}
+else{
+echo "The directory already exists. Please choose a different name.";
+exit;
+}
 
 $fp = fopen("../../".$_POST['dir']."/main_config.php", "w") or die("can't open file");
 

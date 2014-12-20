@@ -19,7 +19,6 @@ $num = count($result);
 	$msg = "<P><em2> $NoSourceIDNames </em></p>";
 	} else {
 	foreach ($result as $row) {
-
 		$sourceid = $row["SourceID"];
 		$sourcename = $row["Organization"];
 if ($sourcename==$default_source)
@@ -47,7 +46,17 @@ $result2 = transQuery($sql2,0,1);
 //add the VerticalDatum options
 $sql3 ="Select Term FROM verticaldatumcv";
 $result3 = transQuery($sql3,0,1);
-
+	//MSL default selection
+	if ((!isset($default_datum))){
+	$default_datum = "MSL";
+	}
+	else {
+	if (empty($default_datum) || $default_datum==""){
+	
+	$default_datum = "MSL";
+	}
+	}
+	
 	if (count($result3) < 1) {
 	$msg = "<P><em2>$NoVerticalDatums</em></p>";
 	} else {
@@ -67,7 +76,15 @@ else
 //add the LatLongDatumID options
 $sql4 ="Select SpatialReferenceID,SRSName FROM spatialreferences";
 $result4 = transQuery($sql4,0,1);
-
+	//WGS84 Default Selection
+	if ((!isset($default_spatial))){
+	$default_spatial = "WGS84";
+	}
+	else{
+	if (empty($default_spatial) || $default_spatial==""){
+	$default_spatial = "WGS84";
+	}
+	}
 	if (count($result4) < 1) {
 	$msg = "<P><em2>$NoVerticalDatums</em></p>";
 	} else {
@@ -75,6 +92,8 @@ $result4 = transQuery($sql4,0,1);
 
 		$srid = $row4["SpatialReferenceID"];
 		$srsname = $row4["SRSName"];
+		
+		
 		if ($srsname==$default_spatial)
 		{
 			$option_block4 .= "<option selected='selected' value=$srid>$srsname</option>";
@@ -308,7 +327,9 @@ HTML_Render_Body_Start(); ?>
   <tr>
     
     <td><input type="SUBMIT" name="submit" value="<?php echo $AddSiteButton;?>" class="button" width="auto"/></td>
-    <td><div id='response'></div></td>
+    <td><div id='response'>
+      <input id="resetButton" type="button" name="resetButton" value="<?php echo $Cancel; ?>" class="button" style="width: auto" />
+    </div></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -321,6 +342,13 @@ HTML_Render_Body_Start(); ?>
    	<?php HTML_Render_Body_End(); ?>
 
 <script>
+
+
+$("#resetButton").click(function() {
+	$("form")[0].reset();
+	 $("html, body").animate({ scrollTop: 0 }, "slow");
+  return false;
+});
 
     $("form").submit(function() {
       //Validate all fields

@@ -27,8 +27,9 @@ echo $JS_Maps;
               <option value="500"><?php echo $FiveHundred; ?></option>
 		</select>
 		<input type="button" onClick="searchLocations()" value="<?php echo $Search; ?>"/>
-            <input type='button' onClick="loadall()" value="<?php echo $ResetSearch; ?>"/>
-            <input type='button' onClick="track_loc()" value="<?php echo $FindSites; ?>"/>
+        <input type='button' onClick="loadall()" value="<?php echo $ResetSearch; ?>"/>
+        <input type='button' onClick="track_loc()" value="<?php echo $FindSites; ?>"/>
+		<input type="checkbox" id="allSitesCheck" onClick="loadall()" value="allSites"><?php echo $AllSites; ?></input>
 		<p class="instruction">
 		<?php echo $SearchDataInst ?>
 		</p>

@@ -57,7 +57,7 @@
 <body background="<?php echo $mainDir; ?>images/bkgrdimage.jpg">
 <table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td colspan="2"><img src="<?php echo $mainDir; ?>images/WebClientBanner.png" width="960" height="200" alt="Adventure Learning Banner" /></td>
+    <td colspan="2"><img src="<?php echo $mainDir; ?>images/WebClientBanner.png" width="960" height="90" alt="Adventure Learning Banner" /></td>
   </tr>
   
   <tr>

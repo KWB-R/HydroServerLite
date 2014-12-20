@@ -259,6 +259,11 @@ $(document).ready(function(){
    	<?php HTML_Render_Body_End(); ?>
 
 <script>
+$("#resetButton").click(function() {
+	$("form")[0].reset();
+	 $("html, body").animate({ scrollTop: 0 }, "slow");
+  return false;
+});
 
 $("#addsource").submit(function(){
 
@@ -276,7 +281,7 @@ $("#addsource").submit(function(){
 	}
 
 	if(($("#SourceLink").val())!=""){
-		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+		var regexp = "/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/";
 		if(!($("#SourceLink").val().match(regexp))){
 			//alert("Invalid url for sourcelink");
 			alert(<?php echo "'".$InvalidSourceLinkURL."'"; ?>);
@@ -297,7 +302,7 @@ $("#addsource").submit(function(){
 	}
 
 	//Phone Validation
-	var regex = /^((\+?1-)?\d\d\d-)?\d\d\d-\d\d\d\d$/;
+	var regex = "/^([+]*([0-9]{1})*[- .(]*([0-9]{3})*[- .)]*[0-9]{3}[- .]*[0-9]{4})+$/";
 	if(!($("#Phone").val().match(regex))){
 		//alert("Invalid phone number");
 		alert(<?php echo "'".$InvalidPhoneNumber."'"; ?>);
@@ -310,7 +315,7 @@ $("#addsource").submit(function(){
 		return false;
 	}
 
-	var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+	var pattern="/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/";
 
 	if(!($("#Email").val().match(pattern))){
 		alert(<?php echo "'".$InvalidEmailAddress."'"; ?>);
@@ -337,7 +342,7 @@ $("#addsource").submit(function(){
 		return false;
 	}
 
-	if(!($("#ZipCode").val().match(/^\d{5}(-\d{4})?$/))){
+	if(!($("#ZipCode").val().match("/^\d{5}(-\d{4})?$/"))){
 		alert(<?php echo "'".$InvalidZipCode."'"; ?>);
 		return false;
 	}
@@ -359,7 +364,7 @@ $("#addsource").submit(function(){
 	}
 
 	if(($("#MetadataLink").val())!=""){
-		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+		var regexp = "/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/";
 			if(!($("#ContactName").val().match(regexp))){
 				alert(<?php echo "'".$InvalidURLMetadata."'"; ?>);
 				return false;

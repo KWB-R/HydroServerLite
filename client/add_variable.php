@@ -22,6 +22,7 @@ echo $JS_JQX;
 echo $JS_Forms;
 
 echo $CSS_Main;
+
 ?>
 
 
@@ -67,7 +68,7 @@ var url="getspec.php";
                 };
                 var dataAdapter = new $.jqx.dataAdapter(source);
 
-                // Create a jqxComboBox
+                // Create a jqxComboBox for Speciation
 $("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "specterm", valueMember: "specdef", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#specdata").bind('select', function (event) {
@@ -112,7 +113,7 @@ var url2="getunittype.php";
                 };
                 var dataAdapter2 = new $.jqx.dataAdapter(source2);
 
-// Create a jqxComboBox for the var unit types
+// Create a jqxComboBox for the var unit types. 
 $("#unittype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter2, displayMember: "unitype", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
 
 $("#unittype").bind('select', function (event) {
@@ -144,7 +145,7 @@ var url3="getunitname.php?type="+item.label;
                 };
                 var dataAdapter3 = new $.jqx.dataAdapter(source3);
 	
-// Create a jqxComboBox for the var unit types
+// Create a jqxComboBox for the var unit types (this is for the units box that shows up once a variable type has been selected
 $("#unit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter3, displayMember: "unit", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
 
 $("#unit").bind('select', function (event) {
@@ -753,7 +754,8 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
           <td colspan="3" valign="top">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="4" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddVariableButton;?>" class="button" /></td>
+          <td colspan="4" valign="top"><input type="SUBMIT" name="submit" value="<?php echo $AddVariableButton;?>" class="button" />
+		<input type="button" id="resetButton" class="button" value="<?php echo $Cancel?>" /></div></td>
           </tr>
       </table>
     </FORM></p>
@@ -762,6 +764,36 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 
 
 <script>
+//Reset function
+
+$('#resetButton').click(function () {
+	$("#add_var")[0].reset();
+	unitsid=0;
+$("#new_spec").hide();
+$("#new_spec1").hide();
+$("#unit").hide();
+$("#unittext").hide();
+$("#newunit").hide();
+$("#smother").hide();
+$("#newunitonly").hide();
+$("#valuetypenewb").hide();
+$("#newvarnameb").hide();
+$("#varname").jqxDropDownList('selectIndex', 0 );
+$("#specdata").jqxDropDownList('selectIndex', 0 );
+$("#unittype").jqxDropDownList('selectIndex', 0 );
+$("#unit").jqxDropDownList('selectIndex', 0 );
+$("#samplemedium").jqxDropDownList('selectIndex', 0 );
+$("#valuetype").jqxDropDownList('selectIndex', 0 );
+$("#isreg").jqxDropDownList('selectIndex', 0 ); 
+$("#timeunit").jqxDropDownList('selectIndex', 0 );
+$("#datatype").jqxDropDownList('selectIndex', 0 );
+$("#gc").jqxDropDownList('selectIndex', 0 );
+$("#jqxWidget").jqxListBox('clearSelection');
+$("#dtdef").val("Please select a data type to view its definition");
+$("#gcdef").val("Please select a category to view its definition");
+ $("html, body").animate({ scrollTop: 0 }, "slow");
+});
+
 
 //Calls a function to validate all fields when the submit button is hit.
 $("form").submit(function(){
@@ -780,7 +812,8 @@ if(($("#var_code").val())==""){
 //Check variable Name
 
 var checkitem = $('#varname').jqxDropDownList('getSelectedItem');
-
+//To prevent the ajax function from submitting
+var Flag=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
 	 alert(<?php echo "'".$SelectVariableName."'"; ?>);
@@ -810,27 +843,13 @@ var checkitem = $('#varname').jqxDropDownList('getSelectedItem');
 		return false;
 	}  
 	
-	
-	//Process the new var name
-	
-	$.ajax({
-  type: "POST",
-  url: "do_add_varname.php?varname="+$("#newvarname").val()+"&vardef="+$("#vardef").val()
-}).done(function( msg ) {
-  if(msg==1)
-  {
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
-	   
+var Flag=1;
    }
+
+   
   
 checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
-
+var Flag2=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
 	alert(<?php echo "'".$SelectSpeciation."'"; ?>);    
@@ -851,24 +870,14 @@ checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
 		alert(<?php echo "'".$EnterDefinitionNewSpeciation."'"; ?>);
 		return false;
 	}  
-	   
-	   $.ajax({
-  type: "POST",
-  url: "do_add_spec.php?varname="+$("#other_spec").val()+"&vardef="+$("#specdef").val()
-}).done(function( msg ) {
-  if(msg==1)
-  {
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
+var Flag2=1; 	
    }
-   
+ 
  
 checkitem = $('#unittype').jqxDropDownList('getSelectedItem');
+//To prevent the ajax function from submitting
+var Flag3=0;
+var Flag4=0;
 
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
@@ -877,8 +886,7 @@ checkitem = $('#unittype').jqxDropDownList('getSelectedItem');
 		return false;    
    }
 
-if ((checkitem != null)&&(checkitem.value!="-1")&&(checkitem.value!="-10")) 
-   
+if ((checkitem != null)&&(checkitem.value!="-1")&&(checkitem.value!="-10"))    
 {
 //If type selected...check if unit selected
 
@@ -889,9 +897,7 @@ if ((unititem == null)||(unititem.value=="-1"))
 	 alert(<?php echo "'".$SelectUnit."'"; ?>);
 		return false;    
    }
-
-
- if(unititem.value=="-10")
+if(unititem.value=="-10")
    {
 	//A new selection...need to process it first so that the entry will be valid
 	
@@ -904,30 +910,9 @@ if ((unititem == null)||(unititem.value=="-1"))
 	 if(($("#new_unit_abb").val())==""){
 		alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
 		return false;
-	}  
-	  //All tests Passed...Write code to inset NEW UNIT 
-	  
-	   $.ajax({
-  type: "POST",
-  url: "do_add_unit.php?varname="+$("#new_unit_name").val()+"&vardef="+$("#new_unit_abb").val()+"&vartype="+checkitem.label
-}).done(function( msg ) {
-  if(msg=="The unit already exists. Cannot Add again. Please select it from the drop down list.")
-  {
-	  alert(msg);
-	  return false;
-  }
-  else
-  {
-	unitsid=msg;
-	 
-  }
- });
-	  
-	  
+	}
+	 	  
    }
-
-
-
 }
    if(checkitem.value=="-10")
    {
@@ -948,37 +933,16 @@ if ((unititem == null)||(unititem.value=="-1"))
 		alert(<?php echo "'".$EnterTypeNewUnit."'"; ?>);
 		return false;
 	}  
-	   
-
-//add a new unit inlucing a new data type
-
-   $.ajax({
-  type: "POST",
-  url: "do_add_unit.php?varname="+$("#new_unit_name").val()+"&vardef="+$("#new_unit_abb").val()+"&vartype="+$("#new_unit_type").val()
-}).done(function( msg ) {
-	var myMsg = new Array();
-	myMsg = msg.split("|");
-	
-	if(myMsg[0] == "false") //the first part of the message is true/false whether we succeeded or not.  =="The unit already exists. Cannot Add again. Please select it from the drop down list.")
-	  {
-		  alert(myMsg[1]);
-		  return false;
-	  }
-	  else
-	  {
-		unitsid=msg;
-	  }
- });
-	  
+var Flag3=1;   
+var Flag4=1;	 
 
    }
-	
+ 
 //Check for Sample Medium
 
 
-
 checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
-
+var Flag5=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
 	 alert(<?php echo "'".$SelectMedium."'"; ?>);
@@ -996,42 +960,26 @@ checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
 	}
 	
 	if(($("#smnew").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
-{
-
+	{
 		alert(<?php echo "'".$InvalidSampleMedium."'"; ?>);
 		return false;
 	}
 
 	 
 	 if((($("#smdef").val())=="")||(($("#smdef").val())=="Please enter a definition")){
-
 		alert(<?php echo "'".$EnterDefinitionNewSampleMedium."'"; ?>);
 		return false;
 	}  
-	
-	   
-	   $.ajax({
-  type: "POST",
-  url: "do_add_sm.php?varname="+$("#smnew").val()+"&vardef="+$("#smdef").val()
-}).done(function( msg ) {
-  if(msg==1)
-  {
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
-	   
+var Flag5=1;	 
    }
+  
 //End Check SAMPLE MEDIUM
 
 //Check Value type
 
 
 checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
-
+var Flag6=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
 	 alert(<?php echo "'".$SelectValueType."'"; ?>);
@@ -1048,8 +996,7 @@ checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
 		return false;
 	}
 	
-	if(($("#valuetypenew").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
-{
+	if(($("#valuetypenew").val().search("^[a-zA-Z0-9_.-]*$"))==-1){
 		alert(<?php echo "'".$InvalidValueType."'"; ?>);
 		return false;
 	}
@@ -1058,25 +1005,10 @@ checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
 	 if((($("#vtdef").val())=="")||(($("#vtdef").val())=="Please enter a definition")){
 		alert(<?php echo "'".$EnterDefinitionNewValueType."'";?>);
 		return false;
-	} 
-	
-	 
-	   $.ajax({
-  type: "POST",
-  url: "do_add_vt.php?varname="+$("#valuetypenew").val()+"&vardef="+$("#vtdef").val()
-}).done(function( msg ) {
-  if(msg==1)
-  {
-  }
-  else
-  {
-	  alert(msg);
-	  return false;  
-  }
- });
-	 
-	   
+	}  
+var Flag6=1;	 
    }
+     
 
 //End Check Value type
 
@@ -1167,6 +1099,108 @@ if(varmeth==""){
 	alert(<?php echo "'".$SelectOneMethod."'"; ?>);
 	return false;
 	}
+	
+if(Flag==1){
+//Process the new var name
+	
+	$.ajax({
+  type: "POST",
+  url: "do_add_varname.php?varname="+$("#newvarname").val()+"&vardef="+$("#vardef").val()
+}).done(function( msg ) {
+  if(msg==1)
+  {
+  }
+  else
+  {
+	  alert(msg);
+	  return false;  
+  }
+ });	
+}
+if(Flag2==1){
+	//Process new speciation name
+$.ajax({
+  type: "POST",
+  url: "do_add_spec.php?varname="+$("#other_spec").val()+"&vardef="+$("#specdef").val()
+}).done(function( msg ) {
+  if(msg==1)
+  {
+  }
+  else
+  {
+	  alert(msg);
+	  return false;  
+  }
+ });	
+}
+if(Flag3==1){
+//All tests Passed...Write code to insert NEW UNIT 
+	  $.ajax({
+  type: "POST",
+  url: "do_add_unit.php?varname="+$("#new_unit_name").val()+"&vardef="+$("#new_unit_abb").val()+"&vartype="+checkitem.label
+}).done(function( msg ) {
+  if(msg=="The unit already exists. Cannot Add again. Please select it from the drop down list.")
+  {
+	  alert(msg);
+	  return false;
+  }
+  else
+  {
+	unitsid=msg;
+	 
+  }
+ });	
+}
+if(Flag4==1){
+//add a new unit inlucing a new data type
+
+   $.ajax({
+  type: "POST",
+  url: "do_add_unit.php?varname="+$("#new_unit_name").val()+"&vardef="+$("#new_unit_abb").val()+"&vartype="+$("#new_unit_type").val()
+}).done(function( msg ) {
+	var myMsg = new Array();
+	myMsg = msg.split("|");
+	
+	if(myMsg[0] == "false") //the first part of the message is true/false whether we succeeded or not.  =="The unit already exists. Cannot Add again. Please select it from the drop down list.")
+	  {
+		  alert(myMsg[1]);
+		  return false;
+	  }
+	  else
+	  {
+		unitsid=msg;
+	  }
+ });
+}
+if(Flag5==1){
+$.ajax({
+  type: "POST",
+  url: "do_add_sm.php?varname="+$("#smnew").val()+"&vardef="+$("#smdef").val()
+}).done(function( msg ) {
+  if(msg==1)
+  {
+  }
+  else
+  {
+	  alert(msg);
+	  return false;  
+  }
+ });	
+}
+if(Flag6==1){
+$.ajax({
+  type: "POST",
+  url: "do_add_vt.php?varname="+$("#valuetypenew").val()+"&vardef="+$("#vtdef").val()}).done(function( msg ) {
+  if(msg==1)
+  {
+  }
+  else
+  {
+	  alert(msg);
+	  return false;  
+  }
+ });	
+}
 
 var isreg=$('#isreg').jqxDropDownList('getSelectedItem').value;
 var f_tid=$('#timeunit').jqxDropDownList('getSelectedItem').value;

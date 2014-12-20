@@ -24,6 +24,16 @@
 	}
 	
 	$lang_code = $lang;	
+	
+	include("download_terms.php");
+	$filePath = "languages/".$lang_code.".php";
+	if(file_exists($filePath))
+	{
+		include($filePath);
+	}
+	else
+	{
+	$lang_code="en";
 	if (isset($urlExtraName))
 	{
 
@@ -45,13 +55,9 @@
 	}
 	$page_text = $urlAddon."languages/" . $lang_code . "/" . $lang_file;
 	$common_text = $urlAddon."languages/" . $lang_code . "/_common_text.php";
+	
 		
-	//Check If files exist before opening
-
-if (file_exists($page_text))
-	{
-	include($page_text);}
-if (file_exists($common_text)){
-	include_once($common_text);
-}
+	
+	}
+	
 ?>

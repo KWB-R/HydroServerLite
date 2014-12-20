@@ -12,6 +12,9 @@ require_once '_html_parts.php';
 
 $option_block = "";
 $option_block3 = "";
+$msg = "";
+$msg3= "";
+$msg4= "";
 
 //add the SourceID's
 $sql ="Select distinct SourceID, Organization FROM seriescatalog";
@@ -21,7 +24,7 @@ $result = transQuery($sql,0,0);
 $num = count($result);
 	if ($num < 1) {
 
-	$msg = "<P><em2> $SorryNoSource </em></p>";
+	$msg = "<P class= em2> $SorryNoSource Please add a source. Data values cannot be added without a source.</p>";
 
 	} else {
 
@@ -43,7 +46,7 @@ $data = transQuery($sql3,0,1);
 $num = count($data);
 	if ($num < 1) {
 
-   $msg3 = "<P><em2>$SorryNoVariable</em></p>";
+   $msg3 = "<P class=em2>$SorryNoVariable Please add a variable. Data values cannot be added without a source.</em></p>";
 
 	} else {
 
@@ -394,7 +397,7 @@ xmlhttp.send();
 }
 </script>
 	<?php HTML_Render_Body_Start(); ?>
-<br /><p class="em" align="right"><span class="requiredInstructions"><?php echo $RequiredFieldsAsterisk; ?></span></p>
+<br /><p class="em" align="right"><span class="requiredInstructions"><?php echo $RequiredFieldsAsterisk; ?></span></p><?php echo "$msg"; ?>&nbsp;<?php echo "$msg3"; ?>&nbsp;<?php echo "$msg4"; ?>
    <h1><?php echo $EnterMultipleValuesManually;?></h1>
       <p><?php echo $EnterDataTableAppears;?>
 	<div id="statusmsg"><p class=em2><?php echo $DataEnteredSuccessfully;?>

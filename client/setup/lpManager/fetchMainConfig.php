@@ -1,4 +1,7 @@
 <?php
+
+require_once("../main_config.php");
+/*
 session_start();
 if ($_SESSION['mainpath'])
 {
@@ -15,6 +18,6 @@ require_once($str);
 else
 {
 require_once("main_config.php");
-}
+}*/
 
 ?>
