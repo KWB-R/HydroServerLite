@@ -31,8 +31,6 @@ if (!isLoggedIn()){
 		exit;	
 	}
 }
-
-
 function addError($mess){
 	$errors = isset($_SESSION["Errors"])?$_SESSION["Errors"]: array();
 	$errors[] = $mess;

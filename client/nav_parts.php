@@ -4,13 +4,6 @@
 		The menu dynamically fills based on the permissions of the
 		user based on their role.
  ####################################################### */
-require_once('authorization_check.php'); 
-global $__User;
-global $__Source;
-global $__Site;
-global $__Method;
-global $__Variable;
-global $__Value;
 
 $menuName = '';
 if (isAdmin())
@@ -35,7 +28,7 @@ echo '       <div class="navbar navbar-default" role="navigation">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <span class="visible-xs navbar-brand">'.$menuName.' Navigation</span>
+          <span class="visible-xs navbar-brand">'.getText($menuName.'Navigation').'</span>
         </div>
 		
 		   <div class="navbar-collapse collapse sidebar-navbar-collapse" id="navbarCollapse">
@@ -45,9 +38,9 @@ echo '       <div class="navbar navbar-default" role="navigation">
 if (isAdmin()){
 	echo '<li class=\"dropdown\">
 	
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Site Management<b class="caret"></b></a>';
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.getText('SiteManagement').'<b class="caret"></b></a>';
 	echo "<ul class=\"dropdown-menu\">";
-	echo "<li class=\"versions\"><a href='versions.php'>Versions</a>";
+	echo "<li class=\"versions\"><a href='versions.php'>".getText('Versions')."</a>";
 	//echo "<li class=\"aliases\"><a href='edit_aliases.php'>Aliases</a>";
 	echo "</ul>";
 	echo "</li>";
@@ -55,57 +48,57 @@ if (isAdmin()){
 
 // teacher admin
 if (isTeacher() || isAdmin()){
-	echo "<li><h2>Database Management</h2>";
+	echo "<li><h2>".getText('DatabaseManagement')."</h2>";
 	echo "<ul class=\"dropdown-menu\">";
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"add_source\"><a href='add_source.php'>Add a ".$__Source->Capitalized."</a>";
-		echo "<li class=\"edit_source\"><a href='change_source.php'>Change a ".$__Source->Capitalized."</a></li>";
+		echo "<li class=\"add_source\"><a href='add_source.php'>".getText('AddSource')."</a>";
+		echo "<li class=\"edit_source\"><a href='change_source.php'>".getText('ChangeSource')."</a></li>";
 	}
 	// > teacher admin
-	echo "<li class=\"add_site\"><a href='add_site.php'>Add a ".$__Site->Capitalized."</a></li>";
+	echo "<li class=\"add_site\"><a href='add_site.php'>".getText('AddSite')."</a></li>";
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"edit_site\"><a href='edit_site.php'>Change a ".$__Site->Capitalized."</a></li>";
-		echo "<li class=\"add_variable\"><a href='add_variable.php'>Add a ".$__Variable->Capitalized."</a></li>";
-		echo "<li class=\"edit_variable\"><a href='edit_var.php'>Change a ".$__Variable->Capitalized."</a></li>";
-		echo "<li class=\"add_method\"><a href='add_method.php'>Add a ".$__Method->Capitalized."</a></li>";
-		echo "<li class=\"edit_method\"><a href='change_method.php'>Change a ".$__Method->Capitalized."</a></li>";
+		echo "<li class=\"edit_site\"><a href='edit_site.php'>".getText('ChangeSite')."</a></li>";
+		echo "<li class=\"add_variable\"><a href='add_variable.php'>".getText('AddVariable')."</a></li>";
+		echo "<li class=\"edit_variable\"><a href='edit_var.php'>".getText('ChangeVariable')."</a></li>";
+		echo "<li class=\"add_method\"><a href='add_method.php'>".getText('AddMethod')."</a></li>";
+		echo "<li class=\"edit_method\"><a href='change_method.php'>".getText('ChangeMethod')."</a></li>";
 	}
 	echo "</ul>";
 	echo "</li>";
 	// teacher admin
 	echo "<li>";
 	//#type $__User Alias
-	echo "<h2>".$__User->PluralCapitalized."</h2>";
+	echo "<h2>".getText('Users')."</h2>";
 
 	echo "<ul>";
-	echo "<li class=\"add_user\"><a href='adduser.php'>Add ".$__User->Capitalized."</a></li>";
-	echo "<li class=\"edit_user\"><a href='changepassword.php'>Change ".$__User->Capitalized."'s Password</a></li>";
-	echo "<li class=\"edit_user\"><a href='change_yourpassword.php'>Change "." Your Password</a></li>";
+	echo "<li class=\"add_user\"><a href='adduser.php'>".getText('AddUser')."</a></li>";
+	echo "<li class=\"edit_user\"><a href='changepassword.php'>".getText('ChangePassword')."</a></li>";
+	echo "<li class=\"edit_user\"><a href='change_yourpassword.php'>".getText('ChangeYourPassword')."</a></li>";
 	// > admin
 	if (isAdmin())
-		echo "<li class=\"change_authority\"><a href='changeauthority.php'>Change ".$__User->Capitalized."'s Authority</a></li>";
+		echo "<li class=\"change_authority\"><a href='changeauthority.php'".getText('ChangeAuthorityButton')."</a></li>";
 
 	// > teacher admin
-	echo "<li class=\"remove_user\"><a href='removeuser.php'>Remove ".$__User->Capitalized."</a></li>";
+	echo "<li class=\"remove_user\"><a href='removeuser.php'>".getText('RemoveUser')."</a></li>";
 	echo"</ul>";
 	echo"</li>";
 }
 if (isStudent() || isTeacher() || isAdmin()){
 	// student teacher
 	echo "<li>";
-	echo "<h2>Add Data</h2>";
+	echo "<h2>".getText('AddData')."</h2>";
 	echo "<ul>";
-	echo "<li class=\"add_single_value\"><a href='add_data_value.php'>Add a Single ".$__Value->Capitalized."</a></li>";
-	echo "<li class=\"add_multiple_value\"><a href='add_multiple_values.php'>Add Multiple ".$__Value->PluralCapitalized."</a></li>";
+	echo "<li class=\"add_single_value\"><a href='add_data_value.php'>".getText('AddSingleValue')."</a></li>";
+	echo "<li class=\"add_multiple_value\"><a href='add_multiple_values.php'>".getText('AddMultipleValues')."</a></li>";
 	if (!isset($_SESSION["importFilePath"]))
 	{
-		echo "<li class=\"import_data\"><a href='import_data_file.php'>Import Data File</a></li>";
+		echo "<li class=\"import_data\"><a href='import_data_file.php'>".getText('ImportDataFiles')."</a></li>";
 	}else
 	{
-		echo "<li class=\"import_data\"><a href='import_data_file.php'>Import Different Data File</a></li>";
-		echo "<li class=\"import_data\"><a href='importWizard.php'>Return to Import Wizard</a></li>";
+		echo "<li class=\"import_data\"><a href='import_data_file.php'>".getText('ImportDataFiles')."</a></li>";
+		echo "<li class=\"import_data\"><a href='importWizard.php'>".getText('ImportDataFiles')."</a></li>";
 	}
 	
 	echo "</ul>";
@@ -115,8 +108,8 @@ if (isStudent() || isTeacher() || isAdmin()){
 // [all]
 // public student teacher admin [all]
 
-echo "<li class=\"search\"><a href='view_main.php'>Search Data</a></li>";
-echo "<li class=\"help\"><a href='help.php'>Help Center</a></li>";
+echo "<li class=\"search\"><a href='view_main.php'>".getText('SearchData')."</a></li>";
+echo "<li class=\"help\"><a href='help.php'>".getText('Help')."</a></li>";
 
 
 //Check session variable being set or not. 
@@ -136,7 +129,7 @@ else
 $servicesPath = "../services";
 }
 
-echo "<li class=\"search\"><a href='".$servicesPath."'>Web Services</a></li>";
+echo "<li class=\"search\"><a href='".$servicesPath."'>".getText('WebServices')."</a></li>";
 
 
 //Commented out because this home button wasn't necessary, or it could be used later for something else...
@@ -145,15 +138,15 @@ echo "<li class=\"search\"><a href='".$servicesPath."'>Web Services</a></li>";
 //}
 
 if(isLoggedIn())	{
-	echo "<li class=\"home\"><a href='home.php'>Home</a></li>";
-	echo "<li class=\"login\"><a href='login_handler.php?logout=-1'>Logout</a></li>";
+	echo "<li class=\"home\"><a href='home.php'>".getText('WebServices')."</a></li>";
+	echo "<li class=\"login\"><a href='login_handler.php?logout=-1'>".getText('Logout')."</a></li>";
 }else{
-	echo "<li class=\"login\"><a href='#' onclick='showLogin()';>Login</a></li>";
+	echo "<li class=\"login\"><a href='#' onclick='showLogin()';>".getText('Login')."</a></li>";
 }
 
 
 
-//echo "<img class=\"footer\" src=\"images/nav-footer.jpg\" />";
+//echo "<img class=\"footer\" src=\"assets/images/nav-footer.jpg\" />";
 echo "</ul>
         </div></div></div>";
 

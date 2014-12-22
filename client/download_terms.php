@@ -16,7 +16,7 @@ and then shows the english phrase if there is no translated term yet
 	if(!$error)
 	{//check which is the session language
 	
-	$language = $lang_code;
+	$language = "English";
 	//language file path
 	$file_path = "languages/" .$language. ".php";
 	//Check if file exists
@@ -44,9 +44,9 @@ and then shows the english phrase if there is no translated term yet
 	fwrite($lang_file, $new_file);
 	while($row = mysqli_fetch_array($terms)) {
 			if ($row[$language] != "")
-				fwrite($lang_file,$row['php_variable']. " = " . '"' . addslashes($row[$language]) . '"' . ";" . "\n ");
+				fwrite($lang_file,'$lang[\''.$row['php_variable']. "] = " . '"' . addslashes($row[$language]) . '"' . ";" . "\n ");
 			else
-				fwrite($lang_file,$row['php_variable']. " = " . '"' . addslashes($row['english_phrase']) . '"' . ";" . "\n ");
+				fwrite($lang_file,'$lang[\''.$row['php_variable']. "'] = " . '"' . addslashes($row['english_phrase']) . '"' . ";" . "\n ");
 		}
 		$last_line = "?>";
 	fwrite($lang_file, $last_line);
@@ -62,9 +62,9 @@ and then shows the english phrase if there is no translated term yet
 	fwrite($lang_file, $new_file);
 	while($row = mysqli_fetch_array($terms)) {
 			if ($row[$language] != "")
-				fwrite($lang_file,$row['php_variable']. " = " . '"' . addslashes($row[$language]) . '"' . ";" . "\n ");
+				fwrite($lang_file,'$lang[\''.$row['php_variable']. "'] = " . '"' . addslashes($row[$language]) . '"' . ";" . "\n ");
 			else
-				fwrite($lang_file,$row['php_variable']. " = " . '"' . addslashes($row['english_phrase']) . '"' . ";" . "\n ");
+				fwrite($lang_file,'$lang[\''.$row['php_variable']. "'] = " . '"' . addslashes($row['english_phrase']) . '"' . ";" . "\n ");
 		}
 		$last_line = "?>";
 	fwrite($lang_file, $last_line);
