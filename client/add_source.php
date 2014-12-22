@@ -313,7 +313,7 @@ $("#addsource").submit(function(){
 		alert(<?php echo "'".$EnterEmailAddress."'"; ?>);
 		return false;
 	}
-
+	//Email validation
 	var pattern= /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 
 	if(!($("#Email").val().match(pattern))){
