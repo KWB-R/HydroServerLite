@@ -19,9 +19,6 @@ class Home extends MY_Controller {
 		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		
-		
-		
 		$this->load->view('welcome',$data);
 	}
 }

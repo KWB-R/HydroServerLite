@@ -1,12 +1,12 @@
 <?php
-HTML_Render_Head();
-
+HTML_Render_Head($js_vars);
 echo $CSS_Main;
 echo $JS_JQuery;
 echo $JS_Maps;
 HTML_Render_Body_Start();
 ?>
-<div class='col-md-9' style='height:500px;'>
+<div class='col-md-9'>
+<?php showMsgs();?>
 <div id="mapOuter" style="width:100%; height:500px;">
 	<div id="mapContainer" style="width:100%;">
 		<div id="map" style="width:100%; height:100%;"> </div>
@@ -39,6 +39,6 @@ HTML_Render_Body_Start();
 <script>
 	load();
 </script>
-<?
+<?php
 HTML_Render_Body_End();
 ?>

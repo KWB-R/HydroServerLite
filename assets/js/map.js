@@ -114,9 +114,9 @@ function loadall() {
     clearLocations();
     option_num = 0;
     var markerCount = 0;
-    var searchUrl = 'db_display_all.php';
+    var searchUrl = base_url+"sites/displayAll";
     if (document.getElementById("allSitesCheck").checked) {
-        searchUrl = 'db_display_all.php?all=1';
+        searchUrl = base_url+"sites/displayAll/1";
     }
     downloadUrl(searchUrl, function(data) {
         var xml = parseXml(data);
@@ -216,7 +216,7 @@ function searchLocationsNear(center) {
     option_num = 0;
 
     var radius = document.getElementById('radiusSelect').value;
-    var searchUrl = 'db_search.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
+    var searchUrl = base_url+'sites/siteSearch?lat=' + center.lat() + '&long=' + center.lng() + '&radius=' + radius;
     downloadUrl(searchUrl, function(data) {
         var xml2 = parseXml(data);
         xml = xml2;
@@ -231,7 +231,6 @@ function searchLocationsNear(center) {
             var sitecode = markerNodes[i].getAttribute("sitecode");
             var lat = markerNodes[i].getAttribute("lat");
             var long = markerNodes[i].getAttribute("lng");
-            var distance = parseFloat(markerNodes[i].getAttribute("distance"));
             var latlng = new google.maps.LatLng(
                 parseFloat(markerNodes[i].getAttribute("lat")),
                 parseFloat(markerNodes[i].getAttribute("lng")));
@@ -254,7 +253,7 @@ function searchLocationsNear2(center) {
     clearLocations();
     option_num = 0;
     var radius = 300; //Radius for tracking
-    var searchUrl = 'db_search.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
+    var searchUrl = base_url+'sites/siteSearch?lat=' + center.lat() + '&long=' + center.lng() + '&radius=' + radius;
     downloadUrl(searchUrl, function(data) {
         var xml2 = parseXml(data);
         var markerNodes = xml2.documentElement.getElementsByTagName("marker");
@@ -264,7 +263,6 @@ function searchLocationsNear2(center) {
             var sitecode = markerNodes[i].getAttribute("sitecode");
             var lat = markerNodes[i].getAttribute("lat");
             var long = markerNodes[i].getAttribute("lng");
-            var distance = parseFloat(markerNodes[i].getAttribute("distance"));
             var latlng = new google.maps.LatLng(
                 parseFloat(markerNodes[i].getAttribute("lat")),
                 parseFloat(markerNodes[i].getAttribute("lng")));

@@ -8,7 +8,7 @@ function getImg($name)
 
 
 
-function HTML_Render_Head($PageTitle = ""){
+function HTML_Render_Head($js_vars,$PageTitle = ""){
 	$HeaderAddon = "";
 	global $WebClient;
 	if(isset($PageTitle) && $PageTitle != "") $HeaderAddon = ": ".$PageTitle;	
@@ -22,6 +22,9 @@ function HTML_Render_Head($PageTitle = ""){
 		<title>$WebClient $HeaderAddon</title>
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 		<link rel="bookmark" href="favicon.ico" />
+		<script type="text/javascript">
+		$js_vars
+		</script>
 		
 PageHead;
 }

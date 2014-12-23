@@ -108,7 +108,7 @@ if (isStudent() || isTeacher() || isAdmin()){
 // [all]
 // public student teacher admin [all]
 
-echo "<li class=\"search\"><a href='view_main.php'>".getTxt('SearchData')."</a></li>";
+echo "<li class=\"search\"><a href='".base_url()."index.php/sites'>".getTxt('SearchData')."</a></li>";
 echo "<li class=\"help\"><a href='help.php'>".getTxt('Help')."</a></li>";
 
 
@@ -138,7 +138,7 @@ echo "<li class=\"search\"><a href='".$servicesPath."'>".getTxt('WebServices')."
 //}
 
 if(isLoggedIn())	{
-	echo "<li class=\"home\"><a href='home.php'>".getTxt('WebServices')."</a></li>";
+	echo "<li class=\"home\"><a href='".base_url()."'>".getTxt('Home')."</a></li>";
 	echo "<li class=\"login\"><a href='".site_url("auth/logout")."'>".getTxt('Logout')."</a></li>";
 }else{
 	echo "<li class=\"login\"><a href='#' onclick='showLogin()';>".getTxt('Login')."</a></li>";

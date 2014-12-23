@@ -19,7 +19,7 @@ if (!isset($_SESSION))
 		
 }
 
-HTML_Render_Head();
+HTML_Render_Head($js_vars);
 echo $CSS_Main;
 echo $JS_JQuery;
 echo $JS_Forms;
