@@ -130,6 +130,10 @@ class MY_Controller extends CI_Controller {
 		$this->StyleData['JS_Uploaders'] = $this->assetor->generate('JS_Uploaders');
 		$this->StyleData['JS_ImportData'] = $this->assetor->generate('JS_ImportData');
 		$this->StyleData['JS_DropDown'] = $this->assetor->generate('JS_DropDown');
-
+		
+		//Initializing Javascript Variable for ajax requests. 
+		
+		$this->StyleData['js_vars'] = 'var base_url = "'.base_url().'index.php/";'; 
+		
 	}
 }

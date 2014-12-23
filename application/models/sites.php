@@ -1,6 +1,11 @@
 <?php
 class Site extends CI_Model
 {
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
 	function displayAll()
 	{
 	$this->db->select('sites.SiteID,SiteName,SiteCode,Latitude,Longitude, SiteType, sitepic.picname');
