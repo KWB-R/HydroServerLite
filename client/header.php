@@ -17,19 +17,20 @@
 	echo("<font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2>Language :</font>");
 	echo("<select id='langChange' name = 'langChange'>
 		<option value='English'>English</option>
-		<option value='Spanish'>Spanish</option>
-		<option value='Italian'>Italian</option>
-		<option value='Portuguese'>Portuguese</option>
-		<option value='German'>German</option>
-		<option value='Dutch'>Dutch</option>
-		<option value='Bulgarian'>Bulgarian</option>
-		<option value='Croatian'>Croatian</option>
-		<option value='Ukranian'>Ukranian</option>
-		<option value='French'>French</option>
-		<option value='Russian'>Russian</option>
+		<option value='Spanish'>Español</option>
+		<option value='Italian'>Italiano</option>
+		<option value='Portuguese'>Portugués</option>
+		<option value='German'>Alemán</option>
+		<option value='Dutch'>Nederlands</option>
+		<option value='Bulgarian'>български</option>
+		<option value='Croatian'>Hrvatski</option>
+		<option value='Ukranian'>Українська</option>
+		<option value='French'>Français</option>
+		<option value='Russian'>Русский</option>
 		<option value='Tagalog'>Tagalog</option>
-		<option value='Czech'>Czech</option>
+		<option value='Czech'>Český</option>
 		</select>");
+		
 	//commented out by Jeremy Fowler (Nov. 20, 2014)
 	//echo("<font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><i><a href='".$_SITE_homelink."' class='button2' > $BackTo ".$_SITE_homename."</a></i></font>");
 	//Old Header : keeping here for temporary purposes. 

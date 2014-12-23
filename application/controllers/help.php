@@ -6,7 +6,7 @@
 |
 | 
 */
-class Sources extends MY_Controller {
+class Help extends MY_Controller {
 	
 	function __construct()
 	{
@@ -14,18 +14,11 @@ class Sources extends MY_Controller {
 		$this->load->model('site','',TRUE);
 	}
 	
-	public function addsource()
+	public function faq()
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('add_source',$data);
-	}
-	
-	public function editsource()
-	{		
-		//List of CSS to pass to this view
-		$data=$this->StyleData;
-		$this->load->view('change_source',$data);
+		$this->load->view('help',$data);
 	}
 	
 }
