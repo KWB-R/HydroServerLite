@@ -40,7 +40,7 @@ if (isAdmin()){
 	
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.getTxt('SiteManagement').'<b class="caret"></b></a>';
 	echo "<ul class=\"dropdown-menu\">";
-	echo "<li class=\"versions\"><a href='versions.php'>".getTxt('Versions')."</a>";
+	echo "<li class=\"versions\"><a href='".site_url('versions')."'>".getTxt('Versions')."</a>";
 	//echo "<li class=\"aliases\"><a href='edit_aliases.php'>Aliases</a>";
 	echo "</ul>";
 	echo "</li>";
@@ -52,18 +52,18 @@ if (isTeacher() || isAdmin()){
 	echo "<ul class=\"dropdown-menu\">";
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"add_source\"><a href='add_source.php'>".getTxt('AddSource')."</a>";
-		echo "<li class=\"edit_source\"><a href='change_source.php'>".getTxt('ChangeSource')."</a></li>";
+		echo "<li class=\"add_source\"><a href='".site_url('sources/add')."'>".getTxt('AddSource')."</a>";
+		echo "<li class=\"edit_source\"><a href='".site_url('sources/change')."'>".getTxt('ChangeSource')."</a></li>";
 	}
 	// > teacher admin
-	echo "<li class=\"add_site\"><a href='add_site.php'>".getTxt('AddSite')."</a></li>";
+	echo "<li class=\"add_site\"><a href='".site_url('sites/add')."'>".getTxt('AddSite')."</a></li>";
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"edit_site\"><a href='edit_site.php'>".getTxt('ChangeSite')."</a></li>";
-		echo "<li class=\"add_variable\"><a href='add_variable.php'>".getTxt('AddVariable')."</a></li>";
-		echo "<li class=\"edit_variable\"><a href='edit_var.php'>".getTxt('ChangeVariable')."</a></li>";
-		echo "<li class=\"add_method\"><a href='add_method.php'>".getTxt('AddMethod')."</a></li>";
-		echo "<li class=\"edit_method\"><a href='change_method.php'>".getTxt('ChangeMethod')."</a></li>";
+		echo "<li class=\"edit_site\"><a href='".site_url('sites/change')."'>".getTxt('ChangeSite')."</a></li>";
+		echo "<li class=\"add_variable\"><a href='".site_url('variables/add')."'>".getTxt('AddVariable')."</a></li>";
+		echo "<li class=\"edit_variable\"><a href='".site_url('variables/change')."'>".getTxt('ChangeVariable')."</a></li>";
+		echo "<li class=\"add_method\"><a href='".site_url('methods/add')."'>".getTxt('AddMethod')."</a></li>";
+		echo "<li class=\"edit_method\"><a href='".site_url('methods/change')."'>".getTxt('ChangeMethod')."</a></li>";
 	}
 	echo "</ul>";
 	echo "</li>";
@@ -73,15 +73,15 @@ if (isTeacher() || isAdmin()){
 	echo "<h2>".getTxt('Users')."</h2>";
 
 	echo "<ul>";
-	echo "<li class=\"add_user\"><a href='adduser.php'>".getTxt('AddUser')."</a></li>";
-	echo "<li class=\"edit_user\"><a href='changepassword.php'>".getTxt('ChangePassword')."</a></li>";
-	echo "<li class=\"edit_user\"><a href='change_yourpassword.php'>".getTxt('ChangeYourPassword')."</a></li>";
+	echo "<li class=\"add_user\"><a href='".site_url('users/add')."'>".getTxt('AddUser')."</a></li>";
+	echo "<li class=\"edit_user\"><a href='".site_url('users/changepassword')."'>".getTxt('ChangePassword')."</a></li>";
+	echo "<li class=\"edit_user\"><a href='".site_url('users/changeownpassword')."'>".getTxt('ChangeYourPassword')."</a></li>";
 	// > admin
 	if (isAdmin())
-		echo "<li class=\"change_authority\"><a href='changeauthority.php'".getTxt('ChangeAuthorityButton')."</a></li>";
+		echo "<li class=\"change_authority\"><a href='".site_url('users/changeauth')."'".getTxt('ChangeAuthorityButton')."</a></li>";
 
 	// > teacher admin
-	echo "<li class=\"remove_user\"><a href='removeuser.php'>".getTxt('RemoveUser')."</a></li>";
+	echo "<li class=\"remove_user\"><a href='".site_url('users/remove')."'>".getTxt('RemoveUser')."</a></li>";
 	echo"</ul>";
 	echo"</li>";
 }
@@ -90,14 +90,14 @@ if (isStudent() || isTeacher() || isAdmin()){
 	echo "<li>";
 	echo "<h2>".getTxt('AddData')."</h2>";
 	echo "<ul>";
-	echo "<li class=\"add_single_value\"><a href='add_data_value.php'>".getTxt('AddSingleValue')."</a></li>";
-	echo "<li class=\"add_multiple_value\"><a href='add_multiple_values.php'>".getTxt('AddMultipleValues')."</a></li>";
+	echo "<li class=\"add_single_value\"><a href='".site_url('data/addpoint')."'>".getTxt('AddSingleValue')."</a></li>";
+	echo "<li class=\"add_multiple_value\"><a href='".site_url('data/addmultiple')."'>".getTxt('AddMultipleValues')."</a></li>";
 	if (!isset($_SESSION["importFilePath"]))
 	{
-		echo "<li class=\"import_data\"><a href='import_data_file.php'>".getTxt('ImportDataFiles')."</a></li>";
+		echo "<li class=\"import_data\"><a href='".site_url('data/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
 	}else
 	{
-		echo "<li class=\"import_data\"><a href='import_data_file.php'>".getTxt('ImportDataFiles')."</a></li>";
+		echo "<li class=\"import_data\"><a href='".site_url('data/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
 		echo "<li class=\"import_data\"><a href='importWizard.php'>".getTxt('ImportDataFiles')."</a></li>";
 	}
 	
@@ -108,8 +108,8 @@ if (isStudent() || isTeacher() || isAdmin()){
 // [all]
 // public student teacher admin [all]
 
-echo "<li class=\"search\"><a href='".base_url()."index.php/sites'>".getTxt('SearchData')."</a></li>";
-echo "<li class=\"help\"><a href='help.php'>".getTxt('Help')."</a></li>";
+echo "<li class=\"search\"><a href='".site_url('sites')."'>".getTxt('SearchData')."</a></li>";
+echo "<li class=\"help\"><a href='".site_url('home/help')."'>".getTxt('Help')."</a></li>";
 
 
 //Check session variable being set or not. 
