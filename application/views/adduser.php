@@ -18,7 +18,7 @@ elseif (isStudent()){
 	exit;	
 	}
 
-echo HTML_Render_Head();
+echo HTML_Render_Head($js_vars);
 
 echo $CSS_Main;
 

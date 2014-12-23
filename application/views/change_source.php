@@ -23,7 +23,7 @@ $result = transQuery($sql,0,0);
 	}
 
 */
-	HTML_Render_Head();
+	HTML_Render_Head($js_vars);
 	
 	echo $CSS_JQX;
 	

@@ -2,7 +2,7 @@
 
 $default_timesupport = "";
 	
-	HTML_Render_Head();
+	HTML_Render_Head($js_vars);
 	
 	echo $CSS_Main;
 	

@@ -10,7 +10,7 @@
 */
 
 
-	HTML_Render_Head();
+	HTML_Render_Head($js_vars);
 	
 	echo $JS_JQuery; // only JQuerey needed.
 	

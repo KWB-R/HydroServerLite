@@ -101,7 +101,7 @@ $result4 = transQuery($sql4,0,1);
 
 */
 
-	HTML_Render_Head();
+	HTML_Render_Head($js_vars);
 
 	echo $CSS_Main;
 	
