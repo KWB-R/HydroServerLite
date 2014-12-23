@@ -49,7 +49,7 @@
               <li>Language:</li>
               <li><div class="button" style="cursor: pointer;" id="langChange">English</div></li>
               <li><div class="button" style="cursor: pointer;" id="langChange">Spanish</div></li>
-			  <li><font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><a href="<?php echo $this->config->item('homelink');?>" class="button2" ><?php echo getText('BackTo').' '.$this->config->item('homename');?></a></font></li>
+			  <li><font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><a href="<?php echo $this->config->item('homelink');?>" class="button2" ><?php echo getTxt('BackTo').' '.$this->config->item('homename');?></a></font></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
