@@ -18,14 +18,14 @@ class Methods extends MY_Controller {
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('add_method',$data);
+		$this->load->view('methods/addmethod',$data);
 	}
 	
 	public function editmethod()
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('change_method',$data);
+		$this->load->view('methods/changemethod',$data);
 	}
 	
 }

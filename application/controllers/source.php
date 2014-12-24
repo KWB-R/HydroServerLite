@@ -18,14 +18,14 @@ class Source extends MY_Controller {
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('sources/add_source',$data);
+		$this->load->view('sources/addsource',$data);
 	}
 	
 	public function editsource()
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('sources/change_source',$data);
+		$this->load->view('sources/changesource',$data);
 	}
 	
 }

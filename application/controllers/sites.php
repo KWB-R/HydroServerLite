@@ -25,14 +25,14 @@ class Sites extends MY_Controller {
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('add_site',$data);
+		$this->load->view('sites/addsite',$data);
 	}
 	
 	public function edit()
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('edit_site',$data);
+		$this->load->view('sites/editsite',$data);
 	}
 	
 	private function genNodes($result)
