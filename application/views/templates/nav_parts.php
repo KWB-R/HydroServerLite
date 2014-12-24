@@ -72,7 +72,7 @@ if (isTeacher() || isAdmin()){
 	//#type $__User Alias
 	echo "<h2>".getTxt('Users')."</h2>";
 
-	echo "<ul>";
+	echo "<ul class=\"dropdown-menu\">";
 	echo "<li class=\"add_user\"><a href='".site_url('user/add')."'>".getTxt('AddUser')."</a></li>";
 	echo "<li class=\"edit_user\"><a href='".site_url('user/changepass')."'>".getTxt('ChangePassword')."</a></li>";
 	echo "<li class=\"edit_user\"><a href='".site_url('user/changeownpassword')."'>".getTxt('ChangeYourPassword')."</a></li>";
@@ -89,7 +89,7 @@ if (isStudent() || isTeacher() || isAdmin()){
 	// student teacher
 	echo "<li>";
 	echo "<h2>".getTxt('AddData')."</h2>";
-	echo "<ul>";
+	echo "<ul class=\"dropdown-menu\">";
 	echo "<li class=\"add_single_value\"><a href='".site_url('data/addpoint')."'>".getTxt('AddSingleValue')."</a></li>";
 	echo "<li class=\"add_multiple_value\"><a href='".site_url('data/addmultiple')."'>".getTxt('AddMultipleValues')."</a></li>";
 	if (!isset($_SESSION["importFilePath"]))
