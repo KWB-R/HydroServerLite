@@ -73,15 +73,15 @@ if (isTeacher() || isAdmin()){
 	echo "<h2>".getTxt('Users')."</h2>";
 
 	echo "<ul>";
-	echo "<li class=\"add_user\"><a href='".site_url('users/add')."'>".getTxt('AddUser')."</a></li>";
-	echo "<li class=\"edit_user\"><a href='".site_url('users/changepassword')."'>".getTxt('ChangePassword')."</a></li>";
-	echo "<li class=\"edit_user\"><a href='".site_url('users/changeownpassword')."'>".getTxt('ChangeYourPassword')."</a></li>";
+	echo "<li class=\"add_user\"><a href='".site_url('user/add')."'>".getTxt('AddUser')."</a></li>";
+	echo "<li class=\"edit_user\"><a href='".site_url('user/changepass')."'>".getTxt('ChangePassword')."</a></li>";
+	echo "<li class=\"edit_user\"><a href='".site_url('user/changeownpassword')."'>".getTxt('ChangeYourPassword')."</a></li>";
 	// > admin
 	if (isAdmin())
-		echo "<li class=\"change_authority\"><a href='".site_url('users/changeauth')."'".getTxt('ChangeAuthorityButton')."</a></li>";
+		echo "<li class=\"change_authority\"><a href='".site_url('user/changeauth')."'>".getTxt('ChangeAuthorityButton')."</a></li>";
 
 	// > teacher admin
-	echo "<li class=\"remove_user\"><a href='".site_url('users/remove')."'>".getTxt('RemoveUser')."</a></li>";
+	echo "<li class=\"remove_user\"><a href='".site_url('user/delete')."'>".getTxt('RemoveUser')."</a></li>";
 	echo"</ul>";
 	echo"</li>";
 }

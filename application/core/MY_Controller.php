@@ -8,11 +8,7 @@ class MY_Controller extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		
-		//Database Connection
-		
-		$this->load->database();
-		
+			
 		//Loading Helpers
 		
 		$this->load->helper('auth_helper.php');
@@ -20,10 +16,10 @@ class MY_Controller extends CI_Controller {
 		$this->load->helper('language_helper.php');
 		
 		//From the language helper we shall get the right language we need to show and then load the language file
-		
 		$lang="English";
-		
 		$this->lang->load('hsl', $lang);
+		
+		$this->authenticate();
 		
 		//Initialize Library and all Types of CSS and JS files. They will be merged according to the requirement.
 		$this->load->library('assetor');
@@ -134,6 +130,20 @@ class MY_Controller extends CI_Controller {
 		//Initializing Javascript Variable for ajax requests. 
 		
 		$this->StyleData['js_vars'] = 'var base_url = "'.base_url().'index.php/";'; 
-		
+	}
+	
+	function kickOut()
+	{
+		//Send user to home page for inadequete permissions
+		addError(getTxt('NotAuthorized'));
+		redirect('/home', 'refresh');
+	}
+	
+	protected function authenticate()
+	{
+		if(!isLoggedIn())
+		{
+			$this->kickOut();	
+		}
 	}
 }

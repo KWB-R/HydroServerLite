@@ -1,15 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Auth extends CI_Controller {
+class Auth extends MY_Controller {
 
  function __construct()
  {
    parent::__construct();
    $this->load->model('users','',TRUE);
-   $this->load->helper('auth_helper.php');
-
  }
 
+protected function authenticate()
+{
+	//Auth is open access	
+}
+ 
 function login()
 {
 	//This method will have the credentials validation
@@ -26,7 +29,7 @@ function logout()
 	fetch_session();
 	//clear sessions
 	session_clear();
-	addSuccess("Logged Out Successfully");
+	addSuccess(getTxt('LogOutSuccess'));
 	redirect('/home', 'refresh');
 }
 
@@ -46,13 +49,13 @@ function logout()
 		 fetch_session();
 		 $_SESSION['username'] =$row->firstname;
 		 $_SESSION['user_auth'] =$row->authority;
-		 addSuccess("Logged In Successfully");
+		 addSuccess(getTxt('LogInSuccess'));
      }
      return TRUE;
    }
    else
    {
-     addError('Invalid username or password');
+     addError(getTxt('Incorrect'));
      return false;
    }
  }

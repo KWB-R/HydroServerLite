@@ -702,5 +702,7 @@ $lang['hsl_SiteManagement'] = "Site Management";
 $lang['hsl_Versions'] = "Versions";
 $lang['hsl_ChangeYourPassword'] = "Change Your Password";
 $lang['hsl_WebServices'] = "Web Services";
+$lang['hsl_LogOutSuccess'] = "Logged Out Successfully";
+$lang['hsl_LogInSuccess'] = "Logged In Successfully";
 
  ?>

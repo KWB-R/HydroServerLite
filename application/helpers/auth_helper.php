@@ -74,6 +74,4 @@ function addSuccess($mess){
 	$successes[] = $mess;
 	$_SESSION["Successes"] = $successes;
 }
-
-
 ?>
