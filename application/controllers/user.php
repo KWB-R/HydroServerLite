@@ -98,7 +98,7 @@ class User extends MY_Controller {
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('lastname', 'Last Name', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('firstname', 'First Name', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('authority', 'Username', 'trim|required');
+		$this->form_validation->set_rules('authority', 'Authority', 'trim|required');
 		
 		if ($this->form_validation->run() == FALSE)
 		{

@@ -364,37 +364,6 @@ $("#addsource").submit(function(){
 				return false;
 			}
 	}
-
-//Validation is all complete, so now process it
-
-	$.post("do_add_source.php", $("#addsource").serialize(), function(data){
-  
-		 if(data==1){
-			$("#msg").show(2000);
-			$("#msg").hide(3500);
-			$("#Organization").val("");
-			$("#SourceDescription").val("");
-			$("#SourceLink").val("");
-			$("#ContactName").val("");
-			$("#Phone").val("");
-			$("#Email").val("");
-			$("#Address").val("");
-			$("#City").val("");
-			$("#state").val("-1");
-			$("#ZipCode").val("");
-			$("#Citation").val("");
-			$("#TopicCategory").val("-1");
-			$("#Title").val("");
-			$("#Abstract").val("");
-			$("#MetadataLink").val("");
-			setTimeout(function(){
-				window.open("add_source.php","_self");
-				}, 5000);
-			return true;
-		}else{
-			alert(<?php echo "'".$ProcessingError."'";?> + data);
-			return false;
-		}
 		
 	});
 return false;

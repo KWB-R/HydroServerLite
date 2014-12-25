@@ -14,25 +14,25 @@ class Datapoint extends MY_Controller {
 		$this->load->model('site','',TRUE);
 	}
 	
-	public function adddatavalue()
+	public function addvalue()
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('add_data_value',$data);
+		$this->load->view('datapoint/addvalue',$data);
 	}
 	
 	public function addmultiplevalues()
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('add_multiple_values',$data);
+		$this->load->view('datapoint/addmultiplevalues',$data);
 	}
 	
 	public function importfile()
 	{
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$this->load->view('import_data_file',$data);
+		$this->load->view('datapoint/importfile',$data);
 	}
 	
 }
