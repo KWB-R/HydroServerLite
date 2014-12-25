@@ -21,6 +21,23 @@ class Sites extends MY_Controller {
 		$this->load->view('map',$data);
 	}
 	
+	public function details()
+	{	
+		$siteid = end($this->uri->segment_array());
+		if($siteid=="details")
+		{
+			$data['errorMsg']="One of the parameters: SiteID is not defined. An example request would be details/1";
+			$this->load->view('templates/apierror',$data);
+			return;
+		}
+		
+		
+		
+		//List of CSS to pass to this view
+		$data=$this->StyleData;
+		$this->load->view('details',$data);
+	}
+	
 	public function add()
 	{		
 		//List of CSS to pass to this view
