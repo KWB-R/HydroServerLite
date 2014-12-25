@@ -6,7 +6,8 @@
 function getTxt($key)
 {
 	$CI = &get_instance();
-	return $CI->lang->line('hsl_'.$key);	
+	$text = $CI->lang->line('hsl_'.$key);
+	return stripslashes($text);
 }
 
 ?>

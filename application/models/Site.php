@@ -1,6 +1,11 @@
 <?php
 class Site extends MY_Model
 {
+	function __construct()
+	{
+		parent::__construct();
+		$this->tableName = "sites";	
+	}
 	function displayAll($checkAll)
 	{	
 	$this->db
@@ -30,7 +35,7 @@ class Site extends MY_Model
 		$this->db
 		->distinct()
 		->select('sites.SiteID, sites.SiteCode,sites.SiteName, Latitude, Longitude, sites.SiteType, ( 3959 * acos( cos( radians('.$lat.') ) * cos( radians( Latitude ) ) * cos( radians( Longitude ) - radians('.$long.') ) + sin( radians('.$lat.') ) * sin( radians( Latitude ) ) ) ) AS distance, sitepic.picname, seriescatalog.SourceID, sources.Organization, sources.SourceID, sources.SourceLink')
-		->from('sites')
+		->from($this->tableName)
 		->join('seriescatalog', 'sites.SiteID=seriescatalog.SiteID', 'left')
 		->join('sitepic', 'sites.SiteID=sitepic.siteid', 'left')
 		->join('sources', 'seriescatalog.SourceID=sources.SourceID', 'left')
@@ -47,6 +52,17 @@ class Site extends MY_Model
 		$query = $this->db->get();
 		return $this->tranResult($query->result_array());
 	}
-
+	
+	function getSitebySource($sourceid)
+	{
+		$this->db->distinct()
+			->select('SiteID, SiteName')
+			->from('seriescatalog')
+			->where('SourceID',$sourceid)
+			->order_by("SiteName");
+		$query = $this->db->get();
+		return $this->tranResult($query->result_array());	
+	}
+	
 }
 ?>

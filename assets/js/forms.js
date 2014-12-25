@@ -81,60 +81,57 @@ function showSitesForSource(srcID, idOfSiteSelect) {
     }
 }
 function showSites(str) {
-    // Why Reset this every time? This is a waste of resources.
-    // document.getElementById("txtHint").innerHTML = "<select name='SiteID' id='SiteID'><option value=''>Select....</option></select>&nbsp;<a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>";
-
-    // Why not just clear the list when not filled?
-    // WHY IS JQUERY NOT LOADING HERE??
-    //$("#SiteID").empty();
-
-    if (str == "") {
-        document.getElementById("txtHint").innerHTML = "";
-        return;
-    }
-    //    else {
-    //                $("#SiteID").append("<option value=''>Select....</option>");
-    //                $("#txtHint").append("<a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>");
-    //    }
-
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    }
-    else {// code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
-            setHintHandlers();
-        }
-    }
-    xmlhttp.open("GET", "getsites.php?q=" + str, true);
-    xmlhttp.send();
+	$("#SiteID").empty();
+	if(str!="-1")
+	{	
+		$.ajax({
+		 url: base_url+"sites/getSitesJSON?source="+str,
+		 dataType: "json"
+		})
+		 .done(function( sites ) {
+			 if(sites.length>0)
+			 {
+				$.each(sites, function() {
+					$("#SiteID").append($("<option />").val(this.SiteID).text(this.SiteName));
+				});
+			 }
+			 else
+			 {
+				$("#SiteID").append($("<option />").val(-1).text(phpVars.NoSitesSource));
+			 }
+		});
+	}
+	else
+	{
+		$("#SiteID").append($("<option />").val(-1).text(phpVars.SelectSite));
+	}
 }
 
 function showMethods(str) {
-
-    document.getElementById("txtHint2").innerHTML = "*&nbsp;<span class=\"hint\" title=\"Method Description\">?</span>";
-
-    if (str == "") {
-        document.getElementById("txtHint2").innerHTML = "";
-        return;
-    }
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    }
-    else {// code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("txtHint2").innerHTML = xmlhttp.responseText;
-            setHintHandlers();
-        }
-    }
-    xmlhttp.open("GET", "getmethods1.php?m=" + str, true);
-    xmlhttp.send();
+	$("#MethodID").empty();
+	if(str!="-1")
+	{
+		$.ajax({
+		 url: base_url+"methods/getMethodsJSON?var="+str,
+		 dataType: "json"
+		})
+		 .done(function( methods ) {
+			 if(methods.length>0)
+			 {
+				$.each(methods, function() {
+					$("#MethodID").append($("<option />").val(this.MethodID).text(this.MethodDescription));
+				});
+			 }
+			 else
+			 {
+				$("#MethodID").append($("<option />").val(-1).text(phpVars.NoMethodsVariable));
+			 }
+		});
+	}
+	else
+	{
+		$("#MethodID").append($("<option />").val(-1).text(phpVars.SelectVariable));
+	}
 }
 
 //Date Validation Script Begins

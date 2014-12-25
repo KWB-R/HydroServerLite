@@ -78,8 +78,21 @@ class Sites extends MY_Controller {
 		{
 			$data['errorMsg']="One of the parameters: Latitude, Longitude or Radius is not defined. An example request would be siteSearch?lat=12.34&&long=14.56&&radius=12";
 			$this->load->view('templates/apierror',$data);	
-		}
-			
+		}		
 	}
 	
+	public function getSitesJSON()
+	{
+		if($this->input->get('source', TRUE))
+		{
+			$result = $this->site->getSitebySource($this->input->get('source', TRUE));
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: Source is not defined. An example request would be getSitesJSON?source=1";
+			$this->load->view('templates/apierror',$data);	
+		}
+		
+	}
 }

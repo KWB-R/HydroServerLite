@@ -705,4 +705,5 @@ $lang['hsl_WebServices'] = "Web Services";
 $lang['hsl_LogOutSuccess'] = "Logged Out Successfully";
 $lang['hsl_LogInSuccess'] = "Logged In Successfully";
 $lang['hsl_NewPassword1'] = "Confirm Password: ";
+$lang['hsl_SelectSite2'] = "Please select a Site";
  ?>

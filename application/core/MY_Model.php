@@ -6,6 +6,12 @@ class MY_Model extends CI_Model
 		parent::__construct();
 	}
 	
+	function getAll()
+	{
+		$query = $this->db->get($this->tableName);
+		return $this->tranResult($query->result_array());
+	}
+	
 	function tranResult($result)
 	{
 		//Put in the logic to translate the results before showing it to the user. 

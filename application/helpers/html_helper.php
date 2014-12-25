@@ -1,16 +1,41 @@
 <?php
 
+//Function for generating options. Keeping it here as it might be used by various controllers once they get the result from the model.
+
+function optionsSource($result)
+{
+	$option_block='';
+	foreach ($result as $row) {
+		$sourceid = $row["SourceID"];
+		$sourcename = $row["Organization"];
+		$option_block .= "<option value=$sourceid>$sourcename</option>";
+	}
+	return $option_block;
+}
+function optionsVariable($result)
+{
+	$option_block='';
+	foreach ($result as $row) {
+		$typeid = $row["VariableID"];
+		$typename = $row["VariableName"];
+		$datatype = $row["DataType"];
+		$option_block .= "<option value=$typeid>$typename ($datatype)</option>";
+	}
+	return $option_block;
+}
+
+
 function getImg($name)
 {
 	return base_url()."assets/images/".$name;
 }
 
-function genInput($labelKey,$id,$name,$req=false)
+function genInput($labelKey,$id,$name,$req=false,$extra='')
 {
 	echo '<div class="form-group">
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-9">
-     	   <input type="text" class="form-control" id="'.$id.'" name="'.$name.'"/>';		   
+     	   <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';	   
 	if($req)
 	{
 	  echo '<span class="required">*</span>';	  
@@ -19,16 +44,34 @@ function genInput($labelKey,$id,$name,$req=false)
       </div>';	
 }
 
-function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=false)
+function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=false,$extra='')
 {
 	echo '<div class="form-group">
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-9">
-        <select name="'.$name.'" class="form-control" id="'.$id.'">';
+        <select name="'.$name.'" class="form-control" id="'.$id.'" '.$extra.'>';
 	if($defaultSelect)
 	{
-		echo '<option value="">'.getTxt($defaultSelect).'</option>'.$optionBlock.'</select>';
+		echo '<option value="-1">'.getTxt($defaultSelect).'</option>'.$optionBlock.'</select>';
 	}
+	if($req)
+	{
+	  echo '<span class="required">*</span>';	  
+	}
+	echo'</div>             
+      </div>';	
+}
+function genSelectH($labelKey,$id,$name,$optionBlock,$hint,$defaultSelect=false,$req=false,$extra='')
+{
+	echo '<div class="form-group">
+        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-9">
+        <select name="'.$name.'" class="form-control" id="'.$id.'" '.$extra.'>';
+	if($defaultSelect)
+	{
+		echo '<option value="-1">'.getTxt($defaultSelect).'</option>'.$optionBlock.'</select>';
+	}
+	echo '<span class="hint" title="'.$hint.'">?</span>';
 	if($req)
 	{
 	  echo '<span class="required">*</span>';	  

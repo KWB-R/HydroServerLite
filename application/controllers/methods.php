@@ -11,7 +11,7 @@ class Methods extends MY_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model('site','',TRUE);
+		$this->load->model('method','',TRUE);
 	}
 	
 	public function addmethod()
@@ -26,6 +26,20 @@ class Methods extends MY_Controller {
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$this->load->view('methods/changemethod',$data);
+	}
+	
+	public function getMethodsJSON()
+	{
+		if($this->input->get('var', TRUE))
+		{
+			$result = $this->method->getMethodsByVar($this->input->get('var', TRUE));
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: Variable is not defined. An example request would be getMethodsJSON?var=1";
+			$this->load->view('templates/apierror',$data);	
+		}
 	}
 	
 }
