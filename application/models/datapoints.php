@@ -15,5 +15,12 @@ class Datapoints extends MY_Model
 	  	return $num_inserts==1;
 	}
 	
+	function addPoints($data)
+	{
+		$this->db->insert_batch($this->tableName, $data);
+		$num_inserts = $this->db->affected_rows();
+	  	return $num_inserts;
+	}
+	
 }
 ?>

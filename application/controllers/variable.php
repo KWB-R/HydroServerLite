@@ -1,17 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 |--------------------------------------------------------------------------
-| Sites Controller
+| Variables Controller
 |--------------------------------------------------------------------------
 |
 | 
 */
-class Variables extends MY_Controller {
+class Variable extends MY_Controller {
 	
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model('site','',TRUE);
+		$this->load->model('variables','',TRUE);
 	}
 	
 	public function addvariable()
@@ -28,4 +28,9 @@ class Variables extends MY_Controller {
 		$this->load->view('variables/editvar',$data);
 	}
 	
+	public function getAllJSON()
+	{
+		$variables = $this->variables->getAll();
+		echo json_encode($variables);
+	}
 }

@@ -26,6 +26,36 @@ class Datapoint extends MY_Controller {
 		return $val;
 	}
 	
+	private function createDP($date,$time,$val,$siteid,$varid,$methid,$sourceid)
+	{
+		
+		$LocalDateTime = $date . " " . $time . ":00";
+		$localtimestamp = strtotime($LocalDateTime);
+		$ms = $this->config->item('UTCOffset') * 3600;
+		$utctimestamp = $localtimestamp - ($ms);
+		$DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
+		
+		$dataPoint = array(
+		'DataValue' => $val,  
+		'ValueAccuracy' => $this->cNull($this->config->item('ValueAccuracy')),
+		'LocalDateTime' => $LocalDateTime, 
+		'UTCOffset' => $this->cNull($this->config->item('UTCOffset')), 
+		'DateTimeUTC' => $DateTimeUTC, 
+		'SiteID' => $siteid,
+		'VariableID' => $varid, 
+		'OffsetValue' => $this->cNull($this->config->item('OffsetValue')),
+		'OffsetTypeID' => $this->cNull($this->config->item('OffsetTypeID')),  
+		'CensorCode' => $this->cNull($this->config->item('CensorCode')),
+		'QualifierID' => $this->cNull($this->config->item('QualifierID')), 
+		'MethodID' => $methid, 
+		'SourceID' => $sourceid, 
+		'SampleID' => $this->cNull($this->config->item('SampleID')),
+		'DerivedFromID' => $this->cNull($this->config->item('DerivedFromID')), 
+		'QualityControlLevelID' => $this->cNull($this->config->item('QualityControlLevelID')));		
+		
+		return $dataPoint;
+	}
+	
 	public function addvalue()
 	{	
 	
@@ -47,29 +77,8 @@ class Datapoint extends MY_Controller {
 		}
 		else
 		{
-			$LocalDateTime = $this->input->post('datepicker') . " " . $this->input->post('timepicker') . ":00";
-			$localtimestamp = strtotime($LocalDateTime);
-			$ms = $this->config->item('UTCOffset') * 3600;
-			$utctimestamp = $localtimestamp - ($ms);
-			$DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
-			
-			$dataPoint = array(
-			'DataValue' => $this->input->post('value'),  
-			'ValueAccuracy' => $this->cNull($this->config->item('ValueAccuracy')),
-			'LocalDateTime' => $LocalDateTime, 
-			'UTCOffset' => $this->cNull($this->config->item('UTCOffset')), 
-			'DateTimeUTC' => $DateTimeUTC, 
-			'SiteID' => $this->input->post('SiteID'),
-			'VariableID' => $this->input->post('VariableID'), 
-			'OffsetValue' => $this->cNull($this->config->item('OffsetValue')),
-			'OffsetTypeID' => $this->cNull($this->config->item('OffsetTypeID')),  
-			'CensorCode' => $this->cNull($this->config->item('CensorCode')),
-			'QualifierID' => $this->cNull($this->config->item('QualifierID')), 
-			'MethodID' => $this->input->post('MethodID'), 
-			'SourceID' => $this->input->post('SourceID'), 
-			'SampleID' => $this->cNull($this->config->item('SampleID')),
-			'DerivedFromID' => $this->cNull($this->config->item('DerivedFromID')), 
-			'QualityControlLevelID' => $this->cNull($this->config->item('QualityControlLevelID')));
+
+			$dataPoint = $this->createDP($this->input->post('datepicker'),$this->input->post('timepicker'),$this->input->post('value'),$this->input->post('SiteID'),$this->input->post('VariableID'),$this->input->post('MethodID'),$this->input->post('SourceID'));
 			
 			$result=$this->datapoints->addPoint($dataPoint);
 			if($result)
@@ -96,9 +105,33 @@ class Datapoint extends MY_Controller {
 	}
 	
 	public function addmultiplevalues()
-	{		
+	{	
+		if($_POST)
+		{
+			$dataset=array();
+			$rows = $this->input->post('finalRows');
+			for($i=1;$i<=$rows;$i++)
+			{
+				$dataPoint = $this->createDP($this->input->post('datepicker'.$i),$this->input->post('timepicker'.$i),$this->input->post('value'.$i),$this->input->post('SiteID'),$this->input->post('VariableID'.$i),$this->input->post('MethodID'.$i),$this->input->post('SourceID'));
+				$dataset[]=$dataPoint;
+			}
+			
+			$result=$this->datapoints->addPoints($dataset);
+			if($result==$rows)
+			{
+				addSuccess(getTxt('DataEnteredSuccessfully'));	
+			}
+			else
+			{
+				addError(getTxt('ProcessingError'));
+			}
+		}
+		//GetSources
+		$sources = $this->sources->getAll();
+		$sourceOptions = optionsSource($sources);
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$data['sourcesOptions']=$sourceOptions;
 		$this->load->view('datapoint/addmultiplevalues',$data);
 	}
 	
