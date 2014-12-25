@@ -1,9 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 |--------------------------------------------------------------------------
-| Sites Controller
+| Data Controller 
 |--------------------------------------------------------------------------
-|
+| It manages all the data points. 
 | 
 */
 class Datapoint extends MY_Controller {

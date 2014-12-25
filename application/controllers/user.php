@@ -12,6 +12,7 @@ class User extends MY_Controller {
 	{
 		parent::__construct();
 		$this->load->model('users','',TRUE);
+		$this->load->library('form_validation');
 	}
 	
 	public function index()
@@ -19,20 +20,57 @@ class User extends MY_Controller {
 		$this->add();	
 	}
 	
+	private function authDropDown()
+	{
+		return 	"<option value=admin>".getTxt('Administrator')."</option><option value=teacher>".getTxt('Teacher')."</option><option value=student>".getTxt('Student')."</option>";
+	}
+	
+	private function adminCheck()
+	{
+		if (!isAdmin())
+		$this->kickOut();
+	}
+	
+	private function getUserList()
+	{
+		$authLevel=0;
+		if (isAdmin()){
+			  $authLevel = 2;			
+			  }
+			  elseif (isTeacher()){
+			  $authLevel = 1;
+			  }
+		  elseif (isStudent()){
+			  $this->kickOut();
+			  }
+		//Get list of usernames. 
+		$users = $this->users->getUsers($authLevel);
+		
+		if(count($users)<1)
+		{
+			addWarning(getTxt('SorryNoUsers'));	
+		}
+		$option_block="";
+		foreach ($users as $row) {
+			$users = $row["username"];
+			$option_block .= "<option value=$users>$users</option>";
+		}	
+		return $option_block;
+	}
+	
 	public function add()
 	{		
 		$selection="";
 		//Display the appropriate user authority to add depending on the user's authority //@TODO
 		  if (isAdmin()){
-			  $selection = "<select name=authority id=authority><option value=>".getTxt('SelectEllipsis')."</option><option value=admin>".getTxt('Administrator')."</option><option value=teacher>".getTxt('Teacher')."</option><option value=student>".getTxt('Student')."</option></select>";			
+			  $selection = $this->authDropDown();			
 			  }
 			  elseif (isTeacher()){
-			  $selection = "<select name=authority id=authority><option value=>".getTxt('SelectEllipsis')."</option><option value=teacher>".getTxt('Teacher')."</option><option value=student>".getTxt('Student')."</option></select>";
+			  $selection = "<select class=\"form-control\" name=authority id=authority><option value=>".getTxt('SelectEllipsis')."</option><option value=teacher>".getTxt('Teacher')."</option><option value=student>".getTxt('Student')."</option></select>";
 			  }
 		  elseif (isStudent()){
 				$this->kickOut();
 			  }
-		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$data['selection']=$selection;
@@ -56,7 +94,6 @@ class User extends MY_Controller {
 	
 	public function doadd()
 	{
-		$this->load->library('form_validation');
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('lastname', 'Last Name', 'trim|required|xss_clean');
@@ -84,9 +121,35 @@ class User extends MY_Controller {
 	}
 	
 	public function edit()
-	{		
+	{	
+		$this->adminCheck();
+		if($_POST)
+		{
+			$this->form_validation->set_rules('username', 'Username', 'trim|required');
+			$this->form_validation->set_rules('authority', 'Authority', 'trim|required');	
+		}
+		if ($this->form_validation->run() == FALSE)
+		{
+			  $errors = validation_errors();
+			  if(!empty($errors))
+			  {addError($errors);}
+		}
+		else
+		{
+			$result=$this->users->changeAuth($this->input->post('username'),$this->input->post('authority'));
+			if($result)
+			{
+				addSuccess(getTxt('CongratulationsChanged')." ".$this->input->post('username'));	
+			}
+			else
+			{
+				addError(getTxt('ProcessingError'));
+			}
+		}
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$data['option_block']=$this->getUserList();
+		$data['selection']=$this->authDropDown();
 		$this->load->view('users/changeauthority',$data);
 	}
 	
@@ -105,38 +168,41 @@ class User extends MY_Controller {
 				addError(getTxt('ProcessingError'));
 			}
 		}
-		
-		
-		$authLevel=0;
-		if (isAdmin()){
-			  $authLevel = 2;			
-			  }
-			  elseif (isTeacher()){
-			  $authLevel = 1;
-			  }
-		  elseif (isStudent()){
-			  $this->kickOut();
-			  }
-		//Get list of usernames. 
-		$users = $this->users->getUsers($authLevel);
-		
-		if(count($users)<1)
-		{
-			addWarning(getTxt('SorryNoUsers'));	
-		}
-		$option_block="";
-		foreach ($users as $row) {
-			$users = $row["username"];
-			$option_block .= "<option value=$users>$users</option>";
-		}
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$data['option_block']=$option_block;
+		$data['option_block']=$this->getUserList();
 		$this->load->view('users/changepassword',$data);	
 	}
 	
 	public function changeownpass()
 	{
+		if(isStudent())
+		$this->kickOut();
+		
+		if($_POST)
+		{
+			$this->form_validation->set_rules('password1', 'New Password', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('password', 'Confirm Password', 'trim|required|xss_clean');	
+		}
+		if ($this->form_validation->run() == FALSE)
+		{
+			  $errors = validation_errors();
+			  if(!empty($errors))
+			  {addError($errors);}
+		}
+		else
+		{
+			$username = getSessionUser();
+			$result=$this->users->changePassword($username,$this->input->post('password'));
+			if($result)
+			{
+				addSuccess(getTxt('CongratulationsChangedPassword')." ".$username);	
+			}
+			else
+			{
+				addError(getTxt('ProcessingError'));
+			}
+		}
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$this->load->view('users/change_yourpassword',$data);	

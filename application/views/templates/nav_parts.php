@@ -75,10 +75,10 @@ if (isTeacher() || isAdmin()){
 	echo "<ul class=\"dropdown-menu\">";
 	echo "<li class=\"add_user\"><a href='".site_url('user/add')."'>".getTxt('AddUser')."</a></li>";
 	echo "<li class=\"edit_user\"><a href='".site_url('user/changepass')."'>".getTxt('ChangePassword')."</a></li>";
-	echo "<li class=\"edit_user\"><a href='".site_url('user/changeownpassword')."'>".getTxt('ChangeYourPassword')."</a></li>";
+	echo "<li class=\"edit_user\"><a href='".site_url('user/changeownpass')."'>".getTxt('ChangeYourPassword')."</a></li>";
 	// > admin
 	if (isAdmin())
-		echo "<li class=\"change_authority\"><a href='".site_url('user/changeauth')."'>".getTxt('ChangeAuthorityButton')."</a></li>";
+		echo "<li class=\"change_authority\"><a href='".site_url('user/edit')."'>".getTxt('ChangeAuthorityButton')."</a></li>";
 
 	// > teacher admin
 	echo "<li class=\"remove_user\"><a href='".site_url('user/delete')."'>".getTxt('RemoveUser')."</a></li>";

@@ -59,6 +59,13 @@ class Users extends CI_Model
 		$query = $this->db->update($this->tableName);
 	  	return $query>=1;	
 	}
+	function changeAuth($username,$auth)
+	{
+		$this->db->set('authority',$auth)
+		->where('username', $username);
+		$query = $this->db->update($this->tableName);
+	  	return $query>=1;	
+	}
 	
 	function login($username, $password)
 	{

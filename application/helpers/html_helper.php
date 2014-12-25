@@ -5,8 +5,61 @@ function getImg($name)
 	return base_url()."assets/images/".$name;
 }
 
+function genInput($labelKey,$id,$name,$req=false)
+{
+	echo '<div class="form-group">
+        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-9">
+     	   <input type="text" class="form-control" id="'.$id.'" name="'.$name.'"/>';		   
+	if($req)
+	{
+	  echo '<span class="required">*</span>';	  
+	}
+	echo'</div>             
+      </div>';	
+}
 
+function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=false)
+{
+	echo '<div class="form-group">
+        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-9">
+        <select name="'.$name.'" class="form-control" id="'.$id.'">';
+	if($defaultSelect)
+	{
+		echo '<option value="">'.getTxt($defaultSelect).'</option>'.$optionBlock.'</select>';
+	}
+	if($req)
+	{
+	  echo '<span class="required">*</span>';	  
+	}
+	echo'</div>             
+      </div>';	
+}
 
+function genHeading($headingKey,$req=false,$defaultColumn=9)
+{
+	echo "<div class='col-md-".$defaultColumn."'>";
+	//ALSO DISPLAYS THE ERROR MSGS. In case this function is not being used, a call to the below function will be needed. 
+	showMsgs();
+	if($req)
+	{
+		echo'<p class="em" align="right">'.getTxt('RequiredFieldsAsterisk').'</p>';
+	}
+	echo '<h1>'.getTxt($headingKey).'</h1>
+          <p>&nbsp;</p>';
+}
+
+function genSubmit($labelKey,$end=true)
+{
+	echo '<div class="col-md-3 col-md-offset-9">
+    <input type="SUBMIT" name="submit" value="'.getTxt($labelKey).'" class="button"/></div>
+    </FORM>';
+	if($end)
+	{
+		echo "</div>";
+	}	
+}
 
 function HTML_Render_Head($js_vars,$PageTitle = ""){
 	$HeaderAddon = "";
