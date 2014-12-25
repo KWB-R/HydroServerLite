@@ -30,5 +30,16 @@ class Method extends MY_Model
 		return $this->tranResult($query->result_array());	
 	}
 	
+	function getByVarSite($var,$site)
+	{
+		$this->db->select('MethodID,MethodDescription')
+			->from('seriescatalog')
+			->where('SiteID',$site)
+			->where('VariableID',$var);
+		
+		$query=$this->db->get();
+		return $query->result_array();		
+	}
+	
 }
 ?>

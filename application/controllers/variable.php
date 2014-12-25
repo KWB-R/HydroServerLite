@@ -33,4 +33,38 @@ class Variable extends MY_Controller {
 		$variables = $this->variables->getAll();
 		echo json_encode($variables);
 	}
+	
+	public function getSiteJSON()
+	{
+		if($this->input->get('siteid', TRUE))
+		{
+			$result = $this->variables->getSite($this->input->get('siteid', TRUE));
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: Siteid is not defined. An example request would be getSiteJSON?siteid=1";
+			$this->load->view('templates/apierror',$data);	
+		}	
+	}
+	
+	public function getTypes()
+	{
+		if($this->input->get('siteid', TRUE)&&$this->input->get('varname', TRUE))
+		{
+			$result = $this->variables->getTypes($this->input->get('siteid', TRUE),$this->input->get('varname', TRUE));
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: Siteid,Variable Name is not defined. An example request would be getTypes?siteid=1&&varname=abc";
+			$this->load->view('templates/apierror',$data);	
+		}		
+	}
+	
+	public function updateVarID()
+	{
+			$result = $this->variables->getVarID($this->input->get('siteid', TRUE),$this->input->get('varname', TRUE),$this->input->get('type', TRUE));
+			echo $result[0]['VariableID'];
+	}
 }

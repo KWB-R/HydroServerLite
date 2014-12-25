@@ -12,6 +12,7 @@ class Sites extends MY_Controller {
 	{
 		parent::__construct();
 		$this->load->model('site','',TRUE);
+
 	}
 	
 	public function map()
@@ -30,11 +31,14 @@ class Sites extends MY_Controller {
 			$this->load->view('templates/apierror',$data);
 			return;
 		}
-		
-		
-		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$siteData = $this->site->getSite($siteid);
+		$data['site']=$siteData[0];
+		$data['SiteID']=$siteid;
+		$this->load->model('variables','',TRUE);
+		$result = $this->variables->getSite($siteid);
+		$data['Variables']=$result;
 		$this->load->view('details',$data);
 	}
 	
@@ -110,6 +114,19 @@ class Sites extends MY_Controller {
 			$data['errorMsg']="One of the parameters: Source is not defined. An example request would be getSitesJSON?source=1";
 			$this->load->view('templates/apierror',$data);	
 		}
-		
+	}
+	
+	public function getSiteJSON()
+	{
+		if($this->input->get('siteid', TRUE))
+		{
+			$result = $this->site->getSite($this->input->get('siteid', TRUE));
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: Siteid is not defined. An example request would be getSiteJSON?siteid=1";
+			$this->load->view('templates/apierror',$data);	
+		}	
 	}
 }

@@ -1,36 +1,20 @@
 <?php
-	header('Content-Type: text/html; charset=utf-8');
-	require_once 'authorization_check.php';
-	include('internationalize.php');
-
-	require_once "_html_parts.php";
-	HTML_Render_Head();
-
-	echo $JS_JQuery;
-
-	echo $JS_JQueryUI;
-
-	echo $JS_JQX;
-
-	echo $JS_GetTheme;
-
-	echo $JS_Globalization; // this is the only page that calls this. This is also the only refernce to MooTools
-
-	echo $JS_Maps;
-
-	echo $CSS_JQX;
-
-	echo $CSS_Main;
-
-	echo $CSS_JQuery_UI;
-
-	echo $CSS_JQStyles;
-
+header('Content-Type: text/html; charset=utf-8');
+HTML_Render_Head($js_vars);
+echo $JS_JQuery;
+echo $JS_JQueryUI;
+echo $JS_JQX;
+echo $JS_GetTheme;
+echo $JS_Globalization; // this is the only page that calls this. This is also the only refernce to MooTools
+echo $JS_Maps;
+echo $CSS_JQX;
+echo $CSS_Main;
+echo $CSS_JQuery_UI;
+echo $CSS_JQStyles;
 ?>
-
 <!--Main Script to display the data-->
 <script type="text/javascript">
-var siteid=<?php echo $_GET['siteid'];?>;
+var siteid=<?php echo $SiteID;?>;
 var glob_df;
 var glob_dt;
 var date_to;
@@ -53,7 +37,7 @@ var strval = $("#timepicker").val();
 
 //Minimum and maximum length is 5, for example, 01:20
 	if(strval.length < 5 || strval.length > 5){
-		alert(<?php echo "'".$InvalidTimeFive."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeFive')."'";?>);
 	return false;
 	}
 
@@ -70,15 +54,15 @@ var strval = $("#timepicker").val();
 
 	//minimum length for hours is two digits, for example, 12
 	if(horval.length != 2){
-		alert(<?php echo "'".$InvalidTimeHoursTwo."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeHoursTwo')."'";?>);
 		return false;
 		}
 	if(horval < 0){
-		alert(<?php echo "'".$InvalidTimeHoursZeros."'";?>);		
+		alert(<?php echo "'".getTxt('InvalidTimeHoursZeros')."'";?>);		
 		return false;
 		}
 	else if(horval > 23){
-		alert(<?php echo "'".$InvalidTimeHoursTwentyThree."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeHoursTwentyThree')."'";?>);
 		return false;
 		}
 
@@ -86,15 +70,15 @@ var strval = $("#timepicker").val();
 
  	//minimum length for minutes is 2, for example, 59
 	if(minval.length != 2){
-		alert(<?php echo "'".$InvalidTimeMinutesTwo."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeMinutesTwo')."'";?>);
 	return false;
 	} 
 	if(minval < 0){
-		alert(<?php echo "'".$InvalidTimeMinutesZeros."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeMinutesZeros')."'";?>);
 		return false;
 		}   
 	else if(minval > 59){
-		alert(<?php echo "'".$InvalidTimeMinutesFiftyNine."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeMinutesFiftyNine')."'";?>);
 		return false;
 		}
 	strval = IsNumeric(strval);
@@ -140,7 +124,7 @@ function IsNumeric(strString){
         var strChar = strString.charAt(i); 
         if (strValidChars.indexOf(strChar) == -1) 
         {
-			alert (<?php echo "'".$InvalidCharacterNumbers."'"; ?>);
+			alert (<?php echo "'".getTxt('InvalidCharacterNumbers')."'"; ?>);
 			strString = strString.replace(strString[i],"");
             blnResult = false;
         } 
@@ -157,7 +141,7 @@ var strval = $("#timepicker_new").val();
 
 //Minimum and maximum length is 5, for example, 01:20
 	if(strval.length < 5 || strval.length > 5){
-		alert(<?php echo "'".$InvalidTimeFive."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeFive')."'";?>);
 	return false;
 	}
 
@@ -174,15 +158,15 @@ var strval = $("#timepicker_new").val();
 
 	//minimum length for hours is two digits, for example, 12
 	if(horval.length != 2){
-		alert(<?php echo "'".$InvalidTimeHoursTwo."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeHoursTwo')."'";?>);
 		return false;
 		}
 	if(horval < 0){
-		alert(<?php echo "'".$InvalidTimeHoursZeros."'";?>);		
+		alert(<?php echo "'".getTxt('InvalidTimeHoursZeros')."'";?>);		
 		return false;
 		}
 	else if(horval > 23){
-		alert(<?php echo "'".$InvalidTimeHoursTwentyThree."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeHoursTwentyThree')."'";?>);
 		return false;
 		}
 
@@ -190,15 +174,15 @@ var strval = $("#timepicker_new").val();
 
  	//minimum length for minutes is 2, for example, 59
 	if(minval.length != 2){
-		alert(<?php echo "'".$InvalidTimeMinutesTwo."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeMinutesTwo')."'";?>);
 	return false;
 	} 
 	if(minval < 0){
-		alert(<?php echo "'".$InvalidTimeMinutesZeros."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeMinutesZeros')."'";?>);
 		return false;
 		}   
 	else if(minval > 59){
-		alert(<?php echo "'".$InvalidTimeMinutesFiftyNine."'";?>);
+		alert(<?php echo "'".getTxt('InvalidTimeMinutesFiftyNine')."'";?>);
 		return false;
 		}
 	strval = IsNumeric(strval);
@@ -217,7 +201,7 @@ return Value;
 
 function isValidNumber(val){
       if(val==null || val.length==0){
-   		  alert(<?php echo "'".$EnterNumberValue."'";?>);
+   		  alert(<?php echo "'".getTxt('EnterNumberValue')."'";?>);
 
 		  return false;
 		  }
@@ -233,7 +217,7 @@ function isValidNumber(val){
                   continue
             }
             if (ch < "0" || ch > "9") {
-		    alert(<?php echo "'".$EnterValidNumberValue."'";?>);
+		    alert(<?php echo "'".getTxt('EnterValidNumberValue')."'";?>);
 			    return false;
             	}
       }
@@ -251,7 +235,7 @@ return Value;
 
 function isValidNumber(val){
       if(val==null || val.length==0){
-   		  alert(<?php echo "'".$EnterNumberValue."'";?>);
+   		  alert(<?php echo "'".getTxt('EnterNumberValue')."'";?>);
 		  return false;
 		  }
 
@@ -266,7 +250,7 @@ function isValidNumber(val){
                   continue
             }
             if (ch < "0" || ch > "9") {
-		    alert(<?php echo "'".$EnterValidNumberValue."'";?>);
+		    alert(<?php echo "'".getTxt('EnterValidNumberValue')."'";?>);
 			    return false;
             	}
       }
@@ -294,10 +278,10 @@ var source =
         {
             datatype: "json",
             datafields: [
-                { name: 'variableid' },
-                { name: 'variablename' },
+                { name: 'VariableID' },
+                { name: 'VariableName' },
             ],
-            url: 'db_get_variablelist.php?siteid='+siteid
+            url: base_url+'variable/getSiteJSON?siteid='+siteid
         };
 //Defining the Data adapter
 var dataAdapter = new $.jqx.dataAdapter(source);
@@ -308,49 +292,38 @@ var dataAdapter = new $.jqx.dataAdapter(source);
             theme: 'darkblue',
             width: 200,
             height: 25,
-            selectedIndex: 1,
-            displayMember: 'variablename',
-            valueMember: 'variableid'
+            selectedIndex: 0,
+            displayMember: 'VariableName',
+            valueMember: 'VariableID'
         });
 
 $('#dropdownlist').bind('select', function (event) {
 var args = event.args;
 var item = $('#dropdownlist').jqxDropDownList('getItem', args.index);
 //Check if a valid value is selected and process futher to display dates
-if ((item != null)&&(item.label != "Please select a variable")) {		
-
+if (item != null) {
 //Clear the Box
 //$('#daterange').empty();	
 $('#daterange').html("");
-
-
 varname=item.label;
 //varid=item.value;
-
 //Going to the next function that will generate a list of data types available for that variable
 var t=setTimeout("create_var_list()",300)
-
-
 }
 });
-
-
 });
 //End of Document Ready Function
 
 function create_var_list()
 {
-
 //Generate data types available for that varname
-
         var source =
         {
             datatype: "json",
             datafields: [
-                { name: 'dataid' },
-                { name: 'dataname' },
+                { name: 'DataType' },
             ],
-            url: 'datavalue.php?siteid='+siteid+'&varname='+varname
+            url: base_url+'variable/getTypes?siteid='+siteid+'&varname='+varname
         };
 //Defining the Data adapter
 var dataAdapter = new $.jqx.dataAdapter(source);
@@ -362,8 +335,8 @@ var dataAdapter = new $.jqx.dataAdapter(source);
             width: 200,
             height: 25,
             selectedIndex: 0,
-            displayMember: 'dataname',
-            valueMember: 'dataid'
+            displayMember: 'DataType',
+            valueMember: 'DataType'
         });
 
 //Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
@@ -376,40 +349,24 @@ var item = $('#typelist').jqxDropDownList('getItem', args.index);
 if (item != null) {		
 datatype=item.label;
 //Update Var ID
-
-update_var_id();
-
-//Call Function to set default dates and plot
-
-}
-
+update_var_id();}
 });
-
 }
 
 //End of create_var_list function	
-
 function update_var_id()
 {	
 $.ajax({
   type: "GET",
-  url: "db_update_varid.php?siteid="+siteid+"&varname="+varname+"&type="+datatype,
+  url: base_url+"variable/updateVarID?siteid="+siteid+"&varname="+varname+"&type="+datatype,
 //Processing The Dates
     success: function(data) {
-varid=data;
-//Now We have the VariableID, We call the dates function
-
-
-//Filter by methods available for that specific selection of variable and site
-
-get_methods();
-
-
-
-//get_dates();
-	}
+	varid=data;
+	//Now We have the VariableID, We call the dates function
+	//Filter by methods available for that specific selection of variable and site
+	get_methods();
+}
 });
-
 }
 
 //Function to get dates and plot a default plot
@@ -424,10 +381,10 @@ $('#methodlist').unbind('valuechanged');
         {
             datatype: "json",
             datafields: [
-                { name: 'methodid' },
-                { name: 'methodname' },
+                { name: 'MethodID' },
+                { name: 'MethodDescription' },
             ],
-            url: 'db_get_methods.php?siteid='+siteid+'&varid='+varid
+            url: base_url+'methods/getSiteVarJSON?siteid='+siteid+'&varid='+varid
         };
 
 //Defining the Data adapter
@@ -441,31 +398,22 @@ var dataAdapter122 = new $.jqx.dataAdapter(source122);
             width: 200,
             height: 25,
             selectedIndex: 0,
-            displayMember: 'methodname',
-            valueMember: 'methodid'
+            displayMember: 'MethodDescription',
+            valueMember: 'MethodID'
         });
 
 //Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
 
 $('#methodlist').bind('select', function (event) {
-	 
 var args = event.args;
 var item = $('#methodlist').jqxDropDownList('getItem', args.index);
 //Check if a valid value is selected and process futher to display dates
 if (item != null) {		
 methodid=item.value;
-
 get_dates();
 //Now call to check dates
-
-
-
 }
-
 });
-	
-	
-	
 }
 function get_dates()
 {
@@ -491,7 +439,7 @@ date_to=String($(this).attr("date_to"));
 //Call the next function to display the data
 
 $('#daterange').html("");
-$('#daterange').prepend('<p><strong>'+<?php echo "'".$DatesAvailable."'";?>+'</strong> ' + date_from + ' <strong>'+<?php echo "'".$To."'";?>+'</strong> ' + date_to +'</p>');
+$('#daterange').prepend('<p><strong>'+<?php echo "'".getTxt('DatesAvailable')."'";?>+'</strong> ' + date_from + ' <strong>'+<?php echo "'".getTxt('To')."'";?>+'</strong> ' + date_to +'</p>');
 
 $("#jqxDateTimeInput").jqxDateTimeInput({ width: '250px', height: '25px', theme: 'darkblue'});
 $("#jqxDateTimeInput").jqxDateTimeInput({ formatString: 'd' });
@@ -546,8 +494,8 @@ if (monthEnd > 12) { monthEnd=12;}
 
 date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
 date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
-$("#fromdatedrop").jqxDropDownButton('setContent', <?php echo "'".$SelectStart."'";?> );
-$("#todatedrop").jqxDropDownButton('setContent', <?php echo "'".$SelectEnd."'";?> );
+$("#fromdatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectStart')."'";?> );
+$("#todatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectEnd')."'";?> );
 
 plot_chart();	
 //Binding An Event to the first calender
@@ -642,7 +590,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
           
         },
     title: {
-	text: <?php echo "'".$Dataof."'"; ?>+" "+sitename+" "+ <?php echo "'".$From."'"; ?>+" "+ date_chart_from +" "+  <?php echo "'".$To."'"; ?>+" " + date_chart_to,
+	text: <?php echo "'".getTxt('Dataof')."'"; ?>+" "+sitename+" "+ <?php echo "'".getTxt('From')."'"; ?>+" "+ date_chart_from +" "+  <?php echo "'".getTxt('To')."'"; ?>+" " + date_chart_to,
 		style: {
                 fontSize: '12px'
             }
@@ -654,7 +602,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
         },
 	
 	 subtitle: {
-	text: <?php echo "'".$ClickDrag."'"; ?>
+	text: <?php echo "'".getTxt('ClickDrag')."'"; ?>
     },
 	
    xAxis: {
@@ -664,7 +612,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
                 year: '%b.%Y'
             },
 			title: {
-		text: <?php echo "'".$TimeMsg."'"; ?>,
+		text: <?php echo "'".getTxt('TimeMsg')."'"; ?>,
 				margin: 30
             }
 			
@@ -690,31 +638,31 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 				{
                     type: 'day',
                     count: 1,
-		    text: <?php echo "'".$OneD."'"; ?>
+		    text: <?php echo "'".getTxt('OneD')."'"; ?>
                 },
 				{
                     type: 'day',
                     count: 3,
-		    		text: <?php echo "'".$ThreeD."'"; ?>
+		    		text: <?php echo "'".getTxt('ThreeD')."'"; ?>
                 }, {
                     type: 'week',
                     count: 1,
-		    		text: <?php echo "'".$OneW."'"; ?>
+		    		text: <?php echo "'".getTxt('OneW')."'"; ?>
                 }, {
                     type: 'month',
                     count: 1,
-		   			text: <?php echo "'".$OneM."'"; ?>
+		   			text: <?php echo "'".getTxt('OneM')."'"; ?>
                 }, {
                     type: 'month',
                     count: 6,
-		   			text: <?php echo "'".$SixM."'"; ?>
+		   			text: <?php echo "'".getTxt('SixM')."'"; ?>
                 }, {
                     type: 'year',
                     count: 1,
-		    		text: <?php echo "'".$OneY."'"; ?>
+		    		text: <?php echo "'".getTxt('OneY')."'"; ?>
                 }, {
                     type: 'all',
-		    		text: <?php echo "'".$All."'"; ?>
+		    		text: <?php echo "'".getTxt('All')."'"; ?>
                 }],
             selected: 6
             },
@@ -960,7 +908,7 @@ switch(varid)
 case "19":
 if((vt<0)||(vt>100))
 {
-alert(<?php echo "'".$ValueBetweenZeroAndHundred."'";?>);
+alert(<?php echo "'".getTxt('ValueBetweenZeroAndHundred')."'";?>);
 		return false;
 }
 break;
@@ -968,7 +916,7 @@ case "13":
 case "22":
 if((vt<0)||(vt>14))
 {
-alert(<?php echo "'".$ValueBetweenZeroAndFourteen."'";?>);
+alert(<?php echo "'".getTxt('ValueBetweenZeroAndFourteen')."'";?>);
 		return false;
 }
 break;
@@ -977,7 +925,7 @@ case "24":break;
 default:
 if(vt<0)
 {
-alert(<?php echo "'".$ValueLessThanZero."'";?>);
+alert(<?php echo "'".getTxt('ValueLessThanZero')."'";?>);
 		return false;
 }
   break;
@@ -1055,7 +1003,7 @@ switch(varid)
 case "19":
 if((vt<0)||(vt>100))
 {
-alert(<?php echo "'".$ValueBetweenZeroAndHundred."'";?>);
+alert(<?php echo "'".getTxt('ValueBetweenZeroAndHundred')."'";?>);
 		return false;
 }
 break;
@@ -1063,7 +1011,7 @@ case "13":
 case "22":
 if((vt<0)||(vt>14))
 {
-alert(<?php echo "'".$ValueBetweenZeroAndFourteen."'";?>);
+alert(<?php echo "'".getTxt('ValueBetweenZeroAndFourteen')."'";?>);
 		return false;
 }
 break;
@@ -1072,7 +1020,7 @@ case "24":break;
 default:
 if(vt<0)
 {
-alert(<?php echo "'".$ValueLessThanZero."'";?>);
+alert(<?php echo "'".getTxt('ValueLessThanZero')."'";?>);
 		return false;
 }
   break;
@@ -1104,7 +1052,7 @@ $("#popupWindow_new").jqxWindow('hide');
   }
   else
   {
-	alert(<?php echo "'".$DatabaseConfigurationError."'"; ?>);
+	alert(<?php echo "'".getTxt('DatabaseConfigurationError')."'"; ?>);
 	
 	return false;  
   }
@@ -1182,22 +1130,10 @@ loadmap();
 <?php HTML_Render_Body_Start(); ?>
 
       <p>&nbsp;</p>
-      <table width="630" border="0">
-        <tr>
-          <td colspan="4"><?php  
-
-require_once 'db_config.php';
-
-// get data and store in a json array
-$query = "SELECT DISTINCT SiteName, SiteType, Latitude, Longitude FROM sites";
-$siteid = $_GET['siteid'];
-$query .= " WHERE SiteID=".$siteid;
-
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
-$row = mysql_fetch_array($result, MYSQL_ASSOC);
-
-echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
-
+<table width="630" border="0">
+	<tr>
+	<td colspan="4"><?php  
+echo("<p align='center'><b>".getTxt('Site')."</b>".$site['SiteName']."</p>");
 ?></td>
           </tr>
         <tr>
@@ -1207,7 +1143,7 @@ echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
           <td width="221">&nbsp;</td>
         </tr>
         <tr>
-    	  <td><strong><?php echo $Variable; ?></strong></td>
+    	  <td><strong><?php echo getTxt('Variable'); ?></strong></td>
           <td><div id="dropdownlist"></div></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
@@ -1219,10 +1155,10 @@ echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><div id='typelist_text'><strong><?php echo $Type; ?> </strong></div></td>
+          <td><div id='typelist_text'><strong><?php echo getTxt('Type'); ?> </strong></div></td>
 
           <td><div id='typelist'></div></td>
-          <td><div id='methodlist_text'><strong><?php echo $Method; ?></strong></div></td>
+          <td><div id='methodlist_text'><strong><?php echo getTxt('Method'); ?></strong></div></td>
           <td><div id='methodlist'></div></td>
         </tr>
         <tr>
@@ -1251,87 +1187,69 @@ echo("<p align='center'><b>$Site </b>".$row['SiteName']."</p>");
           <td>&nbsp;</td>
         </tr>
         <tr>
-           <td colspan="4"><div id="loadingtext" class="loading"><?php echo $PleaseWait; ?><br/>
+           <td colspan="4"><div id="loadingtext" class="loading"><?php echo getTxt('PleaseWait'); ?><br/>
     </div>
   <div id='jqxtabs'>
     <ul style='margin-left: 20px;'>
-      <li><?php echo $SiteInfo; ?></li>
-      <li><?php echo $DataPlot; ?></li>
-      <li><?php echo $DataTable; ?></li>
+      <li><?php echo getTxt('SiteInfo'); ?></li>
+      <li><?php echo getTxt('DataPlot'); ?></li>
+      <li><?php echo getTxt('DataTable'); ?></li>
       </ul>
     <div>
 <?php  
 
 
-echo("<b>Site: </b>".$row['SiteName']."<br/>");
-
-//Fetch the Site Image and display it here
-
-$query1 = "SELECT picname FROM sitepic";
-$query1 .= " WHERE SiteID=".$siteid;
-
-$result1 = mysql_query($query1) or die("SQL Error 1: " . mysql_error());
+echo("<b>Site: </b>".$site['SiteName']."<br/>");
 
 
-if(mysql_num_rows($result1)<1) {
-
+if($site['picname']==null) {
 	if(isLoggedIn()) {
-		echo("<br><br>  $NoImages  <a href='edit_site.php'> $ClickHere </a>");	
+		echo("<br><br>  ".getTxt('NoImages')."  <a href='".site_url('sites/edit/'.$SiteID)."'> ".getTxt('ClickHere')." </a>");	
 		}
 	else {	
-		echo("<br><bf> $NoImages");
+		echo("<br><br> ".getTxt('NoImages'));
 	}
 
 } else {
-	$row1 = mysql_fetch_array($result1, MYSQL_ASSOC);
-	echo("<br><br><img src='imagesite/".$row1['picname']."' width='368' height='250'>");
+	echo("<br><br><img src='".getImg('imagesite/'.$site['picname'])."' width='368' height='250'>");
 }
 
-
-
-echo("<br/><br/><b>$Type </b>".$row['SiteType']."<br/><br/><b>$Latitude </b>".$row['Latitude']."<br/><br/><b>$Longitude </b>".$row['Longitude']);
-
-$query = "SELECT DISTINCT VariableName FROM seriescatalog";
-$siteid = $_GET['siteid'];
-$query .= " WHERE SiteID=".$siteid;
-
-$result = mysql_query($query) or die("SQL Error 1: " . mysql_error());
-echo("<br/><br/><b>$Measurements</b>");
-$num_rows = mysql_num_rows($result);
+echo("<br/><br/><b>".getTxt('Type')." </b>".$site['SiteType']."<br/><br/><b>".getTxt('Latitude')." </b>".$site['Latitude']."<br/><br/><b>".getTxt('Longitude')." </b>".$site['Longitude']."<br /><br/><br/><b>".getTxt('Measurements')."</b>");
+$num_rows = count($Variables);
 $count=1;
-while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+foreach($Variables as $var)
 {
-if($row['VariableName']!="")
+if($var['VariableName']!="")
 {	
-	echo($row['VariableName']);
+	echo($var['VariableName']);
 	if($count!=$num_rows)
 	{echo "; ";}
 }
   $count=$count+1;
-	}
+}
 
 
 
 ?>
  <br/><br/>
-<?php echo $WrongSite; ?><a href="view_main.php" style="color:#00F"><?php echo $Here; ?></a> <?php echo $GoBack; ?> </div>
+<?php echo getTxt('WrongSite'); ?><a href="view_main.php" style="color:#00F"><?php echo ' '.getTxt('Here'); ?></a> <?php echo getTxt('GoBack'); ?> </div>
 
     <div>
    
       <div id="container" style="height: 470px"></div>
 <!-- Button to compare data values-->
-  <input type="button" style=" float:right" value="<?php echo $Compare;?>" id='compare' />
+  <input type="button" style=" float:right" value="<?php echo getTxt('Compare');?>" id='compare' />
 
 
       </div>
     <div>
       <div id="jqxgrid"></div>
         <div id="popupWindow">
-            <div><?php echo $Edit; ?></div>
+            <div><?php echo getTxt('Edit'); ?></div>
             <div style="overflow: hidden;">
                 <table>
                     <tr>
-                        <TD colspan="2"><?php echo $ChangeValues; ?></td>
+                        <TD colspan="2"><?php echo getTxt('ChangeValues'); ?></td>
 
                     </tr>
                     <tr>
@@ -1339,7 +1257,7 @@ if($row['VariableName']!="")
           <td>&nbsp;</td>
         </tr>
                     <tr>
-                        <td align="right"><?php echo $Date; ?></td>
+                        <td align="right"><?php echo getTxt('Date'); ?></td>
 
                         <td align="left"><div id="date"</div></td>
                     </tr>
@@ -1348,7 +1266,7 @@ if($row['VariableName']!="")
           <td>&nbsp;</td>
         </tr>
                     <tr>
-                        <td align="right"><?php echo $Time;?></td>
+                        <td align="right"><?php echo getTxt('Time');?></td>
                         <td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime()" size="10"></td>
                     </tr>
                <tr>
@@ -1357,7 +1275,7 @@ if($row['VariableName']!="")
         </tr>
           
                     <tr>
-                        <td align="right"><?php echo $Value; ?> </td>
+                        <td align="right"><?php echo getTxt('Value'); ?> </td>
                         <td align="left"><input id="value" onBlur="validatenum()"/></td>
                     </tr>
                     <tr>
@@ -1367,24 +1285,24 @@ if($row['VariableName']!="")
              
                     <tr>
                         <td align="right"></td>
-                        <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save" value="<?php echo $Save;?>" /><input id="delval" type="button" value="<?php echo $Delete;?>" />&nbsp;<input id="Cancel" type="button" value="<?php echo $Cancel; ?>" /></td>
+                        <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save" value="<?php echo getTxt('Save');?>" /><input id="delval" type="button" value="<?php echo getTxt('Delete');?>" />&nbsp;<input id="Cancel" type="button" value="<?php echo getTxt('Cancel'); ?>" /></td>
                     </tr>
                 </table>
             </div>
        </div>
           <div id="popupWindow_new">
-            <div><?php echo $Add; ?></div>
+            <div><?php echo getTxt('Add'); ?></div>
             <div style="overflow: hidden;">
                 <table>
                     <tr>
-                        <TD colspan="2"><?php echo $EnterValues; ?></td>
+                        <TD colspan="2"><?php echo getTxt('EnterValues'); ?></td>
                     </tr>
                     <tr>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
                     <tr>
-                        <td align="right"><?php echo $Date; ?></td>
+                        <td align="right"><?php echo getTxt('Date'); ?></td>
                         <td align="left"><div id="date_new"</div></td>
                     </tr>
                     <tr>
@@ -1392,7 +1310,7 @@ if($row['VariableName']!="")
           <td>&nbsp;</td>
         </tr>
                     <tr>
-                        <td align="right"><?php echo $Time; ?></td>
+                        <td align="right"><?php echo getTxt('Time'); ?></td>
                         <td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime_new()" size="10"></td>
                     </tr>
                <tr>
@@ -1401,7 +1319,7 @@ if($row['VariableName']!="")
         </tr>
           
                     <tr>
-                        <td align="right"><?php echo $Value; ?></td>
+                        <td align="right"><?php echo getTxt('Value'); ?></td>
                         <td align="left"><input id="value_new" onBlur="validatenum_new()"/></td>
                     </tr>
                     <tr>
@@ -1411,7 +1329,7 @@ if($row['VariableName']!="")
              
                     <tr>
                         <td align="right"></td>
-                       <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save_new" value="<?php echo $Save; ?>" /><input id="Cancel_new" type="button" value="<?php echo $Cancel; ?>" /></t>
+                       <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save_new" value="<?php echo getTxt('Save'); ?>" /><input id="Cancel_new" type="button" value="<?php echo getTxt('Cancel'); ?>" /></t>
                     </tr>
                 </table>
             </div>
@@ -1424,7 +1342,7 @@ if($row['VariableName']!="")
 		echo("<input type='button' value=$AddRow id='addnew' /> <br/>  <br/>");
 	  }
       ?>
-        <input type="button" value="<?php echo $DownloadData;?>" id='export' />
+        <input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />
         </div>
       </div>
     </div></td>
@@ -1439,35 +1357,35 @@ if($row['VariableName']!="")
 
 <div id="window">
  <div id="windowHeader">
- <span><?php echo $CompareTwo; ?></span>
+ <span><?php echo getTxt('CompareTwo'); ?></span>
    </div>
  <div style="overflow: hidden;" id="windowContent">
  </div>
   </div>
 <div id="window2">
  <div id="window2Header">
- <span><?php echo $CompareTwo; ?></span>
+ <span><?php echo getTxt('CompareTwo'); ?></span>
    </div>
  <div style="overflow: hidden;" id="window2Content">
  </div>
   </div>
   <div id="window3">
  <div id="window3Header">
- <span><?php echo $CompareTwo; ?></span>
+ <span><?php echo getTxt('CompareTwo'); ?></span>
    </div>
  <div style="overflow: hidden;" id="window3Content">
  </div>
   </div>
    <div id="window4">
  <div id="window4Header">
- <span><?php echo $CompareTwo; ?></span>
+ <span><?php echo getTxt('CompareTwo'); ?></span>
    </div>
  <div style="overflow: hidden;" id="window4Content">
  </div>
   </div>
    <div id="window5">
  <div id="window5Header">
- <span><?php echo $CompareTwo; ?></span>
+ <span><?php echo getTxt('CompareTwo'); ?></span>
    </div>
  <div style="overflow: hidden;" id="window5Content">
  </div>

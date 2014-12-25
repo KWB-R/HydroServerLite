@@ -64,5 +64,15 @@ class Site extends MY_Model
 		return $this->tranResult($query->result_array());	
 	}
 	
+	function getSite($siteID)
+	{
+		$this->db->select()
+			->from($this->tableName)
+			->where($this->tableName.'.SiteID',$siteID)
+			->join('sitepic', $this->tableName.'.SiteID=sitepic.siteid', 'left');
+		$query = $this->db->get();
+		return $this->tranResult($query->result_array());	
+	}
+	
 }
 ?>

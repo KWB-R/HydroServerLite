@@ -42,4 +42,20 @@ class Methods extends MY_Controller {
 		}
 	}
 	
+	public function getSiteVarJSON()
+	{
+		$var = $this->input->get('varid', TRUE);
+		$site = $this->input->get('siteid', TRUE);
+		if($var&&$site)
+		{
+			$result = $this->method->getByVarSite($var,$site);
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: VariableID, SiteID is not defined. An example request would be getSiteVarJSON?varid=1&&siteid=2";
+			$this->load->view('templates/apierror',$data);	
+		}
+	}
+	
 }
