@@ -73,6 +73,6 @@ class Site extends MY_Model
 		$query = $this->db->get();
 		return $this->tranResult($query->result_array());	
 	}
-	
+
 }
 ?>

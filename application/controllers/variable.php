@@ -67,4 +67,35 @@ class Variable extends MY_Controller {
 			$result = $this->variables->getVarID($this->input->get('siteid', TRUE),$this->input->get('varname', TRUE),$this->input->get('type', TRUE));
 			echo $result[0]['VariableID'];
 	}
+	
+		
+	public function getUnit()
+	{
+		$var = $this->input->get('varid', TRUE);
+		if($var!==false)
+		{
+			$result = $this->variables->getUnit($var);
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: VariableID is not defined. An example request would be getUnit?varid=1";
+			$this->load->view('templates/apierror',$data);	
+		}
+	}
+	
+	public function getWithUnit()
+	{
+		$var = $this->input->get('varid', TRUE);
+		if($var!==false)
+		{
+			$result = $this->variables->getVariableWithUnit($var);
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: VariableID is not defined. An example request would be getWithUnit?varid=1";
+			$this->load->view('templates/apierror',$data);	
+		}
+	}
 }

@@ -26,5 +26,6 @@ class Sources extends MY_Model
 	  $num_inserts = $this->db->affected_rows();
 	  return $num_inserts;
 	}
+	
 }
 ?>

@@ -340,7 +340,7 @@ var dataAdapter = new $.jqx.dataAdapter(source);
         });
 
 //Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
-
+$("#typelist").jqxDropDownList('selectIndex', 0 ); 
 $('#typelist').bind('select', function (event) {
 	 
 var args = event.args;
@@ -401,7 +401,7 @@ var dataAdapter122 = new $.jqx.dataAdapter(source122);
             displayMember: 'MethodDescription',
             valueMember: 'MethodID'
         });
-
+$("#methodlist").jqxDropDownList('selectIndex', 0 );
 //Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
 
 $('#methodlist').bind('select', function (event) {
@@ -418,24 +418,15 @@ get_dates();
 function get_dates()
 {
 
-
-var url="get_date.php?siteid="+siteid+"&varid=" + varid+"&methodid=" + methodid;
+var url=base_url+"series/getDateJSON?siteid="+siteid+"&varid=" + varid+"&methodid=" + methodid;
 $.ajax({
-        type: "GET",
+    type: "GET",
 	url: url,
-	dataType: "xml",
-	success: function(xml) {
-
-//Displaying the Available Dates	
-$(xml).find("dates").each(function()
-{
-
-
-
+	dataType: "json",
+	success: function(result) {
 //Displaying the Available Dates
-sitename=String($(this).attr("sitename"));	
-date_from=String($(this).attr("date_from"));
-date_to=String($(this).attr("date_to"));		
+date_from=String(result.BeginDateTime);
+date_to=String(result.EndDateTime);		
 //Call the next function to display the data
 
 $('#daterange').html("");
@@ -531,37 +522,27 @@ var tempdate=add_zero((date_select_to.getMonth()+1))+'/'+add_zero(date_select_to
 $("#todatedrop").jqxDropDownButton('setContent', tempdate);
 date_to_sql=date_select_to.getFullYear() + '-' + add_zero((date_select_to.getMonth()+1)) + '-' + add_zero(date_select_to.getDate()) + ' 00:00:00';
 plot_chart();
+});}
 });
-
-
-
-});
-	}
-});
-
-
 } //End of function get_dates
 	
 function plot_chart()
 {
-
 var unit_yaxis="unit";
 //Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
 if (varid != -1)
 {
 $.ajax({
   type: "GET",
-  url: "getUnit2.php?varid="+varid
+  dataType: "json",
+  url: base_url+"variable/getUnit?varid="+varid
 }).done(function( msg ) {
-  unit_yaxis = msg;
+  unit_yaxis = msg[0].unitA;
 });
 }
 
 //Chaning Complete Data loading technique..need to create a php page that will output javascript...
-
-var url_test='db_get_data.php?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
-
-
+var url_test=base_url+'datapoint/getData?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 $.ajax({
   url: url_test,
   type: "GET",
@@ -590,7 +571,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
           
         },
     title: {
-	text: <?php echo "'".getTxt('Dataof')."'"; ?>+" "+sitename+" "+ <?php echo "'".getTxt('From')."'"; ?>+" "+ date_chart_from +" "+  <?php echo "'".getTxt('To')."'"; ?>+" " + date_chart_to,
+	text: <?php echo "'".getTxt('Dataof')."'"; ?>+" "+<?php echo "'".$site['SiteName']."'"; ?>+" "+ <?php echo "'".getTxt('From')."'"; ?>+" "+ date_chart_from +" "+  <?php echo "'".getTxt('To')."'"; ?>+" " + date_chart_to,
 		style: {
                 fontSize: '12px'
             }
@@ -709,17 +690,17 @@ return new Date(year,month,day,hour,minute,sec);
 
 function make_grid()
 {
-               var editrow = -1;
-			   var vid=0;
-var url='db_get_data2.php?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+var editrow = -1;
+var vid=0;
+var url=base_url+'datapoint/getDataJSON?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 
 var source12 =
             {
-                datatype: "csv",
+                datatype: "json",
                 datafields: [
-                    { name: 'vid'},
-                    { name: 'Value'},
-                    { name: 'date'}
+                    { name: 'ValueID'},
+                    { name: 'DataValue'},
+                    { name: 'LocalDateTime'}
                 ],
 				
                 url: url
@@ -728,29 +709,22 @@ var dataAdapter12 = new $.jqx.dataAdapter(source12);
 
 //Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
 var unitGrid = "Unit: None";
-
-
 $.ajax({
-  type: "GET",
-  url: "getUnit2.php?varid="+varid
+ dataType: "json",
+ url: base_url+"variable/getUnit?varid="+varid
 }).done(function( msg ) {
-  unitGrid = msg;
-  
+  unitGrid = msg[0].unitA;
   if (flag==1)    
 {
-
- 
-
- 
    $("#jqxgrid").jqxGrid(
             {
              
                 source: dataAdapter12,
                
                 columns: [
-				  { text: 'ValueID', datafield: 'vid', width: 90 },
-                  { text: 'Date', datafield: 'date', width: 200 },
-	             { text: 'Value (' + unitGrid +')' , datafield: 'Value', width: 200} <?php
+				  { text: 'ValueID', datafield: 'ValueID', width: 90 },
+                  { text: 'Date', datafield: 'LocalDateTime', width: 200 },
+	             { text: 'Value (' + unitGrid +')' , datafield: 'DataValue', width: 200} <?php
      if(isLoggedIn())
 	  {
 		echo(",
@@ -766,7 +740,7 @@ $.ajax({
                      var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
 					 //Create a Date time Input
 					 
-					 var datepart=dataRecord.date.split(' ');
+					 var datepart=dataRecord.LocalDateTime.split(' ');
 					 
 		
 					  $('#popupWindow').jqxWindow('show');
@@ -781,8 +755,8 @@ $.ajax({
 					// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
 					
 					 
-					 $('#value').val(dataRecord.Value);
-					 vid=dataRecord.vid;
+					 $('#value').val(dataRecord.DataValue);
+					 vid=dataRecord.ValueID;
                      // show the popup window.
                     
                  }
@@ -809,9 +783,9 @@ if(flag!=1)
 				 editable: false,
 				   selectionmode: 'singlecell',
                 columns: [
-			  { text: 'ValueID', datafield: 'vid', width: 90 },
-                  { text: 'Date', datafield: 'date', width: 200 },
-	          { text: 'Value (' + unitGrid +')', datafield: 'Value', width: 200} <?php
+			  { text: 'ValueID', datafield: 'ValueID', width: 90 },
+                  { text: 'Date', datafield: 'LocalDateTime', width: 200 },
+	          { text: 'Value (' + unitGrid +')', datafield: 'DataValue', width: 200} <?php
       	if(isLoggedIn())
 	  {
 		echo(",
@@ -827,7 +801,7 @@ if(flag!=1)
                      var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
 					 //Create a Date time Input
 					  $('#popupWindow').jqxWindow('show');
-					 var datepart=dataRecord.date.split(' ');
+					 var datepart=dataRecord.LocalDateTime.split(' ');
 					 
 		
 					 
@@ -842,8 +816,8 @@ if(flag!=1)
 					// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
 					
 					 
-					 $('#value').val(dataRecord.Value);
-					 vid=dataRecord.vid;
+					 $('#value').val(dataRecord.DataValue);
+					 vid=dataRecord.ValueID;
                      // show the popup window.
                     
                  }
@@ -861,78 +835,39 @@ if(flag!=1)
 
   // initialize the popup window and buttons.
 
-$("#popupWindow").jqxWindow({ width: 250, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel"), modalOpacity: 0.01 });
+$("#popupWindow").jqxWindow({ width: 300, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel"), modalOpacity: 0.01 });
 $( "#timepicker" ).timepicker({ showOn: "focus", showPeriodLabels: false });
 $("#delval").jqxButton({ theme: 'darkblue' });
 $("#Cancel").jqxButton({ theme: 'darkblue' });
 $("#Save").jqxButton({ theme: 'darkblue'});
 //Delete Value
+$("#delval").unbind("click"); //Multiple events are getting binded for some reason. This makes sure that doesn't happen. 
 $("#delval").click(function () {
-
-//Send out a delete request
-		
-	 $.ajax({
-  type: "POST",
-  url: "do_edit_value.php?del=1&vid="+vid
-}).done(function( msg ) {
-  if(msg==1)
+//Send out a delete request		
+$.ajax({
+	dataType: "json",
+	url: base_url+"datapoint/delete/"+vid
+}).done(function(result) {
+  if(result.status=='success')
   {
-
 //Remove that row from the table
-$('#jqxgrid').jqxGrid('deleterow', editrow);        
+$('#jqxgrid').jqxGrid('deleterow', editrow);  //This one might be having issues.       
 $("#popupWindow").jqxWindow('hide');
-
- 
   }
 });
-		   
-		   
-		   
-		});
-			// update the edited row when the user clicks the 'Save' button.
+});
+// update the edited row when the user clicks the 'Save' button.
+$("#Save").unbind("click");
 $("#Save").click(function () {
-    if (editrow >= 0) {
-		
+if (editrow >= 0) {		
 var seldate= $('#date').jqxDateTimeInput('getDate'); 
 var row = {date: seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+' '+$("#timepicker").val()+':00', Value: $("#value").val(), vid: vid};
-        
-		//Validate
+var vt = $("#value").val();  
+//Validate
 if(validatenum()==false){
 		return false;
 	}
-	
-var vt = $("#value").val();
-
-switch(varid)
-{
-case "19":
-if((vt<0)||(vt>100))
-{
-alert(<?php echo "'".getTxt('ValueBetweenZeroAndHundred')."'";?>);
-		return false;
-}
-break;
-case "13":
-case "22":
-if((vt<0)||(vt>14))
-{
-alert(<?php echo "'".getTxt('ValueBetweenZeroAndFourteen')."'";?>);
-		return false;
-}
-break;
-case "7":
-case "24":break;
-default:
-if(vt<0)
-{
-alert(<?php echo "'".getTxt('ValueLessThanZero')."'";?>);
-		return false;
-}
-  break;
-}
-	
-		
-	//Time checking
+//Time checking
 result=validatetime();
 	if(result==false){
 		return false;
@@ -940,11 +875,11 @@ result=validatetime();
 
 //Send out an ajax request to update that data field
 	 $.ajax({
-  type: "POST",
-  url: "do_edit_value.php?vid="+vid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker").val()
+  dataType: "json",
+  url: base_url+"datapoint/edit/"+vid+"?val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker").val()
 }).done(function( msg )
  {
-  if(msg==1)
+  if(msg.status=='success')
   {  
 $('#jqxgrid').jqxGrid('updaterow', editrow, row);        
 $("#popupWindow").jqxWindow('hide');
@@ -956,14 +891,8 @@ $("#popupWindow").jqxWindow('hide');
 	return false;  
   }
 });
-
-
-
-
-              
-				}
-            }); 
-
+}
+}); 
 
 //End of Editing 
 
@@ -987,50 +916,17 @@ $( "#timepicker_new" ).timepicker({ showOn: "focus", showPeriodLabels: false });
       ?>
 
 
-
+$("#Save_new").unbind("click");
 $("#Save_new").bind('click', function () {
-
-		//Validate
+var vt = $("#value_new").val();
+//Validate
 if(validatenum_new()==false){
 		return false;
-	}
-
-	
-var vt = $("#value_new").val();
-
-switch(varid)
-{
-case "19":
-if((vt<0)||(vt>100))
-{
-alert(<?php echo "'".getTxt('ValueBetweenZeroAndHundred')."'";?>);
-		return false;
 }
-break;
-case "13":
-case "22":
-if((vt<0)||(vt>14))
-{
-alert(<?php echo "'".getTxt('ValueBetweenZeroAndFourteen')."'";?>);
+//Time checking
+if(validatetime_new()==false){
 		return false;
-}
-break;
-case "7":
-case "24":break;
-default:
-if(vt<0)
-{
-alert(<?php echo "'".getTxt('ValueLessThanZero')."'";?>);
-		return false;
-}
-  break;
-}
-	
-			
-	//Time checking
-	if(validatetime_new()==false){
-		return false;
-	}		
+}		
 
 var seldate= $('#date_new').jqxDateTimeInput('getDate'); 
 
@@ -1038,22 +934,18 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
 //Send out ajax request to add new value
 
  $.ajax({
-  type: "POST",
-  url: "do_edit_addval.php?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+siteid+"&mid="+methodid
+  dataType: "json",
+  url: base_url+"datapoint/add?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+siteid+"&mid="+methodid
 }).done(function( msg )
  {
-  if(msg)
-  {  
-
-var row = {date: seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+' '+$("#timepicker_new").val()+':00', Value: $("#value_new").val(), vid: msg};  
-$("#jqxgrid").jqxGrid('addrow', null, row); 
-$("#popupWindow_new").jqxWindow('hide');
+    if(msg.status=='success')
+  { 
+	$("#popupWindow_new").jqxWindow('hide');
 	plot_chart(); 
   }
   else
   {
 	alert(<?php echo "'".getTxt('DatabaseConfigurationError')."'"; ?>);
-	
 	return false;  
   }
 });
@@ -1339,7 +1231,7 @@ if($var['VariableName']!="")
      <?php
 	if(isLoggedIn())
 	  {
-		echo("<input type='button' value=$AddRow id='addnew' /> <br/>  <br/>");
+		echo("<input type='button' value='".getTxt('AddRow')."' id='addnew' /> <br/>  <br/>");
 	  }
       ?>
         <input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />

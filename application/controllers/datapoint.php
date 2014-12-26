@@ -14,6 +14,7 @@ class Datapoint extends MY_Controller {
 		$this->load->model('variables','',TRUE);
 		$this->load->model('sources','',TRUE);
 		$this->load->model('datapoints','',TRUE);
+		$this->load->model('sc','',TRUE);
 		$this->load->library('form_validation');
 	}
 	
@@ -142,4 +143,164 @@ class Datapoint extends MY_Controller {
 		$this->load->view('datapoint/importfile',$data);
 	}
 	
+	public function getData()
+	{
+		$var = $this->input->get('varid', TRUE);
+		$site = $this->input->get('siteid', TRUE);	
+		$method = $this->input->get('meth', TRUE);
+		$start = $this->input->get('startdate', TRUE);	
+		$end = $this->input->get('enddate', TRUE);
+		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
+		{
+			$result = $this->datapoints->getData($site,$var,$method,$start,$end);
+			$variable = $this->variables->getVariableWithUnit($var);
+			$variable = $variable[0];
+			$unit = $variable['unitsType'];
+			$noValue = $variable['NoDataValue'];
+			
+			echo("var data_test = [\r\n");
+			$num_rows = count($result);
+			$count=1;		
+			//To echo Data in javascript format
+			foreach ($result as $row) 
+			{
+				$pieces = explode("-", $row['LocalDateTime']);
+				$pieces2 = explode(" ", $pieces[2]);
+				$pieces3 = explode(":", $pieces2[1]);
+				$pieces[1]=$pieces[1]-1;
+				
+				$output="[Date.UTC(".$pieces[0].",".$pieces[1].",".$pieces2[0].",".$pieces3[0].",".$pieces3[1].",".$pieces3[2]."),".$row['DataValue']."]";
+				
+				//Check for NoDataValue (Default is -9999))
+				if (!($row['DataValue'] == $noValue))
+				{
+					echo $output;
+					 if($count!=$num_rows)
+						{echo ",";}
+					 $count=$count+1;
+					 echo ("\r\n");
+				}
+			}
+			echo("];");
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: VariableID, SiteID,MethodID is not defined. An example request would be getData?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
+			$this->load->view('templates/apierror',$data);	
+		}
+		
+	}
+	
+	public function getDataJSON()
+	{
+		$var = $this->input->get('varid', TRUE);
+		$site = $this->input->get('siteid', TRUE);	
+		$method = $this->input->get('meth', TRUE);
+		$start = $this->input->get('startdate', TRUE);	
+		$end = $this->input->get('enddate', TRUE);
+		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
+		{
+			$result = $this->datapoints->getData($site,$var,$method,$start,$end);
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: VariableID, SiteID,MethodID is not defined. An example request would be getDateJSON?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
+			$this->load->view('templates/apierror',$data);	
+		}	
+	}
+	
+	public function delete()
+	{
+		$valueid = end($this->uri->segment_array());
+		if($valueid=="delete")
+		{
+			$data['errorMsg']="One of the parameters: ValueID is not defined. An example request would be delete/1";
+			$this->load->view('templates/apierror',$data);
+			return;
+		}
+		$result = $this->datapoints->delete($valueid);
+		if($result)
+			{
+				$output="success";	
+			}
+		else
+			{
+				$output="failed";
+			}		
+		$output = array("status"=>$output);
+		echo json_encode($output);	
+	}
+	
+	public function edit()
+	{
+		$valueid = end($this->uri->segment_array());
+		if($valueid=="edit")
+		{
+			$data['errorMsg']="One of the parameters: ValueID,date,time,value is not defined. An example request would be edit/1?val=2&dt=2001-01-01&time=12:00";
+			$this->load->view('templates/apierror',$data);
+			return;
+		}
+		$value = $this->input->get('val', TRUE);
+		$dt=$this->input->get('dt', TRUE);	
+		$time = $this->input->get('time', TRUE);
+		
+		if($valueid!==false&&$value!==false&&$dt!==false&&$time!==false)
+		{
+			$LocalDateTime = $dt . " " . $time . ":00";
+			$localtimestamp = strtotime($LocalDateTime);
+			$ms = $this->config->item('UTCOffset') * 3600;
+			$utctimestamp = $localtimestamp - ($ms);
+			$DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
+			$result = $this->datapoints->editPoint($valueid,$value,$LocalDateTime,$DateTimeUTC);
+			if($result)
+			{
+				$output="success";	
+			}
+			else
+			{
+				$output="failed";
+			}		
+			$output = array("status"=>$output);
+			echo json_encode($output);	
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: ValueID,date,time,value is not defined. An example request would be edit/1?val=2&dt=2001-01-01&time=12:00";
+			$this->load->view('templates/apierror',$data);	
+		}	
+	}
+	public function add()
+	{	
+		$var = $this->input->get('varid', TRUE);
+		$site = $this->input->get('sid', TRUE);	
+		$method = $this->input->get('mid', TRUE);
+		$value = $this->input->get('val', TRUE);
+		$dt=$this->input->get('dt', TRUE);	
+		$time = $this->input->get('time', TRUE);
+		$source = $this->sc->getSourceBySite($site);
+		$sourceID = $source[0]['SourceID'];
+		if($var!==false&&$value!==false&&$dt!==false&&$time!==false&&$site!==false&&$method!==false)
+		{
+			$dataPoint = $this->createDP($dt,$time,$value,$site,$var,$method,$sourceID);
+			$result=$this->datapoints->addPoint($dataPoint);
+			if($result)
+			{
+				$output="success";
+				
+			}
+			else
+			{
+				$output="failed";
+			}		
+			$output = array("status"=>$output,"id"=>$result);
+			echo json_encode($output);	
+		}
+		
+		else
+		{
+			$data['errorMsg']="One of the parameters: VariableID,date,time,value,SiteID,MethodID, is not defined. An example request would be add?val=2&dt=2001-01-01&time=12:00&sid=1&mid=1&varid=1";
+			$this->load->view('templates/apierror',$data);	
+		}	
+	}
 }

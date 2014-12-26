@@ -12,7 +12,15 @@ class Datapoints extends MY_Model
 	{
 		$this->db->insert($this->tableName, $data);
 		$num_inserts = $this->db->affected_rows();
-	  	return $num_inserts==1;
+		$id = $this->db->insert_id();
+	  	if($num_inserts==1)
+		{
+			return $id;	
+		}
+		else
+		{
+			return false;	
+		}
 	}
 	
 	function addPoints($data)
@@ -22,5 +30,35 @@ class Datapoints extends MY_Model
 	  	return $num_inserts;
 	}
 	
+	function getData($site,$var,$method,$start,$end)
+	{
+		$this->db->select('ValueID, DataValue, LocalDateTime')
+			->from($this->tableName)
+			->where('SiteID',$site)
+			->where('VariableID',$var)
+			->where('MethodID',$method)
+			->where("LocalDateTime between '".$start."' and '".$end."'")
+			->order_by('LocalDateTime');
+		$query = $this->db->get();
+		return $query->result_array();	
+	}
+	function delete($ValueID)
+	{
+		$this->db
+			->where('ValueID',$ValueID)
+			->delete($this->tableName);
+		$num_del = $this->db->affected_rows();
+		return $num_del==1;	
+	}
+	function editPoint($valueid,$value,$LocalDateTime,$DateTimeUTC)
+	{
+		$this->db->set('LocalDateTime', $LocalDateTime)
+		->set('DataValue',$value)
+		->set('DateTimeUTC',$DateTimeUTC)
+		->where('ValueID',$valueid);
+		$this->db->update($this->tableName); 
+		$num = $this->db->affected_rows();
+		return $num==1;	
+	}
 }
 ?>

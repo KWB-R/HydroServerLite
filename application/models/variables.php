@@ -42,5 +42,25 @@ class Variables extends MY_Model
 		$query=$this->db->get();
 		return $query->result_array();	
 	}
+	function getUnit($varID)
+	{
+		$this->db->select('unitsAbbreviation as unitA')
+			->from($this->tableName)
+			->join('units', $this->tableName.'.VariableunitsID=units.unitsID', 'inner')
+			->where('VariableID',$varID);
+		
+		$query=$this->db->get();
+		return $this->tranResult($query->result_array());	
+	}
+	function getVariableWithUnit($var)
+	{
+		$this->db->select()
+			->from($this->tableName)
+			->join('units', $this->tableName.'.VariableunitsID=units.unitsID', 'inner')
+			->where('VariableID',$var);
+		
+		$query=$this->db->get();
+		return $this->tranResult($query->result_array());		
+	}
 }
 ?>
