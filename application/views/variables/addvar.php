@@ -14,6 +14,7 @@ echo $JS_Forms;
 
 echo $CSS_Main;
 
+
 ?>
 
 
@@ -469,8 +470,49 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
         });
 	});
 </script>
+<?php HTML_Render_Body_Start(); 
+genHeading('AddNewVariable',true);
+$attributes = array('class' => 'form-horizontal', 'name' => 'addvar');
+echo form_open('variable/addvariable', $attributes);
+genInputH('VariableCode','var_code', 'VariableCode',getTxt('ArbitraryCode'), true);
+genDropLists('VariableName','varname','varname',true);
+genInput('NewVarName','NewVarName', 'NewVarName', true);
+genInputH('VariableDefinition','vardef', 'vardef',getTxt('VariableDefinitionMsg'), true);
+genDropListsH('Speciation','specdata','specdata',getTxt('ValueCode'),true);
+genInput('NewSpeciation','other_spec', 'other_spec', true);
+genInput('SpeciationDef','specdef', 'specdef', true);
+genDropListsH('VariableUnitType','unittype','unittype',getTxt('UnitsCategory'),true);
+genDropListsH('Unit','unittext', 'unittext',getTxt('UnitsMeasure'),true);
+genDropLists('NewUnitDefinitionColon','NewUnitDefinitionColon', 'NewUnitDefinitionColon', true);
+genInputH('UnitType','new_unit_type', 'new_unit_type', getTxt('UTAssociated'),true);
+genInput('UnitName','new_unit_name', 'new_unit_name', true);
+genInput('UnitAbbreviation','new_unit_abb', 'new_unit_abb', true);
+genDropListsH('SampleMedium','samplemedium', 'samplemedium',getTxt('ObservationMedium'),true);
+genInput('NewSampleMedium','smnew', 'smnew', true);
+genInput('MediumDefinition','smdef', 'smdef', true);
+genDropListsH('ValueType','valuetype', 'valuetype',getTxt('DataTypeMsg'),true);
+genInput('ValueTypeNewColon','valuetypenew', 'valuetypenew', true);
+genInput('ValueTypeDefinition','vtdef', 'vtdef', true);
+genDropListsH('Regularity','isreg', 'isreg',getTxt('RegularlySampledTime'),true);
+genInputH('TimeSupport','tsup', 'tsup',getTxt('TemporalFootprint'), true);
+genDropLists('TimeUnit','timeunit', 'timeunit', true);
+genDropLists('DataType','datatype', 'datatype', true);
+echo '<textarea name="dtdef" cols="45" rows="4" readonly id="dtdef"><?php echo $SelectData;?></textarea><span class="required">*</span>';
+genDropListsH('Category','gc', 'gc',getTxt('ScientificCategory'),true);
+genInput('CategoryDefinition','gcdef', 'gcdef', true);
+genDropListsH('jqxWidget','jqxWidget', 'jqxWidget',getTxt('VariableCollectionMethod'),true);
 
-	<?php HTML_Render_Body_Start(); ?>
+
+
+
+?>
+<div class="col-md-5 col-md-offset-5">
+       <input type="SUBMIT" name="submit" value="<?php echo getTxt('AddVariableButton');?>" class="button"/>
+       <input type="reset" name="Reset" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" />
+</div>
+</div>
+<?php
+/*
 
 
       <p><br /><p class="em" align="right"><?php echo getTxt('RequiredFieldsAsterisk');?></p>
@@ -1252,3 +1294,5 @@ return false;
 });
 	
 </script>
+*/
+?>

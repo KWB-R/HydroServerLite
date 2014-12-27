@@ -9,7 +9,7 @@ $attributes = array('class' => 'form-horizontal', 'id' => 'newuser');
 echo form_open('user/doadd', $attributes);
 genInput('FirstName','firstname','firstname',true);
 genInput('LastName','lastname','lastname',true);
-genInput('UserName','password','password',true);
+genInput('UserName','username','username',true);
 echo '<span id="user-result"></span>
 <span class="help-block">'.getTxt('FirstLastNameExample').'</span>';
 genInput('Password','password','password',true);
@@ -52,8 +52,7 @@ $("#lastname").blur(function (e){
 	}
     });
 });
-$("form").submit(function(e){ //NEED TO FIX TO ACCESS ONLY THE MAIN FORM.
-
+$("#newuser").submit(function(e){ //NEED TO FIX TO ACCESS ONLY THE MAIN FORM.
 if(($("#firstname").val())==""){
 		alert("Please enter your First Name");
 		return false;
@@ -71,7 +70,7 @@ if(($("#password").val())==""){
 		alert("Please enter a Password");
 		return false;
 	} 
-if(($("#authority").val())==""){
+if(($("#authority").val())=="-1"){
 		alert("Please Select an Authority");
 		return false;
 	}

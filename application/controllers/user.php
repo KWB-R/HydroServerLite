@@ -209,9 +209,36 @@ class User extends MY_Controller {
 	}
 	
 	public function delete()
-	{
+	{	
+		if(isStudent())
+		$this->kickOut();
+		if($_POST)
+		{
+			$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
+		}
+		if ($this->form_validation->run() == FALSE)
+		{
+			  $errors = validation_errors();
+			  if(!empty($errors))
+			  {addError($errors);}
+		}
+		else
+		{
+			$uname = $this->input->post('username');
+			$result = $this->users->removeUser($uname);
+			if($result)
+			{
+				addSuccess(getTxt('Congrats')." ".$this->input->post('username'));	
+			}
+			else
+			{
+				addError(getTxt('ProcessingError'));
+			}
+		}
+		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$data['option_block']=$this->getUserList();
 		$this->load->view('users/delete',$data);	
 	}
 	

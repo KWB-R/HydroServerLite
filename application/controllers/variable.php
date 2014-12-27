@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
-|--------------------------------------------------------------------------
-| Variables Controller
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------|-
+| Variables Controller													|||||
+|-------------------------------------------------------------------------|
 |
 | 
 */
@@ -15,7 +15,7 @@ class Variable extends MY_Controller {
 	}
 	
 	public function addvariable()
-	{		
+	{	
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$this->load->view('variables/addvar',$data);
