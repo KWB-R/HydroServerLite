@@ -28,7 +28,7 @@ function genOptions($result)
 {
 	$option_block='';
 	foreach ($result as $key=>$value) {
-		$option_block .= "<option value=$key>$result</option>";
+		$option_block .= "<option value=$key>$value</option>";
 	}
 	return $option_block;
 }

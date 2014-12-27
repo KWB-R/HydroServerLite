@@ -94,6 +94,23 @@ class Method extends MY_Model
 		$query=$this->db->get();
 		return $query->result_array();		
 	}
-	
+	function delete($ValueID)
+	{
+		$this->db
+			->where('MethodID',$ValueID)
+			->delete($this->tableName);
+		$num_del = $this->db->affected_rows();
+		return $num_del==1;	
+	}
+	function update($MethodID,$methodname,$methodlink)
+	{
+		$this->db->set('MethodDescription',$methodname)
+		->set('MethodLink',$methodlink)
+		->where('MethodID',$MethodID)
+		->update($this->tableName);
+		
+		return $this->db->affected_rows()==1;
+		
+	}
 }
 ?>

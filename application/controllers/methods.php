@@ -59,9 +59,33 @@ class Methods extends MY_Controller {
 		{
 			$this->kickOut();	
 		}
+		if($_POST)
+		{
+			$this->form_validation->set_rules('MethodDescription2', 'MethodDescription', 'trim|required');
+			$this->form_validation->set_rules('MethodLink2', 'MethodLink', 'trim');	
+			$this->form_validation->set_rules('MethodID2', 'Method ID', 'trim|required');
 		
+		if ($this->form_validation->run() == FALSE)
+		{
+			  $errors = validation_errors();
+			  if(!empty($errors))
+			  {addError($errors);}
+		}
+		else
+		{
+			$result = $this->method->update($this->input->post('MethodID2'),$this->input->post('MethodDescription2'),$this->input->post('MethodLink2'));
+			if($result)
+			{	
+				addSuccess(getTxt('MethodEdited'));		
+			}
+			else
+			{
+				addError(getTxt('ProcessingError'));	
+			}		
+		}
+		}
 		//Get methods that can be edited. 
-		$methods = $this->method->getByID($methodid);
+		$methods = $this->method->getEditable();
 		$methodsArray = array();
 		foreach($methods as $method)
 		{
@@ -73,6 +97,32 @@ class Methods extends MY_Controller {
 		$data=$this->StyleData;
 		$data['methodOptions']=$methodOptions;
 		$this->load->view('methods/changemethod',$data);
+	}
+	
+	public function delete()
+	{
+		$methodid = end($this->uri->segment_array());
+		if($methodid=="delete")
+		{
+			$data['errorMsg']="One of the parameters: methodid is not defined. An example request would be delete/1";
+			$this->load->view('templates/apierror',$data);
+			return;
+		}
+		$result = $this->method->delete($methodid);
+		if($result)
+			{	
+				if($this->input->get('ui', TRUE))
+				addSuccess(getTxt('MethodDeleted'));	
+				$output="success";	
+			}
+		else
+			{
+				if($this->input->get('ui', TRUE))
+				addError(getTxt('ProcessingError'));	
+				$output="failed";
+			}		
+		$output = array("status"=>$output);
+		echo json_encode($output);	
 	}
 	
 	public function methodInfo()
@@ -89,7 +139,7 @@ class Methods extends MY_Controller {
 			return;
 		}
 		
-		
+		$method = $this->method->getByID($methodid);
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$data['Method']=$method[0];
