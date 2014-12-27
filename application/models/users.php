@@ -1,5 +1,5 @@
 <?php
-class Users extends CI_Model
+class Users extends MY_Model
 {
 	function __construct()
 	{
@@ -85,6 +85,17 @@ class Users extends CI_Model
 	 {
 	   return false;
 	 }
+	}
+	
+	function removeUser($uname)
+	{
+
+		$this->db
+			->where('username',$uname)
+			->delete($this->tableName);
+		$num_del = $this->db->affected_rows();
+		return $num_del==1;	
+	
 	}
 }
 ?>

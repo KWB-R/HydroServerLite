@@ -43,7 +43,47 @@ function genInput($labelKey,$id,$name,$req=false,$extra='')
 	echo'</div>             
       </div>';	
 }
-
+function genInputH($labelKey,$id,$name,$hint,$req=false,$extra='')
+{
+	echo '<div class="form-group">
+        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-9">
+        <input type="type" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';
+	if($req)
+	{
+		echo '<span class="required">*</span>';
+	}
+	echo '<span class="hint" title="'.$hint.'">?</span>';
+	echo'</div>             
+      </div>';	
+}
+function genDropLists($labelKey,$id,$name,$req=false)
+{
+	echo '<div class="form-group">
+        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-9">
+		<div id="'.$id.'" name="'.$name.'"></div>';
+	if($req)
+	{
+	  echo '<span class="required">*</span>';	  
+	}
+	echo'</div>             
+      </div>';	
+}
+function genDropListsH($labelKey,$id,$name,$hint,$req=false)
+{
+	echo '<div class="form-group">
+        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-9">
+		<div id="'.$id.'" name="'.$name.'"></div>';
+	if($req)
+	{
+	  echo '<span class="required">*</span>';	  
+	}
+	echo '<span class="hint" title="'.$hint.'">?</span>';
+	echo'</div>             
+      </div>';	
+}
 function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=false,$extra='')
 {
 	echo '<div class="form-group">
@@ -675,7 +715,8 @@ $_Countries = array(
 	"ZM" => "Zambia",
 	"ZW" => "Zimbabwe"
 	);
-$_States = array(
+function getStates(){
+return array(
 	"AL" => "Alabama",
 	"AK" => "Alaska",
 	"AZ" => "Arizona",
@@ -726,7 +767,7 @@ $_States = array(
 	"WA" => "Washington",
 	"WV" => "West Virginia",
 	"WI" => "Wisconsin",
-	"WY" => "Wyoming",
-	"NULL" => "International"
-	);
+	"WY" => "Wyoming"
+	//"NULL" => $CI->getTxt('International') Moved to Controller.
+	);}
 ?>
