@@ -175,5 +175,9 @@ class Methods extends MY_Controller {
 			$this->load->view('templates/apierror',$data);	
 		}
 	}
+	public function getJSON()
+	{
+		echo json_encode($this->method->getAll());
+	}
 	
 }

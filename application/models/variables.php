@@ -84,5 +84,35 @@ class Variables extends MY_Model
 		$query = $this->db->get();
 		return $this->tranResult($query->result_array());	
 	}
+	
+	function addTDef($table,$term,$def)
+	{
+		$this->db->set('Term',$term)
+		->set('Definition',$def)
+		->insert($table);	
+	}
+	
+	function addUnit($type,$name,$abb)
+	{
+		$this->db->set('unitsName',$name)
+		->set('unitsType',$type)
+		->set('unitsAbbreviation',$abb)
+		->insert('units');
+		return $this->db->insert_id();
+	}
+	
+	function add($var)
+	{
+		$this->db->insert('variables',$var);
+		$num_inserts = $this->db->affected_rows();
+	  	return $this->db->insert_id();
+	}
+	
+	function addVM($varMeth)
+	{
+		$this->db->insert('varmeth',$varMeth);
+		$num_inserts = $this->db->affected_rows();
+	  	return $num_inserts==1;
+	}
 }
 ?>

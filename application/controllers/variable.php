@@ -14,8 +14,114 @@ class Variable extends MY_Controller {
 		$this->load->model('variables','',TRUE);
 	}
 	
+	private function buildVariable()
+	{
+		$regular=0;
+		if($this->input->post('isreg') == getTxt('Regular'))
+		$regular=1;
+		
+		$Variable = array
+		(
+			'VariableCode' => $this->input->post('VariableCode'),
+			'TimeSupport' => $this->input->post('tsup'),
+			'NoDataValue' => -9999,
+			'GeneralCategory' =>$this->input->post('gc_val'),
+			'DataType' =>$this->input->post('datatype_val'),
+			'TimeunitsID' => $this->input->post('timeunit'),
+			'IsRegular' => $regular
+		);
+		//The above are the static variables. 
+		
+		$varname = $this->input->post('varname_val');
+		if($varname == getTxt('OtherSlashNew'))
+		{
+			$varname = $this->input->post('NewVarName');
+			$this->variables->addTDef('variablenamecv',$varname,$this->input->post('vardef'));
+		}
+		$Variable['VariableName']=$varname;
+		$spec = $this->input->post('specdata_val');
+		if($spec == getTxt('OtherSlashNew'))
+		{
+			//New Spec Processing. 	
+			$spec = $this->input->post('other_spec');
+			$this->variables->addTDef('speciationcv',$spec,$this->input->post('specdef'));
+		}
+		$Variable['Speciation']=$spec;
+		
+		$smed = $this->input->post('samplemedium_val');
+		if($smed == getTxt('OtherSlashNew'))
+		{
+			//New Sample Medium Name Processing. 	
+			$smed = $this->input->post('smnew');
+			$this->variables->addTDef('samplemediumcv',$smed,$this->input->post('smnew'));
+		}
+		$Variable['SampleMedium']=$smed;
+		
+		//Unit Checking
+		//First Check New UNIT TYPE. 
+		$utype = $this->input->post('unittype_val');
+		$unit = $this->input->post('unit');
+		if($utype == getTxt('OtherSlashNew'))
+		{
+			//New Unit and unit type Processing. 
+			$unit = $this->variables->addUnit($this->input->post('new_unit_type'),$this->input->post('new_unit_name'),$this->input->post('new_unit_abb')); 
+		}
+		else
+		{
+			//Is there a new unit? 
+			if($unit == -10)
+			{
+				//New Unit Processing with the above type. 
+				$unit = $this->variables->addUnit($utype,$this->input->post('new_unit_name'),$this->input->post('new_unit_abb'));
+			}
+				
+		}
+		$Variable['VariableunitsID']=$unit;
+		
+		//Check Value Type
+		$vt = $this->input->post('valuetype_val');
+		if($vt == getTxt('OtherSlashNew'))
+		{
+			//New Sample Medium Name Processing. 	
+			$vt = $this->input->post('valuetypenew');
+			$this->variables->addTDef('valuetypecv',$vt,$this->input->post('vtdef'));
+		}
+		$Variable['ValueType']=$vt;
+		
+		
+		return $Variable;
+	}
+	
 	public function add()
 	{	
+		if($_POST)
+		{
+			$variable = $this->buildVariable();
+			$result = $this->variables->add($variable);
+			if($result>0)
+			{
+				//Add to varmeth
+				$varMeth = array(
+					'VariableID' =>$result,
+					'VariableCode' =>$variable['VariableCode'],
+					'VariableName'=> $variable['VariableName'],
+					'DataType'=> $variable['DataType'],
+					'MethodID'=> $this->input->post('jqxWidget')				
+				);
+				if($this->variables->addVM($varMeth))
+				{
+				addSuccess(getTxt('VariableSuccessfullyAdded'));
+				}
+				else
+				{
+				addError(getTxt('ProcessingError')." Error in varmeth.");		
+				}
+			}
+			else
+			{
+				addError(getTxt('ProcessingError'));
+			}	
+		}
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$data['DefaultVarcode']= $this->config->item('default_varcode');
