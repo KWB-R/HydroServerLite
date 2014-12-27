@@ -52,16 +52,16 @@ if (isTeacher() || isAdmin()){
 	echo "<ul class=\"dropdown-menu\">";
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"add_source\"><a href='".site_url('sources/add')."'>".getTxt('AddSource')."</a>";
-		echo "<li class=\"edit_source\"><a href='".site_url('sources/change')."'>".getTxt('ChangeSource')."</a></li>";
+		echo "<li class=\"add_source\"><a href='".site_url('source/add')."'>".getTxt('AddSource')."</a>";
+		echo "<li class=\"edit_source\"><a href='".site_url('source/change')."'>".getTxt('ChangeSource')."</a></li>";
 	}
 	// > teacher admin
 	echo "<li class=\"add_site\"><a href='".site_url('sites/add')."'>".getTxt('AddSite')."</a></li>";
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"edit_site\"><a href='".site_url('sites/change')."'>".getTxt('ChangeSite')."</a></li>";
-		echo "<li class=\"add_variable\"><a href='".site_url('variables/add')."'>".getTxt('AddVariable')."</a></li>";
-		echo "<li class=\"edit_variable\"><a href='".site_url('variables/change')."'>".getTxt('ChangeVariable')."</a></li>";
+		echo "<li class=\"edit_site\"><a href='".site_url('sites/edit')."'>".getTxt('ChangeSite')."</a></li>";
+		echo "<li class=\"add_variable\"><a href='".site_url('variable/add')."'>".getTxt('AddVariable')."</a></li>";
+		echo "<li class=\"edit_variable\"><a href='".site_url('variable/edit')."'>".getTxt('ChangeVariable')."</a></li>";
 		echo "<li class=\"add_method\"><a href='".site_url('methods/add')."'>".getTxt('AddMethod')."</a></li>";
 		echo "<li class=\"edit_method\"><a href='".site_url('methods/change')."'>".getTxt('ChangeMethod')."</a></li>";
 	}

@@ -14,14 +14,14 @@ class Variable extends MY_Controller {
 		$this->load->model('variables','',TRUE);
 	}
 	
-	public function addvariable()
+	public function add()
 	{	
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$this->load->view('variables/addvar',$data);
 	}
 	
-	public function editvariable()
+	public function edit()
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;

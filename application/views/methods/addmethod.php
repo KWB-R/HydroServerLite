@@ -31,21 +31,12 @@ $attributes = array('class' => 'form-horizontal', 'name' => 'addmethod', 'id' =>
 echo form_open('methods/add', $attributes);
 genInput('MethodName','MethodDescription','MethodDescription',true);echo '<span class="em">'.getTxt('ExampleMethodName').'</span>';
 genInput('MethodLinkColon','MethodLink','MethodLink',true);echo '<span class="em">'.getTxt('ExMethodLink').'</span>';
-
-
-//<div class="form-group">
-//    <label for="comment">Comment:</label>
- //    <textarea class="form-control" rows="5" id="comment"></textarea>
-// </div>
-	
-
 ?>
 <div class="form-group">
-	<label class="col-sm-3 control-label"></label>
-  <div class = "col-md-6 col-md-offset-0">
+  <div class = "col-md-12">
   <label><?php echo getTxt('SelectVariablesBelow1');?></label>
   <label><?php echo getTxt('SelectAllThatApply');?></label>
-  <input type="textarea" class="form-control" rows="5" id="jqxWidget"></textarea>
+  <div id="jqxWidget"></div><span class="required">*</span>
   </div>
 </div>
 

@@ -29,7 +29,7 @@ class Source extends MY_Controller {
 		return $val;
 	}
 	
-	public function addsource()
+	public function add()
 	{	
 	
 		if($_POST)
@@ -99,7 +99,7 @@ class Source extends MY_Controller {
 		$this->load->view('sources/addsource',$data);
 	}
 	
-	public function editsource()
+	public function change()
 	{		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
