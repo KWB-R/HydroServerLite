@@ -6,6 +6,7 @@ if (!isset($_POST['Organization'])){
 	exit;
 	}else{
 	$Organization = $_POST['Organization'];
+	$Organization = mysqli_real_escape_string($Organization);
 	}
 	
 if (!isset($_POST['SourceDescription'])){
@@ -14,6 +15,7 @@ if (!isset($_POST['SourceDescription'])){
   exit;
 	}else{
 	$SourceDescription = $_POST['SourceDescription'];
+	$SourceDescription = mysqli_real_escape_string($SourceDescription);
 	}
 
 $SourceL = $_POST["SourceLink"];
@@ -30,6 +32,7 @@ if (!isset($_POST['ContactName'])){
 	exit;
 	}else{
 	$ContactName = $_POST['ContactName'];
+	$ContactName = mysqli_real_escape_string($ContactName);
 	}
 	
 if (!isset($_POST['Phone'])){
@@ -93,6 +96,7 @@ if (!isset($_POST['Citation'])){
 	exit;
 	}else{
 	$Citation = $_POST['Citation'];
+	$Citation = mysqli_real_escape_string($Citation);
 	}
 	
 //get hidden default values
@@ -122,7 +126,9 @@ if (!isset($_POST['Abstract'])){
 
 $TopicCategory = $_POST['TopicCategory'];
 $Title = $_POST['Title'];
+$Title = mysqli_real_escape_string($Title);
 $Abstract = $_POST['Abstract'];
+$Abstract = mysqli_real_escape_string($Abstract);
 	
 $MetadataLink = $_POST['MetadataLink'];	
 	if($MetadataLink ==''){

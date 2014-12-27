@@ -22,7 +22,18 @@ $result = transQuery($sql,0,0);
 //adding a new user if there isn't one already
 if (count($result) < 1){
 	
-	$sql ="INSERT INTO moss_users(firstname, lastname, username, password, authority) VALUES ('$_POST[firstname]', '$_POST[lastname]', '$_POST[username]', PASSWORD('$_POST[password]'), '$_POST[authority]')";
+	$first_name = $_POST['firstname'];
+	$first_name = mysqli_real_escape_string($first_name);
+	$last_name = $_POST['lastname'];
+	$last_name = mysqli_real_escape_string($last_name);
+	$user_name = $_POST['username'];
+	$user_name = mysqli_real_escape_string($user_name);
+	$pass_word = $_POST['password'];
+	$pass_word = mysqli_real_escape_string($pass_word);
+	$authority = $_POST['authority'];
+	$authority = mysqli_real_escape_string($authority);
+	
+	$sql ="INSERT INTO moss_users(firstname, lastname, username, password, authority) VALUES ('$first_name', '$last_name', '$user_name', PASSWORD('$pass_word'), '$authority')";
 
 $result = transQuery($sql,0,-1);
 

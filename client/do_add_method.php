@@ -3,6 +3,7 @@
 //require_once 'authorization_check.php';
 
 $MethodD = $_POST["MethodDescription"];
+$MethodD = mysqli_real_escape_string($MethodD);
 $MethodL = $_POST["MethodLink"];
 $Variable = $_GET["varmeth"];
 
