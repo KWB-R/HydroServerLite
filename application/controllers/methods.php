@@ -61,11 +61,17 @@ class Methods extends MY_Controller {
 		}
 		
 		//Get methods that can be edited. 
-		$methods = $this->method->getEditable();
-		//Generate options for this. 
+		$methods = $this->method->getByID($methodid);
+		$methodsArray = array();
+		foreach($methods as $method)
+		{
+			$methodsArray[$method['MethodID']]=$method['MethodDescription'];
+		}
+		$methodOptions = genOptions($methodsArray);
 		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$data['methodOptions']=$methodOptions;
 		$this->load->view('methods/changemethod',$data);
 	}
 	
@@ -82,11 +88,7 @@ class Methods extends MY_Controller {
 			$this->load->view('templates/apierror',$data);
 			return;
 		}
-		//Get methods that can be edited. 
-		$method = $this->method->getByID($methodid);
 		
-		
-		//Generate options for this. 
 		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;

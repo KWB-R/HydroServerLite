@@ -31,8 +31,17 @@ $('#window').show();
 
 </script>
 
-<?php HTML_Render_Body_Start(); ?>
-
+<?php HTML_Render_Body_Start(); 
+genHeading('EditDeleteMethod',true);
+echo '<p>'.getTxt('SelectMethod').'</p>';
+$attributes = array('class' => 'form-horizontal', 'name' => 'addvalue', 'id' => 'addvalue');
+echo form_open('datapoint/addvalue', $attributes);
+genSelect('Source',"SourceID","SourceID",$sourcesOptions,'SelectEllipsis',true,'onChange="showSites(this.value)"');
+genSelectH('Site',"SiteID","SiteID",'',getTxt('IfNoSeeSite1').' '.getTxt('ContactSupervisor').' '.getTxt('AddIt'),'SelectElipsis',true);
+genSelect('Variable',"VariableID","VariableID",$variableOptions,'SelectEllipsis',true,'onChange="showMethods(this.value)"');
+genSelectH('Method',"MethodID","MethodID",'',getTxt('IfNoSeeMethod1').' '.getTxt('ContactSupervisor').' '.getTxt('AddIt'),'SelectElipsis',true);
+genInput('Date','datepicker','datepicker',true,'onChange="return validateDate()"');
+?>
 <br /><p class="em" align="right"><?php echo getTxt('RequiredFieldsAsterisk');?></p><?php echo getTxt('msg_1'); ?><div id="msg"><p class=em2><!--Method successfully deleted!--><?php echo getTxt('MethodDeleted');?></p></div>
     <div id="msg2"><p class=em2><?php echo getTxt('MethodEdited');?></p></div>
       <h1><?php echo getTxt('EditDeleteMethod');?></h1>

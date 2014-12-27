@@ -24,7 +24,14 @@ function optionsVariable($result)
 	return $option_block;
 }
 
-
+function genOptions($result)
+{
+	$option_block='';
+	foreach ($result as $key=>$value) {
+		$option_block .= "<option value=$key>$result</option>";
+	}
+	return $option_block;
+}
 function getImg($name)
 {
 	return base_url()."assets/images/".$name;
