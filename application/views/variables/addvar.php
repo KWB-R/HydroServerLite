@@ -1,23 +1,12 @@
 <?php
-
-$default_timesupport = "";
-
+$default_timesupport = ""; //Come from config. 
 HTML_Render_Head($js_vars);
-
 echo $JS_JQuery;
-
 echo $CSS_JQX;
-
 echo $JS_JQX;
-
 echo $JS_Forms;
-
 echo $CSS_Main;
-
-
 ?>
-
-
 <script type="text/javascript">
 var unitsid=0;
 //Default Parameter
@@ -27,9 +16,7 @@ var nodatavalue=-9999;
 $(document).ready(function(){
 	$("#msg").hide();
 	$("#new_spec").hide();
-	$("#new_spec1").hide();
 	$("#unit").hide();
-	$("#unitreq").hide();
 	$("#unittext").hide();
 	$("#newunit").hide();
 	$("#smother").hide();
@@ -44,24 +31,23 @@ $(document).ready(function(){
 
 //List : Speciation
 var selec_ind=0;
-var url="getspec.php";
+var url=base_url+"variable/getTable/speciationcv";
+// prepare the data
+var source =
+{
+	datatype: "json",
+	datafields: [
+		{ name: 'Term' },
+		{ name: 'Definition' }
+	],
+	id: 'id',
+	url: url,
+	async: false
+};
+var dataAdapter = new $.jqx.dataAdapter(source);
 
-                // prepare the data
-                var source =
-                {
-                    datatype: "json",
-                    datafields: [
-                        { name: 'specterm' },
-                        { name: 'specdef' }
-                    ],
-                    id: 'id',
-                    url: url,
-                    async: false
-                };
-                var dataAdapter = new $.jqx.dataAdapter(source);
-
-                // Create a jqxComboBox for Speciation
-$("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "specterm", valueMember: "specdef", width: 250, height: 25, theme: 'darkblue'});
+// Create a jqxComboBox for Speciation
+$("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#specdata").bind('select', function (event) {
 var args = event.args;
@@ -78,7 +64,7 @@ $("#new_spec1").hide();
  {
 //If user selects other option
 	$("#specdef").removeAttr("disabled");	 
-	 $("#specdef").val(<?php echo "'".$EnterDefinition."'"; ?>);
+	 $("#specdef").val(<?php echo "'".getTxt('EnterDefinition')."'"; ?>);
 //Show the other box
 $("#new_spec").show(200);
 $("#new_spec1").show(200);
@@ -89,7 +75,7 @@ $("#new_spec1").show(200);
  
   });
   
-var url2="getunittype.php";
+var url2=base_url+"variable/getUnitTypes";
 
                 // prepare the data
                 var source2 =
@@ -112,16 +98,15 @@ $("#unittype").bind('select', function (event) {
 var args = event.args;
 var item = $('#unittype').jqxDropDownList('getItem', args.index);
 
-    if ((item != null)&&(item.value!="-1")&&(item.value!="-10")) 
+if ((item != null)&&(item.value!="-1")&&(item.value!="-10")) 
 {					
 
 //Get all the units for that type and display it
 $("#newunit").hide();
 $("#newunitonly").hide();
 $("#unit").show();
-$("#unitreq").show();
 $("#unittext").show();
-var url3="getunitname.php?type="+item.label;
+var url3=base_url+"variable/getUnitsByType?type="+item.label;
 
                 // prepare the data
                 var source3 =
@@ -167,7 +152,6 @@ if (item.value=="-10")
 {					
 
 $("#unit").hide();
-$("#unitreq").hide();
 $("#unittext").hide();
 
 //Show the other box and other details required
@@ -183,20 +167,20 @@ $("#newunitonly").show(400);
 
 //Sample Medium List 
  var source4 =
-                {
-                    datatype: "json",
-                    datafields: [
-                        { name: 'smterm' },
-                        { name: 'smdef' }
-                    ],
-                    id: 'id',
-                    url: 'getsamplemed.php',
-                    async: false
-                };
-                var dataAdapter4 = new $.jqx.dataAdapter(source4);
+{
+	datatype: "json",
+	datafields: [
+		{ name: 'Term' },
+		{ name: 'Definition' }
+	],
+	id: 'id',
+	url: base_url+'variable/getTable/samplemediumcv',
+	async: false
+};
+var dataAdapter4 = new $.jqx.dataAdapter(source4);
 
 
-$("#samplemedium").jqxDropDownList({ selectedIndex: 0, source: dataAdapter4, displayMember: "smterm", valueMember: "smdef", width: 250, height: 25, theme: 'darkblue'});
+$("#samplemedium").jqxDropDownList({ selectedIndex: 0, source: dataAdapter4, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#samplemedium").bind('select', function (event) {
 var args = event.args;
@@ -216,7 +200,7 @@ var item = $('#samplemedium').jqxDropDownList('getItem', args.index);
 	 
 //If user selects other option
 	$("#smdef").removeAttr("disabled");	 
-	 $("#smdef").val(<?php echo "'".$EnterDefinition."'"; ?>);
+	 $("#smdef").val(<?php echo "'".getTxt('EnterDefinition')."'"; ?>);
 //Show the other box
 $("#smother").show(400);
 
@@ -228,24 +212,22 @@ $("#smother").show(400);
 
 //End of Sample Medium list
 
-
 //Value type list
-
 var source5 =
                 {
                     datatype: "json",
                     datafields: [
-                        { name: 'vtterm' },
-                        { name: 'vtdef' }
+                        { name: 'Term' },
+                        { name: 'Definition' }
                     ],
                     id: 'id',
-                    url: 'getvt.php',
+                    url: base_url+'variable/getTable/valuetypecv',
                     async: false
                 };
                 var dataAdapter5 = new $.jqx.dataAdapter(source5);
 
 
-$("#valuetype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter5, displayMember: "vtterm", valueMember: "vtdef", width: 250, height: 25, theme: 'darkblue'});
+$("#valuetype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter5, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#valuetype").bind('select', function (event) {
 var args = event.args;
@@ -265,7 +247,7 @@ var item = $('#valuetype').jqxDropDownList('getItem', args.index);
 	 
 //If user selects other option
 	$("#vtdef").removeAttr("disabled");	 
-	 $("#vtdef").val(<?php echo "'".$EnterDefinition."'"; ?>);
+	 $("#vtdef").val(<?php echo "'".getTxt('EnterDefinition')."'"; ?>);
 //Show the other box
 $("#valuetypenewb").show(400);
 
@@ -281,10 +263,10 @@ $("#valuetypenewb").show(400);
 
 //Start of isregular
 var source7 = [
-                    "<?php echo $SelectEllipsis;?>",
-					"<?php echo $Regular;?>",
-                    "<?php echo $Irregular;?>",
-                    "<?php echo $Unknown;?>"
+                    "<?php echo getTxt('SelectEllipsis');?>",
+					"<?php echo getTxt('Regular');?>",
+                    "<?php echo getTxt('Irregular');?>",
+                    "<?php echo getTxt('Unknown');?>"
 		        ];
 
                 // Create a jqxDropDownList
@@ -299,16 +281,16 @@ var source8 =
                     datatype: "json",
                     datafields: [
                         { name: 'unit' },
-                        { name: 'id' }
+                        { name: 'unitid' }
                     ],
                     id: 'id',
-                    url: 'gettimeunit.php',
+                    url: base_url+"variable/getUnitsByType?type=Time&noNew=1",
                     async: false
                 };
                 var dataAdapter8 = new $.jqx.dataAdapter(source8);
 
 
-$("#timeunit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter8, displayMember: "unit", valueMember: "id", width: 250, height: 25, theme: 'darkblue'});
+$("#timeunit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter8, displayMember: "unit", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
 	
 
 //End time units id
@@ -318,18 +300,15 @@ var source9 =
                 {
                     datatype: "json",
                     datafields: [
-                        { name: 'dtterm' },
-                        { name: 'dtdef' }
+                        { name: 'Term' },
+                        { name: 'Definition' }
                     ],
                     id: 'id',
-                    url: 'getdt.php',
+                    url: base_url+'variable/getTable/datatypecv?noNew=1',
                     async: false
                 };
                 var dataAdapter9 = new $.jqx.dataAdapter(source9);
-
-
-
-$("#datatype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter9, displayMember: "dtterm", valueMember: "dtdef", width: 250, height: 25, theme: 'darkblue'});
+$("#datatype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter9, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#datatype").bind('select', function (event) {
 var args = event.args;
@@ -353,18 +332,18 @@ var source10 =
                 {
                     datatype: "json",
                     datafields: [
-                        { name: 'dtterm' },
-                        { name: 'dtdef' }
+                        { name: 'Term' },
+                        { name: 'Definition' }
                     ],
                     id: 'id',
-                    url: 'getgc.php',
+                    url: base_url+'variable/getTable/generalcategorycv?noNew=1',
                     async: false
                 };
                 var dataAdapter10 = new $.jqx.dataAdapter(source10);
 
 
 
-$("#gc").jqxDropDownList({ selectedIndex: 0, source: dataAdapter10, displayMember: "dtterm", valueMember: "dtdef", width: 250, height: 25, theme: 'darkblue'});
+$("#gc").jqxDropDownList({ selectedIndex: 0, source: dataAdapter10, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#gc").bind('select', function (event) {
 var args = event.args;
@@ -384,25 +363,22 @@ var item = $('#gc').jqxDropDownList('getItem', args.index);
 
 //Variable Name list : new option available
 
-var url15="getvarname.php";
+var url15=base_url+"variable/getTable/variablenamecv";
 
-                // prepare the data
-                var source15 =
-                {
-                    datatype: "json",
-                    datafields: [
-                        { name: 'specterm' },
-                        { name: 'specdef' }
-                    ],
-                    id: 'id',
-                    url: url15,
-                    async: false
-                };
-                var dataAdapter15 = new $.jqx.dataAdapter(source15);
-
-                // Create a jqxComboBox
-$("#varname").jqxDropDownList({ selectedIndex: 0, source: dataAdapter15, displayMember: "specterm", valueMember: "specdef", width: 250, height: 25, theme: 'darkblue'});
-	
+// prepare the data
+var source15 =
+{
+	datatype: "json",
+	datafields: [
+		{ name: 'Term' },
+		{ name: 'Definition' }
+	],
+	id: 'id',
+	url: url15,
+	async: false
+};
+var dataAdapter15 = new $.jqx.dataAdapter(source15);
+$("#varname").jqxDropDownList({ selectedIndex:0,source: dataAdapter15, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
 $("#varname").bind('select', function (event) {
 var args = event.args;
 var item = $('#varname').jqxDropDownList('getItem', args.index);
@@ -417,7 +393,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 	 
 //If user selects other option
 	$("#vardef").removeAttr("disabled");	 
-	$("#vardef").val(<?php echo "'".$EnterDefinition."'"; ?>);
+	$("#vardef").val(<?php echo "'".getTxt('EnterDefinition')."'"; ?>);
 //Show the other box
  $("#newvarnameb").show(200);
 
@@ -474,19 +450,32 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 genHeading('AddNewVariable',true);
 $attributes = array('class' => 'form-horizontal', 'name' => 'addvar');
 echo form_open('variable/addvariable', $attributes);
-genInputH('VariableCode','var_code', 'VariableCode',getTxt('ArbitraryCode'), true);
+genInputH('VariableCode','var_code', 'VariableCode',getTxt('ArbitraryCode'), true,"value='".$DefaultVarcode."'");
+
 genDropLists('VariableName','varname','varname',true);
+
+echo '<div id="newvarnameb">';
 genInput('NewVarName','NewVarName', 'NewVarName', true);
+echo '</div>';
 genInputH('VariableDefinition','vardef', 'vardef',getTxt('VariableDefinitionMsg'), true);
+
+
 genDropListsH('Speciation','specdata','specdata',getTxt('ValueCode'),true);
+
+echo '<div id="new_spec">';
 genInput('NewSpeciation','other_spec', 'other_spec', true);
 genInput('SpeciationDef','specdef', 'specdef', true);
+echo '</div>';
+
 genDropListsH('VariableUnitType','unittype','unittype',getTxt('UnitsCategory'),true);
-genDropListsH('Unit','unittext', 'unittext',getTxt('UnitsMeasure'),true);
+echo '<div id="unittext">';
+genDropListsH('Unit','unit', 'unit',getTxt('UnitsMeasure'),true);
+echo '</div>';
 genDropLists('NewUnitDefinitionColon','NewUnitDefinitionColon', 'NewUnitDefinitionColon', true);
 genInputH('UnitType','new_unit_type', 'new_unit_type', getTxt('UTAssociated'),true);
 genInput('UnitName','new_unit_name', 'new_unit_name', true);
 genInput('UnitAbbreviation','new_unit_abb', 'new_unit_abb', true);
+
 genDropListsH('SampleMedium','samplemedium', 'samplemedium',getTxt('ObservationMedium'),true);
 genInput('NewSampleMedium','smnew', 'smnew', true);
 genInput('MediumDefinition','smdef', 'smdef', true);
@@ -497,7 +486,7 @@ genDropListsH('Regularity','isreg', 'isreg',getTxt('RegularlySampledTime'),true)
 genInputH('TimeSupport','tsup', 'tsup',getTxt('TemporalFootprint'), true);
 genDropLists('TimeUnit','timeunit', 'timeunit', true);
 genDropLists('DataType','datatype', 'datatype', true);
-echo '<textarea name="dtdef" cols="45" rows="4" readonly id="dtdef"><?php echo $SelectData;?></textarea><span class="required">*</span>';
+echo '<textarea name="dtdef" cols="45" rows="4" readonly id="dtdef">'.getTxt('SelectData').'</textarea><span class="required">*</span>';
 genDropListsH('Category','gc', 'gc',getTxt('ScientificCategory'),true);
 genInput('CategoryDefinition','gcdef', 'gcdef', true);
 genDropListsH('jqxWidget','jqxWidget', 'jqxWidget',getTxt('VariableCollectionMethod'),true);
@@ -831,13 +820,13 @@ $("#gcdef").val("Please select a category to view its definition");
 //Calls a function to validate all fields when the submit button is hit.
 $("form").submit(function(){
 if(($("#var_code").val())==""){
-		alert(<?php echo "'".$EnterVariableCode."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterVariableCode')."'"; ?>);
 		return false;
 	}
 	
 	if(($("#var_code").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
 {
-		alert(<?php echo "'".$InvalidVariableCode."'"; ?>);
+		alert(<?php echo "'".getTxt('InvalidVariableCode')."'"; ?>);
 		return false;
 	}
 
@@ -849,7 +838,7 @@ var checkitem = $('#varname').jqxDropDownList('getSelectedItem');
 var Flag=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 alert(<?php echo "'".$SelectVariableName."'"; ?>);
+	 alert(<?php echo "'".getTxt('SelectVariableName')."'"; ?>);
 		return false;    
    }
    
@@ -859,20 +848,20 @@ var Flag=0;
 	
 	//Check if new fields are filled
 	if(($("#newvarname").val())==""){
-		alert(<?php echo "'".$EnterNewVariable."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterNewVariable')."'"; ?>);
 		return false;
 	}
 	
 	if(($("#newvarname").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
 {
-		alert(<?php echo "'".$InvalidVariableName."'"; ?>);
+		alert(<?php echo "'".getTxt('InvalidVariableName')."'"; ?>);
 		return false;
 	}
 
 	 
 	 
 	 if((($("#vardef").val())=="")||(($("#vardef").val())=="Please enter a definition")){
-		alert(<?php echo "'".$EnterDefinitionNewVariable."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterDefinitionNewVariable')."'"; ?>);
 		return false;
 	}  
 	
@@ -885,7 +874,7 @@ checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
 var Flag2=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	alert(<?php echo "'".$SelectSpeciation."'"; ?>);    
+	alert(<?php echo "'".getTxt('SelectSpeciation')."'"; ?>);    
 		return false;
    }
    
@@ -895,12 +884,12 @@ var Flag2=0;
 	
 	//Check if new fields are filled
 	if(($("#other_spec").val())==""){
-		alert(<?php echo "'".$SelectNewSpeciation."'"; ?>);
+		alert(<?php echo "'".getTxt('SelectNewSpeciation')."'"; ?>);
 		return false;
 	}
 
 	 if((($("#specdef").val())=="")||(($("#specdef").val())=="Please enter a definition")){
-		alert(<?php echo "'".$EnterDefinitionNewSpeciation."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterDefinitionNewSpeciation')."'"; ?>);
 		return false;
 	}  
 var Flag2=1; 	
@@ -915,7 +904,7 @@ var Flag4=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
 
-	 alert(<?php echo "'".$SelectVariableUnitType."'"; ?>);
+	 alert(<?php echo "'".getTxt('SelectVariableUnitType')."'"; ?>);
 		return false;    
    }
 
@@ -927,7 +916,7 @@ var unititem = $('#unit').jqxDropDownList('getSelectedItem');
 
 if ((unititem == null)||(unititem.value=="-1"))
    {
-	 alert(<?php echo "'".$SelectUnit."'"; ?>);
+	 alert(<?php echo "'".getTxt('SelectUnit')."'"; ?>);
 		return false;    
    }
 if(unititem.value=="-10")
@@ -936,12 +925,12 @@ if(unititem.value=="-10")
 	
 	//Check if new fields are filled
 	if(($("#new_unit_name").val())==""){
-		alert(<?php echo "'".$EnterNameNewUnit."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterNameNewUnit')."'"; ?>);
 		return false;
 	}
 
 	 if(($("#new_unit_abb").val())==""){
-		alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterAbbreviationNewUnit')."'"; ?>);
 		return false;
 	}
 	 	  
@@ -953,17 +942,17 @@ if(unititem.value=="-10")
 	
 	//Check if new fields are filled
 	if(($("#new_unit_name").val())==""){
-		alert(<?php echo "'".$EnterNameNewUnit."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterNameNewUnit')."'"; ?>);
 		return false;
 	}
 
 	 if(($("#new_unit_abb").val())==""){
-		alert(<?php echo "'".$EnterAbbreviationNewUnit."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterAbbreviationNewUnit')."'"; ?>);
 		return false;
 	}  
 
  if(($("#new_unit_type").val())==""){
-		alert(<?php echo "'".$EnterTypeNewUnit."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterTypeNewUnit')."'"; ?>);
 		return false;
 	}  
 var Flag3=1;   
@@ -978,7 +967,7 @@ checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
 var Flag5=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 alert(<?php echo "'".$SelectMedium."'"; ?>);
+	 alert(<?php echo "'".getTxt('SelectMedium')."'"; ?>);
 		return false;    
    }
    
@@ -988,19 +977,19 @@ var Flag5=0;
 	
 	//Check if new fields are filled
 	if(($("#smnew").val())==""){
-		alert(<?php echo "'".$EnterNewSampleMedium."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterNewSampleMedium')."'"; ?>);
 		return false;
 	}
 	
 	if(($("#smnew").val().search("^[a-zA-Z0-9_.-]*$"))==-1)
 	{
-		alert(<?php echo "'".$InvalidSampleMedium."'"; ?>);
+		alert(<?php echo "'".getTxt('InvalidSampleMedium')."'"; ?>);
 		return false;
 	}
 
 	 
 	 if((($("#smdef").val())=="")||(($("#smdef").val())=="Please enter a definition")){
-		alert(<?php echo "'".$EnterDefinitionNewSampleMedium."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterDefinitionNewSampleMedium')."'"; ?>);
 		return false;
 	}  
 var Flag5=1;	 
@@ -1015,7 +1004,7 @@ checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
 var Flag6=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 alert(<?php echo "'".$SelectValueType."'"; ?>);
+	 alert(<?php echo "'".getTxt('SelectValueType')."'"; ?>);
 		return false;    
    }
    
@@ -1025,18 +1014,18 @@ var Flag6=0;
 	
 	//Check if new fields are filled
 	if(($("#valuetypenew").val())==""){
-		alert(<?php echo "'".$EnterNewValueType."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterNewValueType')."'"; ?>);
 		return false;
 	}
 	
 	if(($("#valuetypenew").val().search("^[a-zA-Z0-9_.-]*$"))==-1){
-		alert(<?php echo "'".$InvalidValueType."'"; ?>);
+		alert(<?php echo "'".getTxt('InvalidValueType')."'"; ?>);
 		return false;
 	}
 
 	 
 	 if((($("#vtdef").val())=="")||(($("#vtdef").val())=="Please enter a definition")){
-		alert(<?php echo "'".$EnterDefinitionNewValueType."'";?>);
+		alert(<?php echo "'".getTxt('EnterDefinitionNewValueType')."'";?>);
 		return false;
 	}  
 var Flag6=1;	 
@@ -1050,7 +1039,7 @@ checkitem = $('#isreg').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
-	 alert(<?php echo "'".$SelectRegularity."'"; ?>);
+	 alert(<?php echo "'".getTxt('SelectRegularity')."'"; ?>);
 		return false;    
    }
 
@@ -1058,14 +1047,14 @@ checkitem = $('#isreg').jqxDropDownList('getSelectedItem');
 checkitem = $('#timeunit').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1")){
-		alert(<?php echo "'".$SelectTimeUnit."'"; ?>);
+		alert(<?php echo "'".getTxt('SelectTimeUnit')."'"; ?>);
 		return false;    
    }
 
 checkitem = $('#datatype').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1")){
-		alert(<?php echo "'".$SelectDataTypeMsg."'"; ?>);
+		alert(<?php echo "'".getTxt('SelectDataTypeMsg')."'"; ?>);
 		return false;    
    }
 
@@ -1073,13 +1062,13 @@ checkitem = $('#gc').jqxDropDownList('getSelectedItem');
 
    if ((checkitem == null)||(checkitem.value=="-1")){
 
-		alert(<?php echo "'".$SelectCategoryMsg."'"; ?>);
+		alert(<?php echo "'".getTxt('SelectCategoryMsg')."'"; ?>);
 		return false;    
    }
 
 
 if(($("#tsup").val())==""){
-		alert(<?php echo "'".$EnterTimeSupportValue."'"; ?>);
+		alert(<?php echo "'".getTxt('EnterTimeSupportValue')."'"; ?>);
 		return false;
 	}
 
@@ -1129,7 +1118,7 @@ checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
 	}
 
 if(varmeth==""){
-	alert(<?php echo "'".$SelectOneMethod."'"; ?>);
+	alert(<?php echo "'".getTxt('SelectOneMethod')."'"; ?>);
 	return false;
 	}
 	

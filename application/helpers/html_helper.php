@@ -45,7 +45,7 @@ function genInput($labelKey,$id,$name,$req=false,$extra='')
      	   <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';	   
 	if($req)
 	{
-	  echo '<span class="required">*</span>';	  
+	  echo '<span class="required"/>';	  
 	}
 	echo'</div>             
       </div>';	
@@ -58,7 +58,7 @@ function genInputH($labelKey,$id,$name,$hint,$req=false,$extra='')
         <input type="type" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';
 	if($req)
 	{
-		echo '<span class="required">*</span>';
+		echo '<span class="required"/>';
 	}
 	echo '<span class="hint" title="'.$hint.'">?</span>';
 	echo'</div>             
@@ -68,14 +68,16 @@ function genDropLists($labelKey,$id,$name,$req=false)
 {
 	echo '<div class="form-group">
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <div class="col-sm-6">
 		<div id="'.$id.'" name="'.$name.'"></div>';
+	
 	if($req)
 	{
-	  echo '<span class="required">*</span>';	  
+	  echo '<div class="col-sm-3 required"></div>';	  
 	}
 	echo'</div>             
       </div>';	
+	
 }
 function genDropListsH($labelKey,$id,$name,$hint,$req=false)
 {
@@ -85,7 +87,7 @@ function genDropListsH($labelKey,$id,$name,$hint,$req=false)
 		<div id="'.$id.'" name="'.$name.'"></div>';
 	if($req)
 	{
-	  echo '<span class="required">*</span>';	  
+	  echo '<span class="required"/>';	  
 	}
 	echo '<span class="hint" title="'.$hint.'">?</span>';
 	echo'</div>             
@@ -103,7 +105,7 @@ function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=fa
 	}
 	if($req)
 	{
-	  echo '<span class="required">*</span>';	  
+	  echo '<span class="required"/>';	  
 	}
 	echo'</div>             
       </div>';	
@@ -121,7 +123,7 @@ function genSelectH($labelKey,$id,$name,$optionBlock,$hint,$defaultSelect=false,
 	echo '<span class="hint" title="'.$hint.'">?</span>';
 	if($req)
 	{
-	  echo '<span class="required">*</span>';	  
+	  echo '<span class="required"/>';	  
 	}
 	echo'</div>             
       </div>';	

@@ -18,6 +18,8 @@ class Variable extends MY_Controller {
 	{	
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$data['DefaultVarcode']= $this->config->item('default_varcode');
+		
 		$this->load->view('variables/addvar',$data);
 	}
 	
@@ -106,6 +108,64 @@ class Variable extends MY_Controller {
 		else
 		{
 			$data['errorMsg']="One of the parameters: VariableID is not defined. An example request would be getWithUnit?varid=1";
+			$this->load->view('templates/apierror',$data);	
+		}
+	}
+	
+	public function getTable()
+	{
+		$valueid = end($this->uri->segment_array());
+		if($valueid=="getTable")
+		{
+			$data['errorMsg']="One of the parameters: TableName is not defined. An example request would be getTable/variablenamecv";
+			$this->load->view('templates/apierror',$data);
+			return;
+		}	
+		$result=array();
+		$result[] = array('Term'=>getTxt('SelectEllipsis'),'Definition'=>"-1");
+		$result = array_merge($result,$this->variables->getByTable($valueid));
+		if(!$this->input->get('noNew', TRUE))
+			{
+			$result[] = array('Term'=>getTxt('OtherSlashNew'),'Definition'=>"-10");
+			}
+		echo json_encode($result);
+		
+	}
+	
+	public function getUnitTypes()
+	{
+		$result=array();
+		$result[] = array('unitype'=>getTxt('SelectEllipsis'),'unitid'=>"-1");
+		$unitTypes = $this->variables->getUnitTs();
+		foreach ($unitTypes as $unit)
+		{
+			$result[] = array('unitype'=>$unit['unitsType'],'unitid'=>"1");	
+		}
+		$result[] = array('unitype'=>getTxt('OtherSlashNew'),'unitid'=>"-10");
+		echo json_encode($result);
+	}
+	
+	public function getUnitsByType()
+	{
+		$type = $this->input->get('type', TRUE);
+		if($type!==false)
+		{
+			$result1 = $this->variables->getUnitsByType($type);
+			$result=array();
+			$result[] = array('unit'=>getTxt('SelectEllipsis'),'unitid'=>"-1");
+			foreach ($result1 as $unit)
+			{
+				$result[] = array('unit'=>$unit['unitsName'],'unitid'=>$unit['unitsID']);	
+			}
+			if(!$this->input->get('noNew', TRUE))
+			{
+			$result[] = array('unit'=>getTxt('OtherSlashNew'),'unitid'=>"-10");
+			}
+			echo json_encode($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: unitsType is not defined. An example request would be getUnitTypes?type=Area";
 			$this->load->view('templates/apierror',$data);	
 		}
 	}

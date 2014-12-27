@@ -62,5 +62,27 @@ class Variables extends MY_Model
 		$query=$this->db->get();
 		return $this->tranResult($query->result_array());		
 	}
+	
+	function getByTable($tableName)
+	{
+		$query = $this->db->get($tableName);
+		return $this->tranResult($query->result_array());		
+	}
+	
+	function getUnitTs()
+	{
+		$this->db->distinct()->select('unitsType')
+		->from('units')->order_by('unitsType');
+		$query = $this->db->get();
+		return $this->tranResult($query->result_array());	
+	}
+	
+	function getUnitsByType($type)
+	{
+		$this->db->select()->where('unitsType',$type)
+		->from('units')->order_by('unitsName');
+		$query = $this->db->get();
+		return $this->tranResult($query->result_array());	
+	}
 }
 ?>

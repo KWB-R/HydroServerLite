@@ -707,4 +707,5 @@ $lang['hsl_LogInSuccess'] = "Logged In Successfully";
 $lang['hsl_NewPassword1'] = "Confirm Password: ";
 $lang['hsl_SelectSite2'] = "Please select a Site";
 $lang['hsl_AllSites'] = "Show all Sites";
+$lang['hsl_CongratsRemoved'] = "Congratulations, you have successfully removed";
  ?>

@@ -33,7 +33,8 @@ genInput('MethodName','MethodDescription','MethodDescription',true);echo '<span 
 genInput('MethodLinkColon','MethodLink','MethodLink',true);echo '<span class="em">'.getTxt('ExMethodLink').'</span>';
 ?>
 <div class="form-group">
-  <div class = "col-md-12">
+	<label class="col-sm-3 control-label"></label>
+  <div class = "col-md-6 col-md-offset-0">
   <label><?php echo getTxt('SelectVariablesBelow1');?></label>
   <label><?php echo getTxt('SelectAllThatApply');?></label>
   <div id="jqxWidget"></div><span class="required">*</span>

@@ -228,7 +228,7 @@ class User extends MY_Controller {
 			$result = $this->users->removeUser($uname);
 			if($result)
 			{
-				addSuccess(getTxt('Congrats')." ".$this->input->post('username'));	
+				addSuccess(getTxt('CongratsRemoved')." ".$this->input->post('username'));	
 			}
 			else
 			{
