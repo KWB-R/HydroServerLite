@@ -34,6 +34,17 @@ class Variable extends MY_Controller {
 		echo json_encode($variables);
 	}
 	
+	public function getAllJSON2()
+	{
+		//Returns the variableName as a combination. 
+		$variables = $this->variables->getAll();
+		foreach($variables as &$var)
+		{
+			$var['VarNameMod']=	$var['VariableName'].' '."(".$var["DataType"].")";
+		}
+		echo json_encode($variables);
+	}
+	
 	public function getSiteJSON()
 	{
 		if($this->input->get('siteid', TRUE))

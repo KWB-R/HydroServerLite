@@ -15,6 +15,7 @@ class Datapoint extends MY_Controller {
 		$this->load->model('sources','',TRUE);
 		$this->load->model('datapoints','',TRUE);
 		$this->load->model('sc','',TRUE);
+		$this->load->model('site','',TRUE);
 		$this->load->library('form_validation');
 	}
 	
@@ -303,4 +304,25 @@ class Datapoint extends MY_Controller {
 			$this->load->view('templates/apierror',$data);	
 		}	
 	}
+	public function compare()
+	{
+		$valueid = end($this->uri->segment_array());
+		if($valueid=="compare")
+		{
+			$data['errorMsg']="One of the parameters: compareID. An example request would be compare/1";
+			$this->load->view('templates/apierror',$data);
+			return;
+		}
+		//List of CSS to pass to this view
+		$data=$this->StyleData;
+		
+		if($valueid==2)
+		{
+			$siteid = $this->input->get('siteid', TRUE);
+			$site = $this->site->getSite($siteid);
+			$data['SiteName']=$site[0]['SiteName'];
+		}
+		
+		$this->load->view("compare/".$valueid,$data);	
+	}	
 }

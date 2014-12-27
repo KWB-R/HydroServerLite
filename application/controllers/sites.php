@@ -14,7 +14,10 @@ class Sites extends MY_Controller {
 		$this->load->model('site','',TRUE);
 
 	}
-	
+	public function index()
+	{		
+		$this->map();
+	}
 	public function map()
 	{		
 		//List of CSS to pass to this view

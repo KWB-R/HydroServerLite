@@ -28,7 +28,7 @@ HTML_Render_Body_Start();
         <input type='button' onClick="track_loc()" value="<?php echo getTxt('FindSites'); ?>"/>
 		<input type="checkbox" id="allSitesCheck" onClick="loadall()" value="allSites"><?php echo getTxt('AllSites'); ?></input>
 		<p class="instruction">
-		<?php echo getTxt('SearchDataInst') ?>
+		<?php echo getTxt('EnterSearchLocation') ?>
 		</p>
 		<div id="mapLocations" >
 		<select name="locationSelect" id="locationSelect" style="width:100%;"></select>

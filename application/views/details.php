@@ -377,7 +377,7 @@ function get_methods()
 $('#methodlist').off()
 $('#methodlist').unbind('valuechanged');
 
-   var source122 =
+var source122 =
         {
             datatype: "json",
             datafields: [
@@ -977,7 +977,9 @@ window.open(url,'_blank');
 //Define the button for comaprision
 
 $("#compare").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
-$('#window').jqxWindow({ maxHeight: 800, maxWidth: 800, minHeight: 200, minWidth: 200, height: 480, width: 650, theme: 'darkblue' });
+$('#window').jqxWindow('destroy');
+$('#mapOuter').empty();
+$('#window').jqxWindow({ maxHeight: 800, maxWidth: 800, minHeight: 200, minWidth: 200, height: 520, width: 720, theme: 'darkblue' });
 $('#window2').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
 $('#window3').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
 $('#window4').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
@@ -990,8 +992,7 @@ $('#window5').jqxWindow('hide');
 $("#compare").click(function(){
 $("html, body").animate({ scrollTop: 0 }, "slow");
 $('#window').jqxWindow('show');
-$('#windowContent').load('compare.php', function() {
-loadmap();
+$('#windowContent').load(base_url+'datapoint/compare/1', function() {
 });
 
 

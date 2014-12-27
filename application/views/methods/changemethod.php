@@ -1,46 +1,13 @@
 <?php
-/*
-//redirect anyone that is not an administrator
-	if (!isAdmin()){
-	header("Location: index.php?state=pass2");
-	exit;	
-	}
-require_once "_html_parts.php";
-
-$sql ="SELECT * FROM methods WHERE MethodID >= 2";
-$result = transQuery($sql,0,1);
-
-	if (count($result) < 1){
-	$msg_1 = "<p class=em2> $NoMethods </em></p>";
-	} else {
-		foreach ($result as $row) {
-			$m_id = $row["MethodID"];
-			$m_desc = $row["MethodDescription"];
-			$option_block .= "<option value=$m_id>$m_desc</option>";
-		}
-	}
-*/
-	HTML_Render_Head($js_vars);
-
-	echo $CSS_JQX;
-	
-	echo $JS_GetTheme;
-
-	echo $JS_JQuery;
-	
-	echo $JS_JQX;
-	
-	echo $CSS_Main;
+HTML_Render_Head($js_vars);
+echo $CSS_JQX;
+echo $JS_GetTheme;
+echo $JS_JQuery;
+echo $JS_JQX;
+echo $CSS_Main;
 ?>
-
-
 <script type="text/javascript">
-
 $(document).ready(function(){
-	$("#msg").hide();
-	$("#msg2").hide();
-	$("#msg3").hide();
-	
 	$('#window').hide();
 
 	$('#window').jqxWindow({ height: 100, width: 200, theme: 'darkblue' });
@@ -64,7 +31,7 @@ $('#window').show();
 
 </script>
 
-	<?php HTML_Render_Body_Start(); ?>
+<?php HTML_Render_Body_Start(); ?>
 
 <br /><p class="em" align="right"><?php echo getTxt('RequiredFieldsAsterisk');?></p><?php echo getTxt('msg_1'); ?><div id="msg"><p class=em2><!--Method successfully deleted!--><?php echo getTxt('MethodDeleted');?></p></div>
     <div id="msg2"><p class=em2><?php echo getTxt('MethodEdited');?></p></div>
@@ -99,14 +66,14 @@ $('#window').show();
 	</div>
     <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo getTxt('AreYouSure');?></strong><br /><br /><input name="Yes" type="button" value="<?php echo getTxt('Yes');?>" id="Yup"/>&nbsp;<input name="No" type="button" value="<?php echo getTxt('No');?>" id="No"/></center></div>
 </div>
-	<?php HTML_Render_Body_End(); ?>
+<?php HTML_Render_Body_End(); ?>
 
 <script>
 //When the "Delete" button is clicked, validate the method selected and then submit the request
 function deleteMethod(){
 
 	if(($("#MethodID").val())==-1){
-		alert(<?php echo "'".$SelectMethodDelete."'"; ?>);
+		alert(<?php echo "'".getTxt('SelectMethodDelete')."'"; ?>);
 		return false;
 		
 	}else{
@@ -130,7 +97,7 @@ function deleteMethod(){
 	
 			}else{
 				
-				alert(<?php echo "'".$ProcessingError."'"; ?>);
+				alert(<?php echo "'".getTxt('ProcessingError')."'"; ?>);
 				return false;
 				}
 		});		
@@ -142,7 +109,7 @@ return false;
 function editMethod(){
 	
 	if(($("#MethodID").val())==-1){
-		alert(<?php echo "'".$SelectMethodEdit."'"; ?>);
+		alert(<?php echo "'".getTxt('SelectMethodEdit')."'"; ?>);
 		return false;
 		
 	}else{
@@ -151,9 +118,7 @@ function editMethod(){
 		var methodid=$("#MethodID").val();
 	
 		$.ajax({
-		type: "POST",
-		url: "request_method_info.php?MethodID="+methodid}).done(function(data){
-			
+		url: base_url+"methods/methodinfo/"+methodid}).done(function(data){
 			if(data){
 				
 				$("#msg3").html(data);
@@ -162,7 +127,7 @@ function editMethod(){
 			
 			}else{
 			
-				alert(<?php echo "'".$ErrorDuringRequest."'"; ?>);
+				alert(<?php echo "'".getTxt('ErrorDuringRequest')."'"; ?>);
 				return false;
 				}
 		});
@@ -175,7 +140,7 @@ function updateMethod(){
 
 	if(($("#MethodDescription2").val())==''){
 		
-		alert(<?php echo "'".$MethodNameRequired."'"; ?>);
+		alert(<?php echo "'".getTxt('MethodNameRequired')."'"; ?>);
 		return false;
 	
 	}else{
@@ -204,7 +169,7 @@ function updateMethod(){
 
 			}else{
 
-				alert(<?php echo "'".$ProcessingError."'"; ?>);
+				alert(<?php echo "'".getTxt('ProcessingError')."'"; ?>);
 				return false;
 				}
 		});

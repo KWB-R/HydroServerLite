@@ -76,7 +76,8 @@ class MY_Controller extends CI_Controller {
 		$this->assetor->load('jqwidgets/jqxgrid.columnsresize.js','JS_JQX');  //details 
 		$this->assetor->load('jqwidgets/jqxgrid.pager.js','JS_JQX'); //details 
 		$this->assetor->load('jqwidgets/jqxgrid.sort.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxgrid.edit.js','JS_JQX'); //details 	
+		$this->assetor->load('jqwidgets/jqxgrid.edit.js','JS_JQX'); //details 
+		$this->assetor->load('jqwidgets/jqxexpander.js','JS_JQX'); //details	
 			
 		$this->assetor->load('gettheme.js','JS_GetTheme');
 		
