@@ -29,48 +29,30 @@ echo $CSS_Main;
 genHeading('AddNewMethod',true);
 $attributes = array('class' => 'form-horizontal', 'name' => 'addmethod', 'id' => 'addmethod');
 echo form_open('methods/add', $attributes);
-?>
-        <table width="620" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td width="80" valign="top"><strong><?php echo getTxt('MethodName'); ?></strong></td>
-          <td colspan="2" valign="top"><input type="text" id="MethodDescription" name="MethodDescription" maxlength="100"/><span class="required">*</span><span class="em"><?php echo getTxt('ExampleMethodName');?></span></td>
-        </tr>
-        <tr>
-          <td width="80" valign="top">&nbsp;</td>
-          <td width="260" valign="top">&nbsp;</td>
-          <td width="280" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
+genInput('MethodName','MethodDescription','MethodDescription',true);echo '<span class="em">'.getTxt('ExampleMethodName').'</span>';
+genInput('MethodLinkColon','MethodLink','MethodLink',true);echo '<span class="em">'.getTxt('ExMethodLink').'</span>';
 
-          <td valign="top"><strong><?php echo getTxt('MethodLinkColon');?></strong></td>
-          <td colspan="2" valign="top"><input type="text" id="MethodLink" name="MethodLink" maxlength="200"/>&nbsp;<span class="em"><?php echo getTxt('ExMethodLink');?></span></td>
-          </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td valign="top">&nbsp;</td>
-          <td valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-        
-            <td colspan="3" valign="top"><strong><?php echo getTxt('SelectVariablesBelow1');?><br>
-            <?php echo getTxt('SelectAllThatApply');?></td>
-          </tr>
-        <tr>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="2" valign="top"><div id='jqxWidget'></div></td>
-          <td valign="top"><span class="required">*</span></td>
-          </tr>
-        <tr>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="3" valign="top">
-          <input type="SUBMIT" name="submit" value="<?php echo getTxt('AddMethodButton');?>" class="button" style="width: auto"/><input type="reset" name="Reset" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" /></td>
-          </tr>
-      </table></FORM>
-      <p>&nbsp;</p>
+
+//<div class="form-group">
+//    <label for="comment">Comment:</label>
+ //    <textarea class="form-control" rows="5" id="comment"></textarea>
+// </div>
+	
+
+?>
+<div class="form-group">
+	<label class="col-sm-3 control-label"></label>
+  <div class = "col-md-6 col-md-offset-0">
+  <label><?php echo getTxt('SelectVariablesBelow1');?></label>
+  <label><?php echo getTxt('SelectAllThatApply');?></label>
+  <input type="textarea" class="form-control" rows="5" id="jqxWidget"></textarea>
+  </div>
+</div>
+
+<div class="col-md-5 col-md-offset-5">
+       <input type="SUBMIT" name="submit" value="<?php echo getTxt('AddMethodButton');?>" class="button"/>
+       <input type="reset" name="Reset" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" />
+</div>
 </div>
 <?php HTML_Render_Body_End(); ?>
 <script>
