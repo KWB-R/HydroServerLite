@@ -74,6 +74,10 @@ class Source extends MY_Controller {
 			{
 				addSuccess(getTxt('SourceSuccessfullyAdded'));
 			}	
+			else
+			{
+				addError(getTxt('ProcessingError'));
+			}
 			
 		}
 		

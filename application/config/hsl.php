@@ -50,6 +50,7 @@ $config['DerivedFromID']	= 'NULL';
 |--------------------------------------------------------------------------
 */
 $config['default_varcode']	= '1';
+$config['time_support']	= '0';
 /*
 |--------------------------------------------------------------------------
 | Default Variables for Adding Source

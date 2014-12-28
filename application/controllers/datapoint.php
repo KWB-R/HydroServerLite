@@ -370,7 +370,7 @@ class Datapoint extends MY_Controller {
 		  //echo "<p>Connected to MySQL!</p>";
 		  
 		  $db = mysql_select_db($this->config->item('database_name'),$connection)
-			or die("<p>Error selecting the database " . DATABASE_NAME .
+			or die("<p>Error selecting the database " . $this->config->item('database_name') .
 			  mysql_error() . "</p>");
 		
 		require_once APPPATH.'../assets/update_series_catalog.php';
