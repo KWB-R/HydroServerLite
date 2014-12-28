@@ -22,6 +22,11 @@ class Home extends MY_Controller {
 		$this->load->view('welcome',$data);
 	}
 	
+	public function help()
+	{
+		$data=$this->StyleData;
+		$this->load->view('help',$data);	
+	}
 	protected function authenticate()
 	{
 		//Home is open access

@@ -35,16 +35,6 @@ echo '       <div class="navbar navbar-default" role="navigation">
           <ul class="nav navbar-nav">
 		';
 
-if (isAdmin()){
-	echo '<li class=\"dropdown\">
-	
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.getTxt('SiteManagement').'<b class="caret"></b></a>';
-	echo "<ul class=\"dropdown-menu\">";
-	echo "<li class=\"versions\"><a href='".site_url('versions')."'>".getTxt('Versions')."</a>";
-	//echo "<li class=\"aliases\"><a href='edit_aliases.php'>Aliases</a>";
-	echo "</ul>";
-	echo "</li>";
-}
 
 // teacher admin
 if (isTeacher() || isAdmin()){
