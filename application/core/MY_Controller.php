@@ -142,9 +142,21 @@ class MY_Controller extends CI_Controller {
 	
 	protected function authenticate()
 	{
-		if(!isLoggedIn())
+		$segments = $this->uri->segment_array();
+		$flag=true;
+		foreach($this->dontAuth as $loc)
 		{
-			$this->kickOut();	
+			if(in_array($loc,$segments))
+			{
+				$flag=false;
+				break;
+			}
 		}
+		
+		if(!isLoggedIn() && $flag)
+		{
+			$this->kickOut();
+		}	
 	}
+
 }

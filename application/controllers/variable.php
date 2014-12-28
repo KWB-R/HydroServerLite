@@ -10,6 +10,8 @@ class Variable extends MY_Controller {
 	
 	function __construct()
 	{
+		$this->dontAuth = array('getAllJSON','getAllJSON2','getSiteJSON','getTypes','updateVarID','getUnit',
+								'getWithUnit','getTable','getUnitTypes','getUnitsByType');
 		parent::__construct();
 		$this->load->model('variables','',TRUE);
 	}

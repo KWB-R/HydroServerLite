@@ -964,7 +964,7 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
 $("#export").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
 $("#export").bind('click', function () {
 
-var url='data_export.php?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+var url=base_url+'datapoint/export?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 
 window.open(url,'_blank');
 
@@ -1125,7 +1125,7 @@ if($var['VariableName']!="")
 
 ?>
  <br/><br/>
-<?php echo getTxt('WrongSite'); ?><a href="view_main.php" style="color:#00F"><?php echo ' '.getTxt('Here'); ?></a> <?php echo getTxt('GoBack'); ?> </div>
+<?php echo getTxt('WrongSite'); ?><a href="<?php echo site_url('sites/map'); ?>" style="color:#00F"><?php echo ' '.getTxt('Here'); ?></a> <?php echo getTxt('GoBack'); ?> </div>
 
     <div>
    

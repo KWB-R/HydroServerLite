@@ -10,6 +10,7 @@ class Methods extends MY_Controller {
 	
 	function __construct()
 	{
+		$this->dontAuth = array('getMethodsJSON','getJSON','getSiteVarJSON');
 		parent::__construct();
 		$this->load->model('method','',TRUE);
 		$this->load->library('form_validation');

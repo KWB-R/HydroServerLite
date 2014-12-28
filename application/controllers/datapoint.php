@@ -10,6 +10,7 @@ class Datapoint extends MY_Controller {
 	
 	function __construct()
 	{
+		$this->dontAuth = array('getData','getDataJSON','compare','export');
 		parent::__construct();
 		$this->load->model('variables','',TRUE);
 		$this->load->model('sources','',TRUE);
@@ -271,6 +272,31 @@ class Datapoint extends MY_Controller {
 			$this->load->view('templates/apierror',$data);	
 		}	
 	}
+	
+
+	
+	public function export()
+	{
+		$var = $this->input->get('varid', TRUE);
+		$site = $this->input->get('siteid', TRUE);	
+		$method = $this->input->get('meth', TRUE);
+		$start = $this->input->get('startdate', TRUE);	
+		$end = $this->input->get('enddate', TRUE);
+		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
+		{
+			$result = $this->datapoints->getResultData($site,$var,$method,$start,$end);
+			header( 'Content-Type: text/csv' );
+			header('Content-Disposition: attachment; filename=HSLDataSite'.$site.'.csv');
+			$this->load->dbutil();
+			echo $this->dbutil->csv_from_result($result);
+		}
+		else
+		{
+			$data['errorMsg']="One of the parameters: VariableID, SiteID,MethodID is not defined. An example request would be export?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
+			$this->load->view('templates/apierror',$data);	
+		}	
+	}
+	
 	public function add()
 	{	
 		$var = $this->input->get('varid', TRUE);

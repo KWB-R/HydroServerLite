@@ -10,8 +10,10 @@ class Sites extends MY_Controller {
 	
 	function __construct()
 	{
+		$this->dontAuth = array('map','details','displayAll','siteSearch','getSitesJSON','getSiteJSON');
 		parent::__construct();
 		$this->load->model('site','',TRUE);
+		
 
 	}
 	public function index()

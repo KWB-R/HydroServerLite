@@ -84,7 +84,8 @@ if (isStudent() || isTeacher() || isAdmin()){
 	echo "<li class=\"add_multiple_value\"><a href='".site_url('datapoint/addmultiplevalues')."'>".getTxt('AddMultipleValues')."</a></li>";
 	if (!isset($_SESSION["importFilePath"]))
 	{
-		echo "<li class=\"import_data\"><a href='".site_url('datapoint/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
+		//DISABLED FOR NOW : UNTIL WORK ON THIS IS DONE. 
+		//echo "<li class=\"import_data\"><a href='".site_url('datapoint/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
 	}else
 	{
 		echo "<li class=\"import_data\"><a href='".site_url('data/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
@@ -98,7 +99,7 @@ if (isStudent() || isTeacher() || isAdmin()){
 // [all]
 // public student teacher admin [all]
 
-echo "<li class=\"search\"><a href='".site_url('sites')."'>".getTxt('SearchData')."</a></li>";
+echo "<li class=\"search\"><a href='".site_url('sites/map')."'>".getTxt('SearchData')."</a></li>";
 echo "<li class=\"help\"><a href='".site_url('home/help')."'>".getTxt('Help')."</a></li>";
 
 
@@ -136,7 +137,7 @@ if(isLoggedIn())	{
 
 
 
-//echo "<img class=\"footer\" src=\"assets/images/nav-footer.jpg\" />";
+//\echo "<img class=\"footer\" src=\"assets/images/nav-footer.jpg\" />";
 echo "</ul>
         </div></div></div>";
 

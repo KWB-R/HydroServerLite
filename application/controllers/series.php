@@ -10,10 +10,10 @@ class Series extends MY_Controller {
 	
 	function __construct()
 	{
+		$this->dontAuth = array('getDateJSON');
 		parent::__construct();
 		$this->load->model('sc','',TRUE);
 		$this->load->library('form_validation');
-
 	}
 	
 	public function getDateJSON()

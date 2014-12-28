@@ -42,6 +42,19 @@ class Datapoints extends MY_Model
 		$query = $this->db->get();
 		return $query->result_array();	
 	}
+	
+	function getResultData($site,$var,$method,$start,$end)
+	{
+		$this->db->select('ValueID, DataValue, LocalDateTime')
+			->from($this->tableName)
+			->where('SiteID',$site)
+			->where('VariableID',$var)
+			->where('MethodID',$method)
+			->where("LocalDateTime between '".$start."' and '".$end."'")
+			->order_by('LocalDateTime');
+		$query = $this->db->get();
+		return $query;	
+	}
 	function delete($ValueID)
 	{
 		$this->db
