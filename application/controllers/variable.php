@@ -35,7 +35,7 @@ class Variable extends MY_Controller {
 		$varname = $this->input->post('varname_val');
 		if($varname == getTxt('OtherSlashNew'))
 		{
-			$varname = $this->input->post('NewVarName');
+			$varname = $this->input->post('newvarname');
 			$this->variables->addTDef('variablenamecv',$varname,$this->input->post('vardef'));
 		}
 		$Variable['VariableName']=$varname;
@@ -125,12 +125,40 @@ class Variable extends MY_Controller {
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$data['DefaultVarcode']= $this->config->item('default_varcode');
-		
+		$data['DefaultTS']= $this->config->item('time_support');
 		$this->load->view('variables/addvar',$data);
 	}
 	
 	public function edit()
 	{		
+		if($_POST)
+		{
+			$variable = $this->buildVariable();
+			$varid = $this->input->post('VariableID');
+			$result = $this->variables->update($variable,$varid);
+			if($result)
+			{
+				//Add to varmeth
+				$varMeth = array(
+					'VariableCode' =>$variable['VariableCode'],
+					'VariableName'=> $variable['VariableName'],
+					'DataType'=> $variable['DataType'],
+					'MethodID'=> $this->input->post('jqxWidget')				
+				);
+				if($this->variables->updateVM($varMeth,$varid))
+				{
+				addSuccess(getTxt('VariableSuccess'));
+				}
+				else
+				{
+				addError(getTxt('ProcessingError')." Error in varmeth.");		
+				}
+			}
+			else
+			{
+				addError(getTxt('ProcessingError'));
+			}	
+		}
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
 		$this->load->view('variables/editvar',$data);
@@ -275,4 +303,30 @@ class Variable extends MY_Controller {
 			$this->load->view('templates/apierror',$data);	
 		}
 	}
+	public function delete()
+	{
+		$varid = end($this->uri->segment_array());
+		if($varid=="delete")
+		{
+			$data['errorMsg']="One of the parameters: methodid is not defined. An example request would be delete/1";
+			$this->load->view('templates/apierror',$data);
+			return;
+		}
+		$result = $this->variables->delete($varid);
+		if($result)
+			{	
+				if($this->input->get('ui', TRUE))
+				addSuccess(getTxt('VariableSuccess'));	
+				$output="success";	
+			}
+		else
+			{
+				if($this->input->get('ui', TRUE))
+				addError(getTxt('ProcessingError'));	
+				$output="failed";
+			}		
+		$output = array("status"=>$output);
+		echo json_encode($output);	
+	}
+	
 }

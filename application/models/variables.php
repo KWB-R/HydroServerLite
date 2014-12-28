@@ -114,5 +114,39 @@ class Variables extends MY_Model
 		$num_inserts = $this->db->affected_rows();
 	  	return $num_inserts==1;
 	}
+	function getByID($id)
+	{
+		$this->db->select()
+		->from($this->tableName)
+		->where('VariableID',$id);
+		$query = $this->db->get();
+		return $this->tranResult($query->result_array());	
+	}
+	
+	function delete($Var)
+	{
+		$this->db->where('VariableID',$Var)
+		->delete($this->tableName);
+		$affected = $this->db->affected_rows();
+		$this->db->where('VariableID',$Var)
+		->delete('varmeth');
+		return ($affected==1 && $this->db->affected_rows()==1);
+	
+	}
+	
+	function update($Var,$id)
+	{
+		$this->db->where('VariableID', $id);
+		$this->db->update($this->tableName, $Var); 
+		$num_inserts = $this->db->affected_rows();
+	  	return $num_inserts>=0;
+	}
+	function updateVM($VM,$id)
+	{
+		$this->db->where('VariableID', $id);
+		$this->db->update('varmeth', $VM);
+		$num_inserts = $this->db->affected_rows();
+	  	return $num_inserts>=0;
+	}
 }
 ?>

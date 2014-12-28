@@ -1,5 +1,5 @@
 <?php
-$default_timesupport = ""; //Come from config. 
+$default_timesupport = $DefaultTS; //Come from config. 
 HTML_Render_Head($js_vars);
 echo $JS_JQuery;
 echo $CSS_JQX;
@@ -23,11 +23,6 @@ $(document).ready(function(){
 	$("#newunitonly").hide();
 	$("#valuetypenewb").hide();
 	$("#newvarnameb").hide();
-
-//Default starter for Variable Code
-//	var d_varcode = $_SITE_default_varcode;
-
-//	$("#VariableCode").val(d_varcode);
 
 //List : Speciation
 var selec_ind=0;
@@ -481,7 +476,7 @@ echo '</div>';
 genInput('ValueTypeDefinition','vtdef', 'vtdef', true);
 
 genDropListsH('Regularity','isreg', 'isreg',getTxt('RegularlySampledTime'),true);
-genInputH('TimeSupport','tsup', 'tsup',getTxt('TemporalFootprint'), true);
+genInputH('TimeSupport','tsup', 'tsup',getTxt('TemporalFootprint'), true, "value='".$default_timesupport."'");
 genDropLists('TimeUnit','timeunit', 'timeunit', true);
 genDropLists('DataType','datatype', 'datatype', true);
 ?>
@@ -706,7 +701,6 @@ checkitem = $('#samplemedium').jqxDropDownList('getSelectedItem');
 //Check Value type
 addHidden('valuetype');
 checkitem = $('#valuetype').jqxDropDownList('getSelectedItem');
-var Flag6=0;
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
 	 alert(<?php echo "'".getTxt('SelectValueType')."'"; ?>);
