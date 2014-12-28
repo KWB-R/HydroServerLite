@@ -73,6 +73,34 @@ class Site extends MY_Model
 		$query = $this->db->get();
 		return $this->tranResult($query->result_array());	
 	}
+	
+	function getSiteTypes()
+	{
+		$query = $this->db->get('sitetypecv');
+		return $this->tranResult($query->result_array());	
+	}
+	function getVD()
+	{
+		$query = $this->db->get('verticaldatumcv');
+		return $this->tranResult($query->result_array());	
+	}
+	function getSR()
+	{
+		$query = $this->db->get('spatialreferences');
+		return $this->tranResult($query->result_array());	
+	}
+	function add($site)
+	{
+	  $this->db->insert($this->tableName,$site);
+	  return $this->db->insert_id();
+	}
+	function addPic($name,$siteID)
+	{
+		$this->db->delete('sitepic', array('siteid' => $siteID)); 
+		$this->db->set('siteid',$siteID)
+		->set('picname',$name)
+		->insert('sitepic');
+	}
 
 }
 ?>

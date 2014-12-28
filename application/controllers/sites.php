@@ -13,6 +13,7 @@ class Sites extends MY_Controller {
 		$this->dontAuth = array('map','details','displayAll','siteSearch','getSitesJSON','getSiteJSON');
 		parent::__construct();
 		$this->load->model('site','',TRUE);
+		$this->load->model('sources','',TRUE);
 		
 
 	}
@@ -47,10 +48,132 @@ class Sites extends MY_Controller {
 		$this->load->view('details',$data);
 	}
 	
+	private function createSite()
+	{
+		
+		$Site = array
+		(
+			'SiteCode' => $this->input->post('SiteCode'),
+			'SiteName' => $this->input->post('SiteName'),
+			'Latitude' =>  $this->input->post('Latitude'),
+			'Longitude' =>$this->input->post('Longitude'),
+			'LatLongDatumID' =>$this->input->post('LatLongDatumID'),
+			'SiteType' => $this->input->post('SiteType'),
+			'Elevation_m' =>  $this->input->post('Elevation'),
+			'VerticalDatum' =>$this->input->post('VerticalDatum'),
+			'State' => $this->input->post('state'),
+			'County' =>  $this->input->post('county'),
+			'Comments' =>  $this->input->post('value')
+		);	
+		
+		return $Site;
+	}
+	
 	public function add()
-	{		
+	{	
+	
+		if($_POST)
+		{
+			$name = 'siteimg'.time();
+			//Processing the SiteImage. 
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$config['max_size']	= '1024';
+			$config['max_width']  = '0';
+			$config['max_height']  = '0';
+			$config['file_name']  = $name;
+			
+			$this->load->library('upload', $config);
+	
+			if ( ! $this->upload->do_upload('picture'))
+			{
+				addError(getTxt('FailMoveFile').$this->upload->display_errors());
+			}
+			else
+			{
+				$uploaddata = $this->upload->data();
+				$name = $uploaddata['file_name'];
+				//Create the site.
+				$site = $this->createSite();
+				//Add the site.
+				$result = $this->site->add($site); 
+				if($result<=0)
+				{
+					addError(getTxt('ProcessingError')." Error while adding site. ");
+				}	
+				else
+				{
+					$siteID = $result;
+					//Add image to sitepic table. 
+					$this->site->addPic($name,$siteID);
+					//Get the source
+					$source = $this->sources->get($this->input->post('SourceID'));
+					
+					$series = array
+					(
+						'SiteID' => $siteID,
+						'SiteCode' => $this->input->post('SiteCode'),
+						'SiteName' =>  $this->input->post('SiteName'),
+						'SiteType' => $this->input->post('SiteType'),
+						'SourceID' =>  $this->input->post('SourceID'),
+						'Organization' =>$source[0]['Organization'],
+						'SourceDescription' => $source[0]['SourceDescription'],
+						'Citation' =>  $source[0]['Citation'],
+						'ValueCount' =>  0
+					);	
+					$this->load->model('sc','',TRUE);
+					//Add to the series catalog
+					$result=$this->sc->add($series);
+					if($result)
+					{
+						addSuccess(getTxt('SiteAddedSuccessfully'));
+					}	
+					else
+					{
+						addError(getTxt('ProcessingError')." Error while adding Series. ");	
+					}
+				}
+			}	
+		}
+		
+		$sources = $this->sources->getAll();
+		$sourceOptions = optionsSource($sources);
+		
+		$types = $this->site->getSiteTypes();
+		$typesArray = array();
+		foreach($types as $type)
+		{
+			$typesArray[$type['Term']]=$type['Term'];
+		}
+		$typeOptions = genOptions($typesArray);
+		
+		$vds = $this->site->getVD();
+		$verticalDatumArray = array();
+		foreach($vds as $vd)
+		{
+			$verticalDatumArray[$vd['Term']]=$vd['Term'];
+		}
+		$vdOptions = genOptions($verticalDatumArray);
+		
+		$srs = $this->site->getSR();
+		$srArray = array();
+		foreach($srs as $sr)
+		{
+			$srArray[$sr['SpatialReferenceID']]=$sr['SRSName'];
+		}
+		$srOptions = genOptions($srArray);
+		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$data['sourceOptions']=$sourceOptions;
+		$data['typeOptions']=$typeOptions;
+		$data['vdOptions']=$vdOptions;
+		$data['srOptions']=$srOptions;
+		//Getting the states dropdown
+		$states=getStates();
+		$states['NULL']=getTxt('International');
+		$stateOptions  = genOptions($states);
+		$data['stateOptions']=$stateOptions;
 		$this->load->view('sites/addsite',$data);
 	}
 	

@@ -10,8 +10,9 @@ function drop_down_list(){
 	    $('#loading_county_drop_down').show(); // Show the Loading...
 	    $('#county_drop_down').hide(); // Hide the drop down
 	    $('#no_county_drop_down').hide(); // Hide the "no counties" message (if it's the case)
-
-    	$.getScript("js/states/"+ state.toLowerCase() +".js", function(){
+		
+		var jsURL = base_url.replace("index.php","assets/js");
+    	$.getScript(jsURL+"states/"+ state.toLowerCase() +".js", function(){
 
 	  		populate(document.addsite.county);
 
@@ -41,8 +42,8 @@ function new_drop_down_list(){
     }else{
 		$('#county_original').hide(); // Hide the original drop down
 		$('#county_drop_down').show(); // Show the drop down
-
-    	$.getScript("js/states/"+ state.toLowerCase() +".js", function(){
+var jsURL = base_url.replace("index.php","assets/js");
+    	$.getScript(jsURL+"states/"+ state.toLowerCase() +".js", function(){
 
 	  		populate(document.editsite.newcounty);
 
@@ -68,8 +69,8 @@ function final_drop_down_list(){
 		
 	    $('#county_drop_down').hide(); // Hide the drop down
 	    $('#no_county_drop_down').hide(); // Hide the "no counties" message (if it's the case)
-
-    	$.getScript("js/states/"+ state.toLowerCase() +".js", function(){
+var jsURL = base_url.replace("index.php","assets/js");
+    	$.getScript(jsURL+"states/"+ state.toLowerCase() +".js", function(){
 
 	  		populate(document.editsite.newcounty);
 

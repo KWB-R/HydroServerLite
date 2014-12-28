@@ -38,5 +38,12 @@ class Sc extends MY_Model
 		return $query->result_array();				
 	}
 	
+	function add($sc)
+	{
+		
+		$this->db->insert($this->tableName,$sc);
+		return $this->db->affected_rows() ==1;	
+	}
+	
 }
 ?>
