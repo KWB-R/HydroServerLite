@@ -86,7 +86,8 @@ class Datapoint extends MY_Controller {
 			$result=$this->datapoints->addPoint($dataPoint);
 			if($result)
 			{
-				addSuccess(getTxt('ValueSuccessfully'));	
+				addSuccess(getTxt('ValueSuccessfully'));
+				$this->updateSC();	
 			}
 			else
 			{
@@ -123,6 +124,7 @@ class Datapoint extends MY_Controller {
 			if($result==$rows)
 			{
 				addSuccess(getTxt('DataEnteredSuccessfully'));	
+				$this->updateSC();
 			}
 			else
 			{
@@ -224,7 +226,8 @@ class Datapoint extends MY_Controller {
 		$result = $this->datapoints->delete($valueid);
 		if($result)
 			{
-				$output="success";	
+				$output="success";
+				$this->updateSC();	
 			}
 		else
 			{
@@ -258,6 +261,7 @@ class Datapoint extends MY_Controller {
 			if($result)
 			{
 				$output="success";	
+				$this->updateSC();
 			}
 			else
 			{
@@ -314,7 +318,7 @@ class Datapoint extends MY_Controller {
 			if($result)
 			{
 				$output="success";
-				
+				$this->updateSC();
 			}
 			else
 			{
@@ -350,5 +354,25 @@ class Datapoint extends MY_Controller {
 		}
 		
 		$this->load->view("compare/".$valueid,$data);	
-	}	
+	}
+	
+	public function updateSC()
+	{
+		//UPDATES THE SERIES CATALOG.
+		//BREAKING FROM CODEIGINITER POLICIES HERE 
+		//Its just better for now to use the same script. 
+		
+		
+		$connection = mysql_connect($this->config->item('database_host'), $this->config->item('database_username'), $this->config->item('database_password'))
+		or die("<p>Error connecting to database: " . 
+				   mysql_error() . "</p>");
+		mysql_set_charset ("utf8");
+		  //echo "<p>Connected to MySQL!</p>";
+		  
+		  $db = mysql_select_db($this->config->item('database_name'),$connection)
+			or die("<p>Error selecting the database " . DATABASE_NAME .
+			  mysql_error() . "</p>");
+		
+		require_once APPPATH.'../assets/update_series_catalog.php';
+	}
 }

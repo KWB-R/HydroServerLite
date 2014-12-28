@@ -941,7 +941,7 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
     if(msg.status=='success')
   { 
 	$("#popupWindow_new").jqxWindow('hide');
-	plot_chart(); 
+		plot_chart(); 
   }
   else
   {
