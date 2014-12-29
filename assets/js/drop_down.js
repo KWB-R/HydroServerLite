@@ -13,9 +13,8 @@ function drop_down_list(){
 		
 		var jsURL = base_url.replace("index.php","assets/js");
     	$.getScript(jsURL+"states/"+ state.toLowerCase() +".js", function(){
-
-	  		populate(document.addsite.county);
-
+	  		populate($("#county")[0]);
+			
  			$('#loading_county_drop_down').hide(); // Hide the Loading...
 			$('#county_drop_down').show(); // Show the drop down
     	});
@@ -30,10 +29,8 @@ $(document).ready(function(){
 $(window).load(drop_down_list);
 
 
-function new_drop_down_list(){
+function new_drop_down_list(value){
     var state = $('#state').val();
-
-	document.editsite.county.options.selectedIndex = 1;
 
     if(state == 'AK' || state == 'DC'){ // Alaska and District Columbia have no counties
 		$('#county_original').hide();
@@ -42,40 +39,14 @@ function new_drop_down_list(){
     }else{
 		$('#county_original').hide(); // Hide the original drop down
 		$('#county_drop_down').show(); // Show the drop down
-var jsURL = base_url.replace("index.php","assets/js");
+		var jsURL = base_url.replace("index.php","assets/js");
     	$.getScript(jsURL+"states/"+ state.toLowerCase() +".js", function(){
 
-	  		populate(document.editsite.newcounty);
-
+	  		populate($("#county")[0]);
+			$("#county").val(value);
+			$('#loading_county_drop_down').hide();
 			$('#county_drop_down').show(); // Show the drop down
     	});
 	}
 }
 
-
-function final_drop_down_list(){
-    var state = $('#state').val();
-	
-	document.editsite.county.options.selectedIndex = 1;
-		
-    if(state == 'AK' || state == 'DC'){ // Alaska and District Columbia have no counties
-		$('#county_original').hide();
-    	$('#loading_county_drop_down').hide(); // Hide the Loading...
-	    $('#no_county_drop_down').show(); // Show the "no counties" message (if it's the case)
-    }else{
-		$('#county_original').hide();
-	    $('#loading_county_drop_down').show(); // Show the Loading...
-		$('#county_original').hide(); // Hide the original drop down
-		
-	    $('#county_drop_down').hide(); // Hide the drop down
-	    $('#no_county_drop_down').hide(); // Hide the "no counties" message (if it's the case)
-var jsURL = base_url.replace("index.php","assets/js");
-    	$.getScript(jsURL+"states/"+ state.toLowerCase() +".js", function(){
-
-	  		populate(document.editsite.newcounty);
-
- 			$('#loading_county_drop_down').hide(); // Hide the Loading...
-			$('#county_drop_down').show(); // Show the drop down
-    	});
-	}
-}

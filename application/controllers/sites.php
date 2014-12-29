@@ -177,10 +177,102 @@ class Sites extends MY_Controller {
 		$this->load->view('sites/addsite',$data);
 	}
 	
-	public function edit()
+	public function change()
 	{		
+	
+	
+		if($_POST)
+		{
+			//Try uploading the site image. If no new image is set, it should be an error. 	
+			$name = 'siteimg'.time();
+			//Processing the SiteImage. 
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$config['max_size']	= '1024';
+			$config['max_width']  = '0';
+			$config['max_height']  = '0';
+			$config['file_name']  = $name;
+			
+			$this->load->library('upload', $config);
+			$name="";
+			if ($this->upload->do_upload('picture'))
+			{
+				$uploaddata = $this->upload->data();
+				$name = $uploaddata['file_name'];
+			}
+			//Create the site.
+			$site = $this->createSite();
+			$siteID = $this->input->post('SiteID');
+			if($name!="") //Add image to sitepic table. 
+			$this->site->addPic($name,$siteID);
+			$result = $this->site->update($site,$siteID);
+			if(!$result)
+			{
+				addError(getTxt('ProcessingError')." Error while adding sites. ");
+			}
+			else
+			{
+				//Update Series. 
+				$series = array
+					(
+						'SiteCode' => $this->input->post('SiteCode'),
+						'SiteName' =>  $this->input->post('SiteName'),
+						'SiteType' => $this->input->post('SiteType'),
+					);
+					$this->load->model('sc','',TRUE);
+					//Add to the series catalog
+					$result=$this->sc->updateSite($series,$siteID);
+					if($result)
+					{
+						addSuccess(getTxt('SiteSuccessfullyEdited'));
+					}	
+					else
+					{
+						addError(getTxt('ProcessingError')." Error while updating Series. ");	
+					}
+					
+			}
+		}
+	
+		$sources = $this->sources->getAll();
+		$sourceOptions = optionsSource($sources);
+		
+		$types = $this->site->getSiteTypes();
+		$typesArray = array();
+		foreach($types as $type)
+		{
+			$typesArray[$type['Term']]=$type['Term'];
+		}
+		$typeOptions = genOptions($typesArray);
+		
+		$vds = $this->site->getVD();
+		$verticalDatumArray = array();
+		foreach($vds as $vd)
+		{
+			$verticalDatumArray[$vd['Term']]=$vd['Term'];
+		}
+		$vdOptions = genOptions($verticalDatumArray);
+		
+		$srs = $this->site->getSR();
+		$srArray = array();
+		foreach($srs as $sr)
+		{
+			$srArray[$sr['SpatialReferenceID']]=$sr['SRSName'];
+		}
+		$srOptions = genOptions($srArray);
+		
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$data['sourceOptions']=$sourceOptions;
+		$data['typeOptions']=$typeOptions;
+		$data['vdOptions']=$vdOptions;
+		$data['srOptions']=$srOptions;
+		//Getting the states dropdown
+		$states=getStates();
+		$states['NULL']=getTxt('International');
+		$stateOptions  = genOptions($states);
+		$data['stateOptions']=$stateOptions;
+		
 		$this->load->view('sites/editsite',$data);
 	}
 	
@@ -256,5 +348,33 @@ class Sites extends MY_Controller {
 			$data['errorMsg']="One of the parameters: Siteid is not defined. An example request would be getSiteJSON?siteid=1";
 			$this->load->view('templates/apierror',$data);	
 		}	
+	}
+	
+	public function delete()
+	{
+		$siteid = end($this->uri->segment_array());
+		if($siteid=="delete")
+		{
+			$data['errorMsg']="One of the parameters: siteid is not defined. An example request would be delete/1";
+			$this->load->view('templates/apierror',$data);
+			return;
+		}
+		$result = $this->site->delete($siteid);
+		$this->load->model('sc','',TRUE);
+		$this->sc->delSite($siteid);
+		if($result)
+			{	
+				if($this->input->get('ui', TRUE))
+				addSuccess(getTxt('SiteSuccessfullyDeleted'));	
+				$output="success";	
+			}
+		else
+			{
+				if($this->input->get('ui', TRUE))
+				addError(getTxt('ProcessingError'));	
+				$output="failed";
+			}		
+		$output = array("status"=>$output);
+		echo json_encode($output);	
 	}
 }

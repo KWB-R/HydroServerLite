@@ -1,107 +1,19 @@
+<?php HTML_Render_Head($js_vars);?>
+<script type="text/javascript">
+//For loading language variables that are required in javascript.
+    phpVars = {};
+    <?php  
+		echo 'phpVars.NoSitesSource="' . getTxt('NoSitesSource') . '";';
+		echo 'phpVars.SelectSite="' . getTxt('SelectSite2') . '";';
+    ?>
+</script>
 <?php
-/*
-$sql ="Select * FROM sources";
-
-$result = transQuery($sql,0,1);
-	if (count($result) < 1) {
-		$msg = "<span class='em'> $NoSourceIDNames </span>";
-
-	}else{
-
-	foreach ($result as $row) {
-
-		$sourceid = $row["SourceID"];
-		$sourcename = $row["Organization"];
-
-		if ($sourcename==$default_source){
-			$option_block .= "<option selected='selected' value=$sourceid>$sourcename</option>";
-
-		}else{
-			$option_block .= "<option value=$sourceid>$sourcename</option>";
-		}
-	}
-}
-
-
-
-
-//add the SiteType options
-$sql2 ="Select * FROM sitetypecv";
-
-$result2 = transQuery($sql2,0,1);
-
-	if(count($result2) < 1){
-		$msg = "<span class='em'> $NoSiteTypes </span>";
-
-	}else{
-
-		foreach ($result2 as $row2) {
-
-			$sitetype = $row2["Term"];
-			$option_block2 .= "<option value='$sitetype'>$sitetype</option>";
-		}
-	}
-
-//add the VerticalDatum options
-$sql3 ="Select * FROM verticaldatumcv";
-
-$result3 = transQuery($sql3,0,1);
-
-	if(count($result3) < 1){
-		
-		$msg = "<span class='em'> $NoVerticalDatums </span>";
-	}else{
-		foreach ($result3 as $row3) {
-			$vd = $row3["Term"];
-
-			if($vd==$default_datum){
-				$option_block3 .= "<option selected='selected' value='$vd'>$vd</option>";
-			}else{
-				$option_block3 .= "<option value=$vd>$vd</option>";
-			}
-		}
-	}
-
-//add the LatLongDatumID options
-$sql4 ="Select * FROM spatialreferences";
-
-$result4 = transQuery($sql4,0,1);
-
-	if(count($result4) < 1){
-		$msg = "<span class='em'> $NoVerticalDatums </span>";
-
-	}else{
-
-		foreach ($result4 as $row4) {
-
-			$srid = $row4["SpatialReferenceID"];
-			$srsname = $row4["SRSName"];
-
-			if($srsname==$default_spatial){
-	
-				$option_block4 .= "<option selected='selected' value=$srid>$srsname</option>";
-
-			}else{
-
-				$option_block4 .= "<option value=$srid>$srsname</option>";
-			}
-		}
-	}
-*/
-HTML_Render_Head($js_vars);
-
 echo $CSS_Main;
-
 echo $JS_JQuery;
-
 echo $JS_Forms;
-
 echo $CSS_JQX;
-
 echo $JS_GetTheme;
-
 echo $JS_JQX;
-
 echo $JS_DropDown;
 
 ?>
@@ -110,29 +22,25 @@ echo $JS_DropDown;
 <script type="text/javascript">
 function show_answer(){
 //alert("If you do not see your SITE listed here, please contact your supervisor and ask them to add it before entering data.");
-alert(<?php echo "'".$SiteNotListedContact."'"; ?>);
+alert(<?php echo "'".getTxt('SiteNotListedContact')."'"; ?>);
 }
 
 function show_answer2(){
 //alert("The current version of this software does not autmatically select the State and County. Please select them mannually.");
-alert(<?php echo "'".$SelectStateCounty."'"; ?>);
+alert(<?php echo "'".getTxt('SelectStateCounty')."'"; ?>);
 }
 </script>
-
-<script type='text/javascript' src='js/drop_down.js'></script>
-
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>
-
 <script type="text/javascript">
 
 $(document).ready(function(){
 	$("#msg").hide();
 	$("#msg2").hide();
 	$("#msg3").hide();
-	
+	$("#editsite").hide();
 	$('#window').hide();
 
-	$('#window').jqxWindow({ height: 100, width: 200, theme: 'darkblue' });
+	$('#window').jqxWindow({ height: 150, width: 200, theme: 'darkblue' });
     	$('#window').jqxWindow('hide');
 
 	$("#Yeah").click(function(){
@@ -147,394 +55,297 @@ $(document).ready(function(){
 
 function confirmBox(){
 	$("html, body").animate({ scrollTop: 0 }, "slow");
-$('#window').show();
+	$('#window').show();
     $('#window').jqxWindow('show');
 }
 
-</script>
-
-<!-- Preload Images -->
-<SCRIPT language="JavaScript">
-<!--
-pic1 = new Image(16, 16); 
-pic1.src="images/loader.gif";
-//-->
-</SCRIPT>
-<script type="text/javascript">
-
-    // This will parse a delimited string into an array of
-    // arrays. The default delimiter is the comma, but this
-    // can be overriden in the second argument.
-    function CSVToArray( strData, strDelimiter ){
-        // Check to see if the delimiter is defined. If not,
-        // then default to comma.
-        strDelimiter = (strDelimiter || ",");
-
-        // Create a regular expression to parse the CSV values.
-        var objPattern = new RegExp(
-                (
-                        // Delimiters.
-                        "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
-
-                        // Quoted fields.
-                        "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
-
-                        // Standard fields.
-                        "([^\"\\" + strDelimiter + "\\r\\n]*))"
-                ),
-                "gi"
-                );
-
-
-        // Create an array to hold our data. Give the array
-        // a default empty first row.
-        var arrData = [[]];
-
-        // Create an array to hold our individual pattern
-        // matching groups.
-        var arrMatches = null;
-
-
-        // Keep looping over the regular expression matches
-        // until we can no longer find a match.
-        while(arrMatches = objPattern.exec( strData )){
-
-                // Get the delimiter that was found.
-                var strMatchedDelimiter = arrMatches[ 1 ];
-
-                // Check to see if the given delimiter has a length
-                // (is not the start of string) and if it matches
-                // field delimiter. If id does not, then we know
-                // that this delimiter is a row delimiter.
-                if(
-                        strMatchedDelimiter.length &&
-                        (strMatchedDelimiter != strDelimiter)
-                        ){
-
-                        // Since we have reached a new row of data,
-                        // add an empty row to our data array.
-                        arrData.push( [] );
-                }
-
-
-                // Now that we have our delimiter out of the way,
-                // let's check to see which kind of value we
-                // captured (quoted or unquoted).
-                if(arrMatches[ 2 ]){
-
-                        // We found a quoted value. When we capture
-                        // this value, unescape any double quotes.
-                        var strMatchedValue = arrMatches[ 2 ].replace(
-                                new RegExp( "\"\"", "g" ),
-                                "\""
-                                );
-
-                }else{
-
-                        // We found a non-quoted value.
-                        var strMatchedValue = arrMatches[ 3 ];
-
-                }
-
-
-                // Now that we have our value string, let's add
-                // it to the data array.
-                arrData[ arrData.length - 1 ].push( strMatchedValue );
-        }
-
-        // Return the parsed data.
-        return( arrData );
-    }
-
-</script>
-<script type="text/javascript">
      var map="-1";
 	 var marker=null;
 	 var elevator;
 
 function initialize() {
-	elevator = new google.maps.ElevationService();
+	
 	$("#file").hide();
 	showSites($("#SourceID option:selected").val());
-	
 	//Make the Map
 	GetSourceName();
 	var myLatlng = new google.maps.LatLng(43.52764,-112.04951);
 }
 
-
- 
-//Function to run on form submission to implement a validation and then run an ajax request to post the data to the server and display the message that the site has been added successfully
-
-function TrainingAlert(){
-	//alert("To automatically enter the latitude, longitude, and elevation, simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.");
-	alert(<?php echo "'".$AutomaticallyEnterLongLatEle."'"; ?>);
-} 
-
-
-
-
-function showSites(str){
-
-document.getElementById("txtHint").innerHTML="<select name='SiteID' id='SiteID' onChange='findSite()'><option value=''>Select....</option></select>&nbsp;<a href='#' onClick='show_answer()' border='0'><img src='images/questionmark.png' border='0'></a>";
-
-if(str==""){
-	document.getElementById("txtHint").innerHTML="";
-	return;
-	}
-if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-}else{// code for IE6, IE5
-	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-xmlhttp.onreadystatechange=function(){
-	if(xmlhttp.readyState==4 && xmlhttp.status==200){
-		document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
-   setHintHandlers();
-    }
-}
-xmlhttp.open("GET","getsites2.php?q="+str,true);
-xmlhttp.send();
-}
-
 </script>
+<?php 
+echo $JS_CreateUserName;
+HTML_Render_Body_Start(); 
+genHeading('EditDeleteSite',true);
+?>
+<p><?php echo getTxt('SelectSourceSiteMenu');?></p>
+<?php
+$attributes = array('class' => 'form-horizontal');
+echo form_open_multipart('', $attributes);
 
-<STYLE TYPE="text/css">
-<!--
-#county_drop_down, #no_county_drop_down, #loading_county_drop_down
-{
-display: none;
-}
---> 
-</STYLE>
+genSelect('Source','SourceID','SourceID',$sourceOptions,'SelectEllipsis',true,' onChange="showSites(this.value)"');
+genSelectH('SiteName',"SiteID","SiteID",'',getTxt('IfNoSeeSite1').' '.getTxt('ContactSupervisor').' '.getTxt('AddIt'),'SelectElipsis',true);
+echo "</form>";
+$attributes = array('class' => 'form-horizontal', 'name' => 'editsite', 'id' => 'editsite');
+echo form_open_multipart('sites/change', $attributes);
 
-<!-- Creating the Site Code automatically -->
-<script type="text/javascript" src="js/create_site_code.js"></script>
 
-	<?php 
-	echo $JS_CreateUserName;
-	HTML_Render_Body_Start(); ?>
-<br /><?php //echo "$msg"; ?><p class="em" align="right"><!--Required fields are marked with an asterick (*).--><?php echo getTxt('RequiredFieldsAsterisk');?></p><div id="msg"><p class=em2><!--Site successfully deleted!--><?php echo $SiteSuccessfullyDeleted;?></p></div>
-    <div id="msg2"><p class=em2><!--Site successfully edited!--><?php echo getTxt('SiteSuccessfullyEdited');?></p></div>
-      <h1><?php echo getTxt('EditDeleteSite');?></h1>
-      <p><?php echo getTxt('SelectSourceSiteMenu');?></p>
-      <p>&nbsp;</p>
-      <table width="600" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('Source');?></strong></td>
+genInput('SiteName','SiteName','SiteName', true);
+echo '<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span>';
+genInputH('SiteCode','SiteCode', 'SiteCode',getTxt('SiteCodeInfo'), true);
+echo '<span class="em">'.getTxt('ExSiteCode').'</span>';
+genSelect('SiteType','SiteType','SiteType',$typeOptions,'SelectEllipsis',true);
 
-          <td colspan="3" valign="top"><select name="SourceID" id="SourceID" onChange="showSites(this.value)"><option value="-1"><!--Select...--><?php echo getTxt('SelectEllipsis');?></option><?php echo "$option_block"; ?></select></td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td width="78" valign="top"><strong><!--Site:--><?php echo getTxt('Site');?></strong></td>
-          <td width="522" colspan="3" valign="top"><div id="txtHint"><select name="SiteID" id="SiteID" onChange="findSite()"><option value="-1"><!--Select....--><?php echo getTxt('SelectEllipsis');?></option></select>&nbsp;<a href="#" onClick="show_answer()" border="0"><img src="<?php echo getImg('questionmark.png'); ?>" border="0"></a></div></td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-      </table>
-	<p>&nbsp;</p>
-      <div id="msg3"></div>
-    <p>&nbsp;</p>
-	<?php HTML_Render_Body_End(); ?>
+echo '<div class="form-group">
+	<label class="col-sm-3 control-label">'.getTxt('SitePhoto').'</label>
+	<div class="col-sm-9">
+		<div id="sitepic"></div>
+	   <input class="form-control" type="file" name="picture" id="picture" size="30">';	   
+echo'</div>             
+  </div><br>';	
+echo getTxt('ExSitePhoto');
+//Not altering map structure for now. As its responsive. In case it causes issues, the code can be altered here. 
+?>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<div class ="row">
+<?php echo getTxt('MapLatLongEle');?>
+</div>
+<div class="form-group">
+<label for="Latitude" class="col-sm-2 control-label"><?php echo getTxt('Latitude');?></label>
+<div class="col-sm-4">
+<input class="form-control"  type="text" id="Latitude" name="Latitude" maxlength=20/>*
+</div>
+<label for="Longitude" class="col-sm-2 control-label"><?php echo getTxt('Longitude');?></label>
+<div class="col-sm-4">
+<input class="form-control" type="text" id="Longitude" name="Longitude" maxlength=20/>*
+</div>
+</div>
+<tr>
+  <div id="map_canvas" style="width:100%; height:450px"></div>
+</tr>
+</table>
+<br />
+<div class="form-group">
+        <label class="col-sm-3 control-label"><?php echo getTxt('Elevation');?></label>
+        <div class="col-sm-7">
+        <input type="type" class="form-control" id="Elevation" name="Elevation"/>
+        </div> 
+        <div class="col-sm-2">
+        	<?php echo getTxt('Meters');?>
+            <span class="hint" title="<?php echo getTxt('ElevationInfo');?>">?</span><span class="required"/>
+        </div>            
+      </div> 
+   <div id="locationtext"></div>   
+ 
+<?php
+genSelect('State','state','state',$stateOptions,'SelectEllipsis',true);
+?>
 
+<div class="form-group">
+        <label class="col-sm-3 control-label"><?php echo getTxt('County');?></label>
+        <div class="col-sm-9">
+        <div id="county_drop_down"><select class="form-control" id="county" name="county"><option value=""><?php echo getTxt('CountyEllipsis');?></option></select>*</div>
+	 <span id="loading_county_drop_down"><img src="<?php echo getImg('loader.gif'); ?>" width="16" height="16" align="absmiddle">&nbsp;<?php echo getTxt('SelectstateElipsis');?></span>
+	 <div id="no_county_drop_down"><?php echo getTxt('StateNoCounties');?></div>
+        </div> 
+</div> 
+<?php
+genSelectH('VerticalDatum','VerticalDatum','VerticalDatum',$vdOptions,getTxt('VerticalDatumInfo'),'SelectEllipsis',true);
+genSelectH('SpatialReferenceColon','LatLongDatumID','LatLongDatumID',$srOptions,getTxt('SpatialReferenceInfo'),'SelectEllipsis',true);
+genInput('Comments','com','value');
+
+?>  
+<span class="em">&nbsp;<?php echo getTxt('Optional');?></span> 
+
+<input type='SUBMIT' name='submit' value='<?php echo getTxt('SaveEdits');?>' class='button' style='width: auto'/>&nbsp;&nbsp;
+<input type='button' name='delete' value='<?php echo getTxt('Delete');?>' class='button' style='width: auto' onClick='confirmBox()'/>&nbsp;&nbsp;
+<input type='button' name='Reset' value='<?php echo getTxt('Cancel');?>' class='button' style='width: auto' onClick='clearEverything()'/>
+</form>
+</div>
+
+<div id="window"><div id="windowHeader"><span><?php echo getTxt('ConfirmationBox');?></span></div>
+<div style="overflow: hidden;" id="windowContent"><center><strong><?php echo getTxt('AreYouSure');?></strong><br /><br />
+<input name="Yes" type="button" value="<?php echo getTxt('Yes');?>" id="Yeah"/>&nbsp;
+<input name="No" type="button" value="<?php echo getTxt('No');?>" id="No"/></center></div></div>
+</body>
+</html>
+<?php HTML_Render_Body_End(); ?>
 <script>
 
 //When a Site selection from the drop down menu is made, a query is used to fill in the form.
-function findSite(){
+$("#SiteID").change(function findSite(){
 
-marker=null;
+	if($(this).val()=="-1")
+	{
+		//Reset the form
+		$("#editsite").hide(500);
+		$("#editsite")[0].reset();
+		return;	
+	}
+		
+	marker=null;
 
-		var siteid=$("#SiteID").val();
-	
-		$.ajax({
-		type: "POST",
-		url: "request_site_info.php?SiteID="+siteid}).done(function(data){
-			
-			if(data){
+	  var siteid=$("#SiteID").val();
+ 	  $("#editsite")[0].reset();
+	  $.ajax({
+	  dataType:'json',
+	  url: base_url+"sites/getSiteJSON?siteid="+siteid}).done(function(data){
+		  data=data[0];
+		  if(data.SiteID){
+			  
+				//Add the fields to the form. 
 				
-				$("#msg3").html(data);
-				$("#msg3").show(500);
+				$("#SiteName").val(data.SiteName);
+				$("#SiteCode").val(data.SiteCode);
+				$("#SiteType").val(data.SiteType);
+				$("#Latitude").val(data.Latitude);
+				$("#Longitude").val(data.Longitude);
+				$("#Elevation").val(data.Elevation_m);
+				$("#state").val(data.State);
+				//OLD versions saved it as the state name. 
+				if($('#state').val()==-1)
+				$('#state option').filter(function(index)
+				{
+				return $(this).text()==data.State;
+				})[0].selected = true;
+				new_drop_down_list(data.County)
+				$("#county").val(data.County);
+				$("#Citation").val(data.Citation);
+				$("#VerticalDatum").val(data.VerticalDatum);
+				$("#LatLongDatumID").val(data.LatLongDatumID);
+				$("#com").val(data.Comments);
 				
-				//also to load the maps and perform other javascript operations
-				//To Get the Sitepicture Details
+				var sitepic = data.picname;
 				
-				$.ajax({
-  					type: "POST",
- 					 url: "getsitepic.php?sc="+siteid
-					  }).done(function( msg ){
-  					if(msg!=-1){
-	  
-					$("#file").hide();
-					//$("#sitepic").html(msg+"<br><div id='sitepicchange'><a href='#'>Click Here to Change the 		site picture</a></div>");
-					("#sitepic").html(msg+"<br><div id='sitepicchange'><a href='#'>" + <?php echo "'".$ClickChangePicture."'"; ?> + "</a></div>");
-						}else{
-	 					 $("#file").hide();
-	 					 //$("#sitepic").html("No Site Picture Defined.<br><div id='sitepicchange'><a href='#'>Click Here to Add a Site Picture</a></div>");
-						 $("#sitepic").html(<?php echo "'".$NoSitePictureDefined."'"; ?> + "<div id='sitepicchange'><a href='#'>" + <?php echo "'".$ClickAddSitePicture."'"; ?> + "</a></div>");
- 							 }
-					});
-        setHintHandlers();
-						$("#sitepic").click(function(){
-							$("#file").show();
-						});
-
-					//To Load the map
+				if(sitepic!=null)
+				{
+					$("#picture").hide();
 					
-
-//Call the map
-var initialLocation = new google.maps.LatLng($("#Latitude").val(),$("#Longitude").val());
- var myOptions = {
-    zoom: 14,
-    center: initialLocation,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-	disableDoubleClickZoom : true
-  }
-map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-placeMarker(initialLocation);
-  google.maps.event.addListener(map, 'dblclick', function(event) {
-    placeMarker(event.latLng);
-  });
-
-//Map Loading Complete
-
-				
-				return true;
-			
-			}else{
-			
-				alert(<?php echo "'".$ErrorDuringRequest."'"; ?>);
-				return false;
+					var imgURL = base_url.replace("index.php","uploads")+sitepic;
+					var imgHTML = "<img src='"+imgURL+"' class='img-responsive' alt='Site image'>";
+					$("#sitepic").html(imgHTML+"<br><div id='sitepicchange'><a href='#'>" + <?php echo "'".getTxt('ClickChangePicture')."'"; ?> + "</a></div>");		
 				}
+				else
+				{
+					$("#picture").hide();
+					   //$("#sitepic").html("No Site Picture Defined.<br><div id='sitepicchange'><a href='#'>Click Here to Add a Site Picture</a></div>");
+					   $("#sitepic").html(<?php echo "'".getTxt('NoSitePictureDefined')."'"; ?> + "<div id='sitepicchange' ><a href='#'>" + <?php echo "'".getTxt('ClickAddSitePicture')."'"; ?> + "</a></div>");
+					   	
+				}
+				 $("#sitepicchange").click(function(){
+						  $("#picture").show();
+					  });
+					  
+			  setHintHandlers();
+			
+			//Call the map
+			var initialLocation = new google.maps.LatLng($("#Latitude").val(),$("#Longitude").val());
+			 var myOptions = {
+				zoom: 14,
+				center: initialLocation,
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				disableDoubleClickZoom : true
+			  }
+			map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+			google.maps.event.addListenerOnce(map, 'idle', function(){
+       		 google.maps.event.trigger(map, 'resize');
+       			 map.setCenter(initialLocation);
+   			 });
+			placeMarker(initialLocation);
+			  google.maps.event.addListener(map, 'dblclick', function(event) {
+				placeMarker(event.latLng);
+			  });
+			//Map Loading Complete
+			 $("#editsite").show(500);
+			return true;
+			}else{
+				alert(<?php echo "'".getTxt('ErrorDuringRequest')."'"; ?>);
+				return false;
+			}
 		});
-};
+});
 
 
 
 //When the "Delete" button is clicked, validate the selected ID and submit the request
-	function deleteSite(){
+function deleteSite(){
 
-		if(($("#SiteID").val())==-1){
-			alert(<?php echo "'".$SelectSiteDelete."'"; ?>);
-			return false;
-		
-		}else{
-	
-		//Validation is now complete, so send to the processing page
-		var site_id = $("#SiteID").val();
-	
-			$.ajax({
-			type: "POST",
-			url: "delete_site.php?SiteID="+site_id}).done(function(data){
-
-				if(data==1){
-				
-					$("#msg").show(1600);
-					$("#SiteID").val("-1");
-					$("#SiteName").val("");
-					$("#SiteCode").val("");
-					$("#SiteType").val("-1");
-					$("#Latitude").val("");
-					$("#Longitude").val("");
-					$("#Elevation_m").val("");
-					$("#state").val("-1");
-					$("#county").val("");
-					$("#newcounty").val("");
-					$("#VerticalDatum").val("-1");
-					$("#LatLongDatumID").val("-1");
-					$("#Comments").val("");
-					$("#msg").hide(2000);
-					setTimeout(function() {
-						window.open("edit_site.php","_self");
-						}, 3800);
-					return true;
-	
-				}else{
-				
-					alert(<?php echo "'".$ErrorDuringProcessingDeleteSite."'"; ?>);
-					return false;
-					}
-			});		
-		}
-		return false;
-	};
-
-
-
-//When the "Cancel" button is clicked, clear the fields and reload the page
-	function clearEverything(){
-
-		$("#SiteID").val("-1");
-		$("#SiteName").val("");
-		$("#SiteCode").val("");
-		$("#SiteType").val("-1");
-		$("#Latitude").val("");
-		$("#Longitude").val("");
-		$("#Elevation_m").val("");
-		$("#state").val("-1");
-		$("#county").val("");
-		$("#newcounty").val("");
-		$("#VerticalDatum").val("-1");
-		$("#LatLongDatumID").val("-1");
-		$("#Comments").val("");
-		setTimeout(function(){
-			window.open("edit_site.php","_self");
-			});
+if(($("#SiteID").val())==-1){
+	alert(<?php echo "'".getTxt('SelectSiteDelete')."'"; ?>);
+	return false;
+}else{
+	var site_id = $("#SiteID").val();
+		$.ajax({
+		dataType:'json',
+		url: base_url+"sites/delete/"+site_id+"?ui=1"}).done(function(data){
+			if(data.status=="success"){
+					window.open(base_url+"sites/change","_self");	
+			}else{
+				alert(<?php echo "'".getTxt('ProcessingError')."'"; ?>);
+				return false;
+			}
+		}).fail(function(data){alert(<?php echo "'".getTxt('ProcessingError')."'"; ?>);console.log(data);});		
 	}
+}
+
+//When the "Cancel" button is clicked, clear the fields
+function clearEverything(){
+
+	$("#editsite")[0].reset();
+	$("#editsite").hide(500);
+	$("#SiteID").val("-1");
+	$("html, body").animate({ scrollTop: 0 }, "slow");
+	
+}
 
 
 	
 //When the "Save Edits" button is clicked, validate the fields and then submit the request
-function updateSite(){
 
-$("form").submit(function(){
+
+$("#editsite").submit(function(){
 
 //Validate all fields
-
 if(($("#SourceID option:selected").val())==-1){
 	//alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
-	alert(<?php echo "'".$SelectSourceAdd."'"; ?>);
+	alert(<?php echo "'".getTxt('SelectSourceAdd')."'"; ?>);
 	return false;
 }
 
 if(($("#SiteName").val())==""){
 	//alert("Please enter a name for the site.");
-	alert(<?php echo "'".$EnterSiteName."'"?>);
+	alert(<?php echo "'".getTxt('EnterSiteName')."'";?>);
 	return false;
 }
 
 if(($("#SiteCode").val())==""){
 	//alert("Please enter a code for the site.");
-	alert(<?php echo "'".$EnterSiteCode."'"; ?>);
+	alert(<?php echo "'".getTxt('EnterSiteCode')."'"; ?>);
 	return false;
 }
 
 if(($("#SiteType option:selected").val())==-1){
 	//alert("Please select a Site Type.");
-	alert(<?php echo "'".$SelectSiteType."'"; ?>);
+	alert(<?php echo "'".getTxt('SelectSiteType')."'"; ?>);
 	return false;
 }	  
 
 if(($("#Latitude").val())==""){
 	//alert("Please enter the latitude for the site or select a point from the map");
-	alert(<?php echo "'".$EnterLatitude."'"; ?>);
+	alert(<?php echo "'".getTxt('EnterLatitude')."'"; ?>);
 	return false;
 }
 
 if(($("#Longitude").val())==""){
 	//alert("Please enter the longitude for the site or select a point from the map");
-	alert(<?php echo "'".$EnterLongitude."'"; ?>);
+	alert(<?php echo "'".getTxt('EnterLongitude')."'"; ?>);
 	return false;
 }
 
 if(($("#Elevation").val())==""){
 	//alert("Please enter the elevation for the site or select a point from the map");
-	alert(<?php echo "'".$EnterElevation."'"?>);
+	alert(<?php echo "'".getTxt('EnterElevation')."'";?>);
 	return false;
 }
 
@@ -543,13 +354,13 @@ var myInt = $("#Latitude").val().match(floatRegex);
 
 if(myInt==null){
 	//alert("Invalid characters present in Latitude. Please correct it.");
-	alert(<?php echo "'".$InvalidLatitude."'"; ?>);
+	alert(<?php echo "'".getTxt('InvalidLatitude')."'"; ?>);
     return false;
 }
 
 if(myInt[0]!=$("#Latitude").val()){
 	//alert("Invalid characters present in latitude. Please correct it.");
-	alert(<?php echo "'".$InvalidLatitude."'"; ?>);
+	alert(<?php echo "'".getTxt('InvalidLatitude')."'"; ?>);
     return false;
 }
 
@@ -558,13 +369,13 @@ myInt = $("#Longitude").val().match(floatRegex);
 if(myInt==null)
 {
 //alert("Invalid characters present in Longitude. Please correct it.");
-alert(<?php echo "'".$InvalidLongitude."'"; ?>);
+alert(<?php echo "'".getTxt('InvalidLongitude')."'"; ?>);
       return false;
 }
 
 if(myInt[0]!=$("#Longitude").val()){
 	//alert("Invalid characters present in Longitude. Please correct it.");
-	alert(<?php echo "'".$InvalidLongitude."'"; ?>);
+	alert(<?php echo "'".getTxt('InvalidLongitude')."'"; ?>);
     return false;
 }
 
@@ -573,167 +384,66 @@ myInt = $("#Elevation").val().match(floatRegex);
 
 if(myInt==null){
 	//alert("Invalid characters present in Elevation. Please correct it.");
-	alert(<?php echo "'".$InvalidElevation."'"?>);
+	alert(<?php echo "'".getTxt('InvalidElevation')."'";?>);
     return false;
 }
 
 
 if(myInt[0]!=$("#Elevation").val()){
 	//alert("Invalid characters present in Elevation. Please correct it.");
-	alert(<?php echo "'".$InvalidElevation."'"?>);
+	alert(<?php echo "'".getTxt('InvalidElevation')."'";?>);
     return false;
 }
 
 if(($("#state option:selected").val())==-1){
-	//alert("Please select a State.");
-	alert(<?php echo "'".$SelectState."'"; ?>);
+	alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
 	return false;
 }
 
 //Validation for the county
-if((($("#county option:selected").val())=="") && (($("#newcounty option:selected").val())=="")){
-		//alert("Please select a County.");
-		alert(<?php echo "'".$SelectCounty."'"; ?>);
+if(($("#county option:selected").val())==""){
+		alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
 		return false;
 	}
 
-if($("#county").val()==""){
-	 
-	var county = $("#newcounty").val();
-}
-
-if($("#newcounty").val()==""){
-
-	var county = $("#county").val();
-}
+var county = $("#county").val();
 
 if(county==undefined){
 	//alert("County is undefined. Please reselect the County.");
-	alert(<?php echo "'".$UndefinedCounty."'"; ?>);
+	alert(<?php echo "'".getTxt('UndefinedCounty')."'"; ?>);
 	return false;
 }
 
 
-//Validation of county done
 
 if(($("#VerticalDatum option:selected").val())==-1){
 	//alert("Please select a Vertical Datum.");
-	alert(<?php echo "'".$SelectVerticalDatum."'"; ?>);
+	alert(<?php echo "'".getTxt('SelectVerticalDatum')."'"; ?>);
 	return false;
 }
 
 if(($("#LatLongDatumID option:selected").val())==-1){
 	//alert("Please select a Spatial Reference.");
-	alert(<?php echo "'".$SelectSpatialReference."'"; ?>);
+	alert(<?php echo "'".getTxt('SelectSpatialReference')."'"; ?>);
 	return false;
 }
 
 //All Validation Checks completed. Now add data to the database.
-
-var sourceid = $("#SourceID option:selected").val();
-var siteid = $("#SiteID option:selected").val();
-var site_c = $("#SiteCode").val();
-var site_n = $("#SiteName").val();
-var site_lat = $("#Latitude").val();
-var site_long = $("#Longitude").val();
-var site_llid = $("#LatLongDatumID option:selected").val();
-var site_type = $("#SiteType option:selected").val();
-var site_elev = $("#Elevation").val();
-var site_vd = $("#VerticalDatum option:selected").val()
-var state = $("#state option:selected").val();
-var site_com = $("#com").val();
-
-	$.ajax({
-	type: "POST",
-	url: "do_edit_site.php?sc="+site_c+"&sn="+site_n+"&lat="+site_lat+"&lng="+site_long+"&llid="+site_llid+"&type="+site_type+"&elev="+site_elev+"&datum="+site_vd+"&state="+state+"&county="+county+"&com="+site_com+"&source="+sourceid+"&siteid="+siteid}).done(function(msg){
-
-		if(msg==1){
-
-	
-			formdata = new FormData();	
-			document.getElementById("response").innerHTML = <?php echo "'".$UploadEllipsis."'" ;?>
-			//Upload the image
-			var input = document.getElementById("file");
-			var file = input.files[0];
+//Add this to the form. 
 		
-			if (file!=null){
-				formdata.append("images[]", file);
+var selectedItem = $('#SiteID').jqxDropDownList('getSelectedItem');
+	$('<input>').attr({
+	type: 'hidden',
+	id: 'SiteID',
+	name: 'SiteID',
+	value: $("#SiteID").val()
+}).appendTo('#editsite');
 
-				$.ajax({
-					url: "do_add_site2.php?siteid="+siteid,
-					type: "POST",
-					data: formdata,
-					processData: false,
-					contentType: false,
-					success: function(res){
-			
-						if(res==1){
-					//			$("#msg2").show(2500);
-			//$("#msg2").hide(3500);
-			$("#SourceID").val("-1");
-			$("#SiteID").val("");
-			$("#SiteName").val("");
-			$("#SiteCode").val("");
-			$("#Latitude").val("");
-			$("#Longitude").val("");
-			$("#LatLongDatumID").val("-1");
-			$("#SiteType").val("-1");
-			$("#Elevation").val("");
-			$("#VerticalDatum").val("-1");
-			$("#state").val("-1");
-			$("#county").val("");
-			$("#newcounty").val("");
-		
-			$("#msg3").hide(1000);
 
-							alert(<?php echo "'".$SiteEditSuccessful."'"; ?>);
-							window.location.href = "edit_site.php";
-							return true;
-						}else{
-							document.getElementById("response").innerHTML = "" 
-							alert(res);
-							return false;
-						}
-					}
-				});
 
-			
-			}else{
-				//	$("#msg2").show(2500);
-			//$("#msg2").hide(3500);
-			$("#SourceID").val("-1");
-			$("#SiteID").val("");
-			$("#SiteName").val("");
-			$("#SiteCode").val("");
-			$("#Latitude").val("");
-			$("#Longitude").val("");
-			$("#LatLongDatumID").val("-1");
-			$("#SiteType").val("-1");
-			$("#Elevation").val("");
-			$("#VerticalDatum").val("-1");
-			$("#state").val("-1");
-			$("#county").val("");
-			$("#newcounty").val("");
-		
-			$("#msg3").hide(1000);
+return true;
+});
 
-				alert(<?php echo "'".$SiteEditSuccessful."'"; ?>);
-				window.location.href = "edit_site.php";
-				return true;
-			}
-	
-			
-		
-		}else{
-		  alert(<?php echo "'".$DatabaseConfigurationError."'"; ?>);
-		  return false;
-		}
-  
-	});
-
-	return false;
-	});
-}
 function placeMarker(location){
 
  if(marker==null){
@@ -784,7 +494,7 @@ function update(location)
   var positionalRequest = {
     'locations': locations
   }
-
+	elevator = new google.maps.ElevationService();
   // Initiate the location request
   elevator.getElevationForLocations(positionalRequest, function(results, status) {
     if (status == google.maps.ElevationStatus.OK) {
@@ -798,11 +508,11 @@ function update(location)
         
       } else {
         //alert("No results found");
-		alert(<?php echo "'".$NoResultsFound."'"; ?>);
+		alert(<?php echo "'".getTxt('NoResultsFound')."'"; ?>);
       }
     } else {
       //alert("Elevation service failed due to: " + status);
-	  alert(<?php echo "'".$ElevationServiceFailed."'"; ?>+ " " + status);
+	  alert(<?php echo "'".getTxt('ElevationServiceFailed')."'"; ?>+ " " + status);
     }
   });
 
@@ -816,13 +526,13 @@ geocoder.geocode({'latLng': latlng1}, function(results, status) {
         if (results[0]) {
 			
 			//$("#locationtext").html("Your selected location according to us is: " + results[0].formatted_address + ". Please select the state and county accordingly.");
-			$("#locationtext").html(<?php echo "'".$SelectedLocationIs."'"; ?> + " " + results[0].formatted_address + ". "+ <?php echo "'".$SelectStateCountyAccordingly."'"; ?>);
+			$("#locationtext").html(<?php echo "'".getTxt('SelectedLocationIs')."'"; ?> + " " + results[0].formatted_address + ". "+ <?php echo "'".getTxt('SelectStateCountyAccordingly')."'"; ?>);
 			        
           
         }
       } else {
         //alert("Geocoder failed due to: " + status);
-		alert(<?php echo "'".$GeocoderFailed."'"; ?> + " " + status);
+		alert(<?php echo "'".getTxt('GeocoderFailed')."'"; ?> + " " + status);
       }
     });
 
@@ -830,6 +540,3 @@ geocoder.geocode({'latLng': latlng1}, function(results, status) {
 	
 </script>
 
-<div id="window"><div id="windowHeader"><span><!--Confirmation Box--><?php echo $ConfirmationBox;?></span></div><div style="overflow: hidden;" id="windowContent"><center><strong><!--Are you sure?--><?php echo $AreYouSure;?></strong><br /><br /><input name="Yes" type="button" value="<?php echo $Yes;?>" id="Yeah"/>&nbsp;<input name="No" type="button" value="<?php echo $No;?>" id="No"/></center></div></div>
-</body>
-</html>

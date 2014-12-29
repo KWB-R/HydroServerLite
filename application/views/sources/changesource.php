@@ -186,7 +186,7 @@ function deleteSource(){
 	
 		$.ajax({
 		dataType:'json',
-		url: "source/delete/"+sourceid+"?ui=1"}).done(function(data){
+		url: base_url+"source/delete/"+sourceid+"?ui=1"}).done(function(data){
 		
 			if(data.status=="success"){
 					window.open(base_url+"source/change","_self");	

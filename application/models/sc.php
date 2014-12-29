@@ -45,5 +45,18 @@ class Sc extends MY_Model
 		return $this->db->affected_rows() ==1;	
 	}
 	
+	function delSite($siteID)
+	{
+		$this->db->delete($this->tableName, array('SiteID' => $siteID)); 
+		return $this->db->affected_rows()==1;
+	}
+	
+	function updateSite($series,$siteID)
+	{
+		$this->db->where('SiteID',$siteID)
+		->update($this->tableName,$series);	
+		return $this->db->affected_rows()>=0;
+	}
+	
 }
 ?>

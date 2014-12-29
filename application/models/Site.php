@@ -101,6 +101,19 @@ class Site extends MY_Model
 		->set('picname',$name)
 		->insert('sitepic');
 	}
+	function delete($siteID)
+	{
+		$this->db->delete('sitepic', array('siteid' => $siteID)); 
+		$this->db->delete($this->tableName, array('SiteID' => $siteID)); 
+		return $this->db->affected_rows()==1;
+	}
+	function update($site,$id)
+	{
+		$this->db->where('SiteID',$id)
+		->update($this->tableName,$site);
+		return $this->db->affected_rows()>=0;	
+	}
+	
 
 }
 ?>

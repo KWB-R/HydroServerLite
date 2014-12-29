@@ -121,8 +121,6 @@ genInput('Comments','com','value');
 <br />
 <input type="SUBMIT" name="submit" value="<?php echo getTxt('AddSiteButton');?>" class="button" width="auto"/>
 <input id="resetButton" type="button" name="resetButton" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" />
-<div id='response'>
-</div>
 </FORM>
 </div>
 <?php HTML_Render_Body_End(); ?>

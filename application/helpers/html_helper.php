@@ -8,7 +8,7 @@ function optionsSource($result)
 	foreach ($result as $row) {
 		$sourceid = $row["SourceID"];
 		$sourcename = $row["Organization"];
-		$option_block .= "<option value=$sourceid>$sourcename</option>";
+		$option_block .= "<option value='$sourceid'>$sourcename</option>";
 	}
 	return $option_block;
 }
@@ -19,7 +19,7 @@ function optionsVariable($result)
 		$typeid = $row["VariableID"];
 		$typename = $row["VariableName"];
 		$datatype = $row["DataType"];
-		$option_block .= "<option value=$typeid>$typename ($datatype)</option>";
+		$option_block .= "<option value='$typeid'>$typename ($datatype)</option>";
 	}
 	return $option_block;
 }
@@ -28,7 +28,7 @@ function genOptions($result)
 {
 	$option_block='';
 	foreach ($result as $key=>$value) {
-		$option_block .= "<option value=$key>$value</option>";
+		$option_block .= "<option value='$key'>$value</option>";
 	}
 	return $option_block;
 }

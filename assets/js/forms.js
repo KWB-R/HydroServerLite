@@ -91,9 +91,11 @@ function showSites(str) {
 		 .done(function( sites ) {
 			 if(sites.length>0)
 			 {
+				$("#SiteID").append($("<option />").val(-1).text(phpVars.SelectSite));
 				$.each(sites, function() {
 					$("#SiteID").append($("<option />").val(this.SiteID).text(this.SiteName));
 				});
+				
 			 }
 			 else
 			 {
