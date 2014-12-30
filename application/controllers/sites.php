@@ -177,7 +177,7 @@ class Sites extends MY_Controller {
 		$this->load->view('sites/addsite',$data);
 	}
 	
-	public function change()
+	public function edit()
 	{		
 	
 	
