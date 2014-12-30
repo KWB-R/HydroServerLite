@@ -119,9 +119,11 @@ genInput('Comments','com','value');
 ?>  
 <span class="em">&nbsp;<?php echo getTxt('Optional');?></span> 
 <br />
+<div class="col-md-5 col-md-offset-5">
 <input type="SUBMIT" name="submit" value="<?php echo getTxt('AddSiteButton');?>" class="button" width="auto"/>
 <input id="resetButton" type="button" name="resetButton" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" />
 </FORM>
+</div>
 </div>
 <?php HTML_Render_Body_End(); ?>
 <script>
@@ -239,6 +241,12 @@ if(($("#state option:selected").val())==-1)
 {
 //alert("Please select a state.");
 alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
+return false;
+}
+if(($("#county option:selected").val())=="")
+{
+//alert("Please select a county.");
+alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
 return false;
 }
 if(($("#VerticalDatum option:selected").val())==-1)

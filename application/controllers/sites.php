@@ -85,7 +85,7 @@ class Sites extends MY_Controller {
 			
 			$this->load->library('upload', $config);
 	
-			if ( ! $this->upload->do_upload('picture'))
+			if ( !$this->upload->do_upload('picture')&&$this->upload->display_errors()!="<p>You did not select a file to upload.</p>")
 			{
 				addError(getTxt('FailMoveFile').$this->upload->display_errors());
 			}
