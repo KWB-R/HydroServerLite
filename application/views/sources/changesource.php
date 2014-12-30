@@ -102,13 +102,14 @@ echo '<span class="em">' .getTxt('ExTitle2').'</span>';
 genInput('Abstract','Abstract','Abstract', true);
 echo '<span class="em">' .getTxt('ExAbstract1').'</span>';
 genInput('MetaLink','MetadataLink','MetadataLink');
-echo '<span class="em">' .getTxt('Optional').'</span>';
-
+echo '<p class="help-block">' .getTxt('Optional').'</span>';
 ?>
+<div class="col-md-5 col-md-offset-5">
 <input type='submit' name='submit' value='<?php echo getTxt('SaveEdits');?>' class='button' style='width: auto' onClick='updateSource()'/>&nbsp;&nbsp;
 <input type='button' name='delete' value='<?php echo getTxt('Delete');?>' class='button' style='width: auto' onClick='confirmBox()'/>&nbsp;&nbsp;
 <input type='button' name='Reset' value='<?php echo getTxt('Cancel');?>' class='button' style='width: auto' onClick='clearEverything()'/>
 </form>
+</div>
 <div id="window">
 	<div id="windowHeader">
 		<span><?php echo getTxt('ConfirmationBox');?></span>
