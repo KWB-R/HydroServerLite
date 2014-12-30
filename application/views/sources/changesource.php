@@ -102,7 +102,7 @@ echo '<span class="em">' .getTxt('ExTitle2').'</span>';
 genInput('Abstract','Abstract','Abstract', true);
 echo '<span class="em">' .getTxt('ExAbstract1').'</span>';
 genInput('MetaLink','MetadataLink','MetadataLink');
-echo '<p class="help-block">' .getTxt('Optional').'</span>';
+echo '<p class="help-block">' .getTxt('ExMetaLink').'</span>';
 ?>
 <div class="col-md-5 col-md-offset-5">
 <input type='submit' name='submit' value='<?php echo getTxt('SaveEdits');?>' class='button' style='width: auto' onClick='updateSource()'/>&nbsp;&nbsp;
