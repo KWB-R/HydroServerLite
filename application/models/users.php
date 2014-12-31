@@ -14,7 +14,6 @@ class Users extends MY_Model
 	  $this->db->set('lastname', $lname);
 	  $this->db->set('authority', $auth);
 	  $this->db->insert($this->tableName);
-	  
 	  $num_inserts = $this->db->affected_rows();
 	  return $num_inserts;
 	}
@@ -53,6 +52,13 @@ class Users extends MY_Model
 	}
 	
 	function changePassword($username,$password)
+	{
+		$this->db->set('password', 'PASSWORD("'.$password.'")', false)
+		->where('username', $username);
+		$query = $this->db->update($this->tableName);
+	  	return $query>=1;	
+	}
+	function changeYourPassword($username,$password)
 	{
 		$this->db->set('password', 'PASSWORD("'.$password.'")', false)
 		->where('username', $username);
