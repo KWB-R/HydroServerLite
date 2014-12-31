@@ -9,11 +9,11 @@ $attributes = array('class' => 'form-horizontal', 'id' => 'newuser');
 echo form_open('user/doadd', $attributes);
 genInput('FirstName','firstname','firstname',true);
 genInput('LastName','lastname','lastname',true);
-genInput('UserName','username','username',true);
-echo '<span id="user-result"></span>
-<span class="help-block">'.getTxt('FirstLastNameExample').'</span>';
-genInput('Password','password','password',true);
-echo '<span class="help-block">'.getTxt('CaseSensitive').'</span>';
+genInputT('UserName','username','username',true,$extra="",'FirstLastNameExample');
+echo '<span id="user-result"></span>';
+//echo '<span class="help-block">'.getTxt('FirstLastNameExample').'</span>';
+genInputT('Password','password','password',true,$extra="",'CaseSensitive');
+//echo '<span class="help-block">'.getTxt('CaseSensitive').'</span>';
 genSelect('Authority',"authority","authority",$selection,'SelectLevel',true);
 ?>
 <div class="col-md-5 col-md-offset-5">
