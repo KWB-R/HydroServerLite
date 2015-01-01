@@ -73,14 +73,14 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-9">
         <input type="type" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="required"></span>
-		<span class="help-inline">'.getTxt($help).'</span>';
+		<span class="em">'.getTxt($help).'</span>';
 	}
 	else
 	{
 	echo '<div class="form-group">
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-9">
-        <input type="type" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="default">'.getTxt($help).'</span>';
+        <input type="type" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="em">'.getTxt($help).'</span>';
 	}
 	echo'</div>            
       </div>';	

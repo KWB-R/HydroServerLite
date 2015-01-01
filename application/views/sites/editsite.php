@@ -88,12 +88,12 @@ genSelectH('SiteName',"SiteID","SiteID",'',getTxt('IfNoSeeSite1').' '.getTxt('Co
 echo "</form>";
 $attributes = array('class' => 'form-horizontal', 'name' => 'editsite', 'id' => 'editsite');
 echo form_open_multipart('sites/change', $attributes);
-
-
-genInput('SiteName','SiteName','SiteName', true);
-echo '<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span>';
-genInputH('SiteCode','SiteCode', 'SiteCode',getTxt('SiteCodeInfo'), true);
-echo '<span class="em">'.getTxt('ExSiteCode').'</span>';
+echo '<div class="form-group"><label class="col-sm-3 control-label">'.getTxt('SiteName').'</label><div class="col-sm-9"><input type="type" class="form-control" id="SiteName" name="SiteName" onKeyUp="GetSiteName()"><span class="required"></span><span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span></div></div>';
+//genInput('SiteName','SiteName','SiteName', true);
+//echo '<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span>';
+echo '<div class="form-group"><label class="col-sm-3 control-label">'.getTxt('SiteCode').'</label><div class="col-sm-9"><input type="type" class="form-control" id="SiteCode" name="SiteCode"><span class="required"></span><span class="hint" title="'.getTxt('SiteCodeInfo').'">?</span><span class="em">'.getTxt('ExSiteCode').'</span></div></div>';
+//genInputH('SiteCode','SiteCode', 'SiteCode',getTxt('SiteCodeInfo'), true);
+//echo '<span class="em">'.getTxt('ExSiteCode').'</span>';
 genSelect('SiteType','SiteType','SiteType',$typeOptions,'SelectEllipsis',true);
 
 echo '<div class="form-group">
@@ -153,17 +153,16 @@ genSelect('State','state','state',$stateOptions,'SelectEllipsis',true);
 <?php
 genSelectH('VerticalDatum','VerticalDatum','VerticalDatum',$vdOptions,getTxt('VerticalDatumInfo'),'SelectEllipsis',true);
 genSelectH('SpatialReferenceColon','LatLongDatumID','LatLongDatumID',$srOptions,getTxt('SpatialReferenceInfo'),'SelectEllipsis',true);
-genInput('Comments','com','value');
+genInputT('Comments','com','value',false,$extra="",'Optional');
 
 ?>  
-<span class="em">&nbsp;<?php echo getTxt('Optional');?></span> 
-
+<div class="col-md-5 col-md-offset-5">
 <input type='SUBMIT' name='submit' value='<?php echo getTxt('SaveEdits');?>' class='button' style='width: auto'/>&nbsp;&nbsp;
 <input type='button' name='delete' value='<?php echo getTxt('Delete');?>' class='button' style='width: auto' onClick='confirmBox()'/>&nbsp;&nbsp;
 <input type='button' name='Reset' value='<?php echo getTxt('Cancel');?>' class='button' style='width: auto' onClick='clearEverything()'/>
 </form>
 </div>
-
+</div>
 <div id="window"><div id="windowHeader"><span><?php echo getTxt('ConfirmationBox');?></span></div>
 <div style="overflow: hidden;" id="windowContent"><center><strong><?php echo getTxt('AreYouSure');?></strong><br /><br />
 <input name="Yes" type="button" value="<?php echo getTxt('Yes');?>" id="Yeah"/>&nbsp;
