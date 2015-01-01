@@ -1,7 +1,8 @@
 <?php
-if(!isset($db)){
-require_once 'database_connection.php';
-}
+
+//if(!isset($db)){
+//require_once 'database_connection.php';
+//}
 function update_series_catalog($siteID, $variableID, $methodID, $sourceID, $qcID) {
   
   $status = "error";

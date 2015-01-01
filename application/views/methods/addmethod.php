@@ -29,8 +29,10 @@ echo $CSS_Main;
 genHeading('AddNewMethod',true);
 $attributes = array('class' => 'form-horizontal', 'name' => 'addmethod', 'id' => 'addmethod');
 echo form_open('methods/add', $attributes);
-genInput('MethodName','MethodDescription','MethodDescription',true);echo '<span class="em">'.getTxt('ExampleMethodName').'</span>';
-genInput('MethodLinkColon','MethodLink','MethodLink',true);echo '<span class="em">'.getTxt('ExMethodLink').'</span>';
+genInputT('MethodName','MethodDescription','MethodDescription',true,$extra="",'ExampleMethodName');
+//echo '<span class="em">'.getTxt('ExampleMethodName').'</span>';
+genInputT('MethodLinkColon','MethodLink','MethodLink',false,$extra="",'ExMethodLink');
+//echo '<span class="em">'.getTxt('ExMethodLink').'</span>';
 ?>
 <div class="form-group">
 	<label class="col-sm-3 control-label"></label>

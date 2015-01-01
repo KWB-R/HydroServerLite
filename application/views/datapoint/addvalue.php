@@ -36,16 +36,18 @@ genSelect('Source',"SourceID","SourceID",$sourcesOptions,'SelectEllipsis',true,'
 genSelectH('Site',"SiteID","SiteID",'',getTxt('IfNoSeeSite1').' '.getTxt('ContactSupervisor').' '.getTxt('AddIt'),'SelectElipsis',true);
 genSelect('Variable',"VariableID","VariableID",$variableOptions,'SelectEllipsis',true,'onChange="showMethods(this.value)"');
 genSelectH('Method',"MethodID","MethodID",'',getTxt('IfNoSeeMethod1').' '.getTxt('ContactSupervisor').' '.getTxt('AddIt'),'SelectElipsis',true);
-genInput('Date','datepicker','datepicker',true,'onChange="return validateDate()"');
-echo '<span class="help-block"><br />'.getTxt('DateFormatExample').'</span>';
-genInput('Time','timepicker','timepicker',true,'onChange="return validateTime()" class="short"');
-echo '<span class="help-block"><br />'.getTxt('TimeFormatExample').'</span>';
-genInput('Value','value','value',true,'class="short" maxlength=20 onBlur="return validateNum()"');
-echo '<span class="help-block"><br />'.getTxt('NumberNoCommas').'</span>';
+genInputT('Date','datepicker','datepicker',true,'onChange="return validateDate()"','DateFormatExample');
+//echo '<span class="help-block"><br />'.getTxt('DateFormatExample').'</span>';
+genInputT('Time','timepicker','timepicker',true,'onChange="return validateTime()" class="short"','TimeFormatExample');
+//echo '<span class="help-block"><br />'.getTxt('TimeFormatExample').'</span>';
+genInputT('Value','value','value',true,'class="short" maxlength=20 onBlur="return validateNum()"','NumberNoCommas');
+//echo '<span class="badge"><br />'.getTxt('NumberNoCommas').'</span>';
 ?>
+<div class="col-md-5 col-md-offset-5">
 <input type="SUBMIT" name="submit" value= "<?php echo getTxt('SubmitData'); ?>" class="button" style="width: auto" />
 <input type="reset" name="Reset" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" />
 </FORM>
+</div>
 </div>
 <?php HTML_Render_Body_End(); ?>
 <script>

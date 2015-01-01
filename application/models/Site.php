@@ -101,11 +101,13 @@ class Site extends MY_Model
 		->set('picname',$name)
 		->insert('sitepic');
 	}
-	function delete($siteID)
+	function delete($site)
 	{
-		$this->db->delete('sitepic', array('siteid' => $siteID)); 
-		$this->db->delete($this->tableName, array('SiteID' => $siteID)); 
-		return $this->db->affected_rows()==1;
+		$this->db
+		     ->where('SiteID', $site)
+		     ->delete($this->tableName); 
+		$num_del = $this->db->affected_rows();
+		return $num_del ==1;
 	}
 	function update($site,$id)
 	{

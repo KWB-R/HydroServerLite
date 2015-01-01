@@ -52,10 +52,12 @@ $attributes = array('class' => 'form-horizontal', 'name' => 'addsite', 'id' => '
 echo form_open_multipart('sites/add', $attributes);
 
 genSelect('Source','SourceID','SourceID',$sourceOptions,'SelectEllipsis',true,' onChange="GetSourceName()"');
-genInput('SiteName','SiteName','SiteName', true, ' onKeyUp="GetSiteName()"');
-echo '<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span>';
-genInputH('SiteCode','SiteCode', 'SiteCode',getTxt('SiteCodeInfo'), true);
-echo '<span class="em">'.getTxt('ExSiteCode').'</span>';
+echo '<div class="form-group"><label class="col-sm-3 control-label">'.getTxt('SiteName').'</label><div class="col-sm-9"><input type="type" class="form-control" id="SiteName" name="SiteName" onKeyUp="GetSiteName()"><span class="required"></span><span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span></div></div>';
+//genInput('SiteName','SiteName','SiteName', true, ' onKeyUp="GetSiteName()"');
+//echo '<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span>';
+echo '<div class="form-group"><label class="col-sm-3 control-label">'.getTxt('SiteCode').'</label><div class="col-sm-9"><input type="type" class="form-control" id="SiteCode" name="SiteCode"><span class="required"></span><span class="hint" title="'.getTxt('SiteCodeInfo').'">?</span><span class="em">'.getTxt('ExSiteCode').'</span></div></div>';
+//genInputH('SiteCode','SiteCode', 'SiteCode',getTxt('SiteCodeInfo'), true);
+//echo '<span class="em">'.getTxt('ExSiteCode').'</span>';
 genSelect('SiteType','SiteType','SiteType',$typeOptions,'SelectEllipsis',true);
 
 echo '<div class="form-group">
@@ -114,14 +116,14 @@ genSelect('State','state','state',$stateOptions,'SelectEllipsis',true);
 <?php
 genSelectH('VerticalDatum','VerticalDatum','VerticalDatum',$vdOptions,getTxt('VerticalDatumInfo'),'SelectEllipsis',true);
 genSelectH('SpatialReferenceColon','LatLongDatumID','LatLongDatumID',$srOptions,getTxt('SpatialReferenceInfo'),'SelectEllipsis',true);
-genInput('Comments','com','value');
+genInputT('Comments','com','value',false,$extra="",'Optional');
 
 ?>  
-<span class="em">&nbsp;<?php echo getTxt('Optional');?></span> 
-<br />
+<div class="col-md-5 col-md-offset-5">
 <input type="SUBMIT" name="submit" value="<?php echo getTxt('AddSiteButton');?>" class="button" width="auto"/>
 <input id="resetButton" type="button" name="resetButton" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" />
 </FORM>
+</div>
 </div>
 <?php HTML_Render_Body_End(); ?>
 <script>
@@ -239,6 +241,12 @@ if(($("#state option:selected").val())==-1)
 {
 //alert("Please select a state.");
 alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
+return false;
+}
+if(($("#county option:selected").val())=="")
+{
+//alert("Please select a county.");
+alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
 return false;
 }
 if(($("#VerticalDatum option:selected").val())==-1)

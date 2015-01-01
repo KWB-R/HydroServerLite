@@ -24,6 +24,10 @@ class User extends MY_Controller {
 	{
 		return 	"<option value=admin>".getTxt('Administrator')."</option><option value=teacher>".getTxt('Teacher')."</option><option value=student>".getTxt('Student')."</option>";
 	}
+	private function teacherDropDown()
+	{
+		return 	"<option value=teacher>".getTxt('Teacher')."</option><option value=student>".getTxt('Student')."</option>";
+	}
 	
 	private function adminCheck()
 	{
@@ -66,7 +70,7 @@ class User extends MY_Controller {
 			  $selection = $this->authDropDown();			
 			  }
 			  elseif (isTeacher()){
-			  $selection = "<select class=\"form-control\" name=authority id=authority><option value=>".getTxt('SelectEllipsis')."</option><option value=teacher>".getTxt('Teacher')."</option><option value=student>".getTxt('Student')."</option></select>";
+			  $selection = $this->teacherDropDown();
 			  }
 		  elseif (isStudent()){
 				$this->kickOut();

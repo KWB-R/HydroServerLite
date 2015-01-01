@@ -47,7 +47,7 @@ function logout()
      {
 		 //Set the SESSION
 		 fetch_session();
-		 $_SESSION['username'] =$row->firstname;
+		 $_SESSION['username'] =$username;
 		 $_SESSION['user_auth'] =$row->authority;
 		 addSuccess(getTxt('LogInSuccess'));
      }
