@@ -52,7 +52,7 @@ $attributes = array('class' => 'form-horizontal', 'name' => 'addsite', 'id' => '
 echo form_open_multipart('sites/add', $attributes);
 
 genSelect('Source','SourceID','SourceID',$sourceOptions,'SelectEllipsis',true,' onChange="GetSourceName()"');
-genInputT('SiteName','SiteName','SiteName', true, ' onKeyUp="GetSiteName()"');
+genInput('SiteName','SiteName','SiteName', true, ' onKeyUp="GetSiteName()"');
 echo '<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span>';
 genInputH('SiteCode','SiteCode', 'SiteCode',getTxt('SiteCodeInfo'), true);
 echo '<span class="em">'.getTxt('ExSiteCode').'</span>';

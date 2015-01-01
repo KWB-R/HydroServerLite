@@ -177,7 +177,7 @@ class Sites extends MY_Controller {
 		$this->load->view('sites/addsite',$data);
 	}
 	
-	public function edit()
+	public function change()
 	{		
 	
 	
@@ -360,8 +360,7 @@ class Sites extends MY_Controller {
 			return;
 		}
 		$result = $this->site->delete($siteid);
-		$this->load->model('sc','',TRUE);
-		$this->sc->delSite($siteid);
+		
 		if($result)
 			{	
 				if($this->input->get('ui', TRUE))
@@ -370,10 +369,12 @@ class Sites extends MY_Controller {
 			}
 		else
 			{
-				if($this->input->get('ui', TRUE))
+				if($this->input->get('ui', FALSE))
 				addError(getTxt('ProcessingError'));	
 				$output="failed";
-			}		
+			}
+		$this->load->model('sc','',TRUE);
+		$this->sc->delSite($siteid);		
 		$output = array("status"=>$output);
 		echo json_encode($output);	
 	}

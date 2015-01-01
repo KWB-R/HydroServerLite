@@ -363,16 +363,16 @@ class Datapoint extends MY_Controller {
 		//Its just better for now to use the same script. 
 		
 		
-		$connection = mysql_connect($this->config->item('database_host'), $this->config->item('database_username'), $this->config->item('database_password'))
+		$connection = mysqli_connect($this->config->item('database_host'), $this->config->item('database_username'), $this->config->item('database_password'),$this->config->item('database_name'))
 		or die("<p>Error connecting to database: " . 
-				   mysql_error() . "</p>");
-		mysql_set_charset ("utf8");
+				   mysqli_error() . "</p>");
+		mysqli_set_charset ($connection,"utf8");
 		  //echo "<p>Connected to MySQL!</p>";
 		  
-		  $db = mysql_select_db($this->config->item('database_name'),$connection)
+		/*  $db = mysql_select_db($this->config->item('database_name'),$connection)
 			or die("<p>Error selecting the database " . $this->config->item('database_name') .
 			  mysql_error() . "</p>");
-		
+		*/
 		require_once APPPATH.'../assets/update_series_catalog.php';
 	}
 }

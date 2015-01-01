@@ -54,7 +54,7 @@ class Sc extends MY_Model
 	function updateSite($series,$siteID)
 	{
 		$this->db->where('SiteID',$siteID)
-		->update($this->tableName,$series);	
+		->update($this->tableName,$series);
 		return $this->db->affected_rows()>=0;
 	}
 	

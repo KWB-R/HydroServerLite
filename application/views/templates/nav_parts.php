@@ -49,7 +49,7 @@ if (isTeacher() || isAdmin()){
 	echo "<li class=\"add_site\"><a href='".site_url('sites/add')."'>".getTxt('AddSite')."</a></li>";
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"edit_site\"><a href='".site_url('sites/edit')."'>".getTxt('ChangeSite')."</a></li>";
+		echo "<li class=\"edit_site\"><a href='".site_url('sites/change')."'>".getTxt('ChangeSite')."</a></li>";
 		echo "<li class=\"add_variable\"><a href='".site_url('variable/add')."'>".getTxt('AddVariable')."</a></li>";
 		echo "<li class=\"edit_variable\"><a href='".site_url('variable/edit')."'>".getTxt('ChangeVariable')."</a></li>";
 		echo "<li class=\"add_method\"><a href='".site_url('methods/add')."'>".getTxt('AddMethod')."</a></li>";
