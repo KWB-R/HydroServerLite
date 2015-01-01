@@ -68,7 +68,7 @@ genHeading('EditDeleteSource',true);
 echo '<p>'.getTxt('SelectSource').'</p>';
 
 
-genSelect('Source','SourceID','SourceID',$sourceOptions,'SelectEllipsis',true,' onChange="editSource()"');
+genSelect('Source','SourceID1','SourceID1',$sourceOptions,'SelectEllipsis',true,' onChange="editSource()"');
 ?>
 <strong class="em2"><?php echo getTxt('NoteColon');?></strong> <span class="em"><?php echo getTxt('NoteText');?></span>
 <div id="msg3"></div>
@@ -76,6 +76,7 @@ genSelect('Source','SourceID','SourceID',$sourceOptions,'SelectEllipsis',true,' 
 
 $attributes = array('class' => 'form-horizontal', 'name' => 'editsource', 'id' => 'editsource');
 echo form_open('source/change', $attributes);
+genInput('SrcID','SourceID', 'SourceID', true, ' readonly');
 genInput('Organization','Organization', 'Organization', true);
 echo '<span class="em">' .getTxt('ExTitle1').'</span>';
 genInput('Description','SourceDescription','SourceDescription', true);
@@ -122,7 +123,7 @@ echo '<span class="em">' .getTxt('Optional').'</span>';
 //When a selection from the Source dropdown menu, a query is used to fill in the form.
 function editSource(){
 	
-		var sourceid=$("#SourceID").val();
+		var sourceid=$("#SourceID1").val();
 		if(sourceid==-1)
 		{
 			//Clear the form
@@ -137,7 +138,7 @@ function editSource(){
 			if(data.SourceID==sourceid){
 				
 				//Set the forms.
-				
+				$("#SourceID").val(data.SourceID);
 				$("#Organization").val(data.Organization);
 				$("#SourceDescription").val(data.SourceDescription);
 				$("#SourceLink").val(data.SourceLink);
@@ -170,7 +171,7 @@ function editSource(){
 //When the "Delete" button is clicked, validate the method selected and then submit the request
 function deleteSource(){
 
-		if(($("#SourceID").val())==-1){
+		if(($("#SourceID1").val())==-1){
 			alert(<?php echo "'".getTxt('SelectSourceDelete')."'"; ?>);
 			return false;
 		}
@@ -181,7 +182,7 @@ function deleteSource(){
 		}
 	
 	//Validation is now complete, so send to the processing page
-	var sourceid = $("#SourceID").val();
+	var sourceid = $("#SourceID1").val();
 	var metadataid = $("#MetadataID2").val();
 	
 		$.ajax({
@@ -212,14 +213,6 @@ function updateSource(){
 		}
 		//Add this to the form. 
 		
-		var selectedItem = $('#SourceID').jqxDropDownList('getSelectedItem');
-			$('<input>').attr({
-			type: 'hidden',
-			id: 'SourceID',
-			name: 'SourceID',
-			value: $("#SourceID").val()
-		}).appendTo('#editsource');
-
 		if(($("#Organization").val())==""){
 			alert(<?php echo "'".getTxt('EnterOrganization')."'"; ?>);
 			return false;

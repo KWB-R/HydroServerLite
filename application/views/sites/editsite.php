@@ -89,7 +89,7 @@ echo "</form>";
 $attributes = array('class' => 'form-horizontal', 'name' => 'editsite', 'id' => 'editsite');
 echo form_open_multipart('sites/change', $attributes);
 
-
+genInput('Site','SiteID2','SiteID2', true,' readonly');
 genInput('SiteName','SiteName','SiteName', true);
 echo '<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span>';
 genInputH('SiteCode','SiteCode', 'SiteCode',getTxt('SiteCodeInfo'), true);
@@ -195,7 +195,7 @@ $("#SiteID").change(function findSite(){
 		  if(data.SiteID){
 			  
 				//Add the fields to the form. 
-				
+				$("#SiteID2").val(data.SiteID);
 				$("#SiteName").val(data.SiteName);
 				$("#SiteCode").val(data.SiteCode);
 				$("#SiteType").val(data.SiteType);

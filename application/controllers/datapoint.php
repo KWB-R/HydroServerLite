@@ -32,11 +32,12 @@ class Datapoint extends MY_Controller {
 	private function createDP($date,$time,$val,$siteid,$varid,$methid,$sourceid)
 	{
 		
-		$LocalDateTime = $date . " " . $time . ":00";
+		$LocalDateTime = $date . " " . $time;
 		$localtimestamp = strtotime($LocalDateTime);
 		$ms = $this->config->item('UTCOffset') * 3600;
 		$utctimestamp = $localtimestamp - ($ms);
 		$DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
+		$LocalDateTime = date("Y-m-d H:i:s", $localtimestamp);
 		
 		$dataPoint = array(
 		'DataValue' => $val,  
@@ -140,10 +141,198 @@ class Datapoint extends MY_Controller {
 		$this->load->view('datapoint/addmultiplevalues',$data);
 	}
 	
+	private function fileUploadHandler()
+	{
+		$newDir = "./uploads/temp".time().rand();
+		$result = mkdir($newDir);
+		if(!$result)
+		{
+			addError(getTxt('FailTemp'));
+			return false;
+		}
+		
+		//Upload files. 
+		$config['upload_path'] = $newDir;
+		$config['allowed_types'] = 'csv';	
+		$this->load->library('upload', $config);
+		if ( ! $this->upload->do_multi_upload('files'))
+		  {
+			  addError(getTxt('FailMoveFile').$this->upload->display_errors());
+			  return false;
+		  }
+		return $this->upload->get_multi_upload_data();
+	}
+	
+	private function getIDS($array, $id)
+	{
+		$ids=array();
+		foreach($array as $row)
+		{
+			$ids[]=$row[$id];
+		}
+		return $ids;
+	}
+	
+	private function processFiles($files)
+	{
+		$check=false;
+		if($this->input->post('valueSpec'))
+		{
+			$check=true;
+			//Values will be checked and fetched while processing.
+			//Build ID tables.
+			$siteIDS = $this->getIDS($this->site->getAll(),"SiteID");
+			$sourceIDS = $this->getIDS($this->sources->getAll(),"SourceID");
+			$varIDS = $this->getIDS($this->variables->getAll(),"VariableID");
+			$this->load->model('method','',true);
+			$methIDS = $this->getIDS($this->method->getAll(),"MethodID");
+		}
+		else
+		{
+			$source =  $this->input->post('SourceID');
+			$site =  $this->input->post('SiteID');
+			$var =  $this->input->post('VariableID');
+			$meth =  $this->input->post('MethodID');
+		}
+		$dataset=array();
+		foreach($files as $file)
+		{
+			$filepath = $file['full_path'];	
+			$handle = fopen($filepath, "r");
+			if(!$handle)
+			{
+				addError(getTxt('FailInputStream'));
+				return;	
+			}
+			$flag=0;
+			$row=1;
+			$tracker=1;
+			$dtIndex = 0;
+			$valIndex = 1;
+			while (($data = fgetcsv($handle)) !== FALSE) {
+				if($flag==0)
+				{
+					if($check)
+					{
+						$dtIndex=4;
+						$valIndex = 5;
+						if(($data[0]!="SourceID")||($data[1]!="SiteID")||($data[2]!="VariableID")||($data[3]!="MethodID")||($data[4]!="LocalDateTime")||($data[5]!="DataValue"))	
+						{
+						addError(getTxt('InvalidHeading')."SourceID,SiteID,VariableID,MethodID,LocalDateTime,DataValue".getTxt('PleaseFix'));
+						return false;					
+						}	
+					}
+					else
+					{
+						if(($data[0]!="LocalDateTime")||($data[1]!="DataValue"))	
+						{
+						addError(getTxt('InvalidHeading').getTxt('PleaseFix'));
+						return false;					
+						}
+					}
+					$flag=1;
+					continue;
+				}
+				
+				try {
+					$date = new DateTime($data[$dtIndex]);
+				} catch (Exception $e) {
+					//add error for invalid datatime format. on $row in file
+					$msg=getTxt('InvalidTime').' '.$row.' '.getTxt('In').' '.$file['file_name'];
+					addError($msg.getTxt('PleaseFix')."(".$e->getMessage().")");
+					return false;
+				}
+				//Validate Value
+				$value = $data[$valIndex];
+				$regex="/^[\-+]?[0-9]*\.?[0-9]+$/";
+
+				if (!preg_match($regex,$value)) {
+				   $msg=getTxt('InvalidChar').' '.$row.' '.getTxt('In').' '.$file['file_name'];
+				   addError($msg.getTxt('PleaseFix'));
+				   return false;
+				} 
+				$dateVal = $date->format("Y-m-d");
+				$timeVal = $date->format("H:i:s");
+				
+				if($check)
+				{
+					//Verify if entered IDS are correct. 
+					$source =  $data[0];
+					$site =  $data[1];
+					$var =  $data[2];
+					$meth =  $data[3];
+					if(!in_array($source,$sourceIDS))
+					{
+						$msg=getTxt('invalid').' '.getTxt('sourceid').'.Row: '.$row.' '.getTxt('In').' '.$file['file_name'];
+						addError($msg.getTxt('PleaseFix'));
+						return false;
+					}
+					if(!in_array($site,$siteIDS))
+					{
+						$msg=getTxt('invalid').' '.getTxt('siteid').'.Row: '.$row.' '.getTxt('In').' '.$file['file_name'];
+						addError($msg.getTxt('PleaseFix'));
+						return false;
+					}
+					if(!in_array($var,$varIDS))
+					{
+						$msg=getTxt('invalid').' '.getTxt('varid').'.Row: '.$row.' '.getTxt('In').' '.$file['file_name'];
+						addError($msg.getTxt('PleaseFix'));
+						return false;
+					}
+					if(!in_array($meth,$methIDS))
+					{
+						$msg=getTxt('invalid').' '.getTxt('methodid').'.Row: '.$row.' '.getTxt('In').' '.$file['file_name'];
+						addError($msg.getTxt('PleaseFix'));
+						return false;
+					}
+				}
+				
+				$dataPoint = $this->createDP($dateVal,$timeVal,$value,$site,$var,$meth,$source);
+				$dataset[]=$dataPoint;
+				$row++;
+			}
+			
+		}
+		return $dataset;
+	}
+	
 	public function importfile()
 	{
+		
+		if($_POST)
+		{
+			$result = $this->fileUploadHandler();
+			if($result)
+			{
+				$dataset = $this->processFiles($result);
+				if($dataset)
+				{
+					$rows = count($dataset);
+					$result=$this->datapoints->addPoints($dataset);
+					if($result==$rows)
+					{
+						addSuccess(getTxt('Success'));	
+						$this->updateSC();
+					}
+					else
+					{
+						addError(getTxt('ProcessingError'));
+					}
+				}
+			}	
+		}
+		
+		//GetSources
+		$sources = $this->sources->getAll();
+		$sourceOptions = optionsSource($sources);
+		//Get Variables
+		$variables = $this->variables->getAll();
+		$varOptions = optionsVariable($variables);
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
+		$data['sourcesOptions']=$sourceOptions;
+		$data['variableOptions']=$varOptions;
+		
 		$this->load->view('datapoint/importfile',$data);
 	}
 	

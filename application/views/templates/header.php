@@ -16,7 +16,7 @@
 	?>
 	
 	<div hidden="true" id="existingLanguage"><?php //echo $_SESSION['lang']?></div><!--@TODO-->
-	
+	<!--
 	<font color='#FFFFFF' face='Arial, Helvetica, sans-serif' size=2>Language :</font>
 	<select id='langChange' name = 'langChange'>
 		<option value='English'>English</option>
@@ -32,7 +32,7 @@
 		<option value='Russian'>Russian</option>
 		<option value='Tagalog'>Tagalog</option>
 		<option value='Czech'>Czech</option>
-		</select>
+		</select>-->
 	<div class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -46,9 +46,9 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-              <li>Language:</li>
+             <!-- <li>Language:</li>
               <li><div class="button" style="cursor: pointer;" id="langChange">English</div></li>
-              <li><div class="button" style="cursor: pointer;" id="langChange">Spanish</div></li>
+              <li><div class="button" style="cursor: pointer;" id="langChange">Spanish</div></li>-->
 			  <li><font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><a href="<?php echo $this->config->item('homelink');?>" class="button2" ><?php echo getTxt('BackTo').' '.$this->config->item('homename');?></a></font></li>
             </ul>
           </div><!--/.nav-collapse -->

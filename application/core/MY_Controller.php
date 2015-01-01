@@ -92,14 +92,6 @@ class MY_Controller extends CI_Controller {
 		$this->assetor->load('map.js','JS_Maps');
 
 		$this->assetor->load('create_username.js','JS_CreateUserName');
-
-		$this->assetor->load('uploader/plupload.js','JS_Uploaders');
-		$this->assetor->load('uploader/plupload.gears.js','JS_Uploaders');
-		$this->assetor->load('uploader/plupload.silverlight.js','JS_Uploaders');
-		$this->assetor->load('uploader/plupload.flash.js','JS_Uploaders');
-		$this->assetor->load('uploader/plupload.browserplus.js','JS_Uploaders');
-		$this->assetor->load('uploader/plupload.html4.js','JS_Uploaders');
-		$this->assetor->load('uploader/plupload.html5.js','JS_Uploaders');
 			
 		$this->assetor->load('import_data.js','JS_ImportData');
 			
@@ -124,7 +116,6 @@ class MY_Controller extends CI_Controller {
 		$this->StyleData['JS_Globalization'] = $this->assetor->generate('JS_Globalization');
 		$this->StyleData['JS_Maps'] = $this->assetor->generate('JS_Maps');
 		$this->StyleData['JS_CreateUserName'] = $this->assetor->generate('JS_CreateUserName');
-		$this->StyleData['JS_Uploaders'] = $this->assetor->generate('JS_Uploaders');
 		$this->StyleData['JS_ImportData'] = $this->assetor->generate('JS_ImportData');
 		$this->StyleData['JS_DropDown'] = $this->assetor->generate('JS_DropDown');
 		
