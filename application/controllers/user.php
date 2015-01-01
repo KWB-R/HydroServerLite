@@ -197,7 +197,7 @@ class User extends MY_Controller {
 		else
 		{
 			$username = getSessionUser();
-			$result=$this->users->changeYourPassword($username,$this->input->post('password'));
+			$result=$this->users->changePassword($username,$this->input->post('password'));
 			if($result)
 			{
 				addSuccess(getTxt('CongratulationsChangedPassword')." ".$username);	

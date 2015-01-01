@@ -85,7 +85,7 @@ class Sites extends MY_Controller {
 			
 			$this->load->library('upload', $config);
 	
-			if ( !$this->upload->do_upload('picture')&&$this->upload->display_errors()!="<p>You did not select a file to upload.</p>")
+			if ( ! $this->upload->do_upload('picture'))
 			{
 				addError(getTxt('FailMoveFile').$this->upload->display_errors());
 			}
@@ -360,7 +360,8 @@ class Sites extends MY_Controller {
 			return;
 		}
 		$result = $this->site->delete($siteid);
-		
+		$this->load->model('sc','',TRUE);
+		$this->sc->delSite($siteid);
 		if($result)
 			{	
 				if($this->input->get('ui', TRUE))
@@ -369,12 +370,10 @@ class Sites extends MY_Controller {
 			}
 		else
 			{
-				if($this->input->get('ui', FALSE))
+				if($this->input->get('ui', TRUE))
 				addError(getTxt('ProcessingError'));	
 				$output="failed";
-			}
-		$this->load->model('sc','',TRUE);
-		$this->sc->delSite($siteid);		
+			}		
 		$output = array("status"=>$output);
 		echo json_encode($output);	
 	}
