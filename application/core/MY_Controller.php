@@ -16,7 +16,8 @@ class MY_Controller extends CI_Controller {
 		$this->load->helper('language_helper.php');
 		
 		//From the language helper we shall get the right language we need to show and then load the language file
-		$lang="English";
+		
+		$lang=processLang();
 		$this->lang->load('hsl', $lang);
 		
 		$this->authenticate();
@@ -122,6 +123,8 @@ class MY_Controller extends CI_Controller {
 		//Initializing Javascript Variable for ajax requests. 
 		
 		$this->StyleData['js_vars'] = 'var base_url = "'.base_url().'index.php/";'; 
+		
+		header('Content-Type: text/html; charset=utf-8');
 	}
 	
 	function kickOut()

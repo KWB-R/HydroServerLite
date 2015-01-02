@@ -16,7 +16,7 @@ and then shows the english phrase if there is no translated term yet
 	if(!$error)
 	{//check which is the session language
 	
-	$language = "English";
+	$language = "Russian";
 	//language file path
 	$file_path = "languages/" .$language. ".php";
 	//Check if file exists
@@ -61,6 +61,7 @@ and then shows the english phrase if there is no translated term yet
 	$new_file = "<?php" . "\n "; 
 	fwrite($lang_file, $new_file);
 	while($row = mysqli_fetch_array($terms)) {
+	print_r($row);
 			if ($row[$language] != "")
 				fwrite($lang_file,'$lang[\''.$row['php_variable']. "'] = " . '"' . addslashes($row[$language]) . '"' . ";" . "\n ");
 			else

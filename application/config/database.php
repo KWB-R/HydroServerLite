@@ -64,6 +64,22 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
+$db['lang']['hostname'] = "worldwater.byu.edu";
+$db['lang']['username'] = "langreader";
+$db['lang']['password'] = "readHSLlang@9";
+$db['lang']['database'] = "hydroserver_translation";
+$db['lang']['dbdriver'] = "mysqli";
+$db['lang']['dbprefix'] = "";
+$db['lang']['pconnect'] = TRUE;
+$db['lang']['db_debug'] = FALSE;
+$db['lang']['cache_on'] = FALSE;
+$db['lang']['cachedir'] = "";
+$db['lang']['char_set'] = "utf8";
+$db['lang']['dbcollat'] = "";
+$db['lang']['swap_pre'] = "";
+$db['lang']['autoinit'] = TRUE;
+$db['lang']['stricton'] = FALSE;
+
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

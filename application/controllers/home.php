@@ -27,6 +27,12 @@ class Home extends MY_Controller {
 		$data=$this->StyleData;
 		$this->load->view('help',$data);	
 	}
+	
+	public function changeLang()
+	{
+		changeLang($this->input->post('lang'),$this->input->post('disp'));
+	}
+	
 	protected function authenticate()
 	{
 		//Home is open access
