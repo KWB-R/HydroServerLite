@@ -1,24 +1,4 @@
 <?php
-
-//Clear the session variable for language so that default language loading can happen. 
-//However if langchange variable is set in the url, then session remains in place
-if (!isset($_GET["langChang"]))
-{
-if (!isset($_SESSION))
-	{
-		session_start();
-	}
-	if (isset($_SESSION['lang']))
-	{
-		unset($_SESSION['lang']);
-	}
-	if (isset($_SESSION['power']))
-	{
-		unset($_SESSION['power']);
-	}
-		
-}
-
 HTML_Render_Head($js_vars);
 echo $CSS_Main;
 echo $JS_JQuery;

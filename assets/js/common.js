@@ -13,9 +13,32 @@ jQuery.browser = {};
 
 $( document ).ready(function() {
 	
-	var exitLang = 	$("#existingLanguage").text();
-	$('#langChange option[value="'+exitLang+'"]').attr("selected",true);
+	$('#langChange li a').click(function (e) {
+		var newHeading = $(this).text();
+		var value = $(this).attr('data');
+		$("#dropdownMenu1:first-child").text("Language: "+newHeading);
+		$("#dropdownMenu1:first-child").val("Language: "+newHeading);
+		
+	$.post( base_url+'home/changeLang',{lang:value,disp:newHeading}).done(function( data ) {
+	  if (data == "langChanged")
+	  {
+		location.reload();
+	  }
+	  else
+	  {
+		alert("Error in changing Language. Error : " +data);
+		return false;  
+	  }
+  });
+		
+	});
+	
+	
   $(document.body).on("change", '#langChange' ,function() {
+	
+	console.log($(this).val());
+
+  
   $.post( './changeLang.php',{lang:$(this).val()}).done(function( data ) {
 	  if (data == "langChanged")
 	  {

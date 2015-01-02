@@ -1,39 +1,4 @@
-<!--
-//This is required to get the international text strings dictionary
-	//global $_SITE_homename;
-	//global $_SITE_homelink;
-	$urlExtraName="header.php";
-	//require 'internationalize.php';
-	//require_once 'fetchMainConfig.php';
-	
-    CHECK ABOVE ELEMENTS
-    ALSO NEED TO FIX THE HEADER SO THAT THE DROP DOWN FITS WELL WITH BOOTSTRAPPING. 
-    
-    -->
-    
-	<?php
-		fetch_session();
-	?>
-	
-	<div hidden="true" id="existingLanguage"><?php //echo $_SESSION['lang']?></div><!--@TODO-->
-	<!--
-	<font color='#FFFFFF' face='Arial, Helvetica, sans-serif' size=2>Language :</font>
-	<select id='langChange' name = 'langChange'>
-		<option value='English'>English</option>
-		<option value='Spanish'>Spanish</option>
-		<option value='Italian'>Italian</option>
-		<option value='Portuguese'>Portuguese</option>
-		<option value='German'>German</option>
-		<option value='Dutch'>Dutch</option>
-		<option value='Bulgarian'>Bulgarian</option>
-		<option value='Croatian'>Croatian</option>
-		<option value='Ukranian'>Ukranian</option>
-		<option value='French'>French</option>
-		<option value='Russian'>Russian</option>
-		<option value='Tagalog'>Tagalog</option>
-		<option value='Czech'>Czech</option>
-		</select>-->
-	<div class="navbar navbar-default" role="navigation">
+<div class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -46,10 +11,33 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-             <!-- <li>Language:</li>
-              <li><div class="button" style="cursor: pointer;" id="langChange">English</div></li>
-              <li><div class="button" style="cursor: pointer;" id="langChange">Spanish</div></li>-->
-			  <li><font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><a href="<?php echo $this->config->item('homelink');?>" class="button2" ><?php echo getTxt('BackTo').' '.$this->config->item('homename');?></a></font></li>
+            
+           
+            <li>
+            
+            <div class="dropdown" style="margin-top:5%;">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    Language: <?php echo getCurrentDisplay();?>
+    <span class="caret" id="headingCaret"></span>
+  </button>
+ <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id='langChange' name ='langChange'>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="English">English</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Spanish">Español</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Italian">Italiano</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Portuguese">Portugués</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="German">Alemán</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Dutch">Nederlands</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Bulgarian">български</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Croatian">Hrvatski</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="French">Français</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Russian">Русский</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Tagalog">Tagalog</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Czech">Český</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Ukranian">Українська</a></li>
+  			</ul>
+		</div>
+            </li>
+			  <li style="margin-top:2%;"><font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><a href="<?php echo $this->config->item('homelink');?>" class="button2" ><?php echo getTxt('BackTo').' '.$this->config->item('homename');?></a></font></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
