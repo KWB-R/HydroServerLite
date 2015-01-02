@@ -48,7 +48,7 @@ function genInput($labelKey,$id,$name,$req=false,$extra='')
 	  echo '<span class="required"/>'; 
 	}
 	
-	echo'</div> ,,            
+	echo'</div>            
       </div>';	
 }
 function genInputH($labelKey,$id,$name,$hint,$req=false,$extra='')
@@ -159,7 +159,8 @@ function genHeading($headingKey,$req=false,$defaultColumn=9)
 	{
 		echo'<p class="em" align="right">'.getTxt('RequiredFieldsAsterisk').'</p>';
 	}
-	echo '<h1>'.getTxt($headingKey).'</h1>
+	
+	echo '<p class="h2" align="center">'.getTxt($headingKey).'</p>
           <p>&nbsp;</p>';
 }
 
