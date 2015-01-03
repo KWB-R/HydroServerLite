@@ -17,8 +17,8 @@ function optionsVariable($result)
 	$option_block='';
 	foreach ($result as $row) {
 		$typeid = $row["VariableID"];
-		$typename = $row["VariableName"];
-		$datatype = $row["DataType"];
+		$typename = translateTerm($row["VariableName"]);
+		$datatype = translateTerm($row["DataType"]);
 		$option_block .= "<option value='$typeid'>$typename ($datatype)</option>";
 	}
 	return $option_block;

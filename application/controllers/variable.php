@@ -27,21 +27,21 @@ class Variable extends MY_Controller {
 			'VariableCode' => $this->input->post('VariableCode'),
 			'TimeSupport' => $this->input->post('tsup'),
 			'NoDataValue' => -9999,
-			'GeneralCategory' =>$this->input->post('gc_val'),
-			'DataType' =>$this->input->post('datatype_val'),
+			'GeneralCategory' =>$this->input->post('gc'),
+			'DataType' =>$this->input->post('datatype'),
 			'TimeunitsID' => $this->input->post('timeunit'),
 			'IsRegular' => $regular
 		);
 		//The above are the static variables. 
 		
-		$varname = $this->input->post('varname_val');
+		$varname = $this->input->post('varname');
 		if($varname == getTxt('OtherSlashNew'))
 		{
-			$varname = $this->input->post('newvarname');
+			$varname = $this->input->post('NewVarName');
 			$this->variables->addTDef('variablenamecv',$varname,$this->input->post('vardef'));
 		}
 		$Variable['VariableName']=$varname;
-		$spec = $this->input->post('specdata_val');
+		$spec = $this->input->post('specdata');
 		if($spec == getTxt('OtherSlashNew'))
 		{
 			//New Spec Processing. 	
@@ -50,7 +50,7 @@ class Variable extends MY_Controller {
 		}
 		$Variable['Speciation']=$spec;
 		
-		$smed = $this->input->post('samplemedium_val');
+		$smed = $this->input->post('samplemedium');
 		if($smed == getTxt('OtherSlashNew'))
 		{
 			//New Sample Medium Name Processing. 	
@@ -61,7 +61,7 @@ class Variable extends MY_Controller {
 		
 		//Unit Checking
 		//First Check New UNIT TYPE. 
-		$utype = $this->input->post('unittype_val');
+		$utype = $this->input->post('unittype');
 		$unit = $this->input->post('unit');
 		if($utype == getTxt('OtherSlashNew'))
 		{
@@ -81,7 +81,7 @@ class Variable extends MY_Controller {
 		$Variable['VariableunitsID']=$unit;
 		
 		//Check Value Type
-		$vt = $this->input->post('valuetype_val');
+		$vt = $this->input->post('valuetype');
 		if($vt == getTxt('OtherSlashNew'))
 		{
 			//New Sample Medium Name Processing. 	
@@ -169,6 +169,10 @@ class Variable extends MY_Controller {
 	public function getAllJSON()
 	{
 		$variables = $this->variables->getAll();
+		foreach($variables as &$var)
+		{
+			$var['VariableName']=translateTerm($var['VariableName']);
+		}
 		echo json_encode($variables);
 	}
 	
@@ -178,7 +182,7 @@ class Variable extends MY_Controller {
 		$variables = $this->variables->getAll();
 		foreach($variables as &$var)
 		{
-			$var['VarNameMod']=	$var['VariableName'].' '."(".$var["DataType"].")";
+			$var['VarNameMod']=	translateTerm($var['VariableName']).' '."(".translateTerm($var["DataType"]).")";
 		}
 		echo json_encode($variables);
 	}
@@ -188,6 +192,10 @@ class Variable extends MY_Controller {
 		if($this->input->get('siteid', TRUE))
 		{
 			$result = $this->variables->getSite($this->input->get('siteid', TRUE));
+			foreach($result as &$var)
+			{
+				$var['VariableName']=translateTerm($var['VariableName']);
+			}
 			echo json_encode($result);
 		}
 		else
@@ -201,7 +209,13 @@ class Variable extends MY_Controller {
 	{
 		if($this->input->get('siteid', TRUE)&&$this->input->get('varname', TRUE))
 		{
-			$result = $this->variables->getTypes($this->input->get('siteid', TRUE),$this->input->get('varname', TRUE));
+			$variable = $this->variables->getVariableWithUnit($this->input->get('varname', TRUE));
+			$varname = $variable[0]['VariableName'];
+			$result = $this->variables->getTypes($this->input->get('siteid', TRUE),$varname);
+			foreach($result as &$var)
+			{
+				$var['display']=translateTerm($var['DataType']);
+			}
 			echo json_encode($result);
 		}
 		else
@@ -213,7 +227,9 @@ class Variable extends MY_Controller {
 	
 	public function updateVarID()
 	{
-			$result = $this->variables->getVarID($this->input->get('siteid', TRUE),$this->input->get('varname', TRUE),$this->input->get('type', TRUE));
+			$variable = $this->variables->getVariableWithUnit($this->input->get('varname', TRUE));
+			$varname = $variable[0]['VariableName'];
+			$result = $this->variables->getVarID($this->input->get('siteid', TRUE),$varname,$this->input->get('type', TRUE));
 			echo $result[0]['VariableID'];
 	}
 	
@@ -258,11 +274,18 @@ class Variable extends MY_Controller {
 			return;
 		}	
 		$result=array();
-		$result[] = array('Term'=>getTxt('SelectEllipsis'),'Definition'=>"-1");
-		$result = array_merge($result,$this->variables->getByTable($valueid));
+		$result[] = array('Term'=>getTxt('SelectEllipsis'),'Definition'=>"-1", 'displayTerm'=>getTxt('SelectEllipsis'),'displayDef'=>"-1",'value'=>getTxt('SelectEllipsis'));
+		$tempResult = $this->variables->getByTable($valueid);
+		foreach($tempResult as &$var)
+		{
+			$var['displayTerm'] = translateTerm($var['Term']);
+			$var['value'] = $var['Term'];
+			$var['displayDef'] = translateTerm($var['Definition']);		
+		}
+		$result = array_merge($result,$tempResult);
 		if(!$this->input->get('noNew', TRUE))
 			{
-			$result[] = array('Term'=>getTxt('OtherSlashNew'),'Definition'=>"-10");
+			$result[] = array('Term'=>getTxt('OtherSlashNew'),'Definition'=>"-10", 'displayTerm'=>getTxt('OtherSlashNew'),'displayDef'=>"-10",'value'=>getTxt('OtherSlashNew'));
 			}
 		echo json_encode($result);
 		
@@ -271,13 +294,13 @@ class Variable extends MY_Controller {
 	public function getUnitTypes()
 	{
 		$result=array();
-		$result[] = array('unitype'=>getTxt('SelectEllipsis'),'unitid'=>"-1");
+		$result[] = array('unitype'=>getTxt('SelectEllipsis'),'unitid'=>"-1",'orgtype'=>getTxt('SelectEllipsis'));
 		$unitTypes = $this->variables->getUnitTs();
 		foreach ($unitTypes as $unit)
 		{
-			$result[] = array('unitype'=>$unit['unitsType'],'unitid'=>"1");	
+			$result[] = array('unitype'=>translateTerm($unit['unitsType']),'orgtype'=>$unit['unitsType'],'unitid'=>"1");	
 		}
-		$result[] = array('unitype'=>getTxt('OtherSlashNew'),'unitid'=>"-10");
+		$result[] = array('unitype'=>getTxt('OtherSlashNew'),'unitid'=>"-10",'orgtype'=>getTxt('OtherSlashNew'));
 		echo json_encode($result);
 	}
 	
@@ -291,7 +314,7 @@ class Variable extends MY_Controller {
 			$result[] = array('unit'=>getTxt('SelectEllipsis'),'unitid'=>"-1");
 			foreach ($result1 as $unit)
 			{
-				$result[] = array('unit'=>$unit['unitsName'],'unitid'=>$unit['unitsID']);	
+				$result[] = array('unit'=>translateTerm($unit['unitsName']),'unitid'=>$unit['unitsID']);	
 			}
 			if(!$this->input->get('noNew', TRUE))
 			{

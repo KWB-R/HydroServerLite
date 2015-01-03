@@ -33,29 +33,31 @@ var source =
 	datatype: "json",
 	datafields: [
 		{ name: 'Term' },
-		{ name: 'Definition' }
+		{ name: 'Definition' },
+		{ name: 'displayTerm' },
+		{ name: 'displayDef' }
 	],
 	id: 'id',
 	url: url,
 	async: false
 };
 var dataAdapter = new $.jqx.dataAdapter(source);
-
+console.log(dataAdapter);
 // Create a jqxComboBox for Speciation
-$("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
-	
+$("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+
 $("#specdata").bind('select', function (event) {
 var args = event.args;
 var item = $('#specdata').jqxDropDownList('getItem', args.index);
-    if ((item != null)&&(item.value!="-1")&&(item.value!="-10")) 
-{					
- $("#specdef").val(item.value);
+    if ((item != null)&&(item.originalItem.Definition!="-1")&&(item.originalItem.Definition!="-10")) 
+{
+ $("#specdef").val(item.originalItem.displayDef);
  $("#specdef").attr('disabled', true);
  $("#new_spec").hide();
 $("#new_spec1").hide();
  }
  
- if(item.value=="-10")
+ if(item.originalItem.Definition=="-10")
  {
 //If user selects other option
 	$("#specdef").removeAttr("disabled");	 
@@ -78,7 +80,8 @@ var url2=base_url+"variable/getUnitTypes";
                     datatype: "json",
                     datafields: [
                         { name: 'unitype' },
-                        { name: 'unitid' }
+                        { name: 'unitid' },
+						 { name: 'orgtype' }
                     ],
                     id: 'id',
                     url: url2,
@@ -87,13 +90,13 @@ var url2=base_url+"variable/getUnitTypes";
                 var dataAdapter2 = new $.jqx.dataAdapter(source2);
 
 // Create a jqxComboBox for the var unit types. 
-$("#unittype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter2, displayMember: "unitype", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
+$("#unittype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter2, displayMember: "unitype", valueMember: "orgtype", width: 250, height: 25, theme: 'darkblue'});
 
 $("#unittype").bind('select', function (event) {
 var args = event.args;
 var item = $('#unittype').jqxDropDownList('getItem', args.index);
 
-if ((item != null)&&(item.value!="-1")&&(item.value!="-10")) 
+if ((item != null)&&(item.originalItem.unitid!="-1")&&(item.originalItem.unitid!="-10")) 
 {					
 
 //Get all the units for that type and display it
@@ -101,7 +104,7 @@ $("#newunit").hide();
 $("#newunitonly").hide();
 $("#unit").show();
 $("#unittext").show();
-var url3=base_url+"variable/getUnitsByType?type="+item.label;
+var url3=base_url+"variable/getUnitsByType?type="+item.originalItem.orgtype;
 
                 // prepare the data
                 var source3 =
@@ -166,7 +169,9 @@ $("#newunitonly").show(400);
 	datatype: "json",
 	datafields: [
 		{ name: 'Term' },
-		{ name: 'Definition' }
+		{ name: 'Definition' },
+		{ name: 'displayTerm' },
+		{ name: 'displayDef' }
 	],
 	id: 'id',
 	url: base_url+'variable/getTable/samplemediumcv',
@@ -175,22 +180,22 @@ $("#newunitonly").show(400);
 var dataAdapter4 = new $.jqx.dataAdapter(source4);
 
 
-$("#samplemedium").jqxDropDownList({ selectedIndex: 0, source: dataAdapter4, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
+$("#samplemedium").jqxDropDownList({ selectedIndex: 0, source: dataAdapter4, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#samplemedium").bind('select', function (event) {
 var args = event.args;
 var item = $('#samplemedium').jqxDropDownList('getItem', args.index);
-    if ((item != null)&&(item.value!="-1")&&(item.value!="-10")) 
+    if ((item != null)&&(item.originalItem.Definition!="-1")&&(item.originalItem.Definition!="-10")) 
 {					
 
 
- $("#smdef").val(item.value);
+ $("#smdef").val(item.originalItem.displayDef);
  $("#smdef").attr('disabled', true);
  
  $("#smother").hide();
  }
  
- if(item.value=="-10")
+ if(item.originalItem.Definition=="-10")
  {
 	 
 //If user selects other option
@@ -211,10 +216,12 @@ $("#smother").show(400);
 var source5 =
                 {
                     datatype: "json",
-                    datafields: [
-                        { name: 'Term' },
-                        { name: 'Definition' }
-                    ],
+                   datafields: [
+		{ name: 'Term' },
+		{ name: 'Definition' },
+		{ name: 'displayTerm' },
+		{ name: 'displayDef' }
+	],
                     id: 'id',
                     url: base_url+'variable/getTable/valuetypecv',
                     async: false
@@ -222,22 +229,22 @@ var source5 =
                 var dataAdapter5 = new $.jqx.dataAdapter(source5);
 
 
-$("#valuetype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter5, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
+$("#valuetype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter5, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#valuetype").bind('select', function (event) {
 var args = event.args;
 var item = $('#valuetype').jqxDropDownList('getItem', args.index);
-    if ((item != null)&&(item.value!="-1")&&(item.value!="-10")) 
+      if ((item != null)&&(item.originalItem.Definition!="-1")&&(item.originalItem.Definition!="-10")) 
 {					
 
 
- $("#vtdef").val(item.value);
+ $("#vtdef").val(item.originalItem.displayDef);
  $("#vtdef").attr('disabled', true);
  
  $("#valuetypenewb").hide();
  }
  
- if(item.value=="-10")
+ if(item.originalItem.Definition=="-10")
  {
 	 
 //If user selects other option
@@ -295,24 +302,26 @@ var source9 =
                 {
                     datatype: "json",
                     datafields: [
-                        { name: 'Term' },
-                        { name: 'Definition' }
-                    ],
+						{ name: 'Term' },
+						{ name: 'Definition' },
+						{ name: 'displayTerm' },
+						{ name: 'displayDef' }
+					],
                     id: 'id',
                     url: base_url+'variable/getTable/datatypecv?noNew=1',
                     async: false
                 };
                 var dataAdapter9 = new $.jqx.dataAdapter(source9);
-$("#datatype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter9, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
+$("#datatype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter9, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#datatype").bind('select', function (event) {
 var args = event.args;
 var item = $('#datatype').jqxDropDownList('getItem', args.index);
-    if ((item != null)&&(item.value!="-1")) 
+    if ((item != null)&&(item.originalItem.Definition!="-1")) 
 {					
 
 
- $("#dtdef").val(item.value);
+ $("#dtdef").val(item.originalItem.displayDef);
 
  
  }
@@ -327,9 +336,11 @@ var source10 =
                 {
                     datatype: "json",
                     datafields: [
-                        { name: 'Term' },
-                        { name: 'Definition' }
-                    ],
+						{ name: 'Term' },
+						{ name: 'Definition' },
+						{ name: 'displayTerm' },
+						{ name: 'displayDef' }
+					],
                     id: 'id',
                     url: base_url+'variable/getTable/generalcategorycv?noNew=1',
                     async: false
@@ -338,16 +349,16 @@ var source10 =
 
 
 
-$("#gc").jqxDropDownList({ selectedIndex: 0, source: dataAdapter10, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
+$("#gc").jqxDropDownList({ selectedIndex: 0, source: dataAdapter10, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
 	
 $("#gc").bind('select', function (event) {
 var args = event.args;
 var item = $('#gc').jqxDropDownList('getItem', args.index);
-    if ((item != null)&&(item.value!="-1")) 
+    if ((item != null)&&(item.originalItem.Definition!="-1")) 
 {					
 
 
- $("#gcdef").val(item.value);
+ $("#gcdef").val(item.originalItem.displayDef);
 
  
  }
@@ -366,26 +377,28 @@ var source15 =
 	datatype: "json",
 	datafields: [
 		{ name: 'Term' },
-		{ name: 'Definition' }
+		{ name: 'Definition' },
+		{ name: 'displayTerm' },
+		{ name: 'displayDef' }
 	],
 	id: 'id',
 	url: url15,
 	async: false
 };
 var dataAdapter15 = new $.jqx.dataAdapter(source15);
-$("#varname").jqxDropDownList({ selectedIndex:0,source: dataAdapter15, displayMember: "Term", valueMember: "Definition", width: 250, height: 25, theme: 'darkblue'});
+$("#varname").jqxDropDownList({ selectedIndex:0,source: dataAdapter15, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
 $("#varname").bind('select', function (event) {
 var args = event.args;
 var item = $('#varname').jqxDropDownList('getItem', args.index);
-    if ((item != null)&&(item.value!="-1")&&(item.value!="-10")) 
+     if ((item != null)&&(item.originalItem.Definition!="-1")&&(item.originalItem.Definition!="-10"))  
 {					
- $("#vardef").val(item.value);
+ $("#vardef").val(item.originalItem.displayDef);
  $("#vardef").attr('disabled', true);
  	 $("#newvarnameb").hide();
  }
  
- if(item.value=="-10"){
-	 
+ if(item.originalItem.Definition=="-10")
+	 {
 //If user selects other option
 	$("#vardef").removeAttr("disabled");	 
 	$("#vardef").val(<?php echo "'".getTxt('EnterDefinition')."'"; ?>);
@@ -534,7 +547,7 @@ function addHidden(name)
     type: 'hidden',
     id: name+'_val',
     name: name+'_val',
-	value: selectedItem.label
+	value: selectedItem.originalItem.value
 }).appendTo('#addvar');
 }
 
@@ -589,7 +602,6 @@ addHidden('varname');
    }
 
    
-addHidden('specdata');
 checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
    if ((checkitem == null)||(checkitem.value=="-1"))
    {
@@ -611,7 +623,6 @@ checkitem = $('#specdata').jqxDropDownList('getSelectedItem');
 	}  	
    }
  
-addHidden('unittype');
 checkitem = $('#unittype').jqxDropDownList('getSelectedItem');
    if ((checkitem == null)||(checkitem.value=="-1"))
    {

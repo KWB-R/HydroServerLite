@@ -152,6 +152,10 @@ class Methods extends MY_Controller {
 		if($this->input->get('var', TRUE))
 		{
 			$result = $this->method->getMethodsByVar($this->input->get('var', TRUE));
+			foreach($result as &$var)
+			{
+				$var['MethodDescription']=translateTerm($var['MethodDescription']);
+			}
 			echo json_encode($result);
 		}
 		else
@@ -168,6 +172,10 @@ class Methods extends MY_Controller {
 		if($var!==false&&$site!==false)
 		{
 			$result = $this->method->getByVarSite($var,$site);
+			foreach($result as &$var)
+			{
+				$var['MethodDescription']=translateTerm($var['MethodDescription']);
+			}
 			echo json_encode($result);
 		}
 		else
@@ -178,7 +186,12 @@ class Methods extends MY_Controller {
 	}
 	public function getJSON()
 	{
-		echo json_encode($this->method->getAll());
+		$result = $this->method->getAll();
+		foreach($result as &$var)
+			{
+				$var['MethodDescription']=translateTerm($var['MethodDescription']);
+			}
+		echo json_encode($result);
 	}
 	
 }

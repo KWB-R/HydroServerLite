@@ -1,56 +1,4 @@
 <?php
-/*
-
-$option_block = "";
-$option_block3 = "";
-$msg = "";
-$msg3= "";
-$msg4= "";
-
-//add the SourceID's
-$sql ="Select distinct SourceID, Organization FROM seriescatalog";
-
-$result = transQuery($sql,0,0);
-
-$num = count($result);
-	if ($num < 1) {
-
-	$msg = "<P class= em2> $SorryNoSource Please add a source. Data values cannot be added without a source.</p>";
-
-	} else {
-
-	foreach ($result as $row) {
-
-		$sourceid = $row["SourceID"];
-		$sourcename = $row["Organization"];
-
-		$option_block .= "<option value=$sourceid>$sourcename</option>";
-
-		}
-	}
-
-//add the Variables
-$sql3 ="Select * FROM variables ORDER BY VariableName ASC";
-
-$data = transQuery($sql3,0,1);
-
-$num = count($data);
-	if ($num < 1) {
-
-   $msg3 = "<P class=em2>$SorryNoVariable Please add a variable. Data values cannot be added without a source.</em></p>";
-
-	} else {
-
-	foreach ($data as $row3) {
-		$typeid = $row3["VariableID"];
-		$typename = $row3["VariableName"];
-		$datatype = $row3["DataType"];
-
-		$option_block3 .= "<option value=$typeid>$typename ($datatype)</option>";
-
-		}
-	}
-*/
 HTML_Render_Head($js_vars);
 ?>
 <script type="text/javascript">
@@ -91,14 +39,6 @@ var source =
         };				
 var dataAdapter = new $.jqx.dataAdapter(source);
 $(document).ready(function () {
-$("#viewdata").click(function() {
-	window.location.href = "details.php?siteid="+glob_siteid;
-});	
-$("#viewdata2").click(function() {
-	window.location.href = "add_multiple_values.php";
-});	
-$("#statusmsg").hide();
-	
 //Creating the Drop Down list
 $("#VariableID1").jqxDropDownList(
 {
