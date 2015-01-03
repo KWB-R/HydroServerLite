@@ -160,7 +160,7 @@ function genHeading($headingKey,$req=false,$defaultColumn=9)
 		echo'<p class="em" align="right">'.getTxt('RequiredFieldsAsterisk').'</p>';
 	}
 	
-	echo '<p class="h2" align="center">'.getTxt($headingKey).'</p>
+	echo '<p class="h3" align="center"><strong>'.getTxt($headingKey).'</strong></p>
           <p>&nbsp;</p>';
 }
 

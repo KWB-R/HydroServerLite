@@ -4,7 +4,6 @@
 		The menu dynamically fills based on the permissions of the
 		user based on their role.
  ####################################################### */
-
 $menuName = '';
 if (isAdmin())
 	$menuName = "Administrator";
@@ -132,7 +131,7 @@ if(isLoggedIn())	{
 	echo "<li class=\"home\"><a href='".base_url()."'>".getTxt('Home')."</a></li>";
 	echo "<li class=\"login\"><a href='".site_url("auth/logout")."'>".getTxt('Logout')."</a></li>";
 }else{
-	echo "<li class=\"login\"><a href='#' onclick='showLogin()';>".getTxt('Login')."</a></li>";
+	echo "<li class=\"login\"><a href='#' onclick='showLogin()';>".getTxt('LoginButton')."</a></li>";
 }
 
 
@@ -140,6 +139,7 @@ if(isLoggedIn())	{
 //\echo "<img class=\"footer\" src=\"assets/images/nav-footer.jpg\" />";
 echo "</ul>
         </div></div></div>";
+
 
 if(!isLoggedIn()){
 ?>

@@ -300,7 +300,7 @@
  $lang['hsl_Deselect'] = "Deselect";
  $lang['hsl_WebClientHome'] = "HydroServer Lite: Homepage";
  $lang['hsl_Returning'] = "Returning Users";
- $lang['hsl_Login'] = "Login";
+ $lang['hsl_LoginButton'] = "Login";
  $lang['hsl_ForgotPW'] = "Forgot your password?";
  $lang['hsl_SearchData'] = "Search Data";
  $lang['hsl_Help'] = "Help Center";
@@ -312,7 +312,7 @@
  $lang['hsl_setupexist'] = "Please remove the setup directory in order to continue.";
  $lang['hsl_ForgotPassword1'] = "If you have forgotten your password,";
  $lang['hsl_ForgotPassword2'] = "please contact your direct supervisor";
- $lang['hsl_ForgotPassword3'] = "and they can reset it for you. Thank You!";
+ $lang['hsl_ForgotPassword3'] = " and they can reset it for you. Thank You!";
  $lang['hsl_InstallationWelcome'] = "Welcome to Installation";
  $lang['hsl_InstallGuide'] = "This setup script will guide you to install HydroServer Interactive on your web server. Please make sure you have the database details ready before you proceed.";
  $lang['hsl_BeginInstallation'] = "Begin Installation";
