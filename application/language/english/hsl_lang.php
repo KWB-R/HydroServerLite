@@ -3911,4 +3911,11 @@
  $lang['hsl_sourceid'] = "Source ID";
  $lang['hsl_methodid'] = "Method ID";
  $lang['hsl_invalid'] = "Invalid";
+ $lang['hsl_EditSC'] = "Edit Series Catalog";
+ $lang['hsl_SeriesID'] = "Series ID";
+ $lang['hsl_ValueCount'] = "Value Count";
+ $lang['hsl_StartDate'] = "Start Date";
+ $lang['hsl_EndDate'] = "End Date";
+ $lang['hsl_SCEditHelp'] = "Please be very careful while editing the Series Catalog. Only ID fields and Value Count are editable below as all the other fields are tied to their respective ID fields. You may also use the update series catalog button to perform a manual update of the catalog. ";
+ $lang['hsl_UpdateSCButton'] = "Update Series Catalog";
  ?>

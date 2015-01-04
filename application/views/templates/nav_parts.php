@@ -53,6 +53,7 @@ if (isTeacher() || isAdmin()){
 		echo "<li class=\"edit_variable\"><a href='".site_url('variable/edit')."'>".getTxt('ChangeVariable')."</a></li>";
 		echo "<li class=\"add_method\"><a href='".site_url('methods/add')."'>".getTxt('AddMethod')."</a></li>";
 		echo "<li class=\"edit_method\"><a href='".site_url('methods/change')."'>".getTxt('ChangeMethod')."</a></li>";
+		echo "<li class=\"edit_variable\"><a href='".site_url('series')."'>".getTxt('EditSC')."</a></li>";
 	}
 	echo "</ul>";
 	echo "</li>";
