@@ -85,14 +85,17 @@ class Sites extends MY_Controller {
 			
 			$this->load->library('upload', $config);
 	
-			if ( ! $this->upload->do_upload('picture'))
+			if ( ! $this->upload->do_upload('picture') && "<p>You did not select a file to upload.</p>"!=$this->upload->display_errors())
 			{
 				addError(getTxt('FailMoveFile').$this->upload->display_errors());
 			}
 			else
-			{
-				$uploaddata = $this->upload->data();
-				$name = $uploaddata['file_name'];
+			{	
+				if("<p>You did not select a file to upload.</p>"!=$this->upload->display_errors())
+				{$uploaddata = $this->upload->data();
+				$name = $uploaddata['file_name'];}
+				else
+				$name="";
 				//Create the site.
 				$site = $this->createSite();
 				//Add the site.
@@ -143,7 +146,7 @@ class Sites extends MY_Controller {
 		$typesArray = array();
 		foreach($types as $type)
 		{
-			$typesArray[$type['Term']]=$type['Term'];
+			$typesArray[$type['Term']]=translateTerm($type['Term']);
 		}
 		$typeOptions = genOptions($typesArray);
 		
@@ -151,7 +154,7 @@ class Sites extends MY_Controller {
 		$verticalDatumArray = array();
 		foreach($vds as $vd)
 		{
-			$verticalDatumArray[$vd['Term']]=$vd['Term'];
+			$verticalDatumArray[$vd['Term']]=translateTerm($vd['Term']);
 		}
 		$vdOptions = genOptions($verticalDatumArray);
 		
@@ -159,7 +162,7 @@ class Sites extends MY_Controller {
 		$srArray = array();
 		foreach($srs as $sr)
 		{
-			$srArray[$sr['SpatialReferenceID']]=$sr['SRSName'];
+			$srArray[$sr['SpatialReferenceID']]=translateTerm($sr['SRSName']);
 		}
 		$srOptions = genOptions($srArray);
 		
@@ -241,7 +244,7 @@ class Sites extends MY_Controller {
 		$typesArray = array();
 		foreach($types as $type)
 		{
-			$typesArray[$type['Term']]=$type['Term'];
+			$typesArray[$type['Term']]=translateTerm($type['Term']);
 		}
 		$typeOptions = genOptions($typesArray);
 		
@@ -249,7 +252,7 @@ class Sites extends MY_Controller {
 		$verticalDatumArray = array();
 		foreach($vds as $vd)
 		{
-			$verticalDatumArray[$vd['Term']]=$vd['Term'];
+			$verticalDatumArray[$vd['Term']]=translateTerm($vd['Term']);
 		}
 		$vdOptions = genOptions($verticalDatumArray);
 		
@@ -257,7 +260,7 @@ class Sites extends MY_Controller {
 		$srArray = array();
 		foreach($srs as $sr)
 		{
-			$srArray[$sr['SpatialReferenceID']]=$sr['SRSName'];
+			$srArray[$sr['SpatialReferenceID']]=translateTerm($sr['SRSName']);
 		}
 		$srOptions = genOptions($srArray);
 		
@@ -289,7 +292,7 @@ class Sites extends MY_Controller {
 			$newnode->setAttribute("sitecode", $row['SiteCode']);
 			$newnode->setAttribute("lat", $row['Latitude']);
 			$newnode->setAttribute("lng", $row['Longitude']);
-			$newnode->setAttribute("sitetype", $row['SiteType']); 
+			$newnode->setAttribute("sitetype", translateTerm($row['SiteType'])); 
 			$newnode->setAttribute("sourcename", $row['Organization']);
 			$newnode->setAttribute("sourcecode", $row['SourceID']);
 			$newnode->setAttribute("sourcelink", $row['SourceLink']);

@@ -144,7 +144,9 @@ class Datapoint extends MY_Controller {
 	private function fileUploadHandler()
 	{
 		$newDir = "./uploads/temp".time().rand();
-		$result = mkdir($newDir);
+		$oldmask = umask(0);
+		$result = mkdir($newDir,0777);
+		umask($oldmask);
 		if(!$result)
 		{
 			addError(getTxt('FailTemp'));
@@ -153,7 +155,7 @@ class Datapoint extends MY_Controller {
 		
 		//Upload files. 
 		$config['upload_path'] = $newDir;
-		$config['allowed_types'] = 'csv';	
+		$config['allowed_types'] = 'csv|CSV';	
 		$this->load->library('upload', $config);
 		if ( ! $this->upload->do_multi_upload('files'))
 		  {

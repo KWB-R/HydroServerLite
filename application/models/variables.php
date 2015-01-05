@@ -148,5 +148,11 @@ class Variables extends MY_Model
 		$num_inserts = $this->db->affected_rows();
 	  	return $num_inserts>=0;
 	}
+	function getUnitName($id)
+	{
+		$this->db->where('unitsID',$id);
+		$query=$this->db->get('units');
+		return $query->result_array();
+	}
 }
 ?>

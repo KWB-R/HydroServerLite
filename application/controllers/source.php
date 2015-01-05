@@ -99,7 +99,7 @@ class Source extends MY_Controller {
 		$topicsArray = array();
 		foreach($topics as $topic)
 		{
-			$topicsArray[$topic['Term']]=$topic['Term'];
+			$topicsArray[$topic['Term']]=translateTerm($topic['Term']);
 		}
 		$topicOptions = genOptions($topicsArray);
 		$data['topicOptions'] = $topicOptions;
@@ -178,7 +178,7 @@ class Source extends MY_Controller {
 		$topicsArray = array();
 		foreach($topics as $topic)
 		{
-			$topicsArray[$topic['Term']]=$topic['Term'];
+			$topicsArray[$topic['Term']]=translateTerm($topic['Term']);
 		}
 		$topicOptions = genOptions($topicsArray);
 		$data['topicOptions'] = $topicOptions;

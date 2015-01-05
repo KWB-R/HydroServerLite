@@ -26,10 +26,12 @@ var date_from_sql;
 var date_to_sql;
 var varname;
 var datatype;
+var displayType;
 var sitename;
 var flag=0;
 var methodid;
 var chart="";
+var displayVar;
 //Time Validation Script
 function  validatetime(){
 
@@ -303,10 +305,9 @@ var item = $('#dropdownlist').jqxDropDownList('getItem', args.index);
 //Check if a valid value is selected and process futher to display dates
 if (item != null) {
 //Clear the Box
-//$('#daterange').empty();	
 $('#daterange').html("");
-varname=item.label;
-//varid=item.value;
+varname=item.value;
+displayVar=item.label;
 //Going to the next function that will generate a list of data types available for that variable
 var t=setTimeout("create_var_list()",300)
 }
@@ -322,6 +323,7 @@ function create_var_list()
             datatype: "json",
             datafields: [
                 { name: 'DataType' },
+				{ name: 'display' },
             ],
             url: base_url+'variable/getTypes?siteid='+siteid+'&varname='+varname
         };
@@ -335,7 +337,7 @@ var dataAdapter = new $.jqx.dataAdapter(source);
             width: 200,
             height: 25,
             selectedIndex: 0,
-            displayMember: 'DataType',
+            displayMember: 'display',
             valueMember: 'DataType'
         });
 
@@ -347,8 +349,8 @@ var args = event.args;
 var item = $('#typelist').jqxDropDownList('getItem', args.index);
 //Check if a valid value is selected and process futher to display dates
 if (item != null) {		
-datatype=item.label;
-//Update Var ID
+datatype=item.value;
+displayType = item.label;
 update_var_id();}
 });
 }
@@ -552,7 +554,6 @@ $.ajax({
 var date_chart_from=glob_df.getFullYear() + '-' + add_zero((glob_df.getMonth()+1)) + '-' + add_zero(glob_df.getDate());
 var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1)) + '-' + add_zero(glob_dt.getDate());
  
-// var n=str.replace("Microsoft","W3Schools"); 
   
 // var data_test=datatest;
 
@@ -651,7 +652,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 	
      series: [{
             data: data_test,
-			name: varname +'('+datatype+')'     
+			name: displayVar +'('+displayType+')'     
         }]
     
 });
@@ -722,9 +723,9 @@ $.ajax({
                 source: dataAdapter12,
                
                 columns: [
-				  { text: 'ValueID', datafield: 'ValueID', width: 90 },
-                  { text: 'Date', datafield: 'LocalDateTime', width: 200 },
-	             { text: 'Value (' + unitGrid +')' , datafield: 'DataValue', width: 200} <?php
+				  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID', width: 90 },
+                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime', width: 200 },
+	             { text: '<?php echo str_replace(':','',getTxt('Value')); ?>  (' + unitGrid +')' , datafield: 'DataValue', width: 200} <?php
      if(isLoggedIn())
 	  {
 		echo(",
@@ -783,9 +784,9 @@ if(flag!=1)
 				 editable: false,
 				   selectionmode: 'singlecell',
                 columns: [
-			  { text: 'ValueID', datafield: 'ValueID', width: 90 },
-                  { text: 'Date', datafield: 'LocalDateTime', width: 200 },
-	          { text: 'Value (' + unitGrid +')', datafield: 'DataValue', width: 200} <?php
+			  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID', width: 90 },
+                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime', width: 200 },
+	          { text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')', datafield: 'DataValue', width: 200} <?php
       	if(isLoggedIn())
 	  {
 		echo(",
@@ -1092,7 +1093,7 @@ echo("<p align='center'><b>".getTxt('Site')."</b>".$site['SiteName']."</p>");
 <?php  
 
 
-echo("<b>Site: </b>".$site['SiteName']."<br/>");
+echo("<b>".getTxt('Site').": </b>".$site['SiteName']."<br/>");
 
 
 if($site['picname']==null) {
@@ -1107,7 +1108,7 @@ if($site['picname']==null) {
 	echo("<br><br><img src='".getImg('imagesite/'.$site['picname'])."' width='368' height='250'>");
 }
 
-echo("<br/><br/><b>".getTxt('Type')." </b>".$site['SiteType']."<br/><br/><b>".getTxt('Latitude')." </b>".$site['Latitude']."<br/><br/><b>".getTxt('Longitude')." </b>".$site['Longitude']."<br /><br/><br/><b>".getTxt('Measurements')."</b>");
+echo("<br/><br/><b>".getTxt('Type')." </b>".translateTerm($site['SiteType'])."<br/><br/><b>".getTxt('Latitude')." </b>".$site['Latitude']."<br/><br/><b>".getTxt('Longitude')." </b>".$site['Longitude']."<br /><br/><br/><b>".getTxt('Measurements')."</b>");
 $num_rows = count($Variables);
 $count=1;
 foreach($Variables as $var)

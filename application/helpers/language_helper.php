@@ -17,7 +17,18 @@ function getTxt($key)
 {
 	$CI = &get_instance();
 	$text = $CI->lang->line('hsl_'.$key);
-	return stripslashes($text);
+	return addslashes(stripslashes($text));
+}
+
+function translateTerm($term)
+{
+	$CI = &get_instance();
+	$text = $CI->lang->line('db_'.$term);
+	if($text=="")
+	{
+		return $term;	
+	}
+	return $text;
 }
 
 function getCurrentLang()
@@ -83,6 +94,11 @@ function processLang()
 }
 
 
+function startsWith($haystack, $needle) {
+    // search backwards starting from haystack length characters from the end
+    return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
+}
+
 function createNew($language)
 {
 	$file_path ="./application/language/" .$language. "/hsl_lang.php";
@@ -108,10 +124,22 @@ function createNew($language)
 	while($term = mysqli_fetch_array($langTerms))
 	{
 		$phpTerm = str_replace("$","",$term['php_variable']);
-		if ($term[$language] != "")
+		if(startsWith($phpTerm,"dbText"))
+		{
+			if (isset($term[$language]))
+				{if($term[$language]!= "")
+				fwrite($lang_file,'$lang["db_'.addslashes($term['english_phrase']). "\"] = " . '"' . addslashes($term[$language]) . '"' . ";" . "\n ");
+				}else
+				fwrite($lang_file,'$lang["db_'.addslashes($term['english_phrase']). "\"] = " . '"' . addslashes($term['english_phrase']) . '"' . ";" . "\n ");
+		}
+		else
+		{
+		if (isset($term[$language]))
+				{if($term[$language]!= "")
 				fwrite($lang_file,'$lang[\'hsl_'.$phpTerm. "'] = " . '"' . addslashes($term[$language]) . '"' . ";" . "\n ");
-			else
+				}else
 				fwrite($lang_file,'$lang[\'hsl_'.$phpTerm. "'] = " . '"' . addslashes($term['english_phrase']) . '"' . ";" . "\n ");	
+		}
 	}
 	fwrite($lang_file, "?>");
 	fclose($lang_file);

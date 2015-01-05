@@ -58,5 +58,18 @@ class Sc extends MY_Model
 		return $this->db->affected_rows()>=0;
 	}
 	
+	function get($seriesID)
+	{
+		$this->db->where('SeriesID',$seriesID);
+		$query=$this->db->Get($this->tableName);
+		return $query->result_array();
+	}
+	
+	function update($series,$seriesID)
+	{
+		$this->db->where('SeriesID',$seriesID);
+		$this->db->update($this->tableName,$series);
+		return $this->db->affected_rows()>=0;
+	}
 }
 ?>

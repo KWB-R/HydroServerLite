@@ -53,6 +53,7 @@ if (isTeacher() || isAdmin()){
 		echo "<li class=\"edit_variable\"><a href='".site_url('variable/edit')."'>".getTxt('ChangeVariable')."</a></li>";
 		echo "<li class=\"add_method\"><a href='".site_url('methods/add')."'>".getTxt('AddMethod')."</a></li>";
 		echo "<li class=\"edit_method\"><a href='".site_url('methods/change')."'>".getTxt('ChangeMethod')."</a></li>";
+		echo "<li class=\"edit_variable\"><a href='".site_url('series')."'>".getTxt('EditSC')."</a></li>";
 	}
 	echo "</ul>";
 	echo "</li>";
@@ -81,16 +82,7 @@ if (isStudent() || isTeacher() || isAdmin()){
 	echo "<ul class=\"dropdown-menu\">";
 	echo "<li class=\"add_single_value\"><a href='".site_url('datapoint/addvalue')."'>".getTxt('AddSingleValue')."</a></li>";
 	echo "<li class=\"add_multiple_value\"><a href='".site_url('datapoint/addmultiplevalues')."'>".getTxt('AddMultipleValues')."</a></li>";
-	if (!isset($_SESSION["importFilePath"]))
-	{
-		//DISABLED FOR NOW : UNTIL WORK ON THIS IS DONE. 
-		//echo "<li class=\"import_data\"><a href='".site_url('datapoint/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
-	}else
-	{
-		echo "<li class=\"import_data\"><a href='".site_url('data/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
-		echo "<li class=\"import_data\"><a href='importWizard.php'>".getTxt('ImportDataFiles')."</a></li>";
-	}
-	
+	echo "<li class=\"import_data\"><a href='".site_url('datapoint/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
 	echo "</ul>";
 	echo "</li>";
 }
