@@ -6,7 +6,11 @@ class Home extends MY_Controller {
 	{
 		parent::__construct();
 	}
-
+	public function installation()
+	{
+	$data=$this->StyleData;
+	$this->load->view('edit_mainconfig',$data);	
+	}
 	public function index()
 	{
 		
