@@ -524,13 +524,13 @@ form ul.login a {
     }
 
         #nav h2:after {
-            content: "+";
-            font-size: .8em;
-            vertical-align: sub;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            padding-right: .5em;
+         //   content: "+";
+          //  font-size: .8em;
+          //  vertical-align: sub;
+          //  position: absolute;
+          //  bottom: 0;
+          //  right: 0;
+          //  padding-right: .5em;
         }
 
     #nav ul {
@@ -592,20 +592,20 @@ form ul.login a {
         border-radius: 0 0 14px 0;
     }
 
-    #nav li:hover > a, div#nav li:hover > h2 {
-        background-color: #3C3C3C;
+   #nav li:hover > a, div#nav li:hover > h2 {
+      //  background-color: #3C3C3C;
     }
 
     #nav li:hover ul {
-        display: block;
+       // display: block;
     }
 
         #nav li:hover ul ul {
-            display: none;
+         //   display: none;
         }
 
     #nav ul ul li {
-        border-left: 25px solid #3C3C3C;
+     //   border-left: 25px solid #3C3C3C;
     }
 
 .home a {
@@ -691,6 +691,61 @@ form ul.login a {
 .aliases a {
     background: transparent url(../../images/icon-sprite-medium.png) no-repeat left -1465px;
 }
+
+.transparentNav {
+	background-color:transparent;
+	border-color:transparent;	
+	padding-right:0px;
+	padding-left:0px;
+}
+
+#navbarCollapse{
+	padding-right:0px;
+	padding-left:0px;	
+	
+}
+
+#navbarCollapse li a, #navbarCollapse li h2 {
+            display: block;
+            min-height: 1.5em;
+            padding: .5em;
+            background-color: #0E76AE;
+            color: #ffd955;
+            text-decoration: none;
+            padding-left: 40px;
+
+        }
+	
+
+	
+	
+#navbarCollapse ul ul li a, #navbarCollapse ul ul li h2 {
+			margin-left:-40px;
+			padding-top: 15px;
+            color: #FFF;
+            min-height: 25px;
+        }
+		
+#navbarCollapse li:first-child > a, #navbarCollapse li:first-child > h2 {
+            border-radius: 14px 14px 0 0;
+        }
+
+        #navbarCollapse li:last-child > a, #navbarCollapse li:last-child > h2 {
+            border-radius: 0 0 14px 14px;
+        }
+
+    #navbarCollapse ul ul li:first-child > a {
+        border-radius: 14px 14px 0 0;
+    }
+
+    #navbarCollapse ul ul li:last-child > a {
+        border-radius: 0 0 14px 14px;
+    }
+
+   #navbarCollapse li:hover > a, div#navbarCollapse li:hover > h2 {
+        background-color: #3C3C3C;
+    }
+	
 /*end Nav*/
 
 

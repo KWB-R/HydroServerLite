@@ -226,9 +226,9 @@ PageBody3;
 	$CI = &get_instance();
 	$CI->load->view('templates/header');
 	echo $HTML_2;
-    if (!isset($_SESSION['setup'])){  
+   // if (!isset($_SESSION['setup'])){  
 	$CI->load->view('templates/nav_parts');
-    }
+  //  }
 //	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
 //		checkPHPVersion($_SITE_Minimum_PHP_Version);
 	echo $HTML_3;

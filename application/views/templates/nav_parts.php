@@ -15,11 +15,10 @@ else
 	$menuName =  "Public";
 
 	//Removed id=nav from here for now, will add it back after styling is merged. 
-	
-echo "<div id='nav' class=\"sidebar-nav\"><h1></h1>
-";
 
-echo '       <div class="navbar navbar-default" role="navigation">
+
+
+echo '       <div class="navbar navbar-default " role="navigation">
 <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="sr-only">Toggle navigation</span>
@@ -30,18 +29,19 @@ echo '       <div class="navbar navbar-default" role="navigation">
           <span class="visible-xs navbar-brand">'.getTxt($menuName.'Navigation').'</span>
         </div>
 		
-		   <div class="navbar-collapse collapse sidebar-navbar-collapse" id="navbarCollapse">
-          <ul class="nav navbar-nav">
-		';
-
-
-// teacher admin
+		   <div class="navbar-collapse collapse sidebar-navbar-collapse transparentNav" id="navbarCollapse">
+		   <ul class="nav nav-tabs nav-stacked">
+		   ';
 if (isTeacher() || isAdmin()){
-	echo "<li><h2>".getTxt('DatabaseManagement')."</h2>";
-	echo "<ul class=\"dropdown-menu\">";
+
+	echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#dbManagement">
+    <h4>'.getTxt('DatabaseManagement').'</h4>
+    </a>
+      <ul style="list-style: none;" class="collapse" id="dbManagement">';
+
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"add_source\"><a href='".site_url('source/add')."'>".getTxt('AddSource')."</a>";
+		echo "<li class=\"add_source\"><a href='".site_url('source/add')."'>".getTxt('AddSource')."</a></li>";
 		echo "<li class=\"edit_source\"><a href='".site_url('source/change')."'>".getTxt('ChangeSource')."</a></li>";
 	}
 	// > teacher admin
@@ -58,11 +58,10 @@ if (isTeacher() || isAdmin()){
 	echo "</ul>";
 	echo "</li>";
 	// teacher admin
-	echo "<li>";
-	//#type $__User Alias
-	echo "<h2>".getTxt('Users')."</h2>";
-
-	echo "<ul class=\"dropdown-menu\">";
+	echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#usermgmt">
+    <h4>'.getTxt('Users').'</h4>
+    </a>
+      <ul style="list-style: none;" class="collapse" id="usermgmt">';
 	echo "<li class=\"add_user\"><a href='".site_url('user/add')."'>".getTxt('AddUser')."</a></li>";
 	echo "<li class=\"edit_user\"><a href='".site_url('user/changepass')."'>".getTxt('ChangePassword')."</a></li>";
 	echo "<li class=\"edit_user\"><a href='".site_url('user/changeownpass')."'>".getTxt('ChangeYourPassword')."</a></li>";
@@ -74,12 +73,14 @@ if (isTeacher() || isAdmin()){
 	echo "<li class=\"remove_user\"><a href='".site_url('user/delete')."'>".getTxt('RemoveUser')."</a></li>";
 	echo"</ul>";
 	echo"</li>";
-}
+}		  
+
 if (isStudent() || isTeacher() || isAdmin()){
 	// student teacher
-	echo "<li>";
-	echo "<h2>".getTxt('AddData')."</h2>";
-	echo "<ul class=\"dropdown-menu\">";
+		echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#dataMgmt">
+    <h4>'.getTxt('AddData').'</h4>
+    </a>
+      <ul style="list-style: none;" class="collapse" id="dataMgmt">';
 	echo "<li class=\"add_single_value\"><a href='".site_url('datapoint/addvalue')."'>".getTxt('AddSingleValue')."</a></li>";
 	echo "<li class=\"add_multiple_value\"><a href='".site_url('datapoint/addmultiplevalues')."'>".getTxt('AddMultipleValues')."</a></li>";
 	echo "<li class=\"import_data\"><a href='".site_url('datapoint/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
@@ -87,37 +88,11 @@ if (isStudent() || isTeacher() || isAdmin()){
 	echo "</li>";
 }
 
-// [all]
-// public student teacher admin [all]
-
-echo "<li class=\"search\"><a href='".site_url('sites/map')."'>".getTxt('SearchData')."</a></li>";
+ echo "<li class=\"search\"><a href='".site_url('sites/map')."'>".getTxt('SearchData')."</a></li>";
 echo "<li class=\"help\"><a href='".site_url('home/help')."'>".getTxt('Help')."</a></li>";
 
-
-//Check session variable being set or not. 
-
-if (!isset($_SESSION))
-{
-session_start();
-}
-
-if (isset($_SESSION['mainpath']))
-{
-$servicesPath = str_replace("main_config.php","services\\",$_SESSION['mainpath']);
-$servicesPath = str_replace("\\","/",$servicesPath);
-}
-else
-{
 $servicesPath = "../services";
-}
-
-echo "<li class=\"search\"><a href='".$servicesPath."'>".getTxt('WebServices')."</a></li>";
-
-
-//Commented out because this home button wasn't necessary, or it could be used later for something else...
-//if (getRequestedPage() != "/index.php")	{
-	//echo "<li class=\"home\"><a href='index.php'>Back to Home</a></li>";
-//}
+echo "<li class=\"search\"><a href='".$servicesPath."'>".getTxt('WebServices')."</a></li>";  
 
 if(isLoggedIn())	{
 	echo "<li class=\"home\"><a href='".base_url()."'>".getTxt('Home')."</a></li>";
@@ -128,9 +103,10 @@ if(isLoggedIn())	{
 
 
 
-//\echo "<img class=\"footer\" src=\"assets/images/nav-footer.jpg\" />";
-echo "</ul>
-        </div></div></div>";
+
+echo'
+</ul>
+</div></div>';
 
 
 if(!isLoggedIn()){
