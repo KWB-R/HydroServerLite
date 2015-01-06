@@ -226,15 +226,51 @@ PageBody3;
 	$CI = &get_instance();
 	$CI->load->view('templates/header');
 	echo $HTML_2;
-    if (!isset($_SESSION['setup'])){  
 	$CI->load->view('templates/nav_parts');
-    }
 //	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
 //		checkPHPVersion($_SITE_Minimum_PHP_Version);
 	echo $HTML_3;
     
     
 }
+function HTML_Render_Body_StartInstall(){
+	global $_SITE_Minimum_PHP_Version;
+	$HTML_1 = <<<PageBody1
+	</head>
+	<body>
+	    <div class="container">
+		<div class="masthead">
+PageBody1;
+	$HTML_1A = 	<<<PartA
+			</div>
+
+<!-- /container -->
+PartA;
+			
+	$HTML_2 = <<<PageBody2
+			
+				      <div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
+        <div class="col-md-2">
+PageBody2;
+	$HTML_3 = <<<PageBody3
+			</div>
+       
+     
+PageBody3;
+
+	echo $HTML_1;
+	echo getTopBanner();
+	echo $HTML_1A;
+	$CI = &get_instance();
+	$CI->load->view('templates/header');
+	echo $HTML_2;
+//	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
+//		checkPHPVersion($_SITE_Minimum_PHP_Version);
+	echo $HTML_3;
+    
+    
+}
+
 
 function showMsgs()
 {
