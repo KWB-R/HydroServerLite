@@ -543,11 +543,8 @@
  $lang['hsl_From'] = "from";
  $lang['hsl_ClickDrag'] = "Click and Drag to Zoom a certain Portion";
  $lang['hsl_TimeMsg'] = "Time";
-<<<<<<< HEAD
  $lang['hsl_dbText-151'] = "ex. \"d\" means day and \"Y\" means year";
-=======
  $lang["db_ex. \"d\" means day and \"Y\" means year"] = "ex. \"d\" means day and \"Y\" means year";
->>>>>>> 2820014644d5f6245dfb6f9606d7ed08efbcb81d
  $lang['hsl_OneD'] = "1d";
  $lang['hsl_ThreeD'] = "3D";
  $lang['hsl_OneW'] = "1w";
@@ -624,11 +621,8 @@
  $lang['hsl_MapLatLongEle'] = "You may either enter the latitude/longitude/elevation manually or simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.";
  $lang['hsl_AddSiteButton'] = "Add Site";
  $lang['hsl_NoApostrophe'] = "Apostrophes are not permitted";
-<<<<<<< HEAD
  $lang['hsl_dbText-74'] = "The Site Code is a unique identifier used by an organization that collects the data. For example, if the organization\\\'s name was McCall Outdoor Science Center and the name of the site was Boulder Creek at Jug Mountain Ranch, then your Site Code could be MOSS-BC-JMR";
-=======
  $lang["db_The Site Code is a unique identifier used by an organization that collects the data. For example, if the organization\\\'s name was McCall Outdoor Science Center and the name of the site was Boulder Creek at Jug Mountain Ranch, then your Site Code could be MOSS-BC-JMR"] = "The Site Code is a unique identifier used by an organization that collects the data. For example, if the organization\\\'s name was McCall Outdoor Science Center and the name of the site was Boulder Creek at Jug Mountain Ranch, then your Site Code could be MOSS-BC-JMR";
->>>>>>> 2820014644d5f6245dfb6f9606d7ed08efbcb81d
  $lang['hsl_VerticalDatumInfo'] = "The vertical datum of the elevation. Controlled Vocabulary from VerticalDatumCV. For example, MSL, which stands for Mean Sea Level.";
  $lang['hsl_SpatialReferenceInfo'] = "The spatial reference is for the purpose of recording the name and EPSG code of each Spatial Reference System used. For example, NAD83 / Idaho Central.";
  $lang['hsl_ElevationInfo'] = "The elevation corresponds to Mean Sea Level (MSL) vertical datum.";
@@ -703,7 +697,6 @@
  $lang['hsl_CongratsInstall'] = "Congratulations. You have successfully installed HydroServer Interactive on your Web Server. Click Below to go to your site.";
  $lang['hsl_Login'] = "You can login using the Administrator password set on the previous page. The username is \'his_admin\' (without the quotes).";
  $lang['hsl_GoToSite'] = "Go to Site";
-<<<<<<< HEAD
  $lang['hsl_dbText1'] = "Average";
  $lang['hsl_dbText2'] = "The values represent the average over a time interval, such as daily mean discharge or daily mean temperature.";
  $lang['hsl_dbText3'] = "Best Easy Systematic Estimator";
@@ -2279,8 +2272,6 @@
  $lang['hsl_dbText1573'] = "290,";
  $lang['hsl_dbText1574'] = "colony forming units per 100 milliliter";
  $lang['hsl_dbText1575'] = "Organism Concentration";
- 
-=======
  $lang["db_Average"] = "Average";
  $lang["db_The values represent the average over a time interval, such as daily mean discharge or daily mean temperature."] = "The values represent the average over a time interval, such as daily mean discharge or daily mean temperature.";
  $lang["db_Best Easy Systematic Estimator"] = "Best Easy Systematic Estimator";
@@ -5505,4 +5496,4 @@
  $lang['hsl_SCEditHelp'] = "Please be very careful while editing the Series Catalog. Only ID fields and Value Count are editable below as all the other fields are tied to their respective ID fields. You may also use the update series catalog button to perform a manual update of the catalog. ";
  $lang['hsl_UpdateSCButton'] = "Update Series Catalog";
  ?>
->>>>>>> 2820014644d5f6245dfb6f9606d7ed08efbcb81d
+

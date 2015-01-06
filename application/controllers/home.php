@@ -8,6 +8,7 @@ class Home extends MY_Controller {
 	}
 	public function installation()
 	{
+	$_SESSION['setup'] = true;	
 	$data=$this->StyleData;
 	$this->load->view('edit_mainconfig',$data);	
 	}
