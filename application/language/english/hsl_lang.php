@@ -1,4 +1,4 @@
-<?php
+﻿<?php
  $lang['hsl_Abstract'] = "Abstract:";
  $lang['hsl_AddNewUser'] = "Add a New User";
  $lang['hsl_Address'] = "Address:";
