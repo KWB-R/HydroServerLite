@@ -20,7 +20,7 @@ Programmers can use Python, R or other programming language to automate the data
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/cuahsi_1_1.asmx?WSDL';?>" class="info_link">SOAP Service WSDL</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/cuahsi_1_1.asmx?WSDL');?>" class="info_link">SOAP Service WSDL</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;copy the link to HydroDesktop: <strong><?=base_url()?>index.php/cuahsi_1_1.asmx?WSDL</strong>
@@ -28,7 +28,7 @@ Programmers can use Python, R or other programming language to automate the data
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/cuahsi_1_1.asmx';?>" class="info_link">SOAP Web Service</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/cuahsi_1_1.asmx');?>" class="info_link">SOAP Web Service</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Hydroserver SOAP service test page.
@@ -36,7 +36,7 @@ Programmers can use Python, R or other programming language to automate the data
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/updatecv.php';?>" class="info_link">Update Controlled Vocabulary</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/updatecv');?>" class="info_link">Update Controlled Vocabulary</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Update Controlled Vocabulary from HIS Central.
@@ -44,7 +44,7 @@ Programmers can use Python, R or other programming language to automate the data
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/wfs/write_xml?service=WFS&request=GetCapabilities&version=1.0.0';?>" class="info_link">WFS Services</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('wfs/write_xml?service=WFS&request=GetCapabilities&version=1.0.0') ;?>" class="info_link">WFS Services</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;WFS 1.0.0.
@@ -52,7 +52,7 @@ Programmers can use Python, R or other programming language to automate the data
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/wfs/write_xml?service=WFS&request=GetCapabilities&version=2.0.0';?>" class="info_link">WFS Services</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('wfs/write_xml?service=WFS&request=GetCapabilities&version=2.0.0');?>" class="info_link">WFS Services</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;WFS 2.0.0.

@@ -72,6 +72,15 @@ $config['HSLversion']	= '3.0'; //Name of your software version
 |--------------------------------------------------------------------------
 */
 $config['lang']	= 'English';
+/*
+|--------------------------------------------------------------------------
+| WaterOneFlow Services Settings
+|--------------------------------------------------------------------------
+*/
+//Service code Settings
+$config['auth_token'] = '';
+$config['service_code'] = 'WWO';
+$config['odm_service'] = 'http://his.cuahsi.org/ODMCV_1_1/ODMCV_1_1.asmx?wsdl';
 
 /* End of file hsl.php */
 /* Location: ./application/config/hsl.php */
