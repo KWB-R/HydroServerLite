@@ -1,4 +1,4 @@
-<?php //$this->load->view('services/header'); ?>
+<?php $this->load->view('services/header'); ?>
 
 		<p>
 		The HydroServer Lite Web Services API provide access to scientific data from the ODM database on this server.
@@ -61,4 +61,4 @@ Programmers can use Python, R or other programming language to automate the data
 			</div>
 		</div>
 	
-<?php $this->load->view('footer'); ?>
+<?php $this->load->view('services/footer'); ?>

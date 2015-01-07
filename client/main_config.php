@@ -15,7 +15,7 @@ if (!(defined("DATABASE_HOST"))):
 
 define("DATABASE_HOST", "localhost"); //for example define("DATABASE_HOST", "your_database_host");
 define("DATABASE_USERNAME", "root"); //for example define("DATABASE_USERNAME", "your_database_username");
-define("DATABASE_NAME", "test122");  //for example define("DATABASE_NAME", "your_database_name");
+define("DATABASE_NAME", "english");  //for example define("DATABASE_NAME", "your_database_name");
 define("DATABASE_PASSWORD", ""); //for example define("DATABASE_PASSWORD", "your_database_password");
 endif;
 //Cookie Settings - This is for Security!
