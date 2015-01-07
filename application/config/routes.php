@@ -38,6 +38,11 @@
 |
 */
 $route['default_controller'] = "home";
+
+// Test Page routing
+$route["services/test"] 										= "cuahsi/test";
+
+
 $route['404_override'] = '';
 
 

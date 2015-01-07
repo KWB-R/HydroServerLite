@@ -17,7 +17,7 @@ function getTxt($key)
 {
 	$CI = &get_instance();
 	$text = $CI->lang->line('hsl_'.$key);
-	return addslashes(stripslashes($text));
+	return stripslashes($text);
 }
 
 function translateTerm($term)

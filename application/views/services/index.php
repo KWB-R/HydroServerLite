@@ -12,7 +12,7 @@ Programmers can use Python, R or other programming language to automate the data
 		<br />
 		<div id="base_info">
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/test';?>" class="info_link">REST Service Test</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/test');?>" class="info_link">REST Service Test</a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;You can perform tests on all of the WaterML web service methods on this page. In this case the test for REST Service.
