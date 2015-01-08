@@ -4,14 +4,19 @@ class Services extends CI_Controller {
 	
 	function __construct()
 	{
+		//Loading Helpers
 		parent::__construct();
+		$this->load->helper('auth_helper.php');
+		$this->load->helper('html_helper.php');
+		$this->load->helper('language_helper.php');
+		$lang=processLang();
+		$this->lang->load('hsl', $lang);
 	}
 	
 	
 	public function index()
 	{
-		$data['title'] = "Test commit title";
-		$this->load->view('services/index', $data);
+		$this->load->view('services/index');
 	}
 	
 

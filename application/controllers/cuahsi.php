@@ -5,6 +5,14 @@ class Cuahsi extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		
+		$this->load->helper('auth_helper.php');
+		$this->load->helper('html_helper.php');
+		$this->load->helper('language_helper.php');
+		$lang=processLang();
+		$this->lang->load('hsl', $lang);
+	
+		
 		$this->load->helper('hydroservices');
 	}
 
