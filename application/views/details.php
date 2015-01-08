@@ -269,7 +269,7 @@ function isValidNumber(val){
 //Create date selectors and hide them
 
 //Create Tabs for Table Chart Switching
-$('#jqxtabs').jqxTabs({ width: 620, height: 550, theme: 'darkblue', collapsible: true });
+$('#jqxtabs').jqxTabs({  height: 550, theme: 'darkblue', collapsible: true });
 $('#jqxtabs').jqxTabs('disable');
 var selectedItem = $('#jqxtabs').jqxTabs('selectedItem');
 $('#jqxtabs').jqxTabs('enableAt', selectedItem);
@@ -292,7 +292,6 @@ var dataAdapter = new $.jqx.dataAdapter(source);
         {
             source: dataAdapter,
             theme: 'darkblue',
-            width: 200,
             height: 25,
             selectedIndex: 0,
             displayMember: 'VariableName',
@@ -334,7 +333,6 @@ var dataAdapter = new $.jqx.dataAdapter(source);
         {
             source: dataAdapter,
             theme: 'darkblue',
-            width: 200,
             height: 25,
             selectedIndex: 0,
             displayMember: 'display',
@@ -397,7 +395,6 @@ var dataAdapter122 = new $.jqx.dataAdapter(source122);
         {
             source: dataAdapter122,
             theme: 'darkblue',
-            width: 200,
             height: 25,
             selectedIndex: 0,
             displayMember: 'MethodDescription',
@@ -559,7 +556,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 
  chart=new Highcharts.StockChart({
     chart: {
-		width: 580,
+		//width: 580,
         renderTo: 'container',
 		 zoomType: 'x'
     },
@@ -724,8 +721,8 @@ $.ajax({
                
                 columns: [
 				  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID', width: 90 },
-                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime', width: 200 },
-	             { text: '<?php echo str_replace(':','',getTxt('Value')); ?>  (' + unitGrid +')' , datafield: 'DataValue', width: 200} <?php
+                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime'},
+	             { text: '<?php echo str_replace(':','',getTxt('Value')); ?>  (' + unitGrid +')' , datafield: 'DataValue', width: 100} <?php
      if(isLoggedIn())
 	  {
 		echo(",
@@ -774,7 +771,7 @@ if(flag!=1)
 
             $("#jqxgrid").jqxGrid(
             {
-                width: 610,
+               // width: 610,
                 source: dataAdapter12,
                 theme: 'darkblue',   
                 columnsresize: true,
@@ -786,7 +783,7 @@ if(flag!=1)
                 columns: [
 			  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID', width: 90 },
                   { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime', width: 200 },
-	          { text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')', datafield: 'DataValue', width: 200} <?php
+	          { text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')', datafield: 'DataValue', width: 100} <?php
       	if(isLoggedIn())
 	  {
 		echo(",
@@ -1024,66 +1021,32 @@ $('#windowContent').load(base_url+'datapoint/compare/1', function() {
 <?php HTML_Render_Body_Start(); ?>
 
       <p>&nbsp;</p>
-<table width="630" border="0">
-	<tr>
-	<td colspan="4"><?php  
+<?php  
 echo("<p align='center'><b>".getTxt('Site')."</b>".$site['SiteName']."</p>");
-?></td>
-          </tr>
-        <tr>
-          <td width="67">&nbsp;</td>
-          <td width="239">&nbsp;</td>
-          <td width="55">&nbsp;</td>
-          <td width="221">&nbsp;</td>
-        </tr>
-        <tr>
-    	  <td><strong><?php echo getTxt('Variable'); ?></strong></td>
-          <td><div id="dropdownlist"></div></td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td><div id='typelist_text'><strong><?php echo getTxt('Type'); ?> </strong></div></td>
-
-          <td><div id='typelist'></div></td>
-          <td><div id='methodlist_text'><strong><?php echo getTxt('Method'); ?></strong></div></td>
-          <td><div id='methodlist'></div></td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="4"><div id='daterange'></div></td>
-          </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="2"><div id='fromdatedrop'><div id='jqxDateTimeInput'></div></div></td>
-          <td colspan="2"><div id='todatedrop'><div id='jqxDateTimeInputto'></div></div></td>
-          </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-           <td colspan="4"><div id="loadingtext" class="loading"><?php echo getTxt('PleaseWait'); ?><br/>
-    </div>
-  <div id='jqxtabs'>
+?>
+<div class="col-md-9">
+<?php
+echo '<div class="row">';
+genDropLists('Variable','dropdownlist', 'dropdownlist', false);
+echo '<br></div>';
+echo '<div class="row">';
+genDropLists('Type','typelist', 'typelist', false);
+echo '<br></div>';
+echo '<div class="row">';
+genDropLists('Method','methodlist', 'methodlist', false);
+echo '<br></div>';
+?>
+<div id='daterange'></div>
+<div class="row">
+            <div class="form-group col-md-6">
+<div id='fromdatedrop'><div id='jqxDateTimeInput'></div></div>
+<br>
+<div class="row">
+			<div class="form-group col-md-6">
+<div id='todatedrop'><div id='jqxDateTimeInputto'></div></div>
+</div>
+</div>
+    <div class="col-md-9" id='jqxtabs'>
     <ul style='margin-left: 20px;'>
       <li><?php echo getTxt('SiteInfo'); ?></li>
       <li><?php echo getTxt('DataPlot'); ?></li>
@@ -1093,7 +1056,7 @@ echo("<p align='center'><b>".getTxt('Site')."</b>".$site['SiteName']."</p>");
 <?php  
 
 
-echo("<b>".getTxt('Site').": </b>".$site['SiteName']."<br/>");
+echo("<b>".getTxt('Site')." </b>".$site['SiteName']."<br/>");
 
 
 if($site['picname']==null) {
@@ -1153,7 +1116,7 @@ if($var['VariableName']!="")
                     <tr>
                         <td align="right"><?php echo getTxt('Date'); ?></td>
 
-                        <td align="left"><div id="date"</div></td>
+                        <td align="left"><div id="date"></div></td>
                     </tr>
                     <tr>
           <td>&nbsp;</td>
@@ -1184,6 +1147,10 @@ if($var['VariableName']!="")
                 </table>
             </div>
        </div>
+     </div>
+     </div>
+     </div> 
+     </div> 
           <div id="popupWindow_new">
             <div><?php echo getTxt('Add'); ?></div>
             <div style="overflow: hidden;">
@@ -1197,7 +1164,7 @@ if($var['VariableName']!="")
         </tr>
                     <tr>
                         <td align="right"><?php echo getTxt('Date'); ?></td>
-                        <td align="left"><div id="date_new"</div></td>
+                        <td align="left"><div id="date_new"></div></td>
                     </tr>
                     <tr>
           <td>&nbsp;</td>
@@ -1239,16 +1206,10 @@ if($var['VariableName']!="")
         <input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />
         </div>
       </div>
-    </div></td>
-          </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-      </table>
-
+    </div>
+    </div>
+    </div>
+</div>
 <div id="window">
  <div id="windowHeader">
  <span><?php echo getTxt('CompareTwo'); ?></span>
@@ -1284,4 +1245,5 @@ if($var['VariableName']!="")
  <div style="overflow: hidden;" id="window5Content">
  </div>
   </div>
+
 	<?php HTML_Render_Body_End(); ?>
