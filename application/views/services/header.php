@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8"/>
-	<title>Hydroserver Web Services</title>
+	<title>Hydroserver <?php echo getTxt('WebServices');?></title>
 	<link rel="shortcut icon" href="<?=base_url()?>services/assets/images/favicon.ico" type="image/x-icon" />
 	<link rel="bookmark" href="<?=base_url()?>services/assets/images/favicon.ico" />
 
@@ -17,6 +17,6 @@
 <body>
 </script>
 <div id="container">
-	<h1>Welcome to Hydroserver Lite Web Services</h1>
+	<h1><?php echo getTxt('Welcome').' '.getTxt('To').' Hydroserver Lite '.getTxt('WebServices');?></h1>
 
 	<div id="body">

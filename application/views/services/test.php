@@ -64,16 +64,16 @@ function remove(obj) {
 }
 </script>
 <div id="container">
-	<h1>WaterOneFlow Web Service Tester</h1>
+	<h1>WaterOneFlow <?php echo getTxt('WebServices').' '.getTxt('Tester');?></h1>
 
 	<div id="body">
 		<form id="form_url_generator">
 		<div id="base_param">
 			<div class="param_container">
-			    <label>Service Method</label>
+			    <label><?php echo getTxt('WebServices').' '.getTxt('Method');?></label>
 				<div class="content">
 					<select id="method" name="method" title="Select service method here.">
-						<option value="">.: Select Method :.</option>
+						<option value=""><?php echo getTxt('SelectMethodElipsis');?></option>
 						<option class="opt" value="GetSitesObject">GetSitesObject</option>
 						<option class="opt" value="GetVariablesObject">GetVariablesObject</option>
 						<option class="opt" value="GetSiteInfoObject">GetSiteInfoObject</option>
@@ -106,7 +106,9 @@ function remove(obj) {
 
 	</div>
 
-	<p class="footer"><font color=#000000 face=Arial, Helvetica, sans-serif size=2><i>Copyright &copy; 2014. <a href='http://hydroserverlite.codeplex.com/' target='_blank' class='reversed'>Hydroserver Lite</a>. All Rights Reserved. <a href='http://hydroserverlite.codeplex.com/team/view' target='_blank' class='reversed'>Meet the Developers</a></i></font></p>
+	<p class="footer"><?php echo getTxt('CopyRight');?> &copy; <?php echo date('Y'); ?>. 
+<a href='http://hydroserverlite.codeplex.com/' target='_blank' class='reversed'><?php echo getTxt('SystemName');?></a>. 
+<?php echo getTxt('AllRightsReserved');?><a href='http://hydroserverlite.codeplex.com/team/view' target='_blank' class='reversed'><?php echo getTxt('MeetDevelopers');?></a></p>
 </div>
 
 </body>

@@ -1,50 +1,51 @@
 <?php $this->load->view('services/header'); ?>
-
 		<p>
-		The HydroServer Lite Web Services API provide access to scientific data from the ODM database on this server.
+        <?php echo getTxt('WebServicesIntro1');?>
 		</p>
 		<p>
-You can connect to the web services with HydroDesktop, HydroExcel and  QGIS software.
+          <?php echo getTxt('WebServicesIntro2');?>
 		</p>
 		<p>
-Programmers can use Python, R or other programming language to automate the data retrieval.
+          <?php echo getTxt('WebServicesIntro3');?>
 		</p>
 		<br />
 		<div id="base_info">
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo site_url('services/test');?>" class="info_link">REST Service Test</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/test');?>" class="info_link">REST <?php echo getTxt('WebServices').' '.getTxt('Test');?></a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;You can perform tests on all of the WaterML web service methods on this page. In this case the test for REST Service.
+						&nbsp;
+                         <?php echo getTxt('RestTestText');?>
+                    
 					</div>
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/cuahsi_1_1.asmx?WSDL';?>" class="info_link">SOAP Service WSDL</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/cuahsi_1_1.asmx?WSDL');?>" class="info_link">SOAP <?php echo getTxt('WebServices');?> WSDL</a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;copy the link to HydroDesktop: <strong><?=base_url()?>index.php/cuahsi_1_1.asmx?WSDL</strong>
+						&nbsp;<?php echo getTxt('CopyLink');?> HydroDesktop: <strong><?=base_url()?>index.php/services/cuahsi_1_1.asmx?WSDL</strong>
 					</div>
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/cuahsi_1_1.asmx';?>" class="info_link">SOAP Web Service</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/cuahsi_1_1.asmx');?>" class="info_link">SOAP <?php echo getTxt('WebServices');?></a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;Hydroserver SOAP service test page.
+						&nbsp;Hydroserver SOAP <?php echo getTxt('WebServices').' '.getTxt('Test');?>.
 					</div>
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/updatecv.php';?>" class="info_link">Update Controlled Vocabulary</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/updatecv');?>" class="info_link"><?php echo getTxt('UpdateCV');?></a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;Update Controlled Vocabulary from HIS Central.
+						&nbsp;<?php echo getTxt('UpdateCV').' '.getTxt('From');?> HIS Central.
 					</div>
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/wfs/write_xml?service=WFS&request=GetCapabilities&version=1.0.0';?>" class="info_link">WFS Services</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('wfs/write_xml?service=WFS&request=GetCapabilities&version=1.0.0') ;?>" class="info_link">WFS  <?php echo getTxt('WebServices');?></a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;WFS 1.0.0.
@@ -52,7 +53,7 @@ Programmers can use Python, R or other programming language to automate the data
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo 'index.php/wfs/write_xml?service=WFS&request=GetCapabilities&version=2.0.0';?>" class="info_link">WFS Services</a></label>
+			    <label class="info_label"><a href="<?php echo site_url('wfs/write_xml?service=WFS&request=GetCapabilities&version=2.0.0');?>" class="info_link">WFS  <?php echo getTxt('WebServices');?></a></label>
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;WFS 2.0.0.

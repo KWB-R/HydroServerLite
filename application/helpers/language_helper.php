@@ -81,7 +81,8 @@ function processLang()
 		$current_time = time();
 		//Time lapse to check the difference between the current time and the last created time
 		$time_lapse = (abs($current_time-$file_created_time)/60/60);
-		if($time_lapse >= '4.0'){
+		if(1){
+		//if($time_lapse >= '4.0'){
 			createNew($language);	
 		}
 	}
