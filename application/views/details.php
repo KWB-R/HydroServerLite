@@ -1068,7 +1068,7 @@ if($site['picname']==null) {
 	}
 
 } else {
-	echo("<br><br><img src='".getImg('imagesite/'.$site['picname'])."' width='368' height='250'>");
+	echo("<br><br><img src='".getDetailsImg(''.$site['picname'])."' width='368' height='250'>");
 }
 
 echo("<br/><br/><b>".getTxt('Type')." </b>".translateTerm($site['SiteType'])."<br/><br/><b>".getTxt('Latitude')." </b>".$site['Latitude']."<br/><br/><b>".getTxt('Longitude')." </b>".$site['Longitude']."<br /><br/><br/><b>".getTxt('Measurements')."</b>");

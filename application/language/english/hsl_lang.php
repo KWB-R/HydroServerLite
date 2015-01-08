@@ -1,4 +1,4 @@
-﻿<?php
+<?php
  $lang['hsl_Abstract'] = "Abstract:";
  $lang['hsl_AddNewUser'] = "Add a New User";
  $lang['hsl_Address'] = "Address:";
@@ -3918,4 +3918,12 @@
  $lang['hsl_EndDate'] = "End Date";
  $lang['hsl_SCEditHelp'] = "Please be very careful while editing the Series Catalog. Only ID fields and Value Count are editable below as all the other fields are tied to their respective ID fields. You may also use the update series catalog button to perform a manual update of the catalog. ";
  $lang['hsl_UpdateSCButton'] = "Update Series Catalog";
+ $lang['hsl_WebServicesIntro1'] = "The HydroServer Lite Web Services API provide access to scientific data from the ODM database on this server.";
+ $lang['hsl_WebServicesIntro2'] = "You can connect to the web services with HydroDesktop, HydroExcel and  QGIS software.";
+ $lang['hsl_WebServicesIntro3'] = "Programmers can use Python, R or other programming language to automate the data retrieval.";
+ $lang['hsl_Test'] = "Test";
+ $lang['hsl_RestTestText'] = "You can perform tests on all of the WaterML web service methods on this page. In this case the test for REST Service.";
+ $lang['hsl_CopyLink'] = "copy the link to";
+ $lang['hsl_UpdateCV'] = "Update Controlled Vocabulary";
+ $lang['hsl_Tester'] = "Tester";
  ?>
