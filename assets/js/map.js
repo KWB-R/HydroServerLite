@@ -285,7 +285,8 @@ function createMarker(latlng, name, sitecode, type, lat, long, sourcename, sourc
     //Sending out a request each time we want to get site picture is super redundant and will slow down the process considerably. 
     //Figured out a join so that the image is going to be provided by the first request only. 
     if (sitepic != "") {
-	var imgurl = base_url.replace("index.php","uploads");
+
+	var imgurl = asset_url.replace("assets","uploads");
         var image = "<img src='" +imgurl + sitepic + "' width='100' height='100'>";
         var html = "<div id='menu12' style='float:left;'><b>" + name + "</b> <br/>Site Type: " + type + "<br/>Latitude: " + lat + "<br/>Longitude: " + long + "<br/>Source: <a href='" + sourcelink + "' target='_blank'>" + sourcename + "</a><br/><a href='"+base_url+"sites/details/" + siteid + "'>Click here for site details and data</a></div><div id='spic' style='margin-left:5px;height:100px;width:100px;float:left;'>" + image + "</div>";
 

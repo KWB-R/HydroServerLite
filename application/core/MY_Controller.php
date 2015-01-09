@@ -122,7 +122,8 @@ class MY_Controller extends CI_Controller {
 		
 		//Initializing Javascript Variable for ajax requests. 
 		
-		$this->StyleData['js_vars'] = 'var base_url = "'.site_url().'";'; 
+		$this->StyleData['js_vars'] = 'var asset_url= "'.base_url().'assets/";
+		base_url = "'.site_url().'";'; 
 		
 		header('Content-Type: text/html; charset=utf-8');
 	}
