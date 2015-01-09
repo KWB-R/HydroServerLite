@@ -37,29 +37,30 @@
 | in the URL cannot be matched to a valid route.
 |
 */
-$route['default_controller'] = "home";
+
+$route['default_controller'] = "default/home";
 
 // Test Page routing
-$route["services/test"] 										= "cuahsi/test";
+$route["(:any)/services/test"] 										= "$1/cuahsi/test";
 
 // REST routing
-$route["services/cuahsi_1_1.asmx"] 								= "cuahsi";
-$route["services/cuahsi_1_1.asmx/GetSites"] 					= "cuahsi/GetSites";
-$route["services/cuahsi_1_1.asmx/GetSiteInfo"] 					= "cuahsi/GetSiteInfo";
-$route["services/cuahsi_1_1.asmx/GetSiteInfoMultpleObject"] 	= "cuahsi/GetSiteInfoMultpleObject";
-$route["services/cuahsi_1_1.asmx/GetSiteInfoObject"] 			= "cuahsi/GetSiteInfoObject";
-$route["services/cuahsi_1_1.asmx/GetSitesObject"] 				= "cuahsi/GetSitesObject";
-$route["services/cuahsi_1_1.asmx/GetSitesByBoxObject"] 			= "cuahsi/GetSitesByBoxObject";
-$route["services/cuahsi_1_1.asmx/GetValues"] 					= "cuahsi/GetValues";
-$route["services/cuahsi_1_1.asmx/GetValuesObject"] 				= "cuahsi/GetValuesObject";
-$route["services/cuahsi_1_1.asmx/GetValuesForASiteObject"] 		= "cuahsi/GetValuesForASiteObject";
-$route["services/cuahsi_1_1.asmx/GetVariables"] 				= "cuahsi/GetVariables";
-$route["services/cuahsi_1_1.asmx/GetVariablesObject"] 			= "cuahsi/GetVariablesObject";
-$route["services/cuahsi_1_1.asmx/GetVariableInfo"] 				= "cuahsi/GetVariableInfo";
-$route["services/cuahsi_1_1.asmx/GetVariableInfoObject"] 		= "cuahsi/GetVariableInfoObject";
+$route["(:any)/services/cuahsi_1_1.asmx"] 								= "$1/cuahsi";
+$route["(:any)/services/cuahsi_1_1.asmx/GetSites"] 					= "$1/cuahsi/GetSites";
+$route["(:any)/services/cuahsi_1_1.asmx/GetSiteInfo"] 					= "$1/cuahsi/GetSiteInfo";
+$route["(:any)/services/cuahsi_1_1.asmx/GetSiteInfoMultpleObject"] 	= "$1/cuahsi/GetSiteInfoMultpleObject";
+$route["(:any)/services/cuahsi_1_1.asmx/GetSiteInfoObject"] 			= "$1/cuahsi/GetSiteInfoObject";
+$route["(:any)/services/cuahsi_1_1.asmx/GetSitesObject"] 				= "$1/cuahsi/GetSitesObject";
+$route["(:any)/services/cuahsi_1_1.asmx/GetSitesByBoxObject"] 			= "$1/cuahsi/GetSitesByBoxObject";
+$route["(:any)/services/cuahsi_1_1.asmx/GetValues"] 					= "$1/cuahsi/GetValues";
+$route["(:any)/services/cuahsi_1_1.asmx/GetValuesObject"] 				= "$1/cuahsi/GetValuesObject";
+$route["(:any)/services/cuahsi_1_1.asmx/GetValuesForASiteObject"] 		= "$1/cuahsi/GetValuesForASiteObject";
+$route["(:any)/services/cuahsi_1_1.asmx/GetVariables"] 				= "$1/cuahsi/GetVariables";
+$route["(:any)/services/cuahsi_1_1.asmx/GetVariablesObject"] 			= "$1/cuahsi/GetVariablesObject";
+$route["(:any)/services/cuahsi_1_1.asmx/GetVariableInfo"] 				= "$1/cuahsi/GetVariableInfo";
+$route["(:any)/services/cuahsi_1_1.asmx/GetVariableInfoObject"] 		= "$1/cuahsi/GetVariableInfoObject";
 
 // Update CV Page routing
-$route["services/updatecv"] 								= "updatecv";
+$route["(:any)/services/updatecv"] 								= "$1/updatecv";
 
 $route['404_override'] = '';
 

@@ -115,7 +115,9 @@ if (!function_exists('RunService')) {
 
 			// send the right headers
 			$complete_uri = $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-			$absolute_uri = "http://" . substr($complete_uri, 0, strrpos($complete_uri, '/')) . "/cuahsi_1_1.asmx";
+		
+			$absolute_uri = site_url('services/cuahsi_1_1.asmx');
+			//$absolute_uri = "http://" . substr($complete_uri, 0, strrpos($complete_uri, '/')) . "/cuahsi_1_1.asmx";
 			$pattern = "/ABSOLUTEURI_TO_REPLACE/";
 			$name2 = preg_replace($pattern, $absolute_uri, $name);
 			header("Content-Type: text/html");
@@ -129,7 +131,8 @@ if (!function_exists('RunService')) {
   				//replace the absolute uri
   				//$absolute_uri = "http://localhost:333/HIS/hydroserver/webservice/cuahsi_1_1.php";
   				$complete_uri = $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-  				$absolute_uri = "http://" . substr($complete_uri, 0, strrpos($complete_uri, '/')) . "/cuahsi_1_1.asmx";
+				$absolute_uri = site_url('services/cuahsi_1_1.asmx');
+  				//$absolute_uri = "http://" . substr($complete_uri, 0, strrpos($complete_uri, '/')) . "/cuahsi_1_1.asmx";
   				$pattern = "/ABSOLUTEURI_TO_REPLACE/";
   				$wsdl2 = preg_replace($pattern, $absolute_uri, $wsdl);
   				header("Content-type: text/xml");

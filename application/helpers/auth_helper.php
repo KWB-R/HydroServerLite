@@ -6,10 +6,7 @@ function fetch_session()
 {	
 //Going against CI sessions for now. Ease of use and existing code in PHP sessions is the reason. 
 if (!isset($_SESSION)){
-	// always start the session before doing anything else.
 	session_start();
-	//nset($_SESSION['power']);
-	//$_SESSION['power']="admin";
 }
 }
 function isLoggedIn(){

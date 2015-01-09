@@ -91,11 +91,10 @@ if (isStudent() || isTeacher() || isAdmin()){
  echo "<li class=\"search\"><a href='".site_url('sites/map')."'>".getTxt('SearchData')."</a></li>";
 echo "<li class=\"help\"><a href='".site_url('home/help')."'>".getTxt('Help')."</a></li>";
 
-$servicesPath = "../services";
-echo "<li class=\"search\"><a href='".$servicesPath."'>".getTxt('WebServices')."</a></li>";  
+echo "<li class=\"search\"><a href='".site_url("services")."'>".getTxt('WebServices')."</a></li>";  
 
 if(isLoggedIn())	{
-	echo "<li class=\"home\"><a href='".base_url()."'>".getTxt('Home')."</a></li>";
+	echo "<li class=\"home\"><a href='".site_url("home")."'>".getTxt('Home')."</a></li>";
 	echo "<li class=\"login\"><a href='".site_url("auth/logout")."'>".getTxt('Logout')."</a></li>";
 }else{
 	echo "<li class=\"login\"><a href='#' onclick='showLogin()';>".getTxt('LoginButton')."</a></li>";

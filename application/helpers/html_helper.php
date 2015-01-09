@@ -178,6 +178,7 @@ function genSubmit($labelKey,$end=true)
 function HTML_Render_Head($js_vars,$PageTitle = ""){
 	$HeaderAddon = "";
 	global $WebClient;
+	$faviconlink = base_url("assets/images/favicon.ico");
 	if(isset($PageTitle) && $PageTitle != "") $HeaderAddon = ": ".$PageTitle;	
 	echo <<<PageHead
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -187,7 +188,7 @@ function HTML_Render_Head($js_vars,$PageTitle = ""){
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>$WebClient $HeaderAddon</title>
-		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="$faviconlink" type="image/x-icon" />
 		<link rel="bookmark" href="favicon.ico" />
 		<script type="text/javascript">
 		$js_vars

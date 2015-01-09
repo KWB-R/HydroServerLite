@@ -101,7 +101,7 @@ function startsWith($haystack, $needle) {
 }
 
 function createNew($language)
-{
+{	
 	$file_path ="./application/language/" .$language. "/hsl_lang.php";
 	if(is_file($file_path)){
 		unlink($file_path);	

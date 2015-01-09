@@ -541,7 +541,7 @@ class Cuahsi extends CI_Controller {
 	 *
 	 */
 	public function generate_url() {
-		$target = base_url()."index.php/services/cuahsi_1_1.asmx/".$_POST["method"];
+		$target = site_url()."services/cuahsi_1_1.asmx/".$_POST["method"];
 
 		$url = "";
 		foreach($_POST as $k=>$v) {
