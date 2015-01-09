@@ -12,6 +12,7 @@ class Home extends MY_Controller {
 	$data=$this->StyleData;
 	$this->load->view('edit_mainconfig',$data);	
 	}
+
 	public function index()
 	{
 		

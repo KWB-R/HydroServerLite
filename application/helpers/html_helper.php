@@ -36,7 +36,10 @@ function getImg($name)
 {
 	return base_url()."assets/images/".$name;
 }
-
+function getDetailsImg($name)
+{
+	return base_url()."uploads/".$name;
+}
 function genInput($labelKey,$id,$name,$req=false,$extra='')
 {
 	echo '<div class="form-group">
