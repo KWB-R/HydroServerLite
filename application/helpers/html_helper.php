@@ -180,7 +180,7 @@ function genSubmit($labelKey,$end=true)
 
 function HTML_Render_Head($js_vars,$PageTitle = ""){
 	$HeaderAddon = "";
-	global $WebClient;
+	$WebClient="HydroServer Lite";
 	$faviconlink = base_url("assets/images/favicon.ico");
 	if(isset($PageTitle) && $PageTitle != "") $HeaderAddon = ": ".$PageTitle;	
 	echo <<<PageHead

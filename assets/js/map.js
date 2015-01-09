@@ -16,7 +16,7 @@ function load() {
 
     var mp = document.getElementById("map");
     if (mp != null) {
-        map = new google.maps.Map(mp, { //document.getElementById("map"), {
+        map = new google.maps.Map(mp, {
             center: new google.maps.LatLng(40.249, -111.649),
             zoom: 12,
             mapTypeId: 'roadmap',
@@ -181,16 +181,20 @@ function create_source(latlng, name, sitecode, type, lat, long, siteid, i, sourc
 
 function searchLocations() {
     var address = document.getElementById("addressInput").value;
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({
-        address: address
-    }, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            searchLocationsNear(results[0].geometry.location);
-        } else {
+	$.ajax({
+ 	 url: "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0",
+	})
+  .done(function(data) {
+	  var results = data.results;
+	  var status = data.status;
+	   if (status == "OK")
+	   {
+		   searchLocationsNear(results[0].geometry.location);
+	   }
+	   else {
             alert(address + ' not found');
         }
-    });
+  });
 }
 
 
@@ -216,7 +220,7 @@ function searchLocationsNear(center) {
     option_num = 0;
 
     var radius = document.getElementById('radiusSelect').value;
-    var searchUrl = base_url+'sites/siteSearch?lat=' + center.lat() + '&long=' + center.lng() + '&radius=' + radius;
+    var searchUrl = base_url+'sites/siteSearch?lat=' + center.lat + '&long=' + center.lng + '&radius=' + radius;
     downloadUrl(searchUrl, function(data) {
         var xml2 = parseXml(data);
         xml = xml2;
