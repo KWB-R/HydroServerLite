@@ -1,5 +1,5 @@
 <?php
-HTML_Render_Head($js_vars); 
+HTML_Render_Head($js_vars,getTxt('AddData')); 
 ?>
 <script type="text/javascript">
 //For loading language variables that are required in javascript.

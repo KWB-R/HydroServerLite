@@ -1,5 +1,5 @@
 <?php
-HTML_Render_Head($js_vars);
+HTML_Render_Head($js_vars,getTxt('Home'));
 echo $CSS_Main;
 echo $JS_JQuery;
 echo $JS_Forms;
@@ -8,7 +8,7 @@ HTML_Render_Body_Start();
 <br />
 <div class="col-md-6">
 	<?php showMsgs();?>
-	<h1>Welcome</h1>
+	<h1><?php echo getTxt('Welcome'); ?></h1>
     <p><?php echo getTxt('Paragraph1'); ?></p>
     <p><?php echo getTxt('Paragraph2'); ?></p>
     <p><?php echo getTxt('Paragraph3'); ?></p>

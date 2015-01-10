@@ -23,7 +23,7 @@ $result = transQuery($sql,0,0);
 	}
 
 */
-HTML_Render_Head($js_vars);
+HTML_Render_Head($js_vars,getTxt('ChangeSource'));
 echo $CSS_JQX;
 echo $JS_GetTheme;
 echo $JS_JQuery;

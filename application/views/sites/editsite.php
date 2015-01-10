@@ -1,4 +1,4 @@
-<?php HTML_Render_Head($js_vars);?>
+<?php HTML_Render_Head($js_vars,getTxt('ChangeSite'));?>
 <script type="text/javascript">
 //For loading language variables that are required in javascript.
     phpVars = {};
