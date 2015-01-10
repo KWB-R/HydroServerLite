@@ -3927,7 +3927,8 @@
  $lang['hsl_UpdateCV'] = "Update Controlled Vocabulary";
  $lang['hsl_Tester'] = "Tester";
  $lang['hsl_ConfigName'] = "Website Path: ";
- $lang['hsl_ConfigDesc'] = "This defines the access URL for your server. Ex: http://worldwater.byu.edu/hsl/YOURNAME. If this is your initial installation, it will be set to default. ";
- $lang['hsl_databaseInstructions'] = "The software will attempt to create the database if its not been created. Also, it will add all the default tables only if it doesn\'t detect a previous installation. If a previous installation of HSL is detected, it will just use that database. ";
+ $lang['hsl_ConfigDesc'] = "This defines the access URL for your server. Ex: http://worldwater.byu.edu/hsl/YOURNAME. If this is your initial installation, it will be set to default. Please don\'t use spaces or special characters. ";
+ $lang['hsl_databaseInstructions'] = "The software will attempt to create the database if its not been created. Also, it will add all the default tables only if it doesn\'t detect a previous installation. If a previous installation of HSL is detected, it will just use that database. You may also use the server\'s database settings to host your data on our default database. In that case please select Yes from the below drop down. (This option is only available for all installs after the initial install)";
  $lang['hsl_multipleInstall'] = "Enable Multiple Installations? ";
+ $lang['hsl_useExistingDB'] = "Use default database connection? ";
  ?>
