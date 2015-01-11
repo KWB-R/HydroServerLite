@@ -99,7 +99,7 @@ class MY_Controller extends CI_Controller {
 		$this->assetor->load('drop_down.js','JS_DropDown');
 	
 		
-		//$this->assetor->merge(TRUE); TEMP DISABLING FOR DEVELOPMENT
+		//$this->assetor->merge(TRUE); Merging is causing issues with google maps. 
 		//$this->assetor->minify();
 	
 		$this->StyleData['CSS_Main'] = $this->assetor->generate('CSS_Main');

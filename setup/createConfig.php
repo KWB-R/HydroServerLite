@@ -32,55 +32,55 @@
     | Default Variables for Adding Site Controller
     |--------------------------------------------------------------------------
     */
-    $"."config"."['default_datum']    = '".$_POST['vdatum']."';
-    $"."config"."['default_spatial']  = '".$_POST['spatialref']."';
-    $"."config"."['default_source']   = '".$_POST['source']."';
-    $"."config"."['LocalX']   = '".$_POST['localx']."';
-    $"."config"."['LocalY']   = '".$_POST['localy']."';
-    $"."config"."['LocalProjectionID']    = '".$_POST['localpid']."';
-    $"."config"."['PosAccuracy_m']    = '".$_POST['posaccuracy']."';
+    $"."config"."['default_datum']    = '".addslashes($_POST['vdatum'])."';
+    $"."config"."['default_spatial']  = '".addslashes($_POST['spatialref'])."';
+    $"."config"."['default_source']   = '".addslashes($_POST['source'])."';
+    $"."config"."['LocalX']   = '".addslashes($_POST['localx'])."';
+    $"."config"."['LocalY']   = '".addslashes($_POST['localy'])."';
+    $"."config"."['LocalProjectionID']    = '".addslashes($_POST['localpid'])."';
+    $"."config"."['PosAccuracy_m']    = '".addslashes($_POST['posaccuracy'])."';
     /*
     |--------------------------------------------------------------------------
     | Default Variables for Adding Data Values
     |--------------------------------------------------------------------------
     */
-    $"."config"."['UTCOffset']    = '".$_POST['utcoffset1']."';
-    $"."config"."['CensorCode']   = '".$_POST['censorcode']."';
-    $"."config"."['QualityControlLevelID']    = '".$_POST['qcl']."';
-    $"."config"."['ValueAccuracy']    = '".$_POST['valueacc']."';
+    $"."config"."['UTCOffset']    = '".addslashes($_POST['utcoffset1'])."';
+    $"."config"."['CensorCode']   = '".addslashes($_POST['censorcode'])."';
+    $"."config"."['QualityControlLevelID']    = '".addslashes($_POST['qcl'])."';
+    $"."config"."['ValueAccuracy']    = '".addslashes($_POST['valueacc'])."';
     $"."config"."['OffsetValue']  = 'NULL';
-    $"."config"."['OffsetTypeID'] = '".$_POST['offsettype']."';
-    $"."config"."['QualifierID']  = '".$_POST['qualifier']."';
-    $"."config"."['SampleID'] = '".$_POST['sampleid']."';
-    $"."config"."['DerivedFromID']    = '".$_POST['derived']."';
+    $"."config"."['OffsetTypeID'] = '".addslashes($_POST['offsettype'])."';
+    $"."config"."['QualifierID']  = '".addslashes($_POST['qualifier'])."';
+    $"."config"."['SampleID'] = '".addslashes($_POST['sampleid'])."';
+    $"."config"."['DerivedFromID']    = '".addslashes($_POST['derived'])."';
     /*
     |--------------------------------------------------------------------------
     | Default Variables for Adding Variable
     |--------------------------------------------------------------------------
     */
-    $"."config"."['default_varcode']  = '".$_POST['varcode']."';
-    $"."config"."['time_support'] = '".$_POST['timesupport']."';
+    $"."config"."['default_varcode']  = '".addslashes($_POST['varcode'])."';
+    $"."config"."['time_support'] = '".addslashes($_POST['timesupport'])."';
     /*
     |--------------------------------------------------------------------------
     | Default Variables for Adding Source
     |--------------------------------------------------------------------------
     */
-    $"."config"."['ProfileVersion']   = '".$_POST['profilev']."';
+    $"."config"."['ProfileVersion']   = '".addslashes($_POST['profilev'])."';
     /*
     |--------------------------------------------------------------------------
     | Configuration for Names and home links
     |--------------------------------------------------------------------------
     */
-    $"."config"."['homename'] = '".$_POST['parentname']."'; //Name of your blog/Website homepage.
-    $"."config"."['homelink'] = '".$_POST['parentweb']."';//Link of your blog/Website homepage
-    $"."config"."['orgname']  = '".$_POST['orgname']."'; //Name of your organization
+    $"."config"."['homename'] = '".addslashes($_POST['parentname'])."'; //Name of your blog/Website homepage.
+    $"."config"."['homelink'] = '".addslashes($_POST['parentweb'])."';//Link of your blog/Website homepage
+    $"."config"."['orgname']  = '".addslashes($_POST['orgname'])."'; //Name of your organization
     $"."config"."['HSLversion']   = '3.0'; //Name of your software version
     /*
     |--------------------------------------------------------------------------
     | Default Language Settings
     |--------------------------------------------------------------------------
     */
-    $"."config"."['lang'] = '".$_POST['lang']."';
+    $"."config"."['lang'] = '".addslashes($_POST['lang'])."';
     /*
     |--------------------------------------------------------------------------
     | WaterOneFlow Services Settings
@@ -88,7 +88,7 @@
     */
     //Service code Settings
     $"."config"."['auth_token'] = '';
-    $"."config"."['service_code'] = '".$_POST['ConfigName']."';
+    $"."config"."['service_code'] = '".addslashes($_POST['ConfigName'])."';
     $"."config"."['odm_service'] = 'http://his.cuahsi.org/ODMCV_1_1/ODMCV_1_1.asmx?wsdl';
     /*
     |--------------------------------------------------------------------------

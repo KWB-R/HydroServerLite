@@ -308,7 +308,7 @@ genInputH('DerivedFromID','Derived from ID','derived',getTxt('DerivedFromIDInfo'
 							else
 							{
 								$("#plsWait").hide();
-								alert("<php echo getTxt('ProcessingError');?>");
+								alert("<?php echo getTxt('ProcessingError');?>");
 								console.log(data);
 							}
 
