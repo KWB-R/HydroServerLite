@@ -59,7 +59,7 @@ function genInputH($labelKey,$id,$name,$hint,$req=false,$extra='')
 	echo '<div class="form-group">
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-9">
-        <input type="type" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';
+        <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';
 	if($req)
 	{
 		echo '<span class="required"/>';
@@ -75,7 +75,7 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
 		echo '<div class="form-group">
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-9">
-        <input type="type" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="required"></span>
+        <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="required"></span>
 		<span class="em">&nbsp&nbsp'.getTxt($help).'</span>';
 	}
 	else
@@ -83,7 +83,7 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
 	echo '<div class="form-group">
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-9">
-        <input type="type" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="em">&nbsp&nbsp'.getTxt($help).'</span>';
+        <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="em">&nbsp&nbsp'.getTxt($help).'</span>';
 	}
 	echo'</div>            
       </div>';	

@@ -79,9 +79,14 @@ $autoload['helper'] = array('form','url');
 | config files.  Otherwise, leave it blank.
 |
 */
-
+if(defined('CONFIGFILE'))
+{
 $autoload['config'] = array(CONFIGFILE);
-
+}
+else
+{
+$autoload['config'] = array();
+}
 
 /*
 | -------------------------------------------------------------------

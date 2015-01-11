@@ -46,7 +46,17 @@ Class MY_Router extends CI_Router
 		}	
 		else
 		{
+		//Check if default also doesn't exist. 
+		if(!file_exists(APPPATH.'config/installations/default'.EXT))
+		{
+			//No SETUP FILES exist. 
+			$segments=array('home','installation');
+			return $segments;
+		}
+		else
+		{
 		exit("Database not DEFINED.");
+		}
 		}
 		
 		

@@ -288,15 +288,15 @@ var source =
 //Defining the Data adapter
 var dataAdapter = new $.jqx.dataAdapter(source);
 //Creating the Drop Down list
-        $("#dropdownlist").jqxDropDownList(
-        {
-            source: dataAdapter,
-            theme: 'darkblue',
-            height: 25,
-            selectedIndex: 0,
-            displayMember: 'VariableName',
-            valueMember: 'VariableID'
-        });
+$("#dropdownlist").jqxDropDownList(
+{
+    source: dataAdapter,
+    theme: 'darkblue',
+    height: 25,
+    selectedIndex: 0,
+    displayMember: 'VariableName',
+    valueMember: 'VariableID'
+});
 
 $('#dropdownlist').bind('select', function (event) {
 var args = event.args;

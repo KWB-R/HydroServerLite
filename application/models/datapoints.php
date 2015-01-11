@@ -26,8 +26,8 @@ class Datapoints extends MY_Model
 	function addPoints($data)
 	{
 		$this->db->insert_batch($this->tableName, $data);
-		$num_inserts = $this->db->affected_rows();
-	  	return $num_inserts;
+		$num_inserts = $this->db->affected_rows(); //Not returning this as batch processing doesn't return a true result here. 
+	  	return true;
 	}
 	
 	function getData($site,$var,$method,$start,$end)

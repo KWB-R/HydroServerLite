@@ -7,7 +7,7 @@
 	$attributes = array('name' => 'login', 'id' => 'login');
 	echo form_open('auth/login',$attributes);
 	?>
-	<input type="hidden" name="redirect" value="<?php echo site_url('sites'); ?>" />
+	<input type="hidden" name="redirect" value="<?php echo site_url('home'); ?>" />
     <div class="container">
     <div class= "row">
     <div class="col-md-offset-0 col-md-7 col-sm-9">

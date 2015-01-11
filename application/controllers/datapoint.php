@@ -228,7 +228,7 @@ class Datapoint extends MY_Controller {
 					{
 						if(($data[0]!="LocalDateTime")||($data[1]!="DataValue"))	
 						{
-						addError(getTxt('InvalidHeading').getTxt('PleaseFix'));
+						addError(getTxt('InvalidHeading')."LocalDateTime,DataValue".getTxt('PleaseFix'));
 						return false;					
 						}
 					}
@@ -311,14 +311,14 @@ class Datapoint extends MY_Controller {
 				{
 					$rows = count($dataset);
 					$result=$this->datapoints->addPoints($dataset);
-					if($result==$rows)
+					if($result)
 					{
 						addSuccess(getTxt('Success'));	
 						$this->updateSC();
 					}
 					else
 					{
-						addError(getTxt('ProcessingError'));
+						addError(getTxt('ProcessingError')."Error in data input");
 					}
 				}
 			}	
