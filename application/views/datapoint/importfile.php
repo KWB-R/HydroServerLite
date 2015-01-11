@@ -30,7 +30,11 @@ echo "<p>".getTxt('MustConform')."</p>";
         2012-05-31 00:20:00,11.02<br>
         2012-05-31 00:30:00,11.04<br></p>
 <?php
-echo "<p>".getTxt('ImportInstructionsNew')."</p>";
+echo "<p>".getTxt('ImportInstructionsNew')."<a href='".base_url("assets/samples/sample1.csv")."'>Sample 1</a> 
+<a href='".base_url("assets/samples/sample2.csv")."'>Sample 2</a> 
+<a href='".base_url("assets/samples/sample3.csv")."'>Sample 3</a> 
+<a href='".base_url("assets/samples/sample4.csv")."'>Sample 4</a>
+</p>";
 $attributes = array('class' => 'form-horizontal', 'name' => 'importfile', 'id' => 'importfile');
 echo form_open_multipart('datapoint/importfile', $attributes);
 ?>

@@ -226,7 +226,11 @@ class Datapoint extends MY_Controller {
 					}
 					else
 					{
-						if(($data[0]!="LocalDateTime")||($data[1]!="DataValue"))	
+
+						//Allow switching of columns. 
+						$dtIndex = array_search(strtolower("LocalDateTime"),array_map('strtolower',$data)); 
+						$valIndex=array_search(strtolower("DataValue"),array_map('strtolower',$data));
+						if($dtIndex===false||$valIndex===false)	
 						{
 						addError(getTxt('InvalidHeading')."LocalDateTime,DataValue".getTxt('PleaseFix'));
 						return false;					
