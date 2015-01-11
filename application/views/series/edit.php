@@ -1,5 +1,5 @@
 <?php
-HTML_Render_Head($js_vars);
+HTML_Render_Head($js_vars,getTxt('UpdateSCButton'));
 echo $JS_JQuery;
 echo $CSS_JQX;
 echo $JS_JQX;
@@ -110,9 +110,9 @@ genHeading('EditSC',true);?>
 <span id="helpBlock" class="help-block">
 <?php echo getTxt('SCEditHelp');?>
 </span>
-<div id="jqxgrid">
+<div class="col-md-12"><div id="jqxgrid">
 	</div>
-
+	</div>
 
 <div class="col-md-5 col-md-offset-5">
 <input type="button" name="update"id="update" value="<?php echo getTxt('UpdateSCButton'); ?>" class="button" style="width: auto" />

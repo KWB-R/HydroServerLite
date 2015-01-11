@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
-HTML_Render_Head($js_vars);
+HTML_Render_Head($js_vars,getTxt('SearchData'));
 echo $JS_JQuery;
 echo $JS_JQueryUI;
 echo $JS_JQX;

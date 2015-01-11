@@ -1,6 +1,6 @@
 <?php
 $default_timesupport = "";
-HTML_Render_Head($js_vars);
+HTML_Render_Head($js_vars,getTxt('ChangeVariable'));
 echo $CSS_Main;
 echo $JS_JQuery;
 echo $CSS_JQStyles;

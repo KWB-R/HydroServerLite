@@ -1,5 +1,5 @@
 <?php
-HTML_Render_Head($js_vars);
+HTML_Render_Head($js_vars,getTxt('Help'));
 
 echo $CSS_Main;
 
