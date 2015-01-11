@@ -114,7 +114,8 @@ class Methods extends MY_Controller {
 			{	
 				if($this->input->get('ui', TRUE))
 				addSuccess(getTxt('MethodDeleted'));	
-				$output="success";	
+				$output="success";
+				$delMethodID= $this->method->updateVarMeth2($methodid);	
 			}
 		else
 			{

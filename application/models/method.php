@@ -102,6 +102,47 @@ class Method extends MY_Model
 		$num_del = $this->db->affected_rows();
 		return $num_del==1;	
 	}
+	function updateVarMeth2($MethodID)
+	{
+		$this->tableName = "varmeth";
+		$this->db->select()
+				->from($this->tableName);
+		
+		$query=$this->db->get();
+		
+		foreach($query->result_array() as $row){
+				$varID = $row['VariableID'];
+				$methID = $row['MethodID'];
+				$parts = explode(',',$methID);	
+				foreach ($parts as &$part){
+					if(count($parts)==1 && $part==$MethodID){
+					  $part = '';
+					  $this->db->set('MethodID',$part)
+							   ->where('VariableID',$varID)
+							   ->update("varmeth");
+						return $this->db->affected_rows()>=0;
+					  
+				  }elseif(count($parts)==2){
+					  if ($part==$MethodID){
+						  $part = '';
+					  $newStr = implode($parts);
+					  $this->db->set('MethodID',$newStr)
+								->where('VariableID',$varID)
+								->update("varmeth");
+						return $this->db->affected_rows()>=0; }
+				  }else{
+					  if($part==$MethodID){
+						  $part = '';
+					  $newStr = implode(",", array_filter($parts));
+					  $this->db->set('MethodID',$newStr)
+								->where('VariableID',$varID)
+								->update("varmeth");
+						return $this->db->affected_rows()>=0;				  
+				  }}
+				}
+				
+			}
+	}
 	function update($MethodID,$methodname,$methodlink)
 	{
 		$this->db->set('MethodDescription',$methodname)
@@ -109,7 +150,7 @@ class Method extends MY_Model
 		->where('MethodID',$MethodID)
 		->update($this->tableName);
 		
-		return $this->db->affected_rows()==1;
+		return $this->db->affected_rows()>=0;
 		
 	}
 }

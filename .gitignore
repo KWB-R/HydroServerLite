@@ -13,3 +13,5 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 /test.sublime-workspace
+
+application/language/english/hsl_lang.php

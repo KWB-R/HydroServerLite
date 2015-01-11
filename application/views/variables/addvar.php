@@ -1,6 +1,6 @@
 <?php
 $default_timesupport = $DefaultTS; //Come from config. 
-HTML_Render_Head($js_vars);
+HTML_Render_Head($js_vars,getTxt('AddVariableButton'));
 echo $JS_JQuery;
 echo $CSS_JQX;
 echo $JS_JQX;

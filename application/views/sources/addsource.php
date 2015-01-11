@@ -1,5 +1,5 @@
 <?php
-HTML_Render_Head($js_vars);
+HTML_Render_Head($js_vars,getTxt('AddSourceButton'));
 echo $CSS_Main;
 echo $JS_JQuery;
 echo $CSS_JQX;

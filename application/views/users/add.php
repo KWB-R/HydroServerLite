@@ -1,5 +1,5 @@
 <?php
-echo HTML_Render_Head($js_vars);
+echo HTML_Render_Head($js_vars,getTxt('AddUser'));
 echo $CSS_Main;
 echo $JS_JQuery;
 echo $JS_CreateUserName;
