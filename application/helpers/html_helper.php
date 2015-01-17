@@ -293,7 +293,7 @@ function getTopBanner()
 	//Will Introduce logic here once I decide on how to implement enterprise versioning of HSL. For now, it just returns the default banner location.
 	//Maybe will have a controller for the logic? Might be overkill though. 
 	$path = getImg("WebClientBanner.png");
-	return '<img src="'.$path.'" alt="logo" class="img-responsive center-block" />';
+	return '<img src="'.$path.'" alt="logo" class="img-responsive" style="max-width:auto;"/>';
 }
 
 function checkPHPVersion($minimumVersion){
