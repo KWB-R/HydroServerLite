@@ -701,10 +701,9 @@ form ul.login a {
 }
 
 #navbarCollapse{
-	padding-top:60px;
+	padding-top:0px;
 	padding-right:0px;
-	padding-left:50px;	
-	
+	padding-left:0px;
 }
 
 #navbarCollapse li a, #navbarCollapse li h2 {
@@ -717,10 +716,7 @@ form ul.login a {
             padding-left: 40px;
 
         }
-	
 
-	
-	
 #navbarCollapse ul ul li a, #navbarCollapse ul ul li h2 {
 			margin-left:-40px;
 			padding-top: 15px;
@@ -954,6 +950,6 @@ ul.messages {
 }
 
 .form-control{
-    width:70%;
+    width:98%;
     float:left;
 }

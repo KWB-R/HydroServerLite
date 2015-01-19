@@ -439,7 +439,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 genHeading('AddNewVariable',true);
 $attributes = array('class' => 'form-horizontal', 'name' => 'addvar', 'id' => 'addvar');
 echo form_open('variable/add', $attributes);
-genInputH('VariableCode','var_code', 'VariableCode',getTxt('ArbitraryCode'), true,"value='".$DefaultVarcode."'");
+genInputH('VariableCode','var_code', 'VariableCode',getTxt('VariableCodeInfo'), true);
 
 genDropLists('VariableName','varname','varname',true);
 

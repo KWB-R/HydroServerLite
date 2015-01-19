@@ -92,7 +92,7 @@ function genDropLists($labelKey,$id,$name,$req=false)
 {
 	echo '<div class="form-group">
         <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-6">
+        <div class="col-sm-9">
 		<div id="'.$id.'" name="'.$name.'"></div>';
 	
 	if($req)
@@ -216,7 +216,7 @@ PartA;
 	$HTML_2 = <<<PageBody2
 			
 				      <div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
-        <div class="col-md-3">
+        <div class="col-md-2">
 PageBody2;
 	$HTML_3 = <<<PageBody3
 			</div>
@@ -293,7 +293,7 @@ function getTopBanner()
 	//Will Introduce logic here once I decide on how to implement enterprise versioning of HSL. For now, it just returns the default banner location.
 	//Maybe will have a controller for the logic? Might be overkill though. 
 	$path = getImg("WebClientBanner.png");
-	return '<img src="'.$path.'" alt="logo" class="img-responsive" style="max-width:auto;"/>';
+	return '<img src="'.$path.'" alt="logo" class="img" style="max-width:auto;"/>';
 }
 
 function checkPHPVersion($minimumVersion){
