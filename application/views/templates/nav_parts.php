@@ -18,7 +18,7 @@ else
 
 
 
-echo '       <div class="navbar navbar-default " role="navigation">
+echo '       <div class="navbar navbar-default navbar-right" role="navigation">
 <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="sr-only">Toggle navigation</span>

@@ -693,16 +693,17 @@ form ul.login a {
 }
 
 .transparentNav {
-	background-color:transparent;
-	border-color:transparent;	
+	background-color:#FFF;
+	border-color:#FFF;
+	padding-top:60px;	
 	padding-right:0px;
 	padding-left:0px;
 }
 
 #navbarCollapse{
+	padding-top:0px;
 	padding-right:0px;
-	padding-left:0px;	
-	
+	padding-left:0px;
 }
 
 #navbarCollapse li a, #navbarCollapse li h2 {
@@ -715,10 +716,7 @@ form ul.login a {
             padding-left: 40px;
 
         }
-	
 
-	
-	
 #navbarCollapse ul ul li a, #navbarCollapse ul ul li h2 {
 			margin-left:-40px;
 			padding-top: 15px;
@@ -889,7 +887,11 @@ ul.messages {
 }
 
 .masthead{
-  width:100%;
+  max-width:auto;
+}
+.img{
+	width:100%;
+	height:auto;
 }
 
 .mainContainer{	
@@ -898,12 +900,13 @@ ul.messages {
 	
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1600px) {
     .container{
-        max-width: 970px;
+		width:auto;
+
     }
 	.mainContainer{
-		  max-width: 970px;
+		  width:auto;
 	}
 }
 
@@ -918,7 +921,7 @@ ul.messages {
 
 
 /* make sidebar nav vertical */ 
-@media (min-width: 768px) {
+@media (min-width: 1600px) {
   .sidebar-nav .navbar .navbar-collapse {
     padding: 0;
     max-height: none;
@@ -947,6 +950,6 @@ ul.messages {
 }
 
 .form-control{
-    width:94%;
+    width:98%;
     float:left;
 }

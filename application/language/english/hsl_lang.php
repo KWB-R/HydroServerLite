@@ -3904,7 +3904,7 @@
  $lang['hsl_CongratsRemoved'] = "Congratulations, you have successfully removed";
  $lang['hsl_InvalidFormat'] = "Only CSV files are allowed. Please check your uploaded file(s).";
  $lang['hsl_In'] = "in";
- $lang['hsl_ImportInstructionsNew'] = "Please Note: You can have all the below parameters specified in your file if you are uploading a number of variable for a variety of sites or methods. However, make sure to have the column ordering in the order displayed below. <br>The column ordering would be as follows: SourceID,SiteID,VariableID,MethodID,LocalDateTime,DataValue.<br>The ID\'s of these elements can be found in their corresponding edit/change pages.";
+ $lang['hsl_ImportInstructionsNew'] = "Please Note: You can have all the below parameters specified in your file if you are uploading a number of variable for a variety of sites or methods. However, make sure to have the column ordering in the order displayed below. <br>The column ordering would be as follows: SourceID,SiteID,VariableID,MethodID,LocalDateTime,DataValue.<br>The ID\'s of these elements can be found in their corresponding edit/change pages.<br>Allowed data type : CSV<br>Sample Files: ";
  $lang['hsl_optionsFile'] = "ID\'s in File?";
  $lang['hsl_varid'] = "Variable ID";
  $lang['hsl_siteid'] = "Site ID";
@@ -3931,4 +3931,7 @@
  $lang['hsl_databaseInstructions'] = "The software will attempt to create the database if its not been created. Also, it will add all the default tables only if it doesn\'t detect a previous installation. If a previous installation of HSL is detected, it will just use that database. You may also use the server\'s database settings to host your data on our default database. In that case please select Yes from the below drop down. (This option is only available for all installs after the initial install)";
  $lang['hsl_multipleInstall'] = "Enable Multiple Installations? ";
  $lang['hsl_useExistingDB'] = "Use default database connection? ";
+ $lang['hsl_UTCOffsetError'] = "Please enter a numeric value for UTCOffset";
+ $lang['hsl_SetupType'] = "Setup Type";
+ $lang['hsl_congratsMultiple'] = "Congratulations. Your server administrator has enabled multiple installations. To install a new database on your server ";
  ?>

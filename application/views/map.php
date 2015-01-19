@@ -7,7 +7,7 @@ HTML_Render_Body_Start();
 ?>
 <div class='col-md-9'>
 <?php showMsgs();?>
-<div id="mapOuter" style="width:100%; height:500px;">
+<div id="mapOuter" style="width:100%; height:875px;">
 	<div id="mapContainer" style="width:100%;">
 		<div id="map" style="width:100%; height:100%;"> </div>
 	</div>
@@ -27,6 +27,8 @@ HTML_Render_Body_Start();
         <input type='button' onClick="loadall()" value="<?php echo getTxt('ResetSearch'); ?>"/>
         <input type='button' onClick="track_loc()" value="<?php echo getTxt('FindSites'); ?>"/>
 		<input type="checkbox" id="allSitesCheck" onClick="loadall()" value="allSites"><?php echo getTxt('AllSites'); ?></input>
+        <input type="button" id="fullscreen" value="Full Screen"/></input>
+        <input type="button" id="exitfullscreen" value="Exit Full Screen"/></input>
 		<p class="instruction">
 		<?php echo getTxt('EnterSearchLocation') ?>
 		</p>
@@ -38,6 +40,37 @@ HTML_Render_Body_Start();
 </div></div>
 <script>
 	load();
+$(document).ready(function(){	
+ $('#fullscreen').click(function(){
+    $("#mapOuter").css("position", 'fixed').
+      css('top', 0).
+      css('left', 0).
+      css("width", '100%').
+      css("height", '100%');
+    google.maps.event.trigger(map, 'resize');
+    return false;
+  });
+ 
+  $('#exitfullscreen').click(function(){
+    $("#mapOuter").css("position", 'relative').
+      css('top', 0).
+      css("width", googleMapWidth).
+      css("height", googleMapHeight);
+    google.maps.event.trigger(map, 'resize');
+    return false;
+	
+  });
+
+$.fn.scrollView = function () {
+    return this.each(function () {
+        $('html, body').animate({
+            scrollTop: $(this).offset().top
+        });
+    });
+}
+$('#mapOuter').scrollView();
+});
+
 </script>
 <?php
 HTML_Render_Body_End();

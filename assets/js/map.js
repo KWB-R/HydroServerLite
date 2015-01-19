@@ -30,7 +30,7 @@ function load() {
         locationSelect.onchange = function() {
             var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
             if (markerNum != "none") {
-				map.setZoom(17);
+				map.setZoom(19);
 				map.panTo(markers[markerNum].position);
                 google.maps.event.trigger(markers[markerNum], 'mouseover');
             }
@@ -66,8 +66,13 @@ function load() {
 	}
 	
 });
-	
-	
+ $("#mapOuter").css("position", 'fixed').
+      css('top', 0).
+      css('left', 0).
+      css("width", '100%').
+      css("height", '100%');
+    google.maps.event.trigger(map, 'resize');
+
 }
 
 // Update the height of the map Container to make sure it will fit inside of the window
