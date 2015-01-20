@@ -43,8 +43,8 @@ function getDetailsImg($name)
 function genInput($labelKey,$id,$name,$req=false,$extra='')
 {
 	echo '<div class="form-group">
-        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
      	   <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';	   
 	if($req)
 	{
@@ -57,8 +57,8 @@ function genInput($labelKey,$id,$name,$req=false,$extra='')
 function genInputH($labelKey,$id,$name,$hint,$req=false,$extra='')
 {
 	echo '<div class="form-group">
-        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
         <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';
 	if($req)
 	{
@@ -73,16 +73,16 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
 	if($req)
 	{
 		echo '<div class="form-group">
-        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
         <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="required"></span>
 		<span class="em">&nbsp&nbsp'.getTxt($help).'</span>';
 	}
 	else
 	{
 	echo '<div class="form-group">
-        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
         <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="em">&nbsp&nbsp'.getTxt($help).'</span>';
 	}
 	echo'</div>            
@@ -91,13 +91,13 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
 function genDropLists($labelKey,$id,$name,$req=false)
 {
 	echo '<div class="form-group">
-        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
 		<div id="'.$id.'" name="'.$name.'"></div>';
 	
 	if($req)
 	{
-	  echo '<div class="col-sm-3 required"></div>';	  
+	   echo '<span class="required"/>';	  
 	}
 	echo'</div>             
       </div>';	
@@ -106,8 +106,8 @@ function genDropLists($labelKey,$id,$name,$req=false)
 function genDropListsH($labelKey,$id,$name,$hint,$req=false)
 {
 	echo '<div class="form-group">
-        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
 		<div id="'.$id.'" name="'.$name.'"></div>';
 	if($req)
 	{
@@ -120,8 +120,8 @@ function genDropListsH($labelKey,$id,$name,$hint,$req=false)
 function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=false,$extra='')
 {
 	echo '<div class="form-group">
-        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
         <select name="'.$name.'" class="form-control" id="'.$id.'" '.$extra.'>';
 	if($defaultSelect)
 	{
@@ -137,8 +137,8 @@ function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=fa
 function genSelectH($labelKey,$id,$name,$optionBlock,$hint,$defaultSelect=false,$req=false,$extra='')
 {
 	echo '<div class="form-group">
-        <label class="col-sm-3 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
         <select name="'.$name.'" class="form-control" id="'.$id.'" '.$extra.'>';
 	if($defaultSelect)
 	{
@@ -216,7 +216,7 @@ PartA;
 	$HTML_2 = <<<PageBody2
 			
 				      <div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
-        <div class="col-md-2">
+        <div class="col-md-3" id="navArea">
 PageBody2;
 	$HTML_3 = <<<PageBody3
 			</div>
@@ -254,7 +254,7 @@ PartA;
 	$HTML_2 = <<<PageBody2
 			
 				      <div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
-        <div class="col-md-2">
+        <div class="col-md-3">
 PageBody2;
 	$HTML_3 = <<<PageBody3
 			</div>

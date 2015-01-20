@@ -52,17 +52,24 @@ $attributes = array('class' => 'form-horizontal', 'name' => 'addsite', 'id' => '
 echo form_open_multipart('sites/add', $attributes);
 
 genSelect('Source','SourceID','SourceID',$sourceOptions,'SelectEllipsis',true,' onChange="GetSourceName()"');
-echo '<div class="form-group"><label class="col-sm-3 control-label">'.getTxt('SiteName').'</label><div class="col-sm-9"><input type="type" class="form-control" id="SiteName" name="SiteName" onKeyUp="GetSiteName()"><span class="required"></span><span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span></div></div>';
+echo '<div class="form-group"><label class="col-sm-2 control-label">'.getTxt('SiteName').'</label><div class="col-sm-10">
+<input type="type" class="form-control" id="SiteName" name="SiteName" onKeyUp="GetSiteName()">
+<span class="required"></span>
+<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span></div></div>';
 //genInput('SiteName','SiteName','SiteName', true, ' onKeyUp="GetSiteName()"');
 //echo '<span class="em">'.getTxt('ExSiteName')." ".getTxt('NoApostrophe').'</span>';
-echo '<div class="form-group"><label class="col-sm-3 control-label">'.getTxt('SiteCode').'</label><div class="col-sm-9"><input type="type" class="form-control" id="SiteCode" name="SiteCode"><span class="required"></span><span class="hint" title="'.getTxt('SiteCodeInfo').'">?</span><span class="em">'.getTxt('ExSiteCode').'</span></div></div>';
+echo '<div class="form-group"><label class="col-sm-2 control-label">'.getTxt('SiteCode').'</label>
+<div class="col-sm-10"><input type="type" class="form-control" id="SiteCode" name="SiteCode">
+<span class="required"></span>
+<span class="hint" title="'.getTxt('SiteCodeInfo').'">?</span>
+<span class="em">'.getTxt('ExSiteCode').'</span></div></div>';
 //genInputH('SiteCode','SiteCode', 'SiteCode',getTxt('SiteCodeInfo'), true);
 //echo '<span class="em">'.getTxt('ExSiteCode').'</span>';
 genSelect('SiteType','SiteType','SiteType',$typeOptions,'SelectEllipsis',true);
 
 echo '<div class="form-group">
-	<label class="col-sm-3 control-label">'.getTxt('SitePhoto').'</label>
-	<div class="col-sm-9">
+	<label class="col-sm-2 control-label">'.getTxt('SitePhoto').'</label>
+	<div class="col-sm-10">
 	   <input class="form-control" type="file" name="picture" id="picture" size="30">';	   
 echo'</div>             
   </div><br>';	
@@ -90,8 +97,8 @@ echo getTxt('ExSitePhoto');
 </table>
 <br />
 <div class="form-group">
-        <label class="col-sm-3 control-label"><?php echo getTxt('Elevation');?></label>
-        <div class="col-sm-7">
+        <label class="col-sm-2 control-label"><?php echo getTxt('Elevation');?></label>
+        <div class="col-sm-8">
         <input type="type" class="form-control" id="Elevation" name="Elevation"/>
         </div> 
         <div class="col-sm-2">
@@ -106,8 +113,8 @@ genSelect('State','state','state',$stateOptions,'SelectEllipsis',true);
 ?>
 
 <div class="form-group">
-        <label class="col-sm-3 control-label"><?php echo getTxt('County');?></label>
-        <div class="col-sm-9">
+        <label class="col-sm-2 control-label"><?php echo getTxt('County');?></label>
+        <div class="col-sm-10">
         <div id="county_drop_down"><select class="form-control" id="county" name="county"><option value=""><?php echo getTxt('CountyEllipsis');?></option></select>*</div>
 	 <span id="loading_county_drop_down"><img src="<?php echo getImg('loader.gif'); ?>" width="16" height="16" align="absmiddle">&nbsp;<?php echo getTxt('SelectstateElipsis');?></span>
 	 <div id="no_county_drop_down"><?php echo getTxt('StateNoCounties');?></div>
@@ -115,7 +122,7 @@ genSelect('State','state','state',$stateOptions,'SelectEllipsis',true);
 </div> 
 <?php
 genSelectH('VerticalDatum','VerticalDatum','VerticalDatum',$vdOptions,getTxt('VerticalDatumInfo'),'SelectEllipsis',true);
-genSelectH('SpatialReferenceColon','LatLongDatumID','LatLongDatumID',$srOptions,getTxt('SpatialReferenceInfo'),'SelectEllipsis',true);
+genSelectH('SpatialReference','LatLongDatumID','LatLongDatumID',$srOptions,getTxt('SpatialReferenceInfo'),'SelectEllipsis',true);
 genInputT('Comments','com','value',false,$extra="",'Optional');
 
 ?>  

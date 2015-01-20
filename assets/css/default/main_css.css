@@ -900,7 +900,7 @@ ul.messages {
 	
 }
 
-@media (min-width: 1600px) {
+@media (min-width: 768px) {
     .container{
 		width:auto;
 
@@ -908,6 +908,12 @@ ul.messages {
 	.mainContainer{
 		  width:auto;
 	}
+}
+
+@media (min-width: 992px) {
+    #navArea{
+        max-width: 300px;
+    }
 }
 
 
@@ -922,7 +928,7 @@ ul.messages {
 
 
 /* make sidebar nav vertical */ 
-@media (min-width: 1600px) {
+@media (min-width: 1200px) {
   .sidebar-nav .navbar .navbar-collapse {
     padding: 0;
     max-height: none;
@@ -950,7 +956,17 @@ ul.messages {
   }
 }
 
-.form-control{
-    width:98%;
+.jqx-widget{
+    width:94%;
     float:left;
+}
+
+.form-control{
+    width:94%;
+    float:left;
+}
+/*Helper lines*/
+div.form-group>div.col-sm-10>span.em
+{
+    white-space: pre;
 }

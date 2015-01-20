@@ -44,7 +44,8 @@ var source =
 var dataAdapter = new $.jqx.dataAdapter(source);
 console.log(dataAdapter);
 // Create a jqxComboBox for Speciation
-$("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+
+$("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 
 $("#specdata").bind('select', function (event) {
 var args = event.args;
@@ -90,7 +91,7 @@ var url2=base_url+"variable/getUnitTypes";
                 var dataAdapter2 = new $.jqx.dataAdapter(source2);
 
 // Create a jqxComboBox for the var unit types. 
-$("#unittype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter2, displayMember: "unitype", valueMember: "orgtype", width: 250, height: 25, theme: 'darkblue'});
+$("#unittype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter2, displayMember: "unitype", valueMember: "orgtype", width: '94%', height: 25, theme: 'darkblue'});
 
 $("#unittype").bind('select', function (event) {
 var args = event.args;
@@ -121,7 +122,7 @@ var url3=base_url+"variable/getUnitsByType?type="+item.originalItem.orgtype;
                 var dataAdapter3 = new $.jqx.dataAdapter(source3);
 	
 // Create a jqxComboBox for the var unit types (this is for the units box that shows up once a variable type has been selected
-$("#unit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter3, displayMember: "unit", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
+$("#unit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter3, displayMember: "unit", valueMember: "unitid", width: '94%', height: 25, theme: 'darkblue'});
 
 $("#unit").bind('select', function (event) {
 var args = event.args;
@@ -180,7 +181,7 @@ $("#newunitonly").show(400);
 var dataAdapter4 = new $.jqx.dataAdapter(source4);
 
 
-$("#samplemedium").jqxDropDownList({ selectedIndex: 0, source: dataAdapter4, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#samplemedium").jqxDropDownList({ selectedIndex: 0, source: dataAdapter4, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 	
 $("#samplemedium").bind('select', function (event) {
 var args = event.args;
@@ -229,7 +230,7 @@ var source5 =
                 var dataAdapter5 = new $.jqx.dataAdapter(source5);
 
 
-$("#valuetype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter5, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#valuetype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter5, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 	
 $("#valuetype").bind('select', function (event) {
 var args = event.args;
@@ -272,7 +273,7 @@ var source7 = [
 		        ];
 
                 // Create a jqxDropDownList
-$("#isreg").jqxDropDownList({ source: source7, selectedIndex: 0, width: '250', height: '25', theme: 'darkblue' });
+$("#isreg").jqxDropDownList({ source: source7, selectedIndex: 0, width: '94%', height: '25', theme: 'darkblue' });
 
 //End of is regular
 
@@ -292,7 +293,7 @@ var source8 =
                 var dataAdapter8 = new $.jqx.dataAdapter(source8);
 
 
-$("#timeunit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter8, displayMember: "unit", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
+$("#timeunit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter8, displayMember: "unit", valueMember: "unitid", width: '94%', height: 25, theme: 'darkblue'});
 	
 
 //End time units id
@@ -312,7 +313,7 @@ var source9 =
                     async: false
                 };
                 var dataAdapter9 = new $.jqx.dataAdapter(source9);
-$("#datatype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter9, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#datatype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter9, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 	
 $("#datatype").bind('select', function (event) {
 var args = event.args;
@@ -349,7 +350,7 @@ var source10 =
 
 
 
-$("#gc").jqxDropDownList({ selectedIndex: 0, source: dataAdapter10, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#gc").jqxDropDownList({ selectedIndex: 0, source: dataAdapter10, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 	
 $("#gc").bind('select', function (event) {
 var args = event.args;
@@ -386,7 +387,7 @@ var source15 =
 	async: false
 };
 var dataAdapter15 = new $.jqx.dataAdapter(source15);
-$("#varname").jqxDropDownList({ selectedIndex:0,source: dataAdapter15, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#varname").jqxDropDownList({ selectedIndex:0,source: dataAdapter15, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 $("#varname").bind('select', function (event) {
 var args = event.args;
 var item = $('#varname').jqxDropDownList('getItem', args.index);
@@ -432,7 +433,7 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 	
 	var dataAdapter = new $.jqx.dataAdapter(source);
         // Create a jqxListBox
-        $("#jqxWidget").jqxListBox({source: dataAdapter, theme: 'darkblue', multiple: true, width: 425, height: 300, displayMember: "MethodDescription", valueMember: "MethodID"});
+        $("#jqxWidget").jqxListBox({source: dataAdapter, theme: 'darkblue', multiple: true, width: '94%', height: 300, displayMember: "MethodDescription", valueMember: "MethodID"});
 	});
 </script>
 <?php HTML_Render_Body_Start(); 
@@ -494,7 +495,7 @@ genDropLists('TimeUnit','timeunit', 'timeunit', true);
 genDropLists('DataType','datatype', 'datatype', true);
 ?>
 <div class="form-group">
-        <label class="col-sm-3 control-label"><?php echo getTxt('DataTypeDefinition');?></label>
+        <label class="col-sm-2 control-label"><?php echo getTxt('DataTypeDefinition');?></label>
         <div class="col-sm-9">
      	   <textarea type="text" cols="45" rows="4" class="form-control" id="dtdef" name="dtdef" readonly><?php echo getTxt('SelectData');?></textarea><span class="required"/></div>             
 </div>
