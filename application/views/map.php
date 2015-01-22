@@ -27,8 +27,8 @@ HTML_Render_Body_Start();
         <input type='button' onClick="loadall()" value="<?php echo getTxt('ResetSearch'); ?>"/>
         <input type='button' onClick="track_loc()" value="<?php echo getTxt('FindSites'); ?>"/>
 		<input type="checkbox" id="allSitesCheck" onClick="loadall()" value="allSites"><?php echo getTxt('AllSites'); ?></input>
-        <input type="button" id="fullscreen" value="Full Screen"/></input>
-        <input type="button" id="exitfullscreen" value="Exit Full Screen"/></input>
+        <input type="button" id="fullscreen" value="<?php echo getTxt('FullScreen'); ?>"/></input>
+        <input type="button" id="exitfullscreen" value="<?php echo getTxt('EFullScreen'); ?>"/></input>
 		<p class="instruction">
 		<?php echo getTxt('EnterSearchLocation') ?>
 		</p>

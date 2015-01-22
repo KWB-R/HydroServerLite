@@ -26,6 +26,11 @@ function load() {
         });
         infoWindow = new google.maps.InfoWindow();
 
+         $(window).resize(function() {
+            // (the 'map' here is the result of the created 'var map = ...' above)
+            google.maps.event.trigger(map, "resize");
+          });
+                
         locationSelect = document.getElementById("locationSelect");
         locationSelect.onchange = function() {
             var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
