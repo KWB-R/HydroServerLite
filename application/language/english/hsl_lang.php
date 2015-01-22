@@ -3934,4 +3934,6 @@
  $lang['hsl_UTCOffsetError'] = "Please enter a numeric value for UTCOffset";
  $lang['hsl_SetupType'] = "Setup Type";
  $lang['hsl_congratsMultiple'] = "Congratulations. Your server administrator has enabled multiple installations. To install a new database on your server ";
+ $lang['hsl_FullScreen'] = "Full Screen";
+ $lang['hsl_EFullScreen'] = "Exit Full Screen";
  ?>
