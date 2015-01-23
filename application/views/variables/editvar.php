@@ -63,8 +63,8 @@ var source19 =
         {
             source: dataAdapter19,
             theme: 'darkblue',
-            width: 300,
-            height: 20,
+            width: '94%',
+            height: 25,
             displayMember: 'VarNameMod',
             valueMember: 'VariableID'
         });		
@@ -243,8 +243,7 @@ $.ajax({
   } 
 });
 
-	$("#edit").show(500);
-
+	$("#edit").show();
   }
   else
   {
@@ -278,7 +277,7 @@ var source =
 var dataAdapter = new $.jqx.dataAdapter(source);
 console.log(dataAdapter);
 // Create a jqxComboBox for Speciation
-$("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#specdata").jqxDropDownList({ selectedIndex: 0, source: dataAdapter, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 
 $("#specdata").bind('select', function (event) {
 var args = event.args;
@@ -324,7 +323,7 @@ var url2=base_url+"variable/getUnitTypes";
                 var dataAdapter2 = new $.jqx.dataAdapter(source2);
 
 // Create a jqxComboBox for the var unit types. 
-$("#unittype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter2, displayMember: "unitype", valueMember: "orgtype", width: 250, height: 25, theme: 'darkblue'});
+$("#unittype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter2, displayMember: "unitype", valueMember: "orgtype", width: '94%', height: 25, theme: 'darkblue'});
 
 $("#unittype").bind('select', function (event) {
 var args = event.args;
@@ -355,7 +354,7 @@ var url3=base_url+"variable/getUnitsByType?type="+item.originalItem.orgtype;
                 var dataAdapter3 = new $.jqx.dataAdapter(source3);
 	
 // Create a jqxComboBox for the var unit types (this is for the units box that shows up once a variable type has been selected
-$("#unit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter3, displayMember: "unit", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
+$("#unit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter3, displayMember: "unit", valueMember: "unitid", width: '94%', height: 25, theme: 'darkblue'});
 
 $("#unit").bind('select', function (event) {
 var args = event.args;
@@ -414,7 +413,7 @@ $("#newunitonly").show(400);
 var dataAdapter4 = new $.jqx.dataAdapter(source4);
 
 
-$("#samplemedium").jqxDropDownList({ selectedIndex: 0, source: dataAdapter4, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#samplemedium").jqxDropDownList({ selectedIndex: 0, source: dataAdapter4, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 	
 $("#samplemedium").bind('select', function (event) {
 var args = event.args;
@@ -463,7 +462,7 @@ var source5 =
                 var dataAdapter5 = new $.jqx.dataAdapter(source5);
 
 
-$("#valuetype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter5, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#valuetype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter5, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 	
 $("#valuetype").bind('select', function (event) {
 var args = event.args;
@@ -506,7 +505,7 @@ var source7 = [
 		        ];
 
                 // Create a jqxDropDownList
-$("#isreg").jqxDropDownList({ source: source7, selectedIndex: 0, width: '250', height: '25', theme: 'darkblue' });
+$("#isreg").jqxDropDownList({ source: source7, selectedIndex: 0, width: '94%', height: '25', theme: 'darkblue' });
 
 //End of is regular
 
@@ -526,7 +525,7 @@ var source8 =
                 var dataAdapter8 = new $.jqx.dataAdapter(source8);
 
 
-$("#timeunit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter8, displayMember: "unit", valueMember: "unitid", width: 250, height: 25, theme: 'darkblue'});
+$("#timeunit").jqxDropDownList({ selectedIndex: 0, source: dataAdapter8, displayMember: "unit", valueMember: "unitid", width: '94%', height: 25, theme: 'darkblue'});
 	
 
 //End time units id
@@ -546,7 +545,7 @@ var source9 =
                     async: false
                 };
                 var dataAdapter9 = new $.jqx.dataAdapter(source9);
-$("#datatype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter9, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#datatype").jqxDropDownList({ selectedIndex: 0, source: dataAdapter9, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 	
 $("#datatype").bind('select', function (event) {
 var args = event.args;
@@ -583,7 +582,7 @@ var source10 =
 
 
 
-$("#gc").jqxDropDownList({ selectedIndex: 0, source: dataAdapter10, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#gc").jqxDropDownList({ selectedIndex: 0, source: dataAdapter10, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 	
 $("#gc").bind('select', function (event) {
 var args = event.args;
@@ -620,7 +619,7 @@ var source15 =
 	async: false
 };
 var dataAdapter15 = new $.jqx.dataAdapter(source15);
-$("#varname").jqxDropDownList({ selectedIndex:0,source: dataAdapter15, displayMember: "displayTerm", valueMember: "Term", width: 250, height: 25, theme: 'darkblue'});
+$("#varname").jqxDropDownList({ selectedIndex:0,source: dataAdapter15, displayMember: "displayTerm", valueMember: "Term", width: '94%', height: 25, theme: 'darkblue'});
 $("#varname").bind('select', function (event) {
 var args = event.args;
 var item = $('#varname').jqxDropDownList('getItem', args.index);
@@ -666,338 +665,94 @@ var item = $('#varname').jqxDropDownList('getItem', args.index);
 	
 	var dataAdapter = new $.jqx.dataAdapter(source);
         // Create a jqxListBox
-        $("#jqxWidget").jqxListBox({source: dataAdapter, theme: 'darkblue', multiple: true, width: 425, height: 300, displayMember: "MethodDescription", valueMember: "MethodID"});
+        $("#jqxWidget").jqxListBox({source: dataAdapter, theme: 'darkblue', multiple: true, width: '94%', height: 300, displayMember: "MethodDescription", valueMember: "MethodID"});
 	});
 </script>
-<?php HTML_Render_Body_Start(); ?>
-      <br /><p class="em" align="right"><?php echo getTxt('RequiredFieldsAsterisk'); ?></p>
-      
-       <div id="msg"><p class=em2><?php echo getTxt('VariableSuccess'); ?></p></div>
-       <?php showMsgs();?>
-        <h1><?php echo getTxt('EditVariable'); ?></h1>
-        <!--<p>Please select the variable to be edited/deleted from the below list. </p>
-        <p  class='em'><strong>Note: </strong>If you are trying to delete a variable, make sure that there are no data values pertaining to that variable exisitng in the database.</p>-->
-        <p><?php echo getTxt('PleaseSelect'); ?></p>
-        <p  class='em'><strong><?php echo getTxt('Note'); ?></strong><?php echo getTxt('TryingToDelete'); ?></p>
-       <?php $attributes = array('class' => '', 'name' => 'add_var', 'id' => 'add_var');
-		echo form_open('variable/edit', $attributes);?>
-        <table width="600" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td width="175" valign="top"><strong><?php echo getTxt('Variable'); ?></strong></td>
-          <td width="425" colspan="3" align="left" valign="top"><div id="VariableID"></div></td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        </table>
-        
-        <table id="edit" width="600" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('VariableID'); ?></strong></td>
-          <td colspan="3" valign="top"><input name="varid" type="text" disabled="disabled" id="varid" value="" size="15" />*&nbsp;<span class='em'><?php echo getTxt('CannotEdit'); ?></span></td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('VariableCode'); ?></strong></td>
-          <td valign="top">
-         <input type="text" id="var_code" name="VariableCode" value="" size="15" /><span class="required">*</span><span class="hint" title="<?php echo getTxt('ArbitraryCode')?>">?</span></td>
+<?php HTML_Render_Body_Start(); 
+genHeading('EditVariable',true);
+?>
+ <p><?php echo getTxt('PleaseSelect'); ?></p>
+<p  class='em'><strong><?php echo getTxt('Note'); ?></strong><?php echo getTxt('TryingToDelete'); ?></p>
+<?php $attributes = array('class' => 'form-horizontal', 'name' => 'add_var', 'id' => 'add_var');
+	echo form_open('variable/edit', $attributes);
+genDropLists('Variable','VariableID','VariableID',true);
+?>
+<div id="edit">
+<?php
+genInput('VariableID','varid', 'varid', false);
+genInputH('VariableCode','var_code', 'VariableCode',getTxt('VariableCodeInfo'), true);
 
-  <td colspan="2" valign="top">&nbsp;</td>
-          </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-          </tr>
-        <tr>
-         <td valign="top"><strong><?php echo getTxt('VariableName');?></strong></td>
-          <td valign="top"><div id="varname"></div></td>
-          <td colspan="2" valign="top"><span class="required">*</span></td>
-        <tbody id="newvarnameb">
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"></td>
- <td colspan="3" valign="top"><strong><?php echo getTxt('NewVarName');?></strong>&nbsp;<input type="text" id="newvarname" name="newvarname" value="" class="medium" /><span class="required">*</span></td>
-        </tr>
-        </tbody>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('VariableDefinition'); ?></strong></td>
- <td colspan="3" valign="top"><input name="vardef" type="text" id="vardef" value="" class="long" maxlength="200" /><span class="required">*</span><span class="hint" title="<?php echo getTxt('VariableDefinitionMsg'); ?>">?</span></td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td width="175" valign="top"><strong><?php echo getTxt('Speciation'); ?></strong></td>
-          <td width="252" valign="top"><div id="specdata"></div></td>
-          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo getTxt('ValueCode'); ?>">?</span></td>
+genDropLists('VariableName','varname','varname',true);
 
-          </tr>
-        
-        <tr id="new_spec1">
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-          </tr>
-        <tr id="new_spec">
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><?php echo getTxt('NewSpeciation');?></strong>&nbsp;<input type="text" id="other_spec" name="other_spec" value="" size="15" /><span class="required">*</span></td>
-
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('SpeciationDef'); ?></strong></td>
-          <td colspan="3" valign="top"><input name="specdef" type="text" id="specdef" value="" class="medium" maxlength="200" /><span class="required">*</span></td>
-
-        </tr>
-        
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td height="30" valign="top"><strong><?php echo getTxt('VariableUnitType'); ?></strong></td>
-          <td width="252" valign="top"><div id="unittype"></div></td>
-          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo getTxt('UnitsCategory'); ?>">?</span></td>
-
-          </tr>
-        <tbody id="unitreq">
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><div id="unittext"><strong><?php echo getTxt('Unit'); ?></strong></div></td>
-          <td width="252" valign="top"><div id="unit"></div></td>
-          <td colspan="2" valign="top"><span id="unitreqSpan"><span class="required">*</span><span class="hint" title="<?php echo getTxt('UnitsMeasure'); ?>">?</span></span></td>
-
-          </tr>
-        </tbody>
-        <tbody id="newunit">
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top" style="text-align: center; font-weight: bold; font-size: 12pt;"><?php echo getTxt('NewUnitDefinition'); ?></td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-  <td colspan="3" valign="top"><strong><?php echo getTxt('UnitType');?></strong>
-		&nbsp;<input type="text" id="new_unit_type" name="new_unit_type" value="" class="medium" /><span class="required">*</span><span class="hint" title="<?php echo getTxt('UTAssociated'); ?>">?</span></td>
-        </tr>
-          </tbody>
-        <tbody id="newunitonly">
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-      
-        
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><?php echo getTxt('UnitName');?></strong>&nbsp;<input type="text" id="new_unit_name" name="new_unit_name" value="" class="medium" /><span class="required">*</span></td>
-</tr>
-        
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-
-          <td colspan="3" valign="top"><strong><?php echo getTxt('UnitAbbreviation');?></strong>&nbsp;<input type="text" id="new_unit_abb" name="new_unit_abb" value="" class="medium" /><span class="required">*</span></td>
-
-        </tr>
-        </tbody>
-    
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('SampleMedium'); ?></strong></td>
-          <td valign="top"><div id="samplemedium"></div></td>
-          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo getTxt('ObservationMedium'); ?>">?</span></td>
-
-          </tr>
-        <tbody id="smother">
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-
-          <td colspan="3" valign="top"><strong><?php echo getTxt('NewSampleMedium');?></strong>&nbsp;<input type="text" id="smnew" name="smnew" value=""  class="medium" /><span class="required">*</span></td>
-
-        </tr>
-           </tbody>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-
-          <td valign="top"><strong><?php echo getTxt('MediumDefinition'); ?></strong></td>
- <td colspan="3" valign="top"><input name="smdef" type="text" id="smdef" value=""  class="long" maxlength="200" /><span class="required">*</span></td>
-        </tr>
-        
-     
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('ValueType'); ?></strong></td>
-          <td valign="top"><div id="valuetype"></div></td>
-          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo getTxt('DataTypeMsg'); ?>">?</span></td>
-
-          <td width="40" valign="top">&nbsp;</td>
-        </tr>
-        <tbody id="valuetypenewb">
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top"><strong><?php echo getTxt('ValueTypeNew');?></strong>&nbsp;<input type="text" id="valuetypenew" name="valuetypenew" value="" class="medium" /><span class="required">*</span></td>
+echo '<div id="newvarnameb">';
+genInput('NewVarName','NewVarName', 'NewVarName', true);
+echo '</div>';
+genInputH('VariableDefinition','vardef', 'vardef',getTxt('VariableDefinitionMsg'), true);
 
 
-        </tr>
-        </tbody>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
+genDropListsH('Speciation','specdata','specdata',getTxt('ValueCode'),true);
 
-          <td valign="top"><strong><?php echo getTxt('ValueTypeDefinition'); ?></strong></td>
-          <td colspan="3" valign="top"><input name="vtdef" type="text" id="vtdef" value="" class="long" maxlength="200" /><span class="required">*</span></td>
+echo '<div id="new_spec">';
+genInput('NewSpeciation','other_spec', 'other_spec', true);
+echo '</div>';
+genInput('SpeciationDef','specdef', 'specdef', true);
 
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td height="18" valign="top"><strong><?php echo getTxt('Regularity'); ?></strong></td>
-          <td valign="top"><div id="isreg"></div></td>
-          <td colspan="2" valign="top"><span class="required">*</span><span class="hint" title="<?php echo getTxt('RegularlySampledTime'); ?>">?</span></td>
 
-          </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
+genDropListsH('VariableUnitType','unittype','unittype',getTxt('UnitsCategory'),true);
+echo '<div id="unittext">';
+genDropListsH('Unit','unit', 'unit',getTxt('UnitsMeasure'),true);
+echo '</div>';
 
-          <td valign="top"><strong><?php echo getTxt('TimeSupport'); ?></strong></td>
-          <td colspan="3" valign="top"><input type="text" id="tsup" name="tsup" value="<?php echo getTxt('default_timesupport'); ?>"  /><span class="required">*</span>
+echo '<div id="newunit">';
+echo '<span class=em2>'.getTxt('NewUnitDefinitionColon').'</span>';
+//genDropLists('NewUnitDefinitionColon','NewUnitDefinitionColon', 'NewUnitDefinitionColon', true);
+genInputH('UnitType','new_unit_type', 'new_unit_type', getTxt('UTAssociated'),true);
+echo '</div>';
 
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('TimeUnit'); ?></strong></td>
-          <td valign="top"><div id="timeunit"></div></td>
-          <td colspan="2" valign="top"><span class="required">*</span></td>
+echo '<div id="newunitonly">';
+genInput('UnitName','new_unit_name', 'new_unit_name', true);
+genInput('UnitAbbreviation','new_unit_abb', 'new_unit_abb', true);
+echo '</div>';
 
-          </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
+genDropListsH('SampleMedium','samplemedium', 'samplemedium',getTxt('ObservationMedium'),true);
 
-          <td valign="top"><strong><?php echo getTxt('DataType'); ?></strong></td>
-          <td valign="top"><div id="datatype"></div></td>
-          <td colspan="2" valign="top"><span class="required">*</span></td>
+echo '<div id="smother">';
+genInput('NewSampleMedium','smnew', 'smnew', true);
+echo '</div>';
+genInput('MediumDefinition','smdef', 'smdef', true);
 
-          </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('DataTypeDefinition'); ?></strong></td>
-          <td colspan="3"><textarea name="dtdef" cols="45" rows="4" readonly id="dtdef"><?php echo getTxt('SelectData');?></textarea><span class="required">*</span></td>
+genDropListsH('ValueType','valuetype', 'valuetype',getTxt('DataTypeMsg'),true);
 
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('Category'); ?></strong></td>
-          <td valign="top"><div id="gc"></div></td>
-          <td width="133" valign="top"><span class="required">*</span><span class="hint" title="<?php echo getTxt('ScientificCategory'); ?>">?</span></td>
+echo '<div id="valuetypenewb">';
+genInput('ValueTypeNewColon','valuetypenew', 'valuetypenew', true);
+echo '</div>';
 
-          </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top"><strong><?php echo getTxt('CategoryDefinition'); ?></strong></td>
+genInput('ValueTypeDefinition','vtdef', 'vtdef', true);
 
-          <td colspan="3" valign="top"><input name="gcdef" type="text" id="gcdef" value="<?php echo getTxt('SelectCategory');?>" class="long" readonly><span class="required">*</span></td>
-
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          
-<td colspan="4" valign="top"><strong><?php echo getTxt('SelectMethods'); ?></strong> <br>
-<?php echo getTxt('HoldCtl'); ?></td>
-          </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="2" valign="top"><div id='jqxWidget'></div></td>
-          <td valign="top">*&nbsp;<a href="#" onClick="show_answerMeth()" border="0"><img src="<?php echo getImg('questionmark.png'); ?>"  border="0"></a></td>
-          <td valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td valign="top">&nbsp;</td>
-          <td colspan="3" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td width="175" valign="top">&nbsp;</td>
-          <!--<td colspan="3" valign="top"><input type="SUBMIT" name="submit" value="Save Edits" class="button" /> <input type="button" id="del" name="del" value="Delete Variable" class="button" /></td>-->
-          <td colspan="3" valign="top"><input type="SUBMIT" name="submit" value=<?php echo getTxt('SaveEdits'); ?> class="button" /> <input type="button" id="del" name="del" value="<?php echo getTxt('DeleteVariables'); ?>" class="button" /></td>
-        </tr>
-     
-      </table>
-    </FORM></p>
-    <p>&nbsp;</p>
-    
-	<?php HTML_Render_Body_End(); ?>
+genDropListsH('Regularity','isreg', 'isreg',getTxt('RegularlySampledTime'),true);
+genInputH('TimeSupport','tsup', 'tsup',getTxt('TemporalFootprint'), true, "value='".$default_timesupport."'");
+genDropLists('TimeUnit','timeunit', 'timeunit', true);
+genDropLists('DataType','datatype', 'datatype', true);
+?>
+<div class="form-group">
+        <label class="col-sm-2 control-label"><?php echo getTxt('DataTypeDefinition');?></label>
+        <div class="col-sm-9">
+     	   <textarea type="text" cols="45" rows="4" class="form-control" id="dtdef" name="dtdef" readonly><?php echo getTxt('SelectData');?></textarea><span class="required"/></div>             
+</div>
+<?php
+genDropListsH('Category','gc', 'gc',getTxt('ScientificCategory'),true);
+genInput('CategoryDefinition','gcdef', 'gcdef', true, " readonly");
+genDropListsH('SelectMethods','jqxWidget', 'jqxWidget',getTxt('VariableCollectionMethod'),true);
+?>
+<div class="col-md-5 col-md-offset-5">
+         
+       <input type="SUBMIT" name="submit" value="<?php echo getTxt('SaveEdits');?>" class="button"/>
+       <input type="reset" name="Reset" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" />
+       <input type="button" id="del" name="del" value="<?php  echo getTxt('DeleteVariables'); ?>" class="button" />
+</div></div>
+</form>
+</div>
+<?php HTML_Render_Body_End(); ?>
 
 
 <script>
