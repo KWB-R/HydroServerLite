@@ -903,7 +903,7 @@ if (!function_exists('write_XML_header')) {
 
 	// This function writes the PHP header  
 	function write_XML_header() {
-	    header("Content-type: text/xml; charset=utf-8'");
+	    header("Content-type: text/xml; charset=utf-8");
 	    echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
 	}
 }
