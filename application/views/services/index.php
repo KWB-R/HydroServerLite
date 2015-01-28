@@ -24,7 +24,7 @@
 			    <label class="info_label"><a href="<?php echo site_url('services/cuahsi_1_1.asmx?WSDL');?>" class="info_link">SOAP <?php echo getTxt('WebServices');?> WSDL</a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;<?php echo getTxt('CopyLink');?> HydroDesktop: <strong><?=base_url()?>index.php/services/cuahsi_1_1.asmx?WSDL</strong>
+						&nbsp;<?php echo getTxt('CopyLink');?> HydroDesktop: <strong><?php echo site_url('services/cuahsi_1_1.asmx?WSDL');?></strong>
 					</div>
 				</div> 
 			</div>
@@ -57,6 +57,14 @@
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;WFS 2.0.0.
+					</div>
+				</div> 
+			</div>
+			<div class="info_container">
+			    <label class="info_label"><a href="<?php echo site_url('services/api');?>" class="info_link">API  <?php echo getTxt('API');?></a></label>
+				<div class="info_content">
+					<div class="link_desc">
+						&nbsp;Data Upload API
 					</div>
 				</div> 
 			</div>

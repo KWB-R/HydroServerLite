@@ -62,6 +62,13 @@ $route["(:any)/services/cuahsi_1_1.asmx/GetVariableInfoObject"] 		= "$1/cuahsi/G
 // Update CV Page routing
 $route["(:any)/services/updatecv"] 								= "$1/updatecv";
 
+$route["(:any)/services/api"] 								= "$1/api";
+$route["(:any)/services/api/values"] 								= "$1/api/values";
+$route["(:any)/services/api/sources"] 								= "$1/api/sources";
+$route["(:any)/services/api/sites"] 								= "$1/api/sites";
+$route["(:any)/services/api/variables"] 								= "$1/api/variables";
+$route["(:any)/services/api/methods"] 								= "$1/api/methods";
+
 $route['404_override'] = '';
 
 
