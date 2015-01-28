@@ -250,6 +250,10 @@ if(($("#state option:selected").val())==-1)
 alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
 return false;
 }
+if(($("#state option:selected").val())=="NULL")
+{
+	$("#county option:selected").val())=="1234"
+}
 if(($("#county option:selected").val())=="")
 {
 //alert("Please select a county.");

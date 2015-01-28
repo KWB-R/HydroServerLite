@@ -50,7 +50,7 @@
     |--------------------------------------------------------------------------
     */
     $config['default_varcode']  = 'sdf';
-    $config['time_support'] = 'df';
+    $config['time_support'] = '';
     /*
     |--------------------------------------------------------------------------
     | Default Variables for Adding Source

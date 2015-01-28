@@ -70,7 +70,10 @@ function load() {
 		}
 	}
 	
+	
+	
 });
+if($("#mapOuter").width()> 768){
  $("#mapOuter").css("position", 'fixed').
       css('top', 0).
       css('left', 0).
@@ -78,6 +81,7 @@ function load() {
       css("height", '100%');
     google.maps.event.trigger(map, 'resize');
 
+}
 }
 
 // Update the height of the map Container to make sure it will fit inside of the window
