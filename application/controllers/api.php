@@ -18,7 +18,7 @@ class api extends MY_Controller {
 		$this->load->model('variables');
 		$this->load->model('Site');
 		$this->load->model('method');
-		$this->load->model('users');		
+		$this->load->model('users'); 		
 	}
 	
 	public function index()
@@ -72,6 +72,18 @@ class api extends MY_Controller {
 		.' was not found in the database. Please supply a valid '.$parameter_name.'"}';
 		exit;
 	}
+	private function exit_duplicate_parameter($parameter_name, $parameter_value)
+	{
+		header('HTTP/1.0 400 Bad request');
+		echo '{"status": "400", "message":"the '.$parameter_name.'='.$parameter_value
+		.' already exists in the database. Please use a different '.$parameter_name.'"}';
+		exit;
+	}
+	private function exit_error($message)
+	{
+		header('HTTP/1.0 500 Internal server error');
+		echo '{"status": "500", "message":"'.$message.'"}';
+	}
 	
 	private function getIDS($array, $id)
 	{
@@ -121,6 +133,135 @@ class api extends MY_Controller {
 	}
 	
 	
+	public function sites()
+	{
+		// adds a source to hydroserver
+		// reading the POST data
+		$postdata = file_get_contents('php://input');
+		
+		// read and check the JSON in the POST data
+		$data = $this->check_json($postdata);
+		
+		// checking user name and password
+		$this->auth($data);
+		
+		//check the parameters for site
+		//check the parameters
+		if (!isset($data->SourceID)) {
+			$this->exit_missing_parameter("SourceID");
+		}
+		
+		if (!isset($data->SiteName)) {
+			$this->exit_missing_parameter("SiteName");
+		}
+		if (!isset($data->SiteCode)) {
+			$this->exit_missing_parameter("SiteCode");
+		}
+		if (!isset($data->Latitude)) {
+			$this->exit_missing_parameter("Latitude");
+		}
+		if (!isset($data->Longitude)) {
+			$this->exit_missing_parameter("Longitude");
+		}	
+		if (!isset($data->SiteType)) {
+			$this->exit_missing_parameter("SiteType");
+		}
+		if (!isset($data->Elevation_m)) {
+			$this->exit_missing_parameter("Elevation_m");		
+		}
+		//set default vertical datum
+		$VerticalDatum = "MSL";
+		if (isset($data->VerticalDatum)) {
+			$VerticalDatum = $data->VerticalDatum;
+		}
+		//set default LatLongDatumID = WGS84 [id=3]
+		$LatLongDatumID = 3;
+		if (isset($data->LatLongDatumID)) {
+			$LatLongDatumID = $data->LatLongDatumID;
+		}
+		//set default state, county, comments
+		$State = NULL;
+		if (isset($data->State)) {
+			$state = $data->State;
+		}
+		$County = NULL;
+		if (isset($data->County)) {
+			$county = $data->County;
+		}
+		$Comments = NULL;
+		if (isset($data->Comments)) {
+			$comments = $data->Comments;
+		}
+		
+		//check if the SiteCode is valid: can't insert duplicate site code
+		$siteCodes = $this->getIDS($this->Site->getAll(),"SiteCode");
+		$SiteCode = $data->SiteCode;
+		if(in_array($SiteCode,$siteCodes))
+		{
+			$this->exit_duplicate_parameter("SiteCode", $SiteCode);
+		}	
+		
+		//check if source id is valid
+		$sourceIDS = $this->getIDS($this->sources->getAll(),"SourceID");
+		$SourceID = $data->SourceID;
+		if(!in_array($SourceID,$sourceIDS))
+		{
+			$this->exit_bad_parameter("SourceID", $SourceID);
+		}	
+		
+		$Site = array
+		(
+			'SiteCode' => $data->SiteCode,
+			'SiteName' => $data->SiteName,
+			'Latitude' =>  $data->Latitude,
+			'Longitude' =>$data->Longitude,
+			'LatLongDatumID' =>$LatLongDatumID,
+			'SiteType' => $data->SiteType,
+			'Elevation_m' =>  $data->Elevation_m,
+			'VerticalDatum' =>$VerticalDatum,
+			'State' => $State,
+			'County' =>  $County,
+			'Comments' =>  $Comments
+		);	
+		
+		// now we can use the model for adding one site to DB
+		$result = $this->Site->add($Site);
+		if($result<=0)
+		{
+			exit_error(getTxt('ProcessingError')." Error while adding site. ");
+		}		
+		$siteID = $result;
+		
+		//In this part we use the series catalog to associate the Site and Source
+		$source = $this->sources->get($SourceID);
+					
+		$series = array
+		(
+			'SiteID' => $siteID,
+			'SiteCode' => $data->SiteCode,
+			'SiteName' =>  $data->SiteName,
+			'SiteType' => $data->SiteType,
+			'SourceID' =>  $data->SourceID,
+			'Organization' =>$source[0]['Organization'],
+			'SourceDescription' => $source[0]['SourceDescription'],
+			'Citation' =>  $source[0]['Citation'],
+			'ValueCount' =>  0
+		);	
+
+		//Add to the series catalog
+		$result=$this->sc->add($series);
+		if($result)
+		{
+			//show response status
+			$response = array('status'=>'200 OK', 'message'=> 'site added: ID='.$siteID);
+			echo json_encode($response);
+			exit;
+		}	
+		else
+		{
+			exit_error(getTxt('ProcessingError')." Error while editing SeriesCatalog for the site. ");	
+		}
+	}
 	
 	
 	public function sources()
