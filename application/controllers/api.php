@@ -1,9 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 |--------------------------------------------------------------------------
-| Upload API Controller 
+| Data Uploading API Controller 
 |--------------------------------------------------------------------------
-| It manages all the data points. 
+| It manages all the REST API calls for uploading data to HydroServer
 | 
 */
 class api extends MY_Controller {
@@ -18,7 +18,7 @@ class api extends MY_Controller {
 		$this->load->model('variables');
 		$this->load->model('Site');
 		$this->load->model('method');
-		$this->load->model('users'); 		
+		$this->load->model('users'); 
 	}
 	
 	public function index()
@@ -104,8 +104,11 @@ class api extends MY_Controller {
 		return $val;
 	}
 	
-	private function createDP($localtimestamp,$val,$siteid,$varid,$methid,$sourceid)
+	private function createDP($date,$time,$val,$siteid,$varid,$methid,$sourceid)
 	{
+		
+		$LocalDateTime = $date . " " . $time;
+		$localtimestamp = strtotime($LocalDateTime);
 		$ms = $this->config->item('UTCOffset') * 3600;
 		$utctimestamp = $localtimestamp - ($ms);
 		$DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
@@ -479,47 +482,47 @@ class api extends MY_Controller {
 		$this->auth($data);
 		
 		//Values in the JSON will be checked and fetched while processing by comparing to the ID tables.
-		$siteIDS = $this->getIDS($this->site->getAll(),"SiteID");
+		$siteIDS = $this->getIDS($this->Site->getAll(),"SiteID");
 		$sourceIDS = $this->getIDS($this->sources->getAll(),"SourceID");
 		$varIDS = $this->getIDS($this->variables->getAll(),"VariableID");
 		$methIDS = $this->getIDS($this->method->getAll(),"MethodID");
 		
 		//check the parameters
-		if (!isset($data->siteid)) {
-			$this->exit_missing_parameter("siteid");
+		if (!isset($data->SiteID)) {
+			$this->exit_missing_parameter("SiteID");
 		}
-		if (!isset($data->sourceid)) {
-			$this->exit_missing_parameter("sourceid");
+		if (!isset($data->SourceID)) {
+			$this->exit_missing_parameter("SourceID");
 		}
-		if (!isset($data->variableid)) {
-			$this->exit_missing_parameter("variableid");
+		if (!isset($data->VariableID)) {
+			$this->exit_missing_parameter("VariableID");
 		}
-		if (!isset($data->methodid)) {
-			$this->exit_missing_parameter("methodid");
+		if (!isset($data->MethodID)) {
+			$this->exit_missing_parameter("MethodID");
 		}
 		if (!isset($data->values)) {
 			$this->exit_missing_parameter("values");
 		}		
 		
-		$source = $data->sourceid;
+		$source = $data->SourceID;
 		if(!in_array($source,$sourceIDS))
 		{
-			$this->exit_bad_parameter("sourceid", $source);
+			$this->exit_bad_parameter("SourceID", $source);
 		}			
-		$site = $data->siteid;
+		$site = $data->SiteID;
 		if(!in_array($site,$siteIDS))
 		{
-			$this->exit_bad_parameter("siteid", $site);
+			$this->exit_bad_parameter("SiteID", $site);
 		}
-		$var = $data->varid;
+		$var = $data->VariableID;
 		if(!in_array($var,$varIDS))
 		{
-			$this->exit_bad_parameter("varid", $var);
+			$this->exit_bad_parameter("VariableID", $var);
 		}
-		$meth = $data->methodid;
+		$meth = $data->MethodID;
 		if(!in_array($meth,$methIDS))
 		{
-			$this->exit_bad_parameter("methodid", $meth);
+			$this->exit_bad_parameter("MethodID", $meth);
 		}
 		
 		// setting default QualityControlLevelID to 0
@@ -552,6 +555,34 @@ class api extends MY_Controller {
 		
 		//inserting valid data values to database, using datapoint model
 		$this->datapoints->addPoints($insertvals);
-		$inserted_msg = count($insertvals) . ' rows successfully inserted to datavalues table';		 
+		$inserted_msg = count($insertvals) . ' rows successfully inserted to datavalues table';	
+
+		//updating the series catalogue
+		$this->updateSC();
+		
+		//returning the status message
+		$response = array('status'=>'200 OK', 'message'=> $inserted_msg);
+		echo json_encode($response);
+		exit;
+	}
+	
+	private function updateSC()
+	{
+		//UPDATES THE SERIES CATALOG.
+		//BREAKING FROM CODEIGINITER POLICIES HERE 
+		//Its just better for now to use the same script. 
+		
+		
+		$connection = mysqli_connect($this->config->item('database_host'), $this->config->item('database_username'), $this->config->item('database_password'),$this->config->item('database_name'))
+		or die("<p>Error connecting to database: " . 
+				   mysqli_error() . "</p>");
+		mysqli_set_charset ($connection,"utf8");
+		  //echo "<p>Connected to MySQL!</p>";
+		  
+		/*  $db = mysql_select_db($this->config->item('database_name'),$connection)
+			or die("<p>Error selecting the database " . $this->config->item('database_name') .
+			  mysql_error() . "</p>");
+		*/
+		require_once APPPATH.'../assets/update_series_catalog.php';
 	}
 }
