@@ -263,6 +263,34 @@ class api extends MY_Controller {
 		}
 	}
 	
+	public function methods()
+	{
+		// adds a method to hydroserver
+		// reading the POST data
+		$postdata = file_get_contents('php://input');
+		$data = $this->check_json($postdata);
+		$this->auth($data);
+		
+		//check the parameters for method
+		if (!isset($data->MethodDescription)) {
+			$this->exit_missing_parameter("MethodDescription");
+		}
+		if (!isset($data->MethodLink)) {
+			$this->exit_missing_parameter("MethodLink");
+		}
+		//variableID is an optional parameter.
+		if (isset($data->VariableID)) {
+			$VariableID = $data->VariableID;
+		} else {
+			$VariableID = 0;
+		}
+		$status = $this->method->add($data->MethodDescription, $data->MethodLink, $VariableID);
+		//show response status
+		$response = array('status'=>'200 OK', 'message'=> 'method added: '.$status);
+		echo json_encode($response);
+		exit;
+	}
+	
 	
 	public function sources()
 	{
