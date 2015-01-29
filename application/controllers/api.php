@@ -81,8 +81,8 @@ class api extends MY_Controller {
 	}
 	private function exit_error($message)
 	{
-		header('HTTP/1.0 500 Internal server error');
-		echo '{"status": "500", "message":"'.$message.'"}';
+		header('HTTP/1.0 400 Bad request');
+		echo '{"status": "400", "database error":"'.$message.'"}';
 	}
 	
 	private function getIDS($array, $id)
@@ -262,6 +262,109 @@ class api extends MY_Controller {
 			exit_error(getTxt('ProcessingError')." Error while editing SeriesCatalog for the site. ");	
 		}
 	}
+	
+	
+	public  function variables()
+    {
+        // adds a variable to hydroserver
+		// reading the POST data
+		$postdata = file_get_contents('php://input');
+		
+		// read and check the JSON in the POST data
+		$data = $this->check_json($postdata);
+		
+		// checking user name and password
+		$this->auth($data);
+		
+        //check the parameters for variable
+		if (!isset($data->VariableCode)) {
+			$this->exit_missing_parameter("VariableCode");
+		}
+                
+        if (!isset($data->VariableName)) {
+			$this->exit_missing_parameter("VariableName");
+		}
+                
+        if (!isset($data->Speciation)) {
+			$this->exit_missing_parameter("Speciation");
+		}
+                
+        if (!isset($data->VariableUnitsID)) {
+			$this->exit_missing_parameter("VariableUnitsID");
+		}
+                
+        if (!isset($data->SampleMedium)) {
+			$this->exit_missing_parameter("SampleMedium");
+		}
+                
+        if (!isset($data->ValueType)) {
+			$this->exit_missing_parameter("ValueType");
+		}
+                
+        if (!isset($data->IsRegular)) {
+			$this->exit_missing_parameter("IsRegular");
+		}
+                
+        if (!isset($data->TimeSupport)) {
+			$this->exit_missing_parameter("TimeSupport");
+		}
+                
+        if (!isset($data->TimeUnitsID)) {
+			$this->exit_missing_parameter("TimeUnitsID");
+		}
+                
+        if (!isset($data->DataType)) {
+			$this->exit_missing_parameter("DataType");
+		}
+                
+        if (!isset($data->GeneralCategory)) {
+			$this->exit_missing_parameter("GeneralCategory");
+		}
+                               
+        if (!isset($data->NoDataValue)) {
+			$this->exit_missing_parameter("NoDataValue");
+		}
+		//check if the VariableCode is valid: can't insert duplicate variable code
+		$VariableCodes = $this->getIDS($this->variables->getAll(),"VariableCode");
+		$VariableCode = $data->VariableCode;
+		if(in_array($VariableCode,$VariableCodes))
+		{
+			$this->exit_duplicate_parameter("VariableCode", $VariableCode);
+		}	
+		$Variable = array
+		(
+			'VariableCode' => $VariableCode,
+			'VariableName' => $data->VariableName,
+			'Speciation' =>  $data->Speciation,
+			'VariableUnitsID' =>$data->VariableUnitsID,
+			'SampleMedium' =>$data->SampleMedium,
+			'ValueType' => $data->ValueType,
+			'IsRegular' =>  $data->IsRegular,
+            'TimeSupport' => $data->TimeSupport,
+			'TimeUnitsID' =>  $data->TimeUnitsID,
+            'DataType' =>  $data->DataType,
+            'GeneralCategory' =>  $data->GeneralCategory,
+            'NoDataValue' =>  $data->NoDataValue			
+		);	
+		
+        // now we can use the model for adding one variable to the DB
+		$result = $this->variables->add($Variable);
+                
+		if($result<=0) {
+			exit_error(getTxt('ProcessingError')." Error while adding site. ");
+		}	
+        $variableID = $result;       
+               
+		if($result) {
+			//show response status
+			$response = array('status'=>'200 OK', 'message'=> 'variable added: ID='.$variableID);
+			echo json_encode($response);
+			exit;
+		}	
+		else {
+			exit_error(getTxt('ProcessingError')." Error while adding variable. ");	
+		}             
+    }
 	
 	public function methods()
 	{
