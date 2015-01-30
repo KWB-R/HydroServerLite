@@ -411,7 +411,6 @@ if(($("#state option:selected").val())==-1){
 	alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
 	return false;
 }
-
 //Validation for the county
 if(($("#county option:selected").val())==""){
 		alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
