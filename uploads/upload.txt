@@ -1,0 +1,1 @@
+This is a folder for the "Add a New Site" page. This gives a folder for the pictures to be uploaded to so that they can be used for the site.
