@@ -212,53 +212,12 @@ genInputH('DerivedFromID','DerivedfromID','derived',getTxt('DerivedFromIDInfo'),
 
 	$("form").submit(function(){
 
-		if(($("#password").val())==""){
-		alert("Please enter a Password");
-		return false;
-		}
-		if(($("#wwdb").val())=="-1"){
-		alert("Please indicate if you'd like to use default database connection");
-		return false;
-		}
-		if(($("#DatabaseHost").val())==""){
-		alert("Please enter a Database Host name");
-		return false;
-		}
-		if(($("#DatabaseUserName").val())==""){
-		alert("Please enter a Database Username");
-		return false;
-		}
-		if(($("#DatabasePassword").val())==""){
-		alert("Please enter a Database Password");
-		return false;
-		}
-		if(($("#DatabaseName").val())==""){
-		alert("Please enter a Database Name");
-		return false;
-		}
-		if(($("#WebsitePath").val())==""){
-		alert("Please enter a Database Name");
-		return false;
-		}
-		if(($("#OrganizationName").val())==""){
-		alert("Please enter a Organization Name");
-		return false;
-		}
-		if(($("#ParentWebsiteName").val())==""){
-		alert("Please enter a Parent Website Name");
-		return false;
-		}
-		if(($("#ParentWebsite").val())==""){
-		alert("Please enter a Parent Website");
-		return false;
-		}
 		
 		var regex = /[0-9]/;
 	if(!($("#TimeSupport").val().match(regex))){
 		alert("Please enter a valid number. Time Support can only be a number.");
 		return false;
 	}
-		
 		
 
 		var tempvalue=document.getElementById("<?php echo getTxt('OrganizationName');?>");
