@@ -22,7 +22,7 @@ echo $CSS_Main;
 	
 	var dataAdapter = new $.jqx.dataAdapter(source);
 	// Create a jqxListBox
-	$("#jqxWidget").jqxListBox({source: dataAdapter, theme: 'darkblue', multiple: true, width: 400, height: 300, displayMember: "VarNameMod", valueMember: "VariableID"});
+	$("#jqxWidget").jqxListBox({source: dataAdapter, theme: 'darkblue', multiple: true, width: '94%', height: 300, displayMember: "VarNameMod", valueMember: "VariableID"});
 });
 </script>
 <?php HTML_Render_Body_Start();
@@ -35,8 +35,8 @@ genInputT('MethodLinkColon','MethodLink','MethodLink',false,$extra="",'ExMethodL
 //echo '<span class="em">'.getTxt('ExMethodLink').'</span>';
 ?>
 <div class="form-group">
-	<label class="col-sm-3 control-label"></label>
-  <div class = "col-md-6 col-md-offset-0">
+	<label class="col-sm-2 control-label"></label>
+  <div class = "col-md-8">
   <label><?php echo getTxt('SelectVariablesBelow1');?></label>
   <label><?php echo getTxt('SelectAllThatApply');?></label>
   <div id="jqxWidget"></div><span class="required">*</span>

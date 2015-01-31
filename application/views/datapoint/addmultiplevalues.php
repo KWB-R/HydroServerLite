@@ -44,7 +44,7 @@ $("#VariableID1").jqxDropDownList(
 {
 	source: dataAdapter,
 	theme: 'darkblue',
-	width: 200,
+	width: '94%',
 	height: 25,
 	selectedIndex: 0,
 	displayMember: 'VariableName',
@@ -70,7 +70,7 @@ $("#MethodID1").jqxDropDownList(
         {
             source: dataAdapter21,
             theme: 'darkblue',
-            width: 200,
+            width: '94%',
             height: 25,
             selectedIndex: 0,
             displayMember: 'MethodDescription',
@@ -158,7 +158,11 @@ row_id.push("VariableID"+row_no);
 var newid=row_id[row_id.length-1];
 
 
-var add_html='<tr><td width="182"><div id="VariableID'+row_no+'"></div></td> <td width="249"><div id="MethodID'+row_no+'"></div></td><td width="60"><center><input type="text" id="datepicker'+row_no+'" name="datepicker'+row_no+'" class="short" /></center></td><td width="46"><center><input type="text" name="timepicker'+row_no+'" id="timepicker'+row_no+'" class="short" maxlength="10"></center></td><td width="51"><center><input type="text" id="value'+row_no+'" name="value'+row_no+'" onblur="runa()" class="tiny" maxlength="20"/></center></td></tr>';
+var add_html='<tr><td width="20%"><div id="VariableID'+row_no+'"></div></td> <td width="20%"><div id="MethodID'+row_no+
+'"></div></td><td width="20%"><center><input type="text" id="datepicker'+row_no+'" name="datepicker'+row_no+
+'"  /></center></td><td width="20%"><center><input type="text" name="timepicker'+row_no+
+'" id="timepicker'+row_no+'"  ></center></td><td width="20%"><center><input type="text" id="value'+row_no+
+'" name="value'+row_no+'" onblur="runa()"/></center></td></tr>';
 
 $('#multiple tr:last').after(add_html);
 
@@ -171,7 +175,7 @@ $('#multiple tr:last').after(add_html);
         {
             source: dataAdapter,
             theme: 'darkblue',
-            width: 200,
+            width: '94%',
             height: 25,
             selectedIndex: 0,
             displayMember: 'VariableName',
@@ -206,7 +210,7 @@ var tempid='MethodID'+newid.slice(10, newid.length);
         {
             source: dataAdapter21,
             theme: 'darkblue',
-            width: 200,
+            width: '94%',
             height: 25,
             selectedIndex: 0,
             displayMember: 'MethodDescription',
@@ -277,37 +281,40 @@ echo form_open('datapoint/addmultiplevalues', $attributes);
 genSelect('Source',"SourceID","SourceID",$sourcesOptions,'SelectEllipsis',true,'onChange="showSites(this.value)"');
 genSelectH('Site',"SiteID","SiteID",'',getTxt('IfNoSeeSite1').' '.getTxt('ContactSupervisor').' '.getTxt('AddIt'),'SelectElipsis',true);
 ?>
-      <table width="600" border="1" cellpadding="0" cellspacing="0" id="multiple">
+<div class="bs-docs-grid">
+
+  <div class="row show-grid">
+     <div class="col-xs-12 col-sm-6 col-md-3"><?php echo getTxt('Variable');?></div>
+     <div class="col-xs-12 col-sm-6 col-md-3"><?php echo getTxt('Method');?></div>
+      <div class="col-xs-12 col-sm-4 col-md-2"><?php echo getTxt('Date');?></div>
+     <div class="col-xs-12 col-sm-4 col-md-2"><?php echo getTxt('Time');?></div>
+      <div class="col-xs-12 col-sm-4 col-md-2"><?php echo getTxt('Value');?></div>
+
+
+    </div>
+
+  </div>
+<br/>
+
+<div class="table-responsive">
+    <table border="1" cellpadding="0" cellspacing="0" id="multiple" class="table table-bordered">
         <tr>
-          <td width="182"><center><strong><?php echo getTxt('Variable');?>&nbsp;*</strong></center></td>
-          <td width="249"><center><strong><?php echo getTxt('Method');?>&nbsp;*</strong>&nbsp;<span class="hint" title="<?php echo "'". getTxt('IfNoSeeMethod1')."'";?> + <?php echo "'". getTxt('ContactSupervisor')."'";?> + <?php echo "'". getTxt('AddIt')."'";?>">?</span></center></td>
-          <td width="60"><center><strong><?php echo getTxt('Date');?>&nbsp;*</strong>&#8224;</center></td>
-          <td width="46"><center><strong><?php echo getTxt('Time');?>&nbsp;</strong>&#8224;</center></td>
-          <td width="51"><center><strong><?php echo getTxt('Value');?>&nbsp;</strong>&#8224;</center></td>
+          <td width="20%"><center><strong><?php echo getTxt('Variable');?>&nbsp;*</strong></center></td>
+          <td width="20%"><center><strong><?php echo getTxt('Method');?>&nbsp;*</strong>&nbsp;<span class="hint" title="<?php echo "'". getTxt('IfNoSeeMethod1')."'";?> + <?php echo "'". getTxt('ContactSupervisor')."'";?> + <?php echo "'". getTxt('AddIt')."'";?>">?</span></center></td>
+          <td width="20%"><center><strong><?php echo getTxt('Date');?>&nbsp;*</strong>&#8224;</center></td>
+          <td width="20%"><center><strong><?php echo getTxt('Time');?>&nbsp;</strong>&#8224;</center></td>
+          <td width="20%"><center><strong><?php echo getTxt('Value');?>&nbsp;</strong>&#8224;</center></td>
           </tr>
         <tr>
-          <td width="182" bgcolor="#0099FF">&nbsp;</td>
-          <td width="249" bgcolor="#0099FF">&nbsp;</td>
-          <td width="60" bgcolor="#0099FF">&nbsp;</td>
-          <td width="46" bgcolor="#0099FF">&nbsp;</td>
-          <td width="51" bgcolor="#0099FF">&nbsp;</td>
-          </tr>
-        <tr>
-          <td width="182">
-     
-           <div id="VariableID1"></div>
-            
-            </td>
-          <td width="249"><div id="MethodID1"></div></td>
-          <td width="60"><center><input type="text" id="datepicker1" name="datepicker1"  class="short" maxlength="12"/></center></td>
-          <td width="46"><center><input type="text" id="timepicker1" name="timepicker1"  class="short" maxlength="10"></center></td>
-          <td width="51"><center><input type="text" id="value1" name="value1" onblur="runa()"  class="tiny" maxlength="20"/></center></td>
-          </tr>
-      
-        
-       
-      </table>
-      
+          <td width="20%"><div id="VariableID1"></div></td>
+          <td width="20%"><div id="MethodID1"></div></td>
+          <td width="20%"><center><input type="text" id="datepicker1" name="datepicker1"  /></center></td>
+          <td width="20%"><center><input type="text" id="timepicker1" name="timepicker1"  ></center></td>
+          <td width="20%"><center><input type="text" id="value1" name="value1" onblur="runa()" /></center></td>
+          </tr>              
+    </table>
+</div>
+
       <br/>
       <center>
       <input type="hidden" id="finalRows" name="finalRows"/>

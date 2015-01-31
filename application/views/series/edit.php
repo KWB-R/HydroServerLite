@@ -73,6 +73,7 @@ echo $CSS_Main;?>
 			  selectionmode: 'singlecell',
 			  source: source,
 			  theme: theme,
+			  width: '94%',
 			  columnsresize: true,
 			  editable: true,
 			  columns: [
