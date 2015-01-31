@@ -70,9 +70,9 @@ echo ("langChanged");
 function processLang()
 {
 	//Check if language file exists. 
-	$language = (getCurrentLang());
+	$language = getCurrentLang();
 	//language file path
-	$file_path ="./application/language/" .$language. "/hsl_lang.php";
+	$file_path ="./application/language/" .strtolower($language). "/hsl_lang.php";
 	$file_exists = is_file($file_path);
 	if($file_exists){
 		// The file exists. Now just check when it was last time created.
@@ -102,16 +102,16 @@ function startsWith($haystack, $needle) {
 
 function createNew($language)
 {	
-	$file_path ="./application/language/" .$language. "/hsl_lang.php";
+	$file_path ="./application/language/" .strtolower($language). "/hsl_lang.php";
 	if(is_file($file_path)){
 		unlink($file_path);	
 	}
 	else
 	{
-		if(!file_exists("./application/language/" .$language))
+		if(!file_exists("./application/language/" .strtolower($language)))
 		{
 			//create dir
-			mkdir("./application/language/" .$language);
+			mkdir("./application/language/" .strtolower($language));
 		}
 	}
 	
