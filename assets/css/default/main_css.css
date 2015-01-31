@@ -970,3 +970,10 @@ div.form-group>div.col-sm-10>span.em
 {
     white-space: pre;
 }
+
+.forceoutline
+{
+    border:1px solid;
+    border-radius: 25px;
+    text-align: center;
+}

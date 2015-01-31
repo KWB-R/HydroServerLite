@@ -201,3 +201,8 @@ td {
  a.reversed:visited { color: #FFF; text-decoration: none;}
  a.reversed:hover { color: #FFF; text-decoration: underline;}
  a.reversed:active { color: #FFF; text-decoration: none;}
+
+ .forceoutline
+ {
+ 	border:1px solid; 
+ }

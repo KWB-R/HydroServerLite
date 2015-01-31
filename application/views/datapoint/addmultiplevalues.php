@@ -281,20 +281,6 @@ echo form_open('datapoint/addmultiplevalues', $attributes);
 genSelect('Source',"SourceID","SourceID",$sourcesOptions,'SelectEllipsis',true,'onChange="showSites(this.value)"');
 genSelectH('Site',"SiteID","SiteID",'',getTxt('IfNoSeeSite1').' '.getTxt('ContactSupervisor').' '.getTxt('AddIt'),'SelectElipsis',true);
 ?>
-<div class="bs-docs-grid">
-
-  <div class="row show-grid">
-     <div class="col-xs-12 col-sm-6 col-md-3"><?php echo getTxt('Variable');?></div>
-     <div class="col-xs-12 col-sm-6 col-md-3"><?php echo getTxt('Method');?></div>
-      <div class="col-xs-12 col-sm-4 col-md-2"><?php echo getTxt('Date');?></div>
-     <div class="col-xs-12 col-sm-4 col-md-2"><?php echo getTxt('Time');?></div>
-      <div class="col-xs-12 col-sm-4 col-md-2"><?php echo getTxt('Value');?></div>
-
-
-    </div>
-
-  </div>
-<br/>
 
 <div class="table-responsive">
     <table border="1" cellpadding="0" cellspacing="0" id="multiple" class="table table-bordered">
