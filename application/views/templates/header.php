@@ -34,6 +34,7 @@
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Tagalog">Tagalog</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Czech">Český</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Ukranian">Українська</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Chinese">中文</a></li>
   			</ul>
 		</div>
             </li>

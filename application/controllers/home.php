@@ -74,7 +74,8 @@ class Home extends MY_Controller {
 					"Russian"=>"Русский",
 					"Tagalog"=>"Tagalog",
 					"Czech"=>"Český",
-					"Ukranian"=>"Українська");
+					"Ukranian"=>"Українська",
+					"Chinese"=>"中文");
 	$langOptions = genOptions($lang);
 
 	//Check if any other installations exist? if No then the first one shall be called 'default'
