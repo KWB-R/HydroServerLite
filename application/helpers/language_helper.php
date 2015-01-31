@@ -70,7 +70,7 @@ echo ("langChanged");
 function processLang()
 {
 	//Check if language file exists. 
-	$language = strtolower(getCurrentLang());
+	$language = (getCurrentLang());
 	//language file path
 	$file_path ="./application/language/" .$language. "/hsl_lang.php";
 	$file_exists = is_file($file_path);

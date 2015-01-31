@@ -39,10 +39,11 @@ genInputT('MethodLinkColon','MethodLink','MethodLink',false,$extra="",'ExMethodL
   <div class = "col-md-8">
   <label><?php echo getTxt('SelectVariablesBelow1');?></label>
   <label><?php echo getTxt('SelectAllThatApply');?></label>
-  <div id="jqxWidget"></div><span class="required">*</span>
+  <!--<div id="jqxWidget"></div><span class="required">*</span>-->
+<?php  genDropLists('','jqxWidget', 'jqxWidget',getTxt(''),true); ?>
+</div>
   </div>
 </div>
-
 <div class="col-md-5 col-md-offset-5">
        <input type="SUBMIT" name="submit" value="<?php echo getTxt('AddMethodButton');?>" class="button"/>
        <input type="reset" name="Reset" value="<?php echo getTxt('Cancel'); ?>" class="button" style="width: auto" />

@@ -138,10 +138,10 @@ $options = genOptions(array(
 		));
 genSelect('useExistingDB',"wwdb","wwdb",$options,'SelectEllipsis',true);}
 echo '<div id="dbsettings">';
-genInputH('DatabaseHost','Database Host','databasehost',getTxt('DatabaseHostInfo'),true);
-genInput('DatabaseUsername','Database User Name','databaseusername');
-genInput('DatabasePassword','Database Password','databasepassword');
-genInputH('DatabaseName','Database Name','databasename',getTxt('DatabaseNameInfo'),true);
+genInputH('DatabaseHost','DatabaseHost','databasehost',getTxt('DatabaseHostInfo'),true);
+genInput('DatabaseUsername','DatabaseUserName','databaseusername',true);
+genInput('DatabasePassword','DatabasePassword','databasepassword',true);
+genInputH('DatabaseName','DatabaseName','databasename',getTxt('DatabaseNameInfo'),true);
 echo '</div>';
 ?>
 <div class="col-sm-12"><p class="h4"><strong><?php echo getTxt('ConfigurationSettingsLook');?></strong></p></div>
@@ -153,11 +153,11 @@ if($default)
 	genSelect('multipleInstall',"multi","multi",$options,'No',true);
 	$extraText = " value='default' readonly";
 }
-genInputT('ConfigName','Website Path','ConfigName',true,$extraText,'ConfigDesc');
+genInputT('ConfigName','WebsitePath','ConfigName',true,$extraText,'ConfigDesc');
 genSelect('LanguageCode',"LangCode","lang",$langOptions,'SelectEllipsis',true);
-genInputT('OrganizationName',getTxt('OrganizationName'),'orgname',true,'','OrganizationNameEx');
-genInputT('ParentWebsiteName',getTxt('ParentWebsiteName'),'parentname',true,'','ParentWebsiteNameEx');
-genInputT('ParentWebsite',getTxt('ParentWebsite'),'parentweb',true,'','WebsiteDomainEx');								
+genInputT('OrganizationName','OrganizationName','orgname',true,'','OrganizationNameEx');
+genInputT('ParentWebsiteName','ParentWebsiteName','parentname',true,'','ParentWebsiteNameEx');
+genInputT('ParentWebsite','ParentWebsite','parentweb',true,'','WebsiteDomainEx');								
 ?>            
 
 <div id="advSetup">
@@ -167,19 +167,19 @@ genInputH('MetaDataProfileVersion','Profile Version','profilev',getTxt('ProfileV
 ?>
 <div class="col-sm-12"><p class="h4"><strong><?php echo getTxt('ConfigurationSettingsSites');?></strong></p></div>
 <?php
-genInputT('Source',getTxt('Source'),'source',true,'','OrganizationNameEx');
-genInputH('LocalX',getTxt('LocalX'),'localx',getTxt('LocalXInfo'));	
-genInputH('LocalY',getTxt('LocalY'),'localy',getTxt('LocalYInfo'));	
-genInputH('LocalProjectionID',getTxt('LocalProjectionID'),'localpid',getTxt('LocalProjectionIDInfo'));	
-genInputH('PosAccuracy',getTxt('PosAccuracy'),'posaccuracy',getTxt('PositionalAccuracyInfo'));	
-genInputH('VerticalDatum',getTxt('VerticalDatum'),'vdatum',getTxt('VerticalDatumInfo'));	
-genInputH('SpatialReference',getTxt('SpatialReference'),'spatialref',getTxt('SpatialReferenceInfo'));	
+genInputT('Source','Source','source',true,'','OrganizationNameEx');
+genInputH('LocalX','LocalX','localx',getTxt('LocalXInfo'));	
+genInputH('LocalY','LocalY','localy',getTxt('LocalYInfo'));	
+genInputH('LocalProjectionID','LocalProjectionID','localpid',getTxt('LocalProjectionIDInfo'));	
+genInputH('PosAccuracy','PosAccuracy','posaccuracy',getTxt('PositionalAccuracyInfo'));	
+genInputH('VerticalDatum','VerticalDatum','vdatum',getTxt('VerticalDatumInfo'));	
+genInputH('SpatialReference','SpatialReference','spatialref',getTxt('SpatialReferenceInfo'));	
 ?>
 </div>
 <div class="col-sm-12"><p class="h4"><strong><?php echo getTxt('ConfigurationSettingsVariables');?></strong></p></div>
 <?php
-genInputH('VariableCode','Variable Code','varcode',getTxt('VariableCodeInfo'));	
-genInputH('TimeSupport','Time Support','timesupport',getTxt('LocalXInfo'));	
+genInputH('VariableCode','VariableCode','varcode',getTxt('VariableCodeInfo'));	
+genInputH('TimeSupport','TimeSupport','timesupport',getTxt('LocalXInfo'));	
 ?>
 <div class="col-sm-12"><p class="h4"><strong><?php echo getTxt('ConfigurationSettingsDataValues');?></strong></p></div>
 <?php
@@ -187,13 +187,13 @@ genInputH('UTCOffset','UTC Offset','utcoffset1',getTxt('UTCOffsetInfo'));
 ?>
 <div id="advSetup2">
 <?php
-genInputH('CensorCode','Censor Code','censorcode',getTxt('CensorCodeInfo'),true,' value="nc"');
-genInputH('QualityControlLevel','Quality Control Level','qcl',getTxt('QualityControlLevelInfo'),true,' value="0"');
-genInputH('ValueAccuracy','Value Accuracy','valueacc',getTxt('ValueAccuracyInfo'),true,' value="NULL"');
-genInputH('OffsetTypeID','Offset Type ID','offsettype',getTxt('OffsetIntergerInfo'),true,' value="NULL"');
-genInputH('QualifierID','Qualifier ID','qualifier',getTxt('QualifierIDInfo'),true,' value="1"');
+genInputH('CensorCode','CensorCode','censorcode',getTxt('CensorCodeInfo'),true,' value="nc"');
+genInputH('QualityControlLevel','QualityControlLevel','qcl',getTxt('QualityControlLevelInfo'),true,' value="0"');
+genInputH('ValueAccuracy','ValueAccuracy','valueacc',getTxt('ValueAccuracyInfo'),true,' value="NULL"');
+genInputH('OffsetTypeID','OffsetTypeID','offsettype',getTxt('OffsetIntergerInfo'),true,' value="NULL"');
+genInputH('QualifierID','QualifierID','qualifier',getTxt('QualifierIDInfo'),true,' value="1"');
 genInputH('SampleID','sampleid','sampleid',getTxt('SampleIDInfo'),true,' value="NULL"');
-genInputH('DerivedFromID','Derived from ID','derived',getTxt('DerivedFromIDInfo'),true,' value="NULL"');
+genInputH('DerivedFromID','DerivedfromID','derived',getTxt('DerivedFromIDInfo'),true,' value="NULL"');
 ?> 
 </div>
  <input type="hidden" name="hiddenstuff" value="<?php echo $hiddenStuff;?>" class="button"/>
@@ -212,7 +212,54 @@ genInputH('DerivedFromID','Derived from ID','derived',getTxt('DerivedFromIDInfo'
 
 	$("form").submit(function(){
 
-
+		if(($("#password").val())==""){
+		alert("Please enter a Password");
+		return false;
+		}
+		if(($("#wwdb").val())=="-1"){
+		alert("Please indicate if you'd like to use default database connection");
+		return false;
+		}
+		if(($("#DatabaseHost").val())==""){
+		alert("Please enter a Database Host name");
+		return false;
+		}
+		if(($("#DatabaseUserName").val())==""){
+		alert("Please enter a Database Username");
+		return false;
+		}
+		if(($("#DatabasePassword").val())==""){
+		alert("Please enter a Database Password");
+		return false;
+		}
+		if(($("#DatabaseName").val())==""){
+		alert("Please enter a Database Name");
+		return false;
+		}
+		if(($("#WebsitePath").val())==""){
+		alert("Please enter a Database Name");
+		return false;
+		}
+		if(($("#OrganizationName").val())==""){
+		alert("Please enter a Organization Name");
+		return false;
+		}
+		if(($("#ParentWebsiteName").val())==""){
+		alert("Please enter a Parent Website Name");
+		return false;
+		}
+		if(($("#ParentWebsite").val())==""){
+		alert("Please enter a Parent Website");
+		return false;
+		}
+		
+		var regex = /[0-9]/;
+	if(!($("#TimeSupport").val().match(regex))){
+		alert("Please enter a valid number. Time Support can only be a number.");
+		return false;
+	}
+		
+		
 
 		var tempvalue=document.getElementById("<?php echo getTxt('OrganizationName');?>");
 		document.getElementById('<?php echo getTxt('Source');?>').value=tempvalue.value;

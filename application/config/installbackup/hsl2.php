@@ -16,7 +16,7 @@
 */
 $config['database_host']	= 'localhost';
 $config['database_username']	= 'root';
-$config['database_name']	= 'idaho';
+$config['database_name']	= 'test122';
 $config['database_password']	= '';
 /*
 |--------------------------------------------------------------------------

@@ -215,6 +215,12 @@ $("#SiteID").change(function findSite(){
 				{
 				return $(this).text()==data.State;
 				})[0].selected = true;
+				if($('#state').val()=='NULL')
+				$('#county option').val(function()
+				{
+				return $(this).text()=='NULL';
+				$("#county").val(data.County);
+				})
 				new_drop_down_list(data.County)
 				$("#county").val(data.County);
 				$("#Citation").val(data.Citation);
@@ -405,22 +411,11 @@ if(($("#state option:selected").val())==-1){
 	alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
 	return false;
 }
-
 //Validation for the county
 if(($("#county option:selected").val())==""){
 		alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
 		return false;
 	}
-
-var county = $("#county").val();
-
-if(county==undefined){
-	//alert("County is undefined. Please reselect the County.");
-	alert(<?php echo "'".getTxt('UndefinedCounty')."'"; ?>);
-	return false;
-}
-
-
 
 if(($("#VerticalDatum option:selected").val())==-1){
 	//alert("Please select a Vertical Datum.");

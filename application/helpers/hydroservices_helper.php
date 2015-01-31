@@ -406,6 +406,11 @@ if (!function_exists('wof_queryInfo_GetSites')) {
   		$retVal = '<queryInfo><creationTime>' . date('c') . '</creationTime>';
   		$retVal .= '<criteria MethodCalled="GetSites">';
 
+		if (is_array($site) && count($site) > 0) {
+			if ($site[0] === "") {
+				$site = NULL;
+			}
+		}
   		if (is_array($site) && count($site) > 0) {
   			$retVal .= '<parameter name="site" value="'.implode(",",$site).'" /></criteria></queryInfo>';
   		} else {
@@ -592,23 +597,19 @@ if (!function_exists('wof_GetValues')) {
 
 	function wof_GetValues($location, $variable, $startDate, $endDate ) {
     	//get the short variable code and short site code
-    	$shortSiteCode = $location;
-    	$shortVariableCode = $variable;
-    	$pos1 = strpos($location, ":");
-    	if ($pos1 >= 0) {
-        	$split1 = explode(":", $location);
-        	$shortSiteCode = $split1[1];
-    	}
-		//What if network Code is not passed? //Changing to adapt to that case
+		$split1 = explode(":", $location);
 		
-    	$pos2 = strpos($variable, ":");
-	    if ($pos2 >= 0 && $pos2!=FALSE) {
-	        $split2 = explode(":", $variable);
-	        $shortVariableCode = $split2[1];
-	    }
-		else
-		{
-			$shortVariableCode=$variable;
+		if (count($split1) > 1) {
+			$shortSiteCode = $split1[1];
+		} else {
+			$shortSiteCode = $split1[0];
+		}
+		
+		$split2 = explode(":", $variable);
+		if (count($split2) > 1) {
+			$shortVariableCode = $split2[1];
+		} else {
+			$shortVariableCode = $split2[0];
 		}
  
 	    $retVal = '<timeSeriesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
@@ -903,7 +904,7 @@ if (!function_exists('write_XML_header')) {
 
 	// This function writes the PHP header  
 	function write_XML_header() {
-	    header("Content-type: text/xml; charset=utf-8'");
+	    header("Content-type: text/xml; charset=utf-8");
 	    echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
 	}
 }
@@ -1278,16 +1279,20 @@ if (!function_exists('db_GetSites')) {
 		$where = '';
 		if (is_array($site) && count($site) > 0) {
 			foreach($site as $row) {
-				$param_site = explode(":",$row);
-				if (count($param_site) > 1) {
-		        	$where .= '"' . $param_site[1] . '",';
-				} else {
-		        	$where .= '"' . $param_site[0] . '",';
+				if($row !== '') {
+					$param_site = explode(":",$row);
+					if (count($param_site) > 1) {
+						$where .= '"' . $param_site[1] . '",';
+					} else {
+						$where .= '"' . $param_site[0] . '",';
+					}
 				}
 			}
-
-	    	$whereCode = "(".substr($where, 0, strlen($where) - 1).")";
-			$ci->db->where("s.SiteCode IN",$whereCode,FALSE);
+			
+			if ($where !== "") {
+				$whereCode = "(".substr($where, 0, strlen($where) - 1).")";
+				$ci->db->where("s.SiteCode IN",$whereCode,FALSE);
+			}
 		}
 
 		$result = $ci->db->get($sites_table." s");

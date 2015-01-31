@@ -16,7 +16,7 @@
     */
     $config['database_host']    = 'localhost';
     $config['database_username']    = 'root';
-    $config['database_name']    = 'english';
+    $config['database_name']    = 'test122';
     $config['database_password']    = '';
     /*
     |--------------------------------------------------------------------------
@@ -50,7 +50,7 @@
     |--------------------------------------------------------------------------
     */
     $config['default_varcode']  = 'sdf';
-    $config['time_support'] = 'df';
+    $config['time_support'] = '';
     /*
     |--------------------------------------------------------------------------
     | Default Variables for Adding Source
