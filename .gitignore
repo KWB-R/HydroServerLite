@@ -16,3 +16,4 @@ application/logs/*
 
 application/language/english/hsl_lang.php
 english
+/application/config/installations/default.php
