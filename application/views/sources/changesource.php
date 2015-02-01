@@ -1,28 +1,4 @@
 <?php
-
-//redirect anyone that is not an administrator
-//	if (!isAdmin()){
-//	header("Location: index.php?state=pass2");
-//	exit;	
-//	}
-
-
-/*
-//filter the Site results after Source is selected
-$sql ="SELECT * FROM sources";
-$result = transQuery($sql,0,0);
-
-	if (count($result) < 1){
-		$msg = "<p class=em2>$NoSoureces</em></p>";
-	} else {
-		foreach ($result as $row) {
-			$s_id = $row["SourceID"];
-			$s_org = $row["Organization"];
-			$option_block_s .= "<option value=$s_id>$s_org</option>";
-		}
-	}
-
-*/
 HTML_Render_Head($js_vars,getTxt('ChangeSource'));
 echo $CSS_JQX;
 echo $JS_GetTheme;
@@ -278,14 +254,16 @@ function updateSource(){
 		}
 
 		//Zip Code Validation
-		if(($("#ZipCode").val())==""){
-			alert(<?php echo "'".getTxt('EnterZipCode')."'"; ?>);
-			return false;
-		}
-		if(!($("#ZipCode").val().match(/^\d{5}(-\d{4})?$/))){
+		if(($("#ZipCode").val())=="" && (($("#State option:selected").val())!="NULL")){
+		alert(<?php echo "'".getTxt('EnterZipCode')."'"; ?>);
+		return false;
+	}
+
+		if((!($("#ZipCode").val().match(/^\d{5}(-\d{4})?$/))) && (($("#State option:selected").val())!="NULL")){
 			alert(<?php echo "'".getTxt('InvalidZipCode')."'"; ?>);
 			return false;
 		}
+
 
 		//MetadataID Validation
 		if(($("#MetadataID").val())==""){

@@ -42,7 +42,23 @@ function setDefaults()
 $( document ).ready(function() {
 	
 	setDefaults();
-  initialize();
+ 	initialize();
+  //County Options
+  $( "#state" )
+  .change(function () {
+    if(($("#state option:selected").val())=="NULL")
+    {
+    	//Hide the county
+    	$("#countyWrapper").hide();
+    }
+    else
+    {
+    	$("#countyWrapper").show();
+    }
+  })
+  .change();
+
+
 });
 </script>
 <?php 
@@ -112,7 +128,7 @@ echo getTxt('ExSitePhoto');
 genSelect('State','state','state',$stateOptions,'SelectEllipsis',true);
 ?>
 
-<div class="form-group">
+<div class="form-group" id="countyWrapper">
         <label class="col-sm-2 control-label"><?php echo getTxt('County');?></label>
         <div class="col-sm-10">
         <div id="county_drop_down"><select class="form-control" id="county" name="county"><option value=""><?php echo getTxt('CountyEllipsis');?></option></select>*</div>
@@ -250,25 +266,19 @@ if(($("#state option:selected").val())==-1)
 alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
 return false;
 }
-if(($("#state option:selected").val())=="NULL")
+
+if(($("#county option:selected").val())=="" && (($("#state option:selected").val())!="NULL")){
 {
-	$("#county option:selected").val())=="1234"
-}
-if(($("#county option:selected").val())=="")
-{
-//alert("Please select a county.");
 alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
 return false;
 }
 if(($("#VerticalDatum option:selected").val())==-1)
 {
-//alert("Please select a vertical datum.");
 alert(<?php echo "'".getTxt('SelectVerticalDatum')."'"; ?>);
 return false;
 }
 if(($("#LatLongDatumID option:selected").val())==-1)
 {
-//alert("Please select a spatial reference.");
 alert(<?php echo "'".getTxt('SelectSpatialReference')."'"; ?>);
 return false;
 }

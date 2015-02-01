@@ -51,6 +51,22 @@ $(document).ready(function(){
 	$("#No").click(function(){
     	$('#window').jqxWindow('hide');
 	});
+
+ //County Options
+  $( "#state" )
+  .change(function () {
+    if(($("#state option:selected").val())=="NULL")
+    {
+    	//Hide the county
+    	$("#countyWrapper").hide();
+    }
+    else
+    {
+    	$("#countyWrapper").show();
+    }
+  })
+  .change();
+
 });	
 
 function confirmBox(){
@@ -149,7 +165,7 @@ echo getTxt('ExSitePhoto');
 genSelect('State','state','state',$stateOptions,'SelectEllipsis',true);
 ?>
 
-<div class="form-group">
+<div class="form-group" id="countyWrapper">
         <label class="col-sm-2 control-label"><?php echo getTxt('County');?></label>
         <div class="col-sm-10">
         <div id="county_drop_down"><select class="form-control" id="county" name="county"><option value=""><?php echo getTxt('CountyEllipsis');?></option></select>*</div>
@@ -270,6 +286,7 @@ $("#SiteID").change(function findSite(){
 			  });
 			//Map Loading Complete
 			 $("#editsite").show(500);
+			 $( "#state" ).change();
 			return true;
 			}else{
 				alert(<?php echo "'".getTxt('ErrorDuringRequest')."'"; ?>);
@@ -412,19 +429,17 @@ if(($("#state option:selected").val())==-1){
 	return false;
 }
 //Validation for the county
-if(($("#county option:selected").val())==""){
+if(($("#county option:selected").val())=="" && (($("#state option:selected").val())!="NULL")){
 		alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
 		return false;
 	}
 
 if(($("#VerticalDatum option:selected").val())==-1){
-	//alert("Please select a Vertical Datum.");
 	alert(<?php echo "'".getTxt('SelectVerticalDatum')."'"; ?>);
 	return false;
 }
 
 if(($("#LatLongDatumID option:selected").val())==-1){
-	//alert("Please select a Spatial Reference.");
 	alert(<?php echo "'".getTxt('SelectSpatialReference')."'"; ?>);
 	return false;
 }

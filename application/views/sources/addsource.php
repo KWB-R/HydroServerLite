@@ -129,12 +129,12 @@ $("#addsource").submit(function(){
 		return false;
 	}
 
-	if(($("#ZipCode").val())==""){
+	if(($("#ZipCode").val())=="" && (($("#State option:selected").val())!="NULL")){
 		alert(<?php echo "'".getTxt('EnterZipCode')."'"; ?>);
 		return false;
 	}
 
-	if(!($("#ZipCode").val().match(/^\d{5}(-\d{4})?$/))){
+	if((!($("#ZipCode").val().match(/^\d{5}(-\d{4})?$/))) && (($("#State option:selected").val())!="NULL")){
 		alert(<?php echo "'".getTxt('InvalidZipCode')."'"; ?>);
 		return false;
 	}
