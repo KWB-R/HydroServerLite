@@ -977,3 +977,13 @@ div.form-group>div.col-sm-10>span.em
     border-radius: 25px;
     text-align: center;
 }
+
+.chart-wrapper {
+ position: relative;
+    /*padding-bottom: 40%;*/
+}
+
+.chart-inner {
+position: absolute;
+    width: 100%;
+}

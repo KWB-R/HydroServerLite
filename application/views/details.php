@@ -269,11 +269,19 @@ function isValidNumber(val){
 //Create date selectors and hide them
 
 //Create Tabs for Table Chart Switching
-$('#jqxtabs').jqxTabs({  height: 550, theme: 'darkblue', collapsible: true });
+$('#jqxtabs').jqxTabs({  width:'100%',height: 550, theme: 'darkblue', collapsible: true });
 $('#jqxtabs').jqxTabs('disable');
 var selectedItem = $('#jqxtabs').jqxTabs('selectedItem');
 $('#jqxtabs').jqxTabs('enableAt', selectedItem);
 			
+$('#jqxtabs').on('selected', function (event) { var selectedTab = event.args.item;
+
+  if(selectedTab==1)
+  {
+   $(window).resize();
+  }
+
+}); 
 
 //Defining the Variable List
 var source =
@@ -293,6 +301,7 @@ $("#dropdownlist").jqxDropDownList(
     source: dataAdapter,
     theme: 'darkblue',
     height: 25,
+    width: "100%",
     selectedIndex: 0,
     displayMember: 'VariableName',
     valueMember: 'VariableID'
@@ -334,6 +343,7 @@ var dataAdapter = new $.jqx.dataAdapter(source);
             source: dataAdapter,
             theme: 'darkblue',
             height: 25,
+            width: "100%",
             selectedIndex: 0,
             displayMember: 'display',
             valueMember: 'DataType'
@@ -396,6 +406,7 @@ var dataAdapter122 = new $.jqx.dataAdapter(source122);
             source: dataAdapter122,
             theme: 'darkblue',
             height: 25,
+            width: "100%",
             selectedIndex: 0,
             displayMember: 'MethodDescription',
             valueMember: 'MethodID'
@@ -431,9 +442,9 @@ date_to=String(result.EndDateTime);
 $('#daterange').html("");
 $('#daterange').prepend('<p><strong>'+<?php echo "'".getTxt('DatesAvailable')."'";?>+'</strong> ' + date_from + ' <strong>'+<?php echo "'".getTxt('To')."'";?>+'</strong> ' + date_to +'</p>');
 
-$("#jqxDateTimeInput").jqxDateTimeInput({ width: '250px', height: '25px', theme: 'darkblue'});
+$("#jqxDateTimeInput").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
 $("#jqxDateTimeInput").jqxDateTimeInput({ formatString: 'd' });
-$("#jqxDateTimeInputto").jqxDateTimeInput({ width: '250px', height: '25px', theme: 'darkblue'});
+$("#jqxDateTimeInputto").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
 $("#jqxDateTimeInputto").jqxDateTimeInput({ formatString: 'd' });
 
 //Resetting the bind functions
@@ -452,9 +463,9 @@ var date1 = new Date();
 glob_df=date1;
 date1.setFullYear(year, month, day);
 
-$("#fromdatedrop").jqxDropDownButton({ width: 250, height: 25, theme: 'darkblue'});
+$("#fromdatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue'});
 
-$("#todatedrop").jqxDropDownButton({ width: 250, height: 25, theme: 'darkblue'});
+$("#todatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue'});
 
 
 //Use Show And Hide Method instead of repeating formation - optimization number 2
@@ -553,12 +564,11 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
  
   
 // var data_test=datatest;
-
  chart=new Highcharts.StockChart({
     chart: {
-		//width: 580,
-        renderTo: 'container',
-		 zoomType: 'x'
+    renderTo: 'container',
+		zoomType: 'x',
+  
     },
 	 legend: {
 		           verticalAlign: 'top',
@@ -655,8 +665,11 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 });
 
 	$("#loadingtext").hide();
-make_grid();
+
+  make_grid();
 	$('#jqxtabs').jqxTabs('enable');
+
+
  
  });
 
@@ -718,11 +731,12 @@ $.ajax({
             {
              
                 source: dataAdapter12,
-               
+                width: '100%',
+                columnsresize: true,
                 columns: [
-				  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID', width: 90 },
+				  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID'},
                   { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime'},
-	             { text: '<?php echo str_replace(':','',getTxt('Value')); ?>  (' + unitGrid +')' , datafield: 'DataValue', width: 100} <?php
+	             { text: '<?php echo str_replace(':','',getTxt('Value')); ?>  (' + unitGrid +')' , datafield: 'DataValue'} <?php
      if(isLoggedIn())
 	  {
 		echo(",
@@ -771,19 +785,19 @@ if(flag!=1)
 
             $("#jqxgrid").jqxGrid(
             {
-               // width: 610,
+                width: '100%',
                 source: dataAdapter12,
                 theme: 'darkblue',   
                 columnsresize: true,
-				sortable: true,
+				        sortable: true,
                 pageable: true,
                 autoheight: true,
-				 editable: false,
-				   selectionmode: 'singlecell',
+				        editable: false,
+				        selectionmode: 'singlecell',
                 columns: [
-			  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID', width: 90 },
-                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime', width: 200 },
-	          { text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')', datafield: 'DataValue', width: 100} <?php
+			  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID' },
+                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime' },
+	          { text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')', datafield: 'DataValue'} <?php
       	if(isLoggedIn())
 	  {
 		echo(",
@@ -833,7 +847,7 @@ if(flag!=1)
 
   // initialize the popup window and buttons.
 
-$("#popupWindow").jqxWindow({ width: 300, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel"), modalOpacity: 0.01 });
+$("#popupWindow").jqxWindow({ width: 300, height:350, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel"), modalOpacity: 0.01 });
 $( "#timepicker" ).timepicker({ showOn: "focus", showPeriodLabels: false });
 $("#delval").jqxButton({ theme: 'darkblue' });
 $("#Cancel").jqxButton({ theme: 'darkblue' });
@@ -895,7 +909,7 @@ $("#popupWindow").jqxWindow('hide');
 //End of Editing 
 
 //Add A new Value to the table
-$("#popupWindow_new").jqxWindow({ width: 250, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel_new"), modalOpacity: 0.01 });
+$("#popupWindow_new").jqxWindow({ width: 300,height:350, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel_new"), modalOpacity: 0.01 });
 $("#Cancel_new").jqxButton({ theme: 'darkblue' });
 $("#Save_new").jqxButton({ theme: 'darkblue'});
   <?php
@@ -1037,22 +1051,20 @@ genDropLists('Method','methodlist', 'methodlist', false);
 echo '<br></div>';
 ?>
 <div id='daterange'></div>
+
 <div class="row">
-            <div class="form-group col-md-6">
-<div id='fromdatedrop'><div id='jqxDateTimeInput'></div></div>
+<div class="col-md-6"><div id='fromdatedrop'><div id='jqxDateTimeInput'></div></div></div>
+<div class="col-md-6"><div id='todatedrop'><div id='jqxDateTimeInputto'></div></div></div>
+</div>
 <br>
-<div class="row">
-			<div class="form-group col-md-6">
-<div id='todatedrop'><div id='jqxDateTimeInputto'></div></div>
-</div>
-</div>
-    <div class="col-md-9" id='jqxtabs'>
+    
+<div id='jqxtabs'>
     <ul style='margin-left: 20px;'>
       <li><?php echo getTxt('SiteInfo'); ?></li>
       <li><?php echo getTxt('DataPlot'); ?></li>
       <li><?php echo getTxt('DataTable'); ?></li>
       </ul>
-    <div>
+<div>
 <?php  
 
 
@@ -1090,10 +1102,15 @@ if($var['VariableName']!="")
 </div>
 
 <div>
-    <div id="container" style="height: 470px"></div>
-    <!-- Button to compare data values-->
-    <input type="button" style=" float:right" value="<?php echo getTxt('Compare');?>" id='compare' />
+    <div class="chart-wrapper">
+      <div class="chart-inner">
+        <div id="container" style="width:100%; height: 470px;"></div>
+         <!-- Button to compare data values-->
+         <input type="button" style=" float:right" value="<?php echo getTxt('Compare');?>" id='compare' />
+      </div>
+    </div>
 </div>
+<!-- End of Chart DIV -->
     <div>
       <div id="jqxgrid"></div>
         <div id="popupWindow">
@@ -1142,11 +1159,25 @@ if($var['VariableName']!="")
                 </table>
             </div>
        </div>
+          <div style="alignment-adjust: middle; float:right;">
+     <?php
+  if(isLoggedIn())
+    {
+    echo("<input type='button' value='".getTxt('AddRow')."' id='addnew' /> <br/>  <br/>");
+    }
+      ?>
+        <input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />
+        </div>
      </div>
-     </div>
+  <!-- End Of Grid Div.  -->
+     </div>  
+     <!-- Jqx Tabs end -->
+
+
      </div> 
-     </div> 
-          <div id="popupWindow_new">
+
+
+<div id="popupWindow_new">
             <div><?php echo getTxt('Add'); ?></div>
             <div style="overflow: hidden;">
                 <table>
@@ -1191,16 +1222,7 @@ if($var['VariableName']!="")
             </div>
        </div>
          <br/>
-      <div style="alignment-adjust: middle; float:right;">
-     <?php
-	if(isLoggedIn())
-	  {
-		echo("<input type='button' value='".getTxt('AddRow')."' id='addnew' /> <br/>  <br/>");
-	  }
-      ?>
-        <input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />
-        </div>
-      </div>
+   
     </div>
     </div>
     </div>
