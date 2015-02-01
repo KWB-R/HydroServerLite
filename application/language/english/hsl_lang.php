@@ -3936,4 +3936,7 @@
  $lang['hsl_congratsMultiple'] = "Congratulations. Your server administrator has enabled multiple installations. To install a new database on your server ";
  $lang['hsl_FullScreen'] = "Full Screen";
  $lang['hsl_EFullScreen'] = "Exit Full Screen";
+ $lang['hsl_AddNewBanner'] = "Add/Change Top Banner";
+ $lang['hsl_banner'] = "Banner";
+ $lang['hsl_Submit'] = "Submit";
  ?>

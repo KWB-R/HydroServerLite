@@ -32,7 +32,22 @@ echo '       <div class="navbar navbar-default" role="navigation">
 		   <div class="navbar-collapse collapse sidebar-navbar-collapse transparentNav" id="navbarCollapse">
 		   <ul class="nav nav-tabs nav-stacked">
 		   ';
+
+if(isAdmin())
+{
+		echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#siteManagement">
+    <h4>'.getTxt('SiteManagement').'</h4>
+    </a>
+      <ul style="list-style: none;" class="collapse" id="siteManagement">';
+
+	echo "<li class=\"add_site\"><a href='".site_url('banner/add')."'>".getTxt('AddNewBanner')."</a></li>";
+	echo "</ul>";
+	echo "</li>";
+}
+
 if (isTeacher() || isAdmin()){
+
+
 
 	echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#dbManagement">
     <h4>'.getTxt('DatabaseManagement').'</h4>

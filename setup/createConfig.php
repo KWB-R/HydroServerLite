@@ -4,6 +4,7 @@
     //check if we have access to the install directory. 
     $path="../application/config/installations/";
     $filepath = $path.$_POST['ConfigName'].".php";
+    umask(0000);
     $myfile = fopen($filepath, "w") or die("Unable to open file!");
 
 

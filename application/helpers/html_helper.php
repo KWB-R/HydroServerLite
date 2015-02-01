@@ -290,10 +290,24 @@ function showMsgs()
 
 function getTopBanner()
 {
-	//Will Introduce logic here once I decide on how to implement enterprise versioning of HSL. For now, it just returns the default banner location.
-	//Maybe will have a controller for the logic? Might be overkill though. 
-	$path = getImg("WebClientBanner.png");
-	return '<img src="'.$path.'" alt="logo" class="img" style="max-width:auto;"/>';
+	
+	$name = 'topBanner'.substr(BASEURL2, 0, -1);
+	//Check uploads directory for topBanner
+	$topBanner = "";
+	$extensions = array('.gif','.jpg','.png','.jpeg');
+		foreach ($extensions as $extension)
+		{
+			if(file_exists(FCPATH."uploads/".$name.$extension))
+			{
+				$topBanner = base_url()."uploads/".$name.$extension;
+			}
+		}
+	if($topBanner=="")
+	{
+		$topBanner = getImg("WebClientBanner.png");
+	}
+
+	return '<img src="'.$topBanner.'" alt="logo" class="img"  style="max-width:auto; max-height:120px;"/>';
 }
 
 function checkPHPVersion($minimumVersion){
