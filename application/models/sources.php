@@ -104,5 +104,14 @@ class Sources extends MY_Model
 		$query=$this->db->get();
 		return $this->tranResult($query->result_array());	
 	}
+	
+	function getWithMetadata()
+	{
+		$this->db->select()
+		->from($this->tableName)
+		->join('isometadata',$this->tableName.'.MetadataID=isometadata.MetadataID');
+		$query=$this->db->get();
+		return $this->tranResult($query->result_array());	
+	}
 }
 ?>

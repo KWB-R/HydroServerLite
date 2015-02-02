@@ -10,7 +10,7 @@ class api extends MY_Controller {
 
 	public function __construct()
 	{
-		$this->dontAuth = array('api','index','values','sources','sites','variables','methods');
+		$this->dontAuth = array('api','index','values','sources','sites','variables','methods','GetSourcesJSON','GetSitesJSON','GetVariablesJSON');
 		parent::__construct();
 		$this->load->model('sc');
 		$this->load->model('datapoints');
@@ -134,6 +134,35 @@ class api extends MY_Controller {
 		
 		return $dataPoint;
 	}
+	
+	public function GetSourcesJSON()
+	{
+		$allSources = $this->sources->GetWithMetadata();
+		
+		// display everything from sources in JSON
+		header('Content-Type: application/json'); 
+		echo json_encode($allSources);
+	}
+	
+	public function GetSitesJSON()
+	{
+		$allSites = $this->Site->displayAllWithSource();
+		
+		// display everything from sources in JSON
+		header('Content-Type: application/json'); 
+		echo json_encode($allSites);
+	}
+	
+	public function GetVariablesJSON()
+	{
+		$allVariables = $this->variables->GetAllWithUnits();
+		
+		// display everything from sources in JSON
+		header('Content-Type: application/json'); 
+		echo json_encode($allVariables);
+	}
+	
+	
 	
 	
 	public function sites()

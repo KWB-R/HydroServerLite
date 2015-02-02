@@ -63,6 +63,28 @@ class Variables extends MY_Model
 		return $this->tranResult($query->result_array());		
 	}
 	
+	function getAllWithUnits()
+	{
+		$this->db->select()
+			->from('variables')
+			->join('units', 'variables.VariableunitsID=units.unitsID', 'left')
+			->join('variablenamecv', 'variables.VariableName=variablenamecv.Term','left');
+		
+		$query=$this->db->get();
+		return $this->tranResult($query->result_array());
+	}
+	
+	function getAllWithUnits2()
+	{
+		$this->db->select('VariableID','VariableCode','VariableName','variablenamecv.Definition','Speciation','VariableunitsID','SampleMedium','ValueType','IsRegular','TimeSupport','TimeUnitsID','DataType','GeneralCategory','NoDataValue','units.unitsType','units.unitsName')
+			->from('variables')
+			->join('units', 'variables.VariableunitsID=units.unitsID', 'left')
+			->join('variablenamecv', 'variables.VariableName=variablenamecv.Term','left');
+		
+		$query=$this->db->get();
+		return $this->tranResult($query->result_array());
+	}
+	
 	function getByTable($tableName)
 	{
 		$query = $this->db->get($tableName);
