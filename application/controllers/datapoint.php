@@ -354,7 +354,7 @@ class Datapoint extends MY_Controller {
 			$result = $this->datapoints->getData($site,$var,$method,$start,$end);
 			$variable = $this->variables->getVariableWithUnit($var);
 			$variable = $variable[0];
-			$unit = $variable['unitsType'];
+			$unit = $variable['UnitsType'];
 			$noValue = $variable['NoDataValue'];
 			
 			echo("var data_test = [\r\n");

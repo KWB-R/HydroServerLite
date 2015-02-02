@@ -91,7 +91,7 @@ function processLang()
 		createNew($language);		
 	}
 	
-	return $language;
+	return strtolower($language);
 }
 
 
