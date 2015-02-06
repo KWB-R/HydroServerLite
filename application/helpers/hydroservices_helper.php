@@ -612,7 +612,7 @@ if (!function_exists('wof_GetValues')) {
 			$shortVariableCode = $split2[0];
 		}
  
-	    $retVal = '<timeSeriesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+	    $retVal = '<timeSeriesResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cuahsi.org/waterML/1.1/">';
 	    $retVal .= wof_queryInfo_Values($location, $variable, $startDate, $endDate);
 	    $retVal .= '<timeSeries>';
   
@@ -1981,8 +1981,8 @@ if (!function_exists('db_GetValues_OneSeries')) {
 	    }
 	    $retVal = "<values>";
 	    foreach ($result->result_array() as $row) {
-	        $retVal .= '<value censorCode="nc" dateTime="' . $row["LocalDateTime"] . '"';
-	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . $row["DateTimeUTC"] . '" ';
+	        $retVal .= '<value censorCode="nc" dateTime="' . strftime("%Y-%m-%dT%H:%M:%S", strtotime($row["LocalDateTime"])) . '"';
+	        $retVal .= ' timeOffset="' . $row["UTCOffset"] . '" dateTimeUTC="' . strftime("%Y-%m-%dT%H:%M:%S", strtotime($row["DateTimeUTC"])) . '" ';
 	        $retVal .= ' methodCode="' . $methodID . '" ';
 	        $retVal .= ' sourceCode="' . $sourceID . '" ';
 	        $retVal .= ($row['LabSampleCode'] != ''? 'labSampleCode="'.$row['LabSampleCode'].'"':'');
