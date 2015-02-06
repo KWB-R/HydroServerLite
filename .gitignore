@@ -1,4 +1,16 @@
-WaterOneFlow_PHP_2.2.zip
 *~
 .metadata
 .zip
+.DS_Store
+uploads/*
+
+application/cache/*
+!application/cache/index.html
+!application/cache/.htaccess
+
+application/logs/*
+!application/logs/index.html
+!application/logs/.htaccess
+/test.sublime-workspace
+
+/application/config/installations/default.php
