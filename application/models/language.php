@@ -9,9 +9,9 @@ class Language extends CI_Model
 		$mysqlserver="worldwater.byu.edu";
 		$mysqlusername="langreader";
 		$mysqlpassword="readHSLlang@9";
-		$this->DB1 =mysqli_connect($mysqlserver, $mysqlusername, $mysqlpassword);
+		$this->DB1 =@mysqli_connect($mysqlserver, $mysqlusername, $mysqlpassword);
 		$dbname = 'hydroserver_translation';
-		mysqli_select_db($this->DB1, $dbname) or $error=1;
+		@mysqli_select_db($this->DB1, $dbname);
 		
 	}
 	function getTerms($lang)

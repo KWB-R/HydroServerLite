@@ -291,6 +291,10 @@ function showMsgs()
 function getTopBanner()
 {
 	
+	if(!defined('BASEURL2'))
+	{
+		define('BASEURL2',"");
+	}
 	$name = 'topBanner'.substr(BASEURL2, 0, -1);
 	//Check uploads directory for topBanner
 	$topBanner = "";

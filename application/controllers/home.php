@@ -22,15 +22,23 @@ class Home extends MY_Controller {
 		parent::__construct();
 	}
 
+	private function file_list($d,$x){ 
+       foreach(array_diff(scandir($d),array('.','..')) as $f)if(is_file($d.'/'.$f)&&(($x)?@ereg($x.'$',$f):1))$l[]=$f; 
+       {
+       	return $l;	
+       }
+        
+	} 
 
 	public function installation()
 	{	
 	//Check if any other installations exist? if No then the first one shall be called 'default'
-	$files1 = scandir(APPPATH.'config/installations');
+	$files1 = @$this->file_list(APPPATH.'config/installations','.php');
 	$count = count($files1);
+
 	$default=false;
 	$encryptedtext="";
-	if(($count==2)&&(in_array('.', $files1))&&(in_array('..', $files1)))
+	if($count==0)
 	{
 		//No other Setup Exists
 		$default=true;
@@ -78,10 +86,11 @@ class Home extends MY_Controller {
 					"Chinese"=>"中文");
 	$langOptions = genOptions($lang);
 
+
 	//Check if any other installations exist? if No then the first one shall be called 'default'
-	$files1 = scandir(APPPATH.'config/installations');
+	$files1 = @$this->file_list(APPPATH.'config/installations','.php');
 	$default=false;
-	if(count($files1)==2 && in_array('.', $files1) && in_array('..', $files1))
+	if($count==0)
 	{
 		//No other Setup Exists
 		$default=true;

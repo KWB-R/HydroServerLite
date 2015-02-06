@@ -102,6 +102,13 @@ function startsWith($haystack, $needle) {
 
 function createNew($language)
 {	
+	$CI=&get_instance();
+	$CI->load->model('language');
+	if(!$CI->language->DB1)
+	{
+		//Since we couldn't connect. We will NOT delete the file. 
+		return;		
+	}
 	$file_path ="./application/language/" .strtolower($language). "/hsl_lang.php";
 	if(is_file($file_path)){
 		unlink($file_path);	
@@ -114,9 +121,6 @@ function createNew($language)
 			mkdir("./application/language/" .strtolower($language));
 		}
 	}
-	
-	$CI=&get_instance();
-	$CI->load->model('language');
 	$CI->load->helper('text');
 	$langTerms = $CI->language->getTerms($language);
 	$lang_file= fopen($file_path,"c+");
