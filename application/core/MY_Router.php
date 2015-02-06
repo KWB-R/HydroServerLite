@@ -49,6 +49,8 @@ Class MY_Router extends CI_Router
 		//Check if default also doesn't exist. 
 		if(!file_exists(APPPATH.'config/installations/default'.EXT))
 		{
+			if(in_array('changeLang',$segments))
+				return $segments;
 			//No SETUP FILES exist. 
 			$segments=array('home','installation');
 			return $segments;

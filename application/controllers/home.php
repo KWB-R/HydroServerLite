@@ -24,10 +24,7 @@ class Home extends MY_Controller {
 
 	private function file_list($d,$x){ 
        foreach(array_diff(scandir($d),array('.','..')) as $f)if(is_file($d.'/'.$f)&&(($x)?@ereg($x.'$',$f):1))$l[]=$f; 
-       {
        	return $l;	
-       }
-        
 	} 
 
 	public function installation()
