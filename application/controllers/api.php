@@ -162,6 +162,15 @@ class api extends MY_Controller {
 		echo json_encode($allVariables);
 	}
 	
+	public function GetMethodsJSON()
+	{
+		$allMethods = $this->method->GetAll();
+		
+		// display everything from sources in JSON
+		header('Content-Type: application/json'); 
+		echo json_encode($allMethods);
+	}
+	
 	
 	
 	

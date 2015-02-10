@@ -68,6 +68,10 @@ $route["(:any)/services/api/sources"] 								= "$1/api/sources";
 $route["(:any)/services/api/sites"] 								= "$1/api/sites";
 $route["(:any)/services/api/variables"] 								= "$1/api/variables";
 $route["(:any)/services/api/methods"] 								= "$1/api/methods";
+$route["(:any)/services/api/GetSitesJSON"] 								= "$1/api/GetSitesJSON";
+$route["(:any)/services/api/GetVariablesJSON"] 								= "$1/api/GetVariablesJSON";
+$route["(:any)/services/api/GetMethodsJSON"] 								= "$1/api/GetMethodsJSON";
+$route["(:any)/services/api/GetSourcesJSON"] 								= "$1/api/GetSourcesJSON";
 
 $route['404_override'] = '';
 

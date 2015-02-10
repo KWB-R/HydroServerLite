@@ -44,7 +44,7 @@
 						&nbsp;Add new sites to HydroServer. See example code in 
 						<a class="info_link" href="examples/python">Python</a>,&nbsp;
 						<a class="info_link" href="<?=base_url()?>assets/api/AddSite.cs">c#</a>,&nbsp;
-						<a class="info_link" href="<?=base_url()?>assets/api/add_source.R">R</a> 
+						<a class="info_link" href="<?=base_url()?>assets/api/add_site.R">R</a> 
 					</div>
 				</div> 
 			</div>
@@ -86,6 +86,30 @@
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Get sites from HydroServer in JSON format  
+					</div>
+				</div> 
+			</div>
+			<div class="info_container">
+			    <label class="info_label"><a href="<?php echo site_url('services/api/GetSourcesJSON') ;?>" class="info_link">GetSourcesJSON</a></label>
+				<div class="info_content">
+					<div class="link_desc">
+						&nbsp;Get sources from HydroServer in JSON format  
+					</div>
+				</div> 
+			</div>
+			<div class="info_container">
+			    <label class="info_label"><a href="<?php echo site_url('services/api/GetVariablesJSON') ;?>" class="info_link">GetVariablesJSON</a></label>
+				<div class="info_content">
+					<div class="link_desc">
+						&nbsp;Get variables from HydroServer in JSON format  
+					</div>
+				</div> 
+			</div>
+			<div class="info_container">
+			    <label class="info_label"><a href="<?php echo site_url('services/api/GetMethodsJSON') ;?>" class="info_link">GetMethodsJSON</a></label>
+				<div class="info_content">
+					<div class="link_desc">
+						&nbsp;Get methods from HydroServer in JSON format  
 					</div>
 				</div> 
 			</div>
