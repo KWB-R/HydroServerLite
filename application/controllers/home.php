@@ -58,7 +58,8 @@ class Home extends MY_Controller {
 	if (file_exists($file_url)){
 	$file_contents = file_get_contents($file_url);
 	$decode_data = json_decode($file_contents);
-	return $decode_data;
+	$decode_data2 = array_map('utf8_decode', $decode_data);
+	return $decode_data2;
 	}
 	}
 	public function installation()
