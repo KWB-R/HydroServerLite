@@ -36,7 +36,7 @@ class Home extends MY_Controller {
 	public function edit()
 	{
 	$this->adminCheck();
-	
+	$dbName = substr(BASEURL2, 0, -1);
 	if($_POST)
 		{
 			$this->form_validation->set_rules('title', 'Title', 'trim|required');
@@ -45,20 +45,27 @@ class Home extends MY_Controller {
 			$this->form_validation->set_rules('citation', 'Citation', 'trim|required');
 		}
 		
-		$stuff = array($this->input->post('title'),$this->input->post('groupname'),$this->input->post('description'),$this->input->post('citation'));
-		$stuff_print = json_encode($stuff);
-		write_file('./application/views/' .getTxt('Name'). '.txt',$stuff_print,'c+');
-		
-
+		$welcome_page = array($this->input->post('title'),$this->input->post('groupname'),$this->input->post('description'),$this->input->post('citation'));
+		$welcome_page_info = json_encode(array_map('utf8_encode',$welcome_page));
+		write_file('./uploads/' .$dbName. '.txt',$welcome_page_info,'c+');
 	$data=$this->StyleData;
 	$this->load->view('edit',$data);
+	}
+	public function parseTextFile()
+	{
+	$dbName = substr(BASEURL2, 0, -1);
+	$file_url = './uploads/' .$dbName. '.txt';
+	if (file_exists($file_url)){
+	$file_contents = file_get_contents($file_url);
+	$decode_data = json_decode($file_contents);
+	return $decode_data;
+	}
 	}
 	public function installation()
 	{	
 	//Check if any other installations exist? if No then the first one shall be called 'default'
 	$files1 = @$this->file_list(APPPATH.'config/installations','.php');
 	$count = count($files1);
-
 	$default=false;
 	$encryptedtext="";
 	if($count==0)
@@ -148,9 +155,8 @@ class Home extends MY_Controller {
 				$data['multi']=true;
 			}
 		}
-
+		$data['welcome'] = $this->parseTextFile();
 		//List of CSS to pass to this view
-		
 		$this->load->view('welcome',$data);
 	}
 	
