@@ -41,6 +41,7 @@ if(isAdmin())
       <ul style="list-style: none;" class="collapse" id="siteManagement">';
 
 	echo "<li class=\"add_site\"><a href='".site_url('banner/add')."'>".getTxt('AddNewBanner')."</a></li>";
+	echo "<li class=\"add_site\"><a href='".site_url('home/edit')."'>".getTxt('Welcome')."</a></li>";
 	echo "</ul>";
 	echo "</li>";
 }

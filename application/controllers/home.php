@@ -20,13 +20,39 @@ class Home extends MY_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->library('form_validation');
+		$this->load->helper('file');
 	}
 
 	private function file_list($d,$x){ 
        foreach(array_diff(scandir($d),array('.','..')) as $f)if(is_file($d.'/'.$f)&&(($x)?@ereg($x.'$',$f):1))$l[]=$f; 
        	return $l;	
-	} 
+	}
+	private function adminCheck()
+	{
+		if (!isAdmin())
+		$this->kickOut();
+	}
+	public function edit()
+	{
+	$this->adminCheck();
+	
+	if($_POST)
+		{
+			$this->form_validation->set_rules('title', 'Title', 'trim|required');
+			$this->form_validation->set_rules('groupname', 'Name', 'trim|required');	
+			$this->form_validation->set_rules('description', 'Description', 'trim|required');
+			$this->form_validation->set_rules('citation', 'Citation', 'trim|required');
+		}
+		
+		$stuff = array($this->input->post('title'),$this->input->post('groupname'),$this->input->post('description'),$this->input->post('citation'));
+		$stuff_print = json_encode($stuff);
+		write_file('./application/views/' .getTxt('Name'). '.txt',$stuff_print,'c+');
+		
 
+	$data=$this->StyleData;
+	$this->load->view('edit',$data);
+	}
 	public function installation()
 	{	
 	//Check if any other installations exist? if No then the first one shall be called 'default'
