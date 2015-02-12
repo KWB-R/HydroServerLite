@@ -8,7 +8,6 @@ HTML_Render_Body_Start();
 genHeading('Edit',true);
 $attributes = array('class' => 'form-horizontal', 'name' => 'welcome', 'id' => 'welcome');
 echo form_open('home/edit', $attributes);
-
 genInput('Title','title','title',true);
 genInput('Name','groupname','groupname',true);
 genInput('Description','description','description',true);
@@ -24,6 +23,12 @@ genInput('Citation','citation','citation',true);
 <?php HTML_Render_Body_End(); ?>
 <script>
 $(document).ready(function(){
+
+($("#title").val('<?php echo addslashes($welcome[0]);?>'));
+($("#groupname").val('<?php echo addslashes($welcome[1]);?>'));
+($("#description").val('<?php echo addslashes($welcome[2]);?>'));
+($("#citation").val('<?php echo addslashes($welcome[3]);?>'));
+
 $("#welcome").submit(function(e){ //NEED TO FIX TO ACCESS ONLY THE MAIN FORM.
 if(($("#title").val())==""){
 		alert("Please enter a Title");
@@ -42,6 +47,8 @@ if(($("#citation").val())==""){
 		alert("Please enter a Citation");
 		return false;
 	} 
+	
 });
+return true;
 });	
 </script>

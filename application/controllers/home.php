@@ -50,6 +50,7 @@ class Home extends MY_Controller {
 	{
 	$this->adminCheck();
 	$dbName = substr(BASEURL2, 0, -1);
+	
 	if($_POST)
 		{
 			$this->form_validation->set_rules('title', 'Title', 'trim|required');
@@ -65,8 +66,9 @@ class Home extends MY_Controller {
 		write_file('./uploads/' .$dbName. '.txt',$welcome_page_info,'c+');
 		addSuccess(getTxt('SiteSuccessfullyEdited'));
 		}
-		
+	
 	$data=$this->StyleData;
+	$data['welcome'] = $this->parseTextFile();
 	$this->load->view('edit',$data);
 	}
 	public function parseTextFile()
