@@ -61,10 +61,10 @@
 				</div> 
 			</div>
 			<div class="info_container">
-			    <label class="info_label"><a href="<?php echo site_url('services/api');?>" class="info_link">API  <?php echo getTxt('API');?></a></label>
+			    <label class="info_label"><a href="<?php echo site_url('services/api');?>" class="info_link">JSON API  <?php echo getTxt('API');?></a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;Data Upload API
+						&nbsp;JSON API for data upload
 					</div>
 				</div> 
 			</div>

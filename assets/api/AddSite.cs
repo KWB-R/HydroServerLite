@@ -13,7 +13,7 @@ namespace APITest
     {
         private void btnSite_Click(object sender, EventArgs e)
         {
-            string url = "http://localhost/hslite-mvc3/index.php/default/services/api/sites";
+            string url = "http://worldwater.byu.edu/app/index.php/default/services/api/sites";
 
             System.Net.HttpWebRequest request = (HttpWebRequest)System.Net.HttpWebRequest.Create(url);
 
