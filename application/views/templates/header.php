@@ -25,7 +25,7 @@
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Spanish">Español</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Italian">Italiano</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Portuguese">Portugués</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="German">Alemán</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="German">Deutsch</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Dutch">Nederlands</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Bulgarian">български</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Croatian">Hrvatski</a></li>

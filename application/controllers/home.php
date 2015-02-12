@@ -33,6 +33,19 @@ class Home extends MY_Controller {
 		if (!isAdmin())
 		$this->kickOut();
 	}
+	private function deleteOthers($name,$ext)
+	{
+		$extensions = array('.txt');
+		foreach ($extensions as $extension)
+		{
+			if ($extension == $ext)
+				continue;
+			if(file_exists(FCPATH."uploads/".$name.$extension))
+			{
+				unlink(FCPATH."uploads/".$name.$extension) or die("Unable to update the welcome page. SOrry. Better luck next time.");
+			}
+		}
+	}
 	public function edit()
 	{
 	$this->adminCheck();
@@ -43,11 +56,16 @@ class Home extends MY_Controller {
 			$this->form_validation->set_rules('groupname', 'Name', 'trim|required');	
 			$this->form_validation->set_rules('description', 'Description', 'trim|required');
 			$this->form_validation->set_rules('citation', 'Citation', 'trim|required');
-		}
-		
+			
 		$welcome_page = array($this->input->post('title'),$this->input->post('groupname'),$this->input->post('description'),$this->input->post('citation'));
 		$welcome_page_info = json_encode(array_map('utf8_encode',$welcome_page));
+		if(file_exists('./uploads/' .$dbName. '.txt')){
+		unlink('./uploads/' .$dbName. '.txt');
+		}
 		write_file('./uploads/' .$dbName. '.txt',$welcome_page_info,'c+');
+		addSuccess(getTxt('SiteSuccessfullyEdited'));
+		}
+		
 	$data=$this->StyleData;
 	$this->load->view('edit',$data);
 	}
@@ -105,7 +123,7 @@ class Home extends MY_Controller {
 					"Spanish"=>"Español",
 					"Italian"=>"Italiano",
 					"Portuguese"=>"Portugués",
-					"German"=>"Alemán",
+					"German"=>"Deutsch",
 					"Dutch"=>"Nederlands",
 					"Bulgarian"=>"български",
 					"Croatian"=>"Hrvatski",
