@@ -13,7 +13,7 @@ namespace APITest
     {
         public void AddMethod()
         {
-            string url = "http://localhost/hslite-mvc3/index.php/default/services/api/methods";
+            string url = "http://worldwater.byu.edu/app/index.php/default/services/api/methods";
 
             System.Net.HttpWebRequest request = (HttpWebRequest)System.Net.HttpWebRequest.Create(url);
 

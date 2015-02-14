@@ -13,10 +13,7 @@ namespace APITest
     {
         private void AddSource()
         {
-            //this would be the url on your localhost (change hslite-mvc to your folder on wamp)
-            //string url = "http://localhost/hslite-mvc/index.php/default/services/api/sources";
-            //you can try the  public url:
-            string url = "http://worldwater.byu.edu/mvc/index.php/default/services/api/sources";
+            string url = "http://worldwater.byu.edu/app/index.php/default/services/api/sources";
 
             System.Net.HttpWebRequest request = (HttpWebRequest)System.Net.HttpWebRequest.Create(url);
             request.Method = "POST";

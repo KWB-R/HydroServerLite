@@ -29,7 +29,7 @@
 					<div class="link_desc">
 						&nbsp;
                          Add new sources to HydroServer. See example code in 
-						 <a class="info_link" href="examples/python">Python</a>,&nbsp;
+						 <a class="info_link" href="<?=base_url()?>assets/api/add_source.py">Python</a>,&nbsp;
 						 <a class="info_link" href="<?=base_url()?>assets/api/AddSource.cs">c#</a>,&nbsp;
 						 <a class="info_link" href="<?=base_url()?>assets/api/add_source.R">R</a> 
                     
@@ -42,7 +42,7 @@
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Add new sites to HydroServer. See example code in 
-						<a class="info_link" href="examples/python">Python</a>,&nbsp;
+						<a class="info_link" href="<?=base_url()?>assets/api/add_site.py">Python</a>,&nbsp;
 						<a class="info_link" href="<?=base_url()?>assets/api/AddSite.cs">c#</a>,&nbsp;
 						<a class="info_link" href="<?=base_url()?>assets/api/add_site.R">R</a> 
 					</div>
@@ -53,9 +53,9 @@
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Add new variables to HydroServer. See example code in 
-						<a class="info_link" href="examples/python">Python</a>,&nbsp;
+						<a class="info_link" href="<?=base_url()?>assets/api/add_variable.py">Python</a>,&nbsp;
 						<a class="info_link" href="<?=base_url()?>assets/api/AddVariable.cs">c#</a>,&nbsp;
-						<a class="info_link" href="<?=base_url()?>assets/api/add_source.R">R</a> 
+						<a class="info_link" href="<?=base_url()?>assets/api/add_variable.R">R</a> 
 					</div>
 				</div> 
 			</div>
@@ -64,9 +64,9 @@
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Add new methods to HydroServer. See example code in 
-						<a class="info_link" href="examples/python">Python</a>,&nbsp;
+						<a class="info_link" href="<?=base_url()?>assets/api/add_method.py">Python</a>,&nbsp;
 						<a class="info_link" href="<?=base_url()?>assets/api/AddMethod.cs">c#</a>,&nbsp;
-						<a class="info_link" href="<?=base_url()?>assets/api/add_source.R">R</a> 
+						<a class="info_link" href="<?=base_url()?>assets/api/add_method.R">R</a> 
 					</div>
 				</div> 
 			</div>
@@ -75,9 +75,9 @@
 				<div class="info_content">
 					<div class="link_desc">
 						&nbsp;Add new data values to HydroServer. See example code in 
-						<a class="info_link" href="examples/python">Python</a>,&nbsp;
+						<a class="info_link" href="<?=base_url()?>assets/api/add_values.py">Python</a>,&nbsp;
 						<a class="info_link" href="<?=base_url()?>assets/api/AddValues.cs">c#</a>,&nbsp;
-						<a class="info_link" href="<?=base_url()?>assets/api/add_source.R">R</a> 
+						<a class="info_link" href="<?=base_url()?>assets/api/add_values.R">R</a> 
 					</div>
 				</div> 
 			</div>
