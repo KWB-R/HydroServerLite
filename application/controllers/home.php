@@ -22,6 +22,9 @@ class Home extends MY_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 		$this->load->helper('file');
+		$this->load->helper('download');
+		$this->load->helper(array('form','url'));
+		$this->dontAuth = array('getData','getDataJSON','compare','export');
 	}
 
 	private function file_list($d,$x){ 
@@ -35,16 +38,39 @@ class Home extends MY_Controller {
 	}
 	private function deleteOthers($name,$ext)
 	{
-		$extensions = array('.txt');
+		$extensions = array('.txt','.csv','.CSV');
 		foreach ($extensions as $extension)
 		{
 			if ($extension == $ext)
 				continue;
 			if(file_exists(FCPATH."uploads/".$name.$extension))
 			{
-				unlink(FCPATH."uploads/".$name.$extension) or die("Unable to update the welcome page. SOrry. Better luck next time.");
+				unlink(FCPATH."uploads/".$name.$extension) or die("Unable to update the welcome page. Sorry. Better luck next time.");
 			}
 		}
+	}
+	private function fileUploadHandler()
+	{
+		$newDir = "./uploads/temp".time().rand();
+		$oldmask = umask(0);
+		$result = mkdir($newDir,0777);
+		umask($oldmask);
+		if(!$result)
+		{
+			addError(getTxt('FailTemp'));
+			return false;
+		}
+		
+		//Upload files. 
+		$config['upload_path'] = $newDir;
+		$config['allowed_types'] = 'jpg|csv|CSV';	
+		$this->load->library('upload', $config);
+		if ( ! $this->upload->do_multi_upload('custom'))
+		  {
+			  addError(getTxt('FailMoveFile').$this->upload->display_errors());
+			  return false;
+		  }
+		return $this->upload->get_multi_upload_data();
 	}
 	public function edit()
 	{
@@ -52,6 +78,7 @@ class Home extends MY_Controller {
 	$dbName = substr(BASEURL2, 0, -1);
 	
 	if($_POST)
+	{
 		{
 			$this->form_validation->set_rules('title', 'Title', 'trim|required');
 			$this->form_validation->set_rules('groupname', 'Name', 'trim|required');	
@@ -65,7 +92,9 @@ class Home extends MY_Controller {
 		}
 		write_file('./uploads/' .$dbName. '.txt',$welcome_page_info,'c+');
 		addSuccess(getTxt('SiteSuccessfullyEdited'));
+		$this->fileUploadHandler();
 		}
+	}
 	
 	$data=$this->StyleData;
 	$data['welcome'] = $this->parseTextFile();
@@ -177,6 +206,7 @@ class Home extends MY_Controller {
 			}
 		}
 		$data['welcome'] = $this->parseTextFile();
+		$data['dbname'] = $this->config->item('database_name'); 
 		//List of CSS to pass to this view
 		$this->load->view('welcome',$data);
 	}

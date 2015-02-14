@@ -22,7 +22,6 @@ HTML_Render_Body_Start();
     <?php if($multi){?>
     <p><?php echo getTxt('congratsMultiple')."<a href='".base_url('index.php/default/home/installation')."'>Click Here</a>."; ?></p>
     <?php }?>
-	
 </div>
 <div class="col-md-3"><img src="<?php echo getImg('homepage_shot.jpg');?>" class="img-responsive" alt="site picture"/></div>
 <?php HTML_Render_Body_End(); ?>
