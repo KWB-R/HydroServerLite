@@ -27,7 +27,7 @@ HTML_Render_Body_Start();
 		<input type="button" class="btn btn-default" onClick="searchLocations()" value="<?php echo getTxt('Search'); ?>"/>
         <input type='button' class="btn btn-default" onClick="loadall()" value="<?php echo getTxt('ResetSearch'); ?>"/>
         <input type='button' class="btn btn-default" onClick="track_loc()" value="<?php echo getTxt('FindSites'); ?>"/>
-        <input type="button" class="btn btn-default" id="fullscreen" value="<?php echo getTxt('FullScreen'); ?>"/></input>
+        <input type="button" class="btn btn-default" id="fullscreen"  value="<?php echo getTxt('FullScreen'); ?>"/></input>
         <input type="button" class="btn btn-default" id="exitfullscreen" value="<?php echo getTxt('EFullScreen'); ?>"/></input>
         <div class="input-group">
         <input type="checkbox" class="checkbox" id="allSitesCheck" onClick="loadall()" value="allSites"><?php echo getTxt('AllSites'); ?></input>
@@ -46,7 +46,7 @@ HTML_Render_Body_Start();
 </div>
 <script>
 	load();
-$(document).ready(function(){	
+$(document).ready(function(){
  $('#fullscreen').click(function(){
     $("#mapOuter").css("position", 'fixed').
       css('top', 0).
