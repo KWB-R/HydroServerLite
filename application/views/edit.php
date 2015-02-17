@@ -1,15 +1,15 @@
 <?php
-HTML_Render_Head($js_vars,getTxt('Welcome'));
+HTML_Render_Head($js_vars,getTxt('EditWelcomePage'));
 echo $CSS_Main;
 echo $JS_JQuery;
 echo $JS_Forms;
 
 HTML_Render_Body_Start(); 
-genHeading('Edit',true);
+genHeading('EditWelcomePage',true);
 $attributes = array('class' => 'form-horizontal', 'name' => 'welcome', 'id' => 'welcome');
 echo form_open('home/edit', $attributes);
 genInput('Title','title','title',true);
-genInput('Name','groupname','groupname',true);
+genInput('OrganizationName','groupname','groupname',true);
 genInput('Description','description','description',true);
 genInput('Citation','citation','citation',true);
 ?>
@@ -49,6 +49,5 @@ if(($("#citation").val())==""){
 	} 
 	
 });
-return true;
 });	
 </script>
