@@ -146,8 +146,14 @@ class api extends MY_Controller {
 	
 	public function GetSitesJSON()
 	{
-		$allSites = $this->Site->displayAllWithSource();
-		
+		if ($this->input->get()) {
+			$param = $this->input->get('source');
+		}
+		if (isset($param)) {
+			$allSites = $this->Site->getSiteDetailsBySource($param);
+		} else {	
+			$allSites = $this->Site->displayAllWithSource();
+		}
 		// display everything from sources in JSON
 		header('Content-Type: application/json'); 
 		echo json_encode($allSites);
@@ -156,7 +162,7 @@ class api extends MY_Controller {
 	public function GetVariablesJSON()
 	{
 		$allVariables = $this->variables->GetAllWithUnits();
-		
+
 		// display everything from sources in JSON
 		header('Content-Type: application/json'); 
 		echo json_encode($allVariables);
@@ -164,15 +170,19 @@ class api extends MY_Controller {
 	
 	public function GetMethodsJSON()
 	{
-		$allMethods = $this->method->GetAll();
+		if ($this->input->get()) {
+			$param = $this->input->get('variable');
+		}
+		if (isset($param)) {
+			$allMethods = $this->method->getMethodsByVar($param);
+		} else {	
+			$allMethods = $this->method->GetAll();
+		}
 		
 		// display everything from sources in JSON
 		header('Content-Type: application/json'); 
 		echo json_encode($allMethods);
 	}
-	
-	
-	
 	
 	public function sites()
 	{

@@ -46,6 +46,22 @@ class Site extends MY_Model
 
 	}
 	
+	function getSiteDetailsBySource($sourceid)
+	{	
+		$this->db
+			->distinct()
+			->select('sites.SiteID, sites.SiteCode,sites.SiteName, Latitude, Longitude, sites.SiteType, sites.Elevation_m, sites.State, sites.County, sites.VerticalDatum, sites.LatLongDatumID, spatialreferences.SRSID, sites.Comments, seriescatalog.SourceID, seriescatalog.Organization')
+			->from('sites')
+			->join('spatialreferences','sites.LatLongDatumID=spatialreferences.SpatialReferenceID', 'left')
+			->join('seriescatalog', 'sites.SiteID=seriescatalog.SiteID', 'left')
+			->where('SourceID',$sourceid)
+			->order_by('sites.SiteName');
+
+		$result = $this->db->get();
+			
+		return $this->tranResult($result->result_array());
+	}
+	
 	function searchSite($lat,$long,$rad,$checkAll=0)
 	{
 		$this->db
