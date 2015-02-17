@@ -4,7 +4,7 @@ html, body {
     height: 100%;
 }
 
-body {
+/*body {
     background: #9ab7e3 url(../../images/bkgrdimage-light.jpg) repeat left top;
     margin: 0px;
 	background-size: 100% 100%;
@@ -12,7 +12,7 @@ body {
     width: 100%;
     font-family: Arial;
     color: #666666;
-}
+}*/
 .welcome img {
     float: right;
 }
@@ -268,12 +268,12 @@ a.reversed:link {
 }
 
 a.reversed:visited {
-    color: #FFF;
+    color: #000000;
     text-decoration: none;
 }
 
 a.reversed:hover {
-    color: #FFF;
+    color: #000;
     text-decoration: underline;
 }
 
@@ -718,7 +718,7 @@ form ul.login a {
         }
 
 #navbarCollapse ul ul li a, #navbarCollapse ul ul li h2 {
-			margin-left:-40px;
+			margin-left:40px;
 			padding-top: 15px;
             color: #FFF;
             min-height: 25px;
@@ -896,7 +896,7 @@ ul.messages {
 
 .mainContainer{	
 	background-color:#FFF;
-	margin-top:-20px;
+	margin-top:20px;
 	
 }
 
@@ -918,8 +918,8 @@ ul.messages {
 
 
 .footer{
-	background-color:#0971B3;
-	color:#FFF;
+	background-color:#FFF;
+	color:#000;
 	font:Arial, Helvetica, sans-serif;
 	size:2;
 	text-align:center;	
@@ -975,7 +975,7 @@ div.form-group>div.col-sm-10>span.em
 {
     border:1px solid;
     border-radius: 25px;
-    text-align: center;
+    text-align: right;
 }
 
 .chart-wrapper {
