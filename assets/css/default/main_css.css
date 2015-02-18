@@ -718,7 +718,7 @@ form ul.login a {
         }
 
 #navbarCollapse ul ul li a, #navbarCollapse ul ul li h2 {
-			margin-left:40px;
+			margin-left:-40px;
 			padding-top: 15px;
             color: #FFF;
             min-height: 25px;
