@@ -94,26 +94,7 @@ td {
     font-style: normal;
 }
 
-.button {
-    behavior: url(styles/PIE.php);
-    margin-top: 5px;
-    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
-    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
-    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
-    background-color: #33F;
-    -moz-border-radius: 17px;
-    -webkit-border-radius: 17px;
-    border-radius: 17px;
-    display: inline-block;
-    color: #ffffff;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 5px 11px;
-    text-decoration: none;
-    text-align: left;
-    position: relative;
-}
+
 
 .menuhead {
     margin-top: 5px;
@@ -157,20 +138,35 @@ td {
     behavior: url(styles/PIE.php);
 }
 
-.button img {
-    width: 24px;
-    height: 24px;
-    vertical-align: middle;
-    border: 0;
-}
-
-.button:hover {
-    background-color: #50BFF5;
-}
-
-.button:active {
+/*This controls the language selector drop down menu*/
+.dropdown {
+	margin-top: 4.5px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    background-color: #0E76AE;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
     position: relative;
-    top: 1px;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+	
+}
+
+.navbar_navbar-default{
+	color: #FFF;
+	background-color: #e5e5e5;
+	width: relative;
 }
 
 .hint {
@@ -235,13 +231,14 @@ span.required {
     transition: all 1s ease-in-out 0.1s;
 }
 
-.button2 {
-    margin-top: 2px;
-    margin-bottom: 2px;
+/*This button is for the "Change Authority" button and similar buttons*/
+.button {
+    behavior: url(styles/PIE.php);
+    margin-top: 5px;
     -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
     -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
     box-shadow: inset 0px 0px 0px 0px #bbdaf7;
-    background-color: #33F;
+    background-color: #0E76AE;
     -moz-border-radius: 17px;
     -webkit-border-radius: 17px;
     border-radius: 17px;
@@ -252,16 +249,60 @@ span.required {
     font-weight: bold;
     padding: 5px 11px;
     text-decoration: none;
-    behavior: url(styles/PIE.htc);
+    text-align: left;
+    position: relative;
+}
+.button img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    border: 0;
+}
+
+.button:active {
+    position: relative;
+    top: 1px;
+}
+
+/*This button is for the "Back to the BYU" button on the top menu*/
+.button2 {
+    margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    background-color: #0E76AE;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
     text-align: left;
     position: relative;
     behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
 }
 
-    .button2:hover {
-        background-color: #50BFF5;
-    }
+    
+.button2:hover {
+    background-color: #3C3C3C;
+	text-decoration: none;
+	color: white;
+}
+	
+.button:hover {
+    background-color: #3C3C3C;
+	color: #FFFF;
+	text-decoration: none;
 
+}
+	
+	
 a.reversed:link {
     color: #FFF;
     text-decoration: none;
@@ -282,7 +323,7 @@ a.reversed:active {
     text-decoration: none;
 }
 
-/*Forms*/
+/*Forms, this also changes the buttons on the main screens*/
 input, select, button {
     font-size: 1.3em;
     padding: .2em;
@@ -306,15 +347,17 @@ input, select, button {
     width: 3em;
 }
 
+/*This changes the buttons in the site*/
 input[type=submit],input[type=reset],input[type=button], button {
     padding: .6em;
     background-color: #0E76AE;
     color: #FFF;
+	text-decoration: none;
 }
 
     input[type=submit]:hover,input[type=reset]:hover,input[type=button]:hover, button:hover {
-        background-color: #bbdaf7;
-        color: #000;
+        background-color: #3C3C3C;
+        color: #FFF;
     }
 
 form ul, ul.form {
@@ -504,7 +547,9 @@ form ul.login a {
 .backLink:hover {
     color:#333;
     background-color: #bbdaf7;
+	text-decoration: none;
 }
+
 #nav {
     z-index: 500;
 }
@@ -706,6 +751,7 @@ form ul.login a {
 	padding-left:0px;
 }
 
+/*This is the for the navigation box on the left*/
 #navbarCollapse li a, #navbarCollapse li h2 {
             display: block;
             min-height: 1.5em;
@@ -717,6 +763,7 @@ form ul.login a {
 
         }
 
+/*This one changes the sub-profile buttons in the left menu*/
 #navbarCollapse ul ul li a, #navbarCollapse ul ul li h2 {
 			margin-left:-40px;
 			padding-top: 15px;
@@ -910,6 +957,7 @@ ul.messages {
 	}
 }
 
+/*size for the navigation menu on the right*/
 @media (min-width: 992px) {
     #navArea{
         max-width: 300px;
@@ -923,11 +971,12 @@ ul.messages {
 	font:Arial, Helvetica, sans-serif;
 	size:2;
 	text-align:center;	
+	text-decoration: none;
 	
 }
 
 
-/* make sidebar nav vertical */ 
+/* make sidebar nav vertical*/
 @media (min-width: 1200px) {
   .sidebar-nav .navbar .navbar-collapse {
     padding: 0;

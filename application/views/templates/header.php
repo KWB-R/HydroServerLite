@@ -1,4 +1,4 @@
-<div class="navbar navbar-default" role="navigation">
+<div class="navbar_navbar-default" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -9,14 +9,14 @@
             </button>
 			   <span class="visible-xs navbar-brand">Language Menu</span>
           </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-            
+          <div class="navbar-collapse collapse" >
+            <ul class="nav navbar-nav navbar-right" >
+           
            
             <li>
             
-            <div class="dropdown" style="margin-top:5%;">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+            <div class="dropdown1">
+  <button class="dropdown" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
     Language: <?php echo getCurrentDisplay();?>
     <span class="caret" id="headingCaret"></span>
   </button>
