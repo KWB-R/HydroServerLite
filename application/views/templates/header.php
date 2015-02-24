@@ -2,12 +2,12 @@
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
+              <span class="sr-only"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-			   <span class="visible-xs navbar-brand">Language Menu</span>
+			   <span class="visible-xs navbar-brand"></span>
           </div>
           <div class="navbar-collapse collapse" >
             <ul class="nav navbar-nav navbar-right" >

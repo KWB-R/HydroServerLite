@@ -15,6 +15,8 @@ html, body {
 }*/
 .welcome img {
     float: right;
+	
+	
 }
 
 h1 {
@@ -138,6 +140,7 @@ td {
     behavior: url(styles/PIE.php);
 }
 
+
 /*This controls the language selector drop down menu*/
 .dropdown {
 	margin-top: 4.5px;
@@ -161,12 +164,16 @@ td {
     behavior: url(styles/PIE.php);
     border: 2px solid #AAA;
 	
+	
 }
 
+/*This controls the top and left side navbar container*/
 .navbar_navbar-default{
 	color: #FFF;
 	background-color: #e5e5e5;
 	width: relative;
+	border: 0px solid #AAA;
+	border-radius: 0px 0px 8px 8px;	
 }
 
 .hint {
@@ -231,6 +238,30 @@ span.required {
     transition: all 1s ease-in-out 0.1s;
 }
 
+/*This is for the buttons below the map on the search data page*/
+.btn-btn-default {
+	margin-top: 4px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    background-color: #0E76AE;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+}
+.btn-group
 /*This button is for the "Change Authority" button and similar buttons*/
 .button {
     behavior: url(styles/PIE.php);
@@ -264,9 +295,10 @@ span.required {
     top: 1px;
 }
 
+
 /*This button is for the "Back to the BYU" button on the top menu*/
 .button2 {
-    margin-top: 0px;
+    margin-top: -1px;
     margin-bottom: 6px;
     -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
     -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
@@ -329,6 +361,7 @@ input, select, button {
     padding: .2em;
     border-radius: .2em;
     border: 2px solid #AAA;
+	
 }
 
 .long {
@@ -339,10 +372,78 @@ input, select, button {
     width: 15em;
 }
 
+/*This is for the search bar*/
 .short {
-    width: 5em;
+    width: 10em;
+	background-color: #FFF;
+	margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
 }
 
+/*This is for the radius button*/
+#radiusSelect{
+	width: 10em;
+	background-color: #0E76AE;
+	margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+	color: #FFF;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+}
+
+#locationSelect{
+	width: 10em;
+	background-color: #0E76AE;
+	margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+	color: #FFF;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+}
 .tiny {
     width: 3em;
 }
@@ -939,6 +1040,7 @@ ul.messages {
 .img{
 	width:100%;
 	height:auto;
+	
 }
 
 .mainContainer{	
@@ -947,9 +1049,42 @@ ul.messages {
 	
 }
 
+/*This one doesn't appear to change anything*/
+/*.nav_nav-tabs_nav-stacked{
+	
+	margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    background-color: #0E76AE;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+	
+}*/
+
+/*Controls the left and right side containers*/
+.col-md-3{
+	background-color: #FFF;
+	
+}
+
 @media (min-width: 768px) {
     .container{
 		width:auto;
+		
 
     }
 	.mainContainer{
@@ -957,10 +1092,11 @@ ul.messages {
 	}
 }
 
-/*size for the navigation menu on the right*/
+/*size for the navigation menu on the left*/
 @media (min-width: 992px) {
     #navArea{
         max-width: 300px;
+
     }
 }
 
@@ -975,12 +1111,70 @@ ul.messages {
 	
 }
 
+@media (min-width:1200px){
+	.container{width:1170px}}
+	
+.container-fluid{
+	padding-right:15px;
+	padding-left:15px;
+	margin-right:auto;
+	margin-left:auto;
+	text-align: right;
+	
+	
+}
 
+@media (min-width:768px){
+	.nav-tabs-justified>li>a{border-bottom:1px solid #ddd;
+	border-radius:4px 4px 0 0}
+	.nav-tabs-justified>.active>a,.nav-tabs-justified>.active>a:hover,.nav-tabs-justified>.active>a:focus{border-bottom-color:#fff}}.tab-content>.tab-pane{display:none}.tab-content>.active{display:block}.nav-tabs .dropdown-menu{margin-top:-1px;border-top-left-radius:0;border-top-right-radius:0}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}
+@media (min-width:768px){.navbar{border-radius:4px}}
+ 
+@media (min-width:768px){
+	.navbar-header{
+		float:left;
+		
+	}
+
+}
+ 
+.navbar-collapse{
+	padding-right:15px;
+	padding-left:15px;
+	overflow-x:visible;
+	-webkit-overflow-scrolling:touch;
+	border-top:1px solid transparent;
+	-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+	box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+	
+	
+}
+.navbar-collapse.in{overflow-y:auto}
+ 
+/*This changed the navbar on the left*/
+@media (min-width:100px){
+	.navbar-collapse{
+		width:auto;
+		border-top:0;
+		-webkit-box-shadow:none;
+		box-shadow:none;
+		
+		}
+	.navbar-collapse.collapse{
+	display:block!important;
+	height:auto!important;
+	padding-bottom:0;
+	overflow:visible!important
+}
+.navbar-collapse.in{
+	overflow-y:visible
+}
 /* make sidebar nav vertical*/
 @media (min-width: 1200px) {
   .sidebar-nav .navbar .navbar-collapse {
     padding: 0;
     max-height: none;
+	
 	
   }
   .sidebar-nav .navbar{
