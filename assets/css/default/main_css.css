@@ -483,18 +483,35 @@ form ul, ul.form {
         form ul li:last-child, ul.form li:last-child {
             padding-left: 10em;
         }
+		
+		
+
 /*end Forms*/
 /* Login Specific*/
+
+
 #loginHolder {
     height: 100%;
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 600;
-    background-color: rgba(49, 49, 49, 0.83);
+    z-index: 600; 
+    background-color: rgba(49, 49, 54, 0.83);
     display: none;
 }
+.h3{
+	
+	text-align: center;
+	margin-left:-153px;
+	
+	
+}
+.bg-primary{
+	margin-left: 11px;
+	background-color: #0E76AE;
+}
+
 
     #loginHolder #login {
         margin: auto;
@@ -1200,6 +1217,7 @@ ul.messages {
 .form-control{
     width:94%;
     float:left;
+	margin-left: 11px;
 }
 /*Helper lines*/
 div.form-group>div.col-sm-10>span.em
