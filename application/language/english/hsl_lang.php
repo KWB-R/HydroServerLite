@@ -375,7 +375,7 @@
  $lang['hsl_CreateWebsitePara2'] = "HydroServer and HydroDesktop are part of the";
  $lang['hsl_Consortium'] = "Consortium of Universities for the Advancement of Hydrologic Sciences";
  $lang['hsl_CreateWebsitePara3'] = "or commonly referred to as CUAHSI (pronounced &quotkw?_-ze&quot). To learn more about this software or find out how your school or organization can get their own version of the HydroServer Lite, please visit us";
- $lang['hsl_BackTo'] = "Back to ";
+ $lang['hsl_BackTo'] = "Back to the";
  $lang['hsl_NoTypesForSite'] = "No Types for this Site.";
  $lang['hsl_ReSelectSource'] = "Please reselect the Source.";
  $lang['hsl_NoMethodsVariable'] = "No Methods for this Variable.";
@@ -3940,5 +3940,4 @@
  $lang['hsl_banner'] = "Banner";
  $lang['hsl_Submit'] = "Submit";
  $lang['hsl_EditWelcomePage'] = "Edit Welcome Page";
- $lang['hsl_Version'] = "You are currently running Version:";
  ?>

@@ -444,6 +444,10 @@ input, select, button {
     behavior: url(styles/PIE.php);
     border: 2px solid #AAA;
 }
+
+#mapLocations{
+	width: 20em;
+}
 .tiny {
     width: 3em;
 }
@@ -1111,18 +1115,7 @@ ul.messages {
 	
 }
 
-@media (min-width:1200px){
-	.container{width:1170px}}
-	
-.container-fluid{
-	padding-right:15px;
-	padding-left:15px;
-	margin-right:auto;
-	margin-left:auto;
-	text-align: right;
-	
-	
-}
+
 
 @media (min-width:768px){
 	.nav-tabs-justified>li>a{border-bottom:1px solid #ddd;
