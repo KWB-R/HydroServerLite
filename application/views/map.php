@@ -46,16 +46,17 @@ HTML_Render_Body_Start();
 </div>
 
 
-
+<!--
 <div class="dropdown keep-open">
     <!-- Dropdown Button -->
-    <button id="mapbar" role="button" href="#" class="btn btn-primary"
+ <!--   <button id="mapbar" role="button" href="#" class="btn btn-primary"
             data-toggle="dropdown" data-target="#" >
         Dropdown <span class="caret"></span>
     </button>
 
+
     <!-- Map Dropdown Menu -->
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+ <!--   <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
         
         <input type="button" class="btn-btn-default" onClick="searchLocations()" value="<?php echo getTxt('Search'); ?>"/>
         <input type='button' class="btn-btn-default" onClick="loadall()" value="<?php echo getTxt('ResetSearch'); ?>"/>
@@ -80,7 +81,7 @@ HTML_Render_Body_Start();
 
 
 
-
+-->
 
 <script>
 	load();
