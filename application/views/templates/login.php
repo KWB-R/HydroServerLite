@@ -1,10 +1,10 @@
 <!-- #######################################################
  This file is the Login form. 
 	NOTE: This will need to be updated to not use tables in the future.
-	#######################################################	-->
-<head>
+	#######################################################	--><head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 </head>
+
 <div id="loginHolder">
     <?php
 	$attributes = array('name' => 'login', 'id' => 'login');

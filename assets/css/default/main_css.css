@@ -179,6 +179,7 @@ td {
 .hint {
     padding-left: 1em;
     cursor: pointer;
+	
 }
 
 span.hint {
@@ -188,11 +189,13 @@ span.hint {
     border-radius: .3em;
     font-size: 1.2em;
     color: #FFF;
+	
 }
 
     span.hint:hover {
-        background-color: #5c9ccc;
-        color: #000;
+        background-color: #3C3C3C;
+        color: #FFF;
+
     }
 
 .required, .requiredInstructions {
@@ -458,6 +461,13 @@ input[type=submit],input[type=reset],input[type=button], button {
     background-color: #0E76AE;
     color: #FFF;
 	text-decoration: none;
+	border-radius: 17px;
+	box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+	font-size: 13px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	
+	
 }
 
     input[type=submit]:hover,input[type=reset]:hover,input[type=button]:hover, button:hover {

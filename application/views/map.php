@@ -33,17 +33,55 @@ HTML_Render_Body_Start();
         <input type="checkbox" class="checkbox" id="allSitesCheck" onClick="loadall()" value="allSites"><?php echo getTxt('AllSites'); ?></input>
         </div>
         </div>
-      
+        <div id="mapLocations" >
+		<select name="locationSelect" id="locationSelect" style="width:100%;"></select>
+	</div>      
 		<p class="instruction">
 		<?php echo getTxt('EnterSearchLocation') ?>
 		</p>
-		<div id="mapLocations" >
-		<select name="locationSelect" id="locationSelect" style="width:100%;"></select>
-	</div>
+		
 	</div>		
 </div>
 </div>
 </div>
+
+
+
+<div class="dropdown keep-open">
+    <!-- Dropdown Button -->
+    <button id="mapbar" role="button" href="#" class="btn btn-primary"
+            data-toggle="dropdown" data-target="#" >
+        Dropdown <span class="caret"></span>
+    </button>
+
+    <!-- Map Dropdown Menu -->
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+        
+        <input type="button" class="btn-btn-default" onClick="searchLocations()" value="<?php echo getTxt('Search'); ?>"/>
+        <input type='button' class="btn-btn-default" onClick="loadall()" value="<?php echo getTxt('ResetSearch'); ?>"/>
+        <input type='button' class="btn-btn-default" onClick="track_loc()" value="<?php echo getTxt('FindSites'); ?>"/>
+        <input type="button" class="btn-btn-default" id="fullscreen"  value="<?php echo getTxt('FullScreen'); ?>"/></input>
+        <input type="button" class="btn-btn-default" id="exitfullscreen" value="<?php echo getTxt('EFullScreen'); ?>"/></input>
+        <input type="checkbox" class="checkbox" id="allSitesCheck" onClick="loadall()" value="allSites"><?php echo getTxt('AllSites'); ?></input>
+        <div id="mapFilters">
+		<input type="text" id="addressInput" class="short"/>
+		<select name="radiusSelect" id="radiusSelect">
+		  <option value="25" selected><?php echo getTxt('TwentyFive'); ?></option>
+              <option value="50"><?php echo getTxt('Fifty'); ?></option>
+              <option value="100"><?php echo getTxt('OneHundred'); ?></option>
+              <option value="200"><?php echo getTxt('TwoHundred'); ?></option>
+              <option value="300"><?php echo getTxt('ThreeHundred'); ?></option>
+              <option value="400"><?php echo getTxt('FourHundred'); ?></option>
+              <option value="500"><?php echo getTxt('FiveHundred'); ?></option>
+		</select>
+        
+    </ul>
+</div>
+
+
+
+
+
 <script>
 	load();
 $(document).ready(function(){
