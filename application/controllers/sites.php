@@ -12,7 +12,7 @@ class Sites extends MY_Controller {
 	{
 		$this->dontAuth = array('map','details','displayAll','siteSearch','getSitesJSON','getSiteJSON');
 		parent::__construct();
-		$this->load->model('site','',TRUE);
+		$this->load->model('Site','',TRUE);
 		$this->load->model('sources','',TRUE);
 		
 
