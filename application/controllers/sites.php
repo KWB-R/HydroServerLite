@@ -12,7 +12,7 @@ class Sites extends MY_Controller {
 	{
 		$this->dontAuth = array('map','details','displayAll','siteSearch','getSitesJSON','getSiteJSON');
 		parent::__construct();
-		$this->load->model('Site','',TRUE);
+		$this->load->model('site','',TRUE);
 		$this->load->model('sources','',TRUE);
 		
 
@@ -39,7 +39,7 @@ class Sites extends MY_Controller {
 		}
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		$siteData = $this->Site->getSite($siteid);
+		$siteData = $this->site->getSite($siteid);
 		$data['site']=$siteData[0];
 		$data['SiteID']=$siteid;
 		$this->load->model('variables','',TRUE);
@@ -99,7 +99,7 @@ class Sites extends MY_Controller {
 				//Create the site.
 				$site = $this->createSite();
 				//Add the site.
-				$result = $this->Site->add($site); 
+				$result = $this->site->add($site); 
 				if($result<=0)
 				{
 					addError(getTxt('ProcessingError')." Error while adding site. ");
@@ -108,7 +108,7 @@ class Sites extends MY_Controller {
 				{
 					$siteID = $result;
 					//Add image to sitepic table. 
-					$this->Site->addPic($name,$siteID);
+					$this->site->addPic($name,$siteID);
 					//Get the source
 					$source = $this->sources->get($this->input->post('SourceID'));
 					
@@ -142,7 +142,7 @@ class Sites extends MY_Controller {
 		$sources = $this->sources->getAll();
 		$sourceOptions = optionsSource($sources);
 		
-		$types = $this->Site->getSiteTypes();
+		$types = $this->site->getSiteTypes();
 		$typesArray = array();
 		foreach($types as $type)
 		{
@@ -150,7 +150,7 @@ class Sites extends MY_Controller {
 		}
 		$typeOptions = genOptions($typesArray);
 		
-		$vds = $this->Site->getVD();
+		$vds = $this->site->getVD();
 		$verticalDatumArray = array();
 		foreach($vds as $vd)
 		{
@@ -158,7 +158,7 @@ class Sites extends MY_Controller {
 		}
 		$vdOptions = genOptions($verticalDatumArray);
 		
-		$srs = $this->Site->getSR();
+		$srs = $this->site->getSR();
 		$srArray = array();
 		foreach($srs as $sr)
 		{
@@ -207,8 +207,8 @@ class Sites extends MY_Controller {
 			$site = $this->createSite();
 			$siteID = $this->input->post('SiteID');
 			if($name!="") //Add image to sitepic table. 
-			$this->Site->addPic($name,$siteID);
-			$result = $this->Site->update($site,$siteID);
+			$this->site->addPic($name,$siteID);
+			$result = $this->site->update($site,$siteID);
 			if(!$result)
 			{
 				addError(getTxt('ProcessingError')." Error while adding sites. ");
@@ -240,7 +240,7 @@ class Sites extends MY_Controller {
 		$sources = $this->sources->getAll();
 		$sourceOptions = optionsSource($sources);
 		
-		$types = $this->Site->getSiteTypes();
+		$types = $this->site->getSiteTypes();
 		$typesArray = array();
 		foreach($types as $type)
 		{
@@ -248,7 +248,7 @@ class Sites extends MY_Controller {
 		}
 		$typeOptions = genOptions($typesArray);
 		
-		$vds = $this->Site->getVD();
+		$vds = $this->site->getVD();
 		$verticalDatumArray = array();
 		foreach($vds as $vd)
 		{
@@ -256,7 +256,7 @@ class Sites extends MY_Controller {
 		}
 		$vdOptions = genOptions($verticalDatumArray);
 		
-		$srs = $this->Site->getSR();
+		$srs = $this->site->getSR();
 		$srArray = array();
 		foreach($srs as $sr)
 		{
@@ -304,7 +304,7 @@ class Sites extends MY_Controller {
 	public function displayAll()
 	{
 		$record_num = end($this->uri->segment_array());
-		$result = $this->Site->displayAll($record_num);
+		$result = $this->site->displayAll($record_num);
 		$data['dump'] = $this->genNodes($result);
 		$this->load->view('templates/xml_dump',$data);	
 	}
@@ -314,7 +314,7 @@ class Sites extends MY_Controller {
 		//Check that required parameters are defined. 
 		if($this->input->get('lat', TRUE)&&$this->input->get('long', TRUE)&&$this->input->get('radius', TRUE))
 		{
-			$result = $this->Site->searchSite($this->input->get('lat', TRUE),$this->input->get('long', TRUE),$this->input->get('radius', TRUE));
+			$result = $this->site->searchSite($this->input->get('lat', TRUE),$this->input->get('long', TRUE),$this->input->get('radius', TRUE));
 			$data['dump'] = $this->genNodes($result);
 			$this->load->view('templates/xml_dump',$data);	
 		}
@@ -329,7 +329,7 @@ class Sites extends MY_Controller {
 	{
 		if($this->input->get('source', TRUE))
 		{
-			$result = $this->Site->getSitebySource($this->input->get('source', TRUE));
+			$result = $this->site->getSitebySource($this->input->get('source', TRUE));
 			echo json_encode($result);
 		}
 		else
@@ -343,7 +343,7 @@ class Sites extends MY_Controller {
 	{
 		if($this->input->get('siteid', TRUE))
 		{
-			$result = $this->Site->getSite($this->input->get('siteid', TRUE));
+			$result = $this->site->getSite($this->input->get('siteid', TRUE));
 			echo json_encode($result);
 		}
 		else
@@ -362,7 +362,7 @@ class Sites extends MY_Controller {
 			$this->load->view('templates/apierror',$data);
 			return;
 		}
-		$result = $this->Site->delete($siteid);
+		$result = $this->site->delete($siteid);
 		$this->load->model('sc','',TRUE);
 		$this->sc->delSite($siteid);
 		if($result)
