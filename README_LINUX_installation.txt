@@ -28,7 +28,7 @@ sudo chmod -R 777 application/config/installations
 sudo chmod -R 777 application/languagecd
 sudo chmod -R 777 uploadshis_admin
 
-#Change directories to where sample_installation_file.txt is located
+#Change the directory to where the sample_installation_file.txt is located
 cd application/config/installations
 
 #create the default installation file: replace the mysql username, mysql db name, and mysql password.
