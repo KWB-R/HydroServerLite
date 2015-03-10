@@ -8,10 +8,17 @@ HTML_Render_Body_Start();
 <br />
 <div class="col-md-6">
 	<?php showMsgs();?>
+	<?php if ($welcome) {?>
+	<h1><?php echo $welcome[0];?></h1>
+	<h4><?php echo $welcome[1];?></h4>
+	<p><?php echo $welcome[2];?></p>
+	<p><?php echo $welcome[3];?></p>
+	<?php }else{?>
 	<h1><?php echo getTxt('Welcome'); ?></h1>
     <p><?php echo getTxt('Paragraph1'); ?></p>
     <p><?php echo getTxt('Paragraph2'); ?></p>
     <p><?php echo getTxt('Paragraph3'); ?></p>
+	<?php }?>
     <?php if($multi){?>
     <p><?php echo getTxt('congratsMultiple')."<a href='".base_url('index.php/default/home/installation')."'>Click Here</a>."; ?></p>
     <?php }?>

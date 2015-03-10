@@ -1,22 +1,22 @@
-<div class="navbar navbar-default" role="navigation">
+<div class="navbar_navbar-default" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
+              <span class="sr-only"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-			   <span class="visible-xs navbar-brand">Language Menu</span>
+			   <span class="visible-xs navbar-brand"></span>
           </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-            
+          <div class="navbar-collapse collapse" >
+            <ul class="nav navbar-nav navbar-right" >
+           
            
             <li>
             
-            <div class="dropdown" style="margin-top:5%;">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+            <div class="dropdown1">
+  <button class="dropdown" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
     Language: <?php echo getCurrentDisplay();?>
     <span class="caret" id="headingCaret"></span>
   </button>
@@ -25,7 +25,7 @@
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Spanish">Español</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Italian">Italiano</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Portuguese">Portugués</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="German">Alemán</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="German">Deutsch</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Dutch">Nederlands</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Bulgarian">български</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data="Croatian">Hrvatski</a></li>

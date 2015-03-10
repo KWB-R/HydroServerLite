@@ -4,7 +4,7 @@ html, body {
     height: 100%;
 }
 
-body {
+/*body {
     background: #9ab7e3 url(../../images/bkgrdimage-light.jpg) repeat left top;
     margin: 0px;
 	background-size: 100% 100%;
@@ -12,9 +12,11 @@ body {
     width: 100%;
     font-family: Arial;
     color: #666666;
-}
+}*/
 .welcome img {
     float: right;
+	
+	
 }
 
 h1 {
@@ -94,26 +96,7 @@ td {
     font-style: normal;
 }
 
-.button {
-    behavior: url(styles/PIE.php);
-    margin-top: 5px;
-    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
-    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
-    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
-    background-color: #33F;
-    -moz-border-radius: 17px;
-    -webkit-border-radius: 17px;
-    border-radius: 17px;
-    display: inline-block;
-    color: #ffffff;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 5px 11px;
-    text-decoration: none;
-    text-align: left;
-    position: relative;
-}
+
 
 .menuhead {
     margin-top: 5px;
@@ -157,25 +140,46 @@ td {
     behavior: url(styles/PIE.php);
 }
 
-.button img {
-    width: 24px;
-    height: 24px;
-    vertical-align: middle;
-    border: 0;
-}
 
-.button:hover {
-    background-color: #50BFF5;
-}
-
-.button:active {
+/*This controls the language selector drop down menu*/
+.dropdown {
+	margin-top: 4.5px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    background-color: #0E76AE;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
     position: relative;
-    top: 1px;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+	
+	
+}
+
+/*This controls the top and left side navbar container*/
+.navbar_navbar-default{
+	color: #FFF;
+	background-color: #e5e5e5;
+	width: relative;
+	border: 0px solid #AAA;
+	border-radius: 0px 0px 8px 8px;	
 }
 
 .hint {
     padding-left: 1em;
     cursor: pointer;
+	
 }
 
 span.hint {
@@ -185,11 +189,13 @@ span.hint {
     border-radius: .3em;
     font-size: 1.2em;
     color: #FFF;
+	
 }
 
     span.hint:hover {
-        background-color: #5c9ccc;
-        color: #000;
+        background-color: #3C3C3C;
+        color: #FFF;
+
     }
 
 .required, .requiredInstructions {
@@ -235,13 +241,38 @@ span.required {
     transition: all 1s ease-in-out 0.1s;
 }
 
-.button2 {
-    margin-top: 2px;
-    margin-bottom: 2px;
+/*This is for the buttons below the map on the search data page*/
+.btn-btn-default {
+	margin-top: 4px;
+    margin-bottom: 6px;
     -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
     -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
     box-shadow: inset 0px 0px 0px 0px #bbdaf7;
-    background-color: #33F;
+    background-color: #0E76AE;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+}
+.btn-group
+/*This button is for the "Change Authority" button and similar buttons*/
+.button {
+    behavior: url(styles/PIE.php);
+    margin-top: 5px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    background-color: #0E76AE;
     -moz-border-radius: 17px;
     -webkit-border-radius: 17px;
     border-radius: 17px;
@@ -252,29 +283,74 @@ span.required {
     font-weight: bold;
     padding: 5px 11px;
     text-decoration: none;
-    behavior: url(styles/PIE.htc);
+    text-align: left;
+    position: relative;
+}
+.button img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    border: 0;
+}
+
+.button:active {
+    position: relative;
+    top: 1px;
+}
+
+
+/*This button is for the "Back to the BYU" button on the top menu*/
+.button2 {
+    margin-top: -1px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    background-color: #0E76AE;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
     text-align: left;
     position: relative;
     behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
 }
 
-    .button2:hover {
-        background-color: #50BFF5;
-    }
+    
+.button2:hover {
+    background-color: #3C3C3C;
+	text-decoration: none;
+	color: white;
+}
+	
+.button:hover {
+    background-color: #3C3C3C;
+	color: #FFFF;
+	text-decoration: none;
 
+}
+	
+	
 a.reversed:link {
-    color: #FFF;
+    color: #000;
     text-decoration: none;
 }
 
 a.reversed:visited {
-    color: #FFF;
+    color: #000000;
     text-decoration: none;
 }
 
 a.reversed:hover {
-    color: #FFF;
-    text-decoration: underline;
+    color: #0E76AE;
+    text-decoration: none;
 }
 
 a.reversed:active {
@@ -282,12 +358,13 @@ a.reversed:active {
     text-decoration: none;
 }
 
-/*Forms*/
+/*Forms, this also changes the buttons on the main screens*/
 input, select, button {
     font-size: 1.3em;
     padding: .2em;
     border-radius: .2em;
     border: 2px solid #AAA;
+	
 }
 
 .long {
@@ -298,23 +375,104 @@ input, select, button {
     width: 15em;
 }
 
+/*This is for the search bar*/
 .short {
-    width: 5em;
+    width: 10em;
+	background-color: #FFF;
+	margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
 }
 
+/*This is for the radius button*/
+#radiusSelect{
+	width: 10em;
+	background-color: #0E76AE;
+	margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+	color: #FFF;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+}
+
+#locationSelect{
+	width: 10em;
+	background-color: #0E76AE;
+	margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+	color: #FFF;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+}
+
+#mapLocations{
+	width: 20em;
+}
 .tiny {
     width: 3em;
 }
 
+/*This changes the buttons in the site*/
 input[type=submit],input[type=reset],input[type=button], button {
     padding: .6em;
     background-color: #0E76AE;
     color: #FFF;
+	text-decoration: none;
+	border-radius: 17px;
+	box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+	font-size: 13px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	
+	
 }
 
     input[type=submit]:hover,input[type=reset]:hover,input[type=button]:hover, button:hover {
-        background-color: #bbdaf7;
-        color: #000;
+        background-color: #3C3C3C;
+        color: #FFF;
     }
 
 form ul, ul.form {
@@ -335,18 +493,35 @@ form ul, ul.form {
         form ul li:last-child, ul.form li:last-child {
             padding-left: 10em;
         }
+		
+		
+
 /*end Forms*/
 /* Login Specific*/
+
+
 #loginHolder {
     height: 100%;
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 600;
-    background-color: rgba(49, 49, 49, 0.83);
+    z-index: 600; 
+    background-color: rgba(49, 49, 54, 0.83);
     display: none;
 }
+.h3{
+	
+	text-align: center;
+	margin-left:-153px;
+	
+	
+}
+.bg-primary{
+	margin-left: 11px;
+	background-color: #0E76AE;
+}
+
 
     #loginHolder #login {
         margin: auto;
@@ -504,7 +679,9 @@ form ul.login a {
 .backLink:hover {
     color:#333;
     background-color: #bbdaf7;
+	text-decoration: none;
 }
+
 #nav {
     z-index: 500;
 }
@@ -706,6 +883,7 @@ form ul.login a {
 	padding-left:0px;
 }
 
+/*This is the for the navigation box on the left*/
 #navbarCollapse li a, #navbarCollapse li h2 {
             display: block;
             min-height: 1.5em;
@@ -717,6 +895,7 @@ form ul.login a {
 
         }
 
+/*This one changes the sub-profile buttons in the left menu*/
 #navbarCollapse ul ul li a, #navbarCollapse ul ul li h2 {
 			margin-left:-40px;
 			padding-top: 15px;
@@ -733,11 +912,11 @@ form ul.login a {
         }
 
     #navbarCollapse ul ul li:first-child > a {
-        border-radius: 14px 14px 0 0;
+        border-radius: 7px 7px 0 0;
     }
 
     #navbarCollapse ul ul li:last-child > a {
-        border-radius: 0 0 14px 14px;
+        border-radius: 0 0 7px 7px;
     }
 
    #navbarCollapse li:hover > a, div#navbarCollapse li:hover > h2 {
@@ -892,17 +1071,51 @@ ul.messages {
 .img{
 	width:100%;
 	height:auto;
+	
 }
 
 .mainContainer{	
 	background-color:#FFF;
-	margin-top:-20px;
+	margin-top:20px;
+	
+}
+
+/*This one doesn't appear to change anything*/
+/*.nav_nav-tabs_nav-stacked{
+	
+	margin-top: 0px;
+    margin-bottom: 6px;
+    -moz-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    box-shadow: inset 0px 0px 0px 0px #bbdaf7;
+    background-color: #0E76AE;
+    -moz-border-radius: 17px;
+    -webkit-border-radius: 17px;
+    border-radius: 17px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 11px;
+    text-decoration: none;
+    text-align: left;
+    position: relative;
+    behavior: url(styles/PIE.php);
+    border: 2px solid #AAA;
+	
+}*/
+
+/*Controls the left and right side containers*/
+.col-md-3{
+	background-color: #FFF;
 	
 }
 
 @media (min-width: 768px) {
     .container{
 		width:auto;
+		
 
     }
 	.mainContainer{
@@ -910,28 +1123,78 @@ ul.messages {
 	}
 }
 
+/*size for the navigation menu on the left*/
 @media (min-width: 992px) {
     #navArea{
         max-width: 300px;
+
     }
 }
 
 
 .footer{
-	background-color:#0971B3;
-	color:#FFF;
+	background-color:#FFF;
+	color:#000;
 	font:Arial, Helvetica, sans-serif;
 	size:2;
 	text-align:center;	
+	text-decoration: none;
 	
 }
 
 
-/* make sidebar nav vertical */ 
+
+@media (min-width:768px){
+	.nav-tabs-justified>li>a{border-bottom:1px solid #ddd;
+	border-radius:4px 4px 0 0}
+	.nav-tabs-justified>.active>a,.nav-tabs-justified>.active>a:hover,.nav-tabs-justified>.active>a:focus{border-bottom-color:#fff}}.tab-content>.tab-pane{display:none}.tab-content>.active{display:block}.nav-tabs .dropdown-menu{margin-top:-1px;border-top-left-radius:0;border-top-right-radius:0}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}
+@media (min-width:768px){.navbar{border-radius:4px}}
+ 
+@media (min-width:768px){
+	.navbar-header{
+		float:left;
+		
+	}
+
+}
+ 
+.navbar-collapse{
+	padding-right:15px;
+	padding-left:15px;
+	overflow-x:visible;
+	-webkit-overflow-scrolling:touch;
+	border-top:1px solid transparent;
+	-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+	box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+	
+	
+}
+.navbar-collapse.in{overflow-y:auto}
+ 
+/*This changed the navbar on the left*/
+@media (min-width:100px){
+	.navbar-collapse{
+		width:auto;
+		border-top:0;
+		-webkit-box-shadow:none;
+		box-shadow:none;
+		
+		}
+	.navbar-collapse.collapse{
+	display:block!important;
+	height:auto!important;
+	padding-bottom:0;
+	overflow:visible!important
+}
+.navbar-collapse.in{
+	overflow-y:visible
+}
+/* make sidebar nav vertical*/
 @media (min-width: 1200px) {
   .sidebar-nav .navbar .navbar-collapse {
     padding: 0;
     max-height: none;
+	
 	
   }
   .sidebar-nav .navbar{
@@ -964,6 +1227,7 @@ ul.messages {
 .form-control{
     width:94%;
     float:left;
+	margin-left: 11px;
 }
 /*Helper lines*/
 div.form-group>div.col-sm-10>span.em

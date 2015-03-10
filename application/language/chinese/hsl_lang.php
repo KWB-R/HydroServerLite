@@ -456,7 +456,11 @@
  $lang['hsl_ConfigurationSettingsDataValues'] = "添加数据配置设置";
  $lang['hsl_UTCOffset'] = "UTCOffset:";
  $lang['hsl_UTCOffsetTwo'] = "UTCOffset2:";
+<<<<<<< HEAD
  $lang['hsl_CensorCode'] = "审图号：";
+=======
+ $lang['hsl_CensorCode'] = "Censor Code:";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_QualityControlLevel'] = "质量控制水平：";
  $lang['hsl_ValueAccuracy'] = "数据精度：";
  $lang['hsl_OffsetTypeID'] = "Offset类型ID：";
@@ -471,6 +475,7 @@
  $lang['hsl_ProfileVersionInfo'] = "文件版本处必须填写ISO元数据文件的版本，例如，ISO10115或ISO 8601，无文件版本可以填写“未知”。";
  $lang['hsl_LocalXInfo'] = "这是当地投影横坐标，例如，456700，不知道可不填。";
  $lang['hsl_LocalYInfo'] = "这是本地投影纵坐标，例如，232000，不知道可不填。";
+<<<<<<< HEAD
  $lang['hsl_LocalProjectionIDInfo'] = "当地坐标的空间坐标参考系识别码，例如，7.或填入NULL。";
  $lang['hsl_PositionalAccuracyInfo'] = "位置信息精确度，以米为单位，例如，100. 或填入NULL。";
  $lang['hsl_VerticalDatumInfo'] = "高程基准，例如，MSL，表示平均海平面。";
@@ -480,6 +485,17 @@
  $lang['hsl_CensorCodeInfo'] = "审查代码用于定义数据是否被审查，nc代表数据未审查，如果不确定，可填写nc。";
  $lang['hsl_QualityControlLevelInfo'] = "样品数据的质量控制等级（整数），例如，0代表原数据或未处理数据，没有经过质量控制；-9999代表数据的质量控制等级未知。";
  $lang['hsl_ValueAccuracyInfo'] = "数据精度指用一个数值代表数据测量的精确度，如果不确定，填写“空”。";
+=======
+ $lang['hsl_LocalProjectionIDInfo'] = "An identifier that references the Spatial Reference System of the local coordinates in the SpatialReferences table. This field is required if local coordinates are given. For example, 7. Or you simply put NULL if not known.";
+ $lang['hsl_PositionalAccuracyInfo'] = "Value giving the accuracy with which the positional information is specified in meters. For example, 100. Or you simply put NULL if not known.";
+ $lang['hsl_VerticalDatumInfo'] = "Vertical datum of the elevation. Controlled Vocabulary from VerticalDatumCV. For example, MSL, which stands for Mean Sea Level.";
+ $lang['hsl_SpatialReferenceInfo'] = "SpatialReferences is for the purpose of recording the name and EPSG code of each Spatial Reference System used. For example, NAD83 / Idaho Central.";
+ $lang['hsl_UTCOffsetInfo'] = "Unambiguous interpretation of date and time information requires specification of the time zone or offset from universal time (UTC). An UTCOffset field is included to ensure that local times recorded in the database can be referenced to standard time and to enable comparison of results across databases that may store data values collected in different time zones. For example, McCall Idaho is Mountain Standard Time (MST), and therefore the value is -7.";
+ $lang['hsl_UTCOffset2Info'] = "To automatically adjust Date and Time a second UTC value is needed for calculations in the software. The value of this UTC is the exact opposite of the first UTC. For example, McCall Idaho is Mountain Standard Time (MST), and therefore the value is 7.";
+ $lang['hsl_CensorCodeInfo'] = "The Censor Code is a controlled vocabulary used to define whether the data value is censored. \\\'nc\\\' means that data is not censored. If not known, simply put nc.";
+ $lang['hsl_QualityControlLevelInfo'] = "A unique integer identifying the quality control level of the data values collected. For example, a quality control level code of 0 is suggested for data which is raw and unprocessed, and have not undergone quality control. Or a quality control level code of -9999 is suggested for data whose quality control level is unknown.";
+ $lang['hsl_ValueAccuracyInfo'] = "Value Accuracy is a numeric value that describes the measurement accuracy of the data value. If not known, simply put NULL.";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_OffsetIntergerInfo'] = "An integer identifier that references the measurement offset type in the OffsetTypes table. If not known, simply put NULL.";
  $lang['hsl_QualifierIDInfo'] = "Integer identifier that references the Qualifiers table. In this environment, the Qualifier is 1 and refers to Citizen Science.";
  $lang['hsl_SampleIDInfo'] = "Integer identifier that references into the Samples table. This is required only if the data value resulted from a physical sample processed in a lab. If not known, simply put NULL.";
@@ -559,7 +575,11 @@
  $lang['hsl_To'] = "至";
  $lang['hsl_CompareData'] = "点击这里对比场地数据";
  $lang['hsl_ClickForSiteList'] = "点击这里获得场地列表：";
+<<<<<<< HEAD
  $lang['hsl_SelectSiteBelow'] = "请在下方地图中选择一个场地，或点击同一场地显示该场地选项。";
+=======
+ $lang['hsl_SelectSiteBelow'] = "Please Select a site from the below map or click same site to show options from the same site.";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_EnterSearchLocation'] = "请输入位置查找附近场地，或点击“查找附近场地！”显示以您的地理位置为中心、300英里为半径范围内的场地。（备注：不包含数据的场地将不显示。）";
  $lang['hsl_SameSite'] = "相同场地";
  $lang['hsl_DatesAvailable'] = "Dates Available:";
@@ -575,9 +595,15 @@
  $lang['hsl_SourceMetadataDeleted'] = "数据源与元数据ID已成功删除！";
  $lang['hsl_SourceEdited'] = "数据源编辑成功！";
  $lang['hsl_EditDeleteSource'] = "编辑/删除数据源";
+<<<<<<< HEAD
  $lang['hsl_SelectSource'] = "请从下拉菜单中选择需要编辑或删除的数据源进行操作。";
  $lang['hsl_NoteText'] = "如果需要删除一个数据源或元数据ID，请先删除所有相关数据。";
  $lang['hsl_ProfileVersionLabel'] = "文件版本是指使用的合规性标准，例如ISO 19115或ISO 8601，在数据库中提供了整套ISO元数据。";
+=======
+ $lang['hsl_SelectSource'] = "Please select the Source you would like to edit or delete from the drop down menu to proceed.";
+ $lang['hsl_NoteText'] = "You cannot delete a Source or MetadataID without first deleting all data values associated with them.";
+ $lang['hsl_ProfileVersionLabel'] = "The Profile Version is a label for the standard of compliance used, such as ISO 19115 or ISO 8601, which provides a complete set of ISO compliant metadata in the database.";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_SelectSourceDelete'] = "请选择要删除的数据源！";
  $lang['hsl_SelectSourceEdit'] = "请选择要编辑的数据源";
  $lang['hsl_SourceWithoutMetadataID'] = "您的数据源没有元数据ID，请与管理员联系。";
@@ -586,8 +612,13 @@
  $lang['hsl_MethodDeleted'] = "方法已成功删除！";
  $lang['hsl_MethodEdited'] = "方法已成功编辑！";
  $lang['hsl_EditDeleteMethod'] = "编辑/删除方法";
+<<<<<<< HEAD
  $lang['hsl_SelectMethod'] = "请从下拉菜单中选择要编辑或删除的方法进行操作。";
  $lang['hsl_MethodNote'] = "如果要删除一种方法，必须先删除所有使用该方法的数据。";
+=======
+ $lang['hsl_SelectMethod'] = "Please select the Method you would like to edit or delete from the drop down menu to proceed.";
+ $lang['hsl_MethodNote'] = "You cannot delete a Method without first deleting all data values which use the specific Method.";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_SelectMethodDelete'] = "请选择要删除的方法！";
  $lang['hsl_SelectMethodEdit'] = "请选择要编辑的方法！";
  $lang['hsl_MethodNameRequired'] = "请填入方法名称！";
@@ -597,7 +628,11 @@
  $lang['hsl_EditDeleteMetadataID'] = "编辑/删除元数据ID";
  $lang['hsl_SelectMetadataID'] = "请在下拉菜单中选择要编辑/删除的元数据ID来完成。";
  $lang['hsl_MetadataTitleColon'] = "元数据标题：";
+<<<<<<< HEAD
  $lang['hsl_MetadataNoteText'] = "如果要删除一个元数据ID，必须先删除所有使用该元数据ID的数据源。";
+=======
+ $lang['hsl_MetadataNoteText'] = "You cannot delete a Metadata ID without first deleting all Sources which use the specific Metadata ID";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_ProfileVersion1'] = "文件版本指使用的标准 ，";
  $lang['hsl_ProfileVersion2'] = "例如，ISO19115或ISO8601，为数据库提供一个";
  $lang['hsl_ProfileVersion3'] = "完整的符合ISO标准的元数据集合。";
@@ -607,9 +642,15 @@
  $lang['hsl_AddNewVariable'] = "添加新变量";
  $lang['hsl_VariableCodeExample'] = "（例如：IDCS-22或IDCS-22-Avg）";
  $lang['hsl_NewUnitDefinitionColon'] = "新单位定义：";
+<<<<<<< HEAD
  $lang['hsl_ValueTypeNewColon'] = "数据类型新建：";
  $lang['hsl_AddVariableButton'] = "添加变量";
  $lang['hsl_EnterTimeSupportValue'] = "请输入时间支持值！0代表即时数据，其他数字代表数据被平均或整合的时间长度。";
+=======
+ $lang['hsl_ValueTypeNewColon'] = "Value Type New:";
+ $lang['hsl_AddVariableButton'] = "添加变量";
+ $lang['hsl_EnterTimeSupportValue'] = "Please enter a Time Support Value! 0 is used to indicate data values that are instantaneous. Other values indicate the time over which the data values are implicitly or explicitly averaged or aggregated.";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_SelectOneMethod'] = "请选择至少一种方法！";
  $lang['hsl_SourceSuccessfullyAdded'] = "数据源已成功添加！";
  $lang['hsl_AddNewSource'] = "添加新数据源";
@@ -617,6 +658,7 @@
  $lang['hsl_MetadataAutoGenerated'] = "（由以上提交信息自动生成。）";
  $lang['hsl_AddSourceButton'] = "添加数据源";
  $lang['hsl_AddNewSite'] = "添加新场地";
+<<<<<<< HEAD
  $lang['hsl_MapLatLongEle'] = "您可以手动输入经度/纬度/高程，或直接点击地图上位置获取（可通过拖动地图上图标调整点至精确位置）。";
  $lang['hsl_AddSiteButton'] = "添加场地";
  $lang['hsl_NoApostrophe'] = "不允许有省略号";
@@ -624,6 +666,15 @@
  $lang['hsl_VerticalDatumInfo'] = "高程基准，参考VerticalDatumCV表格。例如，MSL表示Mean Sea Level（平均海平面）。";
  $lang['hsl_SpatialReferenceInfo'] = "空间参考坐标系是用于记录空间参考坐标系的名称和EPSG代码，例如，NAD83/ Idaho Central。";
  $lang['hsl_ElevationInfo'] = "相对于平均海平面高度（MSL）基准面的高程";
+=======
+ $lang['hsl_MapLatLongEle'] = "You may either enter the latitude/longitude/elevation manually or simply double click the location on the map. Once the marker is placed on the map, you may then click and drag it to the exact location you desire to adjust the results to be more accurate.";
+ $lang['hsl_AddSiteButton'] = "Add Site";
+ $lang['hsl_NoApostrophe'] = "Apostrophes are not permitted";
+ $lang["db_The Site Code is a unique identifier used by an organization that collects the data. For example, if the organization\\\'s name was McCall Outdoor Science Center and the name of the site was Boulder Creek at Jug Mountain Ranch, then your Site Code could be MOSS-BC-JMR"] = "The Site Code is a unique identifier used by an organization that collects the data. For example, if the organization\\\'s name was McCall Outdoor Science Center and the name of the site was Boulder Creek at Jug Mountain Ranch, then your Site Code could be MOSS-BC-JMR";
+ $lang['hsl_VerticalDatumInfo'] = "The vertical datum of the elevation. Controlled Vocabulary from VerticalDatumCV. For example, MSL, which stands for Mean Sea Level.";
+ $lang['hsl_SpatialReferenceInfo'] = "The spatial reference is for the purpose of recording the name and EPSG code of each Spatial Reference System used. For example, NAD83 / Idaho Central.";
+ $lang['hsl_ElevationInfo'] = "The elevation corresponds to Mean Sea Level (MSL) vertical datum.";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_NotFound'] = "没有找到";
  $lang['hsl_FailedElevationService'] = "Elevation service failed due to";
  $lang['hsl_GeocoderFailed'] = "Geocoder failed due to";
@@ -638,10 +689,17 @@
  $lang['hsl_DataEnteredSuccessfully'] = "数据导入成功！";
  $lang['hsl_ViewDataInputed'] = "查看已输入数据";
  $lang['hsl_AddMoreData'] = "添加更多数据";
+<<<<<<< HEAD
  $lang['hsl_SelectSource'] = "请选择一个数据源！如果没有需要的数据源，请通过“添加新数据源”页面添加。";
  $lang['hsl_SelectSite'] = "请选择一个场地！如果没有需要的场地，请通过“添加新场地”页面添加。";
  $lang['hsl_EnterValidValue'] = "请输入一个有效数据";
  $lang['hsl_EnterOneValue'] = "请至少输入一个数据";
+=======
+ $lang['hsl_SelectSource'] = "Please select a Source! If you do not find it in the list, please visit the \\\'Add a new source\\\' page.";
+ $lang['hsl_SelectSite'] = "Please select a Site! If you do not find it in the list, please visit the \\\'Add a new site\\\' page";
+ $lang['hsl_EnterValidValue'] = "Please enter a valid value";
+ $lang['hsl_EnterOneValue'] = "Please enter at least one value";
+>>>>>>> 20c7ae605377453a0b2a0f01209ffb54bafbbc3e
  $lang['hsl_ErrorInRow'] = "Error in row";
  $lang['hsl_ErrorOnRow'] = "Error on row";
  $lang['hsl_MethodSuccessfully'] = "方法成功添加！";

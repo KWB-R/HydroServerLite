@@ -3939,4 +3939,5 @@
  $lang['hsl_AddNewBanner'] = "Add/Change Top Banner";
  $lang['hsl_banner'] = "Banner";
  $lang['hsl_Submit'] = "Submit";
+ $lang['hsl_EditWelcomePage'] = "Edit Welcome Page";
  ?>

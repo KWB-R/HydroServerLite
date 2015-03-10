@@ -20,19 +20,102 @@ class Home extends MY_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->library('form_validation');
+		$this->load->helper('file');
+		$this->load->helper('download');
+		$this->load->helper(array('form','url'));
+		$this->dontAuth = array('getData','getDataJSON','compare','export');
 	}
 
 	private function file_list($d,$x){ 
        foreach(array_diff(scandir($d),array('.','..')) as $f)if(is_file($d.'/'.$f)&&(($x)?@ereg($x.'$',$f):1))$l[]=$f; 
        	return $l;	
-	} 
-
+	}
+	private function adminCheck()
+	{
+		if (!isAdmin())
+		$this->kickOut();
+	}
+	private function deleteOthers($name,$ext)
+	{
+		$extensions = array('.txt','.csv','.CSV');
+		foreach ($extensions as $extension)
+		{
+			if ($extension == $ext)
+				continue;
+			if(file_exists(FCPATH."uploads/".$name.$extension))
+			{
+				unlink(FCPATH."uploads/".$name.$extension) or die("Unable to update the welcome page. Sorry. Better luck next time.");
+			}
+		}
+	}
+	private function fileUploadHandler()
+	{
+		$newDir = "./uploads/temp".time().rand();
+		$oldmask = umask(0);
+		$result = mkdir($newDir,0777);
+		umask($oldmask);
+		if(!$result)
+		{
+			addError(getTxt('FailTemp'));
+			return false;
+		}
+		
+		//Upload files. 
+		$config['upload_path'] = $newDir;
+		$config['allowed_types'] = 'jpg|csv|CSV';	
+		$this->load->library('upload', $config);
+		if ( ! $this->upload->do_multi_upload('custom'))
+		  {
+			  addError(getTxt('FailMoveFile').$this->upload->display_errors());
+			  return false;
+		  }
+		return $this->upload->get_multi_upload_data();
+	}
+	public function edit()
+	{
+	$this->adminCheck();
+	$dbName = substr(BASEURL2, 0, -1);
+	
+	if($_POST)
+	{
+		{
+			$this->form_validation->set_rules('title', 'Title', 'trim|required');
+			$this->form_validation->set_rules('groupname', 'Name', 'trim|required');	
+			$this->form_validation->set_rules('description', 'Description', 'trim|required');
+			$this->form_validation->set_rules('citation', 'Citation', 'trim|required');
+			
+		$welcome_page = array($this->input->post('title'),$this->input->post('groupname'),$this->input->post('description'),$this->input->post('citation'));
+		$welcome_page_info = json_encode(array_map('utf8_encode',$welcome_page));
+		if(file_exists('./uploads/' .$dbName. '.txt')){
+		unlink('./uploads/' .$dbName. '.txt');
+		}
+		write_file('./uploads/' .$dbName. '.txt',$welcome_page_info,'c+');
+		addSuccess(getTxt('SiteSuccessfullyEdited'));
+		$this->fileUploadHandler();
+		}
+	}
+	
+	$data=$this->StyleData;
+	$data['welcome'] = $this->parseTextFile();
+	$this->load->view('edit',$data);
+	}
+	public function parseTextFile()
+	{
+	$dbName = substr(BASEURL2, 0, -1);
+	$file_url = './uploads/' .$dbName. '.txt';
+	if (file_exists($file_url)){
+	$file_contents = file_get_contents($file_url);
+	$decode_data = json_decode($file_contents);
+	$decode_data2 = array_map('utf8_decode', $decode_data);
+	return $decode_data2;
+	}
+	}
 	public function installation()
 	{	
 	//Check if any other installations exist? if No then the first one shall be called 'default'
 	$files1 = @$this->file_list(APPPATH.'config/installations','.php');
 	$count = count($files1);
-
 	$default=false;
 	$encryptedtext="";
 	if($count==0)
@@ -71,7 +154,7 @@ class Home extends MY_Controller {
 					"Spanish"=>"Español",
 					"Italian"=>"Italiano",
 					"Portuguese"=>"Portugués",
-					"German"=>"Alemán",
+					"German"=>"Deutsch",
 					"Dutch"=>"Nederlands",
 					"Bulgarian"=>"български",
 					"Croatian"=>"Hrvatski",
@@ -122,9 +205,9 @@ class Home extends MY_Controller {
 				$data['multi']=true;
 			}
 		}
-
+		$data['welcome'] = $this->parseTextFile();
+		$data['dbname'] = $this->config->item('database_name'); 
 		//List of CSS to pass to this view
-		
 		$this->load->view('welcome',$data);
 	}
 	

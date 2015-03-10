@@ -18,7 +18,7 @@ else
 
 
 
-echo '       <div class="navbar navbar-default" role="navigation">
+echo '       <div class="navbar_navbar-default" role="navigation">
 <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="sr-only">Toggle navigation</span>
@@ -41,6 +41,7 @@ if(isAdmin())
       <ul style="list-style: none;" class="collapse" id="siteManagement">';
 
 	echo "<li class=\"add_site\"><a href='".site_url('banner/add')."'>".getTxt('AddNewBanner')."</a></li>";
+	echo "<li class=\"add_site\"><a href='".site_url('home/edit')."'>".getTxt('EditWelcomePage')."</a></li>";
 	echo "</ul>";
 	echo "</li>";
 }
