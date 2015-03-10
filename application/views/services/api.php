@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8"/>
-	<title>Hydroserver JSON API;?></title>
+	<title>Hydroserver JSON API</title>
 	<link rel="shortcut icon" href="<?=base_url()?>assets/services/images/favicon.ico" type="image/x-icon" />
 	<link rel="bookmark" href="<?=base_url()?>assets/services/images/favicon.ico" />
 
@@ -85,7 +85,7 @@
 			    <label class="info_label"><a href="<?php echo site_url('services/api/GetSitesJSON') ;?>" class="info_link">GetSitesJSON</a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;Get sites from HydroServer in JSON format  
+						&nbsp;Get sites from HydroServer in JSON format. Also if a 'source' is provided using GET or POST, it filters and returns the sites associated with that source. 
 					</div>
 				</div> 
 			</div>
@@ -109,7 +109,7 @@
 			    <label class="info_label"><a href="<?php echo site_url('services/api/GetMethodsJSON') ;?>" class="info_link">GetMethodsJSON</a></label>
 				<div class="info_content">
 					<div class="link_desc">
-						&nbsp;Get methods from HydroServer in JSON format  
+						&nbsp;Get methods from HydroServer in JSON format. Also if a 'variable' is provided using GET or POST, it filters and returns the methods associated with that Variable. 
 					</div>
 				</div> 
 			</div>
