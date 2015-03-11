@@ -307,6 +307,7 @@ $("#dropdownlist").jqxDropDownList(
     valueMember: 'VariableID'
 });
 
+
 $('#dropdownlist').bind('select', function (event) {
 var args = event.args;
 var item = $('#dropdownlist').jqxDropDownList('getItem', args.index);
@@ -1034,12 +1035,17 @@ $('#windowContent').load(base_url+'datapoint/compare/1', function() {
 
 <?php HTML_Render_Body_Start(); ?>
 
-      <p>&nbsp;</p>
-<?php  
-echo("<p align='center'><b>".getTxt('Site')."</b>".$site['SiteName']."</p>");
-?>
+      
+
 <div class="col-md-9">
 <?php
+//possibly a future improvement. The sites could be accessed here in addition to navigating back to the map 
+echo '<div class="row">';
+genDropLists('Site', '', '', false);
+echo '<div class="site_title">';
+echo ($site['SiteName']);
+echo '</div>';
+echo '<br></div>';
 echo '<div class="row">';
 genDropLists('Variable','dropdownlist', 'dropdownlist', false);
 echo '<br></div>';
