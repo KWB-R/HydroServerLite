@@ -1243,7 +1243,8 @@ ul.messages {
 .form-control{
     width:94%;
     float:left;
-	margin-left: 11px;
+	
+	
 }
 /*Helper lines*/
 div.form-group>div.col-sm-10>span.em
@@ -1267,3 +1268,7 @@ div.form-group>div.col-sm-10>span.em
 position: absolute;
     width: 100%;
 }
+
+/*.col-sm-9{
+	margin-right: -200px;	
+}*/

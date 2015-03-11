@@ -46,7 +46,7 @@ HTML_Render_Body_Start();
 </div>
 
 
-<!--
+<!--This is a possible drop down menu for the items at the bottom of the map
 <div class="dropdown keep-open">
     <!-- Dropdown Button -->
  <!--   <button id="mapbar" role="button" href="#" class="btn btn-primary"
