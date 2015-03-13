@@ -183,13 +183,14 @@ td {
 	
 }
 
-/*This controls the top and left side navbar container*/
+/*This controls the top navbar container*/
 .navbar_navbar-default{
 	color: #FFF;
 	background-color: #e5e5e5;
-	width: relative;
+	width: realative;
 	border: 0px solid #AAA;
 	border-radius: 0px 0px 8px 8px;	
+	
 }
 
 .hint {
@@ -1084,6 +1085,7 @@ ul.messages {
 .masthead{
   max-width:auto;
 }
+
 .img{
 	width:100%;
 	height:auto;
@@ -1093,9 +1095,7 @@ ul.messages {
 .mainContainer{	
 	background-color:#FFF;
 	margin-top:20px;
-	
 }
-
 /*This one doesn't appear to change anything*/
 /*.nav_nav-tabs_nav-stacked{
 	
@@ -1123,9 +1123,15 @@ ul.messages {
 }*/
 
 /*Controls the left and right side containers*/
+
+
 .col-md-3{
 	background-color: #FFF;
 	
+}
+
+.container{
+	padding: 0px 0px 0px 0px;
 }
 
 @media (min-width: 768px) {
@@ -1200,7 +1206,8 @@ ul.messages {
 	display:block!important;
 	height:auto!important;
 	padding-bottom:0;
-	overflow:visible!important
+	overflow:visible!important;
+	width: auto;
 }
 .navbar-collapse.in{
 	overflow-y:visible
