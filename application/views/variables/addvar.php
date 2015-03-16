@@ -497,7 +497,7 @@ genDropLists('DataType','datatype', 'datatype', true);
 <div class="form-group">
         <label class="col-sm-2 control-label"><?php echo getTxt('DataTypeDefinition');?></label>
         <div class="col-sm-9">
-     	   <textarea type="text" cols="45" rows="4" class="form-control" id="dtdef" name="dtdef" readonly><?php echo getTxt('SelectData');?></textarea><span class="required"/></div>             
+     	   <textarea type="text" cols="45" rows="4" class="read_only_box" id="dtdef" name="dtdef" readonly ><?php echo getTxt('SelectData');?></textarea>            
 </div>
 <?php
 genDropListsH('Category','gc', 'gc',getTxt('ScientificCategory'),true);
