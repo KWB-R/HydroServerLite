@@ -501,7 +501,7 @@ genDropLists('DataType','datatype', 'datatype', true);
 </div>
 <?php
 genDropListsH('Category','gc', 'gc',getTxt('ScientificCategory'),true);
-genInput('CategoryDefinition','gcdef', 'gcdef', true, " readonly");
+genInput('CategoryDefinition','gcdef', 'gcdef', true, "readonly");
 genDropListsH('SelectMethods','jqxWidget', 'jqxWidget',getTxt('VariableCollectionMethod'),true);
 ?>
 <div class="col-md-5 col-md-offset-5">
