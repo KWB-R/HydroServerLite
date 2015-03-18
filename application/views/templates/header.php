@@ -38,7 +38,7 @@
   			</ul>
 		</div>
             </li>
-			  <li style="margin-top:2%;"><font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><a href="<?php echo $this->config->item('homelink');?>" class="button2" ><?php echo getTxt('BackTo').' '.$this->config->item('homename');?></a></font></li>
+			  <!--<li style="margin-top:2%;"><font color=#FFFFFF face=Arial, Helvetica, sans-serif size=2><a href="<?php //echo $this->config->item('homelink');?>" class="button2" ><?php //echo getTxt('BackTo').' '.$this->config->item('homename');?></a></font></li> -->
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
