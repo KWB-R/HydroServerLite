@@ -10,6 +10,6 @@ genHeading('InstallationComplete',true);
 
 <p><?php echo getTxt('CongratsInstall');?></p>
 <p><?php echo getTxt('Login');?></p>
-<p><a href='<?php echo base_url('index.php/'.$db.'/home')?>' class="button"><?php echo getTxt('GoToSite');?></a></p>
+<p><a href='<?php echo base_url('index.php/'.$db.'/home')?>' class="button2"><?php echo getTxt('GoToSite');?></a></p>
 </div>
 <?php HTML_Render_Body_End();?>
