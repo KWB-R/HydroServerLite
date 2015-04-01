@@ -5,6 +5,7 @@ echo $JS_JQuery;
 echo $JS_Maps;
 HTML_Render_Body_Start();
 ?>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
 <div class='col-md-9'>
 <?php showMsgs();?>
 <div id="mapOuter" style="width:100%; height:875px;">
@@ -13,20 +14,8 @@ HTML_Render_Body_Start();
 	</div>
 	<div>
 	<div id="mapFilters">
-		<input type="text" id="addressInput" class="short"/>
-		<select name="radiusSelect" id="radiusSelect">
-		  <option value="25" selected><?php echo getTxt('TwentyFive'); ?></option>
-              <option value="50"><?php echo getTxt('Fifty'); ?></option>
-              <option value="100"><?php echo getTxt('OneHundred'); ?></option>
-              <option value="200"><?php echo getTxt('TwoHundred'); ?></option>
-              <option value="300"><?php echo getTxt('ThreeHundred'); ?></option>
-              <option value="400"><?php echo getTxt('FourHundred'); ?></option>
-              <option value="500"><?php echo getTxt('FiveHundred'); ?></option>
-		</select>
         <div class="btn-group" role="group">
-		<input type="button" class="btn-btn-default" onClick="searchLocations()" value="<?php echo getTxt('Search'); ?>"/>
-        <input type='button' class="btn-btn-default" onClick="loadall()" value="<?php echo getTxt('ResetSearch'); ?>"/>
-        <input type='button' class="btn-btn-default" onClick="track_loc()" value="<?php echo getTxt('FindSites'); ?>"/>
+        <input id="pac-input" class="controls" type="text" placeholder="Search Any Site Here">
         <input type="button" class="btn-btn-default" id="fullscreen"  value="<?php echo getTxt('FullScreen'); ?>"/></input>
         <input type="button" class="btn-btn-default" id="exitfullscreen" value="<?php echo getTxt('EFullScreen'); ?>"/></input>
         <div class="input-group">
