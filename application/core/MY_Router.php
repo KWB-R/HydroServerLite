@@ -19,7 +19,9 @@ Class MY_Router extends CI_Router
 
     function _validate_request($segments)
     {
-	
+		//Force the installation file name in the request to be lowercase
+		$segments[0] = strtolower($segments[0]);
+		
 		/*Adding custom code for detection of custom installation. */
 		if(file_exists(APPPATH.'config/installations/'.$segments[0].EXT))
 		{
@@ -82,13 +84,13 @@ Class MY_Router extends CI_Router
             while(count($segments) > 0 && is_dir(APPPATH.'controllers/'.$this->directory.$segments[0]))
             {
                 // Set the directory and remove it from the segment array
-            //$this->set_directory($this->directory . $segments[0]);
-            if (substr($this->directory, -1, 1) == '/')
-                $this->directory = $this->directory . $segments[0];
-            else
-                $this->directory = $this->directory . '/' . $segments[0];
+				//$this->set_directory($this->directory . $segments[0]);
+				if (substr($this->directory, -1, 1) == '/')
+					$this->directory = $this->directory . $segments[0];
+				else
+					$this->directory = $this->directory . '/' . $segments[0];
 
-            $segments = array_slice($segments, 1);
+				$segments = array_slice($segments, 1);
             }
 
             if (substr($this->directory, -1, 1) != '/')
