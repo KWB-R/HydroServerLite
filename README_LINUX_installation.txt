@@ -24,14 +24,15 @@ mysql --user=root --password=ROOT_PASSWORD --execute="grant all on hydrodb.* to 
 #setup the HydroServer file permissions
 cd /var/www/html/hydroserverlite
 sudo chmod -R 777 application/config/installations
-#there might be an issue here at the end of language "cd" ???
-sudo chmod -R 777 application/languagecd
-sudo chmod -R 777 uploadshis_admin
+sudo chmod -R 777 application/language
+sudo chmod -R 777 uploads
 
 #Change the directory to where the sample_installation_file.txt is located
 cd application/config/installations
 
 #create the default installation file: replace the mysql username, mysql db name, and mysql password.
+#note: instead of using sed you can also edit the sample_installation_file.txt in a text editor
+#and save it as application/config/installations/default.php.
 sudo sed -i 's/YOUR_DATABASE_USER_NAME/hydrouser/' sample_installation_file.txt
 sudo sed -i 's/YOUR_MYSQL_DATABASE_NAME/hydrodb/' sample_installation_file.txt
 sudo sed -i 's/YOUR_MYSQL_DATABASE_PASSWORD/mypass/' sample_installation_file.txt
