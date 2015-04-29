@@ -41,6 +41,7 @@ class Cuahsi extends CI_Controller {
 	                echo "Value cannot be null.\nParameter name: SiteCode";
 	            } else {
 	                header("Content-type: text/xml");
+					header("Access-Control-Allow-Origin: *");
 	                echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
 	                echo "<string>" . htmlspecialchars(wof_GetSiteInfo_REST($site)) . "</string>";
 	            }
@@ -115,8 +116,7 @@ class Cuahsi extends CI_Controller {
 	{
 		if ($this->validate_token()) {
 			$site = isset($_REQUEST['site'])? explode(",",$_REQUEST['site']):array();
-	        header("Content-type: text/xml");
-	        echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
+			write_XML_header();
 	        echo wof_GetSites($site);
 	        exit;
    		}

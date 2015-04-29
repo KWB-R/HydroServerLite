@@ -365,6 +365,8 @@ if (!function_exists('wof_start')) {
 	function wof_start() {
   		//Set the content-type header to xml
   		header("Content-type: text/xml");
+		//Set the Access-Control-Allow-Origin header
+		header("Access-Control-Allow-Origin: *");
   		//echo the XML declaration
   		echo chr(60).chr(63).'xml version="1.0" encoding="utf-8" '.chr(63).chr(62);
   		echo '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body>';
@@ -904,6 +906,7 @@ if (!function_exists('write_XML_header')) {
 
 	// This function writes the PHP header  
 	function write_XML_header() {
+		header("Access-Control-Allow-Origin: *");
 	    header("Content-type: text/xml; charset=utf-8");
 	    echo chr(60) . chr(63) . 'xml version="1.0" encoding="utf-8" ' . chr(63) . chr(62);
 	}
