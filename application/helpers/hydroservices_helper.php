@@ -1027,7 +1027,7 @@ if (!function_exists('fn_GetSiteArray')) {
 	        $retVal = '';
 	        $retVal .= "<" . $fullSiteTag . ">";
 	        $retVal .= to_xml("siteName", $row["SiteName"]);
-	        $retVal .= '<siteCode network="' . $ci->config->item('service_code') . '">' . $row["SiteCode"] . "</siteCode>";
+	        $retVal .= '<siteCode network="' . $ci->config->item('service_code') . '" siteID="' . $row["SiteID"] . '" >' . $row["SiteCode"] . "</siteCode>";
 	        $retVal .= "<geoLocation>";
 			$retVal .="<geogLocation xsi:type=\"LatLonPointType\">";
 	        $retVal .= to_xml("latitude", $row["Latitude"]);
