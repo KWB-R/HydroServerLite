@@ -75,7 +75,6 @@ $("#addsource").submit(function(){
 	if(($("#SourceLink").val())!=""){
 		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 		if(!($("#SourceLink").val().match(regexp))){
-			alert("Invalid url for sourcelink");
 			alert(<?php echo "'".getTxt('InvalidSourceLinkURL')."'"; ?>);
 			return false;
 		}
@@ -157,10 +156,11 @@ $("#addsource").submit(function(){
 
 	if(($("#MetadataLink").val())!=""){
 		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-			if(!($("#ContactName").val().match(regexp))){
+			if(!($("#Metadatalink").val().match(regexp))){
 				alert(<?php echo "'".getTxt('InvalidURLMetadata')."'"; ?>);
 				return false;
 			}
+			
 	}
 return true;		
 	});
