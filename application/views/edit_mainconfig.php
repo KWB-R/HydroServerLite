@@ -9,6 +9,10 @@ $(document).ready(function() {
 	
  $("input[name='setuptype']").change(radioValueChanged);
  
+//Force the Website Name to be always lower-case
+$("input[name='ConfigName']").keyup(function(){this.value = this.value.toLowerCase(); })
+ 
+ 
  //As default displays only basic setup
  	$("#advSetup").hide();
 	$("#advSetup2").hide();
