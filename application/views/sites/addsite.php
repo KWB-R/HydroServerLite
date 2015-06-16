@@ -32,6 +32,14 @@ function setDefaults()
 	if($('#LatLongDatumID').val()==-1)
 	{
 	$('#LatLongDatumID').val('WGS84');
+		var temp = $('#LatLongDatumID option').filter(function(index)
+		{
+		return $(this).text()==defaultSpatial;
+		})
+	}
+	if(temp.length>0)
+	{
+		temp[0].selected=true;
 	}
 	//Check if it was an invalid datum, if so reset to MSL
 	if($('#LatLongDatumID').val()==-1)
@@ -40,7 +48,7 @@ function setDefaults()
 		return $(this).text()=="WGS84";
 		})[0].selected = true;
 }
-$( document ).ready(function() {
+$(document).ready(function() {
 	
 	setDefaults();
  	initialize();
@@ -151,6 +159,7 @@ genInputT('Comments','com','value',false,$extra="",'Optional');
 </div>
 <?php HTML_Render_Body_End(); ?>
 <script>
+
 $("#resetButton").click(function() {
 	$("#addsite")[0].reset();
 	setDefaults();
@@ -158,132 +167,124 @@ $("#resetButton").click(function() {
   return false;
 });
 
-$("#addsite").submit(function() {
-      //Validate all fields
-	  
-if(($("#SourceID option:selected").val())==-1)
-{
-//alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
-alert(<?php echo "'".getTxt('SelectSourceAdd')."'"; ?>);
-return false;
+$("#addsite").submit(function(){
+
+//Validate all fields
+if(($("#SourceID option:selected").val())==-1){
+	//alert("Please select a Source. If you do not find it in the list, please visit the 'Add a new source' page");
+	alert(<?php echo "'".getTxt('SelectSourceAdd')."'"; ?>);
+	return false;
 }
 
-if(($("#SiteName").val())=="")
-{
-//alert("Please enter a name for the site.");
-alert(<?php echo "'".getTxt('EnterSiteName')."'";?>);
-return false;
+if(($("#SiteName").val())==""){
+	//alert("Please enter a name for the site.");
+	alert(<?php echo "'".getTxt('EnterSiteName')."'";?>);
+	return false;
 }
 
-if(($("#SiteCode").val())=="")
-{
-//alert("Please enter a code for the site.");
-alert(<?php echo "'".getTxt('Enter')."'"; ?>);
-return false;
+if(($("#SiteCode").val())==""){
+	//alert("Please enter a code for the site.");
+	alert(<?php echo "'".getTxt('EnterSiteCode')."'"; ?>);
+	return false;
 }
 
-if(($("#SiteType option:selected").val())==-1)
-{
-//alert("Please select a Site Type.");
-alert(<?php echo "'".getTxt('SelectSiteType')."'"; ?>);
-return false;
+if(($("#SiteType option:selected").val())==-1){
+	//alert("Please select a Site Type.");
+	alert(<?php echo "'".getTxt('SelectSiteType')."'"; ?>);
+	return false;
 }	  
 
-if(($("#Latitude").val())=="")
-{
-//alert("Please enter the latitude for the site or select a point from the map");
-alert(<?php echo "'".getTxt('EnterLatitude')."'"; ?>);
-return false;
+if(($("#Latitude").val())==""){
+	//alert("Please enter the latitude for the site or select a point from the map");
+	alert(<?php echo "'".getTxt('EnterLatitude')."'"; ?>);
+	return false;
 }
 
-if(($("#Longitude").val())=="")
-{
-//alert("Please enter the longitude for the site or select a point from the map");
-alert(<?php echo "'".getTxt('EnterLongitude')."'"; ?>);
-return false;
+if(($("#Longitude").val())==""){
+	//alert("Please enter the longitude for the site or select a point from the map");
+	alert(<?php echo "'".getTxt('EnterLongitude')."'"; ?>);
+	return false;
 }
 
-if(($("#Elevation").val())=="")
-{
-//alert("Please enter the elevation for the site or select a point from the map");
-alert(<?php echo "'".getTxt('EnterElevation')."'";?>);
-return false;
+if(($("#Elevation").val())==""){
+	//alert("Please enter the elevation for the site or select a point from the map");
+	alert(<?php echo "'".getTxt('EnterElevation')."'";?>);
+	return false;
 }
-
 
 var floatRegex = '[-+]?([0-9]*\.[0-9]+|[0-9]+)';
 var myInt = $("#Latitude").val().match(floatRegex);
 
-
-if(myInt==null)
-//{alert("Invalid characters present in latitude. Please correct it.");
-{alert(<?php echo "'".getTxt('InvalidLatitude')."'"; ?>);
-      return false;
+if(myInt==null){
+	//alert("Invalid characters present in Latitude. Please correct it.");
+	alert(<?php echo "'".getTxt('InvalidLatitude')."'"; ?>);
+    return false;
 }
 
-
-if(myInt[0]!=$("#Latitude").val())
-//{alert("Invalid characters present in latitude. Please correct it.");
-{alert(<?php echo "'".getTxt('InvalidLatitude')."'"; ?>);
-      return false;
+if(myInt[0]!=$("#Latitude").val()){
+	//alert("Invalid characters present in latitude. Please correct it.");
+	alert(<?php echo "'".getTxt('InvalidLatitude')."'"; ?>);
+    return false;
 }
-
 
 myInt = $("#Longitude").val().match(floatRegex);
 
-
 if(myInt==null)
-//{alert("Invalid characters present in longitude. Please correct it.");
-{alert(<?php echo "'".getTxt('InvalidLongitude')."'"; ?>);
+{
+//alert("Invalid characters present in Longitude. Please correct it.");
+alert(<?php echo "'".getTxt('InvalidLongitude')."'"; ?>);
       return false;
 }
 
-
-if(myInt[0]!=$("#Longitude").val())
-//{alert("Invalid characters present in longitude. Please correct it.");
-{alert(<?php echo "'".getTxt('InvalidLongitude')."'"; ?>);
-      return false;
+if(myInt[0]!=$("#Longitude").val()){
+	//alert("Invalid characters present in Longitude. Please correct it.");
+	alert(<?php echo "'".getTxt('InvalidLongitude')."'"; ?>);
+    return false;
 }
 
 myInt = $("#Elevation").val().match(floatRegex);
 
 
-if(myInt==null)
-//{alert("Invalid characters present in elevation. Please correct it.");
-{alert(<?php echo "'".getTxt('InvalidElevation')."'";?>);
-      return false;
+if(myInt==null){
+	//alert("Invalid characters present in Elevation. Please correct it.");
+	alert(<?php echo "'".getTxt('InvalidElevation')."'";?>);
+    return false;
 }
 
 
-if(myInt[0]!=$("#Elevation").val())
-//{alert("Invalid characters present in elevation. Please correct it.");
-{alert(<?php echo "'".getTxt('InvalidElevation')."'";?>);
-      return false;
+if(myInt[0]!=$("#Elevation").val()){
+	//alert("Invalid characters present in Elevation. Please correct it.");
+	alert(<?php echo "'".getTxt('InvalidElevation')."'";?>);
+    return false;
 }
 
-if(($("#state option:selected").val())==-1)
-{
-//alert("Please select a state.");
-alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
-return false;
+if(($("#state option:selected").val())==-1){
+	alert(<?php echo "'".getTxt('SelectState')."'"; ?>);
+	return false;
 }
-
+//Validation for the county
 if(($("#county option:selected").val())=="" && (($("#state option:selected").val())!="NULL")){
-{
-alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
-return false;
+		alert(<?php echo "'".getTxt('SelectCounty')."'"; ?>);
+		return false;
+	}
+
+if(($("#VerticalDatum option:selected").val())==-1){
+	alert(<?php echo "'".getTxt('SelectVerticalDatum')."'"; ?>);
+	return false;
 }
-if(($("#VerticalDatum option:selected").val())==-1)
-{
-alert(<?php echo "'".getTxt('SelectVerticalDatum')."'"; ?>);
-return false;
+
+if(($("#LatLongDatumID option:selected").val())==-1){
+	alert(<?php echo "'".getTxt('SelectSpatialReference')."'"; ?>);
+	return false;
 }
-if(($("#LatLongDatumID option:selected").val())==-1)
-{
-alert(<?php echo "'".getTxt('SelectSpatialReference')."'"; ?>);
-return false;
-}
-//All Validation Checks completed.Now add data to the database
+
+//All Validation Checks completed. Now add data to the database.
+//Add this to the form. 
+		
+
+
+
+
 return true;
 });
 </script>
