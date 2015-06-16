@@ -14,23 +14,24 @@ function setDefaults()
 	//Set Default Datum
 	var defaultDatum = "<?php echo $this->config->item('default_datum');?>";
 	if(defaultDatum=="")
+	{
 	defaultDatum="MSL";
 	$('#VerticalDatum').val(defaultDatum);
+	}
 	//Check if it was an invalid datum, if so reset to MSL
 	if($('#VerticalDatum').val()==-1)
-	$('#VerticalDatum').val('MSL');
-	
-	//Set Default Spatial Ref
-	var defaultDatum = "<?php echo $this->config->item('default_spatial');?>";
-	if(defaultDatum=="")
-	defaultDatum="WGS84";
-	var temp = $('#LatLongDatumID option').filter(function(index)
-		{
-		return $(this).text()==defaultDatum;
-		})
-	if(temp.length>0)
 	{
-		temp[0].selected=true;
+	$('#VerticalDatum').val('MSL');
+	}
+	//Set Default Spatial Ref
+	var defaultSpatial = "<?php echo $this->config->item('LatLongDatumID');?>";
+	if(defaultSpatial=="")
+	{
+	defaultSpatial="WGS84";
+	}
+	if($('#LatLongDatumID').val()==-1)
+	{
+	$('#LatLongDatumID').val('WGS84');
 	}
 	//Check if it was an invalid datum, if so reset to MSL
 	if($('#LatLongDatumID').val()==-1)
