@@ -375,7 +375,7 @@
  $lang['hsl_CreateWebsitePara2'] = "HydroServer and HydroDesktop are part of the";
  $lang['hsl_Consortium'] = "Consortium of Universities for the Advancement of Hydrologic Sciences";
  $lang['hsl_CreateWebsitePara3'] = "or commonly referred to as CUAHSI (pronounced &quotkw?_-ze&quot). To learn more about this software or find out how your school or organization can get their own version of the HydroServer Lite, please visit us";
- $lang['hsl_BackTo'] = "Back to the";
+ $lang['hsl_BackTo'] = "Back to";
  $lang['hsl_NoTypesForSite'] = "No Types for this Site.";
  $lang['hsl_ReSelectSource'] = "Please reselect the Source.";
  $lang['hsl_NoMethodsVariable'] = "No Methods for this Variable.";
@@ -384,7 +384,6 @@
  $lang['hsl_InvalidQuery'] = "Invalid query:";
  $lang['hsl_CopyRight'] = "Copyright";
  $lang['hsl_SystemName'] = "HydroServer Interactive";
- $lang['hsl_version'] = "—Version: ";
  $lang['hsl_AllRightsReserved'] = "All Rights Reserved.";
  $lang['hsl_MeetDevelopers'] = "Meet the Developers";
  $lang['hsl_VariableSuccess'] = "Variable edited/deleted successfully";
@@ -3928,7 +3927,7 @@
  $lang['hsl_UpdateCV'] = "Update Controlled Vocabulary";
  $lang['hsl_Tester'] = "Tester";
  $lang['hsl_ConfigName'] = "Website Path: ";
- $lang['hsl_ConfigDesc'] = "This defines the access URL for your server. Ex: http://worldwater.byu.edu/hsl/YOURNAME. If this is your initial installation, it will be set to default. Please don\'t use spaces or special characters. ";
+ $lang['hsl_ConfigDesc'] = "This defines the access URL for your server. Ex: http://worldwater.byu.edu/hsl/YOURNAME. If this is your initial installation, it will be set to default. <p>Please don\'t use spaces or special characters. ";
  $lang['hsl_databaseInstructions'] = "The software will attempt to create the database if its not been created. Also, it will add all the default tables only if it doesn\'t detect a previous installation. If a previous installation of HSL is detected, it will just use that database. You may also use the server\'s database settings to host your data on our default database. In that case please select Yes from the below drop down. (This option is only available for all installs after the initial install)";
  $lang['hsl_multipleInstall'] = "Enable Multiple Installations? ";
  $lang['hsl_useExistingDB'] = "Use default database connection? ";
@@ -3941,4 +3940,6 @@
  $lang['hsl_banner'] = "Banner";
  $lang['hsl_Submit'] = "Submit";
  $lang['hsl_EditWelcomePage'] = "Edit Welcome Page";
+ $lang['hsl_VersionHSL'] = "-Version: ";
+ $lang['hsl_help_info'] = "Registration Help";
  ?>

@@ -8,7 +8,7 @@ function initialize() {
     var myLatlng = new google.maps.LatLng(43.52764, -112.04951);
 
     var myOptions = {
-        zoom: 14,
+        zoom: 6,
         center: myLatlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDoubleClickZoom: true
@@ -131,7 +131,11 @@ function update(location) {
 				if(usa == -1) {
 							$("#state").val("NULL");
 							$("#countyWrapper").hide();
+							} else	{
+							$("#state").val("-1");
+							$("#countyWrapper").show();
 							}
+							
             }
         } else {
             alert("Geocoder failed due to: " + status);
