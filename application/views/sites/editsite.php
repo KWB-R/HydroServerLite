@@ -31,7 +31,7 @@ alert(<?php echo "'".getTxt('SelectStateCounty')."'"; ?>);
 }
 </script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC3d042tZnUAA8256hCC2Y6QeTSREaxrY0&sensor=true"></script>
-<script type="text/javascript">
+<script type="text/javascript" >
 
 $(document).ready(function(){
 	$("#msg").hide();
@@ -230,7 +230,8 @@ $("#SiteID").change(function findSite(){
 				$('#state option').filter(function(index)
 				{
 				return $(this).text()==data.State;
-				})[0].selected = true;
+				}
+				)[0].selected = true;
 				if($('#state').val()=='NULL')
 				$('#county option').val(function()
 				{
@@ -543,7 +544,28 @@ geocoder.geocode({'latLng': latlng1}, function(results, status) {
 			
 			//$("#locationtext").html("Your selected location according to us is: " + results[0].formatted_address + ". Please select the state and county accordingly.");
 			$("#locationtext").html(<?php echo "'".getTxt('SelectedLocationIs')."'"; ?> + " " + results[0].formatted_address + ". "+ <?php echo "'".getTxt('SelectStateCountyAccordingly')."'"; ?>);
-			        
+			var str = results[0].formatted_address;
+				var usa = str.search("USA");
+				if(usa == -1) {
+							$("#state").val("NULL");
+							$("#countyWrapper").hide();
+							} else	{		
+							var auto = JSON.stringify(results[0]);
+							console.log(auto);
+							for (var i=0; i<results[0].address_components.length; i++)
+									{
+										if (results[0].address_components[i].types[0] == "administrative_area_level_2") {
+												county = results[0].address_components[i];
+											}
+										if (results[0].address_components[i].types[0] == "administrative_area_level_1") {
+												state = results[0].address_components[i];
+											}
+									}					
+							$("#state").val(state.short_name);
+							new_drop_down_list(county.long_name);
+							$("#countyWrapper").show();
+							$("#county").val(county.long_name);
+							}        
           
         }
       } else {
@@ -552,6 +574,27 @@ geocoder.geocode({'latLng': latlng1}, function(results, status) {
       }
     });
 
+}
+function new_drop_down_list(value){
+    var state = $('#state').val();
+
+    if(state == 'AK' || state == 'DC' || state == 'NULL'){ // Alaska and District Columbia have no counties
+		//$('#county_original').hide();
+    	$('#loading_county_drop_down').hide(); // Hide the Loading...
+	    $('#no_county_drop_down').show(); // Show the "no counties" message (if it's the case)
+    }else{
+		$('#county_original').hide(); // Hide the original drop down
+		$('#county_drop_down').show(); // Show the drop down
+		$('#no_county_drop_down').hide();
+		var jsURL = asset_url+"js/";
+    	$.getScript(jsURL+"states/"+ state.toLowerCase() +".js", function(){
+
+	  		populate($("#county")[0]);
+			$("#county").val(value);
+			$('#loading_county_drop_down').hide();
+			$('#county_drop_down').show(); // Show the drop down
+    	});
+	}
 }	
 	
 </script>

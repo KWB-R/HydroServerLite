@@ -131,9 +131,22 @@ function update(location) {
 				if(usa == -1) {
 							$("#state").val("NULL");
 							$("#countyWrapper").hide();
-							} else	{
-							$("#state").val("-1");
+							} else	{		
+							var auto = JSON.stringify(results[0]);
+							console.log(auto);
+							for (var i=0; i<results[0].address_components.length; i++)
+									{
+										if (results[0].address_components[i].types[0] == "administrative_area_level_2") {
+												county = results[0].address_components[i];
+											}
+										if (results[0].address_components[i].types[0] == "administrative_area_level_1") {
+												state = results[0].address_components[i];
+											}
+									}					
+							$("#state").val(state.short_name);
+							new_drop_down_list(county.long_name);
 							$("#countyWrapper").show();
+							$("#county").val(county.long_name);
 							}
 							
             }
@@ -143,5 +156,27 @@ function update(location) {
     });
 
 }
+function new_drop_down_list(value){
+    var state = $('#state').val();
+
+    if(state == 'AK' || state == 'DC' || state == 'NULL'){ // Alaska and District Columbia have no counties
+		//$('#county_original').hide();
+    	$('#loading_county_drop_down').hide(); // Hide the Loading...
+	    $('#no_county_drop_down').show(); // Show the "no counties" message (if it's the case)
+    }else{
+		$('#county_original').hide(); // Hide the original drop down
+		$('#county_drop_down').show(); // Show the drop down
+		$('#no_county_drop_down').hide();
+		var jsURL = asset_url+"js/";
+    	$.getScript(jsURL+"states/"+ state.toLowerCase() +".js", function(){
+
+	  		populate($("#county")[0]);
+			$("#county").val(value);
+			$('#loading_county_drop_down').hide();
+			$('#county_drop_down').show(); // Show the drop down
+    	});
+	}
+}
+
 
 //Function to run on form submission to implement a validation and then run an ajax request to post the data to the server and display the message that the site has been added successfully

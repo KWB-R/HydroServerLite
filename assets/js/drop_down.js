@@ -50,4 +50,3 @@ function new_drop_down_list(value){
     	});
 	}
 }
-
