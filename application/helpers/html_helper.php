@@ -54,6 +54,19 @@ function genInput($labelKey,$id,$name,$req=false,$extra='')
 	echo'</div>            
       </div>';	
 }
+function genInputD($labelKey,$id,$name,$req=false,$extra='')
+{
+	echo '<div class="form-group">
+        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
+        <div class="col-sm-10">
+        <textarea class="form-control" rows="6" id="'.$id.'" name="'.$name.'" '.$extra.'></textarea>';
+	if($req)
+	{
+		echo '<span class="required"/>';
+	}
+	echo'</div>             
+      </div>';		
+}
 function genInputH($labelKey,$id,$name,$hint,$req=false,$extra='')
 {
 	echo '<div class="form-group">

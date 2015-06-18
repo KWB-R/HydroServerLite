@@ -10,7 +10,7 @@ $attributes = array('class' => 'form-horizontal', 'name' => 'welcome', 'id' => '
 echo form_open('home/edit', $attributes);
 genInput('Title','title','title',true);
 genInput('OrganizationName','groupname','groupname',true);
-genInput('Description','description','description',true);
+genInputD('Description','description','description',true);
 genInput('Citation','citation','citation',true);
 ?>
 <div class="col-md-5 col-md-offset-5">
@@ -34,7 +34,7 @@ if(($("#title").val())==""){
 		alert("Please enter a Title");
 		return false;
 	}
-if(($("#groupname").val())==""){
+ if(($("#groupname").val())==""){
 		alert("Please enter your Group Name");
 		return false;
 	}
