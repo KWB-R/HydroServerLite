@@ -125,7 +125,7 @@ function update(location) {
     geocoder.geocode({ 'latLng': latlng1 }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             if (results[0]) {
-                $("#locationtext").html("Your selected location according to us is: " + results[0].formatted_address + ". Please select the state and county accordingly.");
+                $("#locationtext").html("Closest known location: " + results[0].formatted_address);
 				var str = results[0].formatted_address;
 				var usa = str.search("USA");
 				if(usa == -1) {

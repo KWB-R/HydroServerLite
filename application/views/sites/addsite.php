@@ -104,8 +104,23 @@ echo getTxt('ExSitePhoto');
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
 <div class ="row">
+<h2>
 <?php echo getTxt('MapLatLongEle');?>
+</h2>
 </div>
+</tr>
+<br />
+<tr>
+  <div id="map_canvas" style="width:100%; height:450px"></div>
+</tr>
+<br />
+<tr>
+<h2>
+<div id="locationtext"></div>  
+</h2>
+</tr>
+<br />
+<tr>
 <div class="form-group">
 <label for="Latitude" class="col-sm-2 control-label"><?php echo getTxt('Latitude');?></label>
 <div class="col-sm-4">
@@ -116,8 +131,6 @@ echo getTxt('ExSitePhoto');
 <input class="form-control" type="text" id="Longitude" name="Longitude" maxlength=20/>*
 </div>
 </div>
-<tr>
-  <div id="map_canvas" style="width:100%; height:450px"></div>
 </tr>
 </table>
 <br />
@@ -131,8 +144,8 @@ echo getTxt('ExSitePhoto');
             <span class="hint" title="<?php echo getTxt('ElevationInfo');?>">?</span><span class="required"/>
         </div>            
       </div> 
-   <div id="locationtext"></div>   
- 
+    
+
 <?php
 genSelect('State','state','state',$stateOptions,'SelectEllipsis',true);
 ?>
