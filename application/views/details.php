@@ -471,19 +471,19 @@ $("#todatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue
 
 //Use Show And Hide Method instead of repeating formation - optimization number 2
 
-$('#jqxDateTimeInput').jqxDateTimeInput('setDate', date1);
-$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', new Date(year, month, day));
+//$('#jqxDateTimeInput').jqxDateTimeInput('setDate', date1);
+//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', new Date(year, month, day));
 var year_to = parseInt(date_to.slice(0,4));		
 var month_to = parseInt(date_to.slice(5,7),10);
 var day_to = parseInt(date_to.slice(8,10),10);	
-//month_to=month_to-1;
+month_to=month_to-1;
 var date2 = new Date();
 date2.setFullYear(year_to, month_to-1, day_to);
 glob_dt=date2;
 
-$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', date2);
-$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to, day_to)); 
-$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to, day_to)); 
+//$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', date2);
+//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to, day_to)); 
+//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to, day_to)); 
 //Plot the Chart with default limits
 
 //If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12. 
@@ -513,7 +513,7 @@ glob_df=date_select_from;
 
 var date_from_sql2=date_select_from.getFullYear() + '-' + add_zero((date_select_from.getMonth()+1)) + '-' + add_zero(date_select_from.getDate()) + ' 00:00:00';
 //Setting the Second calendar's min date to be the date of the first calendar
-$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', date);
+//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', date);
 var tempdate2=add_zero((date_select_from.getMonth()+1))+'/'+add_zero(date_select_from.getDate())+'/'+date_select_from.getFullYear();
 
 $("#fromdatedrop").jqxDropDownButton('setContent', tempdate2);
