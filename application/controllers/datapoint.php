@@ -93,17 +93,22 @@ class Datapoint extends MY_Controller {
 			$this->addSuccessOrError($result, 'ValueSuccessfully');
 		}
 		
-		//GetSources
-		$sources = $this->sources->getAll();
-		$sourceOptions = optionsSource($sources);
-		//Get Variables
-		$variables = $this->variables->getAll();
-		$varOptions = optionsVariable($variables);
+		// Set style and option values (sources, variables) and load the view
+		$this->loadViewWithStyleAndOptions('datapoint/addvalue');
+	}
+
+	private function loadViewWithStyleAndOptions($view, $setVariableOptions = TRUE)
+	{
 		//List of CSS to pass to this view
-		$data=$this->StyleData;
-		$data['sourcesOptions']=$sourceOptions;
-		$data['variableOptions']=$varOptions;
-		$this->load->view('datapoint/addvalue',$data);
+		$data = $this->StyleData;
+
+		$data['sourcesOptions'] = optionsSource($this->sources->getAll());
+
+		if ($setVariableOptions) {
+			$data['variableOptions'] = optionsVariable($this->variables->getAll());
+		}
+		
+		$this->load->view($view, $data);
 	}
 
 	private function addSuccessOrError($success, $successKey, $errorMessage = '')
@@ -158,13 +163,8 @@ class Datapoint extends MY_Controller {
 			$this->addSuccessOrError($result == $rows, 'DataEnteredSuccessfully');			
 		}
 		
-		//GetSources
-		$sources = $this->sources->getAll();
-		$sourceOptions = optionsSource($sources);
-		//List of CSS to pass to this view
-		$data=$this->StyleData;
-		$data['sourcesOptions']=$sourceOptions;
-		$this->load->view('datapoint/addmultiplevalues',$data);
+		// Set style and option values (sources only) and load the view
+		$this->loadViewWithStyleAndOptions('datapoint/addmultiplevalues', FALSE);
 	}
 	
 	private function fileUploadHandler()
@@ -347,18 +347,8 @@ class Datapoint extends MY_Controller {
 			}	
 		}
 		
-		//GetSources
-		$sources = $this->sources->getAll();
-		$sourceOptions = optionsSource($sources);
-		//Get Variables
-		$variables = $this->variables->getAll();
-		$varOptions = optionsVariable($variables);
-		//List of CSS to pass to this view
-		$data=$this->StyleData;
-		$data['sourcesOptions']=$sourceOptions;
-		$data['variableOptions']=$varOptions;
-		
-		$this->load->view('datapoint/importfile',$data);
+		// Set style and option values (sources, variables) and load the view
+		$this->loadViewWithStyleAndOptions('datapoint/importfile');
 	}
 	
 	public function getData()
