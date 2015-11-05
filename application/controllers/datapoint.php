@@ -286,7 +286,7 @@ class Datapoint extends MY_Controller {
 				$dateVal = $date->format("Y-m-d");
 				$timeVal = $date->format("H:i:s");
 				
-				if($check)
+				if ($check)
 				{
 					//Verify if entered IDS are correct. 
 					$source =  $data[0];
@@ -294,27 +294,12 @@ class Datapoint extends MY_Controller {
 					$var =  $data[2];
 					$meth =  $data[3];
 					
-					if (!in_array($source, $sourceIDS))
-					{
-						addError($this->idErrorMessage('sourceid', $row, $file));
-						return false;
-					}
-					
-					if (!in_array($site, $siteIDS))
-					{
-						addError($this->idErrorMessage('siteid', $row, $file));
-						return false;
-					}
-					
-					if (!in_array($var, $varIDS))
-					{
-						addError($this->idErrorMessage('varid', $row, $file));
-						return false;
-					}
-					
-					if(!in_array($meth, $methIDS))
-					{
-						addError($this->idErrorMessage('methodid', $row, $file));
+					if (	
+						$this->addErrorIfInvalid($source, $sourceIDS, 'sourceid', $row, $file)
+						or $this->addErrorIfInvalid($site, $siteIDS, 'siteid', $row, $file)
+						or $this->addErrorIfInvalid($var, $varIDS, 'varid', $row, $file)
+						or $this->addErrorIfInvalid($meth, $methIDS, 'methodid', $row, $file)
+					) {
 						return false;
 					}
 				}
@@ -326,6 +311,18 @@ class Datapoint extends MY_Controller {
 			
 		}
 		return $dataset;
+	}
+
+	private function addErrorIfInvalid($id, $ids, $idName, $row, $file)
+	{
+		$isError = !in_array($id, $ids);
+		
+		if ($isError)
+		{
+			addError($this->idErrorMessage($idName, $row, $file));
+		}
+		
+		return $isError;
 	}
 	
 	private function idErrorMessage($idName, $row, $file)
