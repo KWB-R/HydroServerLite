@@ -353,11 +353,11 @@ class Datapoint extends MY_Controller {
 	
 	public function getData()
 	{
-		$var = $this->input->get('varid', TRUE);
-		$site = $this->input->get('siteid', TRUE);	
-		$method = $this->input->get('meth', TRUE);
-		$start = $this->input->get('startdate', TRUE);	
-		$end = $this->input->get('enddate', TRUE);
+		$var = $this->getInputOrTRUE('varid');
+		$site = $this->getInputOrTRUE('siteid');	
+		$method = $this->getInputOrTRUE('meth');
+		$start = $this->getInputOrTRUE('startdate');	
+		$end = $this->getInputOrTRUE('enddate');
 		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
 		{
 			$result = $this->datapoints->getData($site,$var,$method,$start,$end);
@@ -407,14 +407,19 @@ class Datapoint extends MY_Controller {
 		}
 		
 	}
+
+	private function getInputOrTRUE($name)
+	{
+		return $this->input->get($name, TRUE);
+	}
 	
 	public function getDataJSON()
 	{
-		$var = $this->input->get('varid', TRUE);
-		$site = $this->input->get('siteid', TRUE);	
-		$method = $this->input->get('meth', TRUE);
-		$start = $this->input->get('startdate', TRUE);	
-		$end = $this->input->get('enddate', TRUE);
+		$var = $this->getInputOrTRUE('varid');
+		$site = $this->getInputOrTRUE('siteid');	
+		$method = $this->getInputOrTRUE('meth');
+		$start = $this->getInputOrTRUE('startdate');	
+		$end = $this->getInputOrTRUE('enddate');
 		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
 		{
 			$result = $this->datapoints->getData($site,$var,$method,$start,$end);
@@ -459,9 +464,9 @@ class Datapoint extends MY_Controller {
 			$this->load->view('templates/apierror',$data);
 			return;
 		}
-		$value = $this->input->get('val', TRUE);
-		$dt=$this->input->get('dt', TRUE);	
-		$time = $this->input->get('time', TRUE);
+		$value = $this->getInputOrTRUE('val');
+		$dt=$this->getInputOrTRUE('dt');	
+		$time = $this->getInputOrTRUE('time');
 		
 		if($valueid!==false&&$value!==false&&$dt!==false&&$time!==false)
 		{
@@ -494,11 +499,11 @@ class Datapoint extends MY_Controller {
 	
 	public function export()
 	{
-		$var = $this->input->get('varid', TRUE);
-		$site = $this->input->get('siteid', TRUE);	
-		$method = $this->input->get('meth', TRUE);
-		$start = $this->input->get('startdate', TRUE);	
-		$end = $this->input->get('enddate', TRUE);
+		$var = $this->getInputOrTRUE('varid');
+		$site = $this->getInputOrTRUE('siteid');	
+		$method = $this->getInputOrTRUE('meth');
+		$start = $this->getInputOrTRUE('startdate');	
+		$end = $this->getInputOrTRUE('enddate');
 		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
 		{
 			$result = $this->datapoints->getResultData($site,$var,$method,$start,$end);
@@ -516,12 +521,12 @@ class Datapoint extends MY_Controller {
 	
 	public function add()
 	{	
-		$var = $this->input->get('varid', TRUE);
-		$site = $this->input->get('sid', TRUE);	
-		$method = $this->input->get('mid', TRUE);
-		$value = $this->input->get('val', TRUE);
-		$dt=$this->input->get('dt', TRUE);	
-		$time = $this->input->get('time', TRUE);
+		$var = $this->getInputOrTRUE('varid');
+		$site = $this->getInputOrTRUE('sid');	
+		$method = $this->getInputOrTRUE('mid');
+		$value = $this->getInputOrTRUE('val');
+		$dt=$this->getInputOrTRUE('dt');	
+		$time = $this->getInputOrTRUE('time');
 		$source = $this->sc->getSourceBySite($site);
 		$sourceID = $source[0]['SourceID'];
 		if($var!==false&&$value!==false&&$dt!==false&&$time!==false&&$site!==false&&$method!==false)
@@ -561,7 +566,7 @@ class Datapoint extends MY_Controller {
 		
 		if($valueid==2)
 		{
-			$siteid = $this->input->get('siteid', TRUE);
+			$siteid = $this->getInputOrTRUE('siteid');
 			$site = $this->site->getSite($siteid);
 			$data['SiteName']=$site[0]['SiteName'];
 		}
