@@ -38,20 +38,17 @@ class Datapoint extends MY_Controller {
 	
 	private function createDP($date,$time,$val,$siteid,$varid,$methid,$sourceid)
 	{
+		$dateFormat = "Y-m-d H:i:s";
 		
-		$LocalDateTime = $date . " " . $time;
-		$localtimestamp = strtotime($LocalDateTime);
-		$ms = $this->config->item('UTCOffset') * 3600;
-		$utctimestamp = $localtimestamp - ($ms);
-		$DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
-		$LocalDateTime = date("Y-m-d H:i:s", $localtimestamp);
+		$localtimestamp = strtotime($date . " " . $time);
+		$offsetInSeconds = $this->config->item('UTCOffset') * 3600;
 		
 		$dataPoint = array(
 		'DataValue' => $val,  
 		'ValueAccuracy' => $this->getConfigItem('ValueAccuracy'),
-		'LocalDateTime' => $LocalDateTime, 
+		'LocalDateTime' => date($dateFormat, $localtimestamp), 
 		'UTCOffset' => $this->getConfigItem('UTCOffset'), 
-		'DateTimeUTC' => $DateTimeUTC, 
+		'DateTimeUTC' => date($dateFormat, $localtimestamp - $offsetInSeconds), 
 		'SiteID' => $siteid,
 		'VariableID' => $varid, 
 		'OffsetValue' => $this->getConfigItem('OffsetValue'),
