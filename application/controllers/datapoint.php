@@ -48,23 +48,28 @@ class Datapoint extends MY_Controller {
 		
 		$dataPoint = array(
 		'DataValue' => $val,  
-		'ValueAccuracy' => $this->cNull($this->config->item('ValueAccuracy')),
+		'ValueAccuracy' => $this->getConfigItem('ValueAccuracy'),
 		'LocalDateTime' => $LocalDateTime, 
-		'UTCOffset' => $this->cNull($this->config->item('UTCOffset')), 
+		'UTCOffset' => $this->getConfigItem('UTCOffset'), 
 		'DateTimeUTC' => $DateTimeUTC, 
 		'SiteID' => $siteid,
 		'VariableID' => $varid, 
-		'OffsetValue' => $this->cNull($this->config->item('OffsetValue')),
-		'OffsetTypeID' => $this->cNull($this->config->item('OffsetTypeID')),  
-		'CensorCode' => $this->cNull($this->config->item('CensorCode')),
-		'QualifierID' => $this->cNull($this->config->item('QualifierID')), 
+		'OffsetValue' => $this->getConfigItem('OffsetValue'),
+		'OffsetTypeID' => $this->getConfigItem('OffsetTypeID'),
+		'CensorCode' => $this->getConfigItem('CensorCode'),
+		'QualifierID' => $this->getConfigItem('QualifierID'), 
 		'MethodID' => $methid, 
 		'SourceID' => $sourceid, 
-		'SampleID' => $this->cNull($this->config->item('SampleID')),
-		'DerivedFromID' => $this->cNull($this->config->item('DerivedFromID')), 
-		'QualityControlLevelID' => $this->cNull($this->config->item('QualityControlLevelID')));		
+		'SampleID' => $this->getConfigItem('SampleID'),
+		'DerivedFromID' => $this->getConfigItem('DerivedFromID'), 
+		'QualityControlLevelID' => $this->getConfigItem('QualityControlLevelID'));		
 		
 		return $dataPoint;
+	}
+
+	private function getConfigItem($name)
+	{
+		return $this->cNull($this->config->item($name));		
 	}
 	
 	public function addvalue()
