@@ -90,15 +90,7 @@ class Datapoint extends MY_Controller {
 				$this->createDataPointFromInputs()
 			);
 			
-			if($result)
-			{
-				addSuccess(getTxt('ValueSuccessfully'));
-				$this->updateSC();	
-			}
-			else
-			{
-				addError(getTxt('ProcessingError'));
-			}
+			$this->addSuccessOrError($result, 'ValueSuccessfully');
 		}
 		
 		//GetSources
@@ -112,6 +104,17 @@ class Datapoint extends MY_Controller {
 		$data['sourcesOptions']=$sourceOptions;
 		$data['variableOptions']=$varOptions;
 		$this->load->view('datapoint/addvalue',$data);
+	}
+
+	private function addSuccessOrError($success, $successKey, $errorMessage = '')
+	{
+		if ($success) {
+			addSuccess(getTxt($successKey));
+			$this->updateSC();	
+		}
+		else {
+			addError(getTxt('ProcessingError') . $errorMessage);
+		}
 	}
 	
 	private function setFormValidationRules()
@@ -150,18 +153,11 @@ class Datapoint extends MY_Controller {
 				$dataset[] = $this->createDataPointFromInputs($i);
 			}
 			
-			$result=$this->datapoints->addPoints($dataset);
-			
-			if($result == $rows)
-			{
-				addSuccess(getTxt('DataEnteredSuccessfully'));	
-				$this->updateSC();
-			}
-			else
-			{
-				addError(getTxt('ProcessingError'));
-			}
+			$result = $this->datapoints->addPoints($dataset);
+	
+			$this->addSuccessOrError($result == $rows, 'DataEnteredSuccessfully');			
 		}
+		
 		//GetSources
 		$sources = $this->sources->getAll();
 		$sourceOptions = optionsSource($sources);
@@ -344,16 +340,9 @@ class Datapoint extends MY_Controller {
 				if($dataset)
 				{
 					$rows = count($dataset);
-					$result=$this->datapoints->addPoints($dataset);
-					if($result)
-					{
-						addSuccess(getTxt('Success'));	
-						$this->updateSC();
-					}
-					else
-					{
-						addError(getTxt('ProcessingError')."Error in data input");
-					}
+					$result = $this->datapoints->addPoints($dataset);
+					
+					$this->addSuccessOrError($result, 'Success', 'Error in data input');
 				}
 			}	
 		}
