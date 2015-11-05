@@ -125,15 +125,15 @@ class Datapoint extends MY_Controller {
 		$this->form_validation->set_rules('timepicker', 'SiteID', 'trim|required');
 	}
 
-	private function createDataPointFromInputs()
+	private function createDataPointFromInputs($postfix = '')
 	{
 		return $this->createDP(
-			$this->input->post('datepicker'),
-			$this->input->post('timepicker'),
-			$this->input->post('value'),
+			$this->input->post('datepicker' . $postfix),
+			$this->input->post('timepicker' . $postfix),
+			$this->input->post('value' . $postfix),
 			$this->input->post('SiteID'),
-			$this->input->post('VariableID'),
-			$this->input->post('MethodID'),
+			$this->input->post('VariableID' . $postfix),
+			$this->input->post('MethodID' . $postfix),
 			$this->input->post('SourceID')
 		);
 	}
@@ -142,16 +142,17 @@ class Datapoint extends MY_Controller {
 	{	
 		if($_POST)
 		{
-			$dataset=array();
+			$dataset = array();
 			$rows = $this->input->post('finalRows');
-			for($i=1;$i<=$rows;$i++)
+			
+			for ($i = 1; $i <= $rows; $i++)
 			{
-				$dataPoint = $this->createDP($this->input->post('datepicker'.$i),$this->input->post('timepicker'.$i),$this->input->post('value'.$i),$this->input->post('SiteID'),$this->input->post('VariableID'.$i),$this->input->post('MethodID'.$i),$this->input->post('SourceID'));
-				$dataset[]=$dataPoint;
+				$dataset[] = $this->createDataPointFromInputs($i);
 			}
 			
 			$result=$this->datapoints->addPoints($dataset);
-			if($result==$rows)
+			
+			if($result == $rows)
 			{
 				addSuccess(getTxt('DataEnteredSuccessfully'));	
 				$this->updateSC();
