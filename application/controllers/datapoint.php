@@ -12,14 +12,21 @@ class Datapoint extends MY_Controller {
 	{
 		$this->dontAuth = array('getData','getDataJSON','compare','export');
 		parent::__construct();
-		$this->load->model('variables','',TRUE);
-		$this->load->model('sources','',TRUE);
-		$this->load->model('datapoints','',TRUE);
-		$this->load->model('sc','',TRUE);
-		$this->load->model('site','',TRUE);
+
+		$this->loadModel('variables');
+		$this->loadModel('sources');
+		$this->loadModel('datapoints');
+		$this->loadModel('sc');
+		$this->loadModel('site');
+
 		$this->load->library('form_validation');
 	}
 	
+	private function loadModel($modelName)
+	{
+		$this->load->model($modelName, '', TRUE);
+	}
+
 	private function cNull($val)
 	{
 		if(strtolower($val)=="null")
@@ -186,7 +193,7 @@ class Datapoint extends MY_Controller {
 			$siteIDS = $this->getIDS($this->site->getAll(),"SiteID");
 			$sourceIDS = $this->getIDS($this->sources->getAll(),"SourceID");
 			$varIDS = $this->getIDS($this->variables->getAll(),"VariableID");
-			$this->load->model('method','',true);
+			$this->loadModel('method');
 			$methIDS = $this->getIDS($this->method->getAll(),"MethodID");
 		}
 		else
