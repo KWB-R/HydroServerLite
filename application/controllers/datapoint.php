@@ -70,30 +70,26 @@ class Datapoint extends MY_Controller {
 	}
 	
 	public function addvalue()
-	{	
-	
+	{		
 		if($_POST)
 		{
-			$this->form_validation->set_rules('SourceID', 'SourceID', 'trim|required');
-			$this->form_validation->set_rules('SiteID', 'SiteID', 'trim|required');	
-			$this->form_validation->set_rules('VariableID', 'SourceID', 'trim|required');
-			$this->form_validation->set_rules('MethodID', 'SiteID', 'trim|required');	
-			$this->form_validation->set_rules('value', 'SourceID', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('datepicker', 'SiteID', 'trim|required');
-			$this->form_validation->set_rules('timepicker', 'SiteID', 'trim|required');
+			$this->setFormValidationRules();
 		}
+		
 		if ($this->form_validation->run() == FALSE)
 		{
 			  $errors = validation_errors();
 			  if(!empty($errors))
-			  {addError($errors);}
+			  {
+			  	addError($errors);
+			  }
 		}
 		else
 		{
-
-			$dataPoint = $this->createDP($this->input->post('datepicker'),$this->input->post('timepicker'),$this->input->post('value'),$this->input->post('SiteID'),$this->input->post('VariableID'),$this->input->post('MethodID'),$this->input->post('SourceID'));
+			$result = $this->datapoints->addPoint(
+				$this->createDataPointFromInputs()
+			);
 			
-			$result=$this->datapoints->addPoint($dataPoint);
 			if($result)
 			{
 				addSuccess(getTxt('ValueSuccessfully'));
@@ -118,6 +114,30 @@ class Datapoint extends MY_Controller {
 		$this->load->view('datapoint/addvalue',$data);
 	}
 	
+	private function setFormValidationRules()
+	{
+		$this->form_validation->set_rules('SourceID', 'SourceID', 'trim|required');
+		$this->form_validation->set_rules('SiteID', 'SiteID', 'trim|required');	
+		$this->form_validation->set_rules('VariableID', 'SourceID', 'trim|required');
+		$this->form_validation->set_rules('MethodID', 'SiteID', 'trim|required');	
+		$this->form_validation->set_rules('value', 'SourceID', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('datepicker', 'SiteID', 'trim|required');
+		$this->form_validation->set_rules('timepicker', 'SiteID', 'trim|required');
+	}
+
+	private function createDataPointFromInputs()
+	{
+		return $this->createDP(
+			$this->input->post('datepicker'),
+			$this->input->post('timepicker'),
+			$this->input->post('value'),
+			$this->input->post('SiteID'),
+			$this->input->post('VariableID'),
+			$this->input->post('MethodID'),
+			$this->input->post('SourceID')
+		);
+	}
+
 	public function addmultiplevalues()
 	{	
 		if($_POST)
