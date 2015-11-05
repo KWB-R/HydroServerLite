@@ -293,28 +293,28 @@ class Datapoint extends MY_Controller {
 					$site =  $data[1];
 					$var =  $data[2];
 					$meth =  $data[3];
-					if(!in_array($source,$sourceIDS))
+					
+					if (!in_array($source, $sourceIDS))
 					{
-						$msg=getTxt('invalid').' '.getTxt('sourceid').'.Row: '.$row.' '.getTxt('In').' '.$file['file_name'];
-						addError($msg.getTxt('PleaseFix'));
+						addError($this->idErrorMessage('sourceid', $row, $file));
 						return false;
 					}
-					if(!in_array($site,$siteIDS))
+					
+					if (!in_array($site, $siteIDS))
 					{
-						$msg=getTxt('invalid').' '.getTxt('siteid').'.Row: '.$row.' '.getTxt('In').' '.$file['file_name'];
-						addError($msg.getTxt('PleaseFix'));
+						addError($this->idErrorMessage('siteid', $row, $file));
 						return false;
 					}
-					if(!in_array($var,$varIDS))
+					
+					if (!in_array($var, $varIDS))
 					{
-						$msg=getTxt('invalid').' '.getTxt('varid').'.Row: '.$row.' '.getTxt('In').' '.$file['file_name'];
-						addError($msg.getTxt('PleaseFix'));
+						addError($this->idErrorMessage('varid', $row, $file));
 						return false;
 					}
-					if(!in_array($meth,$methIDS))
+					
+					if(!in_array($meth, $methIDS))
 					{
-						$msg=getTxt('invalid').' '.getTxt('methodid').'.Row: '.$row.' '.getTxt('In').' '.$file['file_name'];
-						addError($msg.getTxt('PleaseFix'));
+						addError($this->idErrorMessage('methodid', $row, $file));
 						return false;
 					}
 				}
@@ -328,6 +328,15 @@ class Datapoint extends MY_Controller {
 		return $dataset;
 	}
 	
+	private function idErrorMessage($idName, $row, $file)
+	{
+		$message = sprintf("%s %s. Row: %s %s %s", 
+			getTxt('invalid'), getTxt($idName), $row, getTxt('In'), $file['file_name']
+		);
+
+		return $message . getTxt('PleaseFix');
+	}
+
 	public function importfile()
 	{
 		
