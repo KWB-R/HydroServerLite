@@ -408,10 +408,8 @@ class Datapoint extends MY_Controller {
 		}
 		else
 		{
-			$data['errorMsg']="One of the parameters: VariableID, SiteID,MethodID is not defined. An example request would be getData?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
-			$this->load->view('templates/apierror',$data);	
+			$this->loadApiErrorView('getData');
 		}
-		
 	}
 
 	private function getInputOrTRUE($name)
@@ -419,6 +417,39 @@ class Datapoint extends MY_Controller {
 		return $this->input->get($name, TRUE);
 	}
 	
+	private function loadApiErrorView($method)
+	{
+		// same parameters and example for getData, getDataJSON and export
+		if (in_array($method, array('getData', 'getDataJSON', 'export'))) {
+			$parameters = "VariableID, SiteID, MethodID";
+			$example = "$method?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
+		}
+		elseif ($method == 'delete') {
+			$parameters = "ValueID";
+			$example = "delete/1";
+		}
+		elseif ($method == 'edit') {
+			$parameters = "ValueID, date, time, value";
+			$example = "edit/1?val=2&dt=2001-01-01&time=12:00";
+		}
+		elseif ($method == 'add') {
+			$parameters = "VariableID, date, time, value, SiteID, MethodID";
+			$example = "add?val=2&dt=2001-01-01&time=12:00&sid=1&mid=1&varid=1";
+		}
+		elseif ($method == 'compare') {
+			$parameters = "compareID";
+			$example = "compare/1";
+		}
+
+		$data['errorMsg'] = sprintf(
+			"One of the parameters: %s is not defined. " .
+			"An example request would be: %s",
+			$parameters, $example
+		);
+
+		$this->load->view('templates/apierror', $data);
+	}
+
 	public function getDataJSON()
 	{
 		$var = $this->getInputOrTRUE('varid');
@@ -433,8 +464,7 @@ class Datapoint extends MY_Controller {
 		}
 		else
 		{
-			$data['errorMsg']="One of the parameters: VariableID, SiteID,MethodID is not defined. An example request would be getDateJSON?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
-			$this->load->view('templates/apierror',$data);	
+			$this->loadApiErrorView('getDataJSON');
 		}	
 	}
 	
@@ -443,8 +473,7 @@ class Datapoint extends MY_Controller {
 		$valueid = end($this->uri->segment_array());
 		if($valueid=="delete")
 		{
-			$data['errorMsg']="One of the parameters: ValueID is not defined. An example request would be delete/1";
-			$this->load->view('templates/apierror',$data);
+			$this->loadApiErrorView('delete');
 			return;
 		}
 		$result = $this->datapoints->delete($valueid);
@@ -466,8 +495,7 @@ class Datapoint extends MY_Controller {
 		$valueid = end($this->uri->segment_array());
 		if($valueid=="edit")
 		{
-			$data['errorMsg']="One of the parameters: ValueID,date,time,value is not defined. An example request would be edit/1?val=2&dt=2001-01-01&time=12:00";
-			$this->load->view('templates/apierror',$data);
+			$this->loadApiErrorView('edit');
 			return;
 		}
 		$value = $this->getInputOrTRUE('val');
@@ -496,12 +524,9 @@ class Datapoint extends MY_Controller {
 		}
 		else
 		{
-			$data['errorMsg']="One of the parameters: ValueID,date,time,value is not defined. An example request would be edit/1?val=2&dt=2001-01-01&time=12:00";
-			$this->load->view('templates/apierror',$data);	
+			$this->loadApiErrorView('edit');
 		}	
 	}
-	
-
 	
 	public function export()
 	{
@@ -520,8 +545,7 @@ class Datapoint extends MY_Controller {
 		}
 		else
 		{
-			$data['errorMsg']="One of the parameters: VariableID, SiteID,MethodID is not defined. An example request would be export?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
-			$this->load->view('templates/apierror',$data);	
+			$this->loadApiErrorView('export');
 		}	
 	}
 	
@@ -554,8 +578,7 @@ class Datapoint extends MY_Controller {
 		
 		else
 		{
-			$data['errorMsg']="One of the parameters: VariableID,date,time,value,SiteID,MethodID, is not defined. An example request would be add?val=2&dt=2001-01-01&time=12:00&sid=1&mid=1&varid=1";
-			$this->load->view('templates/apierror',$data);	
+			$this->loadApiErrorView('add');
 		}	
 	}
 	public function compare()
@@ -563,8 +586,7 @@ class Datapoint extends MY_Controller {
 		$valueid = end($this->uri->segment_array());
 		if($valueid=="compare")
 		{
-			$data['errorMsg']="One of the parameters: compareID. An example request would be compare/1";
-			$this->load->view('templates/apierror',$data);
+			$this->loadApiErrorView('compare');
 			return;
 		}
 		//List of CSS to pass to this view
