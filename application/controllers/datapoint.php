@@ -477,19 +477,27 @@ class Datapoint extends MY_Controller {
 			return;
 		}
 		$result = $this->datapoints->delete($valueid);
-		if($result)
-			{
-				$output="success";
-				$this->updateSC();	
-			}
-		else
-			{
-				$output="failed";
-			}		
-		$output = array("status"=>$output);
-		echo json_encode($output);	
+
+		$this->updateSeriesCatalogIf($result);
+
+		$output = array("status" => $this->successStatus($result));
+
+		echo json_encode($output);
 	}
 	
+	private function updateSeriesCatalogIf($success)
+	{
+		if($success)
+		{
+			$this->updateSC();
+		}
+	}
+
+	private function successStatus($success)
+	{
+		return (($success)? "success" : "failed");
+	}
+
 	public function edit()
 	{
 		$valueid = end($this->uri->segment_array());
@@ -510,17 +518,12 @@ class Datapoint extends MY_Controller {
 			$utctimestamp = $localtimestamp - ($ms);
 			$DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
 			$result = $this->datapoints->editPoint($valueid,$value,$LocalDateTime,$DateTimeUTC);
-			if($result)
-			{
-				$output="success";	
-				$this->updateSC();
-			}
-			else
-			{
-				$output="failed";
-			}		
-			$output = array("status"=>$output);
-			echo json_encode($output);	
+
+			$this->updateSeriesCatalogIf($result);
+
+			$output = array("status" => $this->successStatus($result));
+
+			echo json_encode($output);
 		}
 		else
 		{
@@ -563,17 +566,15 @@ class Datapoint extends MY_Controller {
 		{
 			$dataPoint = $this->createDP($dt,$time,$value,$site,$var,$method,$sourceID);
 			$result=$this->datapoints->addPoint($dataPoint);
-			if($result)
-			{
-				$output="success";
-				$this->updateSC();
-			}
-			else
-			{
-				$output="failed";
-			}		
-			$output = array("status"=>$output,"id"=>$result);
-			echo json_encode($output);	
+
+			$this->updateSeriesCatalogIf($result);
+
+			$output = array(
+				"status" => $this->successStatus($result), 
+				"id" => $result
+			);
+
+			echo json_encode($output);
 		}
 		
 		else
