@@ -381,28 +381,33 @@ class Datapoint extends MY_Controller {
 			}
 			$noValue = $variable['NoDataValue'];
 			
-			echo("var data_test = [\r\n");
-			$num_rows = count($result);
-			$count=1;		
-			//To echo Data in javascript format
-			foreach ($result as $row) 
-			{
-				$output = sprintf("[%s,%s]",
-					Datapoint::javaScriptDateUTC($row['LocalDateTime']),
-					(string) $row['DataValue']
-				);
+			$EOL = "\r\n";
 
+			echo("var data_test = [");
+
+			$first = TRUE;
+
+			//To echo Data in javascript format
+			foreach ($result as $row)
+			{
 				//Check for NoDataValue (Default is -9999))
-				if (!($row['DataValue'] == $noValue))
+				if ($row['DataValue'] != $noValue)
 				{
-					echo $output;
-					 if($count!=$num_rows)
-						{echo ",";}
-					 $count=$count+1;
-					 echo ("\r\n");
+					// not the first line -> separate from last tuple with comma
+					echo (($first)? $EOL : ",$EOL");
+
+					// echo a [time, value] tuple
+					echo sprintf("[%s,%s]",
+						Datapoint::javaScriptDateUTC($row['LocalDateTime']),
+						(string) $row['DataValue']
+					);
+
+					// the next tuple will not be the first
+					$first = FALSE;
 				}
 			}
-			echo("];");
+
+			echo("$EOL];");
 		}
 		else
 		{
