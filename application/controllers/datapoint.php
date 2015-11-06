@@ -387,13 +387,11 @@ class Datapoint extends MY_Controller {
 			//To echo Data in javascript format
 			foreach ($result as $row) 
 			{
-				$pieces = explode("-", $row['LocalDateTime']);
-				$pieces2 = explode(" ", $pieces[2]);
-				$pieces3 = explode(":", $pieces2[1]);
-				$pieces[1]=$pieces[1]-1;
-				
-				$output="[Date.UTC(".$pieces[0].",".$pieces[1].",".$pieces2[0].",".$pieces3[0].",".$pieces3[1].",".$pieces3[2]."),".$row['DataValue']."]";
-				
+				$output = sprintf("[%s,%s]",
+					Datapoint::javaScriptDateUTC($row['LocalDateTime']),
+					(string) $row['DataValue']
+				);
+
 				//Check for NoDataValue (Default is -9999))
 				if (!($row['DataValue'] == $noValue))
 				{
@@ -416,7 +414,39 @@ class Datapoint extends MY_Controller {
 	{
 		return $this->input->get($name, TRUE);
 	}
-	
+
+	public static function javaScriptDateUTC($timestamp)
+	{
+		// split timestamp into named components
+		$parts = Datapoint::splitTimestamp($timestamp);
+
+		// JavaScript's Date.UTC requires month to be an integer between 0 and 11
+		$parts['month']--;
+
+		return sprintf("Date.UTC(%s)", implode(",", $parts));
+	}
+
+	public static function splitTimestamp($timestamp)
+	{
+		// split date from time at space
+		$dateAndTime = explode(" ", $timestamp);
+
+		// split date parts at "-"
+		$dateParts = explode("-", $dateAndTime[0]);
+
+		// split time parts at ":"
+		$timeParts = explode(":", $dateAndTime[1]);
+
+		return array(
+			'year'   => $dateParts[0],
+			'month'  => $dateParts[1],
+			'day'    => $dateParts[2],
+			'hour'   => $timeParts[0],
+			'minute' => $timeParts[1],
+			'second' => $timeParts[2]
+		);
+	}
+
 	private function loadApiErrorView($method)
 	{
 		// same parameters and example for getData, getDataJSON and export
