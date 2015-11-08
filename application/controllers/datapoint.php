@@ -207,25 +207,19 @@ class Datapoint extends MY_Controller {
 	
 	private function processFiles($files)
 	{
-		$check=false;
-		if($this->input->post('valueSpec'))
+		$check = $this->input->post('valueSpec');
+
+		if ($check)
 		{
-			$check=true;
 			//Values will be checked and fetched while processing.
 			//Build ID tables.
-			$siteIDS = $this->getIDS($this->site->getAll(),"SiteID");
-			$sourceIDS = $this->getIDS($this->sources->getAll(),"SourceID");
-			$varIDS = $this->getIDS($this->variables->getAll(),"VariableID");
-			$this->loadModel('method');
-			$methIDS = $this->getIDS($this->method->getAll(),"MethodID");
+			$existingIDs = $this->getExistingIDs();
 		}
 		else
 		{
-			$source =  $this->input->post('SourceID');
-			$site =  $this->input->post('SiteID');
-			$var =  $this->input->post('VariableID');
-			$meth =  $this->input->post('MethodID');
+			$keyIDs = $this->getKeyIDsFromInput();
 		}
+
 		$dataset=array();
 		foreach($files as $file)
 		{
@@ -287,34 +281,65 @@ class Datapoint extends MY_Controller {
 				   addError($msg.getTxt('PleaseFix'));
 				   return false;
 				} 
-				$dateVal = $date->format("Y-m-d");
-				$timeVal = $date->format("H:i:s");
-				
+
 				if ($check)
 				{
 					//Verify if entered IDS are correct. 
-					$source =  $data[0];
-					$site =  $data[1];
-					$var =  $data[2];
-					$meth =  $data[3];
+					$keyIDs = array(
+						'Source' => $data[0],
+						'Site' => $data[1],
+						'Variable' => $data[2],
+						'Method' => $data[3]
+					);
 					
 					if (	
-						$this->addErrorIfInvalid($source, $sourceIDS, 'sourceid', $row, $file)
-						or $this->addErrorIfInvalid($site, $siteIDS, 'siteid', $row, $file)
-						or $this->addErrorIfInvalid($var, $varIDS, 'varid', $row, $file)
-						or $this->addErrorIfInvalid($meth, $methIDS, 'methodid', $row, $file)
+						$this->addErrorIfInvalid($keyIDs['Source'], $existingIDs['Source'], 'sourceid', $row, $file)
+						or $this->addErrorIfInvalid($keyIDs['Site'], $existingIDs['Site'], 'siteid', $row, $file)
+						or $this->addErrorIfInvalid($keyIDs['Variable'], $existingIDs['Variable'], 'varid', $row, $file)
+						or $this->addErrorIfInvalid($keyIDs['Method'], $existingIDs['Method'], 'methodid', $row, $file)
 					) {
 						return false;
 					}
 				}
 				
-				$dataPoint = $this->createDP($dateVal,$timeVal,$value,$site,$var,$meth,$source);
-				$dataset[]=$dataPoint;
+				$dataPoint = $this->createDP(
+					$date->format("Y-m-d"),
+					$date->format("H:i:s"),
+					$value,
+					$keyIDs['Site'],
+					$keyIDs['Variable'],
+					$keyIDs['Method'],
+					$keyIDs['Source']
+				);
+
+				$dataset[] = $dataPoint;
 				$row++;
 			}
 			
 		}
 		return $dataset;
+	}
+
+	private function getExistingIDs()
+	{
+		$this->loadModel('method');
+
+		return array(
+			'Site' => $this->getIDS($this->site->getAll(), 'SiteID'),
+			'Source' => $this->getIDS($this->sources->getAll(), 'SourceID'),
+			'Variable' => $this->getIDS($this->variables->getAll(), 'VariableID'),
+			'Method' => $this->getIDS($this->method->getAll(), 'MethodID')
+		);
+	}
+
+	private function getKeyIDsFromInput()
+	{
+		return array(
+			'Site' => $this->input->post('SiteID'),
+			'Source' => $this->input->post('SourceID'),
+			'Variable' => $this->input->post('VariableID'),
+			'Method' => $this->input->post('MethodID')
+		);
 	}
 
 	private function addErrorIfInvalid($id, $ids, $idName, $row, $file)
