@@ -32,15 +32,6 @@ class Datapoint extends MY_Controller {
 		$this->load->model($modelName, '', TRUE);
 	}
 
-	private function cNull($val)
-	{
-		if(strtolower($val)=="null")
-		{
-			return NULL;	
-		}
-		return $val;
-	}
-	
 	private function createDP($date,$time,$val,$siteid,$varid,$methid,$sourceid)
 	{
 		$dateFormat = "Y-m-d H:i:s";
@@ -71,7 +62,13 @@ class Datapoint extends MY_Controller {
 
 	private function getConfigItem($name)
 	{
-		return $this->cNull($this->config->item($name));		
+		$value = $this->config->item($name);
+
+		if(strtolower($value) == "null") {
+			$value = NULL;
+		}
+
+		return $value;
 	}
 	
 	public function addvalue()
