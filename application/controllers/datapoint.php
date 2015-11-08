@@ -264,23 +264,15 @@ class Datapoint extends MY_Controller {
 					continue;
 				}
 				
-				try {
-					$date = new DateTime($data[$dtIndex]);
-				} catch (Exception $e) {
-					//add error for invalid datatime format. on $row in file
-					$msg=getTxt('InvalidTime').' '.$row.' '.getTxt('In').' '.$file['file_name'];
-					addError($msg.getTxt('PleaseFix')."(".$e->getMessage().")");
+				$timestamp = $data[$dtIndex];
+				$value = $data[$valIndex];
+
+				$date = NULL; // will be set in validateFields
+
+				// Check for a valid date and a valid data value or raise an error
+				if (!$this->validateFields($timestamp, $value, $row, $file, $date)) {
 					return false;
 				}
-				//Validate Value
-				$value = $data[$valIndex];
-				$regex="/^[\-+]?[0-9]*\.?[0-9]+$/";
-
-				if (!preg_match($regex,$value)) {
-				   $msg=getTxt('InvalidChar').' '.$row.' '.getTxt('In').' '.$file['file_name'];
-				   addError($msg.getTxt('PleaseFix'));
-				   return false;
-				} 
 
 				if ($check)
 				{
@@ -342,6 +334,47 @@ class Datapoint extends MY_Controller {
 		);
 	}
 
+	private function validateFields($timestamp, $value, $row, $file, &$date)
+	{
+		// Try to convert timestamp to DateTime object or raise an error
+		$error = $this->toDateTime($timestamp, $date);
+
+		if ($error != "") {
+
+			addError($this->typeErrorMessage('InvalidTime', $row, $file, $error));
+
+			return false;
+		}
+
+		// Check if $value is numeric or raise an error
+		if (!$this->isNumeric($value)) {
+
+			addError($this->typeErrorMessage('InvalidChar', $row, $file));
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private function toDateTime($timestamp, &$date)
+	{
+		try {
+			$date = new DateTime($timestamp);
+			$errorMessage = "";
+		}
+		catch (Exception $e) {
+			$errorMessage = $e->getMessage();
+		}
+
+		return $errorMessage;
+	}
+
+	private function isNumeric($value)
+	{
+		return preg_match("/^[\-+]?[0-9]*\.?[0-9]+$/", $value);
+	}
+
 	private function addErrorIfInvalid($id, $ids, $idName, $row, $file)
 	{
 		$isError = !in_array($id, $ids);
@@ -356,11 +389,27 @@ class Datapoint extends MY_Controller {
 	
 	private function idErrorMessage($idName, $row, $file)
 	{
-		$message = sprintf("%s %s. Row: %s %s %s", 
-			getTxt('invalid'), getTxt($idName), $row, getTxt('In'), $file['file_name']
+		$message = sprintf("%s %s. Row: %s", 
+			getTxt('invalid'), getTxt($idName), $this->fileLocationString($row, $file)
 		);
 
 		return $message . getTxt('PleaseFix');
+	}
+
+	private function typeErrorMessage($errorKey, $row, $file, $error = "")
+	{
+	  $message = getTxt($errorKey) . " " . $this->fileLocationString($row, $file);
+
+		if ($error != "") {
+			$message .= " (" . $error . ")";
+		}
+
+		return $message . getTxt('PleaseFix');
+	}
+
+	private function fileLocationString($row, $file)
+	{
+		return sprintf("%d %s %s", $row, getTxt('In'), $file['file_name']);		
 	}
 
 	public function importfile()
