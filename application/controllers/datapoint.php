@@ -40,23 +40,25 @@ class Datapoint extends MY_Controller {
 		$offsetInSeconds = $this->config->item('UTCOffset') * 3600;
 		
 		$dataPoint = array(
-		'DataValue' => $val,  
-		'ValueAccuracy' => $this->getConfigItem('ValueAccuracy'),
-		'LocalDateTime' => date($dateFormat, $localtimestamp), 
-		'UTCOffset' => $this->getConfigItem('UTCOffset'), 
-		'DateTimeUTC' => date($dateFormat, $localtimestamp - $offsetInSeconds), 
-		'SiteID' => $siteid,
-		'VariableID' => $varid, 
-		'OffsetValue' => $this->getConfigItem('OffsetValue'),
-		'OffsetTypeID' => $this->getConfigItem('OffsetTypeID'),
-		'CensorCode' => $this->getConfigItem('CensorCode'),
-		'QualifierID' => $this->getConfigItem('QualifierID'), 
-		'MethodID' => $methid, 
-		'SourceID' => $sourceid, 
-		'SampleID' => $this->getConfigItem('SampleID'),
-		'DerivedFromID' => $this->getConfigItem('DerivedFromID'), 
-		'QualityControlLevelID' => $this->getConfigItem('QualityControlLevelID'));		
+			'DataValue' => $val,  
+			'LocalDateTime' => date($dateFormat, $localtimestamp), 
+			'DateTimeUTC' => date($dateFormat, $localtimestamp - $offsetInSeconds), 
+			'SiteID' => $siteid,
+			'VariableID' => $varid, 
+			'MethodID' => $methid, 
+			'SourceID' => $sourceid
+		);
+
+		$fields = array(
+			'ValueAccuracy', 'UTCOffset', 'OffsetValue', 'OffsetTypeID',	
+			'CensorCode', 'QualifierID', 'SampleID', 'DerivedFromID', 
+			'QualityControlLevelID'
+		);
 		
+		foreach ($fields as $field) {
+			$dataPoint[$field] = $this->getConfigItem($field);
+		}
+
 		return $dataPoint;
 	}
 
