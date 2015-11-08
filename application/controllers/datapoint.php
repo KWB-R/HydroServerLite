@@ -213,103 +213,143 @@ class Datapoint extends MY_Controller {
 		{
 			//Values will be checked and fetched while processing.
 			//Build ID tables.
+			$keyIDs = NULL;
 			$existingIDs = $this->getExistingIDs();
 		}
 		else
 		{
 			$keyIDs = $this->getKeyIDsFromInput();
+			$existingIDs = NULL;
 		}
 
-		$dataset=array();
-		foreach($files as $file)
+		$dataset = array();
+
+		foreach ($files as $file)
 		{
 			$filepath = $file['full_path'];	
 			$handle = fopen($filepath, "r");
+
 			if(!$handle)
 			{
 				addError(getTxt('FailInputStream'));
-				return;	
+				return false;	
 			}
-			$flag=0;
-			$row=1;
-			$tracker=1;
-			$dtIndex = 0;
-			$valIndex = 1;
-			while (($data = fgetcsv($handle)) !== FALSE) {
-				if($flag==0)
+
+			$row = 0;
+
+			$dtIndex = -1;
+			$valIndex = -1;
+
+			while (($data = fgetcsv($handle)) !== FALSE) 
+			{
+				// Is this the header row?
+				if ($row == 0)
 				{
-					if($check)
+					if (!$this->handleHeaderRow($data, $check, $dtIndex, $valIndex))
 					{
-						$dtIndex=4;
-						$valIndex = 5;
-						if(($data[0]!="SourceID")||($data[1]!="SiteID")||($data[2]!="VariableID")||($data[3]!="MethodID")||($data[4]!="LocalDateTime")||($data[5]!="DataValue"))	
-						{
-						addError(getTxt('InvalidHeading')."SourceID,SiteID,VariableID,MethodID,LocalDateTime,DataValue".getTxt('PleaseFix'));
-						return false;					
-						}	
-					}
-					else
-					{
-
-						//Allow switching of columns. 
-						$dtIndex = array_search(strtolower("LocalDateTime"),array_map('strtolower',$data)); 
-						$valIndex=array_search(strtolower("DataValue"),array_map('strtolower',$data));
-						if($dtIndex===false||$valIndex===false)	
-						{
-						addError(getTxt('InvalidHeading')."LocalDateTime,DataValue".getTxt('PleaseFix'));
-						return false;					
-						}
-					}
-					$flag=1;
-					continue;
-				}
-				
-				$timestamp = $data[$dtIndex];
-				$value = $data[$valIndex];
-
-				$date = NULL; // will be set in validateFields
-
-				// Check for a valid date and a valid data value or raise an error
-				if (!$this->validateFields($timestamp, $value, $row, $file, $date)) {
-					return false;
-				}
-
-				if ($check)
-				{
-					//Verify if entered IDS are correct. 
-					$keyIDs = array(
-						'Source' => $data[0],
-						'Site' => $data[1],
-						'Variable' => $data[2],
-						'Method' => $data[3]
-					);
-					
-					if (	
-						$this->addErrorIfInvalid($keyIDs['Source'], $existingIDs['Source'], 'sourceid', $row, $file)
-						or $this->addErrorIfInvalid($keyIDs['Site'], $existingIDs['Site'], 'siteid', $row, $file)
-						or $this->addErrorIfInvalid($keyIDs['Variable'], $existingIDs['Variable'], 'varid', $row, $file)
-						or $this->addErrorIfInvalid($keyIDs['Method'], $existingIDs['Method'], 'methodid', $row, $file)
-					) {
 						return false;
 					}
 				}
-				
-				$dataPoint = $this->createDP(
-					$date->format("Y-m-d"),
-					$date->format("H:i:s"),
-					$value,
-					$keyIDs['Site'],
-					$keyIDs['Variable'],
-					$keyIDs['Method'],
-					$keyIDs['Source']
-				);
+				else 
+				{
+					$dataPoint = $this->handleDataRow(
+						$data, $dtIndex, $valIndex, $keyIDs, $existingIDs, $row, $file
+					);
 
-				$dataset[] = $dataPoint;
+					if (is_null($dataPoint))
+					{
+						return false;
+					}
+
+					$dataset[] = $dataPoint;
+				}
+
 				$row++;
-			}
+
+			} // end of while(fgetcsv())
 			
-		}
+		} // end of foreach($files)
+
 		return $dataset;
+	}
+
+	private function handleHeaderRow($data, $check, &$dtIndex, &$valIndex)
+	{
+		if ($check)
+		{
+			$dtIndex = 4;
+			$valIndex = 5;
+
+			if (($data[0] != "SourceID") || ($data[1] != "SiteID") ||
+				($data[2] != "VariableID") || ($data[3] != "MethodID") ||
+				($data[4] != "LocalDateTime") || ($data[5] != "DataValue"))
+			{
+				addError(getTxt('InvalidHeading')."SourceID,SiteID,VariableID,MethodID,LocalDateTime,DataValue".getTxt('PleaseFix'));
+				return false;					
+			}
+		}
+		else
+		{
+			//Allow switching of columns. 
+			$dtIndex = array_search(strtolower("LocalDateTime"), array_map('strtolower', $data)); 
+			$valIndex = array_search(strtolower("DataValue"), array_map('strtolower', $data));
+
+			if ($dtIndex === false || $valIndex === false)
+			{
+				addError(getTxt('InvalidHeading')."LocalDateTime,DataValue".getTxt('PleaseFix'));
+				return false;					
+			}
+		}
+
+		return true;
+	}
+
+	private function handleDataRow
+	(
+		$data, $dtIndex, $valIndex, $keyIDs, $existingIDs, $row, $file
+	)
+	{
+		$timestamp = $data[$dtIndex];
+		$value = $data[$valIndex];
+
+		$date = NULL; // will be set in validateFields
+
+		// Check for a valid date and a valid data value or raise an error
+		if (!$this->validateFields($timestamp, $value, $row, $file, $date)) 
+		{
+			return NULL;
+		}
+
+		if (is_null($keyIDs))
+		{
+			//Verify if entered IDS are correct. 
+			$keyIDs = array(
+				'Source' => $data[0],
+				'Site' => $data[1],
+				'Variable' => $data[2],
+				'Method' => $data[3]
+			);
+					
+			if (	
+				$this->addErrorIfInvalid($keyIDs['Source'], $existingIDs['Source'], 'sourceid', $row, $file)
+				or $this->addErrorIfInvalid($keyIDs['Site'], $existingIDs['Site'], 'siteid', $row, $file)
+				or $this->addErrorIfInvalid($keyIDs['Variable'], $existingIDs['Variable'], 'varid', $row, $file)
+				or $this->addErrorIfInvalid($keyIDs['Method'], $existingIDs['Method'], 'methodid', $row, $file)
+			) 
+			{
+				return NULL;
+			}
+		}
+	
+		return $this->createDP(
+			$date->format("Y-m-d"),
+			$date->format("H:i:s"),
+			$value,
+			$keyIDs['Site'],
+			$keyIDs['Variable'],
+			$keyIDs['Method'],
+			$keyIDs['Source']
+		);
 	}
 
 	private function getExistingIDs()
