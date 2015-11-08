@@ -13,15 +13,20 @@ class Datapoint extends MY_Controller {
 		$this->dontAuth = array('getData','getDataJSON','compare','export');
 		parent::__construct();
 
-		$this->loadModel('variables');
-		$this->loadModel('sources');
-		$this->loadModel('datapoints');
-		$this->loadModel('sc');
-		$this->loadModel('site');
+		$models = array('variables', 'sources', 'datapoints', 'sc', 'site');
+
+		$this->loadModels($models);
 
 		$this->load->library('form_validation');
 	}
 	
+	private function loadModels($modelNames)
+	{
+		foreach ($modelNames as $modelName) {
+			$this->loadModel($modelName);
+		}
+	}
+
 	private function loadModel($modelName)
 	{
 		$this->load->model($modelName, '', TRUE);
