@@ -669,14 +669,18 @@ class Datapoint extends MY_Controller {
 
 	public function getDataJSON()
 	{
-		$var = $this->getInputOrTRUE('varid');
-		$site = $this->getInputOrTRUE('siteid');	
-		$method = $this->getInputOrTRUE('meth');
-		$start = $this->getInputOrTRUE('startdate');	
-		$end = $this->getInputOrTRUE('enddate');
-		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
+		$required = array('varid', 'siteid', 'meth', 'startdate', 'enddate');
+
+		$inputs = $this->getInputs($required);
+
+		$missing = $this->getMissing($inputs);
+
+		if (count($missing) == 0)
 		{
-			$result = $this->datapoints->getData($site,$var,$method,$start,$end);
+			$result = $this->datapoints->getData($inputs['siteid'], $inputs['varid'],
+				$inputs['meth'], $inputs['startdate'], $inputs['enddate']
+			);
+			
 			echo json_encode($result);
 		}
 		else
@@ -723,18 +727,24 @@ class Datapoint extends MY_Controller {
 			$this->loadApiErrorView('edit');
 			return;
 		}
-		$value = $this->getInputOrTRUE('val');
-		$dt=$this->getInputOrTRUE('dt');	
-		$time = $this->getInputOrTRUE('time');
+
+		$required = array('val', 'dt', 'time');
 		
-		if($valueid!==false&&$value!==false&&$dt!==false&&$time!==false)
+		$inputs = $this->getInputs($required);
+		
+		$missing = $this->getMissing($inputs);
+				
+		if ($valueid !== false && count($missing) == 0)
 		{
-			$LocalDateTime = $dt . " " . $time . ":00";
+			$LocalDateTime = sprintf("%s %s:00", $inputs['dt'], $inputs['time']);
 			$localtimestamp = strtotime($LocalDateTime);
 			$ms = $this->config->item('UTCOffset') * 3600;
-			$utctimestamp = $localtimestamp - ($ms);
-			$DateTimeUTC = date("Y-m-d H:i:s", $utctimestamp);
-			$result = $this->datapoints->editPoint($valueid,$value,$LocalDateTime,$DateTimeUTC);
+
+			$DateTimeUTC = date("Y-m-d H:i:s", $localtimestamp - $ms);
+
+			$result = $this->datapoints->editPoint($valueid, $inputs['val'],
+				$LocalDateTime, $DateTimeUTC
+			);
 
 			$this->updateSeriesCatalogIf($result);
 
@@ -750,17 +760,26 @@ class Datapoint extends MY_Controller {
 	
 	public function export()
 	{
-		$var = $this->getInputOrTRUE('varid');
-		$site = $this->getInputOrTRUE('siteid');	
-		$method = $this->getInputOrTRUE('meth');
-		$start = $this->getInputOrTRUE('startdate');	
-		$end = $this->getInputOrTRUE('enddate');
-		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
-		{
-			$result = $this->datapoints->getResultData($site,$var,$method,$start,$end);
-			header( 'Content-Type: text/csv' );
-			header('Content-Disposition: attachment; filename=HSLDataSite'.$site.'.csv');
+		$required = array('varid', 'siteid', 'meth', 'startdate', 'enddate');
+
+		$inputs = $this->getInputs($required);
+
+		$missing = $this->getMissing($inputs);
+	
+		if (count($missing) == 0)
+		{		
 			$this->load->dbutil();
+
+			$result = $this->datapoints->getResultData(
+				$inputs['siteid'], $inputs['varid'], $inputs['meth'], 
+				$inputs['startdate'], $inputs['enddate']
+			);
+
+			$filename = 'HSLDataSite' . $inputs['siteid'] . '.csv';
+			
+			header('Content-Type: text/csv');
+			header("Content-Disposition: attachment; filename=$filename");
+			
 			echo $this->dbutil->csv_from_result($result);
 		}
 		else
@@ -771,18 +790,23 @@ class Datapoint extends MY_Controller {
 	
 	public function add()
 	{	
-		$var = $this->getInputOrTRUE('varid');
-		$site = $this->getInputOrTRUE('sid');	
-		$method = $this->getInputOrTRUE('mid');
-		$value = $this->getInputOrTRUE('val');
-		$dt=$this->getInputOrTRUE('dt');	
-		$time = $this->getInputOrTRUE('time');
-		$source = $this->sc->getSourceBySite($site);
-		$sourceID = $source[0]['SourceID'];
-		if($var!==false&&$value!==false&&$dt!==false&&$time!==false&&$site!==false&&$method!==false)
+		$required = array('varid', 'val', 'dt', 'time', 'sid', 'mid');
+
+		$inputs = $this->getInputs($required);
+
+		$missing = $this->getMissing($inputs);
+		
+		if (count($missing) == 0)
 		{
-			$dataPoint = $this->createDP($dt,$time,$value,$site,$var,$method,$sourceID);
-			$result=$this->datapoints->addPoint($dataPoint);
+			$source = $this->sc->getSourceBySite($inputs['sid']);
+			$sourceID = $source[0]['SourceID'];
+		
+			$dataPoint = $this->createDP($inputs['dt'], $inputs['time'],
+				$inputs['val'], $inputs['sid'], $inputs['varid'],
+				$inputs['mid'], $sourceID
+			);
+
+			$result = $this->datapoints->addPoint($dataPoint);
 
 			$this->updateSeriesCatalogIf($result);
 
@@ -799,6 +823,7 @@ class Datapoint extends MY_Controller {
 			$this->loadApiErrorView('add');
 		}	
 	}
+	
 	public function compare()
 	{
 		$valueid = end($this->uri->segment_array());
@@ -840,3 +865,4 @@ class Datapoint extends MY_Controller {
 		require_once APPPATH.'../assets/update_series_catalog.php';
 	}
 }
+
