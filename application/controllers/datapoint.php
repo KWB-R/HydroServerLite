@@ -531,40 +531,43 @@ class Datapoint extends MY_Controller {
 
 			// [deleted because not used: Additional logic to get the unit...]
 
-			$noValue = $variable['NoDataValue'];
-			
-			$EOL = "\r\n";
-
-			echo("var data_test = [");
-
-			$first = TRUE;
-
-			//To echo Data in javascript format
-			foreach ($result as $row)
-			{
-				//Check for NoDataValue (Default is -9999))
-				if ($row['DataValue'] != $noValue)
-				{
-					// not the first line -> separate from last tuple with comma
-					echo (($first)? $EOL : ",$EOL");
-
-					// echo a [time, value] tuple
-					echo sprintf("[%s,%s]",
-						Datapoint::javaScriptDateUTC($row['LocalDateTime']),
-						(string) $row['DataValue']
-					);
-
-					// the next tuple will not be the first
-					$first = FALSE;
-				}
-			}
-
-			echo("$EOL];");
+			$this->echoJavaScriptAssignment($result, $variable['NoDataValue']);
 		}
 		else
 		{
 			$this->loadApiErrorView('getData');
 		}
+	}
+
+	private function echoJavaScriptAssignment($rows, $noValue)
+	{
+		$EOL = "\r\n";
+
+		echo("var data_test = [");
+
+		$first = TRUE;
+
+		//To echo Data in javascript format
+		foreach ($rows as $row)
+		{
+			//Check for NoDataValue (Default is -9999))
+			if ($row['DataValue'] != $noValue)
+			{
+				// not the first line -> separate from last tuple with comma
+				echo (($first)? $EOL : ",$EOL");
+
+				// echo a [time, value] tuple
+				echo sprintf("[%s,%s]",
+					Datapoint::javaScriptDateUTC($row['LocalDateTime']),
+					(string) $row['DataValue']
+				);
+
+				// the next tuple will not be the first
+				$first = FALSE;
+			}
+		}
+
+		echo("$EOL];");	
 	}
 
 	private function getMissing($values)
