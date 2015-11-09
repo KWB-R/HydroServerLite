@@ -15,18 +15,11 @@ class Datapoint extends MY_Controller {
 
 		$models = array('variables', 'sources', 'datapoints', 'sc', 'site');
 
-		$this->loadModels($models);
+		array_walk($models,  array($this, 'loadModel'));
 
 		$this->load->library('form_validation');
 	}
 	
-	private function loadModels($modelNames)
-	{
-		foreach ($modelNames as $modelName) {
-			$this->loadModel($modelName);
-		}
-	}
-
 	private function loadModel($modelName)
 	{
 		$this->load->model($modelName, '', TRUE);
@@ -156,7 +149,10 @@ class Datapoint extends MY_Controller {
 		{
 			$rows = $this->input->post('finalRows');
 			
-			$dataset = $this->createDataPointsFromInputs($rows);
+			$dataset = array_map(
+				array($this, "createDataPointFromInputs"), // callback function
+				range(1, $rows)                            // array to loop through
+			);
 			
 			$result = $this->datapoints->addPoints($dataset);
 	
@@ -165,18 +161,6 @@ class Datapoint extends MY_Controller {
 		
 		// Set style and option values (sources only) and load the view
 		$this->loadViewWithStyleAndOptions('datapoint/addmultiplevalues', FALSE);
-	}
-
-	private function createDataPointsFromInputs($rows)
-	{
-		$dataset = array();
-
-		for ($i = 1; $i <= $rows; $i++)
-		{
-			$dataset[] = $this->createDataPointFromInputs($i);
-		}
-
-		return $dataset;
 	}
 
 	private function fileUploadHandler()
@@ -201,16 +185,6 @@ class Datapoint extends MY_Controller {
 			  return false;
 		  }
 		return $this->upload->get_multi_upload_data();
-	}
-	
-	private function getIDS($array, $id)
-	{
-		$ids=array();
-		foreach($array as $row)
-		{
-			$ids[]=$row[$id];
-		}
-		return $ids;
 	}
 	
 	private function processFiles($files)
@@ -305,15 +279,9 @@ class Datapoint extends MY_Controller {
 		}
 
 		// Could all expected captions be found?
-		$missing = array();
-
-		foreach ($captions as $caption)
-		{
-			if ($columnIndex[$caption] === -1)
-			{
-				$missing[] = $caption;
-			}
-		}
+		$missing = array_keys(array_filter($columnIndex, function($i) {
+			return ($i === -1);
+		}));
 
 		$found = (count($missing) == 0);
 
@@ -395,10 +363,10 @@ class Datapoint extends MY_Controller {
 		$this->loadModel('method');
 
 		return array(
-			'Site' => $this->getIDS($this->site->getAll(), 'SiteID'),
-			'Source' => $this->getIDS($this->sources->getAll(), 'SourceID'),
-			'Variable' => $this->getIDS($this->variables->getAll(), 'VariableID'),
-			'Method' => $this->getIDS($this->method->getAll(), 'MethodID')
+			'Site' => array_column($this->site->getAll(), 'SiteID'),
+			'Source' => array_column($this->sources->getAll(), 'SourceID'),
+			'Variable' => array_column($this->variables->getAll(), 'VariableID'),
+			'Method' => array_column($this->method->getAll(), 'MethodID')
 		);
 	}
 
@@ -425,7 +393,7 @@ class Datapoint extends MY_Controller {
 		}
 
 		// Check if $value is numeric or raise an error
-		if (!$this->isNumeric($value)) {
+		if (!is_numeric($value)) {
 
 			addError($this->typeErrorMessage('InvalidChar', $row, $file));
 
@@ -446,11 +414,6 @@ class Datapoint extends MY_Controller {
 		}
 
 		return $errorMessage;
-	}
-
-	private function isNumeric($value)
-	{
-		return preg_match("/^[\-+]?[0-9]*\.?[0-9]+$/", $value);
 	}
 
 	private function addErrorIfInvalid($id, $ids, $idName, $row, $file)
@@ -572,29 +535,17 @@ class Datapoint extends MY_Controller {
 
 	private function getMissing($values)
 	{
-		$missing = array();
-
-		foreach ($values as $value)
-		{
-			if ($value === FALSE)
-			{
-				$missing[] = $value;
-			}
-		}
-
-		return $missing;
+		return array_keys(array_filter($values, function($value) {
+			return ($value === FALSE);
+		}));
 	}
 
 	private function getInputs($names)
 	{
-		$inputs = array();
-
-		foreach ($names as $name)
-		{
-			$inputs[$name] = $this->getInputOrTRUE($name);
-		}
-
-		return $inputs;
+		return array_combine(
+			$names,                                           // keys 
+			array_map(array($this, "getInputOrTRUE"), $names) // values
+		);		
 	}
 
 	private function getInputOrTRUE($name)
@@ -605,33 +556,12 @@ class Datapoint extends MY_Controller {
 	public static function javaScriptDateUTC($timestamp)
 	{
 		// split timestamp into named components
-		$parts = Datapoint::splitTimestamp($timestamp);
+		$parts = array_slice(date_parse($timestamp), 0, 6);
 
 		// JavaScript's Date.UTC requires month to be an integer between 0 and 11
 		$parts['month']--;
 
 		return sprintf("Date.UTC(%s)", implode(",", $parts));
-	}
-
-	public static function splitTimestamp($timestamp)
-	{
-		// split date from time at space
-		$dateAndTime = explode(" ", $timestamp);
-
-		// split date parts at "-"
-		$dateParts = explode("-", $dateAndTime[0]);
-
-		// split time parts at ":"
-		$timeParts = explode(":", $dateAndTime[1]);
-
-		return array(
-			'year'   => $dateParts[0],
-			'month'  => $dateParts[1],
-			'day'    => $dateParts[2],
-			'hour'   => $timeParts[0],
-			'minute' => $timeParts[1],
-			'second' => $timeParts[2]
-		);
 	}
 
 	private function loadApiErrorView($method)
@@ -816,8 +746,7 @@ class Datapoint extends MY_Controller {
 			);
 
 			echo json_encode($output);
-		}
-		
+		}		
 		else
 		{
 			$this->loadApiErrorView('add');
