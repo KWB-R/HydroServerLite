@@ -515,26 +515,22 @@ class Datapoint extends MY_Controller {
 	
 	public function getData()
 	{
-		$var = $this->getInputOrTRUE('varid');
-		$site = $this->getInputOrTRUE('siteid');	
-		$method = $this->getInputOrTRUE('meth');
-		$start = $this->getInputOrTRUE('startdate');	
-		$end = $this->getInputOrTRUE('enddate');
-		if($var!==false&&$site!==false&&$method!==false&&$start!==false&&$end!==false)
+		$required = array('varid', 'siteid', 'meth', 'startdate', 'enddate');
+
+		$inputs = $this->getInputs($required);
+
+		$missing = $this->getMissing($inputs);
+
+		if (count($missing) == 0)
 		{
-			$result = $this->datapoints->getData($site,$var,$method,$start,$end);
-			$variable = $this->variables->getVariableWithUnit($var);
-			$variable = $variable[0];
-			//Additional logic to get the unit. sometimes its unitsType and sometimes UnitsType
-			$unit = "No unit Found";
-			if(array_key_exists('UnitsType', $variable))
-			{
-				$unit = $variable['UnitsType'];
-			}
-			if(array_key_exists('unitsType', $variable))
-			{
-				$unit = $variable['unitsType'];
-			}
+			$result = $this->datapoints->getData($inputs['siteid'],	$inputs['varid'],
+				$inputs['meth'], $inputs['startdate'], $inputs['enddate']
+			);
+
+			$variable = $this->variables->getVariableWithUnit($inputs['varid'])[0];
+
+			// [deleted because not used: Additional logic to get the unit...]
+
 			$noValue = $variable['NoDataValue'];
 			
 			$EOL = "\r\n";
@@ -569,6 +565,33 @@ class Datapoint extends MY_Controller {
 		{
 			$this->loadApiErrorView('getData');
 		}
+	}
+
+	private function getMissing($values)
+	{
+		$missing = array();
+
+		foreach ($values as $value)
+		{
+			if ($value === FALSE)
+			{
+				$missing[] = $value;
+			}
+		}
+
+		return $missing;
+	}
+
+	private function getInputs($names)
+	{
+		$inputs = array();
+
+		foreach ($names as $name)
+		{
+			$inputs[$name] = $this->getInputOrTRUE($name);
+		}
+
+		return $inputs;
 	}
 
 	private function getInputOrTRUE($name)
