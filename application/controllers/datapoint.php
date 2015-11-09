@@ -154,13 +154,9 @@ class Datapoint extends MY_Controller {
 	{	
 		if($_POST)
 		{
-			$dataset = array();
 			$rows = $this->input->post('finalRows');
 			
-			for ($i = 1; $i <= $rows; $i++)
-			{
-				$dataset[] = $this->createDataPointFromInputs($i);
-			}
+			$dataset = $this->createDataPointsFromInputs($rows);
 			
 			$result = $this->datapoints->addPoints($dataset);
 	
@@ -170,7 +166,19 @@ class Datapoint extends MY_Controller {
 		// Set style and option values (sources only) and load the view
 		$this->loadViewWithStyleAndOptions('datapoint/addmultiplevalues', FALSE);
 	}
-	
+
+	private function createDataPointsFromInputs($rows)
+	{
+		$dataset = array();
+
+		for ($i = 1; $i <= $rows; $i++)
+		{
+			$dataset[] = $this->createDataPointFromInputs($i);
+		}
+
+		return $dataset;
+	}
+
 	private function fileUploadHandler()
 	{
 		$newDir = "./uploads/temp".time().rand();
