@@ -492,21 +492,21 @@ class Datapoint extends MY_Controller {
 
 	public function importfile()
 	{
-		
-		if($_POST)
+		if ($_POST)
 		{
 			$result = $this->fileUploadHandler();
-			if($result)
+
+			if ($result)
 			{
 				$dataset = $this->processFiles($result);
-				if($dataset)
+
+				if ($dataset)
 				{
-					$rows = count($dataset);
 					$result = $this->datapoints->addPoints($dataset);
 					
 					$this->addSuccessOrError($result, 'Success', 'Error in data input');
 				}
-			}	
+			}
 		}
 		
 		// Set style and option values (sources, variables) and load the view
