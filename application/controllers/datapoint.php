@@ -237,15 +237,14 @@ class Datapoint extends MY_Controller {
 
 			$row = 0;
 
-			$dtIndex = -1;
-			$valIndex = -1;
+			$columnIndex = array();
 
 			while (($data = fgetcsv($handle)) !== FALSE) 
 			{
 				// Is this the header row?
 				if ($row == 0)
 				{
-					if (!$this->handleHeaderRow($data, $check, $dtIndex, $valIndex))
+					if (!$this->handleHeaderRow($data, $check, $columnIndex))
 					{
 						return false;
 					}
@@ -253,7 +252,7 @@ class Datapoint extends MY_Controller {
 				else 
 				{
 					$dataPoint = $this->handleDataRow(
-						$data, $dtIndex, $valIndex, $keyIDs, $existingIDs, $row, $file
+						$data, $columnIndex, $keyIDs, $existingIDs, $row, $file
 					);
 
 					if (is_null($dataPoint))
@@ -273,44 +272,61 @@ class Datapoint extends MY_Controller {
 		return $dataset;
 	}
 
-	private function handleHeaderRow($data, $check, &$dtIndex, &$valIndex)
+	private function handleHeaderRow($data, $check, &$columnIndex)
 	{
+		$captionString = "LocalDateTime,DataValue";
+
 		if ($check)
 		{
-			$dtIndex = 4;
-			$valIndex = 5;
-
-			if (($data[0] != "SourceID") || ($data[1] != "SiteID") ||
-				($data[2] != "VariableID") || ($data[3] != "MethodID") ||
-				($data[4] != "LocalDateTime") || ($data[5] != "DataValue"))
-			{
-				addError(getTxt('InvalidHeading')."SourceID,SiteID,VariableID,MethodID,LocalDateTime,DataValue".getTxt('PleaseFix'));
-				return false;					
-			}
+			$captionString = "SourceID,SiteID,VariableID,MethodID," . $captionString;
 		}
-		else
+
+		$captions = explode(",", $captionString);
+
+		//Allow switching of columns.
+		$columnIndex = array();
+
+		foreach ($captions as $caption)
 		{
-			//Allow switching of columns. 
-			$dtIndex = array_search(strtolower("LocalDateTime"), array_map('strtolower', $data)); 
-			$valIndex = array_search(strtolower("DataValue"), array_map('strtolower', $data));
+			$index = array_search(
+				strtolower($caption),
+				array_map('strtolower', $data)
+			);
 
-			if ($dtIndex === false || $valIndex === false)
+			$columnIndex[$caption] = (($index === FALSE)? -1 : $index);
+		}
+
+		// Could all expected captions be found?
+		$missing = array();
+
+		foreach ($captions as $caption)
+		{
+			if ($columnIndex[$caption] === -1)
 			{
-				addError(getTxt('InvalidHeading')."LocalDateTime,DataValue".getTxt('PleaseFix'));
-				return false;					
+				$missing[] = $caption;
 			}
 		}
 
-		return true;
+		$found = (count($missing) == 0);
+
+		if (!$found)
+		{
+			addError(getTxt('InvalidHeading') . implode(",", $captions) .
+				" (missing: " . implode(", ", $missing) . ")" .
+				getTxt('PleaseFix')
+			);
+		}
+
+		return $found;
 	}
 
 	private function handleDataRow
 	(
-		$data, $dtIndex, $valIndex, $keyIDs, $existingIDs, $row, $file
+		$data, $columnIndex, $keyIDs, $existingIDs, $row, $file
 	)
 	{
-		$timestamp = $data[$dtIndex];
-		$value = $data[$valIndex];
+		$timestamp = $data[$columnIndex['LocalDateTime']];
+		$value = $data[$columnIndex['DataValue']];
 
 		$date = NULL; // will be set in validateFields
 
@@ -322,20 +338,34 @@ class Datapoint extends MY_Controller {
 
 		if (is_null($keyIDs))
 		{
-			//Verify if entered IDS are correct. 
+			// Verify if entered IDS are correct.
 			$keyIDs = array(
-				'Source' => $data[0],
-				'Site' => $data[1],
-				'Variable' => $data[2],
-				'Method' => $data[3]
+				'Source' => $data[$columnIndex['SourceID']],
+				'Site' => $data[$columnIndex['SiteID']],
+				'Variable' => $data[$columnIndex['VariableID']],
+				'Method' => $data[$columnIndex['MethodID']]
 			);
-					
-			if (	
-				$this->addErrorIfInvalid($keyIDs['Source'], $existingIDs['Source'], 'sourceid', $row, $file)
-				or $this->addErrorIfInvalid($keyIDs['Site'], $existingIDs['Site'], 'siteid', $row, $file)
-				or $this->addErrorIfInvalid($keyIDs['Variable'], $existingIDs['Variable'], 'varid', $row, $file)
-				or $this->addErrorIfInvalid($keyIDs['Method'], $existingIDs['Method'], 'methodid', $row, $file)
-			) 
+
+			// This assignment just associates the keyword to be looked up in the
+			// language table
+			$idNames = array(
+				'Source' => 'sourceid',
+				'Site' => 'siteid',
+				'Variable' => 'varid',
+				'Method' => 'methodid'
+			);
+
+			$invalid = FALSE;
+
+			foreach ($idNames as $key => $idName)
+			{
+				// parentheses are important since "or" has lower precedence than "="!
+				$invalid = ($invalid or $this->addErrorIfInvalid(
+					$keyIDs[$key], $existingIDs[$key], $idName, $row, $file
+				));
+			}
+
+			if ($invalid)
 			{
 				return NULL;
 			}
