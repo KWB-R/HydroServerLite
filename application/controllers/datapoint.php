@@ -226,7 +226,7 @@ class Datapoint extends MY_Controller {
 				// Is this the header row?
 				if ($row == 0)
 				{
-					if (!$this->handleHeaderRow($data, $check, $columnIndex))
+					if (!$this->handleHeaderRow($data, $check, $file, $columnIndex))
 					{
 						return false;
 					}
@@ -254,7 +254,7 @@ class Datapoint extends MY_Controller {
 		return $dataset;
 	}
 
-	private function handleHeaderRow($data, $check, &$columnIndex)
+	private function handleHeaderRow($data, $check, $file, &$columnIndex)
 	{
 		$captionString = "LocalDateTime,DataValue";
 
@@ -287,10 +287,7 @@ class Datapoint extends MY_Controller {
 
 		if (!$found)
 		{
-			addError(getTxt('InvalidHeading') . implode(",", $captions) .
-				" (missing: " . implode(", ", $missing) . ")" .
-				getTxt('PleaseFix')
-			);
+			addError($this->headerErrorMessage($captions, $missing, $file));
 		}
 
 		return $found;
@@ -430,16 +427,19 @@ class Datapoint extends MY_Controller {
 	
 	private function idErrorMessage($idName, $row, $file)
 	{
-		$message = sprintf("%s %s. Row: %s", 
-			getTxt('invalid'), getTxt($idName), $this->fileLocationString($row, $file)
-		);
+		$message = sprintf("%s %s. Row:", getTxt('invalid'), getTxt($idName));
 
-		return $message . getTxt('PleaseFix');
+		return $this->fileErrorMessage($message, $row, $file);
 	}
 
 	private function typeErrorMessage($errorKey, $row, $file, $error = "")
 	{
-	  $message = getTxt($errorKey) . " " . $this->fileLocationString($row, $file);
+		return $this->fileErrorMessage(getTxt($errorKey), $row, $file, $error);
+	}
+
+	private function fileErrorMessage($message, $row, $file, $error = "")
+	{
+		$message .= sprintf(" %d %s %s", $row, getTxt('In'), $file['file_name']);
 
 		if ($error != "") {
 			$message .= " (" . $error . ")";
@@ -457,9 +457,12 @@ class Datapoint extends MY_Controller {
 		);
 	}
 
-	private function fileLocationString($row, $file)
+	private function headerErrorMessage($captions, $missing, $file)
 	{
-		return sprintf("%d %s %s", $row, getTxt('In'), $file['file_name']);		
+		$message = getTxt('InvalidHeading') . implode(",", $captions) . ". Row";
+		$error = "missing: " . implode(", ", $missing);
+
+		return $this->fileErrorMessage($message, 1, $file, $error);
 	}
 
 	public function importfile()
