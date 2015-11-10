@@ -507,28 +507,40 @@ class Datapoint extends MY_Controller {
 	
 	public function getData()
 	{
-		$required = array('varid', 'siteid', 'meth', 'startdate', 'enddate');
+		$method = 'getData';
+		$inputs = NULL;
 
-		$inputs = $this->getInputs($required);
-
-		$missing = $this->getMissing($inputs);
-
-		if (count($missing) == 0)
+		if ($this->getAndValidateInputs($method, $inputs))
 		{
-			$result = $this->datapoints->getData($inputs['siteid'],	$inputs['varid'],
-				$inputs['meth'], $inputs['startdate'], $inputs['enddate']
+			$result = $this->datapoints->getData(
+				$inputs['SiteID'],
+				$inputs['VariableID'],
+				$inputs['MethodID'],
+				$inputs['startdate'],
+				$inputs['enddate']
 			);
 
-			$variable = $this->variables->getVariableWithUnit($inputs['varid'])[0];
+			$variable = $this->variables->getVariableWithUnit($inputs['VariableID']);
 
 			// [deleted because not used: Additional logic to get the unit...]
 
-			$this->echoJavaScriptAssignment($result, $variable['NoDataValue']);
+			$this->echoJavaScriptAssignment($result, $variable[0]['NoDataValue']);
 		}
 		else
 		{
-			$this->loadApiErrorView('getData');
+			$this->loadApiErrorView($method);
 		}
+	}
+
+	private function getAndValidateInputs($method, &$inputs)
+	{
+		$config = $this->getApiConfiguration($method);
+
+		$inputs = $this->getInputs($config['parameterMapping']);
+
+		$missing = $this->getMissing($inputs);
+
+		return (count($missing) == 0);
 	}
 
 	private function echoJavaScriptAssignment($rows, $noValue)
@@ -571,10 +583,7 @@ class Datapoint extends MY_Controller {
 
 	private function getInputs($names)
 	{
-		return array_combine(
-			$names,                                           // keys 
-			array_map(array($this, "getInputOrTRUE"), $names) // values
-		);		
+		return array_map(array($this, "getInputOrTRUE"), $names);
 	}
 
 	private function getInputOrTRUE($name)
@@ -608,27 +617,50 @@ class Datapoint extends MY_Controller {
 	{
 		// same parameters and example for getData, getDataJSON and export
 		if (in_array($method, array('getData', 'getDataJSON', 'export'))) {
+			$parameterMapping = array(
+				'VariableID' => 'varid',
+				'SiteID' => 'siteid',
+				'MethodID' => 'meth',
+				'startdate' => 'startdate',
+				'enddate' => 'enddate'
+			);
 			$parameters = "VariableID, SiteID, MethodID";
 			$example = "$method?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
 		}
 		elseif ($method == 'delete') {
+			$parameterMapping = array();
 			$parameters = "ValueID";
 			$example = "delete/1";
 		}
 		elseif ($method == 'edit') {
+			$parameterMapping = array(
+				'DataValue' => 'val',
+				'date' => 'dt',
+				'time' => 'time'
+			);
 			$parameters = "ValueID, date, time, value";
 			$example = "edit/1?val=2&dt=2001-01-01&time=12:00";
 		}
 		elseif ($method == 'add') {
+			$parameterMapping = array(
+				'VariableID' => 'varid',
+				'DataValue' => 'val',
+				'date' => 'dt',
+				'time' => 'time',
+				'SiteID' => 'sid',
+				'MethodID' => 'mid'
+			);
 			$parameters = "VariableID, date, time, value, SiteID, MethodID";
 			$example = "add?val=2&dt=2001-01-01&time=12:00&sid=1&mid=1&varid=1";
 		}
 		elseif ($method == 'compare') {
+			$parameterMapping = array();
 			$parameters = "compareID";
 			$example = "compare/1";
 		}
 		
 		return array(
+			'parameterMapping' => $parameterMapping,
 			'parameters' => $parameters, 
 			'example' => $example
 		);
@@ -636,23 +668,24 @@ class Datapoint extends MY_Controller {
 
 	public function getDataJSON()
 	{
-		$required = array('varid', 'siteid', 'meth', 'startdate', 'enddate');
+		$method = 'getDataJSON';
+		$inputs = NULL;
 
-		$inputs = $this->getInputs($required);
-
-		$missing = $this->getMissing($inputs);
-
-		if (count($missing) == 0)
+		if ($this->getAndValidateInputs($method, $inputs))
 		{
-			$result = $this->datapoints->getData($inputs['siteid'], $inputs['varid'],
-				$inputs['meth'], $inputs['startdate'], $inputs['enddate']
+			$result = $this->datapoints->getData(
+				$inputs['SiteID'],
+				$inputs['VariableID'],
+				$inputs['MethodID'],
+				$inputs['startdate'],
+				$inputs['enddate']
 			);
 			
 			echo json_encode($result);
 		}
 		else
 		{
-			$this->loadApiErrorView('getDataJSON');
+			$this->loadApiErrorView($method);
 		}	
 	}
 	
@@ -688,29 +721,31 @@ class Datapoint extends MY_Controller {
 
 	public function edit()
 	{
+		$method = 'edit';
+		$inputs = NULL;
+
 		$valueid = end($this->uri->segment_array());
-		if($valueid=="edit")
+
+		if ($valueid == $method)
 		{
-			$this->loadApiErrorView('edit');
+			$this->loadApiErrorView($method);
 			return;
 		}
 
-		$required = array('val', 'dt', 'time');
-		
-		$inputs = $this->getInputs($required);
-		
-		$missing = $this->getMissing($inputs);
-				
-		if ($valueid !== false && count($missing) == 0)
+		$valid = $this->getAndValidateInputs($method, $inputs);
+
+		if ($valid and ($valueid !== false))
 		{
-			$LocalDateTime = sprintf("%s %s:00", $inputs['dt'], $inputs['time']);
+			$LocalDateTime = sprintf("%s %s:00", $inputs['date'], $inputs['time']);
+
 			$localtimestamp = strtotime($LocalDateTime);
+
 			$ms = $this->config->item('UTCOffset') * 3600;
 
 			$DateTimeUTC = date("Y-m-d H:i:s", $localtimestamp - $ms);
 
-			$result = $this->datapoints->editPoint($valueid, $inputs['val'],
-				$LocalDateTime, $DateTimeUTC
+			$result = $this->datapoints->editPoint(
+				$valueid, $inputs['DataValue'],	$LocalDateTime, $DateTimeUTC
 			);
 
 			$this->updateSeriesCatalogIf($result);
@@ -721,28 +756,28 @@ class Datapoint extends MY_Controller {
 		}
 		else
 		{
-			$this->loadApiErrorView('edit');
+			$this->loadApiErrorView($method);
 		}	
 	}
 	
 	public function export()
 	{
-		$required = array('varid', 'siteid', 'meth', 'startdate', 'enddate');
+		$method = 'export';
+		$inputs = NULL;
 
-		$inputs = $this->getInputs($required);
-
-		$missing = $this->getMissing($inputs);
-	
-		if (count($missing) == 0)
+		if ($this->getAndValidateInputs($method, $inputs))
 		{		
 			$this->load->dbutil();
 
 			$result = $this->datapoints->getResultData(
-				$inputs['siteid'], $inputs['varid'], $inputs['meth'], 
-				$inputs['startdate'], $inputs['enddate']
+				$inputs['SiteID'],
+				$inputs['VariableID'],
+				$inputs['MethodID'],
+				$inputs['startdate'],
+				$inputs['enddate']
 			);
 
-			$filename = 'HSLDataSite' . $inputs['siteid'] . '.csv';
+			$filename = 'HSLDataSite' . $inputs['SiteID'] . '.csv';
 			
 			header('Content-Type: text/csv');
 			header("Content-Disposition: attachment; filename=$filename");
@@ -751,26 +786,28 @@ class Datapoint extends MY_Controller {
 		}
 		else
 		{
-			$this->loadApiErrorView('export');
+			$this->loadApiErrorView($method);
 		}	
 	}
-	
+
 	public function add()
 	{	
-		$required = array('varid', 'val', 'dt', 'time', 'sid', 'mid');
-
-		$inputs = $this->getInputs($required);
-
-		$missing = $this->getMissing($inputs);
+		$method = 'add';
+		$inputs = NULL;
 		
-		if (count($missing) == 0)
+		if ($this->getAndValidateInputs($method, $inputs))
 		{
-			$source = $this->sc->getSourceBySite($inputs['sid']);
+			$source = $this->sc->getSourceBySite($inputs['SiteID']);
 			$sourceID = $source[0]['SourceID'];
 		
-			$dataPoint = $this->createDP($inputs['dt'], $inputs['time'],
-				$inputs['val'], $inputs['sid'], $inputs['varid'],
-				$inputs['mid'], $sourceID
+			$dataPoint = $this->createDP(
+				$inputs['date'],
+				$inputs['time'],
+				$inputs['DataValue'],
+				$inputs['SiteID'],
+				$inputs['VariableID'],
+				$inputs['MethodID'],
+				$sourceID
 			);
 
 			$result = $this->datapoints->addPoint($dataPoint);
@@ -786,7 +823,7 @@ class Datapoint extends MY_Controller {
 		}		
 		else
 		{
-			$this->loadApiErrorView('add');
+			$this->loadApiErrorView($method);
 		}	
 	}
 	
