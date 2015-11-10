@@ -283,14 +283,31 @@ class Datapoint extends MY_Controller {
 			return ($i === -1);
 		}));
 
-		$found = (count($missing) == 0);
-
-		if (!$found)
+		$valid = TRUE;
+		
+		if (count($missing) > 0)
 		{
+			$valid = FALSE;
 			addError($this->headerErrorMessage($captions, $missing, $file));
 		}
 
-		return $found;
+		if (!$check)
+		{
+			// Are captions found that we do not expect?
+			if (in_array('SourceID', $data)	or in_array('SiteID', $data) 
+				or in_array('VariableID', $data) or in_array('MethodID', $data)
+			)
+			{
+				$valid = FALSE;
+				addError("I found one of the columns 'SourceID', 'SiteID', " . 
+					"'VariableID', 'MethodID' in " . $file['file_name']. " " .
+					"which I do not expect since you selected these IDs in the form. " .
+					"Did you forget to check the \"ID's in File?\" option?"
+				);
+			}
+		}
+
+		return $valid;
 	}
 
 	private function handleDataRow
