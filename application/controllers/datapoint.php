@@ -507,24 +507,30 @@ class Datapoint extends MY_Controller {
 	
 	public function getData()
 	{
-		$method = 'getData';
+		$this->getData_generic('getData');
+	}
+
+	public function getDataJSON()
+	{
+		$this->getData_generic('getDataJSON');
+	}
+
+	public function export()
+	{
+		$this->getData_generic('export');
+	}
+
+	private function getData_generic($method)
+	{
 		$inputs = NULL;
 
 		if ($this->getAndValidateInputs($method, $inputs))
 		{
-			$result = $this->datapoints->getData(
-				$inputs['SiteID'],
-				$inputs['VariableID'],
-				$inputs['MethodID'],
-				$inputs['startdate'],
-				$inputs['enddate']
-			);
+			// The data fetched depends on the method
+			$result = $this->getDataFromModel($method, $inputs);
 
-			$variable = $this->variables->getVariableWithUnit($inputs['VariableID']);
-
-			// [deleted because not used: Additional logic to get the unit...]
-
-			$this->echoJavaScriptAssignment($result, $variable[0]['NoDataValue']);
+			// The output action also depends on the method
+			$this->outputOrExportData($method, $inputs, $result);
 		}
 		else
 		{
@@ -541,6 +547,69 @@ class Datapoint extends MY_Controller {
 		$missing = $this->getMissing($inputs);
 
 		return (count($missing) == 0);
+	}
+
+	private function getDataFromModel($method, $inputs)
+	{
+		// hsonne: What is the difference in the result?
+		if (($method == 'getData') or ($method == 'getDataJSON'))
+		{
+			$result = $this->datapoints->getData(
+				$inputs['SiteID'],
+				$inputs['VariableID'],
+				$inputs['MethodID'],
+				$inputs['startdate'],
+				$inputs['enddate']
+			);
+		}
+		else if ($method == 'export')
+		{
+			$result = $this->datapoints->getResultData(
+				$inputs['SiteID'],
+				$inputs['VariableID'],
+				$inputs['MethodID'],
+				$inputs['startdate'],
+				$inputs['enddate']
+			);
+		}
+		else
+		{
+			addError("Unknown method in outputOrExportData: ", $method);
+		}
+
+		return $result;
+	}
+
+	private function outputOrExportData($method, $inputs, $result)
+	{
+		if ($method == 'getData')
+		{
+			// hsonne: Why filter for non-NoDataValues only for getData?
+			$variable = $this->variables->getVariableWithUnit($inputs['VariableID']);
+
+			// [deleted because not used: Additional logic to get the unit...]
+
+			$noValue = ((count($variable) > 0)? $variable[0]['NoDataValue'] : -9999);
+
+			$this->echoJavaScriptAssignment($result, $noValue);
+		}
+		elseif ($method == 'getDataJSON')
+		{
+			echo json_encode($result);
+		}
+		elseif ($method == 'export')
+		{
+			$filename = 'HSLDataSite' . $inputs['SiteID'] . '.csv';
+
+			header('Content-Type: text/csv');
+			header("Content-Disposition: attachment; filename=$filename");
+
+			$this->load->dbutil();
+			echo $this->dbutil->csv_from_result($result);
+		}
+		else {
+			addError("Unknown method in outputOrExportData: ", $method);
+		}
 	}
 
 	private function echoJavaScriptAssignment($rows, $noValue)
@@ -666,29 +735,6 @@ class Datapoint extends MY_Controller {
 		);
 	}
 
-	public function getDataJSON()
-	{
-		$method = 'getDataJSON';
-		$inputs = NULL;
-
-		if ($this->getAndValidateInputs($method, $inputs))
-		{
-			$result = $this->datapoints->getData(
-				$inputs['SiteID'],
-				$inputs['VariableID'],
-				$inputs['MethodID'],
-				$inputs['startdate'],
-				$inputs['enddate']
-			);
-			
-			echo json_encode($result);
-		}
-		else
-		{
-			$this->loadApiErrorView($method);
-		}	
-	}
-	
 	public function delete()
 	{
 		$valueid = end($this->uri->segment_array());
@@ -753,36 +799,6 @@ class Datapoint extends MY_Controller {
 			$output = array("status" => $this->successStatus($result));
 
 			echo json_encode($output);
-		}
-		else
-		{
-			$this->loadApiErrorView($method);
-		}	
-	}
-	
-	public function export()
-	{
-		$method = 'export';
-		$inputs = NULL;
-
-		if ($this->getAndValidateInputs($method, $inputs))
-		{		
-			$this->load->dbutil();
-
-			$result = $this->datapoints->getResultData(
-				$inputs['SiteID'],
-				$inputs['VariableID'],
-				$inputs['MethodID'],
-				$inputs['startdate'],
-				$inputs['enddate']
-			);
-
-			$filename = 'HSLDataSite' . $inputs['SiteID'] . '.csv';
-			
-			header('Content-Type: text/csv');
-			header("Content-Disposition: attachment; filename=$filename");
-			
-			echo $this->dbutil->csv_from_result($result);
 		}
 		else
 		{
