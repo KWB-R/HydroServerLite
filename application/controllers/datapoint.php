@@ -448,6 +448,15 @@ class Datapoint extends MY_Controller {
 		return $message . getTxt('PleaseFix');
 	}
 
+	private function apiErrorMessage($parameters, $example)
+	{
+		return sprintf(
+			"One of the parameters: %s is not defined. " .
+			"An example request would be: %s",
+			$parameters, $example
+		);
+	}
+
 	private function fileLocationString($row, $file)
 	{
 		return sprintf("%d %s %s", $row, getTxt('In'), $file['file_name']);		
@@ -566,6 +575,17 @@ class Datapoint extends MY_Controller {
 
 	private function loadApiErrorView($method)
 	{
+		$config = $this->getApiConfiguration($method);
+
+		$data['errorMsg'] = $this->apiErrorMessage(
+			$config['parameters'], $config['example']
+		);
+
+		$this->load->view('templates/apierror', $data);
+	}
+
+	private function getApiConfiguration($method)
+	{
 		// same parameters and example for getData, getDataJSON and export
 		if (in_array($method, array('getData', 'getDataJSON', 'export'))) {
 			$parameters = "VariableID, SiteID, MethodID";
@@ -587,14 +607,11 @@ class Datapoint extends MY_Controller {
 			$parameters = "compareID";
 			$example = "compare/1";
 		}
-
-		$data['errorMsg'] = sprintf(
-			"One of the parameters: %s is not defined. " .
-			"An example request would be: %s",
-			$parameters, $example
+		
+		return array(
+			'parameters' => $parameters, 
+			'example' => $example
 		);
-
-		$this->load->view('templates/apierror', $data);
 	}
 
 	public function getDataJSON()
