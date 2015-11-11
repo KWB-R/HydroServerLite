@@ -25,31 +25,32 @@ class Datapoint extends MY_Controller {
 		$this->load->model($modelName, '', TRUE);
 	}
 
-	private function createDP($date,$time,$val,$siteid,$varid,$methid,$sourceid)
+	private function createDataPoint($fields)
 	{
 		$dateFormat = "Y-m-d H:i:s";
 		
-		$localtimestamp = strtotime($date . " " . $time);
+		$localtimestamp = strtotime($fields['date'] . " " . $fields['time']);
+
 		$offsetInSeconds = $this->config->item('UTCOffset') * 3600;
 		
 		$dataPoint = array(
-			'DataValue' => $val,  
+			'DataValue' => $fields['DataValue'],
 			'LocalDateTime' => date($dateFormat, $localtimestamp), 
 			'DateTimeUTC' => date($dateFormat, $localtimestamp - $offsetInSeconds), 
-			'SiteID' => $siteid,
-			'VariableID' => $varid, 
-			'MethodID' => $methid, 
-			'SourceID' => $sourceid
+			'SiteID' => $fields['SiteID'],
+			'VariableID' => $fields['VariableID'],
+			'MethodID' => $fields['MethodID'],
+			'SourceID' => $fields['SourceID']
 		);
 
-		$fields = array(
+		$configFields = array(
 			'ValueAccuracy', 'UTCOffset', 'OffsetValue', 'OffsetTypeID',	
 			'CensorCode', 'QualifierID', 'SampleID', 'DerivedFromID', 
 			'QualityControlLevelID'
 		);
 		
-		foreach ($fields as $field) {
-			$dataPoint[$field] = $this->getConfigItem($field);
+		foreach ($configFields as $configField) {
+			$dataPoint[$configField] = $this->getConfigItem($configField);
 		}
 
 		return $dataPoint;
@@ -186,15 +187,15 @@ class Datapoint extends MY_Controller {
 
 	private function createDataPointFromInputs($postfix = '')
 	{
-		return $this->createDP(
-			$this->input->post('datepicker' . $postfix),
-			$this->input->post('timepicker' . $postfix),
-			$this->input->post('value' . $postfix),
-			$this->input->post('SiteID'),
-			$this->input->post('VariableID' . $postfix),
-			$this->input->post('MethodID' . $postfix),
-			$this->input->post('SourceID')
-		);
+		return $this->createDataPoint(array(
+			'date' => $this->input->post('datepicker' . $postfix),
+			'time' => $this->input->post('timepicker' . $postfix),
+			'DataValue' => $this->input->post('value' . $postfix),
+			'SiteID' => $this->input->post('SiteID'),
+			'VariableID' => $this->input->post('VariableID' . $postfix),
+			'MethodID' => $this->input->post('MethodID' . $postfix),
+			'SourceID' => $this->input->post('SourceID')
+		));
 	}
 
 	private function fileUploadHandler()
@@ -395,15 +396,15 @@ class Datapoint extends MY_Controller {
 			}
 		}
 	
-		return $this->createDP(
-			$date->format("Y-m-d"),
-			$date->format("H:i:s"),
-			$value,
-			$keyIDs['Site'],
-			$keyIDs['Variable'],
-			$keyIDs['Method'],
-			$keyIDs['Source']
-		);
+		return $this->createDataPoint(array(
+			'date' => $date->format("Y-m-d"),
+			'time' => $date->format("H:i:s"),
+			'DataValue' => $value,
+			'SiteID' => $keyIDs['Site'],
+			'VariableID' => $keyIDs['Variable'],
+			'MethodID' => $keyIDs['Method'],
+			'SourceID' => $keyIDs['Source']
+		));
 	}
 
 	private function getExistingIDs()
@@ -850,15 +851,9 @@ class Datapoint extends MY_Controller {
 			$source = $this->sc->getSourceBySite($inputs['SiteID']);
 			$sourceID = $source[0]['SourceID'];
 		
-			$dataPoint = $this->createDP(
-				$inputs['date'],
-				$inputs['time'],
-				$inputs['DataValue'],
-				$inputs['SiteID'],
-				$inputs['VariableID'],
-				$inputs['MethodID'],
-				$sourceID
-			);
+			$inputs['SourceID'] = $sourceID;
+
+			$dataPoint = $this->createDataPoint($inputs);
 
 			$result = $this->datapoints->addPoint($dataPoint);
 
