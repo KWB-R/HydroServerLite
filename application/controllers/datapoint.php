@@ -67,31 +67,85 @@ class Datapoint extends MY_Controller {
 	}
 	
 	public function addvalue()
-	{		
-		if($_POST)
+	{
+		$this->addvalue_generic('addvalue');
+	}
+
+	public function addmultiplevalues()
+	{
+		$this->addvalue_generic('addmultiplevalues');
+	}
+
+	private function addvalue_generic($method)
+	{
+		if ($_POST)
 		{
-			$this->setFormValidationRules();
+			if ($method == 'addvalue')
+			{
+				$this->setFormValidationRules();
+				$valid = $this->form_validation->run();
+			}
+			else
+			{
+				// hsonne: no form validation for 'addmultiplevalues'?
+				$valid = TRUE;
+			}
+
+			if ($valid)
+			{
+				$success = $this->applyMethod($method);
+
+				$successKey = (($method == 'addvalue')?
+					'ValueSuccessfully' : 'DataEnteredSuccessfully'
+				);
+
+				$this->addSuccessOrError($success, $successKey);
+			}
+			else
+			{
+				$errors = validation_errors();
+
+				if (! empty($errors))
+				{
+					addError($errors);
+				}
+			}
 		}
+
+		// Set style and option values (sources, variables) and load the view
+		$variableOptions = ($method == 'addvalue');
 		
-		if ($this->form_validation->run() == FALSE)
-		{
-			  $errors = validation_errors();
-			  if(!empty($errors))
-			  {
-			  	addError($errors);
-			  }
-		}
-		else
+		$this->loadViewWithStyleAndOptions("datapoint/$method", $variableOptions);
+	}
+
+	private function applyMethod($method)
+	{
+		if ($method == 'addvalue')
 		{
 			$result = $this->datapoints->addPoint(
 				$this->createDataPointFromInputs()
 			);
 			
-			$this->addSuccessOrError($result, 'ValueSuccessfully');
+			$success = $result;
 		}
-		
-		// Set style and option values (sources, variables) and load the view
-		$this->loadViewWithStyleAndOptions('datapoint/addvalue');
+		elseif ($method == 'addmultiplevalues')
+		{
+			$rows = $this->input->post('finalRows');
+
+			$dataset = array_map(
+				array($this, "createDataPointFromInputs"), // callback function
+				range(1, $rows)                            // array to loop through
+			);
+
+			$result = $this->datapoints->addPoints($dataset);
+			$success = ($result == $rows);
+		}
+		else
+		{
+			addError("Unknown method in applyMethod: $method");
+		}
+
+		return $success;
 	}
 
 	private function loadViewWithStyleAndOptions($view, $setVariableOptions = TRUE)
@@ -141,26 +195,6 @@ class Datapoint extends MY_Controller {
 			$this->input->post('MethodID' . $postfix),
 			$this->input->post('SourceID')
 		);
-	}
-
-	public function addmultiplevalues()
-	{	
-		if($_POST)
-		{
-			$rows = $this->input->post('finalRows');
-			
-			$dataset = array_map(
-				array($this, "createDataPointFromInputs"), // callback function
-				range(1, $rows)                            // array to loop through
-			);
-			
-			$result = $this->datapoints->addPoints($dataset);
-	
-			$this->addSuccessOrError($result == $rows, 'DataEnteredSuccessfully');			
-		}
-		
-		// Set style and option values (sources only) and load the view
-		$this->loadViewWithStyleAndOptions('datapoint/addmultiplevalues', FALSE);
 	}
 
 	private function fileUploadHandler()
