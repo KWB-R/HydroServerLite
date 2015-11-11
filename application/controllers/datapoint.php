@@ -77,8 +77,24 @@ class Datapoint extends MY_Controller {
 		$this->addvalue_generic('addmultiplevalues');
 	}
 
+	public function importfile()
+	{
+		$this->addvalue_generic('importfile');
+	}
+
 	private function addvalue_generic($method)
 	{
+		// Define the keys of the messages in the language table to be shown on
+		// success (at index 0) and an error message (if required, at index 1)
+		$messageKeys = array(
+			'addvalue' => array('ValueSuccessfully', ''),
+			'addmultiplevalues' => array('DataEnteredSuccessfully', ''),
+			'importfile' => array('Success', 'Error in data input')
+		);
+
+		// Array of files to be imported (only relevant for method 'importfile')
+		$files = NULL;
+
 		if ($_POST)
 		{
 			if ($method == 'addvalue')
@@ -86,21 +102,28 @@ class Datapoint extends MY_Controller {
 				$this->setFormValidationRules();
 				$valid = $this->form_validation->run();
 			}
-			else
+			elseif ($method == 'addmultiplevalues')
 			{
 				// hsonne: no form validation for 'addmultiplevalues'?
 				$valid = TRUE;
 			}
+			elseif ($method == 'importfile')
+			{
+				$files = $this->fileUploadHandler();
+				$valid = $files;
+			}
 
 			if ($valid)
 			{
-				$success = $this->applyMethod($method);
+				$success = $this->applyMethod($method, $files);
 
-				$successKey = (($method == 'addvalue')?
-					'ValueSuccessfully' : 'DataEnteredSuccessfully'
-				);
-
-				$this->addSuccessOrError($success, $successKey);
+				// since method 'importfile' shows its own error messages show
+				// only success message here for this method
+				if (($method != 'importfile') or $success)
+				{
+					$this->addSuccessOrError($success, $messageKeys[$method][0],
+						$messageKeys[$method][1]);
+				}
 			}
 			else
 			{
@@ -114,12 +137,12 @@ class Datapoint extends MY_Controller {
 		}
 
 		// Set style and option values (sources, variables) and load the view
-		$variableOptions = ($method == 'addvalue');
+		$variableOptions = ($method != 'addmultiplevalues');
 		
 		$this->loadViewWithStyleAndOptions("datapoint/$method", $variableOptions);
 	}
 
-	private function applyMethod($method)
+	private function applyMethod($method, $files = NULL)
 	{
 		if ($method == 'addvalue')
 		{
@@ -140,6 +163,17 @@ class Datapoint extends MY_Controller {
 
 			$result = $this->datapoints->addPoints($dataset);
 			$success = ($result == $rows);
+		}
+		elseif ($method == 'importfile')
+		{
+			$dataset = $this->processFiles($files);
+
+			if ($dataset)
+			{
+				$result = $this->datapoints->addPoints($dataset);
+			}
+
+			$success = ($dataset and $result);
 		}
 		else
 		{
@@ -515,29 +549,6 @@ class Datapoint extends MY_Controller {
 		$error = "missing: " . implode(", ", $missing);
 
 		return $this->fileErrorMessage($message, 1, $file, $error);
-	}
-
-	public function importfile()
-	{
-		if ($_POST)
-		{
-			$result = $this->fileUploadHandler();
-
-			if ($result)
-			{
-				$dataset = $this->processFiles($result);
-
-				if ($dataset)
-				{
-					$result = $this->datapoints->addPoints($dataset);
-					
-					$this->addSuccessOrError($result, 'Success', 'Error in data input');
-				}
-			}
-		}
-		
-		// Set style and option values (sources, variables) and load the view
-		$this->loadViewWithStyleAndOptions('datapoint/importfile');
 	}
 	
 	public function getData()
