@@ -134,7 +134,7 @@ class Datapoint extends MY_Controller {
 					addError($errors);
 				}
 			}
-		}
+		} // if ($_POST)
 
 		// Set style and option values (sources, variables) and load the view
 		$variableOptions = ($method != 'addmultiplevalues');
@@ -146,9 +146,9 @@ class Datapoint extends MY_Controller {
 	{
 		if ($method == 'addvalue')
 		{
-			$result = $this->datapoints->addPoint(
-				$this->createDataPointFromInputs()
-			);
+			$datapoint = $this->createDataPoint($this->inputsToDataPointFields());
+			
+			$result = $this->datapoints->addPoint($datapoint);
 			
 			$success = $result;
 		}
@@ -157,8 +157,11 @@ class Datapoint extends MY_Controller {
 			$rows = $this->input->post('finalRows');
 
 			$dataset = array_map(
-				array($this, "createDataPointFromInputs"), // callback function
-				range(1, $rows)                            // array to loop through
+				function($i) // callback function (defined inline)
+				{ 
+					return $this->createDataPoint($this->inputsToDataPointFields());
+				},
+				range(1, $rows) // array to loop through (values 1...$rows)
 			);
 
 			$result = $this->datapoints->addPoints($dataset);
@@ -219,9 +222,9 @@ class Datapoint extends MY_Controller {
 		$this->form_validation->set_rules('timepicker', 'SiteID', 'trim|required');
 	}
 
-	private function createDataPointFromInputs($postfix = '')
+	private function inputsToDataPointFields($postfix = '')
 	{
-		return $this->createDataPoint(array(
+		return array(
 			'date' => $this->input->post('datepicker' . $postfix),
 			'time' => $this->input->post('timepicker' . $postfix),
 			'DataValue' => $this->input->post('value' . $postfix),
@@ -229,7 +232,7 @@ class Datapoint extends MY_Controller {
 			'VariableID' => $this->input->post('VariableID' . $postfix),
 			'MethodID' => $this->input->post('MethodID' . $postfix),
 			'SourceID' => $this->input->post('SourceID')
-		));
+		);
 	}
 
 	private function fileUploadHandler()
