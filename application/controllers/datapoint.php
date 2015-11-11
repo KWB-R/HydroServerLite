@@ -737,50 +737,45 @@ class Datapoint extends MY_Controller {
 
 	public function delete()
 	{
-		$valueid = end($this->uri->segment_array());
-		if($valueid=="delete")
-		{
-			$this->loadApiErrorView('delete');
-			return;
-		}
-		$result = $this->datapoints->delete($valueid);
-
-		$this->updateSeriesCatalogIf($result);
-
-		$output = array("status" => $this->successStatus($result));
-
-		echo json_encode($output);
+		$this->action_generic('delete');
 	}
 	
-	private function updateSeriesCatalogIf($success)
-	{
-		if($success)
-		{
-			$this->updateSC();
-		}
-	}
-
-	private function successStatus($success)
-	{
-		return (($success)? "success" : "failed");
-	}
-
 	public function edit()
 	{
-		$method = 'edit';
+		$this->action_generic('edit');
+	}
+
+	private function action_generic($method)
+	{
 		$inputs = NULL;
 
 		$valueid = end($this->uri->segment_array());
 
-		if ($valueid == $method)
+		if (($valueid !== $method) and ($valueid !== false)
+			and $this->getAndValidateInputs($method, $inputs)
+		)
+		{
+			$result = $this->applyAction($valueid, $method, $inputs);
+
+			$this->updateSeriesCatalogIf($result);
+
+			$output = array("status" => $this->successStatus($result));
+
+			echo json_encode($output);
+		}
+		else 
 		{
 			$this->loadApiErrorView($method);
-			return;
 		}
+	}
 
-		$valid = $this->getAndValidateInputs($method, $inputs);
-
-		if ($valid and ($valueid !== false))
+	private function applyAction($valueid, $method, $inputs)
+	{
+		if ($method == 'delete')
+		{
+			$result = $this->datapoints->delete($valueid);
+		}
+		else if ($method == 'edit')
 		{
 			$LocalDateTime = sprintf("%s %s:00", $inputs['date'], $inputs['time']);
 
@@ -793,17 +788,22 @@ class Datapoint extends MY_Controller {
 			$result = $this->datapoints->editPoint(
 				$valueid, $inputs['DataValue'],	$LocalDateTime, $DateTimeUTC
 			);
-
-			$this->updateSeriesCatalogIf($result);
-
-			$output = array("status" => $this->successStatus($result));
-
-			echo json_encode($output);
 		}
-		else
+
+		return $result;
+	}
+
+	private function updateSeriesCatalogIf($success)
+	{
+		if($success)
 		{
-			$this->loadApiErrorView($method);
-		}	
+			$this->updateSC();
+		}
+	}
+
+	private function successStatus($success)
+	{
+		return (($success)? "success" : "failed");
 	}
 
 	public function add()
