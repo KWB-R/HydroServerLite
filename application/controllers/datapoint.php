@@ -166,7 +166,7 @@ class Datapoint extends MY_Controller {
 		}
 		elseif ($method == 'importfile')
 		{
-			$dataset = $this->processFiles($files);
+			$dataset = $this->processFiles($files, $this->input->post('valueSpec'));
 
 			if ($dataset)
 			{
@@ -256,10 +256,8 @@ class Datapoint extends MY_Controller {
 		return $this->upload->get_multi_upload_data();
 	}
 	
-	private function processFiles($files)
+	private function processFiles($files, $check)
 	{
-		$check = $this->input->post('valueSpec');
-
 		if ($check)
 		{
 			//Values will be checked and fetched while processing.
