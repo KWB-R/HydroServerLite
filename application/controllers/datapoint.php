@@ -159,7 +159,7 @@ class Datapoint extends MY_Controller {
 			$dataset = array_map(
 				function($i) // callback function (defined inline)
 				{ 
-					return $this->createDataPoint($this->inputsToDataPointFields());
+					return $this->createDataPoint($this->inputsToDataPointFields($i));
 				},
 				range(1, $rows) // array to loop through (values 1...$rows)
 			);
