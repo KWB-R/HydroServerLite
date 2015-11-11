@@ -300,16 +300,16 @@ class Datapoint extends MY_Controller {
 				}
 				else 
 				{
-					$dataPoint = $this->handleDataRow(
+					$fields = $this->handleDataRow(
 						$data, $columnIndex, $keyIDs, $existingIDs, $row, $file
 					);
 
-					if (is_null($dataPoint))
+					if (is_null($fields))
 					{
 						return false;
 					}
 
-					$dataset[] = $dataPoint;
+					$dataset[] = $this->createDataPoint($fields);
 				}
 
 				$row++;
@@ -428,7 +428,7 @@ class Datapoint extends MY_Controller {
 			}
 		}
 	
-		return $this->createDataPoint(array(
+		return array(
 			'date' => $date->format("Y-m-d"),
 			'time' => $date->format("H:i:s"),
 			'DataValue' => $value,
@@ -436,7 +436,7 @@ class Datapoint extends MY_Controller {
 			'VariableID' => $keyIDs['Variable'],
 			'MethodID' => $keyIDs['Method'],
 			'SourceID' => $keyIDs['Source']
-		));
+		);
 	}
 
 	private function getExistingIDs()
