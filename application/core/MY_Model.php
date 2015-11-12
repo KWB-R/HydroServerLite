@@ -9,7 +9,37 @@ class MY_Model extends CI_Model
 	function getAll()
 	{
 		$query = $this->db->get($this->tableName);
+
 		return $this->tranResult($query->result_array());
+	}
+
+	function affectedRows()
+	{
+		$result = $this->db->affected_rows();
+
+		log_message('debug', "MY_Model::affectedRows: ".$result);
+
+		return $result;
+	}
+
+	function oneRowAffected()
+	{
+		$result = ($this->affectedRows() == 1);
+
+		log_message('debug', "MY_Model::oneRowAffected: ".
+			(($result)? "true" : "false"));
+
+		return $result;
+	}
+
+	function oneOrNoRowAffected()
+	{
+		return $this->affectedRows() >= 0;
+	}
+
+	function getResultArray()
+	{
+		return $this->db->get()->result_array();
 	}
 	
 	function tranResult($result)
@@ -35,6 +65,5 @@ class MY_Model extends CI_Model
 	{
 		return $value; //@TODO
 	}
-	
 }
-?>
+
