@@ -18,6 +18,7 @@ class Datapoint extends MY_Controller {
 		array_walk($models,  array($this, 'loadModel'));
 
 		$this->load->library('form_validation');
+		$this->load->library('API_Config');
 	}
 	
 	private function loadModel($modelName)
@@ -731,54 +732,70 @@ class Datapoint extends MY_Controller {
 
 	private function getApiConfiguration($method)
 	{
+		$currentDate = date('Y-m-d');
+		$currentTime = date('H:i');
+
 		// same parameters and example for getData, getDataJSON and export
-		if (in_array($method, array('getData', 'getDataJSON', 'export'))) {
-			$parameterMapping = array(
-				'VariableID' => 'varid',
-				'SiteID' => 'siteid',
-				'MethodID' => 'meth',
-				'startdate' => 'startdate',
-				'enddate' => 'enddate'
-			);
-			$parameters = "VariableID, SiteID, MethodID";
-			$example = "$method?varid=1&siteid=2&methodid=1&startdate=2012-04-02 00:00:00&enddate=2012-04-02 00:00:00";
-		}
-		elseif ($method == 'delete') {
-			$parameterMapping = array();
-			$parameters = "ValueID";
-			$example = "delete/1";
-		}
-		elseif ($method == 'edit') {
-			$parameterMapping = array(
-				'DataValue' => 'val',
-				'date' => 'dt',
-				'time' => 'time'
-			);
-			$parameters = "ValueID, date, time, value";
-			$example = "edit/1?val=2&dt=2001-01-01&time=12:00";
-		}
-		elseif ($method == 'add') {
-			$parameterMapping = array(
-				'VariableID' => 'varid',
-				'DataValue' => 'val',
-				'date' => 'dt',
-				'time' => 'time',
-				'SiteID' => 'sid',
-				'MethodID' => 'mid'
-			);
-			$parameters = "VariableID, date, time, value, SiteID, MethodID";
-			$example = "add?val=2&dt=2001-01-01&time=12:00&sid=1&mid=1&varid=1";
-		}
-		elseif ($method == 'compare') {
-			$parameterMapping = array();
-			$parameters = "compareID";
-			$example = "compare/1";
-		}
-		
+		$getParameters = array(
+			'VariableID' => API_Config::parameter('varid', '1'),
+			'SiteID' => API_Config::parameter('siteid', '1'),
+			'MethodID' => API_Config::parameter('meth', '1'),
+			'startdate' => API_Config::parameter('startdate', '2012-04-02 00:00:00', FALSE),
+			'enddate' => API_Config::parameter('enddate',
+				// use the current date and time as enddate
+				$currentDate . ' ' . $currentTime . ':00', // '2012-04-02 00:00:00'
+				FALSE
+			)
+		);
+
+		$config = array(
+			'getData' => $getParameters,
+			'getDataJSON' => $getParameters,
+			'export' => $getParameters,
+			'delete' => array(
+				'ValueID' => API_Config::parameter('')
+			),
+			'edit' => array(
+				'ValueID' => API_Config::parameter(''),
+				'date' => API_Config::parameter('dt',
+					// use the current date as date
+					$currentDate // '2001-01-01'
+				),
+				'time' => API_Config::parameter('time',
+					// use the current time as time
+					$currentTime // '12:00'
+				),
+				'DataValue' => API_Config::parameter('val', '2')
+			),
+			'add' => array(
+				'VariableID' => API_Config::parameter('varid', '1'),
+				'date' => API_Config::parameter('dt',
+					// use the current date as date
+					$currentDate // '2001-01-01'
+				),
+				'time' => API_Config::parameter('time',
+					// use the current time as time
+					$currentTime // '12:00'
+				),
+				'DataValue' => API_Config::parameter('val', '2'),
+				'SiteID' => API_Config::parameter('sid', '1'),
+				'MethodID' => API_Config::parameter('mid', '1')
+			),
+			'compare' => array(
+				'compareID' => API_Config::parameter('')
+			)
+		);
+
+		$methodConfig = $config[$method];
+		$validationConfig = API_Config::withName($methodConfig);
+
 		return array(
-			'parameterMapping' => $parameterMapping,
-			'parameters' => $parameters, 
-			'example' => $example
+			'parameterMapping' => array_combine(
+				array_keys($validationConfig),
+				array_column($validationConfig, 'name')
+			),
+			'parameters' => API_Config::requiredString($methodConfig),
+			'example' => API_Config::exampleCall($config, $method)
 		);
 	}
 
