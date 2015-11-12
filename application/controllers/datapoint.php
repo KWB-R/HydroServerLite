@@ -110,7 +110,7 @@ class Datapoint extends MY_Controller {
 			}
 			elseif ($method == 'importfile')
 			{
-				$files = $this->fileUploadHandler();
+				$files = $this->fileUploadHandler('csv|CSV', 'files');
 				$valid = $files;
 			}
 
@@ -236,30 +236,10 @@ class Datapoint extends MY_Controller {
 		);
 	}
 
-	private function fileUploadHandler()
-	{
-		$newDir = "./uploads/temp".time().rand();
-		$oldmask = umask(0);
-		$result = mkdir($newDir,0777);
-		umask($oldmask);
-		if(!$result)
-		{
-			addError(getTxt('FailTemp'));
-			return false;
-		}
-		
-		//Upload files. 
-		$config['upload_path'] = $newDir;
-		$config['allowed_types'] = 'csv|CSV';	
-		$this->load->library('upload', $config);
-		if ( ! $this->upload->do_multi_upload('files'))
-		  {
-			  addError(getTxt('FailMoveFile').$this->upload->display_errors());
-			  return false;
-		  }
-		return $this->upload->get_multi_upload_data();
-	}
-	
+	//
+	// private function fileUploadHandler() now defined in MY_Controller
+	//
+
 	private function processFiles($files, $check)
 	{
 		if ($check)

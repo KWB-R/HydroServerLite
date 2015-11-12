@@ -155,4 +155,33 @@ class MY_Controller extends CI_Controller {
 		}	
 	}
 
+	protected function fileUploadHandler($allowed_types, $field)
+	{
+		$newDir = "./uploads/temp".time().rand();
+
+		$oldmask = umask(0);
+		$result = mkdir($newDir,0777);
+		umask($oldmask);
+
+		if(!$result)
+		{
+			addError(getTxt('FailTemp'));
+			return false;
+		}
+
+		// Upload files
+		$config['upload_path'] = $newDir;
+		$config['allowed_types'] = $allowed_types;
+
+		$this->load->library('upload', $config);
+
+		if (! $this->upload->do_multi_upload($field))
+	  {
+		  addError(getTxt('FailMoveFile').$this->upload->display_errors());
+		  return false;
+	  }
+
+		return $this->upload->get_multi_upload_data();
+	}
 }
+

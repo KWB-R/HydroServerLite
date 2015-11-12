@@ -49,29 +49,11 @@ class Home extends MY_Controller {
 			}
 		}
 	}
-	private function fileUploadHandler()
-	{
-		$newDir = "./uploads/temp".time().rand();
-		$oldmask = umask(0);
-		$result = mkdir($newDir,0777);
-		umask($oldmask);
-		if(!$result)
-		{
-			addError(getTxt('FailTemp'));
-			return false;
-		}
-		
-		//Upload files. 
-		$config['upload_path'] = $newDir;
-		$config['allowed_types'] = 'jpg|csv|CSV';	
-		$this->load->library('upload', $config);
-		if ( ! $this->upload->do_multi_upload('custom'))
-		  {
-			  addError(getTxt('FailMoveFile').$this->upload->display_errors());
-			  return false;
-		  }
-		return $this->upload->get_multi_upload_data();
-	}
+
+	//
+	// private function fileUploadHandler() now defined in MY_Controller
+	//
+
 	public function edit()
 	{
 	$this->adminCheck();
@@ -79,21 +61,30 @@ class Home extends MY_Controller {
 	
 	if($_POST)
 	{
-		{
-			$this->form_validation->set_rules('title', 'Title', 'trim|required');
-			$this->form_validation->set_rules('groupname', 'Name', 'trim|required');	
-			$this->form_validation->set_rules('description', 'Description', 'trim|required');
-			$this->form_validation->set_rules('citation', 'Citation', 'trim|required');
+		$this->form_validation->set_rules('title', 'Title', 'trim|required');
+		$this->form_validation->set_rules('groupname', 'Name', 'trim|required');
+		$this->form_validation->set_rules('description', 'Description', 'trim|required');
+		$this->form_validation->set_rules('citation', 'Citation', 'trim|required');
 			
-		$welcome_page = array($this->input->post('title'),$this->input->post('groupname'),$this->input->post('description'),$this->input->post('citation'));
+		$welcome_page = array(
+			$this->input->post('title'),
+			$this->input->post('groupname'),
+			$this->input->post('description'),
+			$this->input->post('citation')
+		);
+
 		$welcome_page_info = json_encode(array_map('utf8_encode',$welcome_page));
-		if(file_exists('./uploads/' .$dbName. '.txt')){
-		unlink('./uploads/' .$dbName. '.txt');
+
+		if(file_exists('./uploads/' .$dbName. '.txt'))
+		{
+			unlink('./uploads/' .$dbName. '.txt');
 		}
-		write_file('./uploads/' .$dbName. '.txt',$welcome_page_info,'c+');
+
+		write_file('./uploads/' .$dbName. '.txt', $welcome_page_info,'c+');
+
 		addSuccess(getTxt('SiteSuccessfullyEdited'));
-		$this->fileUploadHandler();
-		}
+
+		$this->fileUploadHandler('jpg|csv|CSV', 'custom');
 	}
 	
 	$data=$this->StyleData;
