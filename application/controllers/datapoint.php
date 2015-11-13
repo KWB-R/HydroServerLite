@@ -627,7 +627,7 @@ class Datapoint extends MY_Controller {
 		}
 		elseif ($method == 'export')
 		{
-			$filename = 'HSLDataSite' . $inputs['SiteID'] . '.csv';
+			$filename = $this->toExportName($inputs);
 
 			header('Content-Type: text/csv');
 			header("Content-Disposition: attachment; filename=$filename");
@@ -669,6 +669,28 @@ class Datapoint extends MY_Controller {
 		}
 
 		echo("$EOL];");	
+	}
+
+	private function toExportName($inputs)
+	{
+		// Mapping between the keys in $inputs and short names in the file name
+		$shortNames = array(
+			'SiteID' => 'Site',
+			'VariableID' => 'Var',
+			'MethodID' => 'Meth'
+		);
+
+		$filename = 'HSL';
+
+		foreach($shortNames as $longName => $shortName)
+		{
+			if (isset($inputs[$longName]))
+			{
+				$filename .= sprintf('_%s_%s', $shortName, $inputs[$longName]);
+			}
+		}
+
+		return $filename . '.csv';
 	}
 
 	private function getMissing($values)
