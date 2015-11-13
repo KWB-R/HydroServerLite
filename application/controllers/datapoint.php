@@ -592,12 +592,20 @@ class Datapoint extends MY_Controller {
 		}
 		else if ($method == 'export')
 		{
+			$exportFields = $this->getConfigItem('export_fields');
+
+			if (! $exportFields)
+			{
+				$exportFields = 'ValueID, DataValue, LocalDateTime';
+			}
+
 			$result = $this->datapoints->getResultData(
 				$inputs['SiteID'],
 				$inputs['VariableID'],
 				$inputs['MethodID'],
 				$inputs['startdate'],
-				$inputs['enddate']
+				$inputs['enddate'],
+				$exportFields
 			);
 		}
 		else
