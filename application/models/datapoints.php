@@ -32,9 +32,11 @@ class Datapoints extends MY_Model
 		return true;
 	}
 	
-	function getQueryForGetData($site, $var, $method, $start, $end)
+	function getQueryForGetData($site, $var, $method, $start, $end,
+		$fieldList = 'ValueID, DataValue, LocalDateTime'
+	)
 	{
-		$this->db->select('ValueID, DataValue, LocalDateTime')
+		$this->db->select($fieldList)
 			->from($this->tableName)
 			->where('SiteID', $site)
 			->where('VariableID', $var)
@@ -52,9 +54,13 @@ class Datapoints extends MY_Model
 		return $query->result_array();	
 	}
 	
-	function getResultData($site, $var, $method, $start, $end)
+	function getResultData($site, $var, $method, $start, $end,
+		$fieldList = 'ValueID, DataValue, LocalDateTime'
+	)
 	{
-		return $this->getQueryForGetData($site, $var, $method, $start, $end);
+		return $this->getQueryForGetData(
+			$site, $var, $method, $start, $end, $fieldList
+		);
 	}
 
 	function delete($ValueID)
