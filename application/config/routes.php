@@ -59,6 +59,9 @@ $route["(:any)/services/cuahsi_1_1.asmx/GetVariablesObject"] 			= "$1/cuahsi/Get
 $route["(:any)/services/cuahsi_1_1.asmx/GetVariableInfo"] 				= "$1/cuahsi/GetVariableInfo";
 $route["(:any)/services/cuahsi_1_1.asmx/GetVariableInfoObject"] 		= "$1/cuahsi/GetVariableInfoObject";
 
+$route["(:any)/services/cuahsi_2_0.asmx/GetValues"] 					= "$1/cuahsi/GetValues2";
+$route["(:any)/services/cuahsi_2_0.asmx/GetValuesObject"] 				= "$1/cuahsi/GetValues2";
+
 // Update CV Page routing
 $route["(:any)/services/updatecv"] 								= "$1/updatecv";
 

@@ -176,6 +176,42 @@ class Cuahsi extends CI_Controller {
 	}
 
 	/**
+	 * Implement GetValues for WaterML 2
+	 *
+	 */
+	public function GetValues2()
+	{
+		if ($this->validate_token()) {
+
+			if (!isset($_REQUEST['location'])) {
+	            echo "Missing parameter: location";
+	            exit;
+	        }
+	        if (!isset($_REQUEST['variable'])) {
+	            echo "Missing parameter: variable";
+	            exit;
+	        }
+			
+	        $location = $_REQUEST["location"];
+	        $variable = $_REQUEST["variable"];
+	        $startDate = isset($_REQUEST["startDate"])? $_REQUEST["startDate"]:"";
+	        $endDate = isset($_REQUEST["endDate"])? $_REQUEST["endDate"]:"";
+	        
+			//Adding Version checking here to enable support for WaterML 2.0. Note : Only function changed is the Get_Values operation. Maybe some day all the WaterOneFlow services
+			//will be upgraded to WaterML 2.0 . But until then , just this is supported. This is the data service endpoint that will be served to the users of WFS services. 
+			
+			write_XML_header();
+			
+
+			global $dictionary;
+			$dictionary = array();
+			echo wof_GetValues_2($location, $variable, $startDate, $endDate);
+	        exit;
+   		}
+	}
+	
+	
+	/**
 	 * Implement GetValues
 	 *
 	 */
@@ -456,6 +492,12 @@ class Cuahsi extends CI_Controller {
 							  	<input type=\"text\" id=\"endDate\" name=\"endDate\" value=\"\" class=\"datepicker\" /> 
 							  	<a onclick=\"javascript:remove(this);\" class=\"remove\">x</a>
 						  	</div>
+					  	</div>
+						<div class=\"param_container\">
+						  	<label>WaterML version</label>
+						  	<div class=\"content\">
+							  	<input type=\"text\" id=\"version\" name=\"version\" value=\"1.1\" class=\"must\" title=\"The WaterML version. Enter 1.1 or 2.0\" />
+						  	</div>
 					  	</div>";
 		          	break;
 		      	case "GetValuesObject":
@@ -484,6 +526,12 @@ class Cuahsi extends CI_Controller {
 						  	<div class=\"content\">
 							  	<input type=\"text\" id=\"endDate\" name=\"endDate\" value=\"\" class=\"datepicker\" /> 
 							  	<a onclick=\"javascript:remove(this);\" class=\"remove\">x</a>
+						  	</div>
+					  	</div>
+						<div class=\"param_container\">
+						  	<label>WaterML version</label>
+						  	<div class=\"content\">
+							  	<input type=\"text\" id=\"version\" name=\"version\" value=\"1.1\" class=\"must\" title=\"The WaterML version. Enter 1.1 or 2.0\" />
 						  	</div>
 					  	</div>";
 		          	break;
@@ -543,6 +591,15 @@ class Cuahsi extends CI_Controller {
 	public function generate_url() {
 		$target = site_url()."services/cuahsi_1_1.asmx/".$_POST["method"];
 
+		foreach($_POST as $k1=>$v1) {
+			if ($k1 == "version") {
+				if ($v1 == "2.0") {
+					$target = site_url()."services/cuahsi_2_0.asmx/".$_POST["method"];
+				}
+			}
+		}
+			
+		
 		$url = "";
 		foreach($_POST as $k=>$v) {
 			if (is_array($v)) {
