@@ -560,9 +560,11 @@ class Datapoint extends MY_Controller {
 
 	private function getAndValidateInputs($method, &$inputs)
 	{
-		$config = $this->getApiConfiguration($method);
+		$config = $this->getApiConfiguration();
 
-		$inputs = $this->getInputs($config['parameterMapping']);
+		$parameterMapping = API_Config::parameterMapping($config[$method]);
+
+		$inputs = $this->getInputs($parameterMapping);
 
 		$missing = $this->getMissing($inputs);
 
@@ -743,16 +745,17 @@ class Datapoint extends MY_Controller {
 
 	private function loadApiErrorView($method)
 	{
-		$config = $this->getApiConfiguration($method);
+		$config = $this->getApiConfiguration();
 
 		$data['errorMsg'] = $this->apiErrorMessage(
-			$config['parameters'], $config['example']
+			API_Config::requiredString($config[$method]),
+			API_Config::exampleCall($config, $method)
 		);
 
 		$this->load->view('templates/apierror', $data);
 	}
 
-	private function getApiConfiguration($method)
+	private function getApiConfiguration()
 	{
 		$currentDate = date('Y-m-d');
 		$currentTime = date('H:i');
@@ -770,7 +773,7 @@ class Datapoint extends MY_Controller {
 			)
 		);
 
-		$config = array(
+		return array(
 			'getData' => $getParameters,
 			'getDataJSON' => $getParameters,
 			'export' => $getParameters,
@@ -806,14 +809,6 @@ class Datapoint extends MY_Controller {
 			'compare' => array(
 				'compareID' => API_Config::parameter('')
 			)
-		);
-
-		$methodConfig = $config[$method];
-
-		return array(
-			'parameterMapping' => API_Config::parameterMapping($methodConfig),
-			'parameters' => API_Config::requiredString($methodConfig),
-			'example' => API_Config::exampleCall($config, $method)
 		);
 	}
 
