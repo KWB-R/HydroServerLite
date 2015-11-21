@@ -47,9 +47,13 @@ class Datapoints extends MY_Model
 		return $this->db->get();
 	}
 
-	function getData($site, $var, $method, $start, $end)
+	function getData($site, $var, $method, $start, $end,
+		$fieldList = 'ValueID, DataValue, LocalDateTime'
+	)
 	{
-		$query = $this->getQueryForGetData($site, $var, $method, $start, $end);
+		$query = $this->getQueryForGetData($site, $var, $method, $start, $end,
+			$fieldList
+		);
 
 		return $query->result_array();	
 	}

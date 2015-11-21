@@ -585,7 +585,12 @@ class Datapoint extends MY_Controller {
 
 	private function getDataFromModel($method, $inputs)
 	{
-		// hsonne: What is the difference in the result?
+		// Read list of fields to be provided from the config file
+		// or use the default fields
+		$default = 'ValueID, DataValue, LocalDateTime';
+
+		$fieldList = $this->getConfigItem("field_list_$method", $default);
+
 		if (($method == 'getData') or ($method == 'getDataJSON'))
 		{
 			$result = $this->datapoints->getData(
@@ -593,25 +598,19 @@ class Datapoint extends MY_Controller {
 				$inputs['VariableID'],
 				$inputs['MethodID'],
 				$inputs['startdate'],
-				$inputs['enddate']
+				$inputs['enddate'],
+				$fieldList
 			);
 		}
 		else if ($method == 'export')
 		{
-			$exportFields = $this->getConfigItem('export_fields');
-
-			if (! $exportFields)
-			{
-				$exportFields = 'ValueID, DataValue, LocalDateTime';
-			}
-
 			$result = $this->datapoints->getResultData(
 				$inputs['SiteID'],
 				$inputs['VariableID'],
 				$inputs['MethodID'],
 				$inputs['startdate'],
 				$inputs['enddate'],
-				$exportFields
+				$fieldList
 			);
 		}
 		else
@@ -637,7 +636,8 @@ class Datapoint extends MY_Controller {
 		}
 		elseif ($method == 'getDataJSON')
 		{
-			echo json_encode($result);
+			$options = $this->getConfigItem("json_encode_options", 0);
+			echo json_encode($result, $options);
 		}
 		elseif ($method == 'export')
 		{
