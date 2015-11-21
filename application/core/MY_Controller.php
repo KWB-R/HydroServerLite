@@ -155,6 +155,28 @@ class MY_Controller extends CI_Controller {
 		}	
 	}
 
+	protected function loadModel($modelName)
+	{
+		$this->load->model($modelName, '', TRUE);
+	}
+
+	protected function getConfigItem($name, $default = FALSE)
+	{
+		$value = $this->config->item($name);
+
+		// return the default value if the item is not in the config file
+		if ($value === FALSE)
+		{
+			$value = $default;
+		}
+		elseif(strtolower($value) == "null")
+		{
+			$value = NULL;
+		}
+
+		return $value;
+	}
+
 	protected function fileUploadHandler($allowed_types, $field)
 	{
 		$newDir = "./uploads/temp".time().rand();

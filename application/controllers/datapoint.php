@@ -15,17 +15,12 @@ class Datapoint extends MY_Controller {
 
 		$models = array('variables', 'sources', 'datapoints', 'sc', 'site');
 
-		array_walk($models,  array($this, 'loadModel'));
+		array_walk($models, array($this, 'loadModel'));
 
 		$this->load->library('form_validation');
 		$this->load->library('API_Config');
 	}
 	
-	private function loadModel($modelName)
-	{
-		$this->load->model($modelName, '', TRUE);
-	}
-
 	private function createDataPoint($fields)
 	{
 		$dateFormat = "Y-m-d H:i:s";
@@ -57,23 +52,6 @@ class Datapoint extends MY_Controller {
 		return $dataPoint;
 	}
 
-	private function getConfigItem($name, $default = FALSE)
-	{
-		$value = $this->config->item($name);
-
-		// return the default value if the item is not in the config file
-		if ($value === FALSE)
-		{
-			$value = $default;
-		}
-		elseif(strtolower($value) == "null") 
-		{
-			$value = NULL;
-		}
-
-		return $value;
-	}
-	
 	public function addvalue()
 	{
 		$this->addvalue_generic('addvalue');
