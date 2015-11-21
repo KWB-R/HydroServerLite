@@ -618,7 +618,7 @@ class Datapoint extends MY_Controller {
 
 			$noValue = ((count($variable) > 0)? $variable[0]['NoDataValue'] : -9999);
 
-			$this->echoJavaScriptAssignment($result, $noValue);
+			$this->echoJavaScriptAssignment2($result, $noValue);
 		}
 		elseif ($method == 'getDataJSON')
 		{
@@ -669,6 +669,26 @@ class Datapoint extends MY_Controller {
 		}
 
 		echo("$EOL];");	
+	}
+
+	private function echoJavaScriptAssignment2($rows, $noValue, $EOL = "\r\n")
+	{
+		$lines = array();
+
+		foreach ($rows as $row)
+		{
+			//Check for NoDataValue (Default is -9999))
+			if ($row['DataValue'] != $noValue)
+			{
+				// add a [time, value] tuple to the $lines array
+				$lines[] = sprintf("[%s,%s]",
+					Datapoint::javaScriptDateUTC($row['LocalDateTime']),
+					(string) $row['DataValue']
+				);
+			}
+		}
+
+		echo(sprintf("var data_test = [$EOL%s$EOL];", implode(',' . $EOL, $lines)));
 	}
 
 	private function toExportName($inputs)
