@@ -243,50 +243,59 @@ class Datapoint extends MY_Controller {
 
 		foreach ($files as $file)
 		{
-			$filepath = $file['full_path'];	
-			$handle = fopen($filepath, "r");
-
-			if(!$handle)
+			if (! $this->processFile($file, $check, $keyIDs, $existingIDs, $dataset))
 			{
-				addError(getTxt('FailInputStream'));
-				return false;	
+				return FALSE;
 			}
-
-			$row = 0;
-
-			$columnIndex = array();
-
-			while (($data = fgetcsv($handle)) !== FALSE) 
-			{
-				// Is this the header row?
-				if ($row == 0)
-				{
-					if (!$this->handleHeaderRow($data, $check, $file, $columnIndex))
-					{
-						return false;
-					}
-				}
-				else 
-				{
-					$fields = $this->handleDataRow(
-						$data, $columnIndex, $keyIDs, $existingIDs, $row, $file
-					);
-
-					if (is_null($fields))
-					{
-						return false;
-					}
-
-					$dataset[] = $this->createDataPoint($fields);
-				}
-
-				$row++;
-
-			} // end of while(fgetcsv())
-			
 		} // end of foreach($files)
 
 		return $dataset;
+	}
+
+	private function processFile($file, $check, $keyIDs, $existingIDs, &$dataset)
+	{
+		$filepath = $file['full_path'];	
+		$handle = fopen($filepath, "r");
+
+		if(! $handle)
+		{
+			addError(getTxt('FailInputStream'));
+			return false;
+		}
+
+		$row = 0;
+
+		$columnIndex = array();
+
+		while (($data = fgetcsv($handle)) !== FALSE) 
+		{
+			// Is this the header row?
+			if ($row == 0)
+			{
+				if (!$this->handleHeaderRow($data, $check, $file, $columnIndex))
+				{
+					return false;
+				}
+			}
+			else 
+			{
+				$fields = $this->handleDataRow(
+					$data, $columnIndex, $keyIDs, $existingIDs, $row, $file
+				);
+
+				if (is_null($fields))
+				{
+					return false;
+				}
+
+				$dataset[] = $this->createDataPoint($fields);
+			}
+
+			$row++;
+
+		} // end of while(fgetcsv())
+
+		return TRUE;
 	}
 
 	private function handleHeaderRow($data, $check, $file, &$columnIndex)
