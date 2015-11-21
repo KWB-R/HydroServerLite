@@ -722,10 +722,10 @@ class Datapoint extends MY_Controller {
 
 	private function getInputs($names)
 	{
-		return array_map(array($this, "getInputOrTRUE"), $names);
+		return array_map(array($this, 'getXssCleanInput'), $names);
 	}
 
-	private function getInputOrTRUE($name)
+	private function getXssCleanInput($name)
 	{
 		return $this->input->get($name, TRUE);
 	}
@@ -936,7 +936,7 @@ class Datapoint extends MY_Controller {
 		
 		if($valueid==2)
 		{
-			$siteid = $this->getInputOrTRUE('siteid');
+			$siteid = $this->getXssCleanInput('siteid');
 			$site = $this->site->getSite($siteid);
 			$data['SiteName']=$site[0]['SiteName'];
 		}
