@@ -11,12 +11,22 @@ class API_Config
 		);
 	}
 
-	public function requiredString($parameters, $separator = ', ')
+	public static function parameterMapping($methodConfig)
+	{
+		$validationConfig = API_Config::withName($methodConfig);
+
+		return array_combine(
+			array_keys($validationConfig),
+			array_column($validationConfig, 'name')
+		);
+	}
+
+	public static function requiredString($parameters, $separator = ', ')
 	{
 		return implode($separator, API_Config::requiredArray($parameters));
 	}
 
-	public function requiredArray($parameters)
+	public static function requiredArray($parameters)
 	{
 		return array_map(
 			function($long, $short) {

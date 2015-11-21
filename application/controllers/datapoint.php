@@ -809,13 +809,9 @@ class Datapoint extends MY_Controller {
 		);
 
 		$methodConfig = $config[$method];
-		$validationConfig = API_Config::withName($methodConfig);
 
 		return array(
-			'parameterMapping' => array_combine(
-				array_keys($validationConfig),
-				array_column($validationConfig, 'name')
-			),
+			'parameterMapping' => API_Config::parameterMapping($methodConfig),
 			'parameters' => API_Config::requiredString($methodConfig),
 			'example' => API_Config::exampleCall($config, $method)
 		);
