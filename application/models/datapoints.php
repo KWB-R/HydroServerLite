@@ -32,19 +32,56 @@ class Datapoints extends MY_Model
 		return true;
 	}
 	
-	function getQueryForGetData($site, $var, $method, $start, $end,
-		$fieldList = 'ValueID, DataValue, LocalDateTime'
+	function getQueryForGetData($siteID = -1, $variableID = -1, $methodID = -1,
+		$start = '', $end = '',	$fieldList = 'ValueID, DataValue, LocalDateTime'
 	)
 	{
-		$this->db->select($fieldList)
-			->from($this->tableName)
-			->where('SiteID', $site)
-			->where('VariableID', $var)
-			->where('MethodID', $method)
-			->where("LocalDateTime between '".$start."' and '".$end."'")
-			->order_by('LocalDateTime');
+		$ids = array(
+			'SiteID' => $siteID,
+			'VariableID' => $variableID,
+			'MethodID' => $methodID
+		);
+
+		// keep only IDs that are not -1 in the array
+		$ids = array_filter($ids, function($id) {
+			return ($id != -1);
+		});
+
+		// start the SQL query
+		$this->db->select($fieldList)->from($this->tableName);
+
+		// append a condition to the WHERE clause for the remaining IDs
+		$this->db->where($ids);
+
+		$timeCondition = $this->sqlTimeCondition($start, $end);
+
+		if ($timeCondition !== '')
+		{
+			$this->db->where($timeCondition);
+		}
+
+		$this->db->order_by('DateTimeUTC');
 
 		return $this->db->get();
+	}
+
+	private function sqlTimeCondition($start = '', $end = '',
+		$field = 'LocalDateTime'
+	)
+	{
+		$conditions = array();
+
+		if ($start !== '')
+		{
+			$conditions[] = "$field >= '$start'";
+		}
+
+		if ($end !== '')
+		{
+			$conditions[] = "$field <= '$end'";
+		}
+
+		return implode(' AND ', $conditions);
 	}
 
 	function getData($site, $var, $method, $start, $end,
