@@ -57,11 +57,17 @@ class Datapoint extends MY_Controller {
 		return $dataPoint;
 	}
 
-	private function getConfigItem($name)
+	private function getConfigItem($name, $default = FALSE)
 	{
 		$value = $this->config->item($name);
 
-		if(strtolower($value) == "null") {
+		// return the default value if the item is not in the config file
+		if ($value === FALSE)
+		{
+			$value = $default;
+		}
+		elseif(strtolower($value) == "null") 
+		{
 			$value = NULL;
 		}
 
