@@ -254,23 +254,22 @@ class Datapoint extends MY_Controller {
 
 	private function processFile($file, $check, $keyIDs, $existingIDs, &$dataset)
 	{
-		$filepath = $file['full_path'];	
-		$handle = fopen($filepath, "r");
+		$handle = fopen($file['full_path'], "r");
 
-		if(! $handle)
+		if (! $handle)
 		{
 			addError(getTxt('FailInputStream'));
 			return false;
 		}
 
-		$row = 0;
+		$row = 1;
 
 		$columnIndex = array();
 
 		while (($data = fgetcsv($handle)) !== FALSE) 
 		{
 			// Is this the header row?
-			if ($row == 0)
+			if ($row == 1)
 			{
 				if (!$this->handleHeaderRow($data, $check, $file, $columnIndex))
 				{
