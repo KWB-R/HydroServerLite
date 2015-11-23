@@ -598,7 +598,8 @@ class Datapoint extends MY_Controller {
 				$inputs['MethodID'],
 				$inputs['startdate'],
 				$inputs['enddate'],
-				$fieldList
+				$fieldList,
+				(boolean) $this->getConfigItem('extended_export', FALSE)
 			);
 		}
 		else

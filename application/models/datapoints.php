@@ -33,7 +33,8 @@ class Datapoints extends MY_Model
 	}
 	
 	function getQueryForGetData($siteID = -1, $variableID = -1, $methodID = -1,
-		$start = '', $end = '',	$fieldList = 'ValueID, DataValue, LocalDateTime'
+		$start = '', $end = '',	$fieldList = 'ValueID, DataValue, LocalDateTime',
+		$extended = FALSE
 	)
 	{
 		$ids = array(
@@ -47,8 +48,35 @@ class Datapoints extends MY_Model
 			return ($id != -1);
 		});
 
+		if ($extended)
+		{
+			$fields = preg_split("/\s*,\s*/", $fieldList);
+
+			$fieldList = 'A.' . implode(', A.', $fields);
+
+			$fieldList .= ', B.SiteCode, C.VariableCode, D.Organization, ';
+			$fieldList .=	'E.MethodDescription';
+
+			// adapt keys of $ids (prefix with "A.")
+			$keys = array_map(function($x) {
+				return "A.$x";
+			}, array_keys($ids));
+
+			$ids = array_combine($keys, array_values($ids));
+		}
+
 		// start the SQL query
-		$this->db->select($fieldList)->from($this->tableName);
+		$this->db->select($fieldList)->from($this->tableName . ' AS A');
+
+		// if required, extend query source by joining tables Sites, Variables,
+		// Sources, Methods
+		if ($extended)
+		{
+			$this->db->join('sites AS B', 'A.SiteID = B.SiteID', 'INNER');
+			$this->db->join('variables AS C', 'A.VariableID = C.VariableID', 'INNER');
+			$this->db->join('sources AS D', 'A.SourceID = D.SourceID', 'INNER');
+			$this->db->join('methods AS E', 'A.MethodID = E.MethodID', 'LEFT');
+		}
 
 		// append a condition to the WHERE clause for the remaining IDs
 		$this->db->where($ids);
@@ -85,22 +113,22 @@ class Datapoints extends MY_Model
 	}
 
 	function getData($site, $var, $method, $start, $end,
-		$fieldList = 'ValueID, DataValue, LocalDateTime'
+		$fieldList = 'ValueID, DataValue, LocalDateTime', $extended = FALSE
 	)
 	{
 		$query = $this->getQueryForGetData($site, $var, $method, $start, $end,
-			$fieldList
+			$fieldList, $extended
 		);
 
 		return $query->result_array();	
 	}
 	
 	function getResultData($site, $var, $method, $start, $end,
-		$fieldList = 'ValueID, DataValue, LocalDateTime'
+		$fieldList = 'ValueID, DataValue, LocalDateTime', $extended = FALSE
 	)
 	{
 		return $this->getQueryForGetData(
-			$site, $var, $method, $start, $end, $fieldList
+			$site, $var, $method, $start, $end, $fieldList, $extended
 		);
 	}
 
