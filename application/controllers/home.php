@@ -36,42 +36,7 @@ class Home extends MY_Controller {
 		if (!isAdmin())
 		$this->kickOut();
 	}
-	private function deleteOthers($name,$ext)
-	{
-		$extensions = array('.txt','.csv','.CSV');
-		foreach ($extensions as $extension)
-		{
-			if ($extension == $ext)
-				continue;
-			if(file_exists(FCPATH."uploads/".$name.$extension))
-			{
-				unlink(FCPATH."uploads/".$name.$extension) or die("Unable to update the welcome page. Sorry. Better luck next time.");
-			}
-		}
-	}
-	private function fileUploadHandler()
-	{
-		$newDir = "./uploads/temp".time().rand();
-		$oldmask = umask(0);
-		$result = mkdir($newDir,0777);
-		umask($oldmask);
-		if(!$result)
-		{
-			addError(getTxt('FailTemp'));
-			return false;
-		}
-		
-		//Upload files. 
-		$config['upload_path'] = $newDir;
-		$config['allowed_types'] = 'jpg|csv|CSV';	
-		$this->load->library('upload', $config);
-		if ( ! $this->upload->do_multi_upload('custom'))
-		  {
-			  addError(getTxt('FailMoveFile').$this->upload->display_errors());
-			  return false;
-		  }
-		return $this->upload->get_multi_upload_data();
-	}
+
 	public function edit()
 	{
 	$this->adminCheck();
@@ -86,13 +51,12 @@ class Home extends MY_Controller {
 			$this->form_validation->set_rules('citation', 'Citation', 'trim|required');
 			
 		$welcome_page = array($this->input->post('title'),$this->input->post('groupname'),$this->input->post('description'),$this->input->post('citation'));
+		$welcome_page[2] = trim( preg_replace( '/(\r\n)|\n|\r/', '<br/>',$welcome_page[2] ) );
 		$welcome_page_info = json_encode(array_map('utf8_encode',$welcome_page));
 		if(file_exists('./uploads/' .$dbName. '.txt')){
 		unlink('./uploads/' .$dbName. '.txt');
 		}
 		write_file('./uploads/' .$dbName. '.txt',$welcome_page_info,'c+');
-		addSuccess(getTxt('SiteSuccessfullyEdited'));
-		$this->fileUploadHandler();
 		}
 	}
 	
@@ -107,8 +71,7 @@ class Home extends MY_Controller {
 	if (file_exists($file_url)){
 	$file_contents = file_get_contents($file_url);
 	$decode_data = json_decode($file_contents);
-	$decode_data2 = array_map('utf8_decode', $decode_data);
-	return $decode_data2;
+	return $decode_data;
 	}
 	}
 	public function installation()
