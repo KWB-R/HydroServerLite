@@ -102,6 +102,9 @@ function startsWith($haystack, $needle) {
 
 function createNew($language)
 {	
+	//uncomment the return statement exits the function to make it run faster in external countries.
+	//otherwise server tries to connect to BYU database to get latest updates of translation, which is very slow.
+	return;
 	$CI=&get_instance();
 	$CI->load->model('language');
 	if(!$CI->language->DB1)
