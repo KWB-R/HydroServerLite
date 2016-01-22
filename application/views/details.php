@@ -309,123 +309,140 @@ $("#dropdownlist").jqxDropDownList(
 
 
 $('#dropdownlist').bind('select', function (event) {
-var args = event.args;
-var item = $('#dropdownlist').jqxDropDownList('getItem', args.index);
-//Check if a valid value is selected and process futher to display dates
-if (item != null) {
-//Clear the Box
-$('#daterange').html("");
-varname=item.value;
-displayVar=item.label;
-//Going to the next function that will generate a list of data types available for that variable
-var t=setTimeout("create_var_list()",300)
+	var args = event.args;
+	var item = $('#dropdownlist').jqxDropDownList('getItem', args.index);
+	//Check if a valid value is selected and process futher to display dates
+	if (item != null) {
+	//Clear the Box
+	$('#daterange').html("");
+	varname=item.value;
+	displayVar=item.label;
+	//Going to the next function that will generate a list of data types available for that variable
+	var t=setTimeout("create_var_list()",300)
 }
+//plot_chart();
 });
 });
 //End of Document Ready Function
 
 function create_var_list()
 {
-//Generate data types available for that varname
-        var source =
-        {
-            datatype: "json",
-            datafields: [
-                { name: 'DataType' },
-				{ name: 'display' },
-            ],
-            url: base_url+'variable/getTypes?siteid='+siteid+'&varname='+varname
-        };
-//Defining the Data adapter
-var dataAdapter = new $.jqx.dataAdapter(source);
-//Creating the Drop Down list
-        $("#typelist").jqxDropDownList(
-        {
-            source: dataAdapter,
-            theme: 'darkblue',
-            height: 25,
-            width: "100%",
-            selectedIndex: 0,
-            displayMember: 'display',
-            valueMember: 'DataType'
-        });
-
-//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
-$("#typelist").jqxDropDownList('selectIndex', 0 ); 
-$('#typelist').bind('select', function (event) {
-	 
-var args = event.args;
-var item = $('#typelist').jqxDropDownList('getItem', args.index);
-//Check if a valid value is selected and process futher to display dates
-if (item != null) {		
-datatype=item.value;
-displayType = item.label;
-update_var_id();}
-});
+	//Generate data types available for that varname
+	var source =
+	{
+		datatype: "json",
+		datafields: [
+			{ name: 'DataType' },
+			{ name: 'display' },
+		],
+		url: base_url+'variable/getTypes?siteid='+siteid+'&varname='+varname
+	};
+	//Defining the Data adapter
+	var dataAdapter = new $.jqx.dataAdapter(source);
+	//Creating the Drop Down list
+	$("#typelist").jqxDropDownList(
+	{
+		source: dataAdapter,
+		theme: 'darkblue',
+		height: 25,
+		width: "100%",
+		selectedIndex: 0,
+		displayMember: 'display',
+		valueMember: 'DataType'
+	});
+	$("#typelist").off();
+			
+	//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
+	$("#typelist").jqxDropDownList('selectIndex', 0 ); 
+	$("typelist").on();
+	
+	$('#typelist').bind('select', function (event) {
+		 
+		var args = event.args;
+		var item = $('#typelist').jqxDropDownList('getItem', args.index);
+		//Check if a valid value is selected and process futher to display dates
+		if (item != null) {		
+			datatype=item.value;
+			displayType = item.label;
+			update_var_id();
+			
+		}
+	//plot_chart();
+	});
 }
 
 //End of create_var_list function	
 function update_var_id()
 {	
-$.ajax({
-  type: "GET",
-  url: base_url+"variable/updateVarID?siteid="+siteid+"&varname="+varname+"&type="+datatype,
-//Processing The Dates
-    success: function(data) {
-	varid=data;
-	//Now We have the VariableID, We call the dates function
-	//Filter by methods available for that specific selection of variable and site
-	get_methods();
+	$.ajax({
+		type: "GET",
+		url: base_url+"variable/updateVarID?siteid="+siteid+"&varname="+varname+"&type="+datatype,
+		//Processing The Dates
+		success: function(data) {
+			varid=data;
+			//Now We have the VariableID, We call the dates function
+			//Filter by methods available for that specific selection of variable and site
+			get_methods();
+			$("#methodlist").jqxDropDownList('selectIndex', 0 );
+			//plot_chart();
+		}
+	});
 }
-});
-}
+
+
 
 //Function to get dates and plot a default plot
 
 function get_methods()
 {
 
-$('#methodlist').off()
-$('#methodlist').unbind('valuechanged');
+	$('#methodlist').off()
+	$('#methodlist').unbind('valuechanged');
 
-var source122 =
-        {
-            datatype: "json",
-            datafields: [
-                { name: 'MethodID' },
-                { name: 'MethodDescription' },
-            ],
-            url: base_url+'methods/getSiteVarJSON?siteid='+siteid+'&varid='+varid
-        };
+	var source122 =
+			{
+				datatype: "json",
+				datafields: [
+					{ name: 'MethodID' },
+					{ name: 'MethodDescription' },
+				],
+				url: base_url+'methods/getSiteVarJSON?siteid='+siteid+'&varid='+varid
+			};
 
-//Defining the Data adapter
-var dataAdapter122 = new $.jqx.dataAdapter(source122);
+	//Defining the Data adapter
+	var dataAdapter122 = new $.jqx.dataAdapter(source122);
 
-//Creating the Drop Down list
-        $("#methodlist").jqxDropDownList(
-        {
-            source: dataAdapter122,
-            theme: 'darkblue',
-            height: 25,
-            width: "100%",
-            selectedIndex: 0,
-            displayMember: 'MethodDescription',
-            valueMember: 'MethodID'
-        });
-$("#methodlist").jqxDropDownList('selectIndex', 0 );
-//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
+	//Creating the Drop Down list
+	$("#methodlist").jqxDropDownList(
+	{
+		source: dataAdapter122,
+		theme: 'darkblue',
+		height: 25,
+		width: "100%",
+		selectedIndex: 0,
+		displayMember: 'MethodDescription',
+		valueMember: 'MethodID'
+	});
 
-$('#methodlist').bind('select', function (event) {
-var args = event.args;
-var item = $('#methodlist').jqxDropDownList('getItem', args.index);
-//Check if a valid value is selected and process futher to display dates
-if (item != null) {		
-methodid=item.value;
-get_dates();
-//Now call to check dates
+	
+	//$("#methodlist").jqxDropDownList('selectIndex', 0 );
+
+
+	//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
+
+	$('#methodlist').bind('select', function (event) {
+		var args = event.args;
+		var item = $('#methodlist').jqxDropDownList('getItem', args.index);
+		//Check if a valid value is selected and process futher to display dates
+		if (item != null) {		
+			methodid=item.value;
+			get_dates();
+			//Now call to check dates
+		}
+		plot_chart();
+	});
 }
-});
-}
+
 function get_dates()
 {
 
@@ -443,17 +460,17 @@ date_to=String(result.EndDateTime);
 $('#daterange').html("");
 $('#daterange').prepend('<p><strong>'+<?php echo "'".getTxt('DatesAvailable')."'";?>+'</strong> ' + date_from + ' <strong>'+<?php echo "'".getTxt('To')."'";?>+'</strong> ' + date_to +'</p>');
 
-$("#jqxDateTimeInput").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
-$("#jqxDateTimeInput").jqxDateTimeInput({ formatString: 'd' });
-$("#jqxDateTimeInputto").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
-$("#jqxDateTimeInputto").jqxDateTimeInput({ formatString: 'd' });
+//$("#jqxDateTimeInput").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
+//$("#jqxDateTimeInput").jqxDateTimeInput({ formatString: 'd' });
+//$("#jqxDateTimeInputto").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
+//$("#jqxDateTimeInputto").jqxDateTimeInput({ formatString: 'd' });
 
 //Resetting the bind functions
 $('#jqxDateTimeInput').off()
 $('#jqxDateTimeInputto').off()
 $('#jqxDateTimeInput').unbind('valuechanged');
 //Binding An Event To the Second Calendar
-$('#jqxDateTimeInputo').unbind('valuechanged');
+$('#jqxDateTimeInputo').unbind('valuechanged'); 
 
 //Restricting the Calendar to those available dates
 var year = parseInt(date_from.slice(0,4));
@@ -464,9 +481,9 @@ var date1 = new Date();
 glob_df=date1;
 date1.setFullYear(year, month, day);
 
-$("#fromdatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue'});
+//$("#fromdatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue'});
 
-$("#todatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue'});
+//$("#todatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue'});
 
 
 //Use Show And Hide Method instead of repeating formation - optimization number 2
@@ -476,7 +493,7 @@ $("#todatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue
 var year_to = parseInt(date_to.slice(0,4));		
 var month_to = parseInt(date_to.slice(5,7),10);
 var day_to = parseInt(date_to.slice(8,10),10);	
-month_to=month_to-1;
+month_to=month_to;
 var date2 = new Date();
 date2.setFullYear(year_to, month_to-1, day_to);
 glob_dt=date2;
@@ -496,44 +513,46 @@ if (monthEnd > 12) { monthEnd=12;}
 
 date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
 date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
-$("#fromdatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectStart')."'";?> );
-$("#todatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectEnd')."'";?> );
-
+//$("#fromdatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectStart')."'";?> );
+//$("#todatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectEnd')."'";?> );
+$('#jqxDateTimeInput').jqxDateTimeInput('setDate', glob_df);
+$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', glob_dt);
 plot_chart();	
 //Binding An Event to the first calender
 
-$('#jqxDateTimeInput').bind('valuechanged', function (event) 
-{
+//$('#jqxDateTimeInput').bind('valuechanged', function (event) 
+//{
 	
 
-var date = event.args.date;
-date_select_from=new Date(date);
-glob_df=date_select_from;
+//var date = event.args.date;
+//date_select_from=new Date(date);
+//glob_df=date_select_from;
 //Converting to SQL Format for Searching
 
-var date_from_sql2=date_select_from.getFullYear() + '-' + add_zero((date_select_from.getMonth()+1)) + '-' + add_zero(date_select_from.getDate()) + ' 00:00:00';
+//var date_from_sql2=date_select_from.getFullYear() + '-' + add_zero((date_select_from.getMonth()+1)) + '-' + add_zero(date_select_from.getDate()) + ' 00:00:00';
 //Setting the Second calendar's min date to be the date of the first calendar
 //$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', date);
-var tempdate2=add_zero((date_select_from.getMonth()+1))+'/'+add_zero(date_select_from.getDate())+'/'+date_select_from.getFullYear();
+//var tempdate2=add_zero((date_select_from.getMonth()+1))+'/'+add_zero(date_select_from.getDate())+'/'+date_select_from.getFullYear();
 
-$("#fromdatedrop").jqxDropDownButton('setContent', tempdate2);
+//$("#fromdatedrop").jqxDropDownButton('setContent', tempdate2);
 
-if(date_from_sql!=date_from_sql2)
+/* if(date_from_sql!=date_from_sql2)
 {date_from_sql=date_from_sql2;
 plot_chart();				
-}
-});
+} */
+//});
 //Binding An Event To the Second Calendar
-$('#jqxDateTimeInputto').bind('valuechanged', function (event) {
+//$('#jqxDateTimeInputto').bind('valuechanged', function (event) {
 	
-var date = event.args.date;
-date_select_to=new Date(date);
-glob_dt=date_select_to;
-var tempdate=add_zero((date_select_to.getMonth()+1))+'/'+add_zero(date_select_to.getDate())+'/'+date_select_to.getFullYear();
-$("#todatedrop").jqxDropDownButton('setContent', tempdate);
-date_to_sql=date_select_to.getFullYear() + '-' + add_zero((date_select_to.getMonth()+1)) + '-' + add_zero(date_select_to.getDate()) + ' 00:00:00';
-plot_chart();
-});}
+//var date = event.args.date;
+//date_select_to=new Date(date);
+//glob_dt=date_select_to;
+//var tempdate=add_zero((date_select_to.getMonth()+1))+'/'+add_zero(date_select_to.getDate())+'/'+date_select_to.getFullYear();
+//$("#todatedrop").jqxDropDownButton('setContent', tempdate);
+//date_to_sql=date_select_to.getFullYear() + '-' + add_zero((date_select_to.getMonth()+1)) + '-' + add_zero(date_select_to.getDate()) + ' 00:00:00';
+//plot_chart();
+//});
+}
 });
 } //End of function get_dates
 	
@@ -596,11 +615,6 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
     },
 	
    xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                 month: '%e.%b / %Y',
-                year: '%b.%Y'
-            },
 			title: {
 		text: <?php echo "'".getTxt('TimeMsg')."'"; ?>,
 				margin: 30
@@ -1059,8 +1073,8 @@ echo '<br></div>';
 <div id='daterange'></div>
 
 <div class="row">
-<div class="col-md-6"><div id='fromdatedrop'><div id='jqxDateTimeInput'></div></div></div>
-<div class="col-md-6"><div id='todatedrop'><div id='jqxDateTimeInputto'></div></div></div>
+<div class="col-md-6"><div id='fromdatedrop' style="display: none;"><div id='jqxDateTimeInput' style="display: none;"></div></div></div>
+<div class="col-md-6"><div id='todatedrop' style="display: none;"><div id='jqxDateTimeInputto' style="display: none;"></div></div></div>
 </div>
 <br>
     
