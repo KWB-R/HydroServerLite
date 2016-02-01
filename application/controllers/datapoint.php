@@ -269,9 +269,13 @@ class Datapoint extends MY_Controller {
 		while (($data = fgetcsv($handle)) !== FALSE) 
 		{
 			// Is this the header row?
-			if ($row == 1)
+			if ($row == 1) 
 			{
-				if (!$this->handleHeaderRow($data, $check, $file, $columnIndex))
+				// Try to get an assignment between column name and column index.
+				// If NULL is returned, there were missing or unexpected columns.
+				$columnIndex = $this->handleHeaderRow($data, $check, $file);
+
+				if (is_null($columnIndex)) 
 				{
 					return false;
 				}
@@ -282,7 +286,7 @@ class Datapoint extends MY_Controller {
 					$data, $columnIndex, $keyIDs, $existingIDs, $row, $file
 				);
 
-				if (is_null($fields))
+				if (is_null($fields))	
 				{
 					return false;
 				}
@@ -297,60 +301,42 @@ class Datapoint extends MY_Controller {
 		return TRUE;
 	}
 
-	private function handleHeaderRow($data, $check, $file, &$columnIndex)
+	private function handleHeaderRow($captions, $idsInFile, $file)
 	{
-		$captionString = "LocalDateTime,DataValue";
+		$required = array("LocalDateTime", "DataValue");
+		$required2 = array("SourceID", "SiteID", "VariableID", "MethodID");
 
-		if ($check)
-		{
-			$captionString = "SourceID,SiteID,VariableID,MethodID," . $captionString;
+		if ($idsInFile)	{
+			$required = array_merge($required2, $required);
 		}
 
-		$captions = explode(",", $captionString);
+		// Are there missing captions?
+		$missing = array_values(array_diff($required, $captions));
 
-		//Allow switching of columns.
-		$columnIndex = array();
-
-		foreach ($captions as $caption)
-		{
-			$index = array_search(
-				strtolower($caption),
-				array_map('strtolower', $data)
-			);
-
-			$columnIndex[$caption] = (($index === FALSE)? -1 : $index);
+		// Are there unexpected captions?
+		if ($idsInFile) {
+			$unexpected = array();
 		}
-
-		// Could all expected captions be found?
-		$missing = array_keys(array_filter($columnIndex, function($i) {
-			return ($i === -1);
-		}));
-
-		$valid = TRUE;
+		else {
+			$unexpected = array_intersect($required2, $captions);
+		}
 		
-		if (count($missing) > 0)
-		{
-			$valid = FALSE;
-			addError($this->headerErrorMessage($captions, $missing, $file));
-		}
+		// Prepare return value
+		$columnIndex = NULL;
 
-		if (!$check)
-		{
-			// Are captions found that we do not expect?
-			if (in_array('SourceID', $data)	or in_array('SiteID', $data) 
-				or in_array('VariableID', $data) or in_array('MethodID', $data)
-			)
-			{
-				$valid = FALSE;
-				addError("I found one of the columns 'SourceID', 'SiteID', " . 
-					"'VariableID', 'MethodID' in " . $file['file_name']. " " .
-					"which I do not expect since you selected these IDs in the form. " .
-					"Did you forget to check the \"ID's in File?\" option?"
-				);
-			}
+		if (count($missing) > 0) {
+			addError($this->headerErrorMessage($required, $missing, $file, TRUE));
 		}
-
-		return $valid;
+		elseif (count($unexpected) > 0) {
+			addError($this->headerErrorMessage($required, $unexpected, $file, FALSE));
+		} 
+		else {
+			$columnIndex = array_combine($captions, range(0, count($captions) - 1));		
+		}
+	
+		// Return the assignment between caption and column index (or NULL, 
+		// if an error occurred)
+		return $columnIndex;
 	}
 
 	private function handleDataRow
@@ -517,11 +503,19 @@ class Datapoint extends MY_Controller {
 		);
 	}
 
-	private function headerErrorMessage($captions, $missing, $file)
+	private function headerErrorMessage($captions, $invalid, $file, $missing)
 	{
 		$message = getTxt('InvalidHeading') . implode(",", $captions) . ". Row";
-		$error = "missing: " . implode(", ", $missing);
-
+		$invalids = implode(", ", $invalid);
+		
+		if ($missing) {
+			$error = "missing: " . $invalids;
+		} 
+		else {
+			$error = "unexpected: " . $invalids;
+			$error .= ". Did you forget to check the \"ID's in File?\" option?";
+		}
+		
 		return $this->fileErrorMessage($message, 1, $file, $error);
 	}
 	
