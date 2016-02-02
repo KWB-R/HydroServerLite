@@ -39,16 +39,20 @@ class Datapoint extends MY_Controller {
 			'SourceID' => $fields['SourceID']
 		);
 
-		$configFields = array(
-			'ValueAccuracy', 'UTCOffset', 'OffsetValue', 'OffsetTypeID',	
-			'CensorCode', 'QualifierID', 'SampleID', 'DerivedFromID', 
+		$optionalFields = array(
+			'ValueAccuracy', 'UTCOffset', 'OffsetValue', 'OffsetTypeID',
+			'CensorCode', 'QualifierID', 'SampleID', 'DerivedFromID',
 			'QualityControlLevelID'
 		);
 		
-		foreach ($configFields as $configField) {
-			$dataPoint[$configField] = $this->getConfigItem($configField);
+		foreach ($optionalFields as $field) {
+			$dataPoint[$field] = (
+				isset($fields[$field]) ? $fields[$field] : $this->getConfigItem($field)
+			);
 		}
-
+		
+		log_message('debug', "createDataPoint: " . print_r($dataPoint, TRUE));	
+		
 		return $dataPoint;
 	}
 
@@ -355,14 +359,23 @@ class Datapoint extends MY_Controller {
 			return NULL;
 		}
 
+		$objects = array('Source', 'Site', 'Variable', 'Method');
+		
+		$optObjects = array('QualityControlLevel', 'Qualifier');
+
+		// Extend $objects by names of objects that are given in the file
+		foreach ($optObjects as $object) {
+			if (isset($columnIndex[$object . "ID"])) {
+				array_push($objects, $object);
+			}
+		}
+		
 		if (is_null($keyIDs))
 		{
 			// Copy ID values of current row into array $keyIDs and verify that
 			// all IDs exist.
 			
 			$anyInvalid = FALSE;
-
-			$objects = array('Source', 'Site', 'Variable', 'Method');
 
 			foreach ($objects as $object)
 			{
@@ -390,26 +403,34 @@ class Datapoint extends MY_Controller {
 			}
 		}
 	
-		return array(
+		$dataset = array(
 			'date' => $date->format("Y-m-d"),
 			'time' => $date->format("H:i:s"),
-			'DataValue' => $value,
-			'SiteID' => $keyIDs['Site'],
-			'VariableID' => $keyIDs['Variable'],
-			'MethodID' => $keyIDs['Method'],
-			'SourceID' => $keyIDs['Source']
+			'DataValue' => $value
 		);
+		
+		foreach ($objects as $object) {
+			$dataset[$object . "ID"] = $keyIDs[$object];
+		}
+		
+		return $dataset;
 	}
 
 	private function getExistingIDs()
 	{
 		$this->loadModel('method');
-
+		$this->loadModel('qualitycontrollevel');
+		$this->loadModel('qualifier');
+				
 		return array(
 			'Site' => array_column($this->site->getAll(), 'SiteID'),
 			'Source' => array_column($this->sources->getAll(), 'SourceID'),
 			'Variable' => array_column($this->variables->getAll(), 'VariableID'),
-			'Method' => array_column($this->method->getAll(), 'MethodID')
+			'Method' => array_column($this->method->getAll(), 'MethodID'),
+			'QualityControlLevel' => array_column(
+				$this->qualitycontrollevel->getAll(), 'QualityControlLevelID'
+			),
+			'Qualifier' => array_column($this->qualifier->getAll(), 'QualifierID')
 		);
 	}
 
@@ -473,7 +494,15 @@ class Datapoint extends MY_Controller {
 	
 	private function idErrorMessage($idName, $row, $file)
 	{
-		$message = sprintf("%s %s. Row:", getTxt('invalid'), getTxt($idName));
+		// Try to translate $idName
+		$translated = getTxt($idName);
+
+		// Keep $idName if no translation was found
+		if (! $translated) {
+			$translated = $idName;
+		}
+		
+		$message = sprintf("%s %s. Row:", getTxt('invalid'), $translated);
 
 		return $this->fileErrorMessage($message, $row, $file);
 	}
@@ -542,7 +571,7 @@ class Datapoint extends MY_Controller {
 		{
 			// The data fetched depends on the method
 			$result = $this->getDataFromModel($method, $inputs);
-
+			
 			// The output action also depends on the method
 			$this->outputOrExportData($method, $inputs, $result);
 		}

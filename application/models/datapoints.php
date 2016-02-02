@@ -52,17 +52,24 @@ class Datapoints extends MY_Model
 		{
 			$fields = preg_split("/\s*,\s*/", $fieldList);
 
-			$fieldList = 'A.' . implode(', A.', $fields);
-
-			$fieldList .= ', B.SiteCode, C.VariableCode, D.Organization, ';
-			$fieldList .=	'E.MethodDescription';
-
-			// adapt keys of $ids (prefix with "A.")
-			$keys = array_map(function($x) {
-				return "A.$x";
-			}, array_keys($ids));
-
-			$ids = array_combine($keys, array_values($ids));
+			$fields = array_merge(
+				$this->prefixed($fields, 'A.'),
+				array(
+					'B.SiteCode', 
+					'C.VariableCode', 
+					'D.Organization', 
+					'E.MethodDescription',
+					'F.QualifierCode'
+				)
+			);
+			
+			$fieldList = implode(', ', $fields);
+			
+			// Rewrite the array $ids by prefixing its keys with 'A.'
+			$ids = array_combine(
+				$this->prefixed(array_keys($ids), 'A.'), 
+				array_values($ids)
+			);
 		}
 
 		// start the SQL query
@@ -76,6 +83,7 @@ class Datapoints extends MY_Model
 			$this->db->join('variables AS C', 'A.VariableID = C.VariableID', 'INNER');
 			$this->db->join('sources AS D', 'A.SourceID = D.SourceID', 'INNER');
 			$this->db->join('methods AS E', 'A.MethodID = E.MethodID', 'LEFT');
+			$this->db->join('qualifiers AS F', 'A.QualifierID = F.QualifierID', 'LEFT');
 		}
 
 		// append a condition to the WHERE clause for the remaining IDs
@@ -89,10 +97,23 @@ class Datapoints extends MY_Model
 		}
 
 		$this->db->order_by('DateTimeUTC');
-
-		return $this->db->get();
+		
+		$result = $this->db->get();
+		
+		log_message("debug", "Last Query: " . $this->db->last_query());
+		
+		return $result;
 	}
 
+	private function prefixed($values, $prefix = "") 
+	{
+		foreach ($values as &$value) {		
+	    $value = $prefix . $value;
+	  }
+	  
+		return $values;
+	}
+	
 	private function sqlTimeCondition($start = '', $end = '',
 		$field = 'LocalDateTime'
 	)
@@ -127,6 +148,9 @@ class Datapoints extends MY_Model
 		$fieldList = 'ValueID, DataValue, LocalDateTime', $extended = FALSE
 	)
 	{
+		log_message('debug', "getResultData(site=$site,var=$var,method=$method," .
+			"start=$start,end=$end)...");
+		
 		return $this->getQueryForGetData(
 			$site, $var, $method, $start, $end, $fieldList, $extended
 		);
