@@ -358,33 +358,26 @@ class Datapoint extends MY_Controller {
 		if (is_null($keyIDs))
 		{
 			// Verify if entered IDS are correct.
-			$keyIDs = array(
-				'Source' => $data[$columnIndex['SourceID']],
-				'Site' => $data[$columnIndex['SiteID']],
-				'Variable' => $data[$columnIndex['VariableID']],
-				'Method' => $data[$columnIndex['MethodID']]
-			);
+			
+			$anyInvalid = FALSE;
 
-			// This assignment just associates the keyword to be looked up in the
-			// language table
-			$idNames = array(
-				'Source' => 'sourceid',
-				'Site' => 'siteid',
-				'Variable' => 'varid',
-				'Method' => 'methodid'
-			);
+			$keys = array('Source', 'Site', 'Variable', 'Method');
 
-			$invalid = FALSE;
-
-			foreach ($idNames as $key => $idName)
+			foreach ($keys as $key)
 			{
+				$invalid = $this->addErrorIfInvalid(
+					$data[$columnIndex[$key . "ID"]], // given ID value in current row
+					$existingIDs[$key],               // array of available IDs
+					strtolower($key) . "id",          // keyword for language table
+					$row, 
+					$file
+				);
+				
 				// parentheses are important since "or" has lower precedence than "="!
-				$invalid = ($invalid or $this->addErrorIfInvalid(
-					$keyIDs[$key], $existingIDs[$key], $idName, $row, $file
-				));
+				$anyInvalid = ($anyInvalid or $invalid);
 			}
 
-			if ($invalid)
+			if ($anyInvalid)
 			{
 				return NULL;
 			}
