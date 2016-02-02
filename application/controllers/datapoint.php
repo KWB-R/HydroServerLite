@@ -357,24 +357,31 @@ class Datapoint extends MY_Controller {
 
 		if (is_null($keyIDs))
 		{
-			// Verify if entered IDS are correct.
+			// Copy ID values of current row into array $keyIDs and verify that
+			// all IDs exist.
 			
 			$anyInvalid = FALSE;
 
-			$keys = array('Source', 'Site', 'Variable', 'Method');
+			$objects = array('Source', 'Site', 'Variable', 'Method');
 
-			foreach ($keys as $key)
+			foreach ($objects as $object)
 			{
+				// Given ID value in the <object>ID column of the current data row
+				$id = $data[$columnIndex[$object . "ID"]];
+				
 				$invalid = $this->addErrorIfInvalid(
-					$data[$columnIndex[$key . "ID"]], // given ID value in current row
-					$existingIDs[$key],               // array of available IDs
-					strtolower($key) . "id",          // keyword for language table
+					$id, 
+					$existingIDs[$object],      // array of available IDs
+					strtolower($object) . "id", // keyword for language table
 					$row, 
 					$file
 				);
 				
-				// parentheses are important since "or" has lower precedence than "="!
+				// Parentheses are important since "or" has lower precedence than "="!
 				$anyInvalid = ($anyInvalid or $invalid);
+				
+				// Copy ID into array $keyIDs
+				$keyIDs[$object] = $id;
 			}
 
 			if ($anyInvalid)
