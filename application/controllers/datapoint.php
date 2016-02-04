@@ -25,14 +25,11 @@ class Datapoint extends MY_Controller {
 	{
 		$dateFormat = "Y-m-d H:i:s";
 		
-		$localtimestamp = strtotime($fields['date'] . " " . $fields['time']);
+		$localtime = strtotime($fields['date'] . " " . $fields['time']);
 
-		$offsetInSeconds = $this->config->item('UTCOffset') * 3600;
-		
 		$dataPoint = array(
 			'DataValue' => $fields['DataValue'],
-			'LocalDateTime' => date($dateFormat, $localtimestamp), 
-			'DateTimeUTC' => date($dateFormat, $localtimestamp - $offsetInSeconds), 
+			'LocalDateTime' => date($dateFormat, $localtime), 
 			'SiteID' => $fields['SiteID'],
 			'VariableID' => $fields['VariableID'],
 			'MethodID' => $fields['MethodID'],
@@ -50,7 +47,11 @@ class Datapoint extends MY_Controller {
 				isset($fields[$field]) ? $fields[$field] : $this->getConfigItem($field)
 			);
 		}
+
+		$offsetInSeconds = 3600 * $dataPoint['UTCOffset'];
 		
+		$dataPoint['DateTimeUTC'] = date($dateFormat, $localtime - $offsetInSeconds);
+
 		log_message('debug', "createDataPoint: " . print_r($dataPoint, TRUE));	
 		
 		return $dataPoint;
@@ -348,13 +349,10 @@ class Datapoint extends MY_Controller {
 		$data, $columnIndex, $keyIDs, $existingIDs, $row, $file
 	)
 	{
-		$timestamp = $data[$columnIndex['LocalDateTime']];
-		$value = $data[$columnIndex['DataValue']];
-
 		$date = NULL; // will be set in validateFields
 
 		// Check for a valid date and a valid data value or raise an error
-		if (!$this->validateFields($timestamp, $value, $row, $file, $date)) 
+		if (!$this->validateFields($data, $columnIndex, $row, $file, $date)) 
 		{
 			return NULL;
 		}
@@ -403,12 +401,19 @@ class Datapoint extends MY_Controller {
 			}
 		}
 	
+		// Create a result dataset
 		$dataset = array(
 			'date' => $date->format("Y-m-d"),
 			'time' => $date->format("H:i:s"),
-			'DataValue' => $value
+			'DataValue' => $data[$columnIndex['DataValue']]
 		);
 		
+		// Copy fields that may be given in the file into the result dataset
+		if (isset($columnIndex['UTCOffset'])) {
+		    $dataset['UTCOffset'] = $data[$columnIndex['UTCOffset']];
+		}
+
+		// Copy ID fields into the result dataset
 		foreach ($objects as $object) {
 			$dataset[$object . "ID"] = $keyIDs[$object];
 		}
@@ -444,10 +449,14 @@ class Datapoint extends MY_Controller {
 		);
 	}
 
-	private function validateFields($timestamp, $value, $row, $file, &$date)
+	private function validateFields($fields, $columnIndex, $row, $file, &$date)
 	{
 		// Try to convert timestamp to DateTime object or raise an error
-		$error = $this->toDateTime($timestamp, $date);
+		// As required, $date will be in UTC timezone since UTC was set as the 
+		// default timezone in processLang(), being called in the constructor of
+		// the MY_Controller class
+
+		$error = $this->toDateTime($fields[$columnIndex['LocalDateTime']], $date);
 
 		if ($error != "") {
 
@@ -456,8 +465,16 @@ class Datapoint extends MY_Controller {
 			return false;
 		}
 
-		// Check if $value is numeric or raise an error
-		if (!is_numeric($value)) {
+		// Check if $value is numeric
+		$numeric = is_numeric($fields[$columnIndex['DataValue']]);
+
+		// If UTCOffset is given, check if it is numeric
+		if ($numeric && isset($columnIndex['UTCOffset'])) {
+
+			$numeric = ($numeric && is_numeric($fields[$columnIndex['UTCOffset']]));
+		}
+
+		if (! $numeric) {
 
 			addError($this->typeErrorMessage('InvalidChar', $row, $file));
 
@@ -880,11 +897,11 @@ class Datapoint extends MY_Controller {
 		{
 			$LocalDateTime = sprintf("%s %s:00", $inputs['date'], $inputs['time']);
 
-			$localtimestamp = strtotime($LocalDateTime);
+			$localtime = strtotime($LocalDateTime);
 
 			$ms = $this->config->item('UTCOffset') * 3600;
 
-			$DateTimeUTC = date("Y-m-d H:i:s", $localtimestamp - $ms);
+			$DateTimeUTC = date("Y-m-d H:i:s", $localtime - $ms);
 
 			$result = $this->datapoints->editPoint(
 				$valueid, $inputs['DataValue'],	$LocalDateTime, $DateTimeUTC
