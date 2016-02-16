@@ -617,7 +617,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
    xAxis: {
 			title: {
 		text: <?php echo "'".getTxt('TimeMsg')."'"; ?>,
-				margin: 30
+				margin: 20
             }
 			
         },
@@ -668,6 +668,12 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
                     type: 'all',
 		    		text: <?php echo "'".getTxt('All')."'"; ?>
                 }],
+            inputStyle: {
+                width: 1,
+				height: 1,
+				color: '#039',
+				fontWeight: 'bold'
+            },
             selected: 6
             },
 	
@@ -1054,9 +1060,9 @@ $('#windowContent').load(base_url+'datapoint/compare/1', function() {
 <div class="col-md-9">
 <?php
 //possibly a future improvement. The sites could be accessed here in addition to navigating back to the map 
-echo '<div class="row">';
+echo '<div class="row"><div>';
 genDropLists('Site', '', '', false);
-echo '<div class="site_title">';
+echo '</div><div class="site_title" align="left">';
 echo ($site['SiteName']);
 echo '</div>';
 echo '<br></div>';
