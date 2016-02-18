@@ -18,7 +18,7 @@ var dataAdapter = new $.jqx.dataAdapter(source);
         {
             source: dataAdapter,
             theme: 'darkblue',
-            width: 200,
+            width: 100,
             height: 25,
             displayMember: 'VariableName',
             valueMember: 'VariableID'

@@ -278,7 +278,7 @@ $('#jqxtabs').on('selected', function (event) { var selectedTab = event.args.ite
 
   if(selectedTab==1)
   {
-   $(window).resize();
+   $('#container').highcharts().reflow();
   }
 
 }); 
@@ -555,7 +555,7 @@ plot_chart();
 }
 });
 } //End of function get_dates
-	
+
 function plot_chart()
 {
 var unit_yaxis="unit";
@@ -587,8 +587,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
  chart=new Highcharts.StockChart({
     chart: {
     renderTo: 'container',
-		zoomType: 'x',
-  
+		zoomType: 'x'
     },
 	 legend: {
 		           verticalAlign: 'top',
@@ -624,7 +623,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
   yAxis: {
             title: {
                 text: unit_yaxis,
-				margin: 40
+				margin: 30
             }
 			
         },
@@ -668,23 +667,14 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
                     type: 'all',
 		    		text: <?php echo "'".getTxt('All')."'"; ?>
                 }],
-            inputStyle: {
-                width: 1,
-				height: 1,
-				color: '#039',
-				fontWeight: 'bold'
-            },
             selected: 6
             },
-	
-	
      series: [{
             data: data_test,
 			name: displayVar +'('+displayType+')'     
         }]
     
 });
-
 	$("#loadingtext").hide();
 
   make_grid();
@@ -695,6 +685,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
  });
 
 }
+
 
 function add_zero(value)
 {
@@ -1130,7 +1121,7 @@ if($var['VariableName']!="")
 <div>
     <div class="chart-wrapper">
       <div class="chart-inner">
-        <div id="container" style="width:100%; height: 470px;"></div>
+        <div id="container" style="height:470px;width:100%"></div>
          <!-- Button to compare data values-->
          <input type="button" style=" float:right" value="<?php echo getTxt('Compare');?>" id='compare' />
       </div>

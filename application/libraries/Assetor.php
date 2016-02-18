@@ -85,6 +85,7 @@ class Assetor {
 		}
 		$this->_styles[$group][] = array('file'=>$filename,'ext'=>$ext);
 	}
+	
 
 	/**
 	 * version($ver)
@@ -385,7 +386,14 @@ class Assetor {
 							$assets .='<link rel="stylesheet" href="'.base_url().$this->_css_folder.$file['file'].'?v='.$this->_version.'" />';
 							break;
 						case 'js':
+							if($file['file']=='highstock.js')
+							{
+							$assets .='<script type="text/javascript" src="'.base_url().$this->_js_folder.$file['file'].'?v=4"></script>';	
+							}
+							else
+							{
 							$assets .='<script type="text/javascript" src="'.base_url().$this->_js_folder.$file['file'].'?v='.$this->_version.'"></script>';
+							}
 							break;
 					}
 			}
