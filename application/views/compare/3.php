@@ -1,17 +1,21 @@
 <script type="text/javascript">
 function loadsitecomp1()
-{ 
+{
+
+
 var item = $("#dropdownlistc").jqxDropDownList('getSelectedItem');
-source =
+var source =
         {
             datatype: "json",
             datafields: [
                 { name: 'DataType' },
+				{ name: 'display' },
             ],
-            url: base_url+'variable/getTypes?siteid='+$('#siteidc').val()+'&varname='+item.label
+            url: base_url+'variable/getTypes?siteid='+$('#siteidc').val()+'&varname='+item.value
         };
+console.log(item.value);
 //Defining the Data adapter
-dataAdapter = new $.jqx.dataAdapter(source);
+var dataAdapter = new $.jqx.dataAdapter(source);
 
 //Creating the Drop Down list
 $("#typelistc").jqxDropDownList(
@@ -20,7 +24,7 @@ $("#typelistc").jqxDropDownList(
 	theme: 'darkblue',
 	width: 200,
 	height: 25,
-	displayMember: 'DataType',
+	displayMember: 'display',
 	valueMember: 'DataType'
 });
 
@@ -33,7 +37,7 @@ if ((item != null)&&(item.label != 'Please Choose:')) {
 	var item1 = $("#dropdownlistc").jqxDropDownList('getSelectedItem');
 $.ajax({
   type: "GET",
-   url: base_url+"variable/updateVarID?siteid="+$('#siteidc').val()+"&varname="+item1.label+"&type="+item.label,
+   url: base_url+"variable/updateVarID?siteid="+$('#siteidc').val()+"&varname="+item1.value+"&type="+item.value,
 //Processing The Dates
     success: function(data) {
 

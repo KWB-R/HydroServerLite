@@ -337,6 +337,7 @@ function create_var_list()
 		],
 		url: base_url+'variable/getTypes?siteid='+siteid+'&varname='+varname
 	};
+	console.log(base_url+'variable/getTypes?siteid='+siteid+'&varname='+varname);
 	//Defining the Data adapter
 	var dataAdapter = new $.jqx.dataAdapter(source);
 	//Creating the Drop Down list
@@ -1001,7 +1002,7 @@ window.open(url,'_blank');
 //Define the button for comaprision
 
 $("#compare").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
-$('#window').jqxWindow('destroy');
+//$('#window').jqxWindow('destroy');
 $('#mapOuter').empty();
 $('#window').jqxWindow({ maxHeight: 800, maxWidth: 800, minHeight: 200, minWidth: 200, height: 520, width: 720, theme: 'darkblue' });
 $('#window2').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
@@ -1123,7 +1124,7 @@ if($var['VariableName']!="")
       <div class="chart-inner">
         <div id="container" style="height:470px;width:100%"></div>
          <!-- Button to compare data values-->
-         <input type="button" style=" float:right" value="<?php echo getTxt('Compare');?>" id='compare' />
+         <input type="button" style="float:right;" value="<?php echo getTxt('Compare');?>" id='compare' />
       </div>
     </div>
 </div>

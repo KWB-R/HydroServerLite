@@ -1,7 +1,7 @@
 <div class='col-md-12'>
 <?php echo getTxt('EnterSearchLocation')?>
-<div id="mapOuter" style="width:100%; height:500px;">
-	<div id="mapContainer" style="width:100%;">
+<div class="container-fluid" id="mapOuter" style="width:100%; height:450px;">
+	<div class="container-fluid" id="mapContainer" style="width:100%; height:auto;">
 		<div id="map" style="width:100%; height:100%;"> </div>
 	</div>
 	<div>
@@ -27,11 +27,13 @@
 		<select name="locationSelect" id="locationSelect" style="width:100%;"></select>
 	</div>
 	</div>		
+		</div>
+	</div>
 </div>
-</div></div>
 <script>
 function browsesite(id)
 {
+console.log("Window 1 just opened.");
 $('#window').jqxWindow('hide');
 $('#window2').jqxWindow('show');
 $('#window2Content').load(base_url+'datapoint/compare/2?siteid='+id, function() {

@@ -1,6 +1,7 @@
 <script type="text/javascript">
 function loadsitecomp()
 {
+
 //Defining the Variable List
 var source =
         {
@@ -18,7 +19,7 @@ var dataAdapter = new $.jqx.dataAdapter(source);
         {
             source: dataAdapter,
             theme: 'darkblue',
-            width: 100,
+            width: 200,
             height: 25,
             displayMember: 'VariableName',
             valueMember: 'VariableID'
