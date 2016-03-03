@@ -88,6 +88,7 @@ $(document).ready(function(){
   var searchBox = new google.maps.places.SearchBox(input);
   //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
+  //Testing the new Github account
   // Bias the SearchBox results towards current map's viewport.
   map.addListener('bounds_changed', function() {
     searchBox.setBounds(map.getBounds());
