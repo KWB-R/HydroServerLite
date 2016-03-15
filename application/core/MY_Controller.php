@@ -193,13 +193,9 @@ class MY_Controller extends CI_Controller {
 
 	protected function fileUploadHandler($allowed_types, $field)
 	{
-		$newDir = "./uploads/temp".time().rand();
+		$newDir = $this->createTempUploadDir();
 
-		$oldmask = umask(0);
-		$result = mkdir($newDir,0777);
-		umask($oldmask);
-
-		if(!$result)
+		if (! $newDir)
 		{
 			addError(getTxt('FailTemp'));
 			return false;
@@ -219,5 +215,16 @@ class MY_Controller extends CI_Controller {
 
 		return $this->upload->get_multi_upload_data();
 	}
-}
 
+	protected function createTempUploadDir()
+	{
+		$newDir = "./uploads/temp".time().rand();
+
+		$oldmask = umask(0);
+		$result = mkdir($newDir,0777);
+		umask($oldmask);
+
+		// Return the path of the directory created or '' in case of an error
+		return (($result)? $newDir : '');
+	}
+}
