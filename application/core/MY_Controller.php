@@ -179,12 +179,10 @@ class MY_Controller extends CI_Controller {
 		$value = $this->config->item($name);
 
 		// return the default value if the item is not in the config file
-		if ($value === FALSE)
-		{
+		if ($value === FALSE) {
 			$value = $default;
 		}
-		elseif(strtolower($value) == "null")
-		{
+		elseif(strtolower($value) == "null") {
 			$value = NULL;
 		}
 
@@ -195,8 +193,7 @@ class MY_Controller extends CI_Controller {
 	{
 		$newDir = $this->createTempUploadDir();
 
-		if (! $newDir)
-		{
+		if (! $newDir) {
 			addError(getTxt('FailTemp'));
 			return false;
 		}
@@ -207,8 +204,7 @@ class MY_Controller extends CI_Controller {
 
 		$this->load->library('upload', $config);
 
-		if (! $this->upload->do_multi_upload($field))
-	  {
+		if (! $this->upload->do_multi_upload($field)) {
 		  addError(getTxt('FailMoveFile').$this->upload->display_errors());
 		  return false;
 	  }
