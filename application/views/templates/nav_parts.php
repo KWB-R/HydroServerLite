@@ -47,8 +47,83 @@ function html_li_sublist($keyword, $id, $items)
 		"</li>";
 }
 
-	//Removed id=nav from here for now, will add it back after styling is merged. 
+//
+// Provide configuration of submenus in an array and fill the items according
+// to the role of the current user
+//
 
+$menuConfig = array(
+	'Site' => array(
+		'keyword' => 'SiteManagement', 
+		'id' => "siteManagement", 
+		'items' => array()
+	),
+	'DB' => array(
+		'keyword' => 'DatabaseManagement', 
+		'id' => 'dbManagement', 
+		'items' => array()
+	),
+	'User' => array(
+		'keyword' => 'Users', 
+		'id' => 'usermgmt', 
+		'items' => array()
+	),
+	'Data' => array(
+		'keyword' => 'AddData', 
+		'id' => 'dataMgmt', 
+		'items' => array()
+	)
+);
+
+if (isAdmin()) {
+
+	$menuConfig['Site']['items'] = array(
+		html_linkItem("add_site", "banner/add", "AddNewBanner"),
+		html_linkItem("add_site", "home/edit", "EditWelcomePage")
+	);
+
+	$menuConfig['DB']['items'] = array(
+		html_linkItem("add_source", "source/add", "AddSource"),
+		html_linkItem("edit_source", "source/change", "ChangeSource")
+	);
+}
+
+$menuConfig['DB']['items'][] = html_linkItem("add_site", "sites/add", "AddSite");
+
+if (isAdmin()) {
+	$menuConfig['DB']['items'] = array_merge(
+		$menuConfig['DB']['items'], array(
+			html_linkItem("edit_site", "sites/change", "ChangeSite"),
+			html_linkItem("add_variable", "variable/add", "AddVariable"),
+			html_linkItem("edit_variable", "variable/edit", "ChangeVariable"),
+			html_linkItem("add_method", "methods/add", "AddMethod"),
+			html_linkItem("edit_method", "methods/change", "ChangeMethod"),
+			html_linkItem("edit_variable", "series", "EditSC")
+		)
+	);
+}
+
+if (isTeacher() || isAdmin()) {
+	$menuConfig['User']['items'] = array(
+		html_linkItem("add_user", "user/add", "AddUser"),
+		html_linkItem("edit_user", "user/changepass", "ChangePassword"),
+		html_linkItem("edit_user", "user/changeownpass", "ChangeYourPassword")
+	);
+	if (isAdmin()) {
+		$menuConfig['User']['items'][] = html_linkItem("change_authority", "user/edit", "ChangeAuthorityButton");
+	}
+	$menuConfig['User']['items'][] = html_linkItem("remove_user", "user/delete", "RemoveUser");
+}
+
+if (isStudent() || isTeacher() || isAdmin()) {
+	$menuConfig['Data']['items'] = array(
+		html_linkItem("add_single_value", "datapoint/addvalue", "AddSingleValue"),
+		html_linkItem("add_multiple_value", "datapoint/addmultiplevalues", "AddMultipleValues"), 
+		html_linkItem("import_data", "datapoint/importfile", "ImportDataFiles")
+	);
+}
+
+//Removed id=nav from here for now, will add it back after styling is merged. 
 echo '       <div class="navbar_navbar-default" role="navigation">
 <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
