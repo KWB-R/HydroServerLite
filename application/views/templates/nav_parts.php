@@ -139,55 +139,14 @@ echo '       <div class="navbar_navbar-default" role="navigation">
 		   <ul class="nav nav-tabs nav-stacked">
 		   ';
 
-if(isAdmin())
-{
-	$items = array(
-		html_linkItem("add_site", "banner/add", "AddNewBanner"),
-		html_linkItem("add_site", "home/edit", "EditWelcomePage")
-	);
-	echo html_li_sublist('SiteManagement', 'siteManagement', $items);
-}
-
-if (isTeacher() || isAdmin()){
-	$items = array();
-	if (isAdmin()) {
-		$items[] = html_linkItem("add_source", "source/add", "AddSource");
-		$items[] = html_linkItem("edit_source", "source/change", "ChangeSource");
+foreach ($menuConfig as $subConfig) {
+	if (count($subConfig['items']) > 0) {
+		echo html_li_sublist(
+			$subConfig['keyword'], 
+			$subConfig['id'], 
+			$subConfig['items']
+		);
 	}
-	$items[] = html_linkItem("add_site", "sites/add", "AddSite");
-	if (isAdmin()) {
-		$items = array_merge($items, array(
-			html_linkItem("edit_site", "sites/change", "ChangeSite"),
-			html_linkItem("add_variable", "variable/add", "AddVariable"),
-			html_linkItem("edit_variable", "variable/edit", "ChangeVariable"),
-			html_linkItem("add_method", "methods/add", "AddMethod"),
-			html_linkItem("edit_method", "methods/change", "ChangeMethod"),
-			html_linkItem("edit_variable", "series", "EditSC")
-		));
-	}
-	echo html_li_sublist('DatabaseManagement', 'dbManagement', $items);
-	// teacher admin
-	$items = array(	
-		html_linkItem("add_user", "user/add", "AddUser"),
-		html_linkItem("edit_user", "user/changepass", "ChangePassword"),
-		html_linkItem("edit_user", "user/changeownpass", "ChangeYourPassword")
-	);
-	if (isAdmin()) {
-		$items[] = html_linkItem("change_authority", "user/edit", "ChangeAuthorityButton");
-	}
-	$items[] = html_linkItem("remove_user", "user/delete", "RemoveUser");
-
-	echo html_li_sublist('Users', 'usermgmt', $items);
-}
-
-if (isStudent() || isTeacher() || isAdmin()){
-	// student teacher
-	$items = array(
-		html_linkItem("add_single_value", "datapoint/addvalue", "AddSingleValue"),
-		html_linkItem("add_multiple_value", "datapoint/addmultiplevalues", "AddMultipleValues"),
-		html_linkItem("import_data", "datapoint/importfile", "ImportDataFiles")
-	);
-	echo html_li_sublist('AddData', 'dataMgmt', $items);
 }
 
 echo html_linkItem("search", "sites/map", "SearchData");
