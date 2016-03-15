@@ -377,16 +377,35 @@ class Datapoint extends MY_Controller {
 
 			foreach ($objects as $object)
 			{
-				// Given ID value in the <object>ID column of the current data row
-				$id = $data[$columnIndex[$object . "ID"]];
+				// if there is no "<object>ID" column, there must be a
+				// "<object>Code" column (TODO: check in handleHeaderRow).
+				// Read the Code from the "<object>Code" column, check if the
+				// code is valid and use the ID corresponding to the code
+				if (! isset($columnIndex[$object . "ID"])) {
 				
-				$invalid = $this->addErrorIfInvalid(
-					$id, 
-					$existingIDs[$object],      // array of available IDs
-					strtolower($object) . "id", // keyword for language table
-					$row, 
-					$file
-				);
+					$code = $data[$columnIndex[$object . "Code"]];
+
+					$invalid = $this->addErrorIf(
+						! isset($existingIDs[$object][$code]),
+						strtolower($object) . "code", // keyword for language table
+						$row,
+						$file
+					);
+
+					$id = $existingIDs[$object][$code];
+				}
+				else {
+					// Given ID value in the <object>ID column of the current data row
+					$id = $data[$columnIndex[$object . "ID"]];
+
+					// is the ID in the array of available IDs?
+					$invalid = $this->addErrorIf(
+						! in_array($id, $existingIDs[$object]),
+						strtolower($object) . "id", // keyword for language table
+						$row,
+						$file
+					);
+				}
 				
 				// Parentheses are important since "or" has lower precedence than "="!
 				$anyInvalid = ($anyInvalid or $invalid);
@@ -428,14 +447,34 @@ class Datapoint extends MY_Controller {
 		$this->loadModel('qualifier');
 				
 		return array(
-			'Site' => array_column($this->site->getAll(), 'SiteID'),
-			'Source' => array_column($this->sources->getAll(), 'SourceID'),
-			'Variable' => array_column($this->variables->getAll(), 'VariableID'),
-			'Method' => array_column($this->method->getAll(), 'MethodID'),
-			'QualityControlLevel' => array_column(
-				$this->qualitycontrollevel->getAll(), 'QualityControlLevelID'
+			'Site' => array_column(
+				$this->site->getAll(),
+				'SiteID',
+				'SiteCode'
 			),
-			'Qualifier' => array_column($this->qualifier->getAll(), 'QualifierID')
+			'Source' => array_column(
+				$this->sources->getAll(),
+				'SourceID'
+			),
+			'Variable' => array_column(
+				$this->variables->getAll(),
+				'VariableID',
+				'VariableCode'
+			),
+			'Method' => array_column(
+				$this->method->getAll(),
+				'MethodID'
+			),
+			'QualityControlLevel' => array_column(
+				$this->qualitycontrollevel->getAll(),
+				'QualityControlLevelID',
+				'QualityControlLevelCode'
+			),
+			'Qualifier' => array_column(
+				$this->qualifier->getAll(),
+				'QualifierID',
+				'QualifierCode'
+			)
 		);
 	}
 
@@ -497,16 +536,14 @@ class Datapoint extends MY_Controller {
 		return $errorMessage;
 	}
 
-	private function addErrorIfInvalid($id, $ids, $idName, $row, $file)
+	private function addErrorIf($condition, $idName, $row, $file)
 	{
-		$isError = !in_array($id, $ids);
-		
-		if ($isError)
+		if ($condition)
 		{
 			addError($this->idErrorMessage($idName, $row, $file));
 		}
 		
-		return $isError;
+		return $condition;
 	}
 	
 	private function idErrorMessage($idName, $row, $file)
