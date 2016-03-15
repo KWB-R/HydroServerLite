@@ -4,15 +4,21 @@
 		The menu dynamically fills based on the permissions of the
 		user based on their role.
  ####################################################### */
-$menuName = '';
-if (isAdmin())
-	$menuName = "Administrator";
-elseif(isTeacher())
-	$menuName =  "Teacher";
-elseif(isStudent())
-	$menuName =  "Student";
-else
-	$menuName =  "Public";
+
+function getMenuName()
+{
+	$menuName = '';
+	if (isAdmin())
+		$menuName = "Administrator";
+	elseif(isTeacher())
+		$menuName = "Teacher";
+	elseif(isStudent())
+		$menuName = "Student";
+	else
+		$menuName = "Public";
+
+	return $menuName;
+}
 
 	//Removed id=nav from here for now, will add it back after styling is merged. 
 
@@ -26,7 +32,7 @@ echo '       <div class="navbar_navbar-default" role="navigation">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <span class="visible-xs navbar-brand">'.getTxt($menuName.'Navigation').'</span>
+          <span class="visible-xs navbar-brand">'.getTxt(getMenuName().'Navigation').'</span>
         </div>
 		
 		   <div class="navbar-collapse collapse sidebar-navbar-collapse transparentNav" id="navbarCollapse">
