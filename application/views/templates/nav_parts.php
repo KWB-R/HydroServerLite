@@ -169,23 +169,25 @@ else {
 	echo html_linkItem("login", "#", "LoginButton", 'onclick="showLogin()"');
 }
 
-echo'
-</ul>
-</div></div>';
+echo "</ul>";
+echo "</div>";
+echo "</div>";
 
+if (! isLoggedIn()) {
+	?>
 
-if(!isLoggedIn()){
-?>
-<script type="text/javascript">
-function showLogin(show) {
-    var loginForm = $("#loginHolder");
-    if (typeof show == "undefined" || show) {
-        loginForm.show();
-        $("#username").focus();
-    } else {
-        loginForm.hide();
-    }
-    return false;
+	<script type="text/javascript">
+	function showLogin(show) {
+		  var loginForm = $("#loginHolder");
+		  if (typeof show == "undefined" || show) {
+		      loginForm.show();
+		      $("#username").focus();
+		  } else {
+		      loginForm.hide();
+		  }
+		  return false;
+	}
+	</script>
+	<?php 
 }
-</script>
-<?php }?>
+?>
