@@ -17,109 +17,118 @@ class MY_Controller extends CI_Controller {
 		
 		//From the language helper we shall get the right language we need to show and then load the language file
 		
-		$lang=processLang();
-		$this->lang->load('hsl', $lang);
-		
+		$this->lang->load('hsl', processLang());
+
 		$this->authenticate();
-		
-		//Initialize Library and all Types of CSS and JS files. They will be merged according to the requirement.
+
+		// Initialize Library and all Types of CSS and JS files. 
+		// They will be merged according to the requirement.
 		$this->load->library('assetor');
 		
-		//To add a new stylesheet to the mix, put it in the right category that is being loaded and the code should take on from there. 
-		
-		$this->assetor->load('bootstrap/bootstrap.min.css','CSS_Main');
-		$this->assetor->load('default/main_css.css','CSS_Main');
-	
-		$this->assetor->load('jqstyles/jquery.ui.all.css','CSS_JQuery_UI');
-		$this->assetor->load('jqstyles/jquery.ui.timepicker.css','CSS_JQuery_UI');
-		
-		$this->assetor->load('jqstyles/demos.css','CSS_JQStyles');
-		
-		$this->assetor->load('jqwstyles/jqx.base.css','CSS_JQX');
-		$this->assetor->load('jqwstyles/jqx.darkblue.css','CSS_JQX');
-		$this->assetor->load('jqwstyles/jqx.classic.css','CSS_JQX');
-		
-		//Same stuff for Javascript files. 
-		
-		$this->assetor->load('jquery.js','JS_JQuery');
-		$this->assetor->load('common.js','JS_JQuery');
-		$this->assetor->load('bootstrap.min.js','JS_JQuery');
-		
-		$this->assetor->load('forms.js','JS_Forms');
-		
-		$this->assetor->load('ui/jquery.ui.core.js','JS_JQueryUI');
-		$this->assetor->load('ui/jquery.ui.widget.js','JS_JQueryUI');
-		$this->assetor->load('ui/jquery.ui.datepicker.js','JS_JQueryUI');
-		$this->assetor->load('ui/jquery.ui.timepicker.js','JS_JQueryUI');
-		
-		$this->assetor->load('datevalidation.js','JS_FormValidation');
-		$this->assetor->load('timevalidation.js','JS_FormValidation');
-		$this->assetor->load('numbervalidation.js','JS_FormValidation');
-		
-		$this->assetor->load('jqwidgets/jqxcore.js','JS_JQX');
-		$this->assetor->load('jqwidgets/jqxdata.js','JS_JQX');
-		$this->assetor->load('jqwidgets/jqxbuttons.js','JS_JQX');
-		$this->assetor->load('jqwidgets/jqxscrollbar.js','JS_JQX');
-		$this->assetor->load('jqwidgets/jqxlistbox.js','JS_JQX');
-		$this->assetor->load('jqwidgets/jqxcombobox.js','JS_JQX'); //add variable 
-		$this->assetor->load('jqwidgets/jqxdropdownbutton.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxdropdownlist.js','JS_JQX');  //add variable | details | add_multiple_values 
-		$this->assetor->load('jqwidgets/jqxwindow.js','JS_JQX'); //change metadata | change method | change source | details 
-		$this->assetor->load('jqwidgets/jqxpanel.js','JS_JQX'); //change metadata | change method | change source | details 
-		$this->assetor->load('jqwidgets/jqxtabs.js','JS_JQX'); //change metadata | change method | change source 
-		$this->assetor->load('jqwidgets/jqxcheckbox.js','JS_JQX'); //change metadata | change method | change source | details 
-		$this->assetor->load('jqwidgets/jqxdatetimeinput.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxcalendar.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxtooltip.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxmenu.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxgrid.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxgrid.selection.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxgrid.columnsresize.js','JS_JQX');  //details 
-		$this->assetor->load('jqwidgets/jqxgrid.pager.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxgrid.sort.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxgrid.edit.js','JS_JQX'); //details 
-		$this->assetor->load('jqwidgets/jqxexpander.js','JS_JQX'); //details	
-			
-		$this->assetor->load('gettheme.js','JS_GetTheme');
-		
-		$this->assetor->load('create_site_code.js','JS_SiteCreate');
-			
-		$this->assetor->load('jqwidgets/globalization/jquery.global.js','JS_Globalization');
-		$this->assetor->load('highstock.js','JS_Globalization'); 
-		$this->assetor->load('modules/exporting.js','JS_Globalization');
-	
-		$this->assetor->load('googleMaps.js','JS_Maps'); 
-		$this->assetor->load('markerclusterer.js','JS_Maps');
-		$this->assetor->load('map.js','JS_Maps');
+		// To add a new stylesheet to the mix, put it in the right category that is
+		// being loaded and the code should take on from there.
+		$loadConfig = array(
+			'CSS_Main' => array(
+				'bootstrap/bootstrap.min.css',
+				'default/main_css.css'
+			),
+			'CSS_JQuery_UI' => array(
+				'jqstyles/jquery.ui.all.css',
+				'jqstyles/jquery.ui.timepicker.css',
+			),
+			'CSS_JQStyles' => array(
+				'jqstyles/demos.css',
+			),
+			'CSS_JQX' => array(
+				'jqwstyles/jqx.base.css',
+				'jqwstyles/jqx.darkblue.css',
+				'jqwstyles/jqx.classic.css',
+			),
+			//Same stuff for Javascript files.
+			'JS_JQuery' => array(
+				'jquery.js',
+				'common.js',
+				'bootstrap.min.js'
+			),
+			'JS_Forms' => array(
+				'forms.js'
+			),
+			'JS_JQueryUI' => array(
+				'ui/jquery.ui.core.js',
+				'ui/jquery.ui.widget.js',
+				'ui/jquery.ui.datepicker.js',
+				'ui/jquery.ui.timepicker.js'
+			),
+			'JS_FormValidation' => array(
+				'datevalidation.js',
+				'timevalidation.js',
+				'numbervalidation.js'
+			),
+			'JS_JQX' => array(
+				'jqwidgets/jqxcore.js',
+				'jqwidgets/jqxdata.js',
+				'jqwidgets/jqxbuttons.js',
+				'jqwidgets/jqxscrollbar.js',
+				'jqwidgets/jqxlistbox.js',
+				'jqwidgets/jqxcombobox.js', //add variable
+				'jqwidgets/jqxdropdownbutton.js', //details
+				'jqwidgets/jqxdropdownlist.js', //add variable | details | add_multiple_values
+				'jqwidgets/jqxwindow.js', //change metadata | change method | change source | details
+				'jqwidgets/jqxpanel.js', //change metadata | change method | change source | details 
+				'jqwidgets/jqxtabs.js', //change metadata | change method | change source
+				'jqwidgets/jqxcheckbox.js', //change metadata | change method | change source | details
+				'jqwidgets/jqxdatetimeinput.js', //details
+				'jqwidgets/jqxcalendar.js', //details
+				'jqwidgets/jqxtooltip.js', //details
+				'jqwidgets/jqxmenu.js', //details
+				'jqwidgets/jqxgrid.js', //details
+				'jqwidgets/jqxgrid.selection.js', //details
+				'jqwidgets/jqxgrid.columnsresize.js', //details
+				'jqwidgets/jqxgrid.pager.js', //details
+				'jqwidgets/jqxgrid.sort.js', //details
+				'jqwidgets/jqxgrid.edit.js', //details
+				'jqwidgets/jqxexpander.js' //details
+			),
+			'JS_GetTheme' => array(
+				'gettheme.js'
+			),
+			'JS_SiteCreate' => array(
+				'create_site_code.js'
+			),
+			'JS_Globalization' => array(
+				'jqwidgets/globalization/jquery.global.js',
+				'highstock.js',
+				'modules/exporting.js'
+			),
+			'JS_Maps' => array(
+				'googleMaps.js',
+				'markerclusterer.js',
+				'map.js'
+			),
+			'JS_CreateUserName' => array(
+				'create_username.js'
+			),
+			'JS_ImportData' => array(
+				'import_data.js'
+			),
+			'JS_DropDown' => array(
+				'drop_down.js'
+			)
+		);
 
-		$this->assetor->load('create_username.js','JS_CreateUserName');
-			
-		$this->assetor->load('import_data.js','JS_ImportData');
-			
-		$this->assetor->load('drop_down.js','JS_DropDown');
-	
+		foreach ($loadConfig as $groupName => $files) {
+			foreach ($files as $file) {
+				$this->assetor->load($file, $groupName);
+			}
+		}
 		
 		//$this->assetor->merge(TRUE); Merging is causing issues with google maps. 
 		//$this->assetor->minify();
 	
-		$this->StyleData['CSS_Main'] = $this->assetor->generate('CSS_Main');
-		$this->StyleData['CSS_JQuery_UI'] = $this->assetor->generate('CSS_JQuery_UI');
-		$this->StyleData['CSS_JQStyles'] = $this->assetor->generate('CSS_JQStyles');
-		$this->StyleData['CSS_JQX'] = $this->assetor->generate('CSS_JQX');
-		
-		$this->StyleData['JS_JQuery'] = $this->assetor->generate('JS_JQuery');
-		$this->StyleData['JS_Forms'] = $this->assetor->generate('JS_Forms');
-		$this->StyleData['JS_JQueryUI'] = $this->assetor->generate('JS_JQueryUI');
-		$this->StyleData['JS_FormValidation'] = $this->assetor->generate('JS_FormValidation');
-		$this->StyleData['JS_JQX'] = $this->assetor->generate('JS_JQX');
-		$this->StyleData['JS_GetTheme'] = $this->assetor->generate('JS_GetTheme');
-		$this->StyleData['JS_SiteCreate'] = $this->assetor->generate('JS_SiteCreate');
-		$this->StyleData['JS_Globalization'] = $this->assetor->generate('JS_Globalization');
-		$this->StyleData['JS_Maps'] = $this->assetor->generate('JS_Maps');
-		$this->StyleData['JS_CreateUserName'] = $this->assetor->generate('JS_CreateUserName');
-		$this->StyleData['JS_ImportData'] = $this->assetor->generate('JS_ImportData');
-		$this->StyleData['JS_DropDown'] = $this->assetor->generate('JS_DropDown');
-		
+		foreach (array_keys($loadConfig) as $groupName) {
+			$this->StyleData[$groupName] = $this->assetor->generate($groupName);
+		}
+
 		//Initializing Javascript Variable for ajax requests. 
 		
 		$this->StyleData['js_vars'] = 'var asset_url= "'.base_url().'assets/";
