@@ -32,9 +32,22 @@ function html_linkItem($class, $url, $textKey, $attributes = '')
 		"</li>";
 }
 
+function html_li_sublist($keyword, $id, $items)
+{
+	return
+		html_li_beg("nav-header") .
+			html_a(
+				"#", # target
+				html_h(getTxt($keyword), 4), # content
+				html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
+			) .
+			html_ul_beg("collapse", $id, "list-style: none;") .
+				implode("\n", $items) .
+			"</ul>" .
+		"</li>";
+}
+
 	//Removed id=nav from here for now, will add it back after styling is merged. 
-
-
 
 echo '       <div class="navbar_navbar-default" role="navigation">
 <div class="navbar-header">
@@ -53,85 +66,63 @@ echo '       <div class="navbar_navbar-default" role="navigation">
 
 if(isAdmin())
 {
-		echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#siteManagement">
-    <h4>'.getTxt('SiteManagement').'</h4>
-    </a>
-      <ul style="list-style: none;" class="collapse" id="siteManagement">';
-
-	echo html_linkItem("add_site", "banner/add", "AddNewBanner");
-	echo html_linkItem("add_site", "home/edit", "EditWelcomePage");
-	
-	echo "</ul>";
-	echo "</li>";
+	$items = array(
+		html_linkItem("add_site", "banner/add", "AddNewBanner"),
+		html_linkItem("add_site", "home/edit", "EditWelcomePage")
+	);
+	echo html_li_sublist('SiteManagement', 'siteManagement', $items);
 }
 
 if (isTeacher() || isAdmin()){
-
-
-
-	echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#dbManagement">
-    <h4>'.getTxt('DatabaseManagement').'</h4>
-    </a>
-      <ul style="list-style: none;" class="collapse" id="dbManagement">';
-
-	if (isAdmin()){
-		// > admin
-		echo html_linkItem("add_source", "source/add", "AddSource");
-		echo html_linkItem("edit_source", "source/change", "ChangeSource");
+	$items = array();
+	if (isAdmin()) {
+		$items[] = html_linkItem("add_source", "source/add", "AddSource");
+		$items[] = html_linkItem("edit_source", "source/change", "ChangeSource");
 	}
-	// > teacher admin
-	echo html_linkItem("add_site", "sites/add", "AddSite");
-	
-	if (isAdmin()){
-		// > admin
-		echo html_linkItem("edit_site", "sites/change", "ChangeSite");
-		echo html_linkItem("add_variable", "variable/add", "AddVariable");
-		echo html_linkItem("edit_variable", "variable/edit", "ChangeVariable");
-		echo html_linkItem("add_method", "methods/add", "AddMethod");
-		echo html_linkItem("edit_method", "methods/change", "ChangeMethod");
-		echo html_linkItem("edit_variable", "series", "EditSC");
+	$items[] = html_linkItem("add_site", "sites/add", "AddSite");
+	if (isAdmin()) {
+		$items = array_merge($items, array(
+			html_linkItem("edit_site", "sites/change", "ChangeSite"),
+			html_linkItem("add_variable", "variable/add", "AddVariable"),
+			html_linkItem("edit_variable", "variable/edit", "ChangeVariable"),
+			html_linkItem("add_method", "methods/add", "AddMethod"),
+			html_linkItem("edit_method", "methods/change", "ChangeMethod"),
+			html_linkItem("edit_variable", "series", "EditSC")
+		));
 	}
-	echo "</ul>";
-	echo "</li>";
+	echo html_li_sublist('DatabaseManagement', 'dbManagement', $items);
 	// teacher admin
-	echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#usermgmt">
-    <h4>'.getTxt('Users').'</h4>
-    </a>
-      <ul style="list-style: none;" class="collapse" id="usermgmt">';
-	echo html_linkItem("add_user", "user/add", "AddUser");
-	echo html_linkItem("edit_user", "user/changepass", "ChangePassword");
-	echo html_linkItem("edit_user", "user/changeownpass", "ChangeYourPassword");
-	// > admin
-	if (isAdmin())
-		echo html_linkItem("change_authority", "user/edit", "ChangeAuthorityButton");
+	$items = array(	
+		html_linkItem("add_user", "user/add", "AddUser"),
+		html_linkItem("edit_user", "user/changepass", "ChangePassword"),
+		html_linkItem("edit_user", "user/changeownpass", "ChangeYourPassword")
+	);
+	if (isAdmin()) {
+		$items[] = html_linkItem("change_authority", "user/edit", "ChangeAuthorityButton");
+	}
+	$items[] = html_linkItem("remove_user", "user/delete", "RemoveUser");
 
-	// > teacher admin
-	echo html_linkItem("remove_user", "user/delete", "RemoveUser");
-	echo"</ul>";
-	echo"</li>";
-}		  
+	echo html_li_sublist('Users', 'usermgmt', $items);
+}
 
 if (isStudent() || isTeacher() || isAdmin()){
 	// student teacher
-		echo '<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#dataMgmt">
-    <h4>'.getTxt('AddData').'</h4>
-    </a>
-      <ul style="list-style: none;" class="collapse" id="dataMgmt">';
-	echo html_linkItem("add_single_value", "datapoint/addvalue", "AddSingleValue");
-	echo html_linkItem("add_multiple_value", "datapoint/addmultiplevalues", "AddMultipleValues");
-	echo html_linkItem("import_data", "datapoint/importfile", "ImportDataFiles");
-	echo "</ul>";
-	echo "</li>";
+	$items = array(
+		html_linkItem("add_single_value", "datapoint/addvalue", "AddSingleValue"),
+		html_linkItem("add_multiple_value", "datapoint/addmultiplevalues", "AddMultipleValues"),
+		html_linkItem("import_data", "datapoint/importfile", "ImportDataFiles")
+	);
+	echo html_li_sublist('AddData', 'dataMgmt', $items);
 }
 
- echo "<li class=\"search\"><a href='".site_url('sites/map')."'>".getTxt('SearchData')."</a></li>";
-echo "<li class=\"help\"><a href='".site_url('home/help')."'>".getTxt('Help')."</a></li>";
+echo html_linkItem("search", "sites/map", "SearchData");
+echo html_linkItem("help", "home/help", "Help");
 
-echo "<li class=\"search\"><a href='".site_url("services")."'>".getTxt('WebServices')."</a></li>";  
+echo html_linkItem("search", "services", "WebServices");
 
 if(isLoggedIn())	{
-	echo "<li class=\"home\"><a href='".site_url("home")."'>".getTxt('Home')."</a></li>";
-	echo "<li class=\"login\"><a href='".site_url("auth/logout")."'>".getTxt('Logout')."</a></li>";
+	echo html_linkItem("home", "home", "Home");
+	echo html_linkItem("login", "auth/logout", "Logout");
 }else{
 	echo "<li class=\"login\"><a href='#' onclick='showLogin()';>".getTxt('LoginButton')."</a></li>";
 }
