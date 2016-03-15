@@ -147,21 +147,26 @@ class MY_Controller extends CI_Controller {
 	protected function authenticate()
 	{
 		$segments = $this->uri->segment_array();
-		$flag=true;
-		if(isset($this->dontAuth)){
-		foreach($this->dontAuth as $loc)
-		{
-			if(in_array($loc,$segments))
-			{
-				$flag=false;
-				break;
-			}
-		}}
-		
-		if(!isLoggedIn() && $flag)
-		{
+
+		$ok = isset($this->dontAuth) &&	(
+			($this->dontAuth === '*') ||
+			($this->any_in_array($this->dontAuth, $segments))
+		);
+
+		if (! $ok && ! isLoggedIn()) {
 			$this->kickOut();
-		}	
+		}
+	}
+
+	private function any_in_array($array1, $array2) 
+	{
+		foreach ($array1 as $element) {
+			if (in_array($element, $array2)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	protected function loadModel($modelName)
