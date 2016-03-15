@@ -1,5 +1,97 @@
 <?php
 
+//
+// General HTML Helper Functions
+//
+
+// Functions for setting HTML attributes
+
+function html_class($class = '')
+{
+	return html_attr("class", $class);
+}
+
+function html_id($id = '')
+{
+	return html_attr("id", $id);
+}
+
+function html_style($style = '')
+{
+	return html_attr("style", $style);
+}
+
+function html_attr($name, $value = '')
+{
+	return (($value == '')? '' : " $name=\"$value\"");
+}
+
+function html_attribs($assignments)
+{
+	$pieces = array();
+
+	foreach ($assignments as $key => $value) {
+		if ($value != '') {
+			$pieces[] = html_attr($key, $value);
+		}
+	}
+
+	return implode("", $pieces);
+}
+
+// Full HTML Tags
+
+function html_a($url, $content, $attributes = '')
+{
+	return "\n<a" . html_attr("href", $url) .
+		($attributes? " " . $attributes : "") . ">" . $content . "</a>";
+}
+
+function html_h($content, $level)
+{
+	return "\n<h$level>" . $content . "</h$level>";
+}
+
+function html_span($class, $content = '')
+{
+	return "\n<span" . html_class($class) . '>' . $content . "</span>";
+}
+
+// HTML tag starts
+
+function html_button_beg($class, $toggle, $target)
+{
+	$attribs = html_attribs(array(
+		"type" => "button",
+		"class" => $class,
+		"data-toggle" => $toggle,
+		"data-target" => $target
+	));
+
+	return "\n<button" . $attribs . ">";
+}
+
+function html_div_beg($class = '', $id = '', $role = '')
+{
+	$attribs = html_attribs(array(
+		"class" => $class, "id" => $id, "role" => $role
+	));
+
+	return "\n<div" . $attribs . ">";
+}
+
+function html_li_beg($class = '')
+{
+	return "\n<li" . html_class($class) . ">";
+}
+
+function html_ul_beg($class = '', $id = '', $style = '')
+{
+	return "\n<ul" . html_attribs(
+		array("class" => $class, "id" => $id, "style" => $style)
+	) . ">";
+}
+
 //Function for generating options. Keeping it here as it might be used by various controllers once they get the result from the model.
 
 function optionsSource($result)

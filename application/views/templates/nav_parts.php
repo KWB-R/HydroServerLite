@@ -20,6 +20,18 @@ function getMenuName()
 	return $menuName;
 }
 
+//
+// Helper Functions for generationg parts of this template
+//
+
+function html_linkItem($class, $url, $textKey, $attributes = '')
+{
+	return 
+		html_li_beg($class) . 
+			html_a(site_url($url), getTxt($textKey), $attributes) . 
+		"</li>";
+}
+
 	//Removed id=nav from here for now, will add it back after styling is merged. 
 
 
@@ -46,8 +58,9 @@ if(isAdmin())
     </a>
       <ul style="list-style: none;" class="collapse" id="siteManagement">';
 
-	echo "<li class=\"add_site\"><a href='".site_url('banner/add')."'>".getTxt('AddNewBanner')."</a></li>";
-	echo "<li class=\"add_site\"><a href='".site_url('home/edit')."'>".getTxt('EditWelcomePage')."</a></li>";
+	echo html_linkItem("add_site", "banner/add", "AddNewBanner");
+	echo html_linkItem("add_site", "home/edit", "EditWelcomePage");
+	
 	echo "</ul>";
 	echo "</li>";
 }
@@ -63,19 +76,20 @@ if (isTeacher() || isAdmin()){
 
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"add_source\"><a href='".site_url('source/add')."'>".getTxt('AddSource')."</a></li>";
-		echo "<li class=\"edit_source\"><a href='".site_url('source/change')."'>".getTxt('ChangeSource')."</a></li>";
+		echo html_linkItem("add_source", "source/add", "AddSource");
+		echo html_linkItem("edit_source", "source/change", "ChangeSource");
 	}
 	// > teacher admin
-	echo "<li class=\"add_site\"><a href='".site_url('sites/add')."'>".getTxt('AddSite')."</a></li>";
+	echo html_linkItem("add_site", "sites/add", "AddSite");
+	
 	if (isAdmin()){
 		// > admin
-		echo "<li class=\"edit_site\"><a href='".site_url('sites/change')."'>".getTxt('ChangeSite')."</a></li>";
-		echo "<li class=\"add_variable\"><a href='".site_url('variable/add')."'>".getTxt('AddVariable')."</a></li>";
-		echo "<li class=\"edit_variable\"><a href='".site_url('variable/edit')."'>".getTxt('ChangeVariable')."</a></li>";
-		echo "<li class=\"add_method\"><a href='".site_url('methods/add')."'>".getTxt('AddMethod')."</a></li>";
-		echo "<li class=\"edit_method\"><a href='".site_url('methods/change')."'>".getTxt('ChangeMethod')."</a></li>";
-		echo "<li class=\"edit_variable\"><a href='".site_url('series')."'>".getTxt('EditSC')."</a></li>";
+		echo html_linkItem("edit_site", "sites/change", "ChangeSite");
+		echo html_linkItem("add_variable", "variable/add", "AddVariable");
+		echo html_linkItem("edit_variable", "variable/edit", "ChangeVariable");
+		echo html_linkItem("add_method", "methods/add", "AddMethod");
+		echo html_linkItem("edit_method", "methods/change", "ChangeMethod");
+		echo html_linkItem("edit_variable", "series", "EditSC");
 	}
 	echo "</ul>";
 	echo "</li>";
@@ -84,15 +98,15 @@ if (isTeacher() || isAdmin()){
     <h4>'.getTxt('Users').'</h4>
     </a>
       <ul style="list-style: none;" class="collapse" id="usermgmt">';
-	echo "<li class=\"add_user\"><a href='".site_url('user/add')."'>".getTxt('AddUser')."</a></li>";
-	echo "<li class=\"edit_user\"><a href='".site_url('user/changepass')."'>".getTxt('ChangePassword')."</a></li>";
-	echo "<li class=\"edit_user\"><a href='".site_url('user/changeownpass')."'>".getTxt('ChangeYourPassword')."</a></li>";
+	echo html_linkItem("add_user", "user/add", "AddUser");
+	echo html_linkItem("edit_user", "user/changepass", "ChangePassword");
+	echo html_linkItem("edit_user", "user/changeownpass", "ChangeYourPassword");
 	// > admin
 	if (isAdmin())
-		echo "<li class=\"change_authority\"><a href='".site_url('user/edit')."'>".getTxt('ChangeAuthorityButton')."</a></li>";
+		echo html_linkItem("change_authority", "user/edit", "ChangeAuthorityButton");
 
 	// > teacher admin
-	echo "<li class=\"remove_user\"><a href='".site_url('user/delete')."'>".getTxt('RemoveUser')."</a></li>";
+	echo html_linkItem("remove_user", "user/delete", "RemoveUser");
 	echo"</ul>";
 	echo"</li>";
 }		  
@@ -103,9 +117,9 @@ if (isStudent() || isTeacher() || isAdmin()){
     <h4>'.getTxt('AddData').'</h4>
     </a>
       <ul style="list-style: none;" class="collapse" id="dataMgmt">';
-	echo "<li class=\"add_single_value\"><a href='".site_url('datapoint/addvalue')."'>".getTxt('AddSingleValue')."</a></li>";
-	echo "<li class=\"add_multiple_value\"><a href='".site_url('datapoint/addmultiplevalues')."'>".getTxt('AddMultipleValues')."</a></li>";
-	echo "<li class=\"import_data\"><a href='".site_url('datapoint/importfile')."'>".getTxt('ImportDataFiles')."</a></li>";
+	echo html_linkItem("add_single_value", "datapoint/addvalue", "AddSingleValue");
+	echo html_linkItem("add_multiple_value", "datapoint/addmultiplevalues", "AddMultipleValues");
+	echo html_linkItem("import_data", "datapoint/importfile", "ImportDataFiles");
 	echo "</ul>";
 	echo "</li>";
 }
