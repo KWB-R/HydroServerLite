@@ -10,7 +10,13 @@ class Datapoint extends MY_Controller {
 	
 	function __construct()
 	{
-		$this->dontAuth = array('getData','getDataJSON','compare','export');
+		$dontAuth = array('getData','getDataJSON','compare','export');
+
+		$publicAccess = config_item("public_access");
+		$publicAccess = (isset($publicAccess) && ($publicAccess === TRUE));
+
+		$this->dontAuth = ($publicAccess? $dontAuth : array());
+
 		parent::__construct();
 
 		$models = array('variables', 'sources', 'datapoints', 'sc', 'site');
