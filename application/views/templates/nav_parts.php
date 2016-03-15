@@ -124,20 +124,21 @@ if (isStudent() || isTeacher() || isAdmin()) {
 }
 
 //Removed id=nav from here for now, will add it back after styling is merged. 
-echo '       <div class="navbar_navbar-default" role="navigation">
-<div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <span class="visible-xs navbar-brand">'.getTxt(getMenuName().'Navigation').'</span>
-        </div>
-		
-		   <div class="navbar-collapse collapse sidebar-navbar-collapse transparentNav" id="navbarCollapse">
-		   <ul class="nav nav-tabs nav-stacked">
-		   ';
+echo html_div_beg("navbar_navbar-default", "", "navigation");
+echo html_div_beg("navbar-header");
+echo html_button_beg("navbar-toggle", "collapse", "#navbarCollapse");
+echo html_span("sr-only", "Toggle navigation");
+echo html_span("icon-bar");
+echo html_span("icon-bar");
+echo html_span("icon-bar");
+echo "</button>";
+echo html_span("visible-xs navbar-brand", getTxt(getMenuName() . 'Navigation'));
+echo "</div>"; // navbar-header
+echo html_div_beg( 
+	"navbar-collapse collapse sidebar-navbar-collapse transparentNav", # class
+	"navbarCollapse" # id
+);
+echo html_ul_beg("nav nav-tabs nav-stacked");
 
 foreach ($menuConfig as $subConfig) {
 	if (count($subConfig['items']) > 0) {
