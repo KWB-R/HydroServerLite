@@ -10,17 +10,26 @@ class Sites extends MY_Controller {
 	
 	function __construct()
 	{
-		$this->dontAuth = array('map','details','displayAll','siteSearch','getSitesJSON','getSiteJSON');
-		parent::__construct();
-		$this->load->model('site','',TRUE);
-		$this->load->model('sources','',TRUE);
-		
+		$dontAuth = array(
+			'map','details','displayAll','siteSearch','getSitesJSON','getSiteJSON'
+		);
 
+		$publicAccess = config_item("public_access");
+		$publicAccess = (isset($publicAccess) && ($publicAccess === TRUE));
+
+		$this->dontAuth = ($publicAccess? $dontAuth : array());
+
+		parent::__construct();
+
+		$this->loadModel('site');
+		$this->loadModel('sources');
 	}
+
 	public function index()
 	{		
 		$this->map();
 	}
+
 	public function map()
 	{		
 		//List of CSS to pass to this view
@@ -42,7 +51,7 @@ class Sites extends MY_Controller {
 		$siteData = $this->site->getSite($siteid);
 		$data['site']=$siteData[0];
 		$data['SiteID']=$siteid;
-		$this->load->model('variables','',TRUE);
+		$this->loadModel('variables');
 		$result = $this->variables->getSite($siteid);
 		$data['Variables']=$result;
 		$this->load->view('details',$data);
@@ -124,7 +133,7 @@ class Sites extends MY_Controller {
 						'Citation' =>  $source[0]['Citation'],
 						'ValueCount' =>  0
 					);	
-					$this->load->model('sc','',TRUE);
+					$this->loadModel('sc');
 					//Add to the series catalog
 					$result=$this->sc->add($series);
 					if($result)
@@ -222,7 +231,7 @@ class Sites extends MY_Controller {
 						'SiteName' =>  $this->input->post('SiteName'),
 						'SiteType' => $this->input->post('SiteType'),
 					);
-					$this->load->model('sc','',TRUE);
+					$this->loadModel('sc');
 					//Add to the series catalog
 					$result=$this->sc->updateSite($series,$siteID);
 					if($result)
@@ -363,7 +372,7 @@ class Sites extends MY_Controller {
 			return;
 		}
 		$result = $this->site->delete($siteid);
-		$this->load->model('sc','',TRUE);
+		$this->loadModel('sc');
 		$this->sc->delSite($siteid);
 		if($result)
 			{	

@@ -2,6 +2,19 @@
 
 /*
 |--------------------------------------------------------------------------
+| hsonne: Shall public access be allowed?
+|--------------------------------------------------------------------------
+|
+| I need this setting in the different Controller classes before calling
+| CI_Controller::__construct and before having access to 
+| "application/config/installations/default.php"...
+|
+*/
+//$config['public_access'] = TRUE;
+$config['public_access'] = FALSE;
+
+/*
+|--------------------------------------------------------------------------
 | Base Site URL
 |--------------------------------------------------------------------------
 |

@@ -10,8 +10,18 @@ class api extends MY_Controller {
 
 	public function __construct()
 	{
-		$this->dontAuth = array('api','index','values','sources','sites','variables','methods','GetSourcesJSON','GetSitesJSON','GetVariablesJSON');
+		$dontAuth = array(
+			'api', 'index', 'values', 'sources', 'sites', 'variables', 'methods', 
+			'GetSourcesJSON', 'GetSitesJSON', 'GetVariablesJSON'
+		);
+
+		$publicAccess = config_item("public_access");
+		$publicAccess = (isset($publicAccess) && ($publicAccess === TRUE));
+
+		$this->dontAuth = ($publicAccess? $dontAuth : array());
+
 		parent::__construct();
+
 		$this->load->model('sc');
 		$this->load->model('datapoints');
 		$this->load->model('sources');

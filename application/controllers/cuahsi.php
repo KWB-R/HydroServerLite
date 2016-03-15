@@ -1,17 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Cuahsi extends CI_Controller {
+class Cuahsi extends MY_Controller {
 	
 	function __construct()
 	{
+		$dontAuth = '*';
+
+		$publicAccess = config_item("public_access");
+		$publicAccess = (isset($publicAccess) && ($publicAccess === TRUE));
+
+		$this->dontAuth = ($publicAccess? $dontAuth : array());
+
 		parent::__construct();
-		
-		$this->load->helper('auth_helper.php');
-		$this->load->helper('html_helper.php');
-		$this->load->helper('language_helper.php');
-		$lang=processLang();
-		$this->lang->load('hsl', $lang);
-	
 		
 		$this->load->helper('hydroservices');
 	}
