@@ -124,6 +124,8 @@ if (isStudent() || isTeacher() || isAdmin()) {
 }
 
 //Removed id=nav from here for now, will add it back after styling is merged. 
+
+// Here starts the output
 echo html_div_beg("navbar_navbar-default", "", "navigation");
 echo html_div_beg("navbar-header");
 echo html_button_beg("navbar-toggle", "collapse", "#navbarCollapse");
@@ -153,17 +155,19 @@ foreach ($menuConfig as $subConfig) {
 echo html_linkItem("search", "sites/map", "SearchData");
 echo html_linkItem("help", "home/help", "Help");
 
-echo html_linkItem("search", "services", "WebServices");
+$publicAccess = config_item("public_access");
 
-if(isLoggedIn())	{
-	echo html_linkItem("home", "home", "Home");
-	echo html_linkItem("login", "auth/logout", "Logout");
-}else{
-	echo "<li class=\"login\"><a href='#' onclick='showLogin()';>".getTxt('LoginButton')."</a></li>";
+if (isset($publicAccess) && ($publicAccess === TRUE)) {
+	echo html_linkItem("search", "services", 'WebServices');
 }
 
-
-
+if(isLoggedIn()) {
+	echo html_linkItem("home", "home", "Home");
+	echo html_linkItem("login", "auth/logout", "Logout");
+}
+else {
+	echo html_linkItem("login", "#", "LoginButton", 'onclick="showLogin()"');
+}
 
 echo'
 </ul>
