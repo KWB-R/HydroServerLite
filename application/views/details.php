@@ -17,20 +17,36 @@ echo $CSS_JQStyles;
 var DATA = {
 	siteid:<?php echo $SiteID;?>,
 	text:{
-		InvalidTimeFive:"<?php echo getTxt('InvalidTimeFive');?>",
-		InvalidTimeHoursTwo:"<?php echo getTxt('InvalidTimeHoursTwo');?>",
-		InvalidTimeHoursZeros:"<?php echo getTxt('InvalidTimeHoursZeros');?>",
-		InvalidTimeHoursTwentyThree:"<?php echo getTxt('InvalidTimeHoursTwentyThree');?>",
-		InvalidTimeMinutesTwo:"<?php echo getTxt('InvalidTimeMinutesTwo');?>",
-		InvalidTimeMinutesZeros:"<?php echo getTxt('InvalidTimeMinutesZeros');?>",
-		InvalidTimeMinutesFiftyNine:"<?php echo getTxt('InvalidTimeMinutesFiftyNine');?>",
-		InvalidCharacterNumbers:"<?php echo getTxt('InvalidCharacterNumbers');?>",
-		InvalidTimeHoursTwo:"<?php echo getTxt('InvalidTimeHoursTwo');?>",
-		InvalidTimeHoursZeros:"<?php echo getTxt('InvalidTimeHoursZeros');?>",
-		InvalidTimeHoursTwentyThree:"<?php echo getTxt('InvalidTimeHoursTwentyThree');?>",
-		InvalidTimeMinutesTwo:"<?php echo getTxt('InvalidTimeMinutesTwo');?>",
-		InvalidTimeMinutesZeros:"<?php echo getTxt('InvalidTimeMinutesZeros');?>",
-		InvalidTimeMinutesFiftyNine:"<?php echo getTxt('InvalidTimeMinutesFiftyNine');?>"
+		InvalidTimeFive:             "<?php echo getTxt('InvalidTimeFive');?>",
+		InvalidTimeHoursTwo:         "<?php echo getTxt('InvalidTimeHoursTwo');?>",
+		InvalidTimeHoursZeros:       "<?php echo getTxt('InvalidTimeHoursZeros');?>",
+		InvalidTimeHoursTwentyThree: "<?php echo getTxt('InvalidTimeHoursTwentyThree');?>",
+		InvalidTimeMinutesTwo:       "<?php echo getTxt('InvalidTimeMinutesTwo');?>",
+		InvalidTimeMinutesZeros:     "<?php echo getTxt('InvalidTimeMinutesZeros');?>",
+		InvalidTimeMinutesFiftyNine: "<?php echo getTxt('InvalidTimeMinutesFiftyNine');?>",
+		InvalidCharacterNumbers:     "<?php echo getTxt('InvalidCharacterNumbers');?>",
+		EnterNumberValue:            "<?php echo getTxt('EnterNumberValue');?>",
+		EnterValidNumberValue:       "<?php echo getTxt('EnterValidNumberValue');?>",
+		DatesAvailable:              "<?php echo getTxt('DatesAvailable');?>",
+		From:                        "<?php echo getTxt('From');?>",
+		To:                          "<?php echo getTxt('To');?>",
+		SelectStart:                 "<?php echo getTxt('SelectStart');?>",
+		SelectEnd:                   "<?php echo getTxt('SelectEnd');?>",
+		Dataof:                      "<?php echo getTxt('Dataof');?>",
+		SiteName:                    "<?php echo $site['SiteName'];?>",
+		ClickDrag:                   "<?php echo getTxt('ClickDrag');?>",
+		TimeMsg:                     "<?php echo getTxt('TimeMsg');?>",
+		OneD:                        "<?php echo getTxt('OneD');?>",
+		ThreeD:                      "<?php echo getTxt('ThreeD');?>",
+		OneW:                        "<?php echo getTxt('OneW');?>",
+		OneM:                        "<?php echo getTxt('OneM');?>",
+		SixM:                        "<?php echo getTxt('SixM');?>",
+		OneY:                        "<?php echo getTxt('OneY');?>",
+		All:                         "<?php echo getTxt('All');?>", 
+		DatabaseConfigurationError:  "<?php echo getTxt('DatabaseConfigurationError');?>",
+		ValueID:                     "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
+		DateTime:                    "<?php echo getTxt('Date');?>",
+		Value:                       "<?php echo str_replace(':', '', getTxt('Value'));?>"
 	}
 };
 var glob_df;
@@ -221,7 +237,7 @@ return Value;
 
 function isValidNumber(val){
       if(val==null || val.length==0){
-   		  alert(<?php echo "'".getTxt('EnterNumberValue')."'";?>);
+   		  alert(DATA.text.EnterNumberValue);
 
 		  return false;
 		  }
@@ -237,7 +253,7 @@ function isValidNumber(val){
                   continue
             }
             if (ch < "0" || ch > "9") {
-		    alert(<?php echo "'".getTxt('EnterValidNumberValue')."'";?>);
+		    alert(DATA.text.EnterValidNumberValue);
 			    return false;
             	}
       }
@@ -255,7 +271,7 @@ return Value;
 
 function isValidNumber(val){
       if(val==null || val.length==0){
-   		  alert(<?php echo "'".getTxt('EnterNumberValue')."'";?>);
+   		  alert(DATA.text.EnterNumberValue);
 		  return false;
 		  }
 
@@ -270,7 +286,7 @@ function isValidNumber(val){
                   continue
             }
             if (ch < "0" || ch > "9") {
-		    alert(<?php echo "'".getTxt('EnterValidNumberValue')."'";?>);
+		    alert(DATA.text.EnterValidNumberValue);
 			    return false;
             	}
       }
@@ -459,7 +475,10 @@ date_to=String(result.EndDateTime);
 //Call the next function to display the data
 
 $('#daterange').html("");
-$('#daterange').prepend('<p><strong>'+<?php echo "'".getTxt('DatesAvailable')."'";?>+'</strong> ' + date_from + ' <strong>'+<?php echo "'".getTxt('To')."'";?>+'</strong> ' + date_to +'</p>');
+$('#daterange').prepend(
+	'<p><strong>'+DATA.text.DatesAvailable+'</strong> ' + date_from + 
+	' <strong>'+DATA.text.To + '</strong> ' + date_to +'</p>'
+);
 
 $("#jqxDateTimeInput").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
 $("#jqxDateTimeInput").jqxDateTimeInput({ formatString: 'd' });
@@ -514,8 +533,8 @@ if (monthEnd > 12) { monthEnd=12;}
 
 date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
 date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
-$("#fromdatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectStart')."'";?> );
-$("#todatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectEnd')."'";?> );
+$("#fromdatedrop").jqxDropDownButton('setContent', DATA.text.SelectStart);
+$("#todatedrop").jqxDropDownButton('setContent', DATA.text.SelectEnd);
 
 plot_chart();	
 //Binding An Event to the first calender
@@ -581,7 +600,6 @@ $.ajax({
 var date_chart_from=glob_df.getFullYear() + '-' + add_zero((glob_df.getMonth()+1)) + '-' + add_zero(glob_df.getDate());
 var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1)) + '-' + add_zero(glob_dt.getDate());
  
-  
 // var data_test=datatest;
  chart=new Highcharts.StockChart({
     chart: {
@@ -598,7 +616,9 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
           
         },
     title: {
-	text: <?php echo "'".getTxt('Dataof')."'"; ?>+" "+<?php echo "'".$site['SiteName']."'"; ?>+" "+ <?php echo "'".getTxt('From')."'"; ?>+" "+ date_chart_from +" "+  <?php echo "'".getTxt('To')."'"; ?>+" " + date_chart_to,
+	text: DATA.text.Dataof+" "+DATA.text.SiteName+" "+ 
+				DATA.text.From  +" "+date_chart_from+" "+  
+				DATA.text.To    +" "+date_chart_to,
 		style: {
                 fontSize: '12px'
             }
@@ -610,7 +630,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
         },
 	
 	 subtitle: {
-	text: <?php echo "'".getTxt('ClickDrag')."'"; ?>
+	text: DATA.text.ClickDrag
     },
 	
    xAxis: {
@@ -620,7 +640,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
                 year: '%b.%Y'
             },
 			title: {
-		text: <?php echo "'".getTxt('TimeMsg')."'"; ?>,
+		text: DATA.text.TimeMsg,
 				margin: 30
             }
 			
@@ -633,8 +653,6 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 			
         },
 	
-	 
-	
 	 exporting: {
             enabled: true,
 			width: 5000
@@ -646,31 +664,31 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 				{
                     type: 'day',
                     count: 1,
-		    text: <?php echo "'".getTxt('OneD')."'"; ?>
+		    text: DATA.text.OneD
                 },
 				{
                     type: 'day',
                     count: 3,
-		    		text: <?php echo "'".getTxt('ThreeD')."'"; ?>
+		    		text: DATA.text.ThreeD
                 }, {
                     type: 'week',
                     count: 1,
-		    		text: <?php echo "'".getTxt('OneW')."'"; ?>
+		    		text: DATA.text.OneW
                 }, {
                     type: 'month',
                     count: 1,
-		   			text: <?php echo "'".getTxt('OneM')."'"; ?>
+		   			text: DATA.text.OneM
                 }, {
                     type: 'month',
                     count: 6,
-		   			text: <?php echo "'".getTxt('SixM')."'"; ?>
+		   			text: DATA.text.SixM
                 }, {
                     type: 'year',
                     count: 1,
-		    		text: <?php echo "'".getTxt('OneY')."'"; ?>
+		    		text: DATA.text.OneY
                 }, {
                     type: 'all',
-		    		text: <?php echo "'".getTxt('All')."'"; ?>
+		    		text: DATA.text.All
                 }],
             selected: 6
             },
@@ -753,9 +771,10 @@ $.ajax({
                 width: '100%',
                 columnsresize: true,
                 columns: [
-				  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID'},
-                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime'},
-	             { text: '<?php echo str_replace(':','',getTxt('Value')); ?>  (' + unitGrid +')' , datafield: 'DataValue'} <?php
+				  { text: DATA.text.ValueID, datafield: 'ValueID'},
+          { text: DATA.text.DateTime, datafield: 'LocalDateTime'},
+          { text: DATA.text.Value + ' (' + unitGrid + ')' , datafield: 'DataValue'}
+ <?php
      if(isLoggedIn())
 	  {
 		echo(",
@@ -976,7 +995,7 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
   }
   else
   {
-	alert(<?php echo "'".getTxt('DatabaseConfigurationError')."'"; ?>);
+	alert(DATA.text.DatabaseConfigurationError);
 	return false;  
   }
 });
@@ -984,9 +1003,6 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
 
 
 });
-
-
-
 
 //End of adding a new value
 
