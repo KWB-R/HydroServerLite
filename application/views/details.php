@@ -14,7 +14,10 @@ echo $CSS_JQStyles;
 ?>
 <!--Main Script to display the data-->
 <script type="text/javascript">
-var siteid=<?php echo $SiteID;?>;
+var DATA = {
+	siteid:<?php echo $SiteID;?>
+};
+//var siteid=DATA.siteid;
 var glob_df;
 var glob_dt;
 var date_to;
@@ -291,7 +294,7 @@ var source =
                 { name: 'VariableID' },
                 { name: 'VariableName' },
             ],
-            url: base_url+'variable/getSiteJSON?siteid='+siteid
+            url: base_url+'variable/getSiteJSON?siteid='+DATA.siteid
         };
 //Defining the Data adapter
 var dataAdapter = new $.jqx.dataAdapter(source);
@@ -334,7 +337,7 @@ function create_var_list()
                 { name: 'DataType' },
 				{ name: 'display' },
             ],
-            url: base_url+'variable/getTypes?siteid='+siteid+'&varname='+varname
+            url: base_url+'variable/getTypes?siteid='+DATA.siteid+'&varname='+varname
         };
 //Defining the Data adapter
 var dataAdapter = new $.jqx.dataAdapter(source);
@@ -369,7 +372,7 @@ function update_var_id()
 {	
 $.ajax({
   type: "GET",
-  url: base_url+"variable/updateVarID?siteid="+siteid+"&varname="+varname+"&type="+datatype,
+  url: base_url+"variable/updateVarID?siteid="+DATA.siteid+"&varname="+varname+"&type="+datatype,
 //Processing The Dates
     success: function(data) {
 	varid=data;
@@ -395,7 +398,7 @@ var source122 =
                 { name: 'MethodID' },
                 { name: 'MethodDescription' },
             ],
-            url: base_url+'methods/getSiteVarJSON?siteid='+siteid+'&varid='+varid
+            url: base_url+'methods/getSiteVarJSON?siteid='+DATA.siteid+'&varid='+varid
         };
 
 //Defining the Data adapter
@@ -429,7 +432,7 @@ get_dates();
 function get_dates()
 {
 
-var url=base_url+"series/getDateJSON?siteid="+siteid+"&varid=" + varid+"&methodid=" + methodid;
+var url=base_url+"series/getDateJSON?siteid="+DATA.siteid+"&varid=" + varid+"&methodid=" + methodid;
 $.ajax({
     type: "GET",
 	url: url,
@@ -553,7 +556,7 @@ $.ajax({
 }
 
 //Chaning Complete Data loading technique..need to create a php page that will output javascript...
-var url_test=base_url+'datapoint/getData?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+var url_test=base_url+'datapoint/getData?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 $.ajax({
   url: url_test,
   type: "GET",
@@ -704,7 +707,7 @@ function make_grid()
 {
 var editrow = -1;
 var vid=0;
-var url=base_url+'datapoint/getDataJSON?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+var url=base_url+'datapoint/getDataJSON?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 
 var source12 =
             {
@@ -948,7 +951,7 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
 
  $.ajax({
   dataType: "json",
-  url: base_url+"datapoint/add?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+siteid+"&mid="+methodid
+  url: base_url+"datapoint/add?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+DATA.siteid+"&mid="+methodid
 }).done(function( msg )
  {
     if(msg.status=='success')
@@ -977,7 +980,7 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
 $("#export").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
 $("#export").bind('click', function () {
 
-var url=base_url+'datapoint/export?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+var url=base_url+'datapoint/export?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 
 window.open(url,'_blank');
 
