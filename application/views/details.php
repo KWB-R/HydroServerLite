@@ -15,9 +15,24 @@ echo $CSS_JQStyles;
 <!--Main Script to display the data-->
 <script type="text/javascript">
 var DATA = {
-	siteid:<?php echo $SiteID;?>
+	siteid:<?php echo $SiteID;?>,
+	text:{
+		InvalidTimeFive:"<?php echo getTxt('InvalidTimeFive');?>",
+		InvalidTimeHoursTwo:"<?php echo getTxt('InvalidTimeHoursTwo');?>",
+		InvalidTimeHoursZeros:"<?php echo getTxt('InvalidTimeHoursZeros');?>",
+		InvalidTimeHoursTwentyThree:"<?php echo getTxt('InvalidTimeHoursTwentyThree');?>",
+		InvalidTimeMinutesTwo:"<?php echo getTxt('InvalidTimeMinutesTwo');?>",
+		InvalidTimeMinutesZeros:"<?php echo getTxt('InvalidTimeMinutesZeros');?>",
+		InvalidTimeMinutesFiftyNine:"<?php echo getTxt('InvalidTimeMinutesFiftyNine');?>",
+		InvalidCharacterNumbers:"<?php echo getTxt('InvalidCharacterNumbers');?>",
+		InvalidTimeHoursTwo:"<?php echo getTxt('InvalidTimeHoursTwo');?>",
+		InvalidTimeHoursZeros:"<?php echo getTxt('InvalidTimeHoursZeros');?>",
+		InvalidTimeHoursTwentyThree:"<?php echo getTxt('InvalidTimeHoursTwentyThree');?>",
+		InvalidTimeMinutesTwo:"<?php echo getTxt('InvalidTimeMinutesTwo');?>",
+		InvalidTimeMinutesZeros:"<?php echo getTxt('InvalidTimeMinutesZeros');?>",
+		InvalidTimeMinutesFiftyNine:"<?php echo getTxt('InvalidTimeMinutesFiftyNine');?>"
+	}
 };
-//var siteid=DATA.siteid;
 var glob_df;
 var glob_dt;
 var date_to;
@@ -42,7 +57,7 @@ var strval = $("#timepicker").val();
 
 //Minimum and maximum length is 5, for example, 01:20
 	if(strval.length < 5 || strval.length > 5){
-		alert(<?php echo "'".getTxt('InvalidTimeFive')."'";?>);
+		alert(DATA.text.InvalidTimeFive);
 	return false;
 	}
 
@@ -59,15 +74,15 @@ var strval = $("#timepicker").val();
 
 	//minimum length for hours is two digits, for example, 12
 	if(horval.length != 2){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursTwo')."'";?>);
+		alert(DATA.text.InvalidTimeHoursTwo);
 		return false;
 		}
 	if(horval < 0){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursZeros')."'";?>);		
+		alert(DATA.text.InvalidTimeHoursZeros);		
 		return false;
 		}
 	else if(horval > 23){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursTwentyThree')."'";?>);
+		alert(DATA.text.InvalidTimeHoursTwentyThree);
 		return false;
 		}
 
@@ -75,15 +90,15 @@ var strval = $("#timepicker").val();
 
  	//minimum length for minutes is 2, for example, 59
 	if(minval.length != 2){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesTwo')."'";?>);
+		alert(DATA.text.InvalidTimeMinutesTwo);
 	return false;
 	} 
 	if(minval < 0){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesZeros')."'";?>);
+		alert(DATA.text.InvalidTimeMinutesZeros);
 		return false;
 		}   
 	else if(minval > 59){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesFiftyNine')."'";?>);
+		alert(DATA.text.InvalidTimeMinutesFiftyNine);
 		return false;
 		}
 	strval = IsNumeric(strval);
@@ -129,7 +144,7 @@ function IsNumeric(strString){
         var strChar = strString.charAt(i); 
         if (strValidChars.indexOf(strChar) == -1) 
         {
-			alert (<?php echo "'".getTxt('InvalidCharacterNumbers')."'"; ?>);
+			alert (DATA.text.InvalidCharacterNumbers);
 			strString = strString.replace(strString[i],"");
             blnResult = false;
         } 
@@ -146,7 +161,7 @@ var strval = $("#timepicker_new").val();
 
 //Minimum and maximum length is 5, for example, 01:20
 	if(strval.length < 5 || strval.length > 5){
-		alert(<?php echo "'".getTxt('InvalidTimeFive')."'";?>);
+		alert(DATA.text.InvalidTimeFive);
 	return false;
 	}
 
@@ -163,15 +178,15 @@ var strval = $("#timepicker_new").val();
 
 	//minimum length for hours is two digits, for example, 12
 	if(horval.length != 2){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursTwo')."'";?>);
+		alert(DATA.text.InvalidTimeHoursTwo);
 		return false;
 		}
 	if(horval < 0){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursZeros')."'";?>);		
+		alert(DATA.text.InvalidTimeHoursZeros);		
 		return false;
 		}
 	else if(horval > 23){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursTwentyThree')."'";?>);
+		alert(DATA.text.InvalidTimeHoursTwentyThree);
 		return false;
 		}
 
@@ -179,15 +194,15 @@ var strval = $("#timepicker_new").val();
 
  	//minimum length for minutes is 2, for example, 59
 	if(minval.length != 2){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesTwo')."'";?>);
+		alert(DATA.text.InvalidTimeMinutesTwo);
 	return false;
 	} 
 	if(minval < 0){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesZeros')."'";?>);
+		alert(DATA.text.InvalidTimeMinutesZeros);
 		return false;
 		}   
 	else if(minval > 59){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesFiftyNine')."'";?>);
+		alert(DATA.text.InvalidTimeMinutesFiftyNine);
 		return false;
 		}
 	strval = IsNumeric(strval);
