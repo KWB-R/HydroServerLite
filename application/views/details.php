@@ -17,36 +17,43 @@ echo $CSS_JQStyles;
 var DATA = {
 	siteid:<?php echo $SiteID;?>,
 	text:{
-		InvalidTimeFive:             "<?php echo getTxt('InvalidTimeFive');?>",
-		InvalidTimeHoursTwo:         "<?php echo getTxt('InvalidTimeHoursTwo');?>",
-		InvalidTimeHoursZeros:       "<?php echo getTxt('InvalidTimeHoursZeros');?>",
-		InvalidTimeHoursTwentyThree: "<?php echo getTxt('InvalidTimeHoursTwentyThree');?>",
-		InvalidTimeMinutesTwo:       "<?php echo getTxt('InvalidTimeMinutesTwo');?>",
-		InvalidTimeMinutesZeros:     "<?php echo getTxt('InvalidTimeMinutesZeros');?>",
-		InvalidTimeMinutesFiftyNine: "<?php echo getTxt('InvalidTimeMinutesFiftyNine');?>",
-		InvalidCharacterNumbers:     "<?php echo getTxt('InvalidCharacterNumbers');?>",
-		EnterNumberValue:            "<?php echo getTxt('EnterNumberValue');?>",
-		EnterValidNumberValue:       "<?php echo getTxt('EnterValidNumberValue');?>",
-		DatesAvailable:              "<?php echo getTxt('DatesAvailable');?>",
-		From:                        "<?php echo getTxt('From');?>",
-		To:                          "<?php echo getTxt('To');?>",
-		SelectStart:                 "<?php echo getTxt('SelectStart');?>",
-		SelectEnd:                   "<?php echo getTxt('SelectEnd');?>",
-		Dataof:                      "<?php echo getTxt('Dataof');?>",
-		SiteName:                    "<?php echo $site['SiteName'];?>",
-		ClickDrag:                   "<?php echo getTxt('ClickDrag');?>",
-		TimeMsg:                     "<?php echo getTxt('TimeMsg');?>",
-		OneD:                        "<?php echo getTxt('OneD');?>",
-		ThreeD:                      "<?php echo getTxt('ThreeD');?>",
-		OneW:                        "<?php echo getTxt('OneW');?>",
-		OneM:                        "<?php echo getTxt('OneM');?>",
-		SixM:                        "<?php echo getTxt('SixM');?>",
-		OneY:                        "<?php echo getTxt('OneY');?>",
-		All:                         "<?php echo getTxt('All');?>", 
-		DatabaseConfigurationError:  "<?php echo getTxt('DatabaseConfigurationError');?>",
-		ValueID:                     "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
-		DateTime:                    "<?php echo getTxt('Date');?>",
-		Value:                       "<?php echo str_replace(':', '', getTxt('Value'));?>"
+<?php
+	$names = array(
+		'InvalidTimeFive',
+		'InvalidTimeHoursTwo',
+		'InvalidTimeHoursZeros',
+		'InvalidTimeHoursTwentyThree',
+		'InvalidTimeMinutesTwo',
+		'InvalidTimeMinutesZeros',
+		'InvalidTimeMinutesFiftyNine',
+		'InvalidCharacterNumbers',
+		'EnterNumberValue',
+		'EnterValidNumberValue',
+		'DatesAvailable',
+		'Date',
+		'From',
+		'To',
+		'SelectStart',
+		'SelectEnd',
+		'Dataof',
+		'ClickDrag',
+		'TimeMsg',
+		'OneD',
+		'ThreeD',
+		'OneW',
+		'OneM',
+		'SixM',
+		'OneY',
+		'All', 
+		'DatabaseConfigurationError'
+	);
+	foreach ($names as $name) {
+		echo "        $name: \"" . getTxt($name) . "\",\n";
+	}
+?>
+		SiteName: "<?php echo $site['SiteName'];?>",
+		ValueID: "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
+		Value: "<?php echo str_replace(':', '', getTxt('Value'));?>"
 	}
 };
 var glob_df;
@@ -772,7 +779,7 @@ $.ajax({
                 columnsresize: true,
                 columns: [
 				  { text: DATA.text.ValueID, datafield: 'ValueID'},
-          { text: DATA.text.DateTime, datafield: 'LocalDateTime'},
+          { text: DATA.text.Date, datafield: 'LocalDateTime'},
           { text: DATA.text.Value + ' (' + unitGrid + ')' , datafield: 'DataValue'}
  <?php
      if(isLoggedIn())
