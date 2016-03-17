@@ -256,18 +256,23 @@ class Datapoint extends MY_Controller {
 			$extension = $file['file_ext'];
 
 			if ($extension == '.csv') {
-				$ok = $this->processFile(
-					$file, $check, $keyIDs, $existingIDs, $dataset
-				);
+				$content = $this->excel->read_csv($file['full_path']);
 			}
 			else if ($extension == '.xls') {
-				$ok = $this->processXlsFile(
-						$file, $check, $keyIDs, $existingIDs, $dataset
-				);
+				$content = $this->excel->read_xls($file['full_path']);
 			}
 
-			if (! $ok)
+			if (is_null($content))
 			{
+				addError(getTxt('FailInputStream'));
+				return FALSE;
+			}
+
+			$ok = $this->processFile(
+				$content, $file, $check, $keyIDs, $existingIDs, $dataset
+			);
+
+			if (! $ok) {
 				return FALSE;
 			}
 		} // end of foreach($files)
@@ -275,22 +280,13 @@ class Datapoint extends MY_Controller {
 		return $dataset;
 	}
 
-	private function processFile($file, $check, $keyIDs, $existingIDs, &$dataset)
+	private function processFile($content, $file, $check, $keyIDs, $existingIDs, &$dataset)
 	{
-		$handle = fopen($file['full_path'], "r");
 
-		if (! $handle)
-		{
-			addError(getTxt('FailInputStream'));
-			return false;
-		}
+		for ($row = 1; $row <= count($content); $row++) {
 
-		$row = 1;
+			$data = $content[$row];
 
-		$columnIndex = array();
-
-		while (($data = fgetcsv($handle)) !== FALSE) 
-		{
 			// Is this the header row?
 			if ($row == 1) 
 			{
@@ -317,9 +313,7 @@ class Datapoint extends MY_Controller {
 				$dataset[] = $this->createDataPoint($fields);
 			}
 
-			$row++;
-
-		} // end of while(fgetcsv())
+		} // end of for
 
 		return TRUE;
 	}
@@ -364,7 +358,7 @@ class Datapoint extends MY_Controller {
 			addError($this->headerErrorMessage($required, $unexpected, $file, FALSE));
 		} 
 		else {
-			$columnIndex = array_combine($captions, range(0, count($captions) - 1));		
+			$columnIndex = array_flip($captions);
 		}
 	
 		// Return the assignment between caption and column index (or NULL, 
