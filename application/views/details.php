@@ -73,60 +73,61 @@ var flag=0;
 var methodid;
 var chart="";
 var displayVar;
-//Time Validation Script
-function  validatetime(){
 
-var strval = $("#timepicker").val();
-
-//Minimum and maximum length is 5, for example, 01:20
-	if(strval.length < 5 || strval.length > 5){
-		alert(DATA.text.InvalidTimeFive);
-	return false;
-	}
-
+//Time Validation Script General
+function validatetime(idString) 
+{
 	//Removing all space
-	strval = trimAllSpace(strval);
-	$("#timepicker").val(strval)
+	var strval = trimAllSpace($(idString).val());
+
+	//alert("validatetime(" + idString + "): >" + strval + "<");
+
+	$(idString).val(strval);
+
+	//Minimum and maximum length is 5, for example, 01:20
+	if (strval.length != 5) {
+		alert(DATA.text.InvalidTimeFive);
+		return false;
+	}
 
 	//Split the string
 	var newval = strval.split(":");
-	var horval = newval[0]
+	var horval = newval[0];
 	var minval = newval[1];
 
 	//Checking hours
 
 	//minimum length for hours is two digits, for example, 12
-	if(horval.length != 2){
+	if (horval.length != 2) {
 		alert(DATA.text.InvalidTimeHoursTwo);
 		return false;
-		}
-	if(horval < 0){
+	}
+	if (horval < 0) {
 		alert(DATA.text.InvalidTimeHoursZeros);		
 		return false;
-		}
-	else if(horval > 23){
+	}
+	else if (horval > 23) {
 		alert(DATA.text.InvalidTimeHoursTwentyThree);
 		return false;
-		}
+	}
 
 	//Checking minutes
 
  	//minimum length for minutes is 2, for example, 59
-	if(minval.length != 2){
+	if (minval.length != 2) {
 		alert(DATA.text.InvalidTimeMinutesTwo);
-	return false;
+		return false;
 	} 
-	if(minval < 0){
+	if (minval < 0) {
 		alert(DATA.text.InvalidTimeMinutesZeros);
 		return false;
-		}   
-	else if(minval > 59){
+	}   
+	else if (minval > 59){
 		alert(DATA.text.InvalidTimeMinutesFiftyNine);
 		return false;
-		}
-	strval = IsNumeric(strval);
-	$("#timepicker").val(strval)
+	}
 
+	$(idString).val(IsNumeric(strval));
 }
 
 //The trimAllSpace() function will remove any extra spaces
@@ -157,6 +158,7 @@ function trimString(str)
      else 
          return str1; 
 }
+
 function IsNumeric(strString){ 
     var strValidChars = "0123456789:"; 
     var blnResult = true; 
@@ -177,65 +179,7 @@ function IsNumeric(strString){
 
 //Time Validation Script Ends
 
-//Time Validation Script NEW
-function  validatetime_new(){
-
-var strval = $("#timepicker_new").val();
-
-//Minimum and maximum length is 5, for example, 01:20
-	if(strval.length < 5 || strval.length > 5){
-		alert(DATA.text.InvalidTimeFive);
-	return false;
-	}
-
-	//Removing all space
-	strval = trimAllSpace(strval);
-	$("#timepicker_new").val(strval)
-
-	//Split the string
-	var newval = strval.split(":");
-	var horval = newval[0]
-	var minval = newval[1];
-
-	//Checking hours
-
-	//minimum length for hours is two digits, for example, 12
-	if(horval.length != 2){
-		alert(DATA.text.InvalidTimeHoursTwo);
-		return false;
-		}
-	if(horval < 0){
-		alert(DATA.text.InvalidTimeHoursZeros);		
-		return false;
-		}
-	else if(horval > 23){
-		alert(DATA.text.InvalidTimeHoursTwentyThree);
-		return false;
-		}
-
-	//Checking minutes
-
- 	//minimum length for minutes is 2, for example, 59
-	if(minval.length != 2){
-		alert(DATA.text.InvalidTimeMinutesTwo);
-	return false;
-	} 
-	if(minval < 0){
-		alert(DATA.text.InvalidTimeMinutesZeros);
-		return false;
-		}   
-	else if(minval > 59){
-		alert(DATA.text.InvalidTimeMinutesFiftyNine);
-		return false;
-		}
-	strval = IsNumeric(strval);
-	$("#timepicker_new").val(strval)
-
-}
-
-//Time Validation NEW Script Ends
-
-//Number validatin script
+//Number validation script
 function validatenum() {
 var v = $("#value").val();
 var Value = isValidNumber(v);
@@ -925,7 +869,7 @@ if(validatenum()==false){
 		return false;
 	}
 //Time checking
-result=validatetime();
+result=validatetime("#timepicker");
 	if(result==false){
 		return false;
 	}		
@@ -981,7 +925,7 @@ if(validatenum_new()==false){
 		return false;
 }
 //Time checking
-if(validatetime_new()==false){
+if(validatetime("#timepicker_new")==false){
 		return false;
 }		
 
@@ -1183,7 +1127,7 @@ if($var['VariableName']!="")
         </tr>
                     <tr>
                         <td align="right"><?php echo getTxt('Time');?></td>
-                        <td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime()" size="10"></td>
+                        <td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime('#timepicker')" size="10"></td>
                     </tr>
                <tr>
           <td>&nbsp;</td>
@@ -1245,7 +1189,7 @@ if($var['VariableName']!="")
         </tr>
                     <tr>
                         <td align="right"><?php echo getTxt('Time'); ?></td>
-                        <td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime_new()" size="10"></td>
+                        <td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime('#timepicker_new')" size="10"></td>
                     </tr>
                <tr>
           <td>&nbsp;</td>
