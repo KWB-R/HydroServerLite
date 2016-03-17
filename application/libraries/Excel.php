@@ -43,9 +43,19 @@ class Excel extends PHPExcel
 			$writer->save('php://output');
 		}
 
-		function read_xls
+		public function read_xls($file, $cacheSizeMB = 20)
+		{
+			return $this->read_xls_or_csv($file, 'Excel5', '', $cacheSizeMB);
+		}
+
+		public function read_csv($file, $delimiter = ',', $cacheSizeMB = 20)
+		{
+			return $this->read_xls_or_csv($file, 'CSV', $delimiter, $cacheSizeMB);
+		}
+
+		private function read_xls_or_csv
 		(
-			$file, $format = 'Excel5', $cacheSizeMB = 20
+			$file, $fileType, $delimiter = ',', $cacheSizeMB = 20
 		)
 		{
 			PHPExcel_Settings::setCacheStorageMethod(
@@ -53,12 +63,29 @@ class Excel extends PHPExcel
 				array('memoryCacheSize' => $cacheSizeMB.'MB')
 			);
 
-			$reader = PHPExcel_IOFactory::createReader($format);
+			$reader = PHPExcel_IOFactory::createReader($fileType);
 			$reader->setReadDataOnly(true);
 
+			if ($fileType === 'CSV') {
+				$reader->setDelimiter($delimiter);
+			}
+
 			$excel = $reader->load($file);
+
 			$excel->setActiveSheetIndex(0);
 
-			return $excel->getActiveSheet()->toArray(null, true, true, true);
+			/**
+			 * toArray: Create array from worksheet
+			 *
+			 * @param mixed $nullValue Value returned in the array entry if a cell doesn't exist
+			 * @param boolean $calculateFormulas Should formulas be calculated?
+			 * @param boolean $formatData  Should formatting be applied to cell values?
+			 * @param boolean $returnCellRef False - Return a simple array of rows and columns indexed by number counting from zero
+			 *                               True - Return rows and columns indexed by their actual row and column IDs
+			 * @return array
+			 */
+
+			return $excel->getActiveSheet()->toArray(null, false, false, true);
 		}
+
 }
