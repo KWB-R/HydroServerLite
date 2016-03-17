@@ -939,90 +939,68 @@ if(validatenum_new()==false){
 //Time checking
 if(validatetime_new()==false){
 		return false;
-}		
+	}		
 
-var seldate= $('#date_new').jqxDateTimeInput('getDate'); 
+	var seldate= $('#date_new').jqxDateTimeInput('getDate'); 
 
+		//Send out ajax request to add new value
+		$.ajax({
+			dataType: "json",
+			url: base_url+"datapoint/add?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+siteid+"&mid="+methodid
+		}).done(function( msg )
+		{
+					if(msg.status=='success')
+				{ 
+				$("#popupWindow_new").jqxWindow('hide');
+					plot_chart(); 
+				}
+				else
+				{
+				alert(<?php echo "'".getTxt('DatabaseConfigurationError')."'"; ?>);
+				return false;  
+				}
+			});
+		});
+		//End of adding a new value
 
-//Send out ajax request to add new value
+		//Export Button
+		$("#export").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
+		$("#export").bind('click', function () {
+			var url=base_url+'datapoint/export?siteid='+siteid+'&varid='+varid+
+				'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+			window.open(url,'_blank');
+		});
+		$("#exportXls").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
+		$("#exportXls").bind('click', function () {
+			var url=base_url+'datapoint/exportXls?siteid='+siteid+'&varid='+varid+
+				'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+			window.open(url,'_blank');
+		});
+		//End of Exporting
 
- $.ajax({
-  dataType: "json",
-  url: base_url+"datapoint/add?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+siteid+"&mid="+methodid
-}).done(function( msg )
- {
-    if(msg.status=='success')
-  { 
-	$("#popupWindow_new").jqxWindow('hide');
-		plot_chart(); 
-  }
-  else
-  {
-	alert(<?php echo "'".getTxt('DatabaseConfigurationError')."'"; ?>);
-	return false;  
-  }
-});
-
-
-
-});
-
-
-
-
-//End of adding a new value
-
-//Export Button
-
-$("#export").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
-$("#export").bind('click', function () {
-
-var url=base_url+'datapoint/export?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
-
-window.open(url,'_blank');
-
-                });
-
-//End of Exporting
-
-//Comparing
-
-//Define the button for comaprision
-
-$("#compare").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
-$('#window').jqxWindow('destroy');
-$('#mapOuter').empty();
-$('#window').jqxWindow({ maxHeight: 800, maxWidth: 800, minHeight: 200, minWidth: 200, height: 520, width: 720, theme: 'darkblue' });
-$('#window2').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
-$('#window3').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
-$('#window4').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
-$('#window5').jqxWindow({ maxHeight: 300, maxWidth: 650, minHeight: 300, minWidth: 650, height: 300, width: 650, theme: 'darkblue' });
-$('#window').jqxWindow('hide');
-$('#window2').jqxWindow('hide');
-$('#window3').jqxWindow('hide');
-$('#window4').jqxWindow('hide');
-$('#window5').jqxWindow('hide');
-$("#compare").click(function(){
-$("html, body").animate({ scrollTop: 0 }, "slow");
-$('#window').jqxWindow('show');
-$('#windowContent').load(base_url+'datapoint/compare/1', function() {
-});
-
-
-
-
-
-});
-
-//Now Map Loaded. Another Function to open up a new window that will Give them options to select the data to be plotted against the esiting data
-
-
-
-
-//End of Comparing
-
-
-	
+		//Comparing
+		//Define the button for comaprision
+		$("#compare").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
+		$('#window').jqxWindow('destroy');
+		$('#mapOuter').empty();
+		$('#window').jqxWindow({ maxHeight: 800, maxWidth: 800, minHeight: 200, minWidth: 200, height: 520, width: 720, theme: 'darkblue' });
+		$('#window2').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
+		$('#window3').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
+		$('#window4').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
+		$('#window5').jqxWindow({ maxHeight: 300, maxWidth: 650, minHeight: 300, minWidth: 650, height: 300, width: 650, theme: 'darkblue' });
+		$('#window').jqxWindow('hide');
+		$('#window2').jqxWindow('hide');
+		$('#window3').jqxWindow('hide');
+		$('#window4').jqxWindow('hide');
+		$('#window5').jqxWindow('hide');
+		$("#compare").click(function(){
+		$("html, body").animate({ scrollTop: 0 }, "slow");
+		$('#window').jqxWindow('show');
+		$('#windowContent').load(base_url+'datapoint/compare/1', function() {
+		});
+	});
+	//Now Map Loaded. Another Function to open up a new window that will Give them options to select the data to be plotted against the esiting data
+	//End of Comparing
 }
 </script>
 
@@ -1169,10 +1147,11 @@ if($var['VariableName']!="")
      <?php
   if(isLoggedIn())
     {
-    echo("<input type='button' value='".getTxt('AddRow')."' id='addnew' /> <br/>  <br/>");
+    echo("<input type='button' value='".getTxt('AddRow')."' id='addnew' /><br/><br/>\n");
     }
       ?>
-        <input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />
+        <input type="button" value="<?php echo getTxt('DownloadData').' (.csv)';?>" id='export' /><br/><br/>
+        <input type="button" value="<?php echo getTxt('DownloadData').' (.xls)';?>" id='exportXls' />
         </div>
      </div>
   <!-- End Of Grid Div.  -->

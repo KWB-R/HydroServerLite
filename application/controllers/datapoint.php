@@ -105,7 +105,8 @@ class Datapoint extends MY_Controller {
 			}
 			elseif ($method == 'importfile')
 			{
-				$files = $this->fileUploadHandler('csv|CSV', 'files');
+				// fileUploadHandler now in MY_Controller
+				$files = $this->fileUploadHandler('csv|CSV|xls|XLS', 'files');
 				$valid = $files;
 			}
 
@@ -231,12 +232,10 @@ class Datapoint extends MY_Controller {
 		);
 	}
 
-	//
-	// private function fileUploadHandler() now defined in MY_Controller
-	//
-
 	private function processFiles($files, $check)
 	{
+		$this->load->library('Excel');
+
 		if ($check)
 		{
 			//Values will be checked and fetched while processing.
@@ -254,7 +253,20 @@ class Datapoint extends MY_Controller {
 
 		foreach ($files as $file)
 		{
-			if (! $this->processFile($file, $check, $keyIDs, $existingIDs, $dataset))
+			$extension = $file['file_ext'];
+
+			if ($extension == '.csv') {
+				$ok = $this->processFile(
+					$file, $check, $keyIDs, $existingIDs, $dataset
+				);
+			}
+			else if ($extension == '.xls') {
+				$ok = $this->processXlsFile(
+						$file, $check, $keyIDs, $existingIDs, $dataset
+				);
+			}
+
+			if (! $ok)
 			{
 				return FALSE;
 			}
@@ -310,6 +322,16 @@ class Datapoint extends MY_Controller {
 		} // end of while(fgetcsv())
 
 		return TRUE;
+	}
+
+	private function processXlsFile($file, $check, $keyIDs, $existingIDs, &$dataset)
+	{
+		$dataset = $this->excel->read_xls($file['full_path']);
+		$ok = (count($dataset) > 0);
+
+		addSuccess(print_r($dataset, TRUE));
+
+		return false;
 	}
 
 	private function handleHeaderRow($captions, $idsInFile, $file)
@@ -623,6 +645,11 @@ class Datapoint extends MY_Controller {
 		$this->getData_generic('export');
 	}
 
+	public function exportXls()
+	{
+		$this->getData_generic('exportXls');
+	}
+
 	private function getData_generic($method)
 	{
 		$inputs = NULL;
@@ -673,7 +700,7 @@ class Datapoint extends MY_Controller {
 				$fieldList
 			);
 		}
-		else if ($method == 'export')
+		else if ($method == 'export' || $method == 'exportXls')
 		{
 			$result = $this->datapoints->getResultData(
 				$inputs['SiteID'],
@@ -711,15 +738,29 @@ class Datapoint extends MY_Controller {
 			$options = $this->getConfigItem("json_encode_options", 0);
 			echo json_encode($result, $options);
 		}
-		elseif ($method == 'export')
+		elseif (in_array($method, array('export', 'exportXls')))
 		{
-			$filename = $this->toExportName($inputs);
+			if ($method == 'export') {
+				$filename = $this->toExportName($inputs, '.csv');
+				$contentType = 'text/csv';
+			}
+			else {
+				$filename = $this->toExportName($inputs, '.xls');
+				$contentType = 'application/vnd.ms-excel';
+			}
 
-			header('Content-Type: text/csv');
-			header("Content-Disposition: attachment; filename=$filename");
+			header('Content-Type: ' . $contentType);
+			header('Content-Disposition: attachment; filename=' . $filename);
 
-			$this->load->dbutil();
-			echo $this->dbutil->csv_from_result($result);
+			if ($method == 'export') {
+				$this->load->dbutil();
+				echo $this->dbutil->csv_from_result($result);
+			}
+			else {
+				$this->load->library('Excel');
+				header('Cache-Control: max-age=0'); //no cache
+				$this->excel->output_as_xls($result->result_array());
+			}
 		}
 		else {
 			addError("Unknown method in outputOrExportData: ", $method);
@@ -777,7 +818,7 @@ class Datapoint extends MY_Controller {
 		echo(sprintf("var data_test = [$EOL%s$EOL];", implode(',' . $EOL, $lines)));
 	}
 
-	private function toExportName($inputs)
+	private function toExportName($inputs, $extension = ".csv")
 	{
 		// Mapping between the keys in $inputs and short names in the file name
 		$shortNames = array(
@@ -796,7 +837,7 @@ class Datapoint extends MY_Controller {
 			}
 		}
 
-		return $filename . '.csv';
+		return $filename . $extension;
 	}
 
 	private function getMissing($values)
@@ -861,6 +902,7 @@ class Datapoint extends MY_Controller {
 			'getData' => $getParameters,
 			'getDataJSON' => $getParameters,
 			'export' => $getParameters,
+			'exportXls' => $getParameters,
 			'delete' => array(
 				'ValueID' => API_Config::parameter('')
 			),
