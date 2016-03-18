@@ -1,19 +1,19 @@
-<?php 
+<?php
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once APPPATH."/third_party/PHPExcel.php"; 
- 
-class Excel extends PHPExcel 
-{ 
-		public function __construct() 
-		{ 
-        parent::__construct(); 
-    }
+require_once APPPATH."/third_party/PHPExcel.php";
+
+class Excel extends PHPExcel
+{
+		public function __construct()
+		{
+			parent::__construct();
+		}
 
 		public function output_as_xls(
-			$result, 
-			$sheetName = 'data', 
+			$result,
+			$sheetName = 'data',
 			$format = 'Excel5'
 			// 'Excel5' (Excel 2003 .XLS) or 'Excel2007' (Excel 2007 .XLSX)
 		)
@@ -85,7 +85,7 @@ class Excel extends PHPExcel
 			 * @return array
 			 */
 
-			return $excel->getActiveSheet()->toArray(null, false, false, true);
+			return $excel->getActiveSheet()->toArray(null, true, false, true);
 		}
 
 }
