@@ -14,7 +14,48 @@ echo $CSS_JQStyles;
 ?>
 <!--Main Script to display the data-->
 <script type="text/javascript">
-var siteid=<?php echo $SiteID;?>;
+var DATA = {
+	siteid:<?php echo $SiteID;?>,
+	text:{
+<?php
+	$names = array(
+		'InvalidTimeFive',
+		'InvalidTimeHoursTwo',
+		'InvalidTimeHoursZeros',
+		'InvalidTimeHoursTwentyThree',
+		'InvalidTimeMinutesTwo',
+		'InvalidTimeMinutesZeros',
+		'InvalidTimeMinutesFiftyNine',
+		'InvalidCharacterNumbers',
+		'EnterNumberValue',
+		'EnterValidNumberValue',
+		'DatesAvailable',
+		'Date',
+		'From',
+		'To',
+		'SelectStart',
+		'SelectEnd',
+		'Dataof',
+		'ClickDrag',
+		'TimeMsg',
+		'OneD',
+		'ThreeD',
+		'OneW',
+		'OneM',
+		'SixM',
+		'OneY',
+		'All', 
+		'DatabaseConfigurationError'
+	);
+	foreach ($names as $name) {
+		echo "        $name: \"" . getTxt($name) . "\",\n";
+	}
+?>
+		SiteName: "<?php echo $site['SiteName'];?>",
+		ValueID: "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
+		Value: "<?php echo str_replace(':', '', getTxt('Value'));?>"
+	}
+};
 var glob_df;
 var glob_dt;
 var date_to;
@@ -32,60 +73,61 @@ var flag=0;
 var methodid;
 var chart="";
 var displayVar;
-//Time Validation Script
-function  validatetime(){
 
-var strval = $("#timepicker").val();
-
-//Minimum and maximum length is 5, for example, 01:20
-	if(strval.length < 5 || strval.length > 5){
-		alert(<?php echo "'".getTxt('InvalidTimeFive')."'";?>);
-	return false;
-	}
-
+//Time Validation Script General
+function validatetime(idString) 
+{
 	//Removing all space
-	strval = trimAllSpace(strval);
-	$("#timepicker").val(strval)
+	var strval = trimAllSpace($(idString).val());
+
+	//alert("validatetime(" + idString + "): >" + strval + "<");
+
+	$(idString).val(strval);
+
+	//Minimum and maximum length is 5, for example, 01:20
+	if (strval.length != 5) {
+		alert(DATA.text.InvalidTimeFive);
+		return false;
+	}
 
 	//Split the string
 	var newval = strval.split(":");
-	var horval = newval[0]
+	var horval = newval[0];
 	var minval = newval[1];
 
 	//Checking hours
 
 	//minimum length for hours is two digits, for example, 12
-	if(horval.length != 2){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursTwo')."'";?>);
+	if (horval.length != 2) {
+		alert(DATA.text.InvalidTimeHoursTwo);
 		return false;
-		}
-	if(horval < 0){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursZeros')."'";?>);		
+	}
+	if (horval < 0) {
+		alert(DATA.text.InvalidTimeHoursZeros);		
 		return false;
-		}
-	else if(horval > 23){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursTwentyThree')."'";?>);
+	}
+	else if (horval > 23) {
+		alert(DATA.text.InvalidTimeHoursTwentyThree);
 		return false;
-		}
+	}
 
 	//Checking minutes
 
  	//minimum length for minutes is 2, for example, 59
-	if(minval.length != 2){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesTwo')."'";?>);
-	return false;
+	if (minval.length != 2) {
+		alert(DATA.text.InvalidTimeMinutesTwo);
+		return false;
 	} 
-	if(minval < 0){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesZeros')."'";?>);
+	if (minval < 0) {
+		alert(DATA.text.InvalidTimeMinutesZeros);
 		return false;
-		}   
-	else if(minval > 59){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesFiftyNine')."'";?>);
+	}   
+	else if (minval > 59){
+		alert(DATA.text.InvalidTimeMinutesFiftyNine);
 		return false;
-		}
-	strval = IsNumeric(strval);
-	$("#timepicker").val(strval)
+	}
 
+	$(idString).val(IsNumeric(strval));
 }
 
 //The trimAllSpace() function will remove any extra spaces
@@ -116,6 +158,7 @@ function trimString(str)
      else 
          return str1; 
 }
+
 function IsNumeric(strString){ 
     var strValidChars = "0123456789:"; 
     var blnResult = true; 
@@ -126,7 +169,7 @@ function IsNumeric(strString){
         var strChar = strString.charAt(i); 
         if (strValidChars.indexOf(strChar) == -1) 
         {
-			alert (<?php echo "'".getTxt('InvalidCharacterNumbers')."'"; ?>);
+			alert (DATA.text.InvalidCharacterNumbers);
 			strString = strString.replace(strString[i],"");
             blnResult = false;
         } 
@@ -136,65 +179,7 @@ function IsNumeric(strString){
 
 //Time Validation Script Ends
 
-//Time Validation Script NEW
-function  validatetime_new(){
-
-var strval = $("#timepicker_new").val();
-
-//Minimum and maximum length is 5, for example, 01:20
-	if(strval.length < 5 || strval.length > 5){
-		alert(<?php echo "'".getTxt('InvalidTimeFive')."'";?>);
-	return false;
-	}
-
-	//Removing all space
-	strval = trimAllSpace(strval);
-	$("#timepicker_new").val(strval)
-
-	//Split the string
-	var newval = strval.split(":");
-	var horval = newval[0]
-	var minval = newval[1];
-
-	//Checking hours
-
-	//minimum length for hours is two digits, for example, 12
-	if(horval.length != 2){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursTwo')."'";?>);
-		return false;
-		}
-	if(horval < 0){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursZeros')."'";?>);		
-		return false;
-		}
-	else if(horval > 23){
-		alert(<?php echo "'".getTxt('InvalidTimeHoursTwentyThree')."'";?>);
-		return false;
-		}
-
-	//Checking minutes
-
- 	//minimum length for minutes is 2, for example, 59
-	if(minval.length != 2){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesTwo')."'";?>);
-	return false;
-	} 
-	if(minval < 0){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesZeros')."'";?>);
-		return false;
-		}   
-	else if(minval > 59){
-		alert(<?php echo "'".getTxt('InvalidTimeMinutesFiftyNine')."'";?>);
-		return false;
-		}
-	strval = IsNumeric(strval);
-	$("#timepicker_new").val(strval)
-
-}
-
-//Time Validation NEW Script Ends
-
-//Number validatin script
+//Number validation script
 function validatenum() {
 var v = $("#value").val();
 var Value = isValidNumber(v);
@@ -203,7 +188,7 @@ return Value;
 
 function isValidNumber(val){
       if(val==null || val.length==0){
-   		  alert(<?php echo "'".getTxt('EnterNumberValue')."'";?>);
+   		  alert(DATA.text.EnterNumberValue);
 
 		  return false;
 		  }
@@ -219,7 +204,7 @@ function isValidNumber(val){
                   continue
             }
             if (ch < "0" || ch > "9") {
-		    alert(<?php echo "'".getTxt('EnterValidNumberValue')."'";?>);
+		    alert(DATA.text.EnterValidNumberValue);
 			    return false;
             	}
       }
@@ -237,7 +222,7 @@ return Value;
 
 function isValidNumber(val){
       if(val==null || val.length==0){
-   		  alert(<?php echo "'".getTxt('EnterNumberValue')."'";?>);
+   		  alert(DATA.text.EnterNumberValue);
 		  return false;
 		  }
 
@@ -252,7 +237,7 @@ function isValidNumber(val){
                   continue
             }
             if (ch < "0" || ch > "9") {
-		    alert(<?php echo "'".getTxt('EnterValidNumberValue')."'";?>);
+		    alert(DATA.text.EnterValidNumberValue);
 			    return false;
             	}
       }
@@ -291,7 +276,7 @@ var source =
                 { name: 'VariableID' },
                 { name: 'VariableName' },
             ],
-            url: base_url+'variable/getSiteJSON?siteid='+siteid
+            url: base_url+'variable/getSiteJSON?siteid='+DATA.siteid
         };
 //Defining the Data adapter
 var dataAdapter = new $.jqx.dataAdapter(source);
@@ -334,7 +319,7 @@ function create_var_list()
                 { name: 'DataType' },
 				{ name: 'display' },
             ],
-            url: base_url+'variable/getTypes?siteid='+siteid+'&varname='+varname
+            url: base_url+'variable/getTypes?siteid='+DATA.siteid+'&varname='+varname
         };
 //Defining the Data adapter
 var dataAdapter = new $.jqx.dataAdapter(source);
@@ -369,7 +354,7 @@ function update_var_id()
 {	
 $.ajax({
   type: "GET",
-  url: base_url+"variable/updateVarID?siteid="+siteid+"&varname="+varname+"&type="+datatype,
+  url: base_url+"variable/updateVarID?siteid="+DATA.siteid+"&varname="+varname+"&type="+datatype,
 //Processing The Dates
     success: function(data) {
 	varid=data;
@@ -395,7 +380,7 @@ var source122 =
                 { name: 'MethodID' },
                 { name: 'MethodDescription' },
             ],
-            url: base_url+'methods/getSiteVarJSON?siteid='+siteid+'&varid='+varid
+            url: base_url+'methods/getSiteVarJSON?siteid='+DATA.siteid+'&varid='+varid
         };
 
 //Defining the Data adapter
@@ -429,7 +414,7 @@ get_dates();
 function get_dates()
 {
 
-var url=base_url+"series/getDateJSON?siteid="+siteid+"&varid=" + varid+"&methodid=" + methodid;
+var url=base_url+"series/getDateJSON?siteid="+DATA.siteid+"&varid=" + varid+"&methodid=" + methodid;
 $.ajax({
     type: "GET",
 	url: url,
@@ -441,7 +426,10 @@ date_to=String(result.EndDateTime);
 //Call the next function to display the data
 
 $('#daterange').html("");
-$('#daterange').prepend('<p><strong>'+<?php echo "'".getTxt('DatesAvailable')."'";?>+'</strong> ' + date_from + ' <strong>'+<?php echo "'".getTxt('To')."'";?>+'</strong> ' + date_to +'</p>');
+$('#daterange').prepend(
+	'<p><strong>'+DATA.text.DatesAvailable+'</strong> ' + date_from + 
+	' <strong>'+DATA.text.To + '</strong> ' + date_to +'</p>'
+);
 
 $("#jqxDateTimeInput").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
 $("#jqxDateTimeInput").jqxDateTimeInput({ formatString: 'd' });
@@ -496,8 +484,8 @@ if (monthEnd > 12) { monthEnd=12;}
 
 date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
 date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
-$("#fromdatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectStart')."'";?> );
-$("#todatedrop").jqxDropDownButton('setContent', <?php echo "'".getTxt('SelectEnd')."'";?> );
+$("#fromdatedrop").jqxDropDownButton('setContent', DATA.text.SelectStart);
+$("#todatedrop").jqxDropDownButton('setContent', DATA.text.SelectEnd);
 
 plot_chart();	
 //Binding An Event to the first calender
@@ -553,7 +541,7 @@ $.ajax({
 }
 
 //Chaning Complete Data loading technique..need to create a php page that will output javascript...
-var url_test=base_url+'datapoint/getData?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+var url_test=base_url+'datapoint/getData?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 $.ajax({
   url: url_test,
   type: "GET",
@@ -563,7 +551,6 @@ $.ajax({
 var date_chart_from=glob_df.getFullYear() + '-' + add_zero((glob_df.getMonth()+1)) + '-' + add_zero(glob_df.getDate());
 var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1)) + '-' + add_zero(glob_dt.getDate());
  
-  
 // var data_test=datatest;
  chart=new Highcharts.StockChart({
     chart: {
@@ -580,7 +567,9 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
           
         },
     title: {
-	text: <?php echo "'".getTxt('Dataof')."'"; ?>+" "+<?php echo "'".$site['SiteName']."'"; ?>+" "+ <?php echo "'".getTxt('From')."'"; ?>+" "+ date_chart_from +" "+  <?php echo "'".getTxt('To')."'"; ?>+" " + date_chart_to,
+	text: DATA.text.Dataof+" "+DATA.text.SiteName+" "+ 
+				DATA.text.From  +" "+date_chart_from+" "+  
+				DATA.text.To    +" "+date_chart_to,
 		style: {
                 fontSize: '12px'
             }
@@ -592,7 +581,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
         },
 	
 	 subtitle: {
-	text: <?php echo "'".getTxt('ClickDrag')."'"; ?>
+	text: DATA.text.ClickDrag
     },
 	
    xAxis: {
@@ -602,7 +591,7 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
                 year: '%b.%Y'
             },
 			title: {
-		text: <?php echo "'".getTxt('TimeMsg')."'"; ?>,
+		text: DATA.text.TimeMsg,
 				margin: 30
             }
 			
@@ -615,8 +604,6 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 			
         },
 	
-	 
-	
 	 exporting: {
             enabled: true,
 			width: 5000
@@ -628,31 +615,31 @@ var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1))
 				{
                     type: 'day',
                     count: 1,
-		    text: <?php echo "'".getTxt('OneD')."'"; ?>
+		    text: DATA.text.OneD
                 },
 				{
                     type: 'day',
                     count: 3,
-		    		text: <?php echo "'".getTxt('ThreeD')."'"; ?>
+		    		text: DATA.text.ThreeD
                 }, {
                     type: 'week',
                     count: 1,
-		    		text: <?php echo "'".getTxt('OneW')."'"; ?>
+		    		text: DATA.text.OneW
                 }, {
                     type: 'month',
                     count: 1,
-		   			text: <?php echo "'".getTxt('OneM')."'"; ?>
+		   			text: DATA.text.OneM
                 }, {
                     type: 'month',
                     count: 6,
-		   			text: <?php echo "'".getTxt('SixM')."'"; ?>
+		   			text: DATA.text.SixM
                 }, {
                     type: 'year',
                     count: 1,
-		    		text: <?php echo "'".getTxt('OneY')."'"; ?>
+		    		text: DATA.text.OneY
                 }, {
                     type: 'all',
-		    		text: <?php echo "'".getTxt('All')."'"; ?>
+		    		text: DATA.text.All
                 }],
             selected: 6
             },
@@ -704,7 +691,7 @@ function make_grid()
 {
 var editrow = -1;
 var vid=0;
-var url=base_url+'datapoint/getDataJSON?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+var url=base_url+'datapoint/getDataJSON?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 
 var source12 =
             {
@@ -735,9 +722,10 @@ $.ajax({
                 width: '100%',
                 columnsresize: true,
                 columns: [
-				  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID'},
-                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime'},
-	             { text: '<?php echo str_replace(':','',getTxt('Value')); ?>  (' + unitGrid +')' , datafield: 'DataValue'} <?php
+				  { text: DATA.text.ValueID, datafield: 'ValueID'},
+          { text: DATA.text.Date, datafield: 'LocalDateTime'},
+          { text: DATA.text.Value + ' (' + unitGrid + ')' , datafield: 'DataValue'}
+ <?php
      if(isLoggedIn())
 	  {
 		echo(",
@@ -881,7 +869,7 @@ if(validatenum()==false){
 		return false;
 	}
 //Time checking
-result=validatetime();
+result=validatetime("#timepicker");
 	if(result==false){
 		return false;
 	}		
@@ -937,7 +925,7 @@ if(validatenum_new()==false){
 		return false;
 }
 //Time checking
-if(validatetime_new()==false){
+if(validatetime("#timepicker_new")==false){
 		return false;
 }		
 
@@ -948,7 +936,7 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
 
  $.ajax({
   dataType: "json",
-  url: base_url+"datapoint/add?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+siteid+"&mid="+methodid
+  url: base_url+"datapoint/add?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+DATA.siteid+"&mid="+methodid
 }).done(function( msg )
  {
     if(msg.status=='success')
@@ -958,7 +946,7 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
   }
   else
   {
-	alert(<?php echo "'".getTxt('DatabaseConfigurationError')."'"; ?>);
+	alert(DATA.text.DatabaseConfigurationError);
 	return false;  
   }
 });
@@ -967,9 +955,6 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
 
 });
 
-
-
-
 //End of adding a new value
 
 //Export Button
@@ -977,7 +962,7 @@ var seldate= $('#date_new').jqxDateTimeInput('getDate');
 $("#export").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
 $("#export").bind('click', function () {
 
-var url=base_url+'datapoint/export?siteid='+siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+var url=base_url+'datapoint/export?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 
 window.open(url,'_blank');
 
@@ -1142,7 +1127,7 @@ if($var['VariableName']!="")
         </tr>
                     <tr>
                         <td align="right"><?php echo getTxt('Time');?></td>
-                        <td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime()" size="10"></td>
+                        <td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime('#timepicker')" size="10"></td>
                     </tr>
                <tr>
           <td>&nbsp;</td>
@@ -1204,7 +1189,7 @@ if($var['VariableName']!="")
         </tr>
                     <tr>
                         <td align="right"><?php echo getTxt('Time'); ?></td>
-                        <td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime_new()" size="10"></td>
+                        <td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime('#timepicker_new')" size="10"></td>
                     </tr>
                <tr>
           <td>&nbsp;</td>
