@@ -144,22 +144,24 @@ function trimAllSpace(str)
 	return str1;
 }
 
-function IsNumeric(strString){ 
-    var strValidChars = "0123456789:"; 
-    var blnResult = true; 
+function IsNumeric(strString)
+{
+	var strValidChars = "0123456789:"
+	var blnResult = true
 
-    //test strString consists of valid characters listed above
-    for (i = 0; i < strString.length && blnResult == true; i++) 
-    { 
-        var strChar = strString.charAt(i); 
-        if (strValidChars.indexOf(strChar) == -1) 
-        {
-			alert (DATA.text.InvalidCharacterNumbers);
-			strString = strString.replace(strString[i],"");
-            blnResult = false;
-        } 
-     }
-	return strString;
+	//test strString consists of valid characters listed above
+	for (i = 0; i < strString.length && blnResult == true; i++) {
+
+		var strChar = strString.charAt(i)
+
+		if (strValidChars.indexOf(strChar) == -1) {
+			alert (DATA.text.InvalidCharacterNumbers)
+			strString = strString.replace(strString[i], "")
+			blnResult = false
+		}
+	}
+
+	return strString
 }
 
 //Time Validation Script Ends
