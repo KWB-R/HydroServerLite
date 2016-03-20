@@ -132,31 +132,16 @@ function validatetime(idString)
 
 //The trimAllSpace() function will remove any extra spaces
 function trimAllSpace(str) 
-{ 
-    var str1 = ''; 
-    var i = 0; 
-    while(i != str.length) 
-    { 
-        if(str.charAt(i) != ' ') 
-            str1 = str1 + str.charAt(i); i ++; 
-    } 
-    return str1; 
-}
+{
+	var str1 = '';
 
-//The trimString() function will remove 
-function trimString(str) 
-{ 
-     var str1 = ''; 
-     var i = 0; 
-     while ( i != str.length) 
-     { 
-         if(str.charAt(i) != ' ') str1 = str1 + str.charAt(i); i++; 
-     }
-     var retval = IsNumeric(str1); 
-     if(retval == false) 
-         return -100; 
-     else 
-         return str1; 
+	for (i = 0; i < str.length; i++) {
+		if(str.charAt(i) != ' ') {
+			str1 = str1 + str.charAt(i);
+		}
+	}
+
+	return str1;
 }
 
 function IsNumeric(strString){ 
