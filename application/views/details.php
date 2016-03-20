@@ -165,10 +165,9 @@ function IsNumeric(strString){
 //Time Validation Script Ends
 
 //Number validation script
-function validatenum() {
-var v = $("#value").val();
-var Value = isValidNumber(v);
-return Value;
+function validatenum(idSelector)
+{
+	return isValidNumber($(idSelector).val());
 }
 
 function isValidNumber(val){
@@ -196,14 +195,6 @@ function isValidNumber(val){
 	  return true;
 }
 //Number Validation script ends
-
-
-//Number validatin NEW script
-function validatenum_new() {
-var v = $("#value_new").val();
-var Value = isValidNumber(v);
-return Value;
-}
 
 function isValidNumber(val){
       if(val==null || val.length==0){
@@ -850,7 +841,7 @@ var seldate= $('#date').jqxDateTimeInput('getDate');
 var row = {date: seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+' '+$("#timepicker").val()+':00', Value: $("#value").val(), vid: vid};
 var vt = $("#value").val();  
 //Validate
-if(validatenum()==false){
+if(validatenum("#value")==false){
 		return false;
 	}
 //Time checking
@@ -906,7 +897,7 @@ $("#Save_new").unbind("click");
 $("#Save_new").bind('click', function () {
 var vt = $("#value_new").val();
 //Validate
-if(validatenum_new()==false){
+if(validatenum("#value_new")==false){
 		return false;
 }
 //Time checking
@@ -1121,7 +1112,7 @@ if($var['VariableName']!="")
           
                     <tr>
                         <td align="right"><?php echo getTxt('Value'); ?> </td>
-                        <td align="left"><input id="value" onBlur="validatenum()"/></td>
+                        <td align="left"><input id="value" onBlur="validatenum('#value')"/></td>
                     </tr>
                     <tr>
           <td>&nbsp;</td>
@@ -1183,7 +1174,7 @@ if($var['VariableName']!="")
           
                     <tr>
                         <td align="right"><?php echo getTxt('Value'); ?></td>
-                        <td align="left"><input id="value_new" onBlur="validatenum_new()"/></td>
+                        <td align="left"><input id="value_new" onBlur="validatenum('#value_new')"/></td>
                     </tr>
                     <tr>
           <td>&nbsp;</td>
