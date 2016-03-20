@@ -88,7 +88,9 @@ if (isAdmin()) {
 	);
 }
 
-$menuConfig['DB']['items'][] = html_linkItem("add_site", "sites/add", "AddSite");
+if (isTeacher() || isAdmin()) {
+	$menuConfig['DB']['items'][] = html_linkItem("add_site", "sites/add", "AddSite");
+}
 
 if (isAdmin()) {
 	$menuConfig['DB']['items'] = array_merge(
