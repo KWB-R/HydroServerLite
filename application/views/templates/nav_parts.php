@@ -166,7 +166,7 @@ if(isLoggedIn()) {
 	echo html_linkItem("login", "auth/logout", "Logout");
 }
 else {
-	echo html_linkItem("login", "#", "LoginButton", 'onclick="showLogin()"');
+	echo html_linkItem("login", "#", "LoginButton", 'onclick="return showLogin();"');
 }
 
 echo "</ul>";
