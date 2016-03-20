@@ -167,59 +167,41 @@ function IsNumeric(strString){
 //Number validation script
 function validatenum(idSelector)
 {
-	return isValidNumber($(idSelector).val());
+	return isValidNumber($(idSelector).val())
 }
 
-function isValidNumber(val){
-      if(val==null || val.length==0){
-   		  alert(DATA.text.EnterNumberValue);
+function isValidNumber(val)
+{
+	if (val == null || val.length == 0) {
+		alert(DATA.text.EnterNumberValue)
+		return false
+	}
 
-		  return false;
-		  }
+	var DecimalFound = false
 
-      var DecimalFound = false
-      for (var i = 0; i < val.length; i++) {
-            var ch = val.charAt(i)
-            if (i == 0 && ch == "-") {
-                  continue
-            }
-            if (ch == "." && !DecimalFound) {
-                  DecimalFound = true
-                  continue
-            }
-            if (ch < "0" || ch > "9") {
-		    alert(DATA.text.EnterValidNumberValue);
-			    return false;
-            	}
-      }
-	  return true;
+	for (var i = 0; i < val.length; i++) {
+
+		var ch = val.charAt(i)
+
+		if (i == 0 && ch == "-") {
+			continue
+		}
+
+		if (ch == "." && !DecimalFound) {
+			DecimalFound = true
+			continue
+		}
+
+		if (ch < "0" || ch > "9") {
+			alert(DATA.text.EnterValidNumberValue)
+			return false
+		}
+	}
+
+	return true
 }
+
 //Number Validation script ends
-
-function isValidNumber(val){
-      if(val==null || val.length==0){
-   		  alert(DATA.text.EnterNumberValue);
-		  return false;
-		  }
-
-      var DecimalFound = false
-      for (var i = 0; i < val.length; i++) {
-            var ch = val.charAt(i)
-            if (i == 0 && ch == "-") {
-                  continue
-            }
-            if (ch == "." && !DecimalFound) {
-                  DecimalFound = true
-                  continue
-            }
-            if (ch < "0" || ch > "9") {
-		    alert(DATA.text.EnterValidNumberValue);
-			    return false;
-            	}
-      }
-	  return true;
-}
-//Number Validation NEW  script ends
 
 //Populate the Drop Down list with values from the JSON output of the php page
 
