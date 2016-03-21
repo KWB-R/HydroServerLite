@@ -36,10 +36,13 @@ function html_li_sublist($keyword, $id, $items)
 {
 	return
 		html_li_beg("nav-header") .
-			html_a(
-				"#", # target
-				html_h(getTxt($keyword), 4), # content
-				html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
+			html_h(
+				html_a(
+					"#", # target
+					getTxt($keyword), # content
+					html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
+				),
+				4 // h4 header
 			) .
 			html_ul_beg("collapse", $id, "list-style: none;") .
 				implode("\n", $items) .
@@ -130,9 +133,9 @@ echo html_div_beg("navbar_navbar-default", "", "navigation");
 echo html_div_beg("navbar-header");
 echo html_button_beg("navbar-toggle", "collapse", "#navbarCollapse");
 echo html_span("sr-only", "Toggle navigation");
-echo html_span("icon-bar");
-echo html_span("icon-bar");
-echo html_span("icon-bar");
+//echo html_span("icon-bar");
+//echo html_span("icon-bar");
+//echo html_span("icon-bar");
 echo "</button>";
 echo html_span("visible-xs navbar-brand", getTxt(getMenuName() . 'Navigation'));
 echo "</div>"; // navbar-header
