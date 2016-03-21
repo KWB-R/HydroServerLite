@@ -205,612 +205,629 @@ function isValidNumber(val)
 
 //Number Validation script ends
 
+//Defining the Data adapter for the variable list
+var variablesAdapter = new $.jqx.dataAdapter({
+	datatype: "json",
+	datafields: [
+		{ name: 'VariableID' },
+		{ name: 'VariableName' },
+	],
+	url: base_url + 'variable/getSiteJSON?siteid=' + DATA.siteid
+});
+
+//Defining the Data adapter for the data types
+var typesAdapter = new $.jqx.dataAdapter({
+	datatype: "json",
+	datafields: [
+		{ name: 'DataType' },
+		{ name: 'display' },
+	],
+	url: base_url + 'variable/getTypes?siteid=' + DATA.siteid 
+		+ '&varname=' + varname
+});
+
+//Defining the Data adapter for the methods
+var methodsAdapter = new $.jqx.dataAdapter({
+	datatype: "json",
+	datafields: [
+		{ name: 'MethodID' },
+		{ name: 'MethodDescription' },
+	],
+	url: base_url + 'methods/getSiteVarJSON?siteid=' + DATA.siteid
+		+'&varid=' + varid
+});
+
+function variableSelectHandler(event)
+{
+	var item = $('#dropdownlist').jqxDropDownList(
+		'getItem', event.args.index
+	);
+
+	//Check if a valid value is selected and process futher to display dates
+	if (item != null) {
+		//Clear the Box
+		$('#daterange').html("");
+		varname = item.value;
+		displayVar = item.label;
+
+		//Going to the next function that will generate a list of data types available for that variable
+		var t = setTimeout("create_var_list()", 300)
+	}
+}
+
+function typeSelectHandler(event)
+{
+	var item = $('#typelist').jqxDropDownList('getItem', event.args.index);
+
+	//Check if a valid value is selected and process futher to display dates
+	if (item != null) {
+		datatype = item.value;
+		displayType = item.label;
+		update_var_id();
+	}
+}
+
+function methodSelectHandler(event)
+{
+	var item = $('#methodlist').jqxDropDownList('getItem', event.args.index);
+
+	//Check if a valid value is selected and process futher to display dates
+	if (item != null) {
+		methodid = item.value;
+		get_dates();
+		//Now call to check dates
+	}
+}
+
+function dateChangedHandler(event)
+{
+	var date = event.args.date;
+	date_select_from = new Date(date);
+
+	glob_df = date_select_from;
+
+	//Converting to SQL Format for Searching
+
+	var date_from_sql2 = date_select_from.getFullYear() + '-' + add_zero((date_select_from.getMonth()+1)) + '-' + add_zero(date_select_from.getDate()) + ' 00:00:00';
+	//Setting the Second calendar's min date to be the date of the first calendar
+	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', date);
+	var tempdate2=add_zero((date_select_from.getMonth()+1))+'/'+add_zero(date_select_from.getDate())+'/'+date_select_from.getFullYear();
+
+	$("#fromdatedrop").jqxDropDownButton('setContent', tempdate2);
+
+	if(date_from_sql != date_from_sql2) {
+		date_from_sql = date_from_sql2;
+		plot_chart();
+	}
+}
+
+function dateToChangedHandler(event)
+{
+	var date = event.args.date;
+	date_select_to = new Date(date);
+	glob_dt = date_select_to;
+	var tempdate = add_zero((date_select_to.getMonth()+1))+'/'+add_zero(date_select_to.getDate())+'/'+date_select_to.getFullYear();
+	$("#todatedrop").jqxDropDownButton('setContent', tempdate);
+	date_to_sql = date_select_to.getFullYear() + '-' + add_zero((date_select_to.getMonth()+1)) + '-' + add_zero(date_select_to.getDate()) + ' 00:00:00';
+	plot_chart();
+}
+
+function ajaxSuccessHandler(result)
+{
+	//Displaying the Available Dates
+	date_from = String(result.BeginDateTime);
+	date_to   = String(result.EndDateTime);
+
+	//Call the next function to display the data
+	$('#daterange')
+		.html("")
+		.prepend(
+			'<p>' + 
+			'<strong>' + DATA.text.DatesAvailable + '</strong> ' + date_from + 
+			'<strong>' + DATA.text.To + '</strong> ' + date_to +
+			'</p>'
+		);
+
+	$("#jqxDateTimeInput"  ).jqxDateTimeInput(dateInputConfig);
+	$("#jqxDateTimeInputto").jqxDateTimeInput(dateInputConfig);
+
+	//Resetting the bind functions
+	$('#jqxDateTimeInput'  ).off()
+	$('#jqxDateTimeInputto').off()
+
+	//Binding An Event To the Second Calendar
+	$('#jqxDateTimeInput' ).unbind('valuechanged');
+	$('#jqxDateTimeInputo').unbind('valuechanged');
+
+	//Restricting the Calendar to those available dates
+	var year  = parseInt(date_from.slice(0,  4));
+	var month = parseInt(date_from.slice(5,  7), 10);
+	var day   = parseInt(date_from.slice(8, 10), 10);
+	var date1 = new Date();
+	date1.setFullYear(year, month - 1, day);
+	glob_df = date1;
+
+	$("#fromdatedrop").jqxDropDownButton(dateDropConfig);
+	$("#todatedrop"  ).jqxDropDownButton(dateDropConfig);
+
+	//Use Show And Hide Method instead of repeating formation - optimization number 2
+
+	//$('#jqxDateTimeInput').jqxDateTimeInput('setDate', date1);
+	//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', new Date(year, month - 1, day));
+
+	var year_to  = parseInt(date_to.slice(0,  4));
+	var month_to = parseInt(date_to.slice(5,  7), 10);
+	var day_to   = parseInt(date_to.slice(8, 10), 10);
+	var date2 = new Date();
+
+	date2.setFullYear(year_to, month_to-1, day_to);
+	glob_dt = date2;
+
+	//$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', date2);
+	//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to - 1, day_to)); 
+	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to - 1, day_to)); 
+
+	//Plot the Chart with default limits
+
+	//If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12. 
+
+	var monthBegin = date1.getMonth();
+	if (monthBegin == 0) { monthBegin=1;}
+
+	var monthEnd =  date2.getMonth()+2;
+	if (monthEnd > 12) { monthEnd=12;}
+
+	date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
+	date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
+
+	$("#fromdatedrop").jqxDropDownButton('setContent', DATA.text.SelectStart);
+	$("#todatedrop"  ).jqxDropDownButton('setContent', DATA.text.SelectEnd);
+
+	plot_chart();
+
+	//Binding An Event to the first calender
+	$('#jqxDateTimeInput').bind('valuechanged', dateChangedHandler);
+
+	//Binding An Event To the Second Calendar
+	$('#jqxDateTimeInputto').bind('valuechanged', dateToChangedHandler);
+}
+//ajaxSuccessHandler
+
 //Populate the Drop Down list with values from the JSON output of the php page
 
-    $(document).ready(function () {
-		 	$("#loadingtext").hide();
-		
+$(document).ready(function () {
+	$("#loadingtext").hide();
 
-//Create date selectors and hide them
+	//Create date selectors and hide them
 
-//Create Tabs for Table Chart Switching
-$('#jqxtabs').jqxTabs({  width:'100%',height: 550, theme: 'darkblue', collapsible: true });
-$('#jqxtabs').jqxTabs('disable');
-var selectedItem = $('#jqxtabs').jqxTabs('selectedItem');
-$('#jqxtabs').jqxTabs('enableAt', selectedItem);
-			
-$('#jqxtabs').on('selected', function (event) { var selectedTab = event.args.item;
+	//Create Tabs for Table Chart Switching
+/*	$tabs = $('#jqxtabs');
 
-  if(selectedTab==1)
-  {
-   $(window).resize();
-  }
+	$tabs.jqxTabs({
+		width:'100%', height: 550, theme: 'darkblue', collapsible: true
+	})
 
-}); 
+	$tabs.jqxTabs('disable');
+	$tabs.jqxTabs('enableAt', $tabs.jqxTabs('selectedItem'));
+*/
 
-//Defining the Variable List
-var source =
-        {
-            datatype: "json",
-            datafields: [
-                { name: 'VariableID' },
-                { name: 'VariableName' },
-            ],
-            url: base_url+'variable/getSiteJSON?siteid='+DATA.siteid
-        };
-//Defining the Data adapter
-var dataAdapter = new $.jqx.dataAdapter(source);
-//Creating the Drop Down list
-$("#dropdownlist").jqxDropDownList(
-{
-    source: dataAdapter,
-    theme: 'darkblue',
-    height: 25,
-    width: "100%",
-    selectedIndex: 0,
-    displayMember: 'VariableName',
-    valueMember: 'VariableID'
+	$tabs = $('#jqxtabs');
+
+	$tabs
+		.jqxTabs({
+			width:'100%',
+			height: 550,
+			theme: 'darkblue',
+			collapsible: true
+		});
+
+	$tabs.jqxTabs('disable');
+/*
+		.jqxTabs.enableAt($tabs.jqxTabs('selectedItem'))
+		.on('selected', function (event) {
+			if (event.args.item == 1) {
+				$(window).resize();
+			}
+		});
+*/
+
+	//Creating the Variables Drop Down list
+	$("#dropdownlist")
+		.jqxDropDownList({
+			source: variablesAdapter,
+			theme: 'darkblue',
+			height: 25,
+			width: "100%",
+			selectedIndex: 0,
+			displayMember: 'VariableName',
+			valueMember: 'VariableID'
+		})
+		.bind('select', variableSelectHandler);
 });
 
-
-$('#dropdownlist').bind('select', function (event) {
-var args = event.args;
-var item = $('#dropdownlist').jqxDropDownList('getItem', args.index);
-//Check if a valid value is selected and process futher to display dates
-if (item != null) {
-//Clear the Box
-$('#daterange').html("");
-varname=item.value;
-displayVar=item.label;
-//Going to the next function that will generate a list of data types available for that variable
-var t=setTimeout("create_var_list()",300)
-}
-});
-});
 //End of Document Ready Function
 
 function create_var_list()
 {
-//Generate data types available for that varname
-        var source =
-        {
-            datatype: "json",
-            datafields: [
-                { name: 'DataType' },
-				{ name: 'display' },
-            ],
-            url: base_url+'variable/getTypes?siteid='+DATA.siteid+'&varname='+varname
-        };
-//Defining the Data adapter
-var dataAdapter = new $.jqx.dataAdapter(source);
-//Creating the Drop Down list
-        $("#typelist").jqxDropDownList(
-        {
-            source: dataAdapter,
-            theme: 'darkblue',
-            height: 25,
-            width: "100%",
-            selectedIndex: 0,
-            displayMember: 'display',
-            valueMember: 'DataType'
-        });
-
-//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
-$("#typelist").jqxDropDownList('selectIndex', 0 ); 
-$('#typelist').bind('select', function (event) {
-	 
-var args = event.args;
-var item = $('#typelist').jqxDropDownList('getItem', args.index);
-//Check if a valid value is selected and process futher to display dates
-if (item != null) {		
-datatype=item.value;
-displayType = item.label;
-update_var_id();}
-});
+	//Generate data types available for that varname
+	//Creating the Drop Down list
+	$("#typelist")
+		.jqxDropDownList({
+			source: typesAdapter,
+			theme: 'darkblue',
+			height: 25,
+			width: "100%",
+			selectedIndex: 0,
+			displayMember: 'display',
+			valueMember: 'DataType'
+		})
+		//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
+		.jqxDropDownList('selectIndex', 0 ) 
+		.bind('select', typeSelectHandler);
 }
+// End of create_var_list()
 
-//End of create_var_list function	
 function update_var_id()
-{	
-$.ajax({
-  type: "GET",
-  url: base_url+"variable/updateVarID?siteid="+DATA.siteid+"&varname="+varname+"&type="+datatype,
-//Processing The Dates
-    success: function(data) {
-	varid=data;
-	//Now We have the VariableID, We call the dates function
-	//Filter by methods available for that specific selection of variable and site
-	get_methods();
-}
-});
+{
+	$.ajax({
+		type: "GET",
+		url: base_url + "variable/updateVarID?siteid=" + DATA.siteid
+			+ "&varname=" + varname + "&type=" + datatype,
+		//Processing The Dates
+		success: function(data) {
+			varid = data;
+			//Now We have the VariableID, We call the dates function
+			//Filter by methods available for that specific selection of variable and site
+			get_methods();
+		}
+	});
 }
 
 //Function to get dates and plot a default plot
 
 function get_methods()
 {
-
-$('#methodlist').off()
-$('#methodlist').unbind('valuechanged');
-
-var source122 =
-        {
-            datatype: "json",
-            datafields: [
-                { name: 'MethodID' },
-                { name: 'MethodDescription' },
-            ],
-            url: base_url+'methods/getSiteVarJSON?siteid='+DATA.siteid+'&varid='+varid
-        };
-
-//Defining the Data adapter
-var dataAdapter122 = new $.jqx.dataAdapter(source122);
-
-//Creating the Drop Down list
-        $("#methodlist").jqxDropDownList(
-        {
-            source: dataAdapter122,
-            theme: 'darkblue',
-            height: 25,
-            width: "100%",
-            selectedIndex: 0,
-            displayMember: 'MethodDescription',
-            valueMember: 'MethodID'
-        });
-$("#methodlist").jqxDropDownList('selectIndex', 0 );
-//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
-
-$('#methodlist').bind('select', function (event) {
-var args = event.args;
-var item = $('#methodlist').jqxDropDownList('getItem', args.index);
-//Check if a valid value is selected and process futher to display dates
-if (item != null) {		
-methodid=item.value;
-get_dates();
-//Now call to check dates
+	$('#methodlist')
+		.off()
+		.unbind('valuechanged')
+		//Creating the Drop Down list
+		.jqxDropDownList({
+			source: methodsAdapter,
+			theme: 'darkblue',
+			height: 25,
+			width: "100%",
+			selectedIndex: 0,
+			displayMember: 'MethodDescription',
+			valueMember: 'MethodID'
+		})
+		.jqxDropDownList('selectIndex', 0 )
+		//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
+		.bind('select', methodSelectHandler);
 }
-});
+
+var dateInputConfig = {width: '100%', height: '25px', theme: 'darkblue', formatString: 'd'}
+var dateDropConfig  = {width: '100%', height: 25,     theme: 'darkblue'}
+
+var stockChartConfig = {
+	chart: {renderTo: 'container', zoomType: 'x'},
+	legend: {verticalAlign: 'top', enabled: true, shadow: true, y:40, margin:50},
+	title: {
+		text: DATA.text.Dataof + " " + DATA.text.SiteName + " " +
+					DATA.text.From   + " " + date_chart_from + " " +
+					DATA.text.To     + " " + date_chart_to,
+		style: {
+			fontSize: '12px'
+		}
+	},
+	credits: {enabled: false},
+	subtitle: {text: DATA.text.ClickDrag},
+	xAxis: {
+		type: 'datetime',
+		dateTimeLabelFormats: { // don't display the dummy year
+			month: '%e.%b / %Y',
+			year: '%b.%Y'
+		},
+		title: {text: DATA.text.TimeMsg, margin: 30}
+	},
+	yAxis: {
+		title: {text: unit_yaxis, margin: 40}
+	},
+	exporting: {enabled: true, width: 5000},
+	rangeSelector: {
+		buttons: [
+			{type: 'day',   count: 1, text: DATA.text.OneD},
+			{type: 'day',   count: 3, text: DATA.text.ThreeD},
+			{type: 'week',  count: 1, text: DATA.text.OneW},
+			{type: 'month', count: 1, text: DATA.text.OneM},
+			{type: 'month', count: 6, text: DATA.text.SixM},
+			{type: 'year',  count: 1, text: DATA.text.OneY},
+			{type: 'all', text: DATA.text.All}
+		],
+		selected: 6
+	},
+	series: [
+		{data: data_test,name: displayVar +'(' + displayType + ')'}
+	]
+} // end of stockChartConfig
+
+var gridConfig = {
+	source: dataAdapter12,
+	width: '100%',
+	columnsresize: true,
+	columns: [
+		{ text: DATA.text.ValueID, datafield: 'ValueID'},
+		{ text: DATA.text.Date, datafield: 'LocalDateTime'},
+		{ text: DATA.text.Value + ' (' + unitGrid + ')' , datafield: 'DataValue'}
+<?php
+if (isLoggedIn()) {
+	echo(",
+		{
+			text: 'Edit',
+			datafield: 'Edit',
+			columntype: 'button',
+			cellsrenderer: function () {
+				return 'Edit';
+			},
+			buttonclick: function (row) {
+
+				// open the popup window when the user clicks a button.
+				editrow = row;
+				var offset = $('#jqxgrid').offset();
+				$('#popupWindow').jqxWindow({ position: { x: parseInt(offset.left) + 220, y: parseInt(offset.top) + 60} });
+
+				// get the clicked row's data and initialize the input fields.
+				var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
+
+				//Create a Date time Input
+				var datepart=dataRecord.LocalDateTime.split(' ');
+
+				$('#popupWindow').jqxWindow('show');
+				// $('#date').val(datepart[0]);
+
+				$('#date').jqxDateTimeInput({ width: '125px', height: '25px', theme: 'darkblue', formatString: 'MM/dd/yyyy', textAlign: 'center' });
+
+				var dateparts=datepart[0].split('-');
+				$('#date').jqxDateTimeInput('setDate', new Date(dateparts[0], dateparts[1]-1, dateparts[2]));
+
+				var timepart=datepart[1].split(':')
+				$('#timepicker').val(timepart[0]+':'+timepart[1]);
+				// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
+
+				$('#value').val(dataRecord.DataValue);
+				vid = dataRecord.ValueID;
+				// show the popup window.
+			} // end of buttonclick function
+		}"
+	); // end of echo
+} // end of isLoggedIn()
+?>
+	] // end of columns array
+} // end of gridConfig
+
+var gridConfig2 = {
+	width: '100%',
+	source: dataAdapter12,
+	theme: 'darkblue',
+	columnsresize: true,
+	sortable: true,
+	pageable: true,
+	autoheight: true,
+	editable: false,
+	selectionmode: 'singlecell',
+	columns: columnsConfig
 }
+
+var columnsConfig = [
+	{
+		text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>',
+		datafield: 'ValueID'
+	},
+	{
+		text: '<?php echo getTxt('Date'); ?>',
+		datafield: 'LocalDateTime'
+	},
+	{
+		text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')',
+		datafield: 'DataValue'
+	}
+
+<?php
+			if (isLoggedIn()) {
+		echo(",
+		{
+			text: 'Edit',
+			datafield: 'Edit',
+			columntype: 'button',
+			cellsrenderer: function () {
+				return 'Edit';
+			},
+			buttonclick: function (row) {
+
+				// open the popup window when the user clicks a button.
+				editrow = row;
+				var offset = $('#jqxgrid').offset();
+				$('#popupWindow').jqxWindow({
+					position: {
+				x: parseInt(offset.left) + 220, 
+				y: parseInt(offset.top)  +  60
+					}
+				});
+
+				// get the clicked row's data and initialize the input fields.
+				var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
+
+				//Create a Date time Input
+				$('#popupWindow').jqxWindow('show');
+				var datepart = dataRecord.LocalDateTime.split(' ');
+				// $('#date').val(datepart[0]);
+				$('#date').jqxDateTimeInput({
+					width: '125px', height: '25px', theme: 'darkblue', formatString: 'MM/dd/yyyy', textAlign: 'center'
+				});
+
+				var dateparts = datepart[0].split('-');
+				$('#date').jqxDateTimeInput('setDate', new Date(dateparts[0], dateparts[1]-1, dateparts[2]));
+				var timepart = datepart[1].split(':')
+				$('#timepicker').val(timepart[0] + ':' + timepart[1]);
+				// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
+				$('#value').val(dataRecord.DataValue);
+				vid = dataRecord.ValueID;
+				// show the popup window.
+			} // end of buttonclick function
+		}");
+	}
+?>
+]
+
 function get_dates()
 {
+	var url = base_url + "series/getDateJSON?siteid=" + DATA.siteid
+		+ "&varid=" + varid+"&methodid=" + methodid;
 
-var url=base_url+"series/getDateJSON?siteid="+DATA.siteid+"&varid=" + varid+"&methodid=" + methodid;
-$.ajax({
-    type: "GET",
-	url: url,
-	dataType: "json",
-	success: function(result) {
-//Displaying the Available Dates
-date_from=String(result.BeginDateTime);
-date_to=String(result.EndDateTime);		
-//Call the next function to display the data
+	$.ajax({
+		type: "GET",
+		url: url,
+		dataType: "json",
+		success: ajaxSuccessHandler
+	});
 
-$('#daterange').html("");
-$('#daterange').prepend(
-	'<p><strong>'+DATA.text.DatesAvailable+'</strong> ' + date_from + 
-	' <strong>'+DATA.text.To + '</strong> ' + date_to +'</p>'
-);
+} //End of get_dates()
 
-$("#jqxDateTimeInput").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
-$("#jqxDateTimeInput").jqxDateTimeInput({ formatString: 'd' });
-$("#jqxDateTimeInputto").jqxDateTimeInput({ width: '100%', height: '25px', theme: 'darkblue'});
-$("#jqxDateTimeInputto").jqxDateTimeInput({ formatString: 'd' });
-
-//Resetting the bind functions
-$('#jqxDateTimeInput').off()
-$('#jqxDateTimeInputto').off()
-$('#jqxDateTimeInput').unbind('valuechanged');
-//Binding An Event To the Second Calendar
-$('#jqxDateTimeInputo').unbind('valuechanged');
-
-//Restricting the Calendar to those available dates
-var year = parseInt(date_from.slice(0,4));
-var month = parseInt(date_from.slice(5,7),10);
-var day = parseInt(date_from.slice(8,10),10);
-month=month-1;
-var date1 = new Date();
-glob_df=date1;
-date1.setFullYear(year, month, day);
-
-$("#fromdatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue'});
-
-$("#todatedrop").jqxDropDownButton({ width: '100%', height: 25, theme: 'darkblue'});
-
-
-//Use Show And Hide Method instead of repeating formation - optimization number 2
-
-//$('#jqxDateTimeInput').jqxDateTimeInput('setDate', date1);
-//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', new Date(year, month, day));
-var year_to = parseInt(date_to.slice(0,4));		
-var month_to = parseInt(date_to.slice(5,7),10);
-var day_to = parseInt(date_to.slice(8,10),10);	
-month_to=month_to-1;
-var date2 = new Date();
-date2.setFullYear(year_to, month_to-1, day_to);
-glob_dt=date2;
-
-//$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', date2);
-//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to, day_to)); 
-//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to, day_to)); 
-//Plot the Chart with default limits
-
-//If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12. 
-
-var monthBegin = date1.getMonth();
-if (monthBegin == 0) { monthBegin=1;}
-
-var monthEnd =  date2.getMonth()+2;
-if (monthEnd > 12) { monthEnd=12;}
-
-date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
-date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
-$("#fromdatedrop").jqxDropDownButton('setContent', DATA.text.SelectStart);
-$("#todatedrop").jqxDropDownButton('setContent', DATA.text.SelectEnd);
-
-plot_chart();	
-//Binding An Event to the first calender
-
-$('#jqxDateTimeInput').bind('valuechanged', function (event) 
-{
-	
-
-var date = event.args.date;
-date_select_from=new Date(date);
-glob_df=date_select_from;
-//Converting to SQL Format for Searching
-
-var date_from_sql2=date_select_from.getFullYear() + '-' + add_zero((date_select_from.getMonth()+1)) + '-' + add_zero(date_select_from.getDate()) + ' 00:00:00';
-//Setting the Second calendar's min date to be the date of the first calendar
-//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', date);
-var tempdate2=add_zero((date_select_from.getMonth()+1))+'/'+add_zero(date_select_from.getDate())+'/'+date_select_from.getFullYear();
-
-$("#fromdatedrop").jqxDropDownButton('setContent', tempdate2);
-
-if(date_from_sql!=date_from_sql2)
-{date_from_sql=date_from_sql2;
-plot_chart();				
-}
-});
-//Binding An Event To the Second Calendar
-$('#jqxDateTimeInputto').bind('valuechanged', function (event) {
-	
-var date = event.args.date;
-date_select_to=new Date(date);
-glob_dt=date_select_to;
-var tempdate=add_zero((date_select_to.getMonth()+1))+'/'+add_zero(date_select_to.getDate())+'/'+date_select_to.getFullYear();
-$("#todatedrop").jqxDropDownButton('setContent', tempdate);
-date_to_sql=date_select_to.getFullYear() + '-' + add_zero((date_select_to.getMonth()+1)) + '-' + add_zero(date_select_to.getDate()) + ' 00:00:00';
-plot_chart();
-});}
-});
-} //End of function get_dates
-	
 function plot_chart()
 {
-var unit_yaxis="unit";
-//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
-if (varid != -1)
-{
-$.ajax({
-  type: "GET",
-  dataType: "json",
-  url: base_url+"variable/getUnit?varid="+varid
-}).done(function( msg ) {
-  unit_yaxis = msg[0].unitA;
-});
-}
+	var unit_yaxis = "unit";
 
-//Chaning Complete Data loading technique..need to create a php page that will output javascript...
-var url_test=base_url+'datapoint/getData?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
-$.ajax({
-  url: url_test,
-  type: "GET",
-  dataType: "script"
-}).done(function( datatest ) {
-   
-var date_chart_from=glob_df.getFullYear() + '-' + add_zero((glob_df.getMonth()+1)) + '-' + add_zero(glob_df.getDate());
-var date_chart_to=glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1)) + '-' + add_zero(glob_dt.getDate());
- 
-// var data_test=datatest;
- chart=new Highcharts.StockChart({
-    chart: {
-    renderTo: 'container',
-		zoomType: 'x',
-  
-    },
-	 legend: {
-		           verticalAlign: 'top',
-            enabled: true,
-            shadow: true,
-			y:40,
-			margin:50
-          
-        },
-    title: {
-	text: DATA.text.Dataof+" "+DATA.text.SiteName+" "+ 
-				DATA.text.From  +" "+date_chart_from+" "+  
-				DATA.text.To    +" "+date_chart_to,
-		style: {
-                fontSize: '12px'
-            }
-    },
-	
-	
-        credits: {
-            enabled: false
-        },
-	
-	 subtitle: {
-	text: DATA.text.ClickDrag
-    },
-	
-   xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                 month: '%e.%b / %Y',
-                year: '%b.%Y'
-            },
-			title: {
-		text: DATA.text.TimeMsg,
-				margin: 30
-            }
-			
-        },
-  yAxis: {
-            title: {
-                text: unit_yaxis,
-				margin: 40
-            }
-			
-        },
-	
-	 exporting: {
-            enabled: true,
-			width: 5000
-        },	
-		
+	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
+	if (varid != -1) {
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: base_url+"variable/getUnit?varid=" + varid
+		})
+		.done(function(msg) {
+			unit_yaxis = msg[0].unitA;
+		});
+	}
 
-	rangeSelector: {
-                buttons: [
-				{
-                    type: 'day',
-                    count: 1,
-		    text: DATA.text.OneD
-                },
-				{
-                    type: 'day',
-                    count: 3,
-		    		text: DATA.text.ThreeD
-                }, {
-                    type: 'week',
-                    count: 1,
-		    		text: DATA.text.OneW
-                }, {
-                    type: 'month',
-                    count: 1,
-		   			text: DATA.text.OneM
-                }, {
-                    type: 'month',
-                    count: 6,
-		   			text: DATA.text.SixM
-                }, {
-                    type: 'year',
-                    count: 1,
-		    		text: DATA.text.OneY
-                }, {
-                    type: 'all',
-		    		text: DATA.text.All
-                }],
-            selected: 6
-            },
-	
-	
-     series: [{
-            data: data_test,
-			name: displayVar +'('+displayType+')'     
-        }]
-    
-});
+	//Chaning Complete Data loading technique..need to create a php page that will output javascript...
+	var url_test = base_url + 'datapoint/getData?siteid=' + DATA.siteid + 
+		'&varid=' + varid + '&meth=' + methodid + 
+		'&startdate=' + date_from_sql + '&enddate=' + date_to_sql;
 
-	$("#loadingtext").hide();
+	$.ajax({
+		url: url_test,
+		type: "GET",
+		dataType: "script"
+	})
+	.done(function(datatest) {
+		var date_chart_from = glob_df.getFullYear() + '-' + add_zero((glob_df.getMonth()+1)) + '-' + add_zero(glob_df.getDate());
+		var date_chart_to   = glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1)) + '-' + add_zero(glob_dt.getDate());
 
-  make_grid();
-	$('#jqxtabs').jqxTabs('enable');
+		// var data_test=datatest;
+		chart = new Highcharts.StockChart(stockChartConfig);
 
+		// end of new Highcharts.StockChart()
 
- 
- });
+		$("#loadingtext").hide();
 
+		make_grid();
+
+		$('#jqxtabs').jqxTabs('enable');
+	});
 }
 
 function add_zero(value)
 {
-var ret;
-if (value<10)
-{
-ret='0'+value;
-}
-else
-{ret=value;
-}
-return ret;
+	if (value < 10) {
+		value = '0' + value;
+	}
+
+	return value;
 }
 	
-function timeconvert(timestamp) {
-var year = parseInt(timestamp.slice(0,4));
-var month = parseInt(timestamp.slice(5,7),10);
-var day = parseInt(timestamp.slice(8,10),10);
-month=month-1;
-var hour = parseInt(timestamp.slice(11,13),10);
-var minute = parseInt(timestamp.slice(14,16),10);
-var sec = parseInt(timestamp.slice(17,19),10); 
-return new Date(year,month,day,hour,minute,sec);
+function timeconvert(timestamp)
+{
+	var year   = parseInt(timestamp.slice( 0,  4));
+	var month  = parseInt(timestamp.slice( 5,  7), 10);
+	var day    = parseInt(timestamp.slice( 8, 10), 10);
+	var hour   = parseInt(timestamp.slice(11, 13), 10);
+	var minute = parseInt(timestamp.slice(14, 16), 10);
+	var sec    = parseInt(timestamp.slice(17, 19), 10);
+
+	return new Date(year, month - 1, day, hour, minute, sec);
 }
 
 function make_grid()
 {
-var editrow = -1;
-var vid=0;
-var url=base_url+'datapoint/getDataJSON?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+	var editrow = -1;
+	var vid = 0;
+	var url = base_url + 'datapoint/getDataJSON?siteid=' + DATA.siteid +
+		'&varid=' + varid + '&meth=' + methodid + 
+		'&startdate=' + date_from_sql + '&enddate=' + date_to_sql;
 
-var source12 =
-            {
-                datatype: "json",
-                datafields: [
-                    { name: 'ValueID'},
-                    { name: 'DataValue'},
-                    { name: 'LocalDateTime'}
-                ],
-				
-                url: url
-            };
-var dataAdapter12 = new $.jqx.dataAdapter(source12);   
+	var dataAdapter12 = new $.jqx.dataAdapter({
+		datatype: "json",
+		datafields: [
+			{ name: 'ValueID'},
+			{ name: 'DataValue'},
+			{ name: 'LocalDateTime'}
+		],
+		url: url
+	});
 
-//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
-var unitGrid = "Unit: None";
-$.ajax({
- dataType: "json",
- url: base_url+"variable/getUnit?varid="+varid
-}).done(function( msg ) {
-  unitGrid = msg[0].unitA;
-  if (flag==1)    
-{
-   $("#jqxgrid").jqxGrid(
-            {
-             
-                source: dataAdapter12,
-                width: '100%',
-                columnsresize: true,
-                columns: [
-				  { text: DATA.text.ValueID, datafield: 'ValueID'},
-          { text: DATA.text.Date, datafield: 'LocalDateTime'},
-          { text: DATA.text.Value + ' (' + unitGrid + ')' , datafield: 'DataValue'}
- <?php
-     if(isLoggedIn())
-	  {
-		echo(",
-				  
-				   { text: 'Edit', datafield: 'Edit', columntype: 'button', cellsrenderer: function () {
-                     return 'Edit';
-                 }, buttonclick: function (row) {
-                     // open the popup window when the user clicks a button.
-                     editrow = row;
-                     var offset = $('#jqxgrid').offset();
-                     $('#popupWindow').jqxWindow({ position: { x: parseInt(offset.left) + 220, y: parseInt(offset.top) + 60} });
-                     // get the clicked row's data and initialize the input fields.
-                     var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
-					 //Create a Date time Input
-					 
-					 var datepart=dataRecord.LocalDateTime.split(' ');
-					 
-		
-					  $('#popupWindow').jqxWindow('show');
-                    // $('#date').val(datepart[0]);
-					 
-					 $('#date').jqxDateTimeInput({ width: '125px', height: '25px', theme: 'darkblue', formatString: 'MM/dd/yyyy', textAlign: 'center' });
-                     
-					 var dateparts=datepart[0].split('-');
-					 $('#date').jqxDateTimeInput('setDate', new Date(dateparts[0], dateparts[1]-1, dateparts[2])); 
-					var timepart=datepart[1].split(':')
-					$('#timepicker').val(timepart[0]+':'+timepart[1]);
-					// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
-					
-					 
-					 $('#value').val(dataRecord.DataValue);
-					 vid=dataRecord.ValueID;
-                     // show the popup window.
-                    
-                 }
-                 }                 ");
-	  }
-      ?>
-                ]
-            });		
+	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+	var unitGrid = "Unit: None";
+	$.ajax({
+		dataType: "json",
+		url: base_url+"variable/getUnit?varid=" + varid
+	})
+	.done(function(msg) {
+		unitGrid = msg[0].unitA;
 
-}
-if(flag!=1)
-{
+		if (flag == 1) {
+			$("#jqxgrid").jqxGrid(gridConfig);
+		}
 
+		if (flag !=1 ) {
+			$("#jqxgrid").jqxGrid(gridConfig2);
+			flag = 1;
+		}
+	});
 
-            $("#jqxgrid").jqxGrid(
-            {
-                width: '100%',
-                source: dataAdapter12,
-                theme: 'darkblue',   
-                columnsresize: true,
-				        sortable: true,
-                pageable: true,
-                autoheight: true,
-				        editable: false,
-				        selectionmode: 'singlecell',
-                columns: [
-			  { text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>', datafield: 'ValueID' },
-                  { text: '<?php echo getTxt('Date'); ?>', datafield: 'LocalDateTime' },
-	          { text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')', datafield: 'DataValue'} <?php
-      	if(isLoggedIn())
-	  {
-		echo(",
-				  
-				   { text: 'Edit', datafield: 'Edit', columntype: 'button', cellsrenderer: function () {
-                     return 'Edit';
-                 }, buttonclick: function (row) {
-                     // open the popup window when the user clicks a button.
-                     editrow = row;
-                     var offset = $('#jqxgrid').offset();
-                     $('#popupWindow').jqxWindow({ position: { x: parseInt(offset.left) + 220, y: parseInt(offset.top) + 60} });
-                     // get the clicked row's data and initialize the input fields.
-                     var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
-					 //Create a Date time Input
-					  $('#popupWindow').jqxWindow('show');
-					 var datepart=dataRecord.LocalDateTime.split(' ');
-					 
-		
-					 
-                    // $('#date').val(datepart[0]);
-					 
-					 $('#date').jqxDateTimeInput({ width: '125px', height: '25px', theme: 'darkblue', formatString: 'MM/dd/yyyy', textAlign: 'center' });
-                     
-					 var dateparts=datepart[0].split('-');
-					 $('#date').jqxDateTimeInput('setDate', new Date(dateparts[0], dateparts[1]-1, dateparts[2])); 
-					var timepart=datepart[1].split(':')
-					$('#timepicker').val(timepart[0]+':'+timepart[1]);
-					// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
-					
-					 
-					 $('#value').val(dataRecord.DataValue);
-					 vid=dataRecord.ValueID;
-                     // show the popup window.
-                    
-                 }
-                 }                 ");
-	  }
-      ?>
-                ]
-            });		
-		flag=1;		
-			
-	}
-	
-});
 //Editing functionality
 
   // initialize the popup window and buttons.
 
-$("#popupWindow").jqxWindow({ width: 300, height:350, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel"), modalOpacity: 0.01 });
-$( "#timepicker" ).timepicker({ showOn: "focus", showPeriodLabels: false });
-$("#delval").jqxButton({ theme: 'darkblue' });
-$("#Cancel").jqxButton({ theme: 'darkblue' });
-$("#Save").jqxButton({ theme: 'darkblue'});
+$("#popupWindow").jqxWindow({
+	width: 300,
+	height: 350,
+	resizable: false,
+	theme: 'darkblue',
+	isModal: true,
+	autoOpen: false,
+	cancelButton: $("#Cancel"),
+	modalOpacity: 0.01
+});
+
+$("#timepicker").timepicker({showOn: "focus", showPeriodLabels: false});
+
+$("#delval").jqxButton({theme: 'darkblue'});
+
+$("#Cancel").jqxButton({theme: 'darkblue'});
+
+$("#Save").jqxButton({theme: 'darkblue'});
+
 //Delete Value
 $("#delval").unbind("click"); //Multiple events are getting binded for some reason. This makes sure that doesn't happen. 
 $("#delval").click(function () {
-//Send out a delete request		
+
+//Send out a delete request
 $.ajax({
 	dataType: "json",
 	url: base_url+"datapoint/delete/"+vid
 }).done(function(result) {
   if(result.status=='success')
   {
+
 //Remove that row from the table
 $('#jqxgrid').jqxGrid('deleterow', editrow);  //This one might be having issues.       
 $("#popupWindow").jqxWindow('hide');
@@ -926,7 +943,7 @@ var url=base_url+'datapoint/export?siteid='+DATA.siteid+'&varid='+varid+'&meth='
 
 window.open(url,'_blank');
 
-                });
+});
 
 //End of Exporting
 
@@ -953,21 +970,11 @@ $('#window').jqxWindow('show');
 $('#windowContent').load(base_url+'datapoint/compare/1', function() {
 });
 
-
-
-
-
 });
 
 //Now Map Loaded. Another Function to open up a new window that will Give them options to select the data to be plotted against the esiting data
 
-
-
-
 //End of Comparing
-
-
-	
 }
 </script>
 
