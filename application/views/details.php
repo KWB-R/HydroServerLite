@@ -12,50 +12,14 @@ echo $CSS_Main;
 echo $CSS_JQuery_UI;
 echo $CSS_JQStyles;
 ?>
+
 <!--Main Script to display the data-->
 <script type="text/javascript">
-var DATA = {
-	siteid:<?php echo $SiteID;?>,
-	text:{
-<?php
-	$names = array(
-		'InvalidTimeFive',
-		'InvalidTimeHoursTwo',
-		'InvalidTimeHoursZeros',
-		'InvalidTimeHoursTwentyThree',
-		'InvalidTimeMinutesTwo',
-		'InvalidTimeMinutesZeros',
-		'InvalidTimeMinutesFiftyNine',
-		'InvalidCharacterNumbers',
-		'EnterNumberValue',
-		'EnterValidNumberValue',
-		'DatesAvailable',
-		'Date',
-		'From',
-		'To',
-		'SelectStart',
-		'SelectEnd',
-		'Dataof',
-		'ClickDrag',
-		'TimeMsg',
-		'OneD',
-		'ThreeD',
-		'OneW',
-		'OneM',
-		'SixM',
-		'OneY',
-		'All', 
-		'DatabaseConfigurationError'
-	);
-	foreach ($names as $name) {
-		echo "        $name: \"" . getTxt($name) . "\",\n";
-	}
-?>
-		SiteName: "<?php echo $site['SiteName'];?>",
-		ValueID: "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
-		Value: "<?php echo str_replace(':', '', getTxt('Value'));?>"
-	}
-};
+
+//
+// Define Global Variables
+//
+
 var glob_df;
 var glob_dt;
 var date_to;
@@ -69,65 +33,56 @@ var varname;
 var datatype;
 var displayType;
 var sitename;
-var flag=0;
+var flag = 0;
 var methodid;
-var chart="";
+var chart = "";
 var displayVar;
 
-//Time Validation Script General
-function validatetime(idString) 
+//
+// Helper functions (should be moved to some external script in my opinion)
+//
+
+function formatDateSQL(date, month, minutes)
 {
-	//Removing all space
-	var strval = trimAllSpace($(idString).val());
+	// Set default values if month or minutes are undefined
+	month = month || (date.getMonth()+1)
+	minutes = minutes || ' 00:00:00'
 
-	//alert("validatetime(" + idString + "): >" + strval + "<");
+	return (
+		date.getFullYear() + '-' + 
+		add_zero(month) + '-' + 
+		add_zero(date.getDate()) + minutes
+	)
+}
 
-	$(idString).val(strval);
+function formatDate(date)
+{
+	return (
+		add_zero((date.getMonth() + 1)) + '/' + 
+		add_zero( date.getDate()) + '/' + 
+		date.getFullYear()
+	)
+}
 
-	//Minimum and maximum length is 5, for example, 01:20
-	if (strval.length != 5) {
-		alert(DATA.text.InvalidTimeFive);
-		return false;
+function add_zero(value)
+{
+	if (value < 10) {
+		value = '0' + value
 	}
 
-	//Split the string
-	var newval = strval.split(":");
-	var horval = newval[0];
-	var minval = newval[1];
+	return value
+}
 
-	//Checking hours
+function timeconvert(timestamp)
+{
+	var year   = parseInt(timestamp.slice( 0,  4));
+	var month  = parseInt(timestamp.slice( 5,  7), 10);
+	var day    = parseInt(timestamp.slice( 8, 10), 10);
+	var hour   = parseInt(timestamp.slice(11, 13), 10);
+	var minute = parseInt(timestamp.slice(14, 16), 10);
+	var sec    = parseInt(timestamp.slice(17, 19), 10);
 
-	//minimum length for hours is two digits, for example, 12
-	if (horval.length != 2) {
-		alert(DATA.text.InvalidTimeHoursTwo);
-		return false;
-	}
-	if (horval < 0) {
-		alert(DATA.text.InvalidTimeHoursZeros);		
-		return false;
-	}
-	else if (horval > 23) {
-		alert(DATA.text.InvalidTimeHoursTwentyThree);
-		return false;
-	}
-
-	//Checking minutes
-
- 	//minimum length for minutes is 2, for example, 59
-	if (minval.length != 2) {
-		alert(DATA.text.InvalidTimeMinutesTwo);
-		return false;
-	} 
-	if (minval < 0) {
-		alert(DATA.text.InvalidTimeMinutesZeros);
-		return false;
-	}   
-	else if (minval > 59){
-		alert(DATA.text.InvalidTimeMinutesFiftyNine);
-		return false;
-	}
-
-	$(idString).val(IsNumeric(strval));
+	return new Date(year, month - 1, day, hour, minute, sec);
 }
 
 //The trimAllSpace() function will remove any extra spaces
@@ -162,6 +117,374 @@ function IsNumeric(strString)
 	}
 
 	return strString
+}
+
+//
+// Define all (translated) message texts beforehand
+//
+
+var DATA = {
+	siteid:<?php echo $SiteID;?>,
+	text:{
+<?php
+	$names = array(
+		'InvalidTimeFive',
+		'InvalidTimeHoursTwo',
+		'InvalidTimeHoursZeros',
+		'InvalidTimeHoursTwentyThree',
+		'InvalidTimeMinutesTwo',
+		'InvalidTimeMinutesZeros',
+		'InvalidTimeMinutesFiftyNine',
+		'InvalidCharacterNumbers',
+		'EnterNumberValue',
+		'EnterValidNumberValue',
+		'DatesAvailable',
+		'Date',
+		'From',
+		'To',
+		'SelectStart',
+		'SelectEnd',
+		'Dataof',
+		'ClickDrag',
+		'TimeMsg',
+		'OneD',
+		'ThreeD',
+		'OneW',
+		'OneM',
+		'SixM',
+		'OneY',
+		'All', 
+		'DatabaseConfigurationError'
+	);
+	foreach ($names as $name) {
+		echo "$name: \"" . getTxt($name) . "\",\n";
+	}
+?>
+		SiteName: "<?php echo $site['SiteName'];?>",
+		ValueID: "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
+		Value: "<?php echo str_replace(':', '', getTxt('Value'));?>"
+	}
+};
+
+//
+// Define the configurations of the controls beforehand
+//
+
+var windowConfig = {
+	maxHeight: 800,
+	maxWidth: 800,
+	minHeight: 200,
+	minWidth: 200,
+	height: 520,
+	width: 720,
+	theme: 'darkblue'
+}
+
+var windowConfig2 = {
+	maxHeight: 100,
+	maxWidth: 350,
+	minHeight: 100,
+	minWidth: 350,
+	height: 100,
+	width: 350,
+	theme: 'darkblue'
+}
+
+var windowConfig5 = {
+	maxHeight: 300,
+	maxWidth: 650,
+	minHeight: 300,
+	minWidth: 650,
+	height: 300,
+	width: 650,
+	theme: 'darkblue'
+}
+
+var popupWindowConfigBase = {
+	width: 300,
+	height: 350,
+	resizable: false,
+	theme: 'darkblue',
+	isModal: true,
+	autoOpen: false,
+	modalOpacity: 0.01
+}
+
+var popupWindowConfig = popupWindowConfigBase
+popupWindowConfig.cancelButton = $("#Cancel")
+
+var popupWindowNewConfig = popupWindowConfig
+popupWindowNewConfig.cancelButton = $("#Cancel_new")
+
+var buttonConfigBase = { theme: 'darkblue' }
+var buttonConfig     = { theme: 'darkblue', width: '250', height: '25' }
+
+var dateInputConfig = {width: '100%', height: '25px', theme: 'darkblue', formatString: 'd'}
+var dateDropConfig  = {width: '100%', height: 25,     theme: 'darkblue'}
+
+function getStockChartConfig(
+	date_chart_from, 
+	date_chart_to, 
+	unit_yaxis, 
+	data_test, 
+	displayVar, 
+	displayType
+)
+{
+	return {
+		chart: {renderTo: 'container', zoomType: 'x'},
+		legend: {verticalAlign: 'top', enabled: true, shadow: true, y:40, margin:50},
+		title: {
+			text: DATA.text.Dataof + " " + DATA.text.SiteName + " " +
+						DATA.text.From   + " " + date_chart_from + " " +
+						DATA.text.To     + " " + date_chart_to,
+			style: {
+				fontSize: '12px'
+			}
+		},
+		credits: {enabled: false},
+		subtitle: {text: DATA.text.ClickDrag},
+		xAxis: {
+			type: 'datetime',
+			dateTimeLabelFormats: { // don't display the dummy year
+				month: '%e.%b / %Y',
+				year: '%b.%Y'
+			},
+			title: {text: DATA.text.TimeMsg, margin: 30}
+		},
+		yAxis: {
+			title: {text: unit_yaxis, margin: 40}
+		},
+		exporting: {enabled: true, width: 5000},
+		rangeSelector: {
+			buttons: [
+				{type: 'day',   count: 1, text: DATA.text.OneD},
+				{type: 'day',   count: 3, text: DATA.text.ThreeD},
+				{type: 'week',  count: 1, text: DATA.text.OneW},
+				{type: 'month', count: 1, text: DATA.text.OneM},
+				{type: 'month', count: 6, text: DATA.text.SixM},
+				{type: 'year',  count: 1, text: DATA.text.OneY},
+				{type: 'all', text: DATA.text.All}
+			],
+			selected: 6
+		},
+		series: [
+			{data: data_test, name: displayVar +'(' + displayType + ')'}
+		]
+	} 
+} // end of getStockChartConfig()
+
+function getGridConfig(dataAdapter12, unitGrid)
+{
+	return {
+		source: dataAdapter12,
+		width: '100%',
+		columnsresize: true,
+		columns: [
+			{ text: DATA.text.ValueID, datafield: 'ValueID'},
+			{ text: DATA.text.Date, datafield: 'LocalDateTime'},
+			{ text: DATA.text.Value + ' (' + unitGrid + ')' , datafield: 'DataValue'}
+	<?php
+	if (isLoggedIn()) {
+		echo(",
+			{
+				text: 'Edit',
+				datafield: 'Edit',
+				columntype: 'button',
+				cellsrenderer: function () {
+					return 'Edit';
+				},
+				buttonclick: function (row) {
+
+					// open the popup window when the user clicks a button.
+					editrow = row;
+					var offset = $('#jqxgrid').offset();
+					$('#popupWindow').jqxWindow({
+						position: {
+							x: parseInt(offset.left) + 220,
+							y: parseInt(offset.top)  +  60
+						}
+					});
+
+					// get the clicked row's data and initialize the input fields.
+					var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
+
+					//Create a Date time Input
+					var datepart = dataRecord.LocalDateTime.split(' ');
+
+					$('#popupWindow').jqxWindow('show');
+					// $('#date').val(datepart[0]);
+
+					$('#date').jqxDateTimeInput({
+						width: '125px',
+						height: '25px',
+						theme: 'darkblue',
+						formatString: 'MM/dd/yyyy',
+						textAlign: 'center'
+					});
+
+					var dateparts = datepart[0].split('-');
+					$('#date').jqxDateTimeInput('setDate', 
+						new Date(dateparts[0], dateparts[1]-1, dateparts[2])
+					);
+
+					var timepart = datepart[1].split(':')
+					$('#timepicker').val(timepart[0] + ':' + timepart[1]);
+					// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
+
+					$('#value').val(dataRecord.DataValue);
+					vid = dataRecord.ValueID;
+					// show the popup window.
+				} // end of buttonclick function
+			}"
+		); // end of echo
+	} // end of isLoggedIn()
+	?>
+		] // end of columns array
+	} 
+} // end of getGridConfig()
+
+function getColumnsConfig(unitGrid)
+{
+	return [
+		{
+			text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>',
+			datafield: 'ValueID'
+		},
+		{
+			text: '<?php echo getTxt('Date'); ?>',
+			datafield: 'LocalDateTime'
+		},
+		{
+			text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')',
+			datafield: 'DataValue'
+		}
+
+	<?php
+				if (isLoggedIn()) {
+			echo(",
+			{
+				text: 'Edit',
+				datafield: 'Edit',
+				columntype: 'button',
+				cellsrenderer: function () {
+					return 'Edit';
+				},
+				buttonclick: function (row) {
+
+					// open the popup window when the user clicks a button.
+					editrow = row;
+					var offset = $('#jqxgrid').offset();
+					$('#popupWindow').jqxWindow({
+						position: {
+							x: parseInt(offset.left) + 220, 
+							y: parseInt(offset.top)  +  60
+						}
+					});
+
+					// get the clicked row's data and initialize the input fields.
+					var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
+
+					//Create a Date time Input
+					$('#popupWindow').jqxWindow('show');
+					var datepart = dataRecord.LocalDateTime.split(' ');
+					// $('#date').val(datepart[0]);
+					$('#date').jqxDateTimeInput({
+						width: '125px',
+						height: '25px',
+						theme: 'darkblue',
+						formatString: 'MM/dd/yyyy',
+						textAlign: 'center'
+					});
+
+					var dateparts = datepart[0].split('-');
+					$('#date').jqxDateTimeInput(
+						'setDate', new Date(dateparts[0], dateparts[1]-1, dateparts[2])
+					);
+					var timepart = datepart[1].split(':')
+					$('#timepicker').val(timepart[0] + ':' + timepart[1]);
+					// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
+					$('#value').val(dataRecord.DataValue);
+					vid = dataRecord.ValueID;
+					// show the popup window.
+				} // end of buttonclick function
+			}");
+		}
+	?>
+	]
+} // end of getColumnsConfig()
+
+function getGridConfig2(dataAdapter12, columnsConfig)
+{
+	return {
+		width: '100%',
+		source: dataAdapter12,
+		theme: 'darkblue',
+		columnsresize: true,
+		sortable: true,
+		pageable: true,
+		autoheight: true,
+		editable: false,
+		selectionmode: 'singlecell',
+		columns: columnsConfig
+	}
+} // end of getGridConfig2()
+
+//Time Validation Script General
+function validatetime(idString)
+{
+	//Removing all space
+	var strval = trimAllSpace($(idString).val());
+
+	//alert("validatetime(" + idString + "): >" + strval + "<");
+
+	$(idString).val(strval);
+
+	//Minimum and maximum length is 5, for example, 01:20
+	if (strval.length != 5) {
+		alert(DATA.text.InvalidTimeFive);
+		return false;
+	}
+
+	//Split the string
+	var newval = strval.split(":");
+	var horval = newval[0];
+	var minval = newval[1];
+
+	//Checking hours
+
+	//minimum length for hours is two digits, for example, 12
+	if (horval.length != 2) {
+		alert(DATA.text.InvalidTimeHoursTwo);
+		return false;
+	}
+	if (horval < 0) {
+		alert(DATA.text.InvalidTimeHoursZeros);
+		return false;
+	}
+	else if (horval > 23) {
+		alert(DATA.text.InvalidTimeHoursTwentyThree);
+		return false;
+	}
+
+	//Checking minutes
+
+ 	//minimum length for minutes is 2, for example, 59
+	if (minval.length != 2) {
+		alert(DATA.text.InvalidTimeMinutesTwo)
+		return false
+	} 
+
+	if (minval < 0 || minval > 59) {
+		alert(
+			minval < 0 ?
+			DATA.text.InvalidTimeMinutesZeros :
+			DATA.text.InvalidTimeMinutesFiftyNine
+		)
+		return false
+	}
+
+	$(idString).val(IsNumeric(strval))
 }
 
 //Time Validation Script Ends
@@ -210,7 +533,7 @@ var variablesAdapter = new $.jqx.dataAdapter({
 	datatype: "json",
 	datafields: [
 		{ name: 'VariableID' },
-		{ name: 'VariableName' },
+		{ name: 'VariableName' }
 	],
 	url: base_url + 'variable/getSiteJSON?siteid=' + DATA.siteid
 });
@@ -220,9 +543,9 @@ var typesAdapter = new $.jqx.dataAdapter({
 	datatype: "json",
 	datafields: [
 		{ name: 'DataType' },
-		{ name: 'display' },
+		{ name: 'display' }
 	],
-	url: base_url + 'variable/getTypes?siteid=' + DATA.siteid 
+	url: base_url + 'variable/getTypes?siteid=' + DATA.siteid
 		+ '&varname=' + varname
 });
 
@@ -231,7 +554,7 @@ var methodsAdapter = new $.jqx.dataAdapter({
 	datatype: "json",
 	datafields: [
 		{ name: 'MethodID' },
-		{ name: 'MethodDescription' },
+		{ name: 'MethodDescription' }
 	],
 	url: base_url + 'methods/getSiteVarJSON?siteid=' + DATA.siteid
 		+'&varid=' + varid
@@ -288,12 +611,13 @@ function dateChangedHandler(event)
 
 	//Converting to SQL Format for Searching
 
-	var date_from_sql2 = date_select_from.getFullYear() + '-' + add_zero((date_select_from.getMonth()+1)) + '-' + add_zero(date_select_from.getDate()) + ' 00:00:00';
+	var date_from_sql2 = formatDateSQL(date_select_from);
+
 	//Setting the Second calendar's min date to be the date of the first calendar
 	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', date);
-	var tempdate2=add_zero((date_select_from.getMonth()+1))+'/'+add_zero(date_select_from.getDate())+'/'+date_select_from.getFullYear();
 
-	$("#fromdatedrop").jqxDropDownButton('setContent', tempdate2);
+	$("#fromdatedrop")
+		.jqxDropDownButton('setContent', formatDate(date_select_from));
 
 	if(date_from_sql != date_from_sql2) {
 		date_from_sql = date_from_sql2;
@@ -306,10 +630,13 @@ function dateToChangedHandler(event)
 	var date = event.args.date;
 	date_select_to = new Date(date);
 	glob_dt = date_select_to;
-	var tempdate = add_zero((date_select_to.getMonth()+1))+'/'+add_zero(date_select_to.getDate())+'/'+date_select_to.getFullYear();
-	$("#todatedrop").jqxDropDownButton('setContent', tempdate);
-	date_to_sql = date_select_to.getFullYear() + '-' + add_zero((date_select_to.getMonth()+1)) + '-' + add_zero(date_select_to.getDate()) + ' 00:00:00';
-	plot_chart();
+
+	$("#todatedrop")
+		.jqxDropDownButton('setContent', formatDate(date_select_to));
+
+	date_to_sql = formatDateSQL(date_select_to)
+
+	plot_chart()
 }
 
 function ajaxSuccessHandler(result)
@@ -377,8 +704,8 @@ function ajaxSuccessHandler(result)
 	var monthEnd =  date2.getMonth()+2;
 	if (monthEnd > 12) { monthEnd=12;}
 
-	date_from_sql=date1.getFullYear() + '-' + add_zero(monthBegin) + '-' + add_zero(date1.getDate()) + ' 00:00:00';
-	date_to_sql=date2.getFullYear() + '-' + add_zero(monthEnd) + '-' + add_zero(date2.getDate()) + ' 00:00:00';
+	date_from_sql = formatDateSQL(date1, monthBegin);
+	date_to_sql   = formatDateSql(date2, monthEnd);
 
 	$("#fromdatedrop").jqxDropDownButton('setContent', DATA.text.SelectStart);
 	$("#todatedrop"  ).jqxDropDownButton('setContent', DATA.text.SelectEnd);
@@ -391,18 +718,139 @@ function ajaxSuccessHandler(result)
 	//Binding An Event To the Second Calendar
 	$('#jqxDateTimeInputto').bind('valuechanged', dateToChangedHandler);
 }
-//ajaxSuccessHandler
+// end of ajaxSuccessHandler()
+
+function delValClickHandler()
+{
+	//Send out a delete request
+	$.ajax({
+		dataType: "json",
+		url: base_url+"datapoint/delete/"+vid
+	})
+	.done(function(result) {
+		if(result.status=='success') {
+			//Remove that row from the table
+			$('#jqxgrid').jqxGrid('deleterow', editrow);  //This one might be having issues.       
+			$("#popupWindow").jqxWindow('hide');
+		}
+	});
+} // end of delValClickHandler()
+
+function saveClickHandler()
+{
+	if (editrow >= 0) {
+
+		var seldate= $('#date').jqxDateTimeInput('getDate');
+
+		var row = {
+			date: formatDateSQL(seldate, undefined, ' ' + $("#timepicker").val() + ':00'),
+			Value: $("#value").val(), 
+			vid: vid
+		};
+
+		var vt = $("#value").val();
+
+		//Validate
+		if (validatenum("#value") == false) {
+			return false;
+		}
+
+		//Time checking
+		if (validatetime("#timepicker") == false) {
+			return false;
+		}
+
+		//Send out an ajax request to update that data field
+		$.ajax({
+			dataType: "json",
+			url: base_url + "datapoint/edit/" + vid +
+				"?val=" + vt +
+				"&dt=" + formatDateSQL(seldate, undefined, '') +
+				"&time=" + $("#timepicker").val()
+		})
+		.done(function(msg) {
+			if (msg.status == 'success') {
+				$('#jqxgrid').jqxGrid('updaterow', editrow, row);
+				$("#popupWindow").jqxWindow('hide');
+				plot_chart();
+			}
+			else {
+				alert(msg);
+				return false
+			}
+		});
+	} // end of if (editrow >= 0)
+} // end of saveClickHandler()
+
+function saveNewClickHandler()
+{
+	var vt = $("#value_new").val();
+
+	//Validate
+	if (validatenum("#value_new") == false) {
+		return false;
+	}
+
+	//Time checking
+	if (validatetime("#timepicker_new") == false) {
+		return false;
+	}
+
+	var seldate= $('#date_new').jqxDateTimeInput('getDate'); 
+
+	//Send out ajax request to add new value
+
+	$.ajax({
+		dataType: "json",
+		url: base_url + "datapoint/add?varid=" + varid + 
+			"&val=" + vt + 
+			"&dt=" + formatDateSQL(seldate, undefined, '') +
+			"&time=" + $("#timepicker_new").val()+
+			"&sid=" + DATA.siteid +
+			"&mid=" + methodid
+	})
+	.done(function(msg) {
+		if (msg.status == 'success') {
+			$("#popupWindow_new").jqxWindow('hide');
+			plot_chart()
+		}
+		else {
+			alert(DATA.text.DatabaseConfigurationError);
+			return false
+		}
+	});
+} // end of saveNewClickHandler()
+
+function compareClickHandler()
+{
+	$("html, body").animate({ scrollTop: 0 }, "slow");
+	$('#window').jqxWindow('show');
+	$('#windowContent').load(base_url + 'datapoint/compare/1', function() {});
+} // end of compareClickHandler
+
+function exportClickHandler()
+{
+	var url = base_url + 'datapoint/export?siteid=' + DATA.siteid +
+		'&varid=' + varid +
+		'&meth=' + methodid +
+		'&startdate=' + date_from_sql +
+		'&enddate=' + date_to_sql;
+
+	window.open(url,'_blank')
+}
 
 //Populate the Drop Down list with values from the JSON output of the php page
 
-$(document).ready(function () {
-	$("#loadingtext").hide();
+$(document).ready(function() {
+	// There is no such element with id "loadingtext"
+	//$("#loadingtext").hide();
+/*
 
 	//Create date selectors and hide them
 
 	//Create Tabs for Table Chart Switching
-/*	$tabs = $('#jqxtabs');
-
+	$tabs = $('#jqxtabs');
+/*
 	$tabs.jqxTabs({
 		width:'100%', height: 550, theme: 'darkblue', collapsible: true
 	})
@@ -410,7 +858,7 @@ $(document).ready(function () {
 	$tabs.jqxTabs('disable');
 	$tabs.jqxTabs('enableAt', $tabs.jqxTabs('selectedItem'));
 */
-
+/*
 	$tabs = $('#jqxtabs');
 
 	$tabs
@@ -430,7 +878,7 @@ $(document).ready(function () {
 			}
 		});
 */
-
+/*
 	//Creating the Variables Drop Down list
 	$("#dropdownlist")
 		.jqxDropDownList({
@@ -443,6 +891,7 @@ $(document).ready(function () {
 			valueMember: 'VariableID'
 		})
 		.bind('select', variableSelectHandler);
+*/
 });
 
 //End of Document Ready Function
@@ -505,179 +954,6 @@ function get_methods()
 		.bind('select', methodSelectHandler);
 }
 
-var dateInputConfig = {width: '100%', height: '25px', theme: 'darkblue', formatString: 'd'}
-var dateDropConfig  = {width: '100%', height: 25,     theme: 'darkblue'}
-
-var stockChartConfig = {
-	chart: {renderTo: 'container', zoomType: 'x'},
-	legend: {verticalAlign: 'top', enabled: true, shadow: true, y:40, margin:50},
-	title: {
-		text: DATA.text.Dataof + " " + DATA.text.SiteName + " " +
-					DATA.text.From   + " " + date_chart_from + " " +
-					DATA.text.To     + " " + date_chart_to,
-		style: {
-			fontSize: '12px'
-		}
-	},
-	credits: {enabled: false},
-	subtitle: {text: DATA.text.ClickDrag},
-	xAxis: {
-		type: 'datetime',
-		dateTimeLabelFormats: { // don't display the dummy year
-			month: '%e.%b / %Y',
-			year: '%b.%Y'
-		},
-		title: {text: DATA.text.TimeMsg, margin: 30}
-	},
-	yAxis: {
-		title: {text: unit_yaxis, margin: 40}
-	},
-	exporting: {enabled: true, width: 5000},
-	rangeSelector: {
-		buttons: [
-			{type: 'day',   count: 1, text: DATA.text.OneD},
-			{type: 'day',   count: 3, text: DATA.text.ThreeD},
-			{type: 'week',  count: 1, text: DATA.text.OneW},
-			{type: 'month', count: 1, text: DATA.text.OneM},
-			{type: 'month', count: 6, text: DATA.text.SixM},
-			{type: 'year',  count: 1, text: DATA.text.OneY},
-			{type: 'all', text: DATA.text.All}
-		],
-		selected: 6
-	},
-	series: [
-		{data: data_test,name: displayVar +'(' + displayType + ')'}
-	]
-} // end of stockChartConfig
-
-var gridConfig = {
-	source: dataAdapter12,
-	width: '100%',
-	columnsresize: true,
-	columns: [
-		{ text: DATA.text.ValueID, datafield: 'ValueID'},
-		{ text: DATA.text.Date, datafield: 'LocalDateTime'},
-		{ text: DATA.text.Value + ' (' + unitGrid + ')' , datafield: 'DataValue'}
-<?php
-if (isLoggedIn()) {
-	echo(",
-		{
-			text: 'Edit',
-			datafield: 'Edit',
-			columntype: 'button',
-			cellsrenderer: function () {
-				return 'Edit';
-			},
-			buttonclick: function (row) {
-
-				// open the popup window when the user clicks a button.
-				editrow = row;
-				var offset = $('#jqxgrid').offset();
-				$('#popupWindow').jqxWindow({ position: { x: parseInt(offset.left) + 220, y: parseInt(offset.top) + 60} });
-
-				// get the clicked row's data and initialize the input fields.
-				var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
-
-				//Create a Date time Input
-				var datepart=dataRecord.LocalDateTime.split(' ');
-
-				$('#popupWindow').jqxWindow('show');
-				// $('#date').val(datepart[0]);
-
-				$('#date').jqxDateTimeInput({ width: '125px', height: '25px', theme: 'darkblue', formatString: 'MM/dd/yyyy', textAlign: 'center' });
-
-				var dateparts=datepart[0].split('-');
-				$('#date').jqxDateTimeInput('setDate', new Date(dateparts[0], dateparts[1]-1, dateparts[2]));
-
-				var timepart=datepart[1].split(':')
-				$('#timepicker').val(timepart[0]+':'+timepart[1]);
-				// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
-
-				$('#value').val(dataRecord.DataValue);
-				vid = dataRecord.ValueID;
-				// show the popup window.
-			} // end of buttonclick function
-		}"
-	); // end of echo
-} // end of isLoggedIn()
-?>
-	] // end of columns array
-} // end of gridConfig
-
-var gridConfig2 = {
-	width: '100%',
-	source: dataAdapter12,
-	theme: 'darkblue',
-	columnsresize: true,
-	sortable: true,
-	pageable: true,
-	autoheight: true,
-	editable: false,
-	selectionmode: 'singlecell',
-	columns: columnsConfig
-}
-
-var columnsConfig = [
-	{
-		text: '<?php echo str_replace(':',' ID',getTxt('Value')); ?>',
-		datafield: 'ValueID'
-	},
-	{
-		text: '<?php echo getTxt('Date'); ?>',
-		datafield: 'LocalDateTime'
-	},
-	{
-		text: '<?php echo str_replace(':','',getTxt('Value')); ?> (' + unitGrid +')',
-		datafield: 'DataValue'
-	}
-
-<?php
-			if (isLoggedIn()) {
-		echo(",
-		{
-			text: 'Edit',
-			datafield: 'Edit',
-			columntype: 'button',
-			cellsrenderer: function () {
-				return 'Edit';
-			},
-			buttonclick: function (row) {
-
-				// open the popup window when the user clicks a button.
-				editrow = row;
-				var offset = $('#jqxgrid').offset();
-				$('#popupWindow').jqxWindow({
-					position: {
-				x: parseInt(offset.left) + 220, 
-				y: parseInt(offset.top)  +  60
-					}
-				});
-
-				// get the clicked row's data and initialize the input fields.
-				var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
-
-				//Create a Date time Input
-				$('#popupWindow').jqxWindow('show');
-				var datepart = dataRecord.LocalDateTime.split(' ');
-				// $('#date').val(datepart[0]);
-				$('#date').jqxDateTimeInput({
-					width: '125px', height: '25px', theme: 'darkblue', formatString: 'MM/dd/yyyy', textAlign: 'center'
-				});
-
-				var dateparts = datepart[0].split('-');
-				$('#date').jqxDateTimeInput('setDate', new Date(dateparts[0], dateparts[1]-1, dateparts[2]));
-				var timepart = datepart[1].split(':')
-				$('#timepicker').val(timepart[0] + ':' + timepart[1]);
-				// $('#timepicker').timepicker('setTime',timepart[0]+':'+timepart[1]);
-				$('#value').val(dataRecord.DataValue);
-				vid = dataRecord.ValueID;
-				// show the popup window.
-			} // end of buttonclick function
-		}");
-	}
-?>
-]
-
 function get_dates()
 {
 	var url = base_url + "series/getDateJSON?siteid=" + DATA.siteid
@@ -719,15 +995,18 @@ function plot_chart()
 		dataType: "script"
 	})
 	.done(function(datatest) {
-		var date_chart_from = glob_df.getFullYear() + '-' + add_zero((glob_df.getMonth()+1)) + '-' + add_zero(glob_df.getDate());
-		var date_chart_to   = glob_dt.getFullYear() + '-' + add_zero((glob_dt.getMonth()+1)) + '-' + add_zero(glob_dt.getDate());
+		var date_chart_from = formatDateSQL(glob_df, undefined, '')
+		var date_chart_to   = formatDateSQL(glob_dt, undefined, '')
 
 		// var data_test=datatest;
-		chart = new Highcharts.StockChart(stockChartConfig);
+		chart = new Highcharts.StockChart(getStockChartConfig(
+			date_chart_from, date_chart_to, unit_yaxis, data_test, displayVar, displayType
+		));
 
 		// end of new Highcharts.StockChart()
 
-		$("#loadingtext").hide();
+		// There is no such element with id "loadingtext"
+		//$("#loadingtext").hide();
 
 		make_grid();
 
@@ -735,34 +1014,15 @@ function plot_chart()
 	});
 }
 
-function add_zero(value)
-{
-	if (value < 10) {
-		value = '0' + value;
-	}
-
-	return value;
-}
-	
-function timeconvert(timestamp)
-{
-	var year   = parseInt(timestamp.slice( 0,  4));
-	var month  = parseInt(timestamp.slice( 5,  7), 10);
-	var day    = parseInt(timestamp.slice( 8, 10), 10);
-	var hour   = parseInt(timestamp.slice(11, 13), 10);
-	var minute = parseInt(timestamp.slice(14, 16), 10);
-	var sec    = parseInt(timestamp.slice(17, 19), 10);
-
-	return new Date(year, month - 1, day, hour, minute, sec);
-}
-
 function make_grid()
 {
 	var editrow = -1;
 	var vid = 0;
 	var url = base_url + 'datapoint/getDataJSON?siteid=' + DATA.siteid +
-		'&varid=' + varid + '&meth=' + methodid + 
-		'&startdate=' + date_from_sql + '&enddate=' + date_to_sql;
+		'&varid=' + varid +
+		'&meth=' + methodid +
+		'&startdate=' + date_from_sql +
+		'&enddate=' + date_to_sql;
 
 	var dataAdapter12 = new $.jqx.dataAdapter({
 		datatype: "json",
@@ -793,201 +1053,127 @@ function make_grid()
 		}
 	});
 
-//Editing functionality
+	//Editing functionality
 
-  // initialize the popup window and buttons.
+	// initialize the popup window and buttons.
 
-$("#popupWindow").jqxWindow({
-	width: 300,
-	height: 350,
-	resizable: false,
-	theme: 'darkblue',
-	isModal: true,
-	autoOpen: false,
-	cancelButton: $("#Cancel"),
-	modalOpacity: 0.01
-});
+	$("#popupWindow").jqxWindow(popupWindowConfig);
 
-$("#timepicker").timepicker({showOn: "focus", showPeriodLabels: false});
+	$("#timepicker").timepicker({showOn: "focus", showPeriodLabels: false});
 
-$("#delval").jqxButton({theme: 'darkblue'});
+	$("#delval").jqxButton(buttonConfigBase);
+	$("#Cancel").jqxButton(buttonConfigBase);
+	$("#Save"  ).jqxButton(buttonConfigBase);
 
-$("#Cancel").jqxButton({theme: 'darkblue'});
+	//Delete Value
+	$("#delval").unbind("click"); //Multiple events are getting binded for some reason. This makes sure that doesn't happen. 
+	$("#delval").click(delValClickHandler);
 
-$("#Save").jqxButton({theme: 'darkblue'});
+	// update the edited row when the user clicks the 'Save' button.
+	$("#Save").unbind("click");
+	$("#Save").click(saveClickHandler);
 
-//Delete Value
-$("#delval").unbind("click"); //Multiple events are getting binded for some reason. This makes sure that doesn't happen. 
-$("#delval").click(function () {
+	//End of Editing 
 
-//Send out a delete request
-$.ajax({
-	dataType: "json",
-	url: base_url+"datapoint/delete/"+vid
-}).done(function(result) {
-  if(result.status=='success')
-  {
+	//Add A new Value to the table
+	$("#popupWindow_new").jqxWindow(popupWindowNewConfig);
+	$("#Cancel_new").jqxButton(buttonConfigBase);
+	$("#Save_new"  ).jqxButton(buttonConfigBase);
 
-//Remove that row from the table
-$('#jqxgrid').jqxGrid('deleterow', editrow);  //This one might be having issues.       
-$("#popupWindow").jqxWindow('hide');
-  }
-});
-});
-// update the edited row when the user clicks the 'Save' button.
-$("#Save").unbind("click");
-$("#Save").click(function () {
-if (editrow >= 0) {		
-var seldate= $('#date').jqxDateTimeInput('getDate'); 
-var row = {date: seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+' '+$("#timepicker").val()+':00', Value: $("#value").val(), vid: vid};
-var vt = $("#value").val();  
-//Validate
-if(validatenum("#value")==false){
-		return false;
-	}
-//Time checking
-result=validatetime("#timepicker");
-	if(result==false){
-		return false;
-	}		
+<?php
+if (isLoggedIn()) {
+echo(
+'	$("#addnew").jqxButton({
+		width: \'250\',
+		height: \'25\',
+		theme: \'darkblue\'
+	})
+	.bind(\'click\', function () {
 
-//Send out an ajax request to update that data field
-	 $.ajax({
-  dataType: "json",
-  url: base_url+"datapoint/edit/"+vid+"?val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker").val()
-}).done(function( msg )
- {
-  if(msg.status=='success')
-  {  
-$('#jqxgrid').jqxGrid('updaterow', editrow, row);        
-$("#popupWindow").jqxWindow('hide');
-	 	plot_chart(); 
-  }
-  else
-  {
-	alert(msg);
-	return false;  
-  }
-});
-}
-}); 
+		$("#popupWindow_new").jqxWindow(\'show\');
 
-//End of Editing 
+		var offset = $("#jqxgrid").offset();
 
-//Add A new Value to the table
-$("#popupWindow_new").jqxWindow({ width: 300,height:350, resizable: false, theme: 'darkblue', isModal: true, autoOpen: false, cancelButton: $("#Cancel_new"), modalOpacity: 0.01 });
-$("#Cancel_new").jqxButton({ theme: 'darkblue' });
-$("#Save_new").jqxButton({ theme: 'darkblue'});
-  <?php
-      if(isLoggedIn())
-	  {
-		echo('$("#addnew").jqxButton({ width: \'250\', height: \'25\', theme: \'darkblue\'});
-$("#addnew").bind(\'click\', function () {
-$("#popupWindow_new").jqxWindow(\'show\');
-var offset = $("#jqxgrid").offset();
-$("#popupWindow_new").jqxWindow({ position: { x: parseInt(offset.left) + 220, y: parseInt(offset.top) + 60} });
-$("#date_new").jqxDateTimeInput({ width: \'125px\', height: \'25px\', theme: \'darkblue\', formatString: "MM/dd/yyyy", textAlign: "center" });
-$( "#timepicker_new" ).timepicker({ showOn: "focus", showPeriodLabels: false });
+		$("#popupWindow_new").jqxWindow({
+			position: {
+				x: parseInt(offset.left) + 220,
+				y: parseInt(offset.top)  +  60
+			}
+		});
 
- });');
-	  }
-      ?>
+		$("#date_new").jqxDateTimeInput({
+			width: \'125px\',
+			height: \'25px\',
+			theme: \'darkblue\',
+			formatString: "MM/dd/yyyy",
+			textAlign: "center"
+		});
 
+		$("#timepicker_new" ).timepicker({
+			showOn: "focus",
+			showPeriodLabels: false
+		});
+	});' // end of click handler
+); // end of echo
+} // end of if (isLoggedIn())
+?>
 
-$("#Save_new").unbind("click");
-$("#Save_new").bind('click', function () {
-var vt = $("#value_new").val();
-//Validate
-if(validatenum("#value_new")==false){
-		return false;
-}
-//Time checking
-if(validatetime("#timepicker_new")==false){
-		return false;
-}		
+	$("#Save_new").unbind("click");
+	$("#Save_new").bind('click', saveNewClickHandler);
 
-var seldate= $('#date_new').jqxDateTimeInput('getDate'); 
+	//End of adding a new value
 
+	//Export Button
 
-//Send out ajax request to add new value
+	$("#export").jqxButton(buttonConfig);
+	$("#export").bind('click', exportClickHandler);
 
- $.ajax({
-  dataType: "json",
-  url: base_url+"datapoint/add?varid="+varid+"&val="+vt+"&dt="+seldate.getFullYear() + '-' + add_zero((seldate.getMonth()+1)) + '-' + add_zero(seldate.getDate())+"&time="+$("#timepicker_new").val()+"&sid="+DATA.siteid+"&mid="+methodid
-}).done(function( msg )
- {
-    if(msg.status=='success')
-  { 
-	$("#popupWindow_new").jqxWindow('hide');
-		plot_chart(); 
-  }
-  else
-  {
-	alert(DATA.text.DatabaseConfigurationError);
-	return false;  
-  }
-});
+	//End of Exporting
 
+	//Comparing
 
+	//Define the button for comaprision
 
-});
+	$("#compare").jqxButton(buttonConfig);
+	$('#window').jqxWindow('destroy');
+	$('#mapOuter').empty();
 
-//End of adding a new value
+	$('#window' ).jqxWindow(windowConfig);
+	$('#window2').jqxWindow(windowConfig2);
+	$('#window3').jqxWindow(windowConfig2);
+	$('#window4').jqxWindow(windowConfig2);
+	$('#window5').jqxWindow(windowConfig5);
 
-//Export Button
+	$('#window' ).jqxWindow('hide');
+	$('#window2').jqxWindow('hide');
+	$('#window3').jqxWindow('hide');
+	$('#window4').jqxWindow('hide');
+	$('#window5').jqxWindow('hide');
 
-$("#export").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
-$("#export").bind('click', function () {
+	$("#compare").click(compareClickHandler);
 
-var url=base_url+'datapoint/export?siteid='+DATA.siteid+'&varid='+varid+'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
+	//Now Map Loaded. Another Function to open up a new window that will Give them options to select the data to be plotted against the esiting data
 
-window.open(url,'_blank');
+	//End of Comparing
 
-});
+} // end of make_grid()
 
-//End of Exporting
-
-//Comparing
-
-//Define the button for comaprision
-
-$("#compare").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
-$('#window').jqxWindow('destroy');
-$('#mapOuter').empty();
-$('#window').jqxWindow({ maxHeight: 800, maxWidth: 800, minHeight: 200, minWidth: 200, height: 520, width: 720, theme: 'darkblue' });
-$('#window2').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
-$('#window3').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
-$('#window4').jqxWindow({ maxHeight: 100, maxWidth: 350, minHeight: 100, minWidth: 350, height: 100, width: 350, theme: 'darkblue' });
-$('#window5').jqxWindow({ maxHeight: 300, maxWidth: 650, minHeight: 300, minWidth: 650, height: 300, width: 650, theme: 'darkblue' });
-$('#window').jqxWindow('hide');
-$('#window2').jqxWindow('hide');
-$('#window3').jqxWindow('hide');
-$('#window4').jqxWindow('hide');
-$('#window5').jqxWindow('hide');
-$("#compare").click(function(){
-$("html, body").animate({ scrollTop: 0 }, "slow");
-$('#window').jqxWindow('show');
-$('#windowContent').load(base_url+'datapoint/compare/1', function() {
-});
-
-});
-
-//Now Map Loaded. Another Function to open up a new window that will Give them options to select the data to be plotted against the esiting data
-
-//End of Comparing
-}
 </script>
 
+<!-- 
+#
+# End of JavaScript 
+#
+-->
+
 <STYLE type="text/css">
-.button a:link { color:#FFF; text-decoration: none}
-.button a:visited { color: #FFF; text-decoration: none}
-.button a:hover { color: #FFF; text-decoration: none}
-.button a:active { color: #FFF; text-decoration: none}
- </STYLE>
+	.button a:link    { color: #FFF; text-decoration: none}
+	.button a:visited { color: #FFF; text-decoration: none}
+	.button a:hover   { color: #FFF; text-decoration: none}
+	.button a:active  { color: #FFF; text-decoration: none}
+</STYLE>
 
 <?php HTML_Render_Body_Start(); ?>
-
-      
 
 <div class="col-md-9">
 <?php
@@ -997,228 +1183,264 @@ genDropLists('Site', '', '', false);
 echo '<div class="site_title">';
 echo ($site['SiteName']);
 echo '</div>';
-echo '<br></div>';
+echo '<br /></div>';
 echo '<div class="row">';
 genDropLists('Variable','dropdownlist', 'dropdownlist', false);
-echo '<br></div>';
+echo '<br /></div>';
 echo '<div class="row">';
 genDropLists('Type','typelist', 'typelist', false);
-echo '<br></div>';
+echo '<br /></div>';
 echo '<div class="row">';
 genDropLists('Method','methodlist', 'methodlist', false);
-echo '<br></div>';
+echo '<br /></div>';
 ?>
+
 <div id='daterange'></div>
 
 <div class="row">
-<div class="col-md-6"><div id='fromdatedrop'><div id='jqxDateTimeInput'></div></div></div>
-<div class="col-md-6"><div id='todatedrop'><div id='jqxDateTimeInputto'></div></div></div>
-</div>
-<br>
-    
+
+	<div class="col-md-6">
+		<div id='fromdatedrop'>
+			<div id='jqxDateTimeInput'></div>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<div id='todatedrop'>
+			<div id='jqxDateTimeInputto'></div>
+		</div>
+	</div>
+
+</div> <!-- end of row -->
+
+<br />
+
 <div id='jqxtabs'>
-    <ul style='margin-left: 20px;'>
-      <li><?php echo getTxt('SiteInfo'); ?></li>
-      <li><?php echo getTxt('DataPlot'); ?></li>
-      <li><?php echo getTxt('DataTable'); ?></li>
-      </ul>
+	<ul style='margin-left: 20px;'>
+		<li><?php echo getTxt('SiteInfo'); ?></li>
+		<li><?php echo getTxt('DataPlot'); ?></li>
+		<li><?php echo getTxt('DataTable'); ?></li>
+	</ul>
 <div>
-<?php  
 
-
+<?php
 echo("<b>".getTxt('Site')." </b>".$site['SiteName']."<br/>");
 
-
-if($site['picname']==null) {
+if ($site['picname'] == null) {
 	if(isLoggedIn()) {
-		echo("<br><br>  ".getTxt('NoImages')."  <a href='".site_url('sites/edit/'.$SiteID)."'> ".getTxt('ClickHere')." </a>");	
-		}
-	else {	
-		echo("<br><br> ".getTxt('NoImages'));
+		echo(
+			"<br /><br />" . getTxt('NoImages').
+			"<a href='" . site_url('sites/edit/' . $SiteID) . "'> " . getTxt('ClickHere') . " </a>"
+		);
 	}
-
-} else {
-	echo("<br><br><img src='".getDetailsImg(''.$site['picname'])."' width='368' height='250'>");
+	else {	
+		echo("<br /><br />".getTxt('NoImages'));
+	}
+} 
+else {
+	echo(
+		"<br /><br /><img src='" . getDetailsImg('' . $site['picname']) .
+		"' width='368' height='250' />"
+	);
 }
 
-echo("<br/><br/><b>".getTxt('Type')." </b>".translateTerm($site['SiteType'])."<br/><br/><b>".getTxt('Latitude')." </b>".$site['Latitude']."<br/><br/><b>".getTxt('Longitude')." </b>".$site['Longitude']."<br /><br/><br/><b>".getTxt('Measurements')."</b>");
+echo(
+	"<br/><br/><b>" . getTxt('Type') . " </b>" . 
+	translateTerm($site['SiteType']) . "<br/><br/><b>" . 
+	getTxt('Latitude') . " </b>" . 
+	$site['Latitude'] . "<br/><br/><b>" .
+	getTxt('Longitude')." </b>" .
+	$site['Longitude']."<br /><br/><br/><b>" .
+	getTxt('Measurements')."</b>"
+);
+
 $num_rows = count($Variables);
-$count=1;
-foreach($Variables as $var)
-{
-if($var['VariableName']!="")
-{	
-	echo($var['VariableName']);
-	if($count!=$num_rows)
-	{echo "; ";}
-}
-  $count=$count+1;
+$count = 1;
+
+foreach ($Variables as $var) {
+	if ($var['VariableName'] != "") {
+		echo($var['VariableName']);
+		if ($count != $num_rows) {
+			echo "; ";
+		}
+	}
+	$count = $count + 1;
 }
 ?>
- <br/><br/>
-<?php echo getTxt('WrongSite'); ?><a href="<?php echo site_url('sites/map'); ?>" style="color:#00F"><?php echo ' '.getTxt('Here'); ?></a> <?php echo getTxt('GoBack'); ?> 
+<br/><br/>
+<?php echo getTxt('WrongSite'); ?>
+<a href="<?php echo site_url('sites/map'); ?>" style="color:#00F">
+<?php echo ' '.getTxt('Here'); ?></a>
+<?php echo getTxt('GoBack'); ?> 
 </div>
 
 <div>
-    <div class="chart-wrapper">
-      <div class="chart-inner">
-        <div id="container" style="width:100%; height: 470px;"></div>
-         <!-- Button to compare data values-->
-         <input type="button" style=" float:right" value="<?php echo getTxt('Compare');?>" id='compare' />
-      </div>
-    </div>
+<div class="chart-wrapper">
+<div class="chart-inner">
+<div id="container" style="width:100%; height: 470px;"></div>
+<!-- Button to compare data values-->
+<input type="button" style=" float:right" value="<?php echo getTxt('Compare');?>" id='compare' />
+</div>
+</div>
 </div>
 <!-- End of Chart DIV -->
-    <div>
-      <div id="jqxgrid"></div>
-        <div id="popupWindow">
-            <div><?php echo getTxt('Edit'); ?></div>
-            <div style="overflow: hidden;">
-                <table>
-                    <tr>
-                        <TD colspan="2"><?php echo getTxt('ChangeValues'); ?></td>
+<div>
+<div id="jqxgrid"></div>
+<div id="popupWindow">
+<div><?php echo getTxt('Edit'); ?></div>
+<div style="overflow: hidden;">
 
-                    </tr>
-                    <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-                    <tr>
-                        <td align="right"><?php echo getTxt('Date'); ?></td>
+	<table>
 
-                        <td align="left"><div id="date"></div></td>
-                    </tr>
-                    <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-                    <tr>
-                        <td align="right"><?php echo getTxt('Time');?></td>
-                        <td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime('#timepicker')" size="10"></td>
-                    </tr>
-               <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-          
-                    <tr>
-                        <td align="right"><?php echo getTxt('Value'); ?> </td>
-                        <td align="left"><input id="value" onBlur="validatenum('#value')"/></td>
-                    </tr>
-                    <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-             
-                    <tr>
-                        <td align="right"></td>
-                        <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save" value="<?php echo getTxt('Save');?>" /><input id="delval" type="button" value="<?php echo getTxt('Delete');?>" />&nbsp;<input id="Cancel" type="button" value="<?php echo getTxt('Cancel'); ?>" /></td>
-                    </tr>
-                </table>
-            </div>
-       </div>
-          <div style="alignment-adjust: middle; float:right;">
-     <?php
-  if(isLoggedIn())
-    {
-    echo("<input type='button' value='".getTxt('AddRow')."' id='addnew' /> <br/>  <br/>");
-    }
-      ?>
-        <input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />
-        </div>
-     </div>
-  <!-- End Of Grid Div.  -->
-     </div>  
-     <!-- Jqx Tabs end -->
+		<tr>
+		<td colspan="2"><?php echo getTxt('ChangeValues'); ?></td>
+		</tr>
 
+		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 
-     </div> 
+		<tr>
+		<td align="right"><?php echo getTxt('Date'); ?></td>
+		<td align="left"><div id="date"></div></td>
+		</tr>
 
+		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 
-<div id="popupWindow_new">
-            <div><?php echo getTxt('Add'); ?></div>
-            <div style="overflow: hidden;">
-                <table>
-                    <tr>
-                        <TD colspan="2"><?php echo getTxt('EnterValues'); ?></td>
-                    </tr>
-                    <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-                    <tr>
-                        <td align="right"><?php echo getTxt('Date'); ?></td>
-                        <td align="left"><div id="date_new"></div></td>
-                    </tr>
-                    <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-                    <tr>
-                        <td align="right"><?php echo getTxt('Time'); ?></td>
-                        <td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime('#timepicker_new')" size="10"></td>
-                    </tr>
-               <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-          
-                    <tr>
-                        <td align="right"><?php echo getTxt('Value'); ?></td>
-                        <td align="left"><input id="value_new" onBlur="validatenum('#value_new')"/></td>
-                    </tr>
-                    <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-             
-                    <tr>
-                        <td align="right"></td>
-                       <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save_new" value="<?php echo getTxt('Save'); ?>" /><input id="Cancel_new" type="button" value="<?php echo getTxt('Cancel'); ?>" /></t>
-                    </tr>
-                </table>
-            </div>
-       </div>
-         <br/>
-   
-    </div>
-    </div>
-    </div>
+		<tr>
+		<td align="right"><?php echo getTxt('Time');?></td>
+		<td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime('#timepicker')" size="10" /></td>
+		</tr>
+
+		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+		<tr>
+		<td align="right"><?php echo getTxt('Value'); ?> </td>
+		<td align="left"><input id="value" onBlur="validatenum('#value')" /></td>
+		</tr>
+
+		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+		<tr>
+		<td align="right"></td>
+		<td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save" value="<?php echo getTxt('Save');?>" /><input id="delval" type="button" value="<?php echo getTxt('Delete');?>" />&nbsp;<input id="Cancel" type="button" value="<?php echo getTxt('Cancel'); ?>" /></td>
+		</tr>
+
+	</table>
+
 </div>
-<div id="window">
- <div id="windowHeader">
- <span><?php echo getTxt('CompareTwo'); ?></span>
-   </div>
- <div style="overflow: hidden;" id="windowContent">
- </div>
-  </div>
-<div id="window2">
- <div id="window2Header">
- <span><?php echo getTxt('CompareTwo'); ?></span>
-   </div>
- <div style="overflow: hidden;" id="window2Content">
- </div>
-  </div>
-  <div id="window3">
- <div id="window3Header">
- <span><?php echo getTxt('CompareTwo'); ?></span>
-   </div>
- <div style="overflow: hidden;" id="window3Content">
- </div>
-  </div>
-   <div id="window4">
- <div id="window4Header">
- <span><?php echo getTxt('CompareTwo'); ?></span>
-   </div>
- <div style="overflow: hidden;" id="window4Content">
- </div>
-  </div>
-   <div id="window5">
- <div id="window5Header">
- <span><?php echo getTxt('CompareTwo'); ?></span>
-   </div>
- <div style="overflow: hidden;" id="window5Content">
- </div>
-  </div>
 
-	<?php HTML_Render_Body_End(); ?>
+</div>
+
+<div style="alignment-adjust: middle; float:right;">
+<?php
+if (isLoggedIn()) {
+	echo("<input type='button' value='".getTxt('AddRow')."' id='addnew' /> <br/>  <br/>");
+}
+?>
+<input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />
+</div>
+</div>
+<!-- End Of Grid Div.  -->
+</div>
+<!-- Jqx Tabs end -->
+</div> 
+<div id="popupWindow_new">
+<div><?php echo getTxt('Add'); ?></div>
+<div style="overflow: hidden;">
+			<table>
+
+				<tr>
+					<td colspan="2"><?php echo getTxt('EnterValues'); ?></td>
+				</tr>
+
+				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+				<tr>
+					<td align="right"><?php echo getTxt('Date'); ?></td>
+					<td align="left"><div id="date_new"></div></td>
+				</tr>
+
+				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+				<tr>
+					<td align="right"><?php echo getTxt('Time'); ?></td>
+					<td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime('#timepicker_new')" size="10" /></td>
+				</tr>
+
+				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+				<tr>
+					<td align="right"><?php echo getTxt('Value'); ?></td>
+					<td align="left"><input id="value_new" onBlur="validatenum('#value_new')"/></td>
+				</tr>
+
+				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+				<tr>
+					<td align="right"></td>
+					<td style="padding-top: 10px;" align="right">
+						<input style="margin-right: 5px;" type="button" id="Save_new" value="<?php echo getTxt('Save'); ?>" />
+						<input id="Cancel_new" type="button" value="<?php echo getTxt('Cancel'); ?>" />
+					</td>
+				</tr>
+
+			</table>
+
+		</div>
+		</div>
+		<br/>
+		</div>
+		</div>
+	</div>
+</div>
+
+<div id="window">
+
+	<div id="windowHeader">
+		<span><?php echo getTxt('CompareTwo'); ?></span>
+	</div>
+
+	<div style="overflow: hidden;" id="windowContent"></div>
+
+</div>
+
+<div id="window2">
+
+	<div id="window2Header">
+		<span><?php echo getTxt('CompareTwo'); ?></span>
+	</div>
+
+	<div style="overflow: hidden;" id="window2Content"></div>
+
+</div>
+
+<div id="window3">
+
+	<div id="window3Header">
+		<span><?php echo getTxt('CompareTwo'); ?></span>
+	</div>
+
+	<div style="overflow: hidden;" id="window3Content"></div>
+
+</div>
+
+<div id="window4">
+
+	<div id="window4Header">
+		<span><?php echo getTxt('CompareTwo'); ?></span>
+	</div>
+
+	<div style="overflow: hidden;" id="window4Content"></div>
+
+</div>
+
+<div id="window5">
+
+	<div id="window5Header">
+		<span><?php echo getTxt('CompareTwo'); ?></span>
+	</div>
+
+	<div style="overflow: hidden;" id="window5Content"></div>
+
+</div>
+
+<?php HTML_Render_Body_End(); ?>
