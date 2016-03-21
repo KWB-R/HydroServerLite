@@ -181,14 +181,14 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
         <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-10">
         <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="required"></span>
-		<span class="em">&nbsp&nbsp'.getTxt($help).'</span>';
+		<span class="em">&nbsp;&nbsp;'.getTxt($help).'</span>';
 	}
 	else
 	{
 	echo '<div class="form-group">
         <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
         <div class="col-sm-10">
-        <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="em">&nbsp&nbsp'.getTxt($help).'</span>';
+        <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="em">&nbsp;&nbsp;'.getTxt($help).'</span>';
 	}
 	echo'</div>            
       </div>';	
@@ -293,8 +293,8 @@ function HTML_Render_Head($js_vars,$PageTitle = ""){
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>$WebClient $HeaderAddon</title>
 		<link rel="shortcut icon" href="$faviconlink" type="image/x-icon" />
 		<link rel="bookmark" href="favicon.ico" />
