@@ -846,11 +846,6 @@ class Datapoint extends MY_Controller {
 		return array_map(array($this, 'getXssCleanInput'), $names);
 	}
 
-	private function getXssCleanInput($name)
-	{
-		return $this->input->get($name, TRUE);
-	}
-
 	public static function javaScriptDateUTC($timestamp)
 	{
 		// split timestamp into named components

@@ -174,6 +174,11 @@ class MY_Controller extends CI_Controller {
 		$this->load->model($modelName, '', TRUE);
 	}
 
+	protected function getXssCleanInput($name)
+	{
+		return $this->input->get($name, TRUE);
+	}
+
 	protected function getConfigItem($name, $default = FALSE)
 	{
 		$value = $this->config->item($name);

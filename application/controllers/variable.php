@@ -240,11 +240,9 @@ class Variable extends MY_Controller
 
 	public function getSiteJSON()
 	{
-		if ($this->input->get('siteid', TRUE)) {
+		if ($this->getXssCleanInput('siteid')) {
 
-			$result = $this->variables->getSite(
-				$this->input->get('siteid', TRUE)
-			);
+			$result = $this->variables->getSite($this->getXssCleanInput('siteid'));
 
 			foreach($result as &$var) {
 				$var['VariableName'] = translateTerm($var['VariableName']);
@@ -262,18 +260,18 @@ class Variable extends MY_Controller
 	public function getTypes()
 	{
 		if (
-			$this->input->get('siteid', TRUE) && 
-			$this->input->get('varname', TRUE)
+			$this->getXssCleanInput('siteid') && 
+			$this->getXssCleanInput('varname')
 		) {
 
 			$variable = $this->variables->getVariableWithUnit(
-				$this->input->get('varname', TRUE)
+				$this->getXssCleanInput('varname')
 			);
 
 			$varname = $variable[0]['VariableName'];
 
 			$result = $this->variables->getTypes(
-				$this->input->get('siteid', TRUE),
+				$this->getXssCleanInput('siteid'),
 				$varname
 			);
 
@@ -292,15 +290,15 @@ class Variable extends MY_Controller
 	public function updateVarID()
 	{
 		$variable = $this->variables->getVariableWithUnit(
-			$this->input->get('varname', TRUE)
+			$this->getXssCleanInput('varname')
 		);
 
 		$varname = $variable[0]['VariableName'];
 
 		$result = $this->variables->getVarID(
-			$this->input->get('siteid', TRUE),
+			$this->getXssCleanInput('siteid'),
 			$varname,
-			$this->input->get('type', TRUE)
+			$this->getXssCleanInput('type')
 		);
 
 		echo $result[0]['VariableID'];
@@ -308,7 +306,7 @@ class Variable extends MY_Controller
 
 	public function getUnit()
 	{
-		$var = $this->input->get('varid', TRUE);
+		$var = $this->getXssCleanInput('varid');
 
 		if ($var !== false) {
 			echo json_encode($this->variables->getUnit($var));
@@ -321,7 +319,7 @@ class Variable extends MY_Controller
 
 	public function getWithUnit()
 	{
-		$var = $this->input->get('varid', TRUE);
+		$var = $this->getXssCleanInput('varid');
 
 		if ($var !== false) {
 			echo json_encode($this->variables->getVariableWithUnit($var));
@@ -365,7 +363,7 @@ class Variable extends MY_Controller
 
 		$result = array_merge($result, $tempResult);
 
-		if (! $this->input->get('noNew', TRUE)) {
+		if (! $this->getXssCleanInput('noNew')) {
 			$result[] = array(
 				'Term'        => $otherSlashNew,
 				'Definition'  => "-10",
@@ -412,7 +410,7 @@ class Variable extends MY_Controller
 
 	public function getUnitsByType()
 	{
-		$type = $this->input->get('type', TRUE);
+		$type = $this->getXssCleanInput('type');
 
 		if($type !== false) {
 
@@ -432,7 +430,7 @@ class Variable extends MY_Controller
 				);
 			}
 
-			if (! $this->input->get('noNew', TRUE)) {
+			if (! $this->getXssCleanInput('noNew')) {
 				$result[] = array(
 					'unit'   => getTxt('OtherSlashNew'),
 					'unitid' => "-10"
@@ -458,7 +456,7 @@ class Variable extends MY_Controller
 
 		$result = $this->variables->delete($varid);
 
-		if($this->input->get('ui', TRUE)) {
+		if ($this->getXssCleanInput('ui')) {
 			if ($result) {
 				addSuccess(getTxt('VariableSuccess'));
 			}
