@@ -194,7 +194,7 @@ class Variable extends MY_Controller {
 			$result = $this->variables->getSite($this->input->get('siteid', TRUE));
 			foreach($result as &$var)
 			{
-				$var['VariableName']=translateTerm($var['VariableName']);
+				$var['VariableName'] = translateTerm($var['VariableName']);
 			}
 			echo json_encode($result);
 		}
