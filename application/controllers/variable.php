@@ -153,15 +153,11 @@ class Variable extends MY_Controller
 					$this->variables->updateVM($varMeth, $varid)
 				);
 
-				if ($success) {
-					addSuccess(getTxt($add ?
-						'VariableSuccessfullyAdded' :
-						'VariableSuccess'
-					));
-				}
-				else {
-					addError(getTxt('ProcessingError') . " Error in varmeth.");
-				}
+				$this->addSuccessOrError(
+					$success, 
+					$add ? 'VariableSuccessfullyAdded' : 'VariableSuccess',
+					"Error in varmeth."
+				);
 			}
 			else {
 				addError(getTxt('ProcessingError'));
@@ -436,14 +432,20 @@ class Variable extends MY_Controller
 		$result = $this->variables->delete($varid);
 
 		if ($this->getXssCleanInput('ui')) {
-			if ($result) {
-				addSuccess(getTxt('VariableSuccess'));
-			}
-			else {
-				addError(getTxt('ProcessingError'));
-			}
+
+			$this->addSuccessOrError($result, 'VariableSuccess');
 		}
 
 		echo json_encode(array("status" => ($result? "success" : "failed")));
+	}
+
+	private function addSuccessOrError($success, $successKey, $errorMessage = '')
+	{
+		if ($success) {
+			addSuccess(getTxt($successKey));
+		}
+		else {
+			addError(getTxt('ProcessingError') . " " . $errorMessage);
+		}
 	}
 }
