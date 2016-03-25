@@ -223,9 +223,18 @@ class Variable extends MY_Controller
 			echo json_encode($result);
 		}
 		else {
-			$data['errorMsg'] = "One of the parameters: Siteid is not defined. An example request would be getSiteJSON?siteid=1";
-			$this->load->view('templates/apierror', $data);
+			$this->loadApiErrorView("Siteid", "getSiteJSON?siteid=1");
 		}
+	}
+
+	private function loadApiErrorView($parameters, $example)
+	{
+		$message  = "One of the parameters: " . $parameters . " is not defined. ";
+		$message .= "An example request would be " . $example;
+
+		$data['errorMsg'] = $message;
+
+		$this->load->view('templates/apierror', $data);
 	}
 
 	public function getTypes()
@@ -242,8 +251,7 @@ class Variable extends MY_Controller
 			$varname = $variable[0]['VariableName'];
 
 			$result = $this->variables->getTypes(
-				$this->getXssCleanInput('siteid'),
-				$varname
+				$this->getXssCleanInput('siteid'), $varname
 			);
 
 			foreach($result as &$var) {
@@ -253,8 +261,9 @@ class Variable extends MY_Controller
 			echo json_encode($result);
 		}
 		else {
-			$data['errorMsg'] = "One of the parameters: Siteid,Variable Name is not defined. An example request would be getTypes?siteid=1&&varname=abc";
-			$this->load->view('templates/apierror', $data);
+			$this->loadApiErrorView(
+				"Siteid,Variable Name", "getTypes?siteid=1&varname=abc"
+			);
 		}
 	}
 
@@ -283,8 +292,7 @@ class Variable extends MY_Controller
 			echo json_encode($this->variables->getUnit($var));
 		}
 		else {
-			$data['errorMsg'] = "One of the parameters: VariableID is not defined. An example request would be getUnit?varid=1";
-			$this->load->view('templates/apierror', $data);
+			$this->loadApiErrorView("VariableID", "getUnit?varid=1");
 		}
 	}
 
@@ -296,8 +304,7 @@ class Variable extends MY_Controller
 			echo json_encode($this->variables->getVariableWithUnit($var));
 		}
 		else {
-			$data['errorMsg'] = "One of the parameters: VariableID is not defined. An example request would be getWithUnit?varid=1";
-			$this->load->view('templates/apierror', $data);
+			$this->loadApiErrorView("VariableID", "getWithUnit?varid=1");
 		}
 	}
 
@@ -306,8 +313,9 @@ class Variable extends MY_Controller
 		$valueid = end($this->uri->segment_array());
 
 		if ($valueid == "getTable") {
-			$data['errorMsg'] = "One of the parameters: TableName is not defined. An example request would be getTable/variablenamecv";
-			$this->load->view('templates/apierror', $data);
+
+			$this->loadApiErrorView("TableName", "getTable/variablenamecv");
+
 			return;
 		}
 
@@ -410,8 +418,7 @@ class Variable extends MY_Controller
 			echo json_encode($result);
 		}
 		else {
-			$data['errorMsg'] = "One of the parameters: unitsType is not defined. An example request would be getUnitTypes?type=Area";
-			$this->load->view('templates/apierror', $data);
+			$this->loadApiErrorView("unitsType", "getUnitTypes?type=Area");
 		}
 	}
 
@@ -420,8 +427,9 @@ class Variable extends MY_Controller
 		$varid = end($this->uri->segment_array());
 
 		if ($varid == "delete") {
-			$data['errorMsg']="One of the parameters: methodid is not defined. An example request would be delete/1";
-			$this->load->view('templates/apierror',$data);
+
+			$this->loadApiErrorView("methodid", "delete/1");
+
 			return;
 		}
 
