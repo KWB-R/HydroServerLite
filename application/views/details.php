@@ -1167,26 +1167,32 @@ echo(
 	.button a:active  { color: #FFF; text-decoration: none}
 </STYLE>
 
-<?php HTML_Render_Body_Start(); ?>
+<?php 
 
-<div class="col-md-9">
-<?php
-//possibly a future improvement. The sites could be accessed here in addition to navigating back to the map 
-echo '<div class="row">';
+HTML_Render_Body_Start();
+
+echo html_div_beg("col-md-9");
+
+//possibly a future improvement. The sites could be accessed here in 
+//addition to navigating back to the map 
+
+echo html_div_beg('row');
 genDropLists('Site', '', '', false);
-echo '<div class="site_title">';
-echo ($site['SiteName']);
+echo html_div_beg('site_title') . $site['SiteName'] . '</div>' . html_br();
 echo '</div>';
-echo '<br /></div>';
-echo '<div class="row">';
-genDropLists('Variable','dropdownlist', 'dropdownlist', false);
-echo '<br /></div>';
-echo '<div class="row">';
-genDropLists('Type','typelist', 'typelist', false);
-echo '<br /></div>';
-echo '<div class="row">';
-genDropLists('Method','methodlist', 'methodlist', false);
-echo '<br /></div>';
+
+echo html_div_beg('row');
+genDropLists('Variable','dropdownlist', 'dropdownlist', false) . html_br();
+echo '</div>';
+
+echo html_div_beg('row');
+genDropLists('Type','typelist', 'typelist', false) . html_br();
+echo '</div>';
+
+echo html_div_beg('row');
+genDropLists('Method','methodlist', 'methodlist', false) . html_br();
+echo '</div>';
+
 ?>
 
 <div id='daterange'></div>
@@ -1210,42 +1216,42 @@ echo '<br /></div>';
 <br />
 
 <div id='jqxtabs'>
+
 	<ul style='margin-left: 20px;'>
 		<li><?php echo getTxt('SiteInfo'); ?></li>
 		<li><?php echo getTxt('DataPlot'); ?></li>
 		<li><?php echo getTxt('DataTable'); ?></li>
 	</ul>
-<div>
+
+	<div>
 
 <?php
-echo("<b>".getTxt('Site')." </b>".$site['SiteName']."<br/>");
+echo(html_b(getTxt('Site')).$site['SiteName'].html_br());
 
 if ($site['picname'] == null) {
 	if(isLoggedIn()) {
 		echo(
-			"<br /><br />" . getTxt('NoImages').
+			html_br(2) . getTxt('NoImages').
 			"<a href='" . site_url('sites/edit/' . $SiteID) . "'> " . getTxt('ClickHere') . " </a>"
 		);
 	}
 	else {	
-		echo("<br /><br />".getTxt('NoImages'));
+		echo(html_br(2) . getTxt('NoImages'));
 	}
 } 
 else {
 	echo(
-		"<br /><br /><img src='" . getDetailsImg('' . $site['picname']) .
+		html_br(2) . "<img src='" . getDetailsImg('' . $site['picname']) .
 		"' width='368' height='250' />"
 	);
 }
 
 echo(
-	"<br/><br/><b>" . getTxt('Type') . " </b>" . 
-	translateTerm($site['SiteType']) . "<br/><br/><b>" . 
-	getTxt('Latitude') . " </b>" . 
-	$site['Latitude'] . "<br/><br/><b>" .
-	getTxt('Longitude')." </b>" .
-	$site['Longitude']."<br /><br/><br/><b>" .
-	getTxt('Measurements')."</b>"
+	html_br(2) . 
+	html_b(getTxt('Type'        )) .translateTerm($site['SiteType']) . html_br(2) .
+	html_b(getTxt('Latitude'    )) . $site['Latitude' ] . html_br(2) .
+	html_b(getTxt('Longitude'   )) . $site['Longitude'] . html_br(3) .
+	html_b(getTxt('Measurements'))
 );
 
 $num_rows = count($Variables);
@@ -1260,8 +1266,10 @@ foreach ($Variables as $var) {
 	}
 	$count = $count + 1;
 }
+
+echo html_br(2);
 ?>
-<br/><br/>
+
 <?php echo getTxt('WrongSite'); ?>
 <a href="<?php echo site_url('sites/map'); ?>" style="color:#00F">
 <?php echo ' '.getTxt('Here'); ?></a>

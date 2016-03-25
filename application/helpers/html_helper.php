@@ -41,6 +41,22 @@ function html_attribs($assignments)
 
 // Full HTML Tags
 
+function html_br($number = 1)
+{
+	$html = "";
+
+	for ($i = 0; $i < $number; $i++) {
+		$html = $html . "<br />";
+	}
+
+	return $html . "\n";
+}
+
+function html_b($content)
+{
+	return '<b>' . $content . '</b>';
+}
+
 function html_a($url, $content, $attributes = '')
 {
 	return "\n<a" . html_attr("href", $url) .
