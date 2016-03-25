@@ -851,40 +851,31 @@ $(document).ready(function() {
 	//Create date selectors and hide them
 
 	//Create Tabs for Table Chart Switching
-/*
+
 	$tabs = $('#jqxtabs');
 
 	$tabs.jqxTabs({
-		width:'100%', height: 550, theme: 'darkblue', collapsible: true
-	})
+		width:'100%',
+		height: 550,
+		theme: 'darkblue',
+		collapsible: true
+	});
 
 	$tabs.jqxTabs('disable');
+
 	$tabs.jqxTabs('enableAt', $tabs.jqxTabs('selectedItem'));
-*/
-/*
-	$tabs = $('#jqxtabs');
 
-	$tabs
-		.jqxTabs({
-			width:'100%',
-			height: 550,
-			theme: 'darkblue',
-			collapsible: true
-		});
+//		.jqxTabs.enableAt($tabs.jqxTabs('selectedItem'))
 
-	$tabs.jqxTabs('disable');
-
-		.jqxTabs.enableAt($tabs.jqxTabs('selectedItem'))
-		.on('selected', function (event) {
+	$tabs.on('selected', function (event) {
 			if (event.args.item == 1) {
 				$(window).resize();
 			}
-		});
-*/
-/*
+	});
+
 	//Creating the Variables Drop Down list
-	$("#dropdownlist")
-		.jqxDropDownList({
+	$("#dropdownlist").
+		jqxDropDownList({
 			source: variablesAdapter,
 			theme: 'darkblue',
 			height: 25,
@@ -892,9 +883,8 @@ $(document).ready(function() {
 			selectedIndex: 0,
 			displayMember: 'VariableName',
 			valueMember: 'VariableID'
-		})
-		.bind('select', variableSelectHandler);
-*/
+		}).
+		bind('select', variableSelectHandler);
 });
 
 //End of Document Ready Function
