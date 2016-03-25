@@ -547,26 +547,32 @@ var variablesAdapter = new $.jqx.dataAdapter({
 });
 
 //Defining the Data adapter for the data types
-var typesAdapter = new $.jqx.dataAdapter({
-	datatype: "json",
-	datafields: [
-		{name: 'DataType'},
-		{name: 'display'}
-	],
-	url: base_url + 'variable/getTypes?siteid=' + DATA.siteid	+
-		'&varname=' + varname
-});
+function getTypesAdapter(varname)
+{
+	return new $.jqx.dataAdapter({
+		datatype: "json",
+		datafields: [
+			{name: 'DataType'},
+			{name: 'display'}
+		],
+		url: base_url + 'variable/getTypes?siteid=' + DATA.siteid +
+			'&varname=' + varname
+	});
+}
 
 //Defining the Data adapter for the methods
-var methodsAdapter = new $.jqx.dataAdapter({
-	datatype: "json",
-	datafields: [
-		{ name: 'MethodID' },
-		{ name: 'MethodDescription' }
-	],
-	url: base_url + 'methods/getSiteVarJSON?siteid=' + DATA.siteid +
-		'&varid=' + varid
-});
+function getMethodsAdapter(varid)
+{
+	return new $.jqx.dataAdapter({
+		datatype: "json",
+		datafields: [
+			{ name: 'MethodID' },
+			{ name: 'MethodDescription' }
+		],
+		url: base_url + 'methods/getSiteVarJSON?siteid=' + DATA.siteid +
+			'&varid=' + varid
+	});
+}
 
 function variableSelectHandler(event)
 {
@@ -899,7 +905,7 @@ function create_var_list()
 	//Creating the Drop Down list
 	$("#typelist").
 		jqxDropDownList({
-			source: typesAdapter,
+			source: getTypesAdapter(varname),
 			theme: 'darkblue',
 			height: 25,
 			width: "100%",
@@ -938,7 +944,7 @@ function get_methods()
 		unbind('valuechanged').
 		//Creating the Drop Down list
 		jqxDropDownList({
-			source: methodsAdapter,
+			source: getMethodsAdapter(varid),
 			theme: 'darkblue',
 			height: 25,
 			width: "100%",
