@@ -173,6 +173,7 @@ class Variable extends MY_Controller
 		$data = $this->StyleData;
 
 		if ($add) {
+
 			$data['DefaultVarcode']= $this->config->item('default_varcode');
 			$data['DefaultTS']     = $this->config->item('time_support');
 		}
@@ -182,23 +183,28 @@ class Variable extends MY_Controller
 
 	public function getAllJSON()
 	{
-		$variables = $this->variables->getAll();
-
-		foreach ($variables as &$var) {
-			$var['VariableName'] = translateTerm($var['VariableName']);
-		}
-
-		echo json_encode($variables);
+		$this->getAll_JSON(1);
 	}
 
 	public function getAllJSON2()
 	{
 		//Returns the variableName as a combination.
+		$this->getAll_JSON(2);
+	}
+
+	private function getAll_JSON($variant = 1)
+	{
 		$variables = $this->variables->getAll();
 
 		foreach ($variables as &$var) {
-			$var['VarNameMod'] = translateTerm($var['VariableName']) . ' ' .
-				"(" . translateTerm($var["DataType"]) . ")";
+
+			$name = translateTerm($var['VariableName']);
+			$var['VariableName'] = $name;
+
+			if ($variant === 2) {
+				$type = translateTerm($var["DataType"]);
+				$var['VarNameMod'] = $name . " (" . $type . ")";
+			}
 		}
 
 		echo json_encode($variables);
@@ -216,8 +222,7 @@ class Variable extends MY_Controller
 
 			echo json_encode($result);
 		}
-		else
-		{
+		else {
 			$data['errorMsg'] = "One of the parameters: Siteid is not defined. An example request would be getSiteJSON?siteid=1";
 			$this->load->view('templates/apierror', $data);
 		}
