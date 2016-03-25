@@ -27,12 +27,12 @@ class Variable extends MY_Controller
 
 	public function add()
 	{
-		return $this->addOrEdit(true);
+		$this->addOrEdit(true);
 	}
 
 	public function edit()
 	{
-		return $this->addOrEdit(false);
+		$this->addOrEdit(false);
 	}
 
 	public function getAllJSON()
@@ -112,26 +112,12 @@ class Variable extends MY_Controller
 
 	public function getUnit()
 	{
-		$var = $this->getXssCleanInput('varid');
-
-		if ($var !== false) {
-			echo json_encode($this->variables->getUnit($var));
-		}
-		else {
-			$this->loadApiErrorView("VariableID", "getUnit?varid=1");
-		}
+		$this->getWithOrWithoutUnit(false);
 	}
 
 	public function getWithUnit()
 	{
-		$var = $this->getXssCleanInput('varid');
-
-		if ($var !== false) {
-			echo json_encode($this->variables->getVariableWithUnit($var));
-		}
-		else {
-			$this->loadApiErrorView("VariableID", "getWithUnit?varid=1");
-		}
+		$this->getWithOrWithoutUnit(true);
 	}
 
 	public function getTable()
@@ -217,7 +203,7 @@ class Variable extends MY_Controller
 	{
 		$type = $this->getXssCleanInput('type');
 
-		if($type !== false) {
+		if ($type !== false) {
 
 			$result1 = $this->variables->getUnitsByType($type);
 
@@ -435,6 +421,27 @@ class Variable extends MY_Controller
 		}
 
 		echo json_encode($variables);
+	}
+
+	private function getWithOrWithoutUnit($withUnit)
+	{
+		$var = $this->getXssCleanInput('varid');
+
+		if ($var !== false) {
+
+			echo json_encode(
+				$withUnit ?
+				$this->variables->getVariableWithUnit($var) :
+				$this->variables->getUnit($var)
+			);
+		}
+		else {
+
+			$this->loadApiErrorView(
+				"VariableID", 
+				$withUnit ? "getWithUnit?varid=1" : "getUnit?varid=1"
+			);
+		}
 	}
 
 	private function loadApiErrorView($parameters, $example)
