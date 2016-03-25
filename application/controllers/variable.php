@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 /*
 |-------------------------------------------------------------------------|
 | Variables Controller                                                    |
@@ -22,10 +23,6 @@ class Variable extends MY_Controller
 	
 	private function buildVariable()
 	{
-		$otherSlashNew = getTxt('OtherSlashNew');
-
-		$regular = ($this->input->post('isreg') == getTxt('Regular'))? 1 : 0;
-		
 		$Variable = array(
 			'VariableCode'    => $this->input->post('VariableCode'),
 			'TimeSupport'     => $this->input->post('tsup'),
@@ -33,61 +30,57 @@ class Variable extends MY_Controller
 			'GeneralCategory' => $this->input->post('gc'),
 			'DataType'        => $this->input->post('datatype'),
 			'TimeunitsID'     => $this->input->post('timeunit'),
-			'IsRegular'       => $regular
+			'IsRegular'       => 
+				($this->input->post('isreg') == getTxt('Regular'))? 1 : 0
 		);
 
 		//The above are the static variables.
 
-		$varname = $this->input->post('varname');
+		$Variable['VariableName'] = $this->getControlledName(
+			'varname', 'NewVarName', 'variablenamecv', 'vardef'
+		);
 
-		if ($varname == $otherSlashNew) {
+		$Variable['Speciation'] = $this->getControlledName(
+			'specdata', 'other_spec', 'speciationcv', 'specdef'
+		);
 
-			$varname = $this->input->post('NewVarName');
+		$Variable['SampleMedium'] = getControlledName(
+			'samplemedium', 'smnew', 'samplemediumcv', 'smnew'
+		);
 
-			$this->variables->addTDef(
-				'variablenamecv', $varname, $this->input->post('vardef')
-			);
+		//Unit Checking. First Check New UNIT TYPE.
+
+		$Variable['VariableunitsID'] = getControlledUnit();
+
+		//Check Value Type
+
+		$Variable['ValueType'] = getControlledName(
+			'valuetype', 'valuetypenew', 'valuetypecv', 'vtdef'
+		);
+
+		return $Variable;
+	}
+
+	private function getControlledName($id, $id_new, $table, $id_def)
+	{
+		$name = $this->input->post($id);
+
+		if ($name == getTxt('OtherSlashNew')) {
+
+			$name = $this->input->post($id_new);
+
+			$this->variables->addTDef($table, $name, $this->input->post($id_def));
 		}
 
-		$Variable['VariableName'] = $varname;
+		return $name;
+	}
 
-		$spec = $this->input->post('specdata');
-
-		if ($spec == $otherSlashNew) {
-
-			//New Spec Processing.
-
-			$spec = $this->input->post('other_spec');
-
-			$this->variables->addTDef(
-				'speciationcv', $spec, $this->input->post('specdef')
-			);
-		}
-
-		$Variable['Speciation'] = $spec;
-
-		$smed = $this->input->post('samplemedium');
-
-		if ($smed == $otherSlashNew) {
-
-			//New Sample Medium Name Processing.
-
-			$smed = $this->input->post('smnew');
-
-			$this->variables->addTDef(
-				'samplemediumcv', $smed, $this->input->post('smnew')
-			);
-		}
-
-		$Variable['SampleMedium'] = $smed;
-		
-		//Unit Checking
-		//First Check New UNIT TYPE.
-
+	function getControlledUnit()
+	{
 		$utype = $this->input->post('unittype');
 		$unit = $this->input->post('unit');
 
-		if ($utype == $otherSlashNew) {
+		if ($utype == getTxt('OtherSlashNew')) {
 
 			//New Unit and unit type Processing.
 
@@ -113,28 +106,7 @@ class Variable extends MY_Controller
 			}
 		}
 
-		$Variable['VariableunitsID'] = $unit;
-
-		//Check Value Type
-
-		$vt = $this->input->post('valuetype');
-
-		if ($vt == $otherSlashNew) {
-
-			//New Sample Medium Name Processing.
-
-			$vt = $this->input->post('valuetypenew');
-
-			$this->variables->addTDef(
-				'valuetypecv',
-				$vt,
-				$this->input->post('vtdef')
-			);
-		}
-
-		$Variable['ValueType'] = $vt;
-
-		return $Variable;
+		return $unit;
 	}
 
 	public function add()
