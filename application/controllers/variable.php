@@ -111,66 +111,53 @@ class Variable extends MY_Controller
 
 	public function add()
 	{
-		if ($_POST) {
-
-			$variable = $this->buildVariable();
-			$result = $this->variables->add($variable);
-
-			if ($result > 0) {
-
-				//Add to varmeth
-
-				$varMeth = array(
-					'VariableID'   => $result,
-					'VariableCode' => $variable['VariableCode'],
-					'VariableName' => $variable['VariableName'],
-					'DataType'     => $variable['DataType'],
-					'MethodID'     => $this->input->post('jqxWidget')
-				);
-
-				if($this->variables->addVM($varMeth)) {
-					addSuccess(getTxt('VariableSuccessfullyAdded'));
-				}
-				else {
-					addError(getTxt('ProcessingError')." Error in varmeth.");
-				}
-			}
-			else {
-				addError(getTxt('ProcessingError'));
-			}
-		}
-
-		//List of CSS to pass to this view
-
-		$data = $this->StyleData;
-
-		$data['DefaultVarcode']= $this->config->item('default_varcode');
-		$data['DefaultTS']= $this->config->item('time_support');
-
-		$this->load->view('variables/addvar', $data);
+		return $this->addOrEdit(true);
 	}
 
 	public function edit()
 	{
+		return $this->addOrEdit(false);
+	}
+
+	private function addOrEdit($add)
+	{
 		if ($_POST) {
 
 			$variable = $this->buildVariable();
-			$varid = $this->input->post('VariableID');
-			$result = $this->variables->update($variable, $varid);
 
-			if($result) {
+			if ($add) {
+				$result = $this->variables->add($variable);
+			}
+			else {
+				$varid = $this->input->post('VariableID');
+				$result = $this->variables->update($variable, $varid);
+			}
+
+			if ($result > 0) {
 
 				//Add to varmeth
+				$varMeth = ($add ?
+					array('VariableID'   => $result) :
+					array()
+				);
 
-				$varMeth = array(
+				$varMeth = array_merge($varMeth, array(
 					'VariableCode' => $variable['VariableCode'],
 					'VariableName' => $variable['VariableName'],
 					'DataType'     => $variable['DataType'],
 					'MethodID'     => $this->input->post('jqxWidget')
+				));
+
+				$success = ($add ?
+					$this->variables->addVM($varMeth) :
+					$this->variables->updateVM($varMeth, $varid)
 				);
 
-				if($this->variables->updateVM($varMeth, $varid)) {
-					addSuccess(getTxt('VariableSuccess'));
+				if ($success) {
+					addSuccess(getTxt($add ?
+						'VariableSuccessfullyAdded' :
+						'VariableSuccess'
+					));
 				}
 				else {
 					addError(getTxt('ProcessingError') . " Error in varmeth.");
@@ -183,7 +170,14 @@ class Variable extends MY_Controller
 
 		//List of CSS to pass to this view
 
-		$this->load->view('variables/editvar', $this->StyleData);
+		$data = $this->StyleData;
+
+		if ($add) {
+			$data['DefaultVarcode']= $this->config->item('default_varcode');
+			$data['DefaultTS']     = $this->config->item('time_support');
+		}
+
+		$this->load->view('variables/' . ($add ? 'addvar':'editvar'), $data);
 	}
 
 	public function getAllJSON()
