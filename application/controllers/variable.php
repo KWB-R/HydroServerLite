@@ -21,93 +21,9 @@ class Variable extends MY_Controller
 		$this->loadModel('variables');
 	}
 	
-	private function buildVariable()
-	{
-		$Variable = array(
-			'VariableCode'    => $this->input->post('VariableCode'),
-			'TimeSupport'     => $this->input->post('tsup'),
-			'NoDataValue'     => -9999,
-			'GeneralCategory' => $this->input->post('gc'),
-			'DataType'        => $this->input->post('datatype'),
-			'TimeunitsID'     => $this->input->post('timeunit'),
-			'IsRegular'       => 
-				($this->input->post('isreg') == getTxt('Regular'))? 1 : 0
-		);
-
-		//The above are the static variables.
-
-		$Variable['VariableName'] = $this->getControlledName(
-			'varname', 'NewVarName', 'variablenamecv', 'vardef'
-		);
-
-		$Variable['Speciation'] = $this->getControlledName(
-			'specdata', 'other_spec', 'speciationcv', 'specdef'
-		);
-
-		$Variable['SampleMedium'] = getControlledName(
-			'samplemedium', 'smnew', 'samplemediumcv', 'smnew'
-		);
-
-		//Unit Checking. First Check New UNIT TYPE.
-
-		$Variable['VariableunitsID'] = getControlledUnit();
-
-		//Check Value Type
-
-		$Variable['ValueType'] = getControlledName(
-			'valuetype', 'valuetypenew', 'valuetypecv', 'vtdef'
-		);
-
-		return $Variable;
-	}
-
-	private function getControlledName($id, $id_new, $table, $id_def)
-	{
-		$name = $this->input->post($id);
-
-		if ($name == getTxt('OtherSlashNew')) {
-
-			$name = $this->input->post($id_new);
-
-			$this->variables->addTDef($table, $name, $this->input->post($id_def));
-		}
-
-		return $name;
-	}
-
-	function getControlledUnit()
-	{
-		$utype = $this->input->post('unittype');
-		$unit = $this->input->post('unit');
-
-		if ($utype == getTxt('OtherSlashNew')) {
-
-			//New Unit and unit type Processing.
-
-			$unit = $this->variables->addUnit(
-				$this->input->post('new_unit_type'),
-				$this->input->post('new_unit_name'),
-				$this->input->post('new_unit_abb')
-			);
-		}
-		else {
-
-			//Is there a new unit?
-
-			if ($unit == -10) {
-
-				//New Unit Processing with the above type.
-
-				$unit = $this->variables->addUnit(
-					$utype,
-					$this->input->post('new_unit_name'),
-					$this->input->post('new_unit_abb')
-				);
-			}
-		}
-
-		return $unit;
-	}
+	//
+	// Public functions
+	//
 
 	public function add()
 	{
@@ -119,64 +35,6 @@ class Variable extends MY_Controller
 		return $this->addOrEdit(false);
 	}
 
-	private function addOrEdit($add)
-	{
-		if ($_POST) {
-
-			$variable = $this->buildVariable();
-
-			if ($add) {
-				$result = $this->variables->add($variable);
-			}
-			else {
-				$varid = $this->input->post('VariableID');
-				$result = $this->variables->update($variable, $varid);
-			}
-
-			if ($result > 0) {
-
-				//Add to varmeth
-				$varMeth = ($add ?
-					array('VariableID'   => $result) :
-					array()
-				);
-
-				$varMeth = array_merge($varMeth, array(
-					'VariableCode' => $variable['VariableCode'],
-					'VariableName' => $variable['VariableName'],
-					'DataType'     => $variable['DataType'],
-					'MethodID'     => $this->input->post('jqxWidget')
-				));
-
-				$success = ($add ?
-					$this->variables->addVM($varMeth) :
-					$this->variables->updateVM($varMeth, $varid)
-				);
-
-				$this->addSuccessOrError(
-					$success, 
-					$add ? 'VariableSuccessfullyAdded' : 'VariableSuccess',
-					"Error in varmeth."
-				);
-			}
-			else {
-				addError(getTxt('ProcessingError'));
-			}
-		}
-
-		//List of CSS to pass to this view
-
-		$data = $this->StyleData;
-
-		if ($add) {
-
-			$data['DefaultVarcode']= $this->config->item('default_varcode');
-			$data['DefaultTS']     = $this->config->item('time_support');
-		}
-
-		$this->load->view('variables/' . ($add ? 'addvar':'editvar'), $data);
-	}
-
 	public function getAllJSON()
 	{
 		$this->getAll_JSON(1);
@@ -186,24 +44,6 @@ class Variable extends MY_Controller
 	{
 		//Returns the variableName as a combination.
 		$this->getAll_JSON(2);
-	}
-
-	private function getAll_JSON($variant = 1)
-	{
-		$variables = $this->variables->getAll();
-
-		foreach ($variables as &$var) {
-
-			$name = translateTerm($var['VariableName']);
-			$var['VariableName'] = $name;
-
-			if ($variant === 2) {
-				$type = translateTerm($var["DataType"]);
-				$var['VarNameMod'] = $name . " (" . $type . ")";
-			}
-		}
-
-		echo json_encode($variables);
 	}
 
 	public function getSiteJSON()
@@ -221,16 +61,6 @@ class Variable extends MY_Controller
 		else {
 			$this->loadApiErrorView("Siteid", "getSiteJSON?siteid=1");
 		}
-	}
-
-	private function loadApiErrorView($parameters, $example)
-	{
-		$message  = "One of the parameters: " . $parameters . " is not defined. ";
-		$message .= "An example request would be " . $example;
-
-		$data['errorMsg'] = $message;
-
-		$this->load->view('templates/apierror', $data);
 	}
 
 	public function getTypes()
@@ -437,6 +267,184 @@ class Variable extends MY_Controller
 		}
 
 		echo json_encode(array("status" => ($result? "success" : "failed")));
+	}
+
+	//
+	// Private functions
+	//
+
+	private function addOrEdit($add)
+	{
+		if ($_POST) {
+
+			$variable = $this->buildVariable();
+
+			if ($add) {
+				$result = $this->variables->add($variable);
+			}
+			else {
+				$varid = $this->input->post('VariableID');
+				$result = $this->variables->update($variable, $varid);
+			}
+
+			if ($result > 0) {
+
+				//Add to varmeth
+				$varMeth = ($add ?
+					array('VariableID'   => $result) :
+					array()
+				);
+
+				$varMeth = array_merge($varMeth, array(
+					'VariableCode' => $variable['VariableCode'],
+					'VariableName' => $variable['VariableName'],
+					'DataType'     => $variable['DataType'],
+					'MethodID'     => $this->input->post('jqxWidget')
+				));
+
+				$success = ($add ?
+					$this->variables->addVM($varMeth) :
+					$this->variables->updateVM($varMeth, $varid)
+				);
+
+				$this->addSuccessOrError(
+					$success, 
+					$add ? 'VariableSuccessfullyAdded' : 'VariableSuccess',
+					"Error in varmeth."
+				);
+			}
+			else {
+				addError(getTxt('ProcessingError'));
+			}
+		}
+
+		//List of CSS to pass to this view
+
+		$data = $this->StyleData;
+
+		if ($add) {
+
+			$data['DefaultVarcode']= $this->config->item('default_varcode');
+			$data['DefaultTS']     = $this->config->item('time_support');
+		}
+
+		$this->load->view('variables/' . ($add ? 'addvar':'editvar'), $data);
+	}
+
+	private function buildVariable()
+	{
+		$Variable = array(
+			'VariableCode'    => $this->input->post('VariableCode'),
+			'TimeSupport'     => $this->input->post('tsup'),
+			'NoDataValue'     => -9999,
+			'GeneralCategory' => $this->input->post('gc'),
+			'DataType'        => $this->input->post('datatype'),
+			'TimeunitsID'     => $this->input->post('timeunit'),
+			'IsRegular'       => 
+				($this->input->post('isreg') == getTxt('Regular'))? 1 : 0
+		);
+
+		//The above are the static variables.
+
+		$Variable['VariableName'] = $this->getControlledName(
+			'varname', 'NewVarName', 'variablenamecv', 'vardef'
+		);
+
+		$Variable['Speciation'] = $this->getControlledName(
+			'specdata', 'other_spec', 'speciationcv', 'specdef'
+		);
+
+		$Variable['SampleMedium'] = getControlledName(
+			'samplemedium', 'smnew', 'samplemediumcv', 'smnew'
+		);
+
+		//Unit Checking. First Check New UNIT TYPE.
+
+		$Variable['VariableunitsID'] = getControlledUnit();
+
+		//Check Value Type
+
+		$Variable['ValueType'] = getControlledName(
+			'valuetype', 'valuetypenew', 'valuetypecv', 'vtdef'
+		);
+
+		return $Variable;
+	}
+
+	private function getControlledName($id, $id_new, $table, $id_def)
+	{
+		$name = $this->input->post($id);
+
+		if ($name == getTxt('OtherSlashNew')) {
+
+			$name = $this->input->post($id_new);
+
+			$this->variables->addTDef($table, $name, $this->input->post($id_def));
+		}
+
+		return $name;
+	}
+
+	private function getControlledUnit()
+	{
+		$utype = $this->input->post('unittype');
+		$unit = $this->input->post('unit');
+
+		if ($utype == getTxt('OtherSlashNew')) {
+
+			//New Unit and unit type Processing.
+
+			$unit = $this->variables->addUnit(
+				$this->input->post('new_unit_type'),
+				$this->input->post('new_unit_name'),
+				$this->input->post('new_unit_abb')
+			);
+		}
+		else {
+
+			//Is there a new unit?
+
+			if ($unit == -10) {
+
+				//New Unit Processing with the above type.
+
+				$unit = $this->variables->addUnit(
+					$utype,
+					$this->input->post('new_unit_name'),
+					$this->input->post('new_unit_abb')
+				);
+			}
+		}
+
+		return $unit;
+	}
+
+	private function getAll_JSON($variant = 1)
+	{
+		$variables = $this->variables->getAll();
+
+		foreach ($variables as &$var) {
+
+			$name = translateTerm($var['VariableName']);
+			$var['VariableName'] = $name;
+
+			if ($variant === 2) {
+				$type = translateTerm($var["DataType"]);
+				$var['VarNameMod'] = $name . " (" . $type . ")";
+			}
+		}
+
+		echo json_encode($variables);
+	}
+
+	private function loadApiErrorView($parameters, $example)
+	{
+		$message  = "One of the parameters: " . $parameters . " is not defined. ";
+		$message .= "An example request would be " . $example;
+
+		$data['errorMsg'] = $message;
+
+		$this->load->view('templates/apierror', $data);
 	}
 
 	private function addSuccessOrError($success, $successKey, $errorMessage = '')
