@@ -576,8 +576,7 @@ function getMethodsAdapter(varid)
 
 function variableSelectHandler(event)
 {
-	var item = $('#dropdownlist').jqxDropDownList(
-		'getItem', event.args.index);
+	var item = $('#dropdownlist').jqxDropDownList('getItem', event.args.index);
 
 	//Check if a valid value is selected and process futher to display dates
 	if (item !== null) {
@@ -1185,9 +1184,10 @@ echo html_div_beg('row');
 genDropLists('Variable','dropdownlist', 'dropdownlist', false) . html_br();
 echo '</div>';
 
-echo html_div_beg('row');
-genDropLists('Type','typelist', 'typelist', false) . html_br();
-echo '</div>';
+//The type is already selected when the Variable is selected!
+//echo html_div_beg('row');
+//genDropLists('Type','typelist', 'typelist', false) . html_br();
+//echo '</div>';
 
 echo html_div_beg('row');
 genDropLists('Method','methodlist', 'methodlist', false) . html_br();
