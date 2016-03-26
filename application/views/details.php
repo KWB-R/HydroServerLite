@@ -904,8 +904,8 @@ function create_var_list()
 			valueMember: 'DataType'
 		}).
 		//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
-		jqxDropDownList('selectIndex', 0 ).
-		bind('select', typeSelectHandler);
+		bind('select', typeSelectHandler).
+		jqxDropDownList('selectIndex', 0);
 }
 // End of create_var_list()
 
