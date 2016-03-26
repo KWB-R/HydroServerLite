@@ -337,17 +337,17 @@ class Variable extends MY_Controller
 			'specdata', 'other_spec', 'speciationcv', 'specdef'
 		);
 
-		$Variable['SampleMedium'] = getControlledName(
+		$Variable['SampleMedium'] = $this->getControlledName(
 			'samplemedium', 'smnew', 'samplemediumcv', 'smnew'
 		);
 
 		//Unit Checking. First Check New UNIT TYPE.
 
-		$Variable['VariableunitsID'] = getControlledUnit();
+		$Variable['VariableunitsID'] = $this->getControlledUnit();
 
 		//Check Value Type
 
-		$Variable['ValueType'] = getControlledName(
+		$Variable['ValueType'] = $this->getControlledName(
 			'valuetype', 'valuetypenew', 'valuetypecv', 'vtdef'
 		);
 
