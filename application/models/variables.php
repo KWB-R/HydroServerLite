@@ -12,10 +12,16 @@ class Variables extends MY_Model
 		return $this->tranResult($this->db->get()->result_array());
 	}
 
-	function getSite($siteid)
+	function getSite($siteid, $additionalFields = '')
 	{
-		//Gets vars by site. 
-		$this->db->select('VariableName, VariableID')
+		$fields = 'VariableName, VariableID';
+
+		if ($additionalFields) {
+			$fields .= ', ' . $additionalFields;
+		}
+
+		//Gets vars by site.
+		$this->db->select($fields)
 			->distinct()
 			->from('seriescatalog')
 			->where('SiteID', $siteid)
@@ -24,7 +30,7 @@ class Variables extends MY_Model
 		return $this->translatedResult();
 	}
 
-	function getTypes($siteid,$varname)
+	function getTypes($siteid, $varname)
 	{
 		$this->db->select('DataType')
 			->distinct()

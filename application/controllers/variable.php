@@ -48,12 +48,25 @@ class Variable extends MY_Controller
 
 	public function getSiteJSON()
 	{
-		if ($this->getXssCleanInput('siteid')) {
+		$siteID = $this->getXssCleanInput('siteid');
+		$withType = $this->getXssCleanInput('withtype');
 
-			$result = $this->variables->getSite($this->getXssCleanInput('siteid'));
+		if ($siteID) {
+
+			$result = $this->variables->getSite($siteID, $withType ? 'DataType' : '');
 
 			foreach($result as &$var) {
-				$var['VariableName'] = translateTerm($var['VariableName']);
+
+				$name = translateTerm($var['VariableName']);
+
+				$var['VariableName'] = $name;
+
+				if ($withType) {
+
+					$type = translateTerm($var["DataType"]);
+
+					$var['VarNameMod'] = $name . " (" . $type . ")";
+				}
 			}
 
 			echo json_encode($result);
