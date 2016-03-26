@@ -65,47 +65,43 @@ class Variable extends MY_Controller
 
 	public function getTypes()
 	{
-		$siteid  = $this->getXssCleanInput('siteid');
-		$varname = $this->getXssCleanInput('varname');
+		// in fact this is the VariableID!
+		$variableID = $this->getXssCleanInput('varname');
+		$siteID     = $this->getXssCleanInput('siteid');
 
-		if ($siteid && $varname) {
+		if ($siteID && $variableID) {
 
-			$variable = $this->variables->getVariableWithUnit($varname);
+			$variableName = $this->getVariableName($variableID);
 
-			if (count($variable) > 0) {
+			if ($variableName !== '') {
 
-				$varname = $variable[0]['VariableName'];
+				$types = $this->variables->getTypes($siteID, $variableName);
 
-				$result = $this->variables->getTypes($siteid, $varname);
-
-				foreach($result as &$var) {
-					$var['display'] = translateTerm($var['DataType']);
+				foreach ($types as &$type) {
+					$type['display'] = translateTerm($type['DataType']);
 				}
 			}
 			else {
-				$result = array();
+				$types = array();
 			}
 
-			echo json_encode($result);
+			echo json_encode($types);
 		}
 		else {
 			$this->loadApiErrorView(
-				"Siteid,Variable Name", "getTypes?siteid=1&varname=abc"
+				"Siteid,Variable Name", "getTypes?siteid=1&varname=1"
 			);
 		}
 	}
 
 	public function updateVarID()
 	{
-		$variable = $this->variables->getVariableWithUnit(
-			$this->getXssCleanInput('varname')
-		);
-
-		$varname = $variable[0]['VariableName'];
+		// in fact this is the VariableID!
+		$variableID = $this->getXssCleanInput('varname');
 
 		$result = $this->variables->getVarID(
 			$this->getXssCleanInput('siteid'),
-			$varname,
+			$this->getVariableName($variableID),
 			$this->getXssCleanInput('type')
 		);
 
@@ -291,7 +287,7 @@ class Variable extends MY_Controller
 					);
 				}
 				else {	
-					$success = $this->variables->updateVM($varMeth, $varid)
+					$success = $this->variables->updateVM($varMeth, $varid);
 				}
 
 				$this->addSuccessOrError(
@@ -443,6 +439,13 @@ class Variable extends MY_Controller
 				$withUnit ? "getWithUnit?varid=1" : "getUnit?varid=1"
 			);
 		}
+	}
+
+	private function getVariableName($variableID)
+	{
+		$variable = $this->variables->getVariableWithUnit($variableID);
+
+		return ((count($variable) > 0) ? $variable[0]['VariableName'] : '');
 	}
 
 	private function loadApiErrorView($parameters, $example)
