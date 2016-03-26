@@ -417,6 +417,11 @@ class Variable extends MY_Controller
 			}
 		}
 
+		// Sort the array by 'VarNameMod'
+		usort($variables, function($a, $b) {
+			return ($a['VarNameMod'] < $b['VarNameMod']) ? -1 : 1;
+		});
+
 		echo json_encode($variables);
 	}
 
