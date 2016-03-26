@@ -59,10 +59,11 @@ class Variables extends MY_Model
 
 	function getVariableWithUnit($var)
 	{
+		$table = $this->tableName;
+
 		$this->db->select()
-			->from($this->tableName)
-			->join('units', $this->tableName.'.VariableunitsID = units.unitsID',
-							'inner')
+			->from($table)
+			->join('units', $table . '.VariableunitsID = units.unitsID', 'inner')
 			->where('VariableID', $var);
 
 		return $this->translatedResult();

@@ -65,23 +65,25 @@ class Variable extends MY_Controller
 
 	public function getTypes()
 	{
-		if (
-			$this->getXssCleanInput('siteid') && 
-			$this->getXssCleanInput('varname')
-		) {
+		$siteid  = $this->getXssCleanInput('siteid');
+		$varname = $this->getXssCleanInput('varname');
 
-			$variable = $this->variables->getVariableWithUnit(
-				$this->getXssCleanInput('varname')
-			);
+		if ($siteid && $varname) {
 
-			$varname = $variable[0]['VariableName'];
+			$variable = $this->variables->getVariableWithUnit($varname);
 
-			$result = $this->variables->getTypes(
-				$this->getXssCleanInput('siteid'), $varname
-			);
+			if (count($variable) > 0) {
 
-			foreach($result as &$var) {
-				$var['display'] = translateTerm($var['DataType']);
+				$varname = $variable[0]['VariableName'];
+
+				$result = $this->variables->getTypes($siteid, $varname);
+
+				foreach($result as &$var) {
+					$var['display'] = translateTerm($var['DataType']);
+				}
+			}
+			else {
+				$result = array();
 			}
 
 			echo json_encode($result);
@@ -276,22 +278,21 @@ class Variable extends MY_Controller
 			if ($result > 0) {
 
 				//Add to varmeth
-				$varMeth = ($add ?
-					array('VariableID'   => $result) :
-					array()
-				);
-
-				$varMeth = array_merge($varMeth, array(
+				$varMeth = array(
 					'VariableCode' => $variable['VariableCode'],
 					'VariableName' => $variable['VariableName'],
 					'DataType'     => $variable['DataType'],
 					'MethodID'     => $this->input->post('jqxWidget')
-				));
-
-				$success = ($add ?
-					$this->variables->addVM($varMeth) :
-					$this->variables->updateVM($varMeth, $varid)
 				);
+
+				if ($add) {
+					$success = $this->variables->addVM(
+						array_merge(array('VariableID' => $result), $varMeth)
+					);
+				}
+				else {	
+					$success = $this->variables->updateVM($varMeth, $varid)
+				}
 
 				$this->addSuccessOrError(
 					$success, 
