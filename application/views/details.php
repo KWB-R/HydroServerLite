@@ -854,7 +854,9 @@ function make_grid()
 
 	// initialize the popup window and buttons.
 
-	$("#popupWindow").jqxWindow(popupWindowConfig);
+	$("#popupWindow").jqxWindow(jQuery.extend(
+		popupWindowConfig, {cancelButton: $("#Cancel")}
+	));
 
 	$("#timepicker").timepicker({showOn: "focus", showPeriodLabels: false});
 
@@ -873,7 +875,10 @@ function make_grid()
 	//End of Editing 
 
 	//Add A new Value to the table
-	$("#popupWindow_new").jqxWindow(popupWindowNewConfig);
+	$("#popupWindow_new").jqxWindow(jQuery.extend(
+		popupWindowConfig, {cancelButton: $("#Cancel_new")}
+	));
+
 	$("#Cancel_new").jqxButton(buttonConfigBase);
 	$("#Save_new"  ).jqxButton(buttonConfigBase);
 

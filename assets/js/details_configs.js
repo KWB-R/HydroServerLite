@@ -32,7 +32,7 @@ var windowConfig5 = {
 	theme: 'darkblue'
 };
 
-var popupWindowConfigBase = {
+var popupWindowConfig = {
 	width: 300,
 	height: 350,
 	resizable: false,
@@ -42,23 +42,26 @@ var popupWindowConfigBase = {
 	modalOpacity: 0.01
 };
 
-var popupWindowConfig = jQuery.extend(
-	popupWindowConfigBase, {cancelButton: $("#Cancel")}
-);
+var buttonConfigBase = {
+	theme: 'darkblue'
+};
 
-var popupWindowNewConfig = jQuery.extend(
-	popupWindowConfig, {cancelButton: $("#Cancel_new")}
-);
-
-var buttonConfigBase = {theme: 'darkblue'};
-var buttonConfig     = {theme: 'darkblue', width: '250', height: '25'};
+var buttonConfig = {
+	theme: 'darkblue',
+	width: '250',
+	height: '25'
+};
 
 var dateInputConfig = {
-	width: '100%', 
-	height: '25px', 
-	theme: 'darkblue', 
+	width: '100%',
+	height: '25px',
+	theme: 'darkblue',
 	formatString: 'dd.MM.yyyy hh:mm'
 };
 
-var dateDropConfig  = {width: '100%', height: 25, theme: 'darkblue'};
+var dateDropConfig  = {
+	width: '100%',
+	height: 25,
+	theme: 'darkblue'
+};
 
