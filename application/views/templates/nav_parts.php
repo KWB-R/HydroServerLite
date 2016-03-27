@@ -36,13 +36,10 @@ function html_li_sublist($keyword, $id, $items)
 {
 	return
 		html_li_beg("nav-header") .
-			html_h(
-				html_a(
-					"#", # target
-					getTxt($keyword), # content
-					html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
-				),
-				4 // h4 header
+			html_a(
+				"#", # target
+				html_h(getTxt($keyword), 4), # content
+				html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
 			) .
 			html_ul_beg("collapse", $id, "list-style: none;") .
 				implode("\n", $items) .
@@ -145,6 +142,7 @@ echo html_div_beg(
 	"navbar-collapse collapse sidebar-navbar-collapse transparentNav", # class
 	"navbarCollapse" # id
 );
+
 echo html_ul_beg("nav nav-tabs nav-stacked");
 
 foreach ($menuConfig as $subConfig) {
