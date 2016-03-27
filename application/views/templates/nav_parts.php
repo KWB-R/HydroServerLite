@@ -36,10 +36,13 @@ function html_li_sublist($keyword, $id, $items)
 {
 	return
 		html_li_beg("nav-header") .
-			html_a(
-				"#", # target
-				html_h(getTxt($keyword), 4), # content
-				html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
+			html_h(
+				html_a(
+					"#", # target
+					getTxt($keyword), # content
+					html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
+				),
+				4 // h4 header
 			) .
 			html_ul_beg("collapse", $id, "list-style: none;") .
 				implode("\n", $items) .
