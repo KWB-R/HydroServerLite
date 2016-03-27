@@ -13,119 +13,41 @@ echo $CSS_JQuery_UI;
 echo $CSS_JQStyles;
 ?>
 
-<!--Main Script to display the data-->
+
+<!-- Load helper functions -->
+<?php $source = base_url() . 'assets/js/details_helpers.js'; ?>
+<script type="text/javascript" src="<?php echo $source;?>"></script>
+
+<!-- Load configurations of UI Widgets -->
+<?php $source = base_url() . 'assets/js/details_configs.js'; ?>
+<script type="text/javascript" src="<?php echo $source;?>"></script>
+
+<!-- Main Script -->
 <script type="text/javascript">
 
 //
 // Define Global Variables
 //
 
+var varid;           // currently selected VariableID
+var variableAndType; // currently selected "<VariableName> (<DataType>)"
+var methodid;        // currently selected MethodID
+
 var glob_df;
 var glob_dt;
-var date_to;
+
 var date_from;
-var date_select_to;
-var date_select_from;
-var varid;
+var date_to;
+
 var date_from_sql;
 var date_to_sql;
-var varname;
-var datatype;
-var displayType;
+
+var date_select_from;
+var date_select_to;
+
 var sitename;
 var flag = 0;
-var methodid;
 var chart = "";
-var displayVar;
-
-//
-// Helper functions (should be moved to some external script in my opinion)
-//
-
-function formatDateSQL(date, month, minutes)
-{
-	// Set default values if month or minutes are undefined
-	month = month || (date.getMonth()+1);
-	minutes = minutes || ' 00:00:00';
-
-	return date.getFullYear() + '-' + 
-		add_zero(month) + '-' + 
-		add_zero(date.getDate()) + minutes;
-}
-
-function formatDate(date)
-{
-	return add_zero((date.getMonth() + 1)) + '/' + 
-		add_zero( date.getDate()) + '/' + 
-		date.getFullYear();
-}
-
-function add_zero(value)
-{
-	if (value < 10) {
-		value = '0' + value;
-	}
-
-	return value;
-}
-
-function timeconvert(timestamp, useTime)
-{
-	// set default of useTime to true
-	useTime = useTime || true;
-
-	var year   = parseInt(timestamp.slice( 0,  4), 10);
-	var month  = parseInt(timestamp.slice( 5,  7), 10);
-	var day    = parseInt(timestamp.slice( 8, 10), 10);
-	var hour   = (useTime ? parseInt(timestamp.slice(11, 13), 10) : 0);
-	var minute = (useTime ? parseInt(timestamp.slice(14, 16), 10) : 0);
-	var sec    = (useTime ? parseInt(timestamp.slice(17, 19), 10) : 0);
-
-	return new Date(year, month - 1, day, hour, minute, sec);
-}
-
-function toDate(datestring)
-{
-	var parts = datestring.split('-');
-
-	return new Date(parts[0], parts[1] - 1, parts[2]);
-}
-
-function toHourAndMinute(timestring)
-{
-	var parts = timestring.split(':');
-
-	return parts[0] + ':' + parts[1];
-}
-
-function splitTimeString(timestring)
-{
-	var parts = timestring.split(":");
-
-	return {
-		hour: parts[0],
-		minute: parts[1]
-	};
-}
-
-//The trimAllSpace() function will remove any extra spaces
-function trimAllSpace(str) 
-{
-	return str.replace(/ /g, '');
-}
-
-function IsNumeric(str)
-{
-	// test if str consists of only numbers or the colon
-	var pattern = /^[0-9:]+$/;
-
-	if (! pattern.test(str)) {
-		alert (DATA.text.InvalidCharacterNumbers);
-	}
-
-	// remove non-numeric or colon characters
-	return str.replace(/[^0-9:]/g, '');
-}
 
 //
 // Define all (translated) message texts beforehand
@@ -174,77 +96,13 @@ var DATA = {
 	}
 };
 
-//
-// Define the configurations of the controls beforehand
-//
-
-var windowConfig = {
-	maxHeight: 800,
-	maxWidth: 800,
-	minHeight: 200,
-	minWidth: 200,
-	height: 520,
-	width: 720,
-	theme: 'darkblue'
-};
-
-var windowConfig2 = {
-	maxHeight: 100,
-	maxWidth: 350,
-	minHeight: 100,
-	minWidth: 350,
-	height: 100,
-	width: 350,
-	theme: 'darkblue'
-};
-
-var windowConfig5 = {
-	maxHeight: 300,
-	maxWidth: 650,
-	minHeight: 300,
-	minWidth: 650,
-	height: 300,
-	width: 650,
-	theme: 'darkblue'
-};
-
-var popupWindowConfigBase = {
-	width: 300,
-	height: 350,
-	resizable: false,
-	theme: 'darkblue',
-	isModal: true,
-	autoOpen: false,
-	modalOpacity: 0.01
-};
-
-var popupWindowConfig = jQuery.extend(
-	popupWindowConfigBase, {cancelButton: $("#Cancel")}
-);
-
-var popupWindowNewConfig = jQuery.extend(
-	popupWindowConfig, {cancelButton: $("#Cancel_new")}
-);
-
-var buttonConfigBase = {theme: 'darkblue'};
-var buttonConfig     = {theme: 'darkblue', width: '250', height: '25'};
-
-var dateInputConfig = {
-	width: '100%', 
-	height: '25px', 
-	theme: 'darkblue', 
-	formatString: 'dd.MM.yyyy hh:mm'
-};
-
-var dateDropConfig  = {width: '100%', height: 25, theme: 'darkblue'};
-
 function getStockChartConfig(
 	date_chart_from,
 	date_chart_to,
 	unit_yaxis,
 	data_test,
-	displayVar,
-	displayType) 
+	variableAndType
+)
 {
 	return {
 		chart: {renderTo: 'container', zoomType: 'x'},
@@ -286,9 +144,7 @@ function getStockChartConfig(
 			],
 			selected: 6
 		},
-		series: [
-			{data: data_test, name: displayVar +'(' + displayType + ')'}
-		]
+		series: [ {data: data_test, name: variableAndType} ]
 	};
 } // end of getStockChartConfig()
 
@@ -552,20 +408,6 @@ var variablesAdapter = new $.jqx.dataAdapter({
 	url: base_url + 'variable/getSiteJSON?siteid=' + DATA.siteid + '&withtype=1'
 });
 
-//Defining the Data adapter for the data types
-function getTypesAdapter(varname)
-{
-	return new $.jqx.dataAdapter({
-		datatype: "json",
-		datafields: [
-			{name: 'DataType'},
-			{name: 'display'}
-		],
-		url: base_url + 'variable/getTypes?siteid=' + DATA.siteid +
-			'&varname=' + varname
-	});
-}
-
 //Defining the Data adapter for the methods
 function getMethodsAdapter(variableID)
 {
@@ -589,30 +431,15 @@ function variableSelectHandler(event)
 		//Clear the Box
 		$('#daterange').html("");
 
-		varname = item.value;
-		varid = varname;
+		varid = item.value;
 
-		displayVar = item.label;
+		variableAndType = item.label;
 
 		//Going to the next function that will generate a list of data types available for that variable
 		//var t = setTimeout("create_var_list()", 300);
-		get_methods(varname);
+		get_methods(varid);
 	}
 }
-
-/*
-function typeSelectHandler(event)
-{
-	var item = $('#typelist').jqxDropDownList('getItem', event.args.index);
-
-	//Check if a valid value is selected and process futher to display dates
-	if (item !== null) {
-		datatype = item.value;
-		displayType = item.label;
-		update_var_id();
-	}
-}
-*/
 
 function methodSelectHandler(event)
 {
@@ -901,46 +728,6 @@ $(document).ready(function() {
 
 //End of Document Ready Function
 
-/*
-function create_var_list()
-{
-	//Generate data types available for that varname
-	//Creating the Drop Down list
-	$("#typelist").
-		jqxDropDownList({
-			source: getTypesAdapter(varname),
-			theme: 'darkblue',
-			height: 25,
-			width: "100%",
-			selectedIndex: 0,
-			displayMember: 'display',
-			valueMember: 'DataType'
-		}).
-		//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
-		bind('select', typeSelectHandler).
-		jqxDropDownList('selectIndex', 0);
-}
-// End of create_var_list()
-*/
-
-/*
-function update_var_id()
-{
-	$.ajax({
-		type: "GET",
-		url: base_url + "variable/updateVarID?siteid=" + DATA.siteid +
-			"&varname=" + varname + "&type=" + datatype,
-		//Processing The Dates
-		success: function(data) {
-			varid = data;
-			//Now We have the VariableID, We call the dates function
-			//Filter by methods available for that specific selection of variable and site
-			get_methods();
-		}
-	});
-}
-*/
-
 //Function to get dates and plot a default plot
 
 function get_methods(variableID)
@@ -1009,8 +796,8 @@ function plot_chart()
 
 		// var data_test=datatest;
 		chart = new Highcharts.StockChart(getStockChartConfig(
-			date_chart_from, date_chart_to, unit_yaxis, data_test, displayVar,
-			displayType));
+			date_chart_from, date_chart_to, unit_yaxis, data_test, variableAndType
+		));
 
 		// end of new Highcharts.StockChart()
 
