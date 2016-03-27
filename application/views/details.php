@@ -42,9 +42,6 @@ var date_to;
 var date_from_sql;
 var date_to_sql;
 
-var date_select_from;
-var date_select_to;
-
 var sitename;
 var flag = 0;
 var chart = "";
@@ -496,7 +493,7 @@ function ajaxSuccessHandler(result)
 	$('#daterange').html("").prepend(
 			'<p>' + 
 			'<strong>' + DATA.text.DatesAvailable + '</strong> ' + date_from + 
-			'<strong>' + DATA.text.To + '</strong> ' + date_to +
+			'<strong> ' + DATA.text.To + ' </strong> ' + date_to +
 			'</p>');
 
 	//$("#jqxDateTimeInput").jqxDateTimeInput(dateInputConfig);
