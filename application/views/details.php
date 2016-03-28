@@ -102,9 +102,15 @@ function getStockChartConfig(
 )
 {
 	return {
-		chart: {renderTo: 'container', zoomType: 'x'},
+		chart: {
+			renderTo: 'container',
+			zoomType: 'x'
+		},
 		legend: {
-			verticalAlign: 'top', enabled: true, shadow: true, y: 40,
+			verticalAlign: 'top',
+			enabled: true,
+			shadow: true,
+			y: 40,
 			margin: 50
 		},
 		title: {
@@ -115,20 +121,33 @@ function getStockChartConfig(
 				fontSize: '12px'
 			}
 		},
-		credits: {enabled: false},
-		subtitle: {text: DATA.text.ClickDrag},
+		credits: {
+			enabled: false
+		},
+		subtitle: {
+			text: DATA.text.ClickDrag
+		},
 		xAxis: {
 			type: 'datetime',
-			dateTimeLabelFormats: { // don't display the dummy year
+			dateTimeLabelFormats: {
 				month: '%e.%b / %Y',
 				year: '%b.%Y'
 			},
-			title: {text: DATA.text.TimeMsg, margin: 30}
+			title: {
+				text: DATA.text.TimeMsg,
+				margin: 30
+			}
 		},
 		yAxis: {
-			title: {text: unit_yaxis, margin: 40}
+			title: {
+				text: unit_yaxis,
+				margin: 40
+			}
 		},
-		exporting: {enabled: true, width: 5000},
+		exporting: {
+			enabled: true,
+			width: 5000
+		},
 		rangeSelector: {
 			buttons: [
 				{type: 'day',   count: 1, text: DATA.text.OneD},
@@ -145,160 +164,95 @@ function getStockChartConfig(
 	};
 } // end of getStockChartConfig()
 
-function getGridConfig(dataAdapter, unitGrid)
+function getGridConfig(dataAdapter, columnsConfig)
 {
 	return {
 		source: dataAdapter,
 		width: '100%',
 		columnsresize: true,
-		columns: [
-			{text: DATA.text.ValueID, datafield: 'ValueID'},
-			{text: DATA.text.Date, datafield: 'LocalDateTime'},
-			{text: DATA.text.Value + ' (' + unitGrid + ')' , datafield: 'DataValue'}
-	<?php
-	if (isLoggedIn()) {
-		echo(",
-			{
-				text: 'Edit',
-				datafield: 'Edit',
-				columntype: 'button',
-				cellsrenderer: function () {
-					return 'Edit';
-				},
-				buttonclick: function (row) {
-
-					// open the popup window when the user clicks a button.
-					editrow = row;
-
-					var offset = $('#jqxgrid').offset();
-
-					$('#popupWindow').jqxWindow({
-						position: {
-							x: parseInt(offset.left, 10) + 220,
-							y: parseInt(offset.top,  10) +  60
-						}
-					});
-
-					// get the clicked row's data and initialize the input fields.
-					var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
-
-					//Create a Date time Input
-					var datepart = dataRecord.LocalDateTime.split(' ');
-
-					$('#popupWindow').jqxWindow('show');
-					// $('#date').val(datepart[0]);
-
-					$('#date').jqxDateTimeInput({
-							width: '125px',
-							height: '25px',
-							theme: 'darkblue',
-							formatString: 'MM/dd/yyyy',
-							textAlign: 'center'
-						}).jqxDateTimeInput('setDate', toDate(datepart[0]));
-
-					$('#timepicker').val(toHourAndMinute(datepart[1]));
-					//$('#timepicker').timepicker('setTime', toHourAndMinute(datepart[1]))
-
-					$('#value').val(dataRecord.DataValue);
-					vid = dataRecord.ValueID;
-
-					// show the popup window.
-				} // end of buttonclick function
-			}"
-		); // end of echo
-	} // end of isLoggedIn()
-	?>
-		] // end of columns array
+		columns: columnsConfig
 	};
+
 } // end of getGridConfig()
 
-function getColumnsConfig(unitGrid)
+
+function getColumnsConfig(unitGrid, editable)
 {
-	return [
-		{
-			text: DATA.text.ValueID,
-			datafield: 'ValueID'
-		},
-		{
-			text: DATA.text.Date,
-			datafield: 'LocalDateTime'
-		},
-		{
-			text: DATA.text.Value + ' (' + unitGrid + ')',
-			datafield: 'DataValue'
-		}
-<?php
-	if (isLoggedIn()) {
-		echo(",
-			{
-				text: 'Edit',
-				datafield: 'Edit',
-				columntype: 'button',
-				cellsrenderer: function () {
-					return 'Edit';
-				},
-				buttonclick: function (row) {
-
-					// open the popup window when the user clicks a button.
-					editrow = row;
-
-					var offset = $('#jqxgrid').offset();
-
-					$('#popupWindow').jqxWindow({
-						position: {
-							x: parseInt(offset.left, 10) + 220, 
-							y: parseInt(offset.top,  10) +  60
-						}
-					});
-
-					// get the clicked row's data and initialize the input fields.
-					var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
-
-					//Create a Date time Input
-					$('#popupWindow').jqxWindow('show');
-
-					var datepart = dataRecord.LocalDateTime.split(' ');
-					// $('#date').val(datepart[0]);
-
-					$('#date').jqxDateTimeInput({
-							width: '125px',
-							height: '25px',
-							theme: 'darkblue',
-							formatString: 'MM/dd/yyyy',
-							textAlign: 'center'
-						}).jqxDateTimeInput('setDate', toDate(datepart[0]));
-
-					$('#timepicker').val(toHourAndMinute(datepart[1]));
-					//$('#timepicker').timepicker('setTime', toHourAndMinute(datepart[1]))
-
-					$('#value').val(dataRecord.DataValue);
-
-					vid = dataRecord.ValueID;
-
-					// show the popup window.
-				} // end of buttonclick function
-			}"
-		); // end of echo()
-	} // end of if (IsLoggedIn())
-?>
+	var columns = [
+		{text: DATA.text.ValueID, datafield: 'ValueID'},
+		{text: DATA.text.Date, datafield: 'LocalDateTime'},
+		{text: DATA.text.Value + ' (' + unitGrid + ')', datafield: 'DataValue'}
 	];
+
+	if (editable === true) {
+
+		var editColumn = {
+			text: 'Edit',
+			datafield: 'Edit',
+			columntype: 'button',
+			cellsrenderer: function () {
+				return 'Edit';
+			},
+			buttonclick: editClickHandler
+		};
+
+		columns = jQuery.merge(columns, [ editColumn ]);
+	}
+
+	return columns;
 } // end of getColumnsConfig()
 
 function getGridConfig2(dataAdapter, columnsConfig)
 {
-	return {
-		width: '100%',
-		source: dataAdapter,
-		theme: 'darkblue',
-		columnsresize: true,
-		sortable: true,
-		pageable: true,
-		autoheight: true,
-		editable: false,
-		selectionmode: 'singlecell',
-		columns: columnsConfig
-	};
+	return jQuery.extend(
+		getGridConfig(dataAdapter, columnsConfig), 
+		{
+			theme: 'darkblue',
+			sortable: true,
+			pageable: true,
+			autoheight: true,
+			editable: false,
+			selectionmode: 'singlecell'
+		}
+	);
 } // end of getGridConfig2()
+
+function editClickHandler(row)
+{
+	// open the popup window when the user clicks a button.
+	editrow = row;
+
+	var offset = $('#jqxgrid').offset();
+
+	$('#popupWindow').jqxWindow({
+		position: {
+			x: parseInt(offset.left, 10) + 220,
+			y: parseInt(offset.top,  10) +  60
+		}
+	});
+
+	// get the clicked row's data and initialize the input fields.
+	var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
+
+	//Create a Date time Input
+	var datepart = dataRecord.LocalDateTime.split(' ');
+
+	$('#popupWindow').jqxWindow('show');
+
+	$('#date').jqxDateTimeInput({
+		width: '125px',
+		height: '25px',
+		theme: 'darkblue',
+		formatString: 'MM/dd/yyyy',
+		textAlign: 'center'
+	}).jqxDateTimeInput('setDate', toDate(datepart[0]));
+
+	$('#timepicker').val(toHourAndMinute(datepart[1]));
+
+	$('#value').val(dataRecord.DataValue);
+
+	vid = dataRecord.ValueID;
+}
 
 //Time Validation Script General
 function validatetime(idString)
@@ -837,14 +791,19 @@ function make_grid()
 	done(function(msg) {
 		unitGrid = msg[0].unitA;
 
-		if (flag == 1) {
-			$("#jqxgrid").jqxGrid(getGridConfig(dataAdapter, unitGrid));
-		}
+		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
+		var columnsConfig = getColumnsConfig(unitGrid, editable);
+		var gridConfig;
 
-		if (flag !=1 ) {
-			$("#jqxgrid").jqxGrid(getGridConfig2(dataAdapter, columnsConfig));
+		if (flag === 1) {
+			gridConfig = getGridConfig(dataAdapter, columnsConfig);
+		}
+		else {
+			gridConfig = getGridConfig2(dataAdapter, columnsConfig);
 			flag = 1;
 		}
+
+		$("#jqxgrid").jqxGrid(gridConfig);
 	});
 
 	//Editing functionality
