@@ -42,7 +42,7 @@ function html_attribs($assignments)
 // Full HTML Tags
 function html_label($class, $content)
 {
-	return "<label class=\"$class\">$content</label>\n";
+	return "<label class=\"$class\">$content</label>";
 }
 
 function html_tr($content)
@@ -102,6 +102,11 @@ function html_span($class, $content = '')
 	return "<span" . html_class($class) . '>' . $content . "</span>";
 }
 
+function html_option($value, $content)
+{
+	return "<option value=\"$value\">$content</option>\n";
+}
+
 // HTML tag starts
 
 function html_button_beg($class, $toggle, $target)
@@ -141,102 +146,122 @@ function html_ul_beg($class = '', $id = '', $style = '')
 
 function optionsSource($result)
 {
-	$option_block='';
+	$html = '';
+
 	foreach ($result as $row) {
-		$sourceid = $row["SourceID"];
-		$sourcename = $row["Organization"];
-		$option_block .= "<option value='$sourceid'>$sourcename</option>";
+
+		$html .= html_option($row["SourceID"], $row["Organization"]);
 	}
-	return $option_block;
+
+	return $html;
 }
+
 function optionsVariable($result)
 {
-	$option_block='';
+	$html = '';
+
 	foreach ($result as $row) {
-		$typeid = $row["VariableID"];
+
 		$typename = translateTerm($row["VariableName"]);
 		$datatype = translateTerm($row["DataType"]);
-		$option_block .= "<option value='$typeid'>$typename ($datatype)</option>";
+
+		$html .= html_option($row["VariableID"], "$typename ($datatype)");
 	}
-	return $option_block;
+
+	return $html;
 }
 
 function genOptions($result)
 {
-	$option_block='';
-	foreach ($result as $key=>$value) {
-		$option_block .= "<option value='$key'>$value</option>";
+	$html = '';
+
+	foreach ($result as $key => $value) {
+		$html .= html_option($key, $value);
 	}
-	return $option_block;
+
+	return $html;
 }
+
 function getImg($name)
 {
-	return base_url()."assets/images/".$name;
+	return base_url() . "assets/images/" . $name;
 }
+
 function getDetailsImg($name)
 {
-	return base_url()."uploads/".$name;
+	return base_url() . "uploads/" . $name;
 }
-function genInput($labelKey,$id,$name,$req=false,$extra='')
+
+function genInput($labelKey, $id, $name, $req = false, $extra = '')
 {
-	echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-     	   <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';	   
-	if($req)
-	{
-	  echo '<span class="required"/>'; 
+	$html  = html_div_beg('form-group');
+	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
+	$html .= html_div_beg('col-sm-10');
+	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
+
+	if($req) {
+		$html .= '<span class="required"/>';
 	}
+
+	$html .= "</div>\n";
+	$html .= "</div>\n";
+
+	echo $html;
+}
+
+function genInputD($labelKey, $id, $name, $req = false, $extra = '')
+{
+	$html  = html_div_beg('form-group');
+	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
+	$html .= html_div_beg('col-sm-10');
+	$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>";
 	
-	echo'</div>            
-      </div>';	
-}
-function genInputD($labelKey,$id,$name,$req=false,$extra='')
-{
-	echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-        <textarea class="form-control" rows="6" id="'.$id.'" name="'.$name.'" '.$extra.'></textarea>';
-	if($req)
-	{
-		echo '<span class="required"/>';
+	if ($req) {
+		$html .= '<span class="required"/>';
 	}
-	echo'</div>             
-      </div>';		
+
+	$html .= "</div>\n";
+	$html .= "</div>\n";
+
+	echo $html;
 }
-function genInputH($labelKey,$id,$name,$hint,$req=false,$extra='')
+
+function genInputH($labelKey, $id, $name, $hint, $req = false, $extra = '')
 {
-	echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-        <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'>';
-	if($req)
-	{
-		echo '<span class="required"/>';
+	$html  = html_div_beg('form-group');
+	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
+	$html .= html_div_beg('col-sm-10');
+	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
+
+	if ($req) {
+		$html .= '<span class="required"/>';
 	}
-	echo '<span class="hint" title="'.$hint.'">?</span>';
-	echo'</div>             
-      </div>';	
+
+	$html .= '<span class="hint" title="'.$hint.'">?</span>';
+
+	$html .= "</div>\n";
+	$html .= "</div>\n";
+
+	echo $html;
 }
+
 function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
 {
-	if($req)
-	{
-		echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-        <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="required"></span>
-		<span class="em">&nbsp;&nbsp;'.getTxt($help).'</span>';
+	$html  = html_div_beg('form-group');
+	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
+	$html .= html_div_beg('col-sm-10');
+	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
+
+	if ($req) {
+		$html .= '<span class="required"></span>';
 	}
-	else
-	{
-	echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-        <input type="text" class="form-control" id="'.$id.'" name="'.$name.'" '.$extra.'><span class="em">&nbsp;&nbsp;'.getTxt($help).'</span>';
-	}
-	echo'</div>            
-      </div>';	
+
+	$html .= '<span class="em">&nbsp;&nbsp;' . getTxt($help) . '</span>';
+
+	$html .= "</div>\n";
+	$html .= "</div>\n";
+
+	echo $html;
 }
 
 function genDropLists($labelKey, $id, $name, $req = false, $hint = '')
@@ -302,34 +327,42 @@ function genSelectH($labelKey, $id, $name, $optionBlock, $hint,
 
 function genHeading($headingKey,$req=false,$defaultColumn=9)
 {
-	echo "<div class='col-md-".$defaultColumn."'>";
-	//ALSO DISPLAYS THE ERROR MSGS. In case this function is not being used, a call to the below function will be needed. 
+	echo "<div class='col-md-" . $defaultColumn . "'>";
+
+	// ALSO DISPLAYS THE ERROR MSGS. In case this function is not being used,
+	// a call to the below function will be needed. 
+
 	showMsgs();
-	if($req)
-	{
+
+	if ($req) {
 		echo'<p class="em" align="right">'.getTxt('RequiredFieldsAsterisk').'</p>';
 	}
 	
-	echo '<p class="h3" align="center"><strong>'.getTxt($headingKey).'</strong></p>
+	echo '<p class="h3" align="center"><strong>' . getTxt($headingKey) . '</strong></p>
           <p>&nbsp;</p>';
 }
 
-function genSubmit($labelKey,$end=true)
+function genSubmit($labelKey, $end = true)
 {
 	echo '<div class="col-md-3 col-md-offset-9">
     <input type="SUBMIT" name="submit" value="'.getTxt($labelKey).'" class="button"/></div>
     </FORM>';
-	if($end)
-	{
+    
+	if ($end) {
 		echo "</div>";
-	}	
+	}
 }
 
-function HTML_Render_Head($js_vars,$PageTitle = ""){
+function HTML_Render_Head($js_vars, $PageTitle = "")
+{
 	$HeaderAddon = "";
-	$WebClient="HydroServer Lite";
+	$WebClient = "HydroServer Lite";
 	$faviconlink = base_url("assets/images/favicon.ico");
-	if(isset($PageTitle) && $PageTitle != "") $HeaderAddon = ": ".$PageTitle;	
+
+	if (isset($PageTitle) && $PageTitle != "") {
+		$HeaderAddon = ": " . $PageTitle;
+	}
+
 	echo <<<PageHead
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -343,34 +376,32 @@ function HTML_Render_Head($js_vars,$PageTitle = ""){
 		<script type="text/javascript">
 		$js_vars
 		</script>
-		
+
 PageHead;
 }
-function HTML_Render_Body_Start(){
+
+function HTML_Render_Body_Start()
+{
 	global $_SITE_Minimum_PHP_Version;
 	$HTML_1 = <<<PageBody1
 	</head>
 	<body>
-	    <div class="container">
+		<div class="container">
 		<div class="masthead">
 PageBody1;
-	$HTML_1A = 	<<<PartA
-			</div>
+	$HTML_1A = <<<PartA
+		</div>
 
 <!-- /container -->
 PartA;
-			
 	$HTML_2 = <<<PageBody2
-			
-				      <div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
-        <div class="col-md-3" id="navArea">
+		<div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
+		<div class="col-md-3" id="navArea">
 PageBody2;
 	$HTML_3 = <<<PageBody3
-			</div>
-       
-     
-PageBody3;
+		</div>
 
+PageBody3;
 	echo $HTML_1;
 	echo getTopBanner();
 	echo $HTML_1A;
@@ -381,34 +412,29 @@ PageBody3;
 //	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
 //		checkPHPVersion($_SITE_Minimum_PHP_Version);
 	echo $HTML_3;
-    
-    
 }
+
 function HTML_Render_Body_StartInstall(){
 	global $_SITE_Minimum_PHP_Version;
 	$HTML_1 = <<<PageBody1
 	</head>
 	<body>
-	    <div class="container">
+		<div class="container">
 		<div class="masthead">
 PageBody1;
 	$HTML_1A = 	<<<PartA
-			</div>
+		</div>
 
 <!-- /container -->
 PartA;
-			
 	$HTML_2 = <<<PageBody2
-			
-				      <div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
-        <div class="col-md-3">
+		<div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
+		<div class="col-md-3">
 PageBody2;
 	$HTML_3 = <<<PageBody3
-			</div>
-       
-     
-PageBody3;
+		</div>
 
+PageBody3;
 	echo $HTML_1;
 	echo getTopBanner();
 	echo $HTML_1A;
@@ -418,10 +444,7 @@ PageBody3;
 //	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
 //		checkPHPVersion($_SITE_Minimum_PHP_Version);
 	echo $HTML_3;
-    
-    
 }
-
 
 function showMsgs()
 {
@@ -432,74 +455,90 @@ function showMsgs()
 		showMessages("Warnings","warning");
 		showMessages("Successes","success");
 		echo "</ul>";
-	}	
+	}
 }
 
 function getTopBanner()
 {
 	
-	if(!defined('BASEURL2'))
-	{
+	if (!defined('BASEURL2')) {
 		define('BASEURL2',"");
 	}
-	$name = 'topBanner'.substr(BASEURL2, 0, -1);
+	
+	$name = 'topBanner' . substr(BASEURL2, 0, -1);
+	
 	//Check uploads directory for topBanner
 	$topBanner = "";
 	$extensions = array('.gif','.jpg','.png','.jpeg');
-		foreach ($extensions as $extension)
-		{
-			if(file_exists(FCPATH."uploads/".$name.$extension))
-			{
-				$topBanner = base_url()."uploads/".$name.$extension;
-			}
+
+	foreach ($extensions as $extension) {
+
+		$path = "uploads/" . $name . $extension;
+
+		if (file_exists(FCPATH . $path)) {
+
+			$topBanner = base_url() . $path;
 		}
-	if($topBanner=="")
-	{
+	}
+
+	if ($topBanner == "") {
 		$topBanner = getImg("WebClientBanner.png");
 	}
 
-	return '<img src="'.$topBanner.'" alt="logo" class="img"  style="max-width:auto; max-height:120px;"/>';
+	return '<img src="' . $topBanner . '" alt="logo" class="img"  style="max-width:auto; max-height:120px;"/>';
 }
 
-function checkPHPVersion($minimumVersion){
+function checkPHPVersion($minimumVersion)
+{
 	$phpVersion = phpversion();
-	if(!isVersionGreater($phpVersion,$minimumVersion)){
+	
+	if (! isVersionGreater($phpVersion,$minimumVersion)) {
 		addError(sprintf("Your version of PHP (%s) is not high enough. Components of this site require PHP %s.".
-				" Please visit the <a href='versions.php'>Versions page</a> for more details.",
-			$phpVersion,$minimumVersion));
+			" Please visit the <a href='versions.php'>Versions page</a> for more details.",
+			$phpVersion, $minimumVersion));
 	}
 }
-function isVersionGreater($currentVersion,$minimumVersion){
-	$minimumParts = explode(".",$minimumVersion);
-	$currentParts = explode(".",$currentVersion);
+
+function isVersionGreater($currentVersion,$minimumVersion)
+{
+	$minimumParts = explode(".", $minimumVersion);
+	$currentParts = explode(".", $currentVersion);
 
 	$isGreater = false;
-	if ((int)$currentParts[0] >= (int)$minimumParts[0])
-		if ((int)$currentParts[1] >= (int)$minimumParts[1])
-			if((int)$currentParts[2] >= (int)$minimumParts[2])
-				$isGreater = true;			
+
+	if ((int) $currentParts[0] >= (int) $minimumParts[0])
+		if ((int) $currentParts[1] >= (int) $minimumParts[1])
+			if ((int) $currentParts[2] >= (int) $minimumParts[2])
+				$isGreater = true;
 			else
 				$isGreater = false;
 		else
 			$isGreater = false;
 	else
 		$isGreater = false;
-	
+
 	return $isGreater;
 }
-function showMessages($key,$class){
-	if (isset($_SESSION[$key])){
+
+function showMessages($key, $class)
+{
+	if (isset($_SESSION[$key])) {
+
 		$errors = $_SESSION[$key];
-		foreach ($errors as $mess)
+
+		foreach ($errors as $mess) {
 			echo "<li class=\"$class\">$mess</li>";
+		}
 	}
+
 	unset($_SESSION[$key]);
 }
+
 function HTML_Render_Body_End(){
 	$HTML_1 =   " </div>   <!-- Closing row -->";
-	
+
 	$HTML_1A = '
-	</div>     <!-- Closing Container -->	
+	</div> <!-- Closing Container -->
 		<div id="popUp">
 			<h1 id="popTitle"><span id="popTitleText">Details</span>
 				<span id="popClose" onclick="$(this).parent().parent().hide(1000);">X</span>
@@ -514,14 +553,13 @@ function HTML_Render_Body_End(){
 	$CI->load->view('templates/footer');
 	echo $HTML_1A;
 
-	if (!isLoggedIn())
-	{
+	if (!isLoggedIn()) {
 		$CI->load->view('templates/login');
 	}
 
-	echo "</body></html>";
+	echo "</body>\n";
+	echo "</html>\n";
 }
-
 
 $__DateTimeFormats = array(
 	"ATOM, RFC3339, W3C" => DateTime::ATOM,
@@ -531,7 +569,8 @@ $__DateTimeFormats = array(
 	"RFC1123, RFC2822, RSS" => DateTime::RFC2822,
 	"Simple" => "Y-m-d H:i:s", // (2011/03/14 20:04:23)
 	"Condensed" => "Ymd His" // (20110314 200423)
-	);
+);
+
 //"ATOM" => "Y-m-d\TH:i:sP", // //(2013-08-01T18:36:42-07:00)
 //"COOKIE" => "l, d-M-y H:i:s T",  //(Thursday, 01-Aug-13 18:36:42 GMT+7)
 //"ISO8601" => "Y-m-d\TH:i:sO",  //(2013-08-01T18:36:42-0700)
@@ -557,7 +596,6 @@ $__DateFormats = array(
 	"Simple (Day First)" =>"d/m/Y", // 08/01/2013
 	"Condensed" => "Ymd"  //(20130801)
 	);
-
 
 $__TimeFormats = array(
 	"ATOM, RFC3339, W3C" => "\TH:i:sP",  //(T18:36:42-07:00)
@@ -711,8 +749,7 @@ $__TimeZones = array(
 	'(GMT+12:00) Marshall Is.' => 'Pacific/Fiji',
 	'(GMT+12:00) Wellington' => 'Pacific/Auckland',
 	'(GMT+13:00) Nuku\'alofa' => 'Pacific/Tongatapu'
-	);
-
+);
 
 $_Countries = array(
 	"AF" => "Afghanistan",
@@ -954,60 +991,63 @@ $_Countries = array(
 	"YU" => "Yugoslavia",
 	"ZM" => "Zambia",
 	"ZW" => "Zimbabwe"
+);
+
+function getStates()
+{
+	return array(
+		"AL" => "Alabama",
+		"AK" => "Alaska",
+		"AZ" => "Arizona",
+		"AR" => "Arkansas",
+		"CA" => "California",
+		"CO" => "Colorado",
+		"CT" => "Connecticut",
+		"DE" => "Delaware",
+		"DC" => "District of Columbia",
+		"FL" => "Florida",
+		"GA" => "Georgia",
+		"HI" => "Hawaii",
+		"ID" => "Idaho",
+		"IL" => "Illinois",
+		"IN" => "Indiana",
+		"IA" => "Iowa",
+		"KS" => "Kansas",
+		"KY" => "Kentucky",
+		"LA" => "Louisiana",
+		"ME" => "Maine",
+		"MD" => "Maryland",
+		"MA" => "Massachusetts",
+		"MI" => "Michigan",
+		"MN" => "Minnesota",
+		"MS" => "Mississippi",
+		"MO" => "Missouri",
+		"MT" => "Montana",
+		"NE" => "Nebraska",
+		"NV" => "Nevada",
+		"NH" => "New Hampshire",
+		"NJ" => "New Jersey",
+		"NM" => "New Mexico",
+		"NY" => "New York",
+		"NC" => "North Carolina",
+		"ND" => "North Dakota",
+		"OH" => "Ohio",
+		"OK" => "Oklahoma",
+		"OR" => "Oregon",
+		"PA" => "Pennsylvania",
+		"RI" => "Rhode Island",
+		"SC" => "South Carolina",
+		"SD" => "South Dakota",
+		"TN" => "Tennessee",
+		"TX" => "Texas",
+		"UT" => "Utah",
+		"VT" => "Vermont",
+		"VA" => "Virginia",
+		"WA" => "Washington",
+		"WV" => "West Virginia",
+		"WI" => "Wisconsin",
+		"WY" => "Wyoming"
+		//"NULL" => $CI->getTxt('International') Moved to Controller.
 	);
-function getStates(){
-return array(
-	"AL" => "Alabama",
-	"AK" => "Alaska",
-	"AZ" => "Arizona",
-	"AR" => "Arkansas",
-	"CA" => "California",
-	"CO" => "Colorado",
-	"CT" => "Connecticut",
-	"DE" => "Delaware",
-	"DC" => "District of Columbia",
-	"FL" => "Florida",
-	"GA" => "Georgia",
-	"HI" => "Hawaii",
-	"ID" => "Idaho",
-	"IL" => "Illinois",
-	"IN" => "Indiana",
-	"IA" => "Iowa",
-	"KS" => "Kansas",
-	"KY" => "Kentucky",
-	"LA" => "Louisiana",
-	"ME" => "Maine",
-	"MD" => "Maryland",
-	"MA" => "Massachusetts",
-	"MI" => "Michigan",
-	"MN" => "Minnesota",
-	"MS" => "Mississippi",
-	"MO" => "Missouri",
-	"MT" => "Montana",
-	"NE" => "Nebraska",
-	"NV" => "Nevada",
-	"NH" => "New Hampshire",
-	"NJ" => "New Jersey",
-	"NM" => "New Mexico",
-	"NY" => "New York",
-	"NC" => "North Carolina",
-	"ND" => "North Dakota",
-	"OH" => "Ohio",
-	"OK" => "Oklahoma",
-	"OR" => "Oregon",
-	"PA" => "Pennsylvania",
-	"RI" => "Rhode Island",
-	"SC" => "South Carolina",
-	"SD" => "South Dakota",
-	"TN" => "Tennessee",
-	"TX" => "Texas",
-	"UT" => "Utah",
-	"VT" => "Vermont",
-	"VA" => "Virginia",
-	"WA" => "Washington",
-	"WV" => "West Virginia",
-	"WI" => "Wisconsin",
-	"WY" => "Wyoming"
-	//"NULL" => $CI->getTxt('International') Moved to Controller.
-	);}
+}
 ?>

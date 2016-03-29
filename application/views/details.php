@@ -1071,7 +1071,7 @@ echo html_div_beg('site_title') . $site['SiteName'] . '</div>' . html_br();
 echo '</div>';
 
 echo html_div_beg('row');
-genDropLists('Variable','dropdownlist', 'dropdownlist', false) . html_br();
+genDropLists('Variable', 'dropdownlist', 'dropdownlist', false) . html_br();
 echo '</div>';
 
 //The type is already selected when the Variable is selected!
@@ -1080,7 +1080,7 @@ echo '</div>';
 //echo '</div>';
 
 echo html_div_beg('row');
-genDropLists('Method','methodlist', 'methodlist', false) . html_br();
+genDropLists('Method', 'methodlist', 'methodlist', false) . html_br();
 echo '</div>';
 
 echo html_div_beg('', 'daterange') . "</div>\n";
@@ -1105,9 +1105,7 @@ echo(
 	html_b(getTxt('Measurements'))
 );
 
-$variableNames = nonEmptyElements(array_column($Variables, 'VariableName'));
-
-echo implode("; ", $variableNames);
+echo implode("; ", nonEmptyElements(array_column($Variables, 'VariableName')));
 
 echo html_br(2);
 
