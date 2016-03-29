@@ -994,25 +994,28 @@ echo html_ul_for_tabs();
 
 echo html_div_beg();
 
-echo(html_b(getTxt('Site')).$site['SiteName'].html_br());
+echo html_b(getTxt('Site')) . $site['SiteName'] . html_br();
 
-if ($site['picname'] == null) {
-	if(isLoggedIn()) {
-		echo(
-			html_br(2) . getTxt('NoImages').
-			"<a href='" . site_url('sites/edit/' . $SiteID) . "'> " . getTxt('ClickHere') . " </a>"
-		);
+function html_picture_area($picture, $siteID)
+{
+	if ($picture == null) {
+
+		$html = html_br(2) . getTxt('NoImages');
+
+		if (isLoggedIn()) {
+			$html .= "<a href='" . site_url('sites/edit/' . $siteID) . "'> " .
+				getTxt('ClickHere') . " </a>";
+		}
 	}
-	else {	
-		echo(html_br(2) . getTxt('NoImages'));
+	else {
+		$html = html_br(2) . "<img src='" . getDetailsImg('' . $picture) .
+			"' width='368' height='250' />";
 	}
-} 
-else {
-	echo(
-		html_br(2) . "<img src='" . getDetailsImg('' . $site['picname']) .
-		"' width='368' height='250' />"
-	);
+
+	return $html;
 }
+
+echo html_picture_area($site['picname'], $SiteID);
 
 echo(
 	html_br(2) . 
