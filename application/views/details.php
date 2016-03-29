@@ -1025,18 +1025,16 @@ echo(
 	html_b(getTxt('Measurements'))
 );
 
-$num_rows = count($Variables);
-$count = 1;
-
-foreach ($Variables as $var) {
-	if ($var['VariableName'] != "") {
-		echo($var['VariableName']);
-		if ($count != $num_rows) {
-			echo "; ";
-		}
-	}
-	$count = $count + 1;
+function nonEmptyElements($elements)
+{
+	return array_filter($elements, function($element) {
+		return ($element != "");
+	});
 }
+
+$variableNames = nonEmptyElements(array_column($Variables, 'VariableName'));
+
+echo implode("; ", $variableNames);
 
 echo html_br(2);
 ?>
