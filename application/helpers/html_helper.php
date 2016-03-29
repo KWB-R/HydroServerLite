@@ -265,40 +265,39 @@ function genDropListsH($labelKey, $id, $name, $hint, $req = false)
 	genDropLists($labelKey, $id, $name, $req, $hint);
 }
 
-function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=false,$extra='')
+function genSelect($labelKey, $id, $name, $optionBlock, $defaultSelect = false,
+	$req = false, $extra = '', $hint = '')
 {
-	echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-        <select name="'.$name.'" class="form-control" id="'.$id.'" '.$extra.'>';
-	if($defaultSelect)
-	{
-		echo '<option value="-1">'.getTxt($defaultSelect).'</option>'.$optionBlock.'</select>';
+	$html  = html_div_beg('form-group');
+	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
+	$html .= html_div_beg('col-sm-10');
+	$html .= "<select name=\"$name\" class=\"form-control\" id=\"$id\" $extra>\n";
+
+	if ($defaultSelect) {
+		$html .= '<option value="-1">' . getTxt($defaultSelect) . '</option>' .
+			$optionBlock . '</select>';
 	}
-	if($req)
-	{
-	  echo '<span class="required"/>';	  
+	
+	if ($hint !== '') {
+		$html .= "<span class=\"hint\" title=\"$hint\">?</span>\n";
 	}
-	echo'</div>             
-      </div>';	
+	
+	if ($req) {
+		$html .= '<span class="required" />';
+	}
+	
+	$html .= "</div>\n";
+	$html .= "</div>\n";
+
+	echo $html;
 }
-function genSelectH($labelKey,$id,$name,$optionBlock,$hint,$defaultSelect=false,$req=false,$extra='')
+
+function genSelectH($labelKey, $id, $name, $optionBlock, $hint,
+	$defaultSelect = false, $req = false, $extra = '')
 {
-	echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-        <select name="'.$name.'" class="form-control" id="'.$id.'" '.$extra.'>';
-	if($defaultSelect)
-	{
-		echo '<option value="-1">'.getTxt($defaultSelect).'</option>'.$optionBlock.'</select>';
-	}
-	echo '<span class="hint" title="'.$hint.'">?</span>';
-	if($req)
-	{
-	  echo '<span class="required"/>';	  
-	}
-	echo'</div>             
-      </div>';	
+	genSelect(
+		$labelKey, $id, $name, $optionBlock, $defaultSelect, $req, $extra, $hint
+	);
 }
 
 function genHeading($headingKey,$req=false,$defaultColumn=9)
