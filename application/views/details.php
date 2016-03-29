@@ -1135,15 +1135,12 @@ function html_enter_values_table($rows)
 		'id_cancel' => 'Cancel',
 		'button_delete' => html_input_button("delval", getTxt('Delete'))
 	)));
-?>
 
-</div>
+echo "</div>\n";
 
-</div>
+echo "</div>\n";
 
-<div style="alignment-adjust: middle; float:right;">
-
-<?php
+echo '<div style="alignment-adjust: middle; float:right;">';
 
 	if (isLoggedIn()) {
 		echo html_input_button('addnew', getTxt('AddRow')) . html_br(2);
@@ -1151,22 +1148,24 @@ function html_enter_values_table($rows)
 
 	echo html_input_button('export', getTxt('DownloadData'));
 
-?>
+echo "</div>\n";
 
-</div>
-</div>
-<!-- End Of Grid Div.  -->
-</div>
-<!-- Jqx Tabs end -->
-</div>
+echo "</div>\n";
 
-<div id="popupWindow_new">
+echo "<!-- End Of Grid Div.  -->\n";
 
-<div><?php echo getTxt('Add'); ?></div>
+echo "</div>\n";
 
-<div style="overflow: hidden;">
+echo "<!-- Jqx Tabs end -->\n";
 
-<?php 
+echo "</div>\n";
+
+echo html_div_beg('', 'popupWindow_new');
+
+echo html_div_beg() . getTxt('Add') . "</div>\n";
+
+echo '<div style="overflow: hidden;">';
+
 	echo html_enter_values_table(rows_for_values_table(array(
 		'caption' => 'EnterValues',
 		'id_date' => 'date_new',
@@ -1176,17 +1175,20 @@ function html_enter_values_table($rows)
 		'id_cancel' => 'Cancel_new',
 		'button_delete' => ''
 	))); 
-?>
 
-		</div>
-		</div>
-		<br/>
-		</div>
-		</div>
-	</div>
-</div>
+echo "</div>\n";
 
-<?php
+echo "</div>\n";
+
+echo html_br();
+
+echo "</div>\n";
+
+echo "</div>\n";
+
+echo "</div>\n";
+
+echo "</div>\n";
 
 function div_window($number = '')
 {
