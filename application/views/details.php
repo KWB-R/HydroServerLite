@@ -977,19 +977,23 @@ function html_daterange_row()
 
 echo html_daterange_row();
 
-?>
+function html_ul_for_tabs()
+{
+	$html = "<ul style='margin-left: 20px;'>";
+	$html .= "<li>" . getTxt('SiteInfo') . "</li>";
+	$html .= "<li>" . getTxt('DataPlot') . "</li>";
+	$html .= "<li>" . getTxt('DataTable') . "</li>";
+	$html .= "</ul>";
 
-<div id='jqxtabs'>
+	return $html;
+}
 
-	<ul style='margin-left: 20px;'>
-		<li><?php echo getTxt('SiteInfo'); ?></li>
-		<li><?php echo getTxt('DataPlot'); ?></li>
-		<li><?php echo getTxt('DataTable'); ?></li>
-	</ul>
+echo html_div_beg('', 'jqxtabs');
 
-	<div>
+echo html_ul_for_tabs();
 
-<?php
+echo html_div_beg();
+
 echo(html_b(getTxt('Site')).$site['SiteName'].html_br());
 
 if ($site['picname'] == null) {
