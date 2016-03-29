@@ -1037,35 +1037,38 @@ $variableNames = nonEmptyElements(array_column($Variables, 'VariableName'));
 echo implode("; ", $variableNames);
 
 echo html_br(2);
-?>
 
-<?php echo getTxt('WrongSite'); ?>
-<a href="<?php echo site_url('sites/map'); ?>" style="color:#00F">
-<?php echo ' '.getTxt('Here'); ?></a>
-<?php echo getTxt('GoBack'); ?> 
-</div>
+echo getTxt('WrongSite');
+echo '<a href="' . site_url('sites/map') .'" style="color:#00F"> ' .
+	getTxt('Here') . '</a> ';
+echo getTxt('GoBack');
+echo "</div>\n";
 
-<div>
-<div class="chart-wrapper">
-<div class="chart-inner">
-<div id="container" style="width:100%; height: 470px;"></div>
-<!-- Button to compare data values-->
-<input type="button" style=" float:right" value="<?php echo getTxt('Compare');?>" id='compare' />
-</div>
-</div>
-</div>
-<!-- End of Chart DIV -->
+echo html_div_beg();
+echo html_div_beg("chart-wrapper");
+echo html_div_beg("chart-inner");
 
-<div>
-<div id="jqxgrid"></div>
+echo '<div id="container" style="width:100%; height: 470px;"></div>';
 
-<div id="popupWindow">
+echo "<!-- Button to compare data values-->\n";
 
-<div><?php echo getTxt('Edit'); ?></div>
+echo html_input_button('compare', getTxt('Compare'), 'style=" float:right"');
 
-<div style="overflow: hidden;">
+echo "</div>\n";
+echo "</div>\n";
+echo "</div>\n";
 
-<?php
+echo "<!-- End of Chart DIV -->\n";
+
+echo html_div_beg();
+
+echo html_div_beg('', 'jqxgrid') . "</div>\n";
+
+echo html_div_beg('', 'popupWindow');
+
+echo html_div_beg() . getTxt('Edit') . "</div>\n";
+
+echo '<div style="overflow: hidden;">';
 
 function rows_for_values_table($data)
 {
