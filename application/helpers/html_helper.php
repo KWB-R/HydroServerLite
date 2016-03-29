@@ -40,6 +40,10 @@ function html_attribs($assignments)
 }
 
 // Full HTML Tags
+function html_label($class, $content)
+{
+	return "<label class=\"$class\">$content</label>\n";
+}
 
 function html_tr($content)
 {
@@ -234,35 +238,33 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
 	echo'</div>            
       </div>';	
 }
-function genDropLists($labelKey,$id,$name,$req=false)
+
+function genDropLists($labelKey, $id, $name, $req = false, $hint = '')
 {
-	echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-		<div id="'.$id.'" name="'.$name.'"></div>';
-	
-	if($req)
-	{
-	   echo '<span class="required"/>';	  
+	$html  = html_div_beg('form-group');
+	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
+	$html .= html_div_beg('col-sm-10');
+	$html .= '<div id="' . $id . '" name="' . $name . '"></div>';
+
+	if ($req) {
+		$html .= '<span class="required" />';
 	}
-	echo'</div>             
-      </div>';	
+
+	if ($hint !== '') {
+		$html .= '<span class="hint" title="'.$hint.'">?</span>';
+	}
 	
+	$html .= "</div>\n";
+	$html .= "</div>\n";
+
+	echo $html;
 }
-function genDropListsH($labelKey,$id,$name,$hint,$req=false)
+
+function genDropListsH($labelKey, $id, $name, $hint, $req = false)
 {
-	echo '<div class="form-group">
-        <label class="col-sm-2 control-label">'.getTxt($labelKey).'</label>
-        <div class="col-sm-10">
-		<div id="'.$id.'" name="'.$name.'"></div>';
-	if($req)
-	{
-	  echo '<span class="required"/>';	  
-	}
-	echo '<span class="hint" title="'.$hint.'">?</span>';
-	echo'</div>             
-      </div>';	
+	genDropLists($labelKey, $id, $name, $req, $hint);
 }
+
 function genSelect($labelKey,$id,$name,$optionBlock,$defaultSelect=false,$req=false,$extra='')
 {
 	echo '<div class="form-group">
