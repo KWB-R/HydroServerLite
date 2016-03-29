@@ -41,6 +41,31 @@ function html_attribs($assignments)
 
 // Full HTML Tags
 
+function html_tr($content)
+{
+	return "<tr>" . $content . "</tr>\n";
+}
+
+function html_td_left($content = '')
+{
+	return '<td align="left">' . $content . "</td>\n";
+}
+
+function html_td_right($content = '', $attributes = '')
+{
+	return "<td align=\"right\" $attributes>$content</td>\n";
+}
+
+function html_input($id, $content)
+{
+	return "<input id=\"$id\" $content />\n";
+}
+
+function html_input_button($id, $value, $content = '')
+{
+	return "<input id=\"$id\" type=\"button\" value=\"$value\" $content />\n";
+}
+
 function html_br($number = 1)
 {
 	$html = "";
@@ -70,7 +95,7 @@ function html_h($content, $level)
 
 function html_span($class, $content = '')
 {
-	return "\n<span" . html_class($class) . '>' . $content . "</span>";
+	return "<span" . html_class($class) . '>' . $content . "</span>";
 }
 
 // HTML tag starts

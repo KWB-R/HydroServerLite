@@ -1051,106 +1051,125 @@ echo html_br(2);
 </div>
 </div>
 <!-- End of Chart DIV -->
+
 <div>
 <div id="jqxgrid"></div>
+
 <div id="popupWindow">
+
 <div><?php echo getTxt('Edit'); ?></div>
+
 <div style="overflow: hidden;">
 
-	<table>
+<?php
 
-		<tr>
-		<td colspan="2"><?php echo getTxt('ChangeValues'); ?></td>
-		</tr>
+function rows_for_values_table($data)
+{
+	$id_timepicker = $data['id_timepicker'];
+	$id_value = $data['id_value'];
 
-		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+	$onChange = "onChange=\"validatetime('#$id_timepicker')\"";
 
-		<tr>
-		<td align="right"><?php echo getTxt('Date'); ?></td>
-		<td align="left"><div id="date"></div></td>
-		</tr>
+	$onBlur = "onBlur=\"validatenum('#$id_value')\"";
 
-		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+	$style = 'style="margin-right: 5px;"';
 
-		<tr>
-		<td align="right"><?php echo getTxt('Time');?></td>
-		<td align="left"> <input type="text" id="timepicker" name="timepicker" onChange="validatetime('#timepicker')" size="10" /></td>
-		</tr>
+	return array(
 
-		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+		// row 1
+		'<td colspan="2">' . getTxt($data['caption']) . '</td>',
 
-		<tr>
-		<td align="right"><?php echo getTxt('Value'); ?> </td>
-		<td align="left"><input id="value" onBlur="validatenum('#value')" /></td>
-		</tr>
+		// row 2
+		html_td_right(getTxt('Date')) .
+		html_td_left('<div id="' . $data['id_date']. '"></div>'),
 
-		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+		// row 3
+		html_td_right(getTxt('Time')) .
+		html_td_left(
+			html_input(
+				$data['id_timepicker'],
+				'type="text" name="' . $data['id_timepicker'] . '" ' . 
+					$onChange . ' size="10"'
+			)
+		),
 
-		<tr>
-		<td align="right"></td>
-		<td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save" value="<?php echo getTxt('Save');?>" /><input id="delval" type="button" value="<?php echo getTxt('Delete');?>" />&nbsp;<input id="Cancel" type="button" value="<?php echo getTxt('Cancel'); ?>" /></td>
-		</tr>
+		// row 4
+		html_td_right(getTxt('Value')) .
+		html_td_left(html_input($data['id_value'], $onBlur)),
 
-	</table>
+		// row 5
+		html_td_right() .
+		html_td_right(
+			html_input_button($data['id_save'], getTxt('Save'), $style) .
+			$data['button_delete'] .
+			html_input_button($data['id_cancel'], getTxt('Cancel')),
+			'style="padding-top: 10px;"'
+		)
+	);
+}
+
+function html_enter_values_table($rows)
+{
+	$empty_row = html_tr("<td>&nbsp;</td><td>&nbsp;</td>");
+
+	$html  = "<table>\n";
+	$html .= implode($empty_row, array_map("html_tr", $rows));
+	$html .= "</table>\n";
+
+	return $html;
+}
+
+	echo html_enter_values_table(rows_for_values_table(array(
+		'caption' => 'ChangeValues',
+		'id_date' => 'date',
+		'id_timepicker' => 'timepicker',
+		'id_value' => 'value',
+		'id_save' => 'Save',
+		'id_cancel' => 'Cancel',
+		'button_delete' => html_input_button("delval", getTxt('Delete'))
+	)));
+?>
 
 </div>
 
 </div>
 
 <div style="alignment-adjust: middle; float:right;">
+
 <?php
-if (isLoggedIn()) {
-	echo("<input type='button' value='".getTxt('AddRow')."' id='addnew' /> <br/>  <br/>");
-}
+
+	if (isLoggedIn()) {
+		echo html_input_button('addnew', getTxt('AddRow')) . html_br(2);
+	}
+
+	echo html_input_button('export', getTxt('DownloadData'));
+
 ?>
-<input type="button" value="<?php echo getTxt('DownloadData');?>" id='export' />
+
 </div>
 </div>
 <!-- End Of Grid Div.  -->
 </div>
 <!-- Jqx Tabs end -->
-</div> 
+</div>
+
 <div id="popupWindow_new">
+
 <div><?php echo getTxt('Add'); ?></div>
+
 <div style="overflow: hidden;">
-			<table>
 
-				<tr>
-					<td colspan="2"><?php echo getTxt('EnterValues'); ?></td>
-				</tr>
-
-				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-
-				<tr>
-					<td align="right"><?php echo getTxt('Date'); ?></td>
-					<td align="left"><div id="date_new"></div></td>
-				</tr>
-
-				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-
-				<tr>
-					<td align="right"><?php echo getTxt('Time'); ?></td>
-					<td align="left"> <input type="text" id="timepicker_new" name="timepicker_new" onChange="validatetime('#timepicker_new')" size="10" /></td>
-				</tr>
-
-				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-
-				<tr>
-					<td align="right"><?php echo getTxt('Value'); ?></td>
-					<td align="left"><input id="value_new" onBlur="validatenum('#value_new')"/></td>
-				</tr>
-
-				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-
-				<tr>
-					<td align="right"></td>
-					<td style="padding-top: 10px;" align="right">
-						<input style="margin-right: 5px;" type="button" id="Save_new" value="<?php echo getTxt('Save'); ?>" />
-						<input id="Cancel_new" type="button" value="<?php echo getTxt('Cancel'); ?>" />
-					</td>
-				</tr>
-
-			</table>
+<?php 
+	echo html_enter_values_table(rows_for_values_table(array(
+		'caption' => 'EnterValues',
+		'id_date' => 'date_new',
+		'id_timepicker' => 'timepicker_new',
+		'id_value' => 'value_new',
+		'id_save' => 'Save_new',
+		'id_cancel' => 'Cancel_new',
+		'button_delete' => ''
+	))); 
+?>
 
 		</div>
 		</div>
@@ -1160,54 +1179,27 @@ if (isLoggedIn()) {
 	</div>
 </div>
 
-<div id="window">
+<?php
 
-	<div id="windowHeader">
-		<span><?php echo getTxt('CompareTwo'); ?></span>
-	</div>
+function div_window($number = '')
+{
+	$html  = "<div id=\"window" . $number . "\">\n";
+	$html .= "  <div id=\"window" . $number . "Header\">\n";
+	$html .= "    " . html_span('', getTxt('CompareTwo'));
+	$html .= "\n  </div>\n";
+	$html .= "  <div style=\"overflow: hidden;\" id=\"window" . 
+		$number . "Content\"></div>\n";
+	$html .= "</div>\n\n";
 
-	<div style="overflow: hidden;" id="windowContent"></div>
+	return $html;
+}
 
-</div>
+echo div_window();
+echo div_window('2');
+echo div_window('3');
+echo div_window('4');
+echo div_window('5');
 
-<div id="window2">
+HTML_Render_Body_End();
 
-	<div id="window2Header">
-		<span><?php echo getTxt('CompareTwo'); ?></span>
-	</div>
-
-	<div style="overflow: hidden;" id="window2Content"></div>
-
-</div>
-
-<div id="window3">
-
-	<div id="window3Header">
-		<span><?php echo getTxt('CompareTwo'); ?></span>
-	</div>
-
-	<div style="overflow: hidden;" id="window3Content"></div>
-
-</div>
-
-<div id="window4">
-
-	<div id="window4Header">
-		<span><?php echo getTxt('CompareTwo'); ?></span>
-	</div>
-
-	<div style="overflow: hidden;" id="window4Content"></div>
-
-</div>
-
-<div id="window5">
-
-	<div id="window5Header">
-		<span><?php echo getTxt('CompareTwo'); ?></span>
-	</div>
-
-	<div style="overflow: hidden;" id="window5Content"></div>
-
-</div>
-
-<?php HTML_Render_Body_End(); ?>
+?>
