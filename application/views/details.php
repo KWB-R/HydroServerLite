@@ -958,27 +958,26 @@ echo html_div_beg('row');
 genDropLists('Method','methodlist', 'methodlist', false) . html_br();
 echo '</div>';
 
+echo html_div_beg('', 'daterange') . "</div>\n";
+
+function html_daterange_row()
+{
+	$html = html_div_beg('row');
+	$html .=   html_div_beg('col-md-6');
+	$html .=     html_div_beg('', 'jqxDateTimeInput') . "</div>\n";
+	$html .=   "</div>\n";
+	$html .=   html_div_beg('col-md-6');
+	$html .=     html_div_beg('', 'jqxDateTimeInputto') . "</div>\n";
+	$html .=   "</div>\n";
+	$html .= "</div> <!-- end of row -->\n";
+	$html .= html_br();
+
+	return $html;
+}
+
+echo html_daterange_row();
+
 ?>
-
-<div id='daterange'></div>
-
-<div class="row">
-
-	<div class="col-md-6">
-<!--		<div id='fromdatedrop'> -->
-			<div id='jqxDateTimeInput'></div>
-<!--		</div> -->
-	</div>
-
-	<div class="col-md-6">
-<!--		<div id='todatedrop'> -->
-			<div id='jqxDateTimeInputto'></div>
-<!--		</div> -->
-	</div>
-
-</div> <!-- end of row -->
-
-<br />
 
 <div id='jqxtabs'>
 
