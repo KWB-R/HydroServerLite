@@ -66,11 +66,6 @@ function html_a($url, $content, $attributes = '')
 		($attributes? " " . $attributes : "") . ">" . $content . "</a>";
 }
 
-function html_h($content, $level)
-{
-	return "\n<h$level>" . $content . "</h$level>";
-}
-
 function html_span($class, $content = '')
 {
 	return "<span" . html_attr("class", $class) . '>' . $content . "</span>";
