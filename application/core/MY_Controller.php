@@ -9,12 +9,25 @@ class MY_Controller extends CI_Controller {
 	{
 		parent::__construct();
 
-		//Loading Helpers
-		
-		$this->load->helper('auth_helper.php');
-		$this->load->helper('html_helper.php');
-		$this->load->helper('language_helper.php');
-		
+		// Loading Helpers
+
+		// See https://ellislab.com/codeigniter/user-guide/general/helpers.html,
+		// "Extending" Helpers
+
+		// Load:
+		// - application/helpers/auth_helper.php
+		$this->load->helper('auth');
+
+		// Load:
+		// - system/helpers/language_helper.php and
+		// - application/helpers/MY_language_helper.php
+		$this->load->helper('language');
+
+		// Load:
+		// - system/helpers/html_helper.php and
+		// - application/helpers/MY_html_helper.php
+		$this->load->helper('html');
+
 		//From the language helper we shall get the right language we need to show and then load the language file
 		
 		$this->lang->load('hsl', processLang());

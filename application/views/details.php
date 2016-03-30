@@ -947,7 +947,7 @@ function html_daterange_row()
 	$html .=     html_div_beg('', 'jqxDateTimeInputto') . "</div>\n";
 	$html .=   "</div>\n";
 	$html .= "</div> <!-- end of row -->\n";
-	$html .= html_br();
+	$html .= br();
 
 	return $html;
 }
@@ -967,7 +967,7 @@ function html_picture_area($picture, $siteID)
 {
 	if ($picture == null) {
 
-		$html = html_br(2) . getTxt('NoImages');
+		$html = br(2) . getTxt('NoImages');
 
 		if (isLoggedIn()) {
 			$html .= "<a href='" . site_url('sites/edit/' . $siteID) . "'> " .
@@ -975,7 +975,7 @@ function html_picture_area($picture, $siteID)
 		}
 	}
 	else {
-		$html = html_br(2) . "<img src='" . getDetailsImg('' . $picture) .
+		$html = br(2) . "<img src='" . getDetailsImg('' . $picture) .
 			"' width='368' height='250' />";
 	}
 
@@ -1067,20 +1067,20 @@ echo html_div_beg("col-md-9");
 
 echo html_div_beg('row');
 genDropLists('Site', '', '', false);
-echo html_div_beg('site_title') . $site['SiteName'] . '</div>' . html_br();
+echo html_div_beg('site_title') . $site['SiteName'] . '</div>' . br();
 echo '</div>';
 
 echo html_div_beg('row');
-genDropLists('Variable', 'dropdownlist', 'dropdownlist', false) . html_br();
+genDropLists('Variable', 'dropdownlist', 'dropdownlist', false) . br();
 echo '</div>';
 
 //The type is already selected when the Variable is selected!
 //echo html_div_beg('row');
-//genDropLists('Type','typelist', 'typelist', false) . html_br();
+//genDropLists('Type','typelist', 'typelist', false) . br();
 //echo '</div>';
 
 echo html_div_beg('row');
-genDropLists('Method', 'methodlist', 'methodlist', false) . html_br();
+genDropLists('Method', 'methodlist', 'methodlist', false) . br();
 echo '</div>';
 
 echo html_div_beg('', 'daterange') . "</div>\n";
@@ -1093,21 +1093,21 @@ echo html_ul_for_tabs();
 
 echo html_div_beg();
 
-echo html_b(getTxt('Site')) . $site['SiteName'] . html_br();
+echo html_b(getTxt('Site')) . $site['SiteName'] . br();
 
 echo html_picture_area($site['picname'], $SiteID);
 
 echo(
-	html_br(2) . 
-	html_b(getTxt('Type'        )) .translateTerm($site['SiteType']) . html_br(2) .
-	html_b(getTxt('Latitude'    )) . $site['Latitude' ] . html_br(2) .
-	html_b(getTxt('Longitude'   )) . $site['Longitude'] . html_br(3) .
+	br(2) . 
+	html_b(getTxt('Type'        )) .translateTerm($site['SiteType']) . br(2) .
+	html_b(getTxt('Latitude'    )) . $site['Latitude' ] . br(2) .
+	html_b(getTxt('Longitude'   )) . $site['Longitude'] . br(3) .
 	html_b(getTxt('Measurements'))
 );
 
 echo implode("; ", nonEmptyElements(array_column($Variables, 'VariableName')));
 
-echo html_br(2);
+echo br(2);
 
 echo getTxt('WrongSite');
 echo '<a href="' . site_url('sites/map') .'" style="color:#00F"> ' .
@@ -1158,7 +1158,7 @@ echo "</div>\n";
 echo '<div style="alignment-adjust: middle; float:right;">';
 
 if (isLoggedIn()) {
-	echo html_input_button('addnew', getTxt('AddRow')) . html_br(2);
+	echo html_input_button('addnew', getTxt('AddRow')) . br(2);
 }
 
 echo html_input_button('export', getTxt('DownloadData'));
@@ -1195,7 +1195,7 @@ echo "</div>\n";
 
 echo "</div>\n";
 
-echo html_br();
+echo br();
 
 echo "</div>\n";
 

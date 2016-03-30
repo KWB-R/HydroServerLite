@@ -55,17 +55,6 @@ function html_input_button($id, $value, $content = '')
 	return "<input id=\"$id\" type=\"button\" value=\"$value\" $content />\n";
 }
 
-function html_br($number = 1)
-{
-	$html = "";
-
-	for ($i = 0; $i < $number; $i++) {
-		$html = $html . "<br />";
-	}
-
-	return $html . "\n";
-}
-
 function html_b($content)
 {
 	return '<b>' . $content . '</b>';
