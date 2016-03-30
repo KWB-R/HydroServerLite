@@ -190,8 +190,18 @@ function genInputT($labelKey, $id, $name, $req = false, $extra = '', $help)
 	echo html_formGroup('text', $labelKey, $id, $name, $req, $extra, '', $help);
 }
 
+function genDropLists($labelKey, $id, $name, $req = false, $hint = '')
+{
+	echo html_formGroup('div', $labelKey, $id, $name, $req, '', $hint);
+}
+
+function genDropListsH($labelKey, $id, $name, $hint, $req = false)
+{
+	genDropLists($labelKey, $id, $name, $req, $hint);
+}
+
 function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
-	$hint = '', $help = ''
+	$hint = '', $help = '', $extraSelect = ''
 )
 {
 	$html  = html_div_beg('form-group');
@@ -205,11 +215,20 @@ function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
 		case 'textarea':
 			$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>\n";
 			break;
+		case 'div':
+			$html .= '<div id="' . $id . '" name="' . $name . '"></div>';
+			break;
+		case 'select':
+			$html .= "<select name=\"$name\" class=\"form-control\" id=\"$id\" $extra>\n";
+			$html .= $extraSelect;
+			break;
 		default:
 			break;
 	}
 
-	$html .= requiredSpan($req);
+	if ($type !== 'select') {
+		$html .= requiredSpan($req);
+	}
 
 	if ($hint !== '') {
 		$html .= '<span class="hint" title="'.$hint.'">?</span>';
@@ -219,58 +238,29 @@ function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
 		$html .= '<span class="em">' . nbs(2) . getTxt($help) . '</span>';
 	}
 
+	if ($type === 'select') {
+		$html .= requiredSpan($req);
+	}
+
 	$html .= "</div>\n";
 	$html .= "</div>\n";
 
 	return $html;
 }
 
-function genDropLists($labelKey, $id, $name, $req = false, $hint = '')
-{
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= '<div id="' . $id . '" name="' . $name . '"></div>';
-	$html .= requiredSpan($req);
-
-	if ($hint !== '') {
-		$html .= '<span class="hint" title="'.$hint.'">?</span>';
-	}
-	
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
-}
-
-function genDropListsH($labelKey, $id, $name, $hint, $req = false)
-{
-	genDropLists($labelKey, $id, $name, $req, $hint);
-}
-
 function genSelect($labelKey, $id, $name, $optionBlock, $defaultSelect = false,
 	$req = false, $extra = '', $hint = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<select name=\"$name\" class=\"form-control\" id=\"$id\" $extra>\n";
-
 	if ($defaultSelect) {
-		$html .= '<option value="-1">' . getTxt($defaultSelect) . '</option>' .
+		$extraSelect = '<option value="-1">' . getTxt($defaultSelect) . '</option>' .
 			$optionBlock . '</select>';
-	}
-	
-	if ($hint !== '') {
-		$html .= "<span class=\"hint\" title=\"$hint\">?</span>\n";
+	} else {
+		$extraSelect = '';
 	}
 
-	$html .= requiredSpan($req);
-
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup(
+		'select', $labelKey, $id, $name, $req, $extra, $hint, '', $extraSelect
+	);
 }
 
 function genSelectH($labelKey, $id, $name, $optionBlock, $hint,
