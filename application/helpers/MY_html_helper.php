@@ -225,7 +225,7 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
 		$html .= '<span class="required"></span>';
 	}
 
-	$html .= '<span class="em">&nbsp;&nbsp;' . getTxt($help) . '</span>';
+	$html .= '<span class="em">' . nbs(2) . getTxt($help) . '</span>';
 
 	$html .= "</div>\n";
 	$html .= "</div>\n";
@@ -308,7 +308,7 @@ function genHeading($headingKey,$req=false,$defaultColumn=9)
 	}
 	
 	echo '<p class="h3" align="center"><strong>' . getTxt($headingKey) . '</strong></p>
-          <p>&nbsp;</p>';
+          <p>' . nbs(1) . '</p>';
 }
 
 function genSubmit($labelKey, $end = true)
