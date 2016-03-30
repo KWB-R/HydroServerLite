@@ -27,7 +27,7 @@ function html_attribs($assignments)
 // Full HTML Tags
 function html_label($class, $content)
 {
-	return "<label class=\"$class\">$content</label>";
+	return "<label class=\"$class\">$content</label>\n";
 }
 
 function html_tr($content)
@@ -96,7 +96,7 @@ function html_div_beg($class = '', $id = '', $role = '')
 		"class" => $class, "id" => $id, "role" => $role
 	));
 
-	return "\n<div" . $attribs . ">";
+	return "<div" . $attribs . ">\n";
 }
 
 function html_li_beg($class = '')
@@ -164,7 +164,7 @@ function getDetailsImg($name)
 
 function requiredSpan($req)
 {
-	$span = '<span class="required"></span>' . "\n";
+	$span = "    <span class=\"required\"></span>\n";
 	//$span = '<span class="required" />';
 
 	return $req ? $span : '';
@@ -205,8 +205,9 @@ function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
 )
 {
 	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
+	$html .= '  ' . html_label('col-sm-2 control-label', getTxt($labelKey));
+	$html .= '  ' . html_div_beg('col-sm-10');
+	$html .= '    '; // indentation
 
 	switch ($type) {
 		case 'text':
@@ -216,7 +217,7 @@ function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
 			$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>\n";
 			break;
 		case 'div':
-			$html .= '<div id="' . $id . '" name="' . $name . '"></div>';
+			$html .= "<div id=\"$id\" name=\"$name\"></div>\n";
 			break;
 		case 'select':
 			$html .= "<select name=\"$name\" class=\"form-control\" id=\"$id\" $extra>\n";
@@ -231,18 +232,18 @@ function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
 	}
 
 	if ($hint !== '') {
-		$html .= '<span class="hint" title="'.$hint.'">?</span>';
+		$html .= "    <span class=\"hint\" title=\"$hint\">?</span>\n";
 	}
 
 	if ($help !== '') {
-		$html .= '<span class="em">' . nbs(2) . getTxt($help) . '</span>';
+		$html .= "    <span class=\"em\">" . nbs(2) . getTxt($help) . "</span>\n";
 	}
 
 	if ($type === 'select') {
 		$html .= requiredSpan($req);
 	}
 
-	$html .= "</div>\n";
+	$html .= "  </div>\n";
 	$html .= "</div>\n";
 
 	return $html;
@@ -253,7 +254,7 @@ function genSelect($labelKey, $id, $name, $optionBlock, $defaultSelect = false,
 {
 	if ($defaultSelect) {
 		$extraSelect = '<option value="-1">' . getTxt($defaultSelect) . '</option>' .
-			$optionBlock . '</select>';
+			$optionBlock . "</select>\n";
 	} else {
 		$extraSelect = '';
 	}
@@ -271,9 +272,9 @@ function genSelectH($labelKey, $id, $name, $optionBlock, $hint,
 	);
 }
 
-function genHeading($headingKey,$req=false,$defaultColumn=9)
+function genHeading($headingKey, $req = false, $defaultColumn = 9)
 {
-	echo "<div class='col-md-" . $defaultColumn . "'>";
+	echo "<div class=\"col-md-$defaultColumn\">\n";
 
 	// ALSO DISPLAYS THE ERROR MSGS. In case this function is not being used,
 	// a call to the below function will be needed. 
@@ -281,22 +282,29 @@ function genHeading($headingKey,$req=false,$defaultColumn=9)
 	showMsgs();
 
 	if ($req) {
-		echo'<p class="em" align="right">'.getTxt('RequiredFieldsAsterisk').'</p>';
+		echo '<p class="em" align="right">' . getTxt('RequiredFieldsAsterisk') .
+			"</p>\n";
 	}
-	
-	echo '<p class="h3" align="center"><strong>' . getTxt($headingKey) . '</strong></p>
-          <p>' . nbs(1) . '</p>';
+
+	echo '<p class="h3" align="center"><strong>' . getTxt($headingKey) .
+		"</strong></p>\n";
+
+	echo '<p>' . nbs(1) . "</p>\n";
 }
 
 function genSubmit($labelKey, $end = true)
 {
-	echo '<div class="col-md-3 col-md-offset-9">
-    <input type="SUBMIT" name="submit" value="'.getTxt($labelKey).'" class="button"/></div>
-    </FORM>';
-    
+	$html  = '<div class="col-md-3 col-md-offset-9">';
+	$html .= '<input type="SUBMIT" name="submit" value="' . getTxt($labelKey) .
+		'" class="button"/>';
+	$html .= "</div>\n";
+	$html .= "</form>\n";
+
 	if ($end) {
-		echo "</div>";
+		$html .= "</div>";
 	}
+
+	echo $html;
 }
 
 function HTML_Render_Head($js_vars, $PageTitle = "")
@@ -329,72 +337,99 @@ PageHead;
 function HTML_Render_Body_Start()
 {
 	global $_SITE_Minimum_PHP_Version;
+
 	$HTML_1 = <<<PageBody1
 	</head>
 	<body>
 		<div class="container">
 		<div class="masthead">
 PageBody1;
+
 	$HTML_1A = <<<PartA
 		</div>
 
 <!-- /container -->
 PartA;
+
 	$HTML_2 = <<<PageBody2
 		<div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
 		<div class="col-md-3" id="navArea">
 PageBody2;
+
 	$HTML_3 = <<<PageBody3
 		</div>
 
 PageBody3;
+
 	echo $HTML_1;
+
 	echo getTopBanner();
+
 	echo $HTML_1A;
+
 	$CI = &get_instance();
 	$CI->load->view('templates/header');
+
 	echo $HTML_2;
+
 	$CI->load->view('templates/nav_parts');
+
 //	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
 //		checkPHPVersion($_SITE_Minimum_PHP_Version);
+
 	echo $HTML_3;
 }
 
-function HTML_Render_Body_StartInstall(){
+function HTML_Render_Body_StartInstall()
+{
 	global $_SITE_Minimum_PHP_Version;
+
 	$HTML_1 = <<<PageBody1
 	</head>
 	<body>
 		<div class="container">
 		<div class="masthead">
 PageBody1;
+
 	$HTML_1A = 	<<<PartA
 		</div>
 
 <!-- /container -->
 PartA;
+
 	$HTML_2 = <<<PageBody2
 		<div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
 		<div class="col-md-3">
 PageBody2;
+
 	$HTML_3 = <<<PageBody3
 		</div>
-
 PageBody3;
+
 	echo $HTML_1;
+
 	echo getTopBanner();
+
 	echo $HTML_1A;
+
 	$CI = &get_instance();
 	$CI->load->view('templates/header');
+
 	echo $HTML_2;
+
 //	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
 //		checkPHPVersion($_SITE_Minimum_PHP_Version);
+
 	echo $HTML_3;
 }
 
 function showMsgs()
 {
-	if (isset($_SESSION["Errors"]) || isset($_SESSION["Warnings"]) || isset($_SESSION["Successes"]))
+	if (
+		isset($_SESSION["Errors"]) ||
+		isset($_SESSION["Warnings"]) ||
+		isset($_SESSION["Successes"])
+	)
 	{
 		echo "<ul class=\"messages\">";
 		showMessages("Errors","error");
@@ -406,13 +441,12 @@ function showMsgs()
 
 function getTopBanner()
 {
-	
 	if (!defined('BASEURL2')) {
 		define('BASEURL2',"");
 	}
 	
 	$name = 'topBanner' . substr(BASEURL2, 0, -1);
-	
+
 	//Check uploads directory for topBanner
 	$topBanner = "";
 	$extensions = array('.gif','.jpg','.png','.jpeg');
@@ -480,7 +514,8 @@ function showMessages($key, $class)
 	unset($_SESSION[$key]);
 }
 
-function HTML_Render_Body_End(){
+function HTML_Render_Body_End()
+{
 	$HTML_1 =   " </div>   <!-- Closing row -->";
 
 	$HTML_1A = '
@@ -495,8 +530,10 @@ function HTML_Render_Body_End(){
 		</div>';
 
 	echo $HTML_1;
+
 	$CI = &get_instance();
 	$CI->load->view('templates/footer');
+
 	echo $HTML_1A;
 
 	if (!isLoggedIn()) {
