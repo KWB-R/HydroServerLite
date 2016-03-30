@@ -172,56 +172,57 @@ function requiredSpan($req)
 
 function genInput($labelKey, $id, $name, $req = false, $extra = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
-	$html .= requiredSpan($req);
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup("text", $labelKey, $id, $name, $req, $extra);
 }
 
 function genInputD($labelKey, $id, $name, $req = false, $extra = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>\n";
-	$html .= requiredSpan($req);
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup("textarea", $labelKey, $id, $name, $req, $extra);
 }
 
 function genInputH($labelKey, $id, $name, $hint, $req = false, $extra = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
-	$html .= requiredSpan($req);
-	$html .= '<span class="hint" title="'.$hint.'">?</span>';
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup("text", $labelKey, $id, $name, $req, $extra, $hint);
 }
 
-function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
+function genInputT($labelKey, $id, $name, $req = false, $extra = '', $help)
+{
+	echo html_formGroup('text', $labelKey, $id, $name, $req, $extra, '', $help);
+}
+
+function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
+	$hint = '', $help = ''
+)
 {
 	$html  = html_div_beg('form-group');
 	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
 	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
+
+	switch ($type) {
+		case 'text':
+			$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
+			break;
+		case 'textarea':
+			$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>\n";
+			break;
+		default:
+			break;
+	}
+
 	$html .= requiredSpan($req);
-	$html .= '<span class="em">' . nbs(2) . getTxt($help) . '</span>';
+
+	if ($hint !== '') {
+		$html .= '<span class="hint" title="'.$hint.'">?</span>';
+	}
+
+	if ($help !== '') {
+		$html .= '<span class="em">' . nbs(2) . getTxt($help) . '</span>';
+	}
+
 	$html .= "</div>\n";
 	$html .= "</div>\n";
 
-	echo $html;
+	return $html;
 }
 
 function genDropLists($labelKey, $id, $name, $req = false, $hint = '')
