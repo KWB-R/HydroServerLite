@@ -111,7 +111,8 @@ function html_ul_beg($class = '', $id = '', $style = '')
 	) . ">";
 }
 
-//Function for generating options. Keeping it here as it might be used by various controllers once they get the result from the model.
+// Function for generating options. Keeping it here as it might be used by 
+// various controllers once they get the result from the model.
 
 function optionsSource($result)
 {
@@ -161,17 +162,21 @@ function getDetailsImg($name)
 	return base_url() . "uploads/" . $name;
 }
 
+function requiredSpan($req)
+{
+	$span = '<span class="required"></span>' . "\n";
+	//$span = '<span class="required" />';
+
+	return $req ? $span : '';
+}
+
 function genInput($labelKey, $id, $name, $req = false, $extra = '')
 {
 	$html  = html_div_beg('form-group');
 	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
 	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
-
-	if($req) {
-		$html .= '<span class="required"/>';
-	}
-
+	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
+	$html .= requiredSpan($req);
 	$html .= "</div>\n";
 	$html .= "</div>\n";
 
@@ -183,12 +188,8 @@ function genInputD($labelKey, $id, $name, $req = false, $extra = '')
 	$html  = html_div_beg('form-group');
 	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
 	$html .= html_div_beg('col-sm-10');
-	$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>";
-	
-	if ($req) {
-		$html .= '<span class="required"/>';
-	}
-
+	$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>\n";
+	$html .= requiredSpan($req);
 	$html .= "</div>\n";
 	$html .= "</div>\n";
 
@@ -200,14 +201,9 @@ function genInputH($labelKey, $id, $name, $hint, $req = false, $extra = '')
 	$html  = html_div_beg('form-group');
 	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
 	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
-
-	if ($req) {
-		$html .= '<span class="required"/>';
-	}
-
+	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
+	$html .= requiredSpan($req);
 	$html .= '<span class="hint" title="'.$hint.'">?</span>';
-
 	$html .= "</div>\n";
 	$html .= "</div>\n";
 
@@ -219,14 +215,9 @@ function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
 	$html  = html_div_beg('form-group');
 	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
 	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
-
-	if ($req) {
-		$html .= '<span class="required"></span>';
-	}
-
+	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
+	$html .= requiredSpan($req);
 	$html .= '<span class="em">' . nbs(2) . getTxt($help) . '</span>';
-
 	$html .= "</div>\n";
 	$html .= "</div>\n";
 
@@ -239,10 +230,7 @@ function genDropLists($labelKey, $id, $name, $req = false, $hint = '')
 	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
 	$html .= html_div_beg('col-sm-10');
 	$html .= '<div id="' . $id . '" name="' . $name . '"></div>';
-
-	if ($req) {
-		$html .= '<span class="required" />';
-	}
+	$html .= requiredSpan($req);
 
 	if ($hint !== '') {
 		$html .= '<span class="hint" title="'.$hint.'">?</span>';
@@ -275,11 +263,9 @@ function genSelect($labelKey, $id, $name, $optionBlock, $defaultSelect = false,
 	if ($hint !== '') {
 		$html .= "<span class=\"hint\" title=\"$hint\">?</span>\n";
 	}
-	
-	if ($req) {
-		$html .= '<span class="required" />';
-	}
-	
+
+	$html .= requiredSpan($req);
+
 	$html .= "</div>\n";
 	$html .= "</div>\n";
 
