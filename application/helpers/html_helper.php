@@ -6,21 +6,6 @@
 
 // Functions for setting HTML attributes
 
-function html_class($class = '')
-{
-	return html_attr("class", $class);
-}
-
-function html_id($id = '')
-{
-	return html_attr("id", $id);
-}
-
-function html_style($style = '')
-{
-	return html_attr("style", $style);
-}
-
 function html_attr($name, $value = '')
 {
 	return (($value == '')? '' : " $name=\"$value\"");
@@ -99,7 +84,7 @@ function html_h($content, $level)
 
 function html_span($class, $content = '')
 {
-	return "<span" . html_class($class) . '>' . $content . "</span>";
+	return "<span" . html_attr("class", $class) . '>' . $content . "</span>";
 }
 
 function html_option($value, $content)
@@ -132,7 +117,7 @@ function html_div_beg($class = '', $id = '', $role = '')
 
 function html_li_beg($class = '')
 {
-	return "\n<li" . html_class($class) . ">";
+	return "\n<li" . html_attr("class", $class) . ">";
 }
 
 function html_ul_beg($class = '', $id = '', $style = '')
