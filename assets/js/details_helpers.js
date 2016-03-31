@@ -2,6 +2,81 @@
 // Helper functions required in sites/details
 //
 
+function checkTimeFormat(timestring, messages)
+{
+	//Minimum and maximum length is 5, for example, 01:20
+	if (timestring.length != 5) {
+		alert(messages.InvalidTimeFive);
+		return false;
+	}
+
+	//Split the string
+	var timeparts = splitTimeString(timestring);
+
+	//Checking hours
+
+	//minimum length for hours is two digits, for example, 12
+	if (timeparts.hour.length != 2) {
+		alert(messages.InvalidTimeHoursTwo);
+		return false;
+	}
+
+	if (timeparts.hour < 0 || timeparts.hour > 23) {
+		alert(timeparts.hour < 0 ?
+			messages.InvalidTimeHoursZeros :
+			messages.InvalidTimeHoursTwentyThree);
+		return false;
+	}
+
+	//Checking minutes
+
+	//minimum length for minutes is 2, for example, 59
+	if (timeparts.minute.length != 2) {
+		alert(messages.InvalidTimeMinutesTwo);
+		return false;
+	} 
+
+	if (timeparts.minute < 0 || timeparts.minute > 59) {
+		alert(timeparts.minute < 0 ?
+			messages.InvalidTimeMinutesZeros :
+			messages.InvalidTimeMinutesFiftyNine);
+		return false;
+	}
+
+	return true;
+}
+
+function isValidNumber(valuetext, messages)
+{
+	if (valuetext === null || valuetext.length === 0) {
+		alert(messages.EnterNumberValue);
+		return false;
+	}
+
+	var DecimalFound = false;
+
+	for (var i = 0; i < valuetext.length; i++) {
+
+		var ch = valuetext.charAt(i);
+
+		if (i === 0 && ch === "-") {
+			continue;
+		}
+
+		if (ch === "." && ! DecimalFound) {
+			DecimalFound = true;
+			continue;
+		}
+
+		if (ch < "0" || ch > "9") {
+			alert(messages.EnterValidNumberValue);
+			return false;
+		}
+	}
+
+	return true;
+}
+
 function formatDateSQL(date, month, minutes)
 {
 	// Set default values if month or minutes are undefined

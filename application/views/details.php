@@ -262,6 +262,7 @@ function validatetime(idString)
 
 	$(idString).val(timestring);
 
+	// checkTimeFormat from assets/js/details_helpers.js
 	if (! checkTimeFormat(timestring, DATA.text)) {
 		return false;
 	}
@@ -271,90 +272,11 @@ function validatetime(idString)
 	return true;
 }
 
-function checkTimeFormat(timestring, messages)
-{
-	//Minimum and maximum length is 5, for example, 01:20
-	if (timestring.length != 5) {
-		alert(messages.InvalidTimeFive);
-		return false;
-	}
-
-	//Split the string
-	var timeparts = splitTimeString(timestring);
-
-	//Checking hours
-
-	//minimum length for hours is two digits, for example, 12
-	if (timeparts.hour.length != 2) {
-		alert(messages.InvalidTimeHoursTwo);
-		return false;
-	}
-
-	if (timeparts.hour < 0 || timeparts.hour > 23) {
-		alert(timeparts.hour < 0 ?
-			messages.InvalidTimeHoursZeros :
-			messages.InvalidTimeHoursTwentyThree);
-		return false;
-	}
-
-	//Checking minutes
-
-	//minimum length for minutes is 2, for example, 59
-	if (timeparts.minute.length != 2) {
-		alert(messages.InvalidTimeMinutesTwo);
-		return false;
-	} 
-
-	if (timeparts.minute < 0 || timeparts.minute > 59) {
-		alert(timeparts.minute < 0 ?
-			messages.InvalidTimeMinutesZeros :
-			messages.InvalidTimeMinutesFiftyNine);
-		return false;
-	}
-
-	return true;
-}
-
-//Time Validation Script Ends
-
-//Number validation script
 function validatenum(idSelector)
 {
+	// isValidNumber from assets/js/details_helpers.js
 	return isValidNumber($(idSelector).val(), DATA.text);
 }
-
-function isValidNumber(valuetext, messages)
-{
-	if (valuetext === null || valuetext.length === 0) {
-		alert(messages.EnterNumberValue);
-		return false;
-	}
-
-	var DecimalFound = false;
-
-	for (var i = 0; i < valuetext.length; i++) {
-
-		var ch = valuetext.charAt(i);
-
-		if (i === 0 && ch === "-") {
-			continue;
-		}
-
-		if (ch === "." && ! DecimalFound) {
-			DecimalFound = true;
-			continue;
-		}
-
-		if (ch < "0" || ch > "9") {
-			alert(messages.EnterValidNumberValue);
-			return false;
-		}
-	}
-
-	return true;
-}
-
-//Number Validation script ends
 
 //Defining the Data adapter for the variable list
 var variablesAdapter = new $.jqx.dataAdapter({
