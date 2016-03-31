@@ -2,6 +2,13 @@
 // Define the configurations of the controls in sites/details
 //
 
+var dropDownConfig = {
+	theme: 'darkblue',
+	height: 25,
+	width: "100%",
+	selectedIndex: 0
+};
+
 var chartConfig = {
 	chart: {
 		renderTo: 'container',

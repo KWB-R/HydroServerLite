@@ -273,13 +273,6 @@ function toJsonAdapter(url, fieldnames)
 	});
 }
 
-//Defining the Data adapter for the variable list
-
-var variablesAdapter = toJsonAdapter(
-	toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 }),
-	['VariableID', 'VarNameMod']
-);
-
 function variableSelectHandler(event)
 {
 	var item = $('#dropdownlist').jqxDropDownList('getItem', event.args.index);
@@ -601,17 +594,21 @@ $(document).ready(function() {
 			}
 	});
 
+	//Defining the Data adapter for the variable list
+	var dataAdapter = toJsonAdapter(
+		toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 }),
+		['VariableID', 'VarNameMod']
+	);
+
 	//Creating the Variables Drop Down list
 	$("#dropdownlist").
-		jqxDropDownList({
-			source: variablesAdapter,
-			theme: 'darkblue',
-			height: 25,
-			width: "100%",
-			selectedIndex: 0,
-			displayMember: 'VarNameMod',
-			valueMember: 'VariableID'
-		}).
+		jqxDropDownList(
+			jQuery.extend(dropDownConfig, {
+				source: dataAdapter,
+				displayMember: 'VarNameMod',
+				valueMember: 'VariableID'
+			})
+		).
 		bind('select', variableSelectHandler);
 
 	$("#jqxDateTimeInput").
@@ -629,22 +626,22 @@ $(document).ready(function() {
 
 function get_methods(variableID)
 {
+	var dataAdapter = toJsonAdapter(
+		toURL('methods/getSiteVarJSON', {siteid: DATA.siteid, varid: variableID}),
+		[ 'MethodID', 'MethodDescription' ]
+	);
+
 	$('#methodlist').
-//		off().
-//		unbind('valuechanged').
+		//off().
+		//unbind('valuechanged').
 		//Creating the Drop Down list
-		jqxDropDownList({
-			source: toJsonAdapter(
-				toURL('methods/getSiteVarJSON', {siteid: DATA.siteid, varid: variableID}),
-				[ 'MethodID', 'MethodDescription' ]
-			),
-			theme: 'darkblue',
-			height: 25,
-			width: "100%",
-			selectedIndex: 0,
-			displayMember: 'MethodDescription',
-			valueMember: 'MethodID'
-		}).
+		jqxDropDownList(
+			jQuery.extend(dropDownConfig, {
+				source: dataAdapter,
+				displayMember: 'MethodDescription',
+				valueMember: 'MethodID'
+			})
+		).
 		//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
 		bind('select', methodSelectHandler).
 		jqxDropDownList('selectIndex', 0);
