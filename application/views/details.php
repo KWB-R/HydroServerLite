@@ -1034,13 +1034,15 @@ function rows_for_values_table($data)
 	);
 }
 
-function html_enter_values_table($rows)
+function html_enter_values_div($rows)
 {
 	$empty_row = html_tr("<td>&nbsp;</td><td>&nbsp;</td>");
 
-	$html  = "<table>\n";
+	$html  = "<div style=\"overflow: hidden;\">\n";
+	$html .= "  <table>\n";
 	$html .= implode($empty_row, array_map("html_tr", $rows));
-	$html .= "</table>\n";
+	$html .= "  </table>\n";
+	$html .= "</div>\n";
 
 	return $html;
 }
@@ -1115,21 +1117,18 @@ echo '<a href="' . site_url('sites/map') .'" style="color:#00F"> ' .
 echo getTxt('GoBack');
 echo "</div>\n";
 
-echo html_div_beg();
-echo html_div_beg("chart-wrapper");
-echo html_div_beg("chart-inner");
-
-echo '<div id="container" style="width:100%; height: 470px;"></div>';
-
-echo "<!-- Button to compare data values-->\n";
-
-echo html_input_button('compare', getTxt('Compare'), 'style=" float:right"');
-
-echo "</div>\n";
-echo "</div>\n";
-echo "</div>\n";
-
-echo "<!-- End of Chart DIV -->\n";
+echo encloseInBeginEndComments(
+	html_div_beg() .
+	"  " . html_div_beg("chart-wrapper") .
+	"    " . html_div_beg("chart-inner") .
+	"      <div id=\"container\" style=\"width:100%; height: 470px;\"></div>\n" .
+	"      <!-- Button to compare data values-->\n" .
+	"      " . html_input_button('compare', getTxt('Compare'), 'style=" float:right"') .
+	"    </div>\n" .
+	"  </div>\n" .
+	"</div>\n",
+	"of Chart DIV"
+);
 
 echo html_div_beg();
 
@@ -1139,19 +1138,18 @@ echo html_div_beg('', 'popupWindow');
 
 echo html_div_beg() . getTxt('Edit') . "</div>\n";
 
-echo '<div style="overflow: hidden;">';
-
-echo html_enter_values_table(rows_for_values_table(array(
-	'caption' => 'ChangeValues',
-	'id_date' => 'date',
-	'id_timepicker' => 'timepicker',
-	'id_value' => 'value',
-	'id_save' => 'Save',
-	'id_cancel' => 'Cancel',
-	'button_delete' => html_input_button("delval", getTxt('Delete'))
-)));
-
-echo "</div>\n";
+echo encloseInBeginEndComments(
+	html_enter_values_div(rows_for_values_table(array(
+		'caption' => 'ChangeValues',
+		'id_date' => 'date',
+		'id_timepicker' => 'timepicker',
+		'id_value' => 'value',
+		'id_save' => 'Save',
+		'id_cancel' => 'Cancel',
+		'button_delete' => html_input_button("delval", getTxt('Delete'))
+	))),
+	"hidden div (change values)"
+);
 
 echo "</div>\n";
 
@@ -1179,19 +1177,18 @@ echo html_div_beg('', 'popupWindow_new');
 
 echo html_div_beg() . getTxt('Add') . "</div>\n";
 
-echo '<div style="overflow: hidden;">';
-
-echo html_enter_values_table(rows_for_values_table(array(
-	'caption' => 'EnterValues',
-	'id_date' => 'date_new',
-	'id_timepicker' => 'timepicker_new',
-	'id_value' => 'value_new',
-	'id_save' => 'Save_new',
-	'id_cancel' => 'Cancel_new',
-	'button_delete' => ''
-))); 
-
-echo "</div>\n";
+echo encloseInBeginEndComments(
+	html_enter_values_div(rows_for_values_table(array(
+		'caption' => 'EnterValues',
+		'id_date' => 'date_new',
+		'id_timepicker' => 'timepicker_new',
+		'id_value' => 'value_new',
+		'id_save' => 'Save_new',
+		'id_cancel' => 'Cancel_new',
+		'button_delete' => ''
+	))),
+	"hidden div (enter new values)"
+);
 
 echo "</div>\n";
 
