@@ -424,6 +424,27 @@ function toMonthEnd(date)
 	return (monthEnd > 12) ? 12 : monthEnd;
 }
 
+function addValueClickHandler()
+{
+	$("#popupWindow_new").jqxWindow('show');
+
+	var offset = $("#jqxgrid").offset();
+
+	$("#popupWindow_new").jqxWindow({
+		position: {
+			x: parseInt(offset.left, 10) + 220,
+			y: parseInt(offset.top,  10) +  60
+		}
+	});
+
+	$("#date_new").jqxDateTimeInput(dateInputConfig2);
+
+	$("#timepicker_new" ).timepicker({
+		showOn: "focus",
+		showPeriodLabels: false
+	});
+}
+
 function delValClickHandler()
 {
 	//Send out a delete request
@@ -750,33 +771,14 @@ function make_grid()
 	$("#Cancel_new").jqxButton(buttonConfigBase);
 	$("#Save_new"  ).jqxButton(buttonConfigBase);
 
-<?php
+<?php 
+
 if (isLoggedIn()) {
-echo(
-'	$("#addnew").jqxButton(buttonConfig).
-	bind(\'click\', function () {
+	echo "$(\"#addnew\").jqxButton(buttonConfig)." . 
+		"bind('click', addValueClickHandler)\n";
+}
 
-		$("#popupWindow_new").jqxWindow(\'show\');
-
-		var offset = $("#jqxgrid").offset();
-
-		$("#popupWindow_new").jqxWindow({
-			position: {
-				x: parseInt(offset.left, 10) + 220,
-				y: parseInt(offset.top,  10) +  60
-			}
-		});
-
-		$("#date_new").jqxDateTimeInput(dateInputConfig2);
-
-		$("#timepicker_new" ).timepicker({
-			showOn: "focus",
-			showPeriodLabels: false
-		});
-	});' // end of click handler
-); // end of echo
-} // end of if (isLoggedIn())
-?>
+?> 
 
 	$("#Save_new").unbind("click");
 	$("#Save_new").bind('click', saveNewClickHandler);
