@@ -114,9 +114,9 @@ function html_ul_beg($class = '', $id = '', $style = '')
 function encloseInBeginEndComments($html, $sectionName = 'section')
 {
 	return
-		"<!-- BEGIN $sectionName -->\n" .
+		"\n<!-- BEGIN $sectionName -->\n\n" .
 		$html .
-		"<!-- END $sectionName -->\n";
+		"\n<!-- END $sectionName -->\n\n";
 }
 
 // Function for generating options. Keeping it here as it might be used by 
