@@ -258,33 +258,42 @@ function editClickHandler(row)
 function validatetime(idString)
 {
 	//Removing all space
-	var strval = trimAllSpace($(idString).val());
+	var timestring = trimAllSpace($(idString).val());
 
-	//alert("validatetime(" + idString + "): >" + strval + "<")
+	$(idString).val(timestring);
 
-	$(idString).val(strval);
+	if (! checkTimeFormat(timestring, DATA.text)) {
+		return false;
+	}
 
+	$(idString).val(IsNumeric(timestring));
+
+	return true;
+}
+
+function checkTimeFormat(timestring, messages)
+{
 	//Minimum and maximum length is 5, for example, 01:20
-	if (strval.length != 5) {
-		alert(DATA.text.InvalidTimeFive);
+	if (timestring.length != 5) {
+		alert(messages.InvalidTimeFive);
 		return false;
 	}
 
 	//Split the string
-	var timeparts = splitTimeString(strval);
+	var timeparts = splitTimeString(timestring);
 
 	//Checking hours
 
 	//minimum length for hours is two digits, for example, 12
 	if (timeparts.hour.length != 2) {
-		alert(DATA.text.InvalidTimeHoursTwo);
+		alert(messages.InvalidTimeHoursTwo);
 		return false;
 	}
 
 	if (timeparts.hour < 0 || timeparts.hour > 23) {
 		alert(timeparts.hour < 0 ?
-			DATA.text.InvalidTimeHoursZeros :
-			DATA.text.InvalidTimeHoursTwentyThree);
+			messages.InvalidTimeHoursZeros :
+			messages.InvalidTimeHoursTwentyThree);
 		return false;
 	}
 
@@ -292,18 +301,16 @@ function validatetime(idString)
 
 	//minimum length for minutes is 2, for example, 59
 	if (timeparts.minute.length != 2) {
-		alert(DATA.text.InvalidTimeMinutesTwo);
+		alert(messages.InvalidTimeMinutesTwo);
 		return false;
 	} 
 
 	if (timeparts.minute < 0 || timeparts.minute > 59) {
 		alert(timeparts.minute < 0 ?
-			DATA.text.InvalidTimeMinutesZeros :
-			DATA.text.InvalidTimeMinutesFiftyNine);
+			messages.InvalidTimeMinutesZeros :
+			messages.InvalidTimeMinutesFiftyNine);
 		return false;
 	}
-
-	$(idString).val(IsNumeric(strval));
 
 	return true;
 }
@@ -313,33 +320,33 @@ function validatetime(idString)
 //Number validation script
 function validatenum(idSelector)
 {
-	return isValidNumber($(idSelector).val());
+	return isValidNumber($(idSelector).val(), DATA.text);
 }
 
-function isValidNumber(val)
+function isValidNumber(valuetext, messages)
 {
-	if (val === null || val.length === 0) {
-		alert(DATA.text.EnterNumberValue);
+	if (valuetext === null || valuetext.length === 0) {
+		alert(messages.EnterNumberValue);
 		return false;
 	}
 
 	var DecimalFound = false;
 
-	for (var i = 0; i < val.length; i++) {
+	for (var i = 0; i < valuetext.length; i++) {
 
-		var ch = val.charAt(i);
+		var ch = valuetext.charAt(i);
 
 		if (i === 0 && ch === "-") {
 			continue;
 		}
 
-		if (ch === "." && !DecimalFound) {
+		if (ch === "." && ! DecimalFound) {
 			DecimalFound = true;
 			continue;
 		}
 
 		if (ch < "0" || ch > "9") {
-			alert(DATA.text.EnterValidNumberValue);
+			alert(messages.EnterValidNumberValue);
 			return false;
 		}
 	}
