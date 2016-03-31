@@ -253,31 +253,32 @@ function toURL(endpoint, parameters)
 	return base_url + relative;
 }
 
-//Defining the Data adapter for the variable list
-var variablesAdapter = new $.jqx.dataAdapter({
-	datatype: "json",
-	datafields: [
-		{ name: 'VariableID'},
-		{ name: 'VarNameMod'}
-	],
-	url: toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 })
-});
+function toDatafields(fieldnames)
+{
+	var datafields = [];
 
-//Defining the Data adapter for the methods
-function getMethodsAdapter(variableID)
+	for (var i = 0; i < fieldnames.length; i++) {
+		datafields.push({ name: fieldnames[i] });
+	}
+
+	return datafields;
+}
+
+function toJsonAdapter(url, fieldnames)
 {
 	return new $.jqx.dataAdapter({
 		datatype: "json",
-		datafields: [
-			{ name: 'MethodID' },
-			{ name: 'MethodDescription' }
-		],
-		url: toURL('methods/getSiteVarJSON', {
-			siteid: DATA.siteid, 
-			varid: variableID
-		})
+		datafields: toDatafields(fieldnames),
+		url: url
 	});
 }
+
+//Defining the Data adapter for the variable list
+
+var variablesAdapter = toJsonAdapter(
+	toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 }),
+	['VariableID', 'VarNameMod']
+);
 
 function variableSelectHandler(event)
 {
@@ -613,7 +614,10 @@ function get_methods(variableID)
 //		unbind('valuechanged').
 		//Creating the Drop Down list
 		jqxDropDownList({
-			source: getMethodsAdapter(variableID),
+			source: toJsonAdapter(
+				toURL('methods/getSiteVarJSON', {siteid: DATA.siteid, varid: variableID}),
+				[ 'MethodID', 'MethodDescription' ]
+			),
 			theme: 'darkblue',
 			height: 25,
 			width: "100%",
@@ -696,21 +700,16 @@ function make_grid()
 	var editrow = -1;
 	var vid = 0;
 
-	var dataAdapter = new $.jqx.dataAdapter({
-		datatype: "json",
-		datafields: [
-			{name: 'ValueID'},
-			{name: 'DataValue'},
-			{name: 'LocalDateTime'}
-		],
-		url: toURL('datapoint/getDataJSON', {
+	var dataAdapter = toJsonAdapter(
+		toURL('datapoint/getDataJSON', {
 			siteid: DATA.siteid,
 			varid: varid,
 			meth: methodid,
 			startdate: date_from_sql,
 			enddate: date_to_sql
-		})
-	});
+		}),
+		[ 'ValueID', 'DataValue', 'LocalDateTime' ]
+	);
 
 	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
 	var unitGrid = "Unit: None";
