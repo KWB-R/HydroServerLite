@@ -314,32 +314,47 @@ function methodSelectHandler(event)
 function dateChangedHandler(event)
 {
 	//alert(event.data.origin + ' changed to:' + event.args.date);
-/*
-	glob_df = new Date(event.args.date);
 
-	//Setting the Second calendar's min date to be the date of the first calendar
-	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', event.args.date);
+	var newDate = new Date(event.args.date);
 
-//	$("#fromdatedrop").jqxDropDownButton('setContent', formatDate(glob_df));
+	switch (event.data.origin) {
 
-	//Converting to SQL Format for Searching
-	var date_sql = formatDateSQL(glob_df);
+		case 'from':
 
-	if (date_from_sql != date_sql) {
-		date_from_sql = date_sql;
-		plot_chart();
+			glob_df = newDate;
+
+			/*//Setting the Second calendar's min date to be the date of the first calendar
+			//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', event.args.date);
+			//	$("#fromdatedrop").jqxDropDownButton('setContent', formatDate(glob_df));
+
+			//Converting to SQL Format for Searching
+			var date_sql = formatDateSQL(glob_df);
+
+			if (date_from_sql != date_sql) {
+				date_from_sql = date_sql;
+				plot_chart();
+			}*/
+
+			break;
+
+		case 'to':
+
+			glob_dt = newDate;
+
+			//	$("#todatedrop").jqxDropDownButton('setContent', formatDate(glob_dt));
+
+			date_to_sql = formatDateSQL(glob_dt);
+
+			break;
+
+		default:
+
+			alert(
+				"Unexpected origin calling dateChangedHanlder: " + event.data.origin
+			);
+
+			break;
 	}
-*/
-		plot_chart();
-}
-
-function dateToChangedHandler(event)
-{
-	glob_dt = new Date(event.args.date);
-
-//	$("#todatedrop").jqxDropDownButton('setContent', formatDate(glob_dt));
-
-	date_to_sql = formatDateSQL(glob_dt);
 
 	plot_chart();
 }
