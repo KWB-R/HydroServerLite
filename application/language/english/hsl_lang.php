@@ -3902,7 +3902,7 @@
  $lang['hsl_SelectSite2'] = "Please select a Site";
  $lang['hsl_AllSites'] = "Show all Sites";
  $lang['hsl_CongratsRemoved'] = "Congratulations, you have successfully removed";
- $lang['hsl_InvalidFormat'] = "Only CSV files are allowed. Please check your uploaded file(s).";
+ $lang['hsl_InvalidFormat'] = "Only CSV files or XLS files are allowed. Please check your uploaded file(s).";
  $lang['hsl_In'] = "in";
  $lang['hsl_ImportInstructionsNew'] = "Please Note: You can have all the below parameters specified in your file if you are uploading a number of variable for a variety of sites or methods. However, make sure to have the column ordering in the order displayed below. <br>The column ordering would be as follows: SourceID,SiteID,VariableID,MethodID,LocalDateTime,DataValue.<br>The ID\'s of these elements can be found in their corresponding edit/change pages.<br>Allowed data type : CSV<br>Sample Files: ";
  $lang['hsl_optionsFile'] = "ID\'s in File?";

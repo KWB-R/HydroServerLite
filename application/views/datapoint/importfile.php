@@ -109,10 +109,9 @@ $("#importfile").submit(function() {
 	flag=1;
 	names.forEach(function(name)
 	{
-		var ext = name.split('.').pop();
-		if(ext.toLowerCase() != "csv")
+		var ext = name.split('.').pop().toLowerCase();
+		if (ext != "csv" && ext != "xls")
 		{
-			
 			flag=0;
 		}
 	});

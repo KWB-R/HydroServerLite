@@ -38,7 +38,7 @@ function html_li_sublist($keyword, $id, $items)
 		html_li_beg("nav-header") .
 			html_a(
 				"#", # target
-				html_h(getTxt($keyword), 4), # content
+				heading(getTxt($keyword), 4), # content
 				html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
 			) .
 			html_ul_beg("collapse", $id, "list-style: none;") .
@@ -88,7 +88,9 @@ if (isAdmin()) {
 	);
 }
 
-$menuConfig['DB']['items'][] = html_linkItem("add_site", "sites/add", "AddSite");
+if (isTeacher() || isAdmin()) {
+	$menuConfig['DB']['items'][] = html_linkItem("add_site", "sites/add", "AddSite");
+}
 
 if (isAdmin()) {
 	$menuConfig['DB']['items'] = array_merge(
@@ -140,6 +142,7 @@ echo html_div_beg(
 	"navbar-collapse collapse sidebar-navbar-collapse transparentNav", # class
 	"navbarCollapse" # id
 );
+
 echo html_ul_beg("nav nav-tabs nav-stacked");
 
 foreach ($menuConfig as $subConfig) {
@@ -166,7 +169,7 @@ if(isLoggedIn()) {
 	echo html_linkItem("login", "auth/logout", "Logout");
 }
 else {
-	echo html_linkItem("login", "#", "LoginButton", 'onclick="showLogin()"');
+	echo html_linkItem("login", "#", "LoginButton", 'onclick="return showLogin();"');
 }
 
 echo "</ul>";
