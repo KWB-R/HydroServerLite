@@ -266,6 +266,16 @@ function validatenum(idSelector)
 	return isValidNumber($(idSelector).val(), DATA.text);
 }
 
+// Helper function to generate a URL with parameters
+function toURL(endpoint, parameters)
+{
+	var relative = endpoint + '?' + jQuery.param(parameters);
+
+	//alert("relative URL:\n" + relative);
+
+	return base_url + relative;
+}
+
 //Defining the Data adapter for the variable list
 var variablesAdapter = new $.jqx.dataAdapter({
 	datatype: "json",
@@ -273,7 +283,7 @@ var variablesAdapter = new $.jqx.dataAdapter({
 		{ name: 'VariableID'},
 		{ name: 'VarNameMod'}
 	],
-	url: base_url + 'variable/getSiteJSON?siteid=' + DATA.siteid + '&withtype=1'
+	url: toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 })
 });
 
 //Defining the Data adapter for the methods
@@ -285,8 +295,10 @@ function getMethodsAdapter(variableID)
 			{ name: 'MethodID' },
 			{ name: 'MethodDescription' }
 		],
-		url: base_url + 'methods/getSiteVarJSON?siteid=' + DATA.siteid +
-			'&varid=' + variableID
+		url: toURL('methods/getSiteVarJSON', {
+			siteid: DATA.siteid, 
+			varid: variableID
+		})
 	});
 }
 
@@ -450,7 +462,7 @@ function delValClickHandler()
 	//Send out a delete request
 	$.ajax({
 		dataType: "json",
-		url: base_url+"datapoint/delete/" + vid
+		url: toURL("datapoint/delete/" + vid, {})
 	}).
 	done(function(result) {
 		if(result.status == 'success') {
@@ -485,10 +497,11 @@ function saveClickHandler()
 		//Send out an ajax request to update that data field
 		$.ajax({
 			dataType: "json",
-			url: base_url + "datapoint/edit/" + vid +
-				"?val=" + vt +
-				"&dt=" + formatDateSQL(seldate, undefined, '') +
-				"&time=" + $("#timepicker").val()
+			url: toURL("datapoint/edit/" + vid, {
+				val: vt,
+				dt: formatDateSQL(seldate, undefined, ''),
+				time: $("#timepicker").val()
+			})
 		}).
 		done(function(msg) {
 			if (msg.status == 'success') {
@@ -524,12 +537,14 @@ function saveNewClickHandler()
 
 	$.ajax({
 		dataType: "json",
-		url: base_url + "datapoint/add?varid=" + varid + 
-			"&val=" + vt + 
-			"&dt=" + formatDateSQL(seldate, undefined, '') +
-			"&time=" + $("#timepicker_new").val()+
-			"&sid=" + DATA.siteid +
-			"&mid=" + methodid
+		url: toURL("datapoint/add", {
+			varid: varid,
+			val: vt,
+			dt: formatDateSQL(seldate, undefined, ''),
+			time: $("#timepicker_new").val(),
+			sid: DATA.siteid,
+			mid: methodid
+		})
 	}).
 	done(function(msg) {
 		if (msg.status == 'success') {
@@ -636,12 +651,13 @@ function get_methods(variableID)
 
 function get_dates()
 {
-	var url = base_url + "series/getDateJSON?siteid=" + DATA.siteid +
-		"&varid=" + varid+"&methodid=" + methodid;
-
 	$.ajax({
 		type: "GET",
-		url: url,
+		url: toURL("series/getDateJSON", {
+			siteid: DATA.siteid,
+			varid: varid,
+			methodid: methodid
+		}),
 		dataType: "json",
 		success: ajaxSuccessHandler
 	});
@@ -657,7 +673,9 @@ function plot_chart()
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: base_url+"variable/getUnit?varid=" + varid
+			url: toURL("variable/getUnit", {
+				varid: varid
+			})
 		}).
 		done(function(msg) {
 			unit_yaxis = msg[0].unitA;
@@ -665,12 +683,14 @@ function plot_chart()
 	}
 
 	//Chaning Complete Data loading technique..need to create a php page that will output javascript...
-	var url_test = base_url + 'datapoint/getData?siteid=' + DATA.siteid + 
-		'&varid=' + varid + '&meth=' + methodid + 
-		'&startdate=' + date_from_sql + '&enddate=' + date_to_sql;
-
 	$.ajax({
-		url: url_test,
+		url: toURL('datapoint/getData', {
+			siteid: DATA.siteid,
+			varid: varid,
+			meth: methodid,
+			startdate: date_from_sql,
+			enddate: date_to_sql
+		}),
 		type: "GET",
 		dataType: "script"
 	}).
@@ -698,11 +718,6 @@ function make_grid()
 {
 	var editrow = -1;
 	var vid = 0;
-	var url = base_url + 'datapoint/getDataJSON?siteid=' + DATA.siteid +
-		'&varid=' + varid +
-		'&meth=' + methodid +
-		'&startdate=' + date_from_sql +
-		'&enddate=' + date_to_sql;
 
 	var dataAdapter = new $.jqx.dataAdapter({
 		datatype: "json",
@@ -711,7 +726,13 @@ function make_grid()
 			{name: 'DataValue'},
 			{name: 'LocalDateTime'}
 		],
-		url: url
+		url: toURL('datapoint/getDataJSON', {
+			siteid: DATA.siteid,
+			varid: varid,
+			meth: methodid,
+			startdate: date_from_sql,
+			enddate: date_to_sql
+		})
 	});
 
 	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
@@ -719,7 +740,7 @@ function make_grid()
 
 	$.ajax({
 		dataType: "json",
-		url: base_url+"variable/getUnit?varid=" + varid
+		url: toURL("variable/getUnit", { varid: varid })
 	}).
 	done(function(msg) {
 		unitGrid = msg[0].unitA;
