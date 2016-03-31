@@ -99,6 +99,11 @@ function html_div_beg($class = '', $id = '', $role = '')
 	return "<div" . $attribs . ">\n";
 }
 
+function html_div_end($indent = 0, $eol = true)
+{
+	return str_repeat('  ', $indent) . "</div>" . ($eol ? "\n" : '');
+}
+
 function html_li_beg($class = '')
 {
 	return "\n<li" . html_attr("class", $class) . ">";
