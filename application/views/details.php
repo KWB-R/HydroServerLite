@@ -861,12 +861,12 @@ function html_daterange_row()
 {
 	$html = html_div_beg('row');
 	$html .=   html_div_beg('col-md-6');
-	$html .=     html_div_beg('', 'jqxDateTimeInput') . "</div>\n";
-	$html .=   "</div>\n";
+	$html .=     html_div_beg('', 'jqxDateTimeInput') . html_div_end();
+	$html .=   html_div_end();
 	$html .=   html_div_beg('col-md-6');
-	$html .=     html_div_beg('', 'jqxDateTimeInputto') . "</div>\n";
-	$html .=   "</div>\n";
-	$html .= "</div> <!-- end of row -->\n";
+	$html .=     html_div_beg('', 'jqxDateTimeInputto') . html_div_end();
+	$html .=   html_div_end();
+	$html .= html_div_end();
 	$html .= br();
 
 	return $html;
@@ -927,7 +927,7 @@ function rows_for_values_table($data)
 
 		// row 2
 		html_td_right(getTxt('Date')) .
-		html_td_left('<div id="' . $data['id_date']. '"></div>'),
+		html_td_left('<div id="' . $data['id_date']. '">' . html_div_end()),
 
 		// row 3
 		html_td_right(getTxt('Time')) .
@@ -962,7 +962,7 @@ function html_enter_values_div($rows)
 	$html .= "  <table>\n";
 	$html .= implode($empty_row, array_map("html_tr", $rows));
 	$html .= "  </table>\n";
-	$html .= "</div>\n";
+	$html .= html_div_end();
 
 	return $html;
 }
@@ -971,11 +971,11 @@ function div_window($number = '')
 {
 	$html  = "<div id=\"window" . $number . "\">\n";
 	$html .= "  <div id=\"window" . $number . "Header\">\n";
-	$html .= "    " . html_span('', getTxt('CompareTwo'));
-	$html .= "\n  </div>\n";
+	$html .= "    " . html_span('', getTxt('CompareTwo')) . "\n";
+	$html .= html_div_end(1);
 	$html .= "  <div style=\"overflow: hidden;\" id=\"window" . 
-		$number . "Content\"></div>\n";
-	$html .= "</div>\n\n";
+		$number . "Content\">" . html_div_end();
+	$html .= html_div_end() . "\n";
 
 	return $html;
 }
@@ -989,23 +989,23 @@ echo html_div_beg("col-md-9");
 
 echo html_div_beg('row');
 genDropLists('Site', '', '', false);
-echo html_div_beg('site_title') . $site['SiteName'] . '</div>' . br();
-echo '</div>';
+echo html_div_beg('site_title') . $site['SiteName'] . html_div_end() . br();
+echo html_div_end();
 
 echo html_div_beg('row');
 genDropLists('Variable', 'dropdownlist', 'dropdownlist', false) . br();
-echo '</div>';
+echo html_div_end();
 
 //The type is already selected when the Variable is selected!
 //echo html_div_beg('row');
 //genDropLists('Type','typelist', 'typelist', false) . br();
-//echo '</div>';
+//echo html_div_end();
 
 echo html_div_beg('row');
 genDropLists('Method', 'methodlist', 'methodlist', false) . br();
-echo '</div>';
+echo html_div_end();
 
-echo html_div_beg('', 'daterange') . "</div>\n";
+echo html_div_beg('', 'daterange') . html_div_end();
 
 echo html_daterange_row();
 
@@ -1035,43 +1035,40 @@ echo getTxt('WrongSite');
 echo '<a href="' . site_url('sites/map') .'" style="color:#00F"> ' .
 	getTxt('Here') . '</a> ';
 echo getTxt('GoBack');
-echo "</div>\n";
+echo html_div_end();
 
 echo encloseInBeginEndComments(
 	html_div_beg() .
 	"  " . html_div_beg("chart-wrapper") .
 	"    " . html_div_beg("chart-inner") .
-	"      <div id=\"container\" style=\"width:100%; height: 470px;\"></div>\n" .
+	"      <div id=\"container\" style=\"width:100%; height: 470px;\">" . html_div_end(3) .
 	"      <!-- Button to compare data values-->\n" .
 	"      " . html_input_button('compare', getTxt('Compare'), 'style=" float:right"') .
-	"    </div>\n" .
-	"  </div>\n" .
-	"</div>\n",
+	"    " . html_div_end() .
+	"  " . html_div_end() .
+	html_div_end(),
 	"of Chart DIV"
 );
 
 echo html_div_beg();
 
-echo html_div_beg('', 'jqxgrid') . "</div>\n";
-
-echo html_div_beg('', 'popupWindow');
-
-echo html_div_beg() . getTxt('Edit') . "</div>\n";
+echo html_div_beg('', 'jqxgrid') . html_div_end();
 
 echo encloseInBeginEndComments(
-	html_enter_values_div(rows_for_values_table(array(
-		'caption' => 'ChangeValues',
-		'id_date' => 'date',
-		'id_timepicker' => 'timepicker',
-		'id_value' => 'value',
-		'id_save' => 'Save',
-		'id_cancel' => 'Cancel',
-		'button_delete' => html_input_button("delval", getTxt('Delete'))
-	))),
-	"hidden div (change values)"
+	html_div_beg('', 'popupWindow') .
+		'<div>' . getTxt('Edit') . html_div_end() .
+		html_enter_values_div(rows_for_values_table(array(
+			'caption' => 'ChangeValues',
+			'id_date' => 'date',
+			'id_timepicker' => 'timepicker',
+			'id_value' => 'value',
+			'id_save' => 'Save',
+			'id_cancel' => 'Cancel',
+			'button_delete' => html_input_button("delval", getTxt('Delete'))
+		))) .
+	html_div_end(),
+	"of DIV #popupWindow (change values)"
 );
-
-echo "</div>\n";
 
 echo '<div style="alignment-adjust: middle; float:right;">';
 
@@ -1081,46 +1078,43 @@ if (isLoggedIn()) {
 
 echo html_input_button('export', getTxt('DownloadData'));
 
-echo "</div>\n";
+echo html_div_end();
 
-echo "</div>\n";
+echo html_div_end();
 
 echo "<!-- End Of Grid Div.  -->\n";
 
-echo "</div>\n";
+echo html_div_end();
 
 echo "<!-- Jqx Tabs end -->\n";
 
-echo "</div>\n";
-
-echo html_div_beg('', 'popupWindow_new');
-
-echo html_div_beg() . getTxt('Add') . "</div>\n";
+echo html_div_end();
 
 echo encloseInBeginEndComments(
-	html_enter_values_div(rows_for_values_table(array(
-		'caption' => 'EnterValues',
-		'id_date' => 'date_new',
-		'id_timepicker' => 'timepicker_new',
-		'id_value' => 'value_new',
-		'id_save' => 'Save_new',
-		'id_cancel' => 'Cancel_new',
-		'button_delete' => ''
-	))),
-	"hidden div (enter new values)"
+	html_div_beg('', 'popupWindow_new') .
+		'<div>' . getTxt('Add') . html_div_end() .
+		html_enter_values_div(rows_for_values_table(array(
+			'caption' => 'EnterValues',
+			'id_date' => 'date_new',
+			'id_timepicker' => 'timepicker_new',
+			'id_value' => 'value_new',
+			'id_save' => 'Save_new',
+			'id_cancel' => 'Cancel_new',
+			'button_delete' => ''
+		))) .
+	html_div_end(),
+	"of DIV #popupWindow_new (enter new values)"
 );
-
-echo "</div>\n";
 
 echo br();
 
-echo "</div>\n";
+echo html_div_end();
 
-echo "</div>\n";
+echo html_div_end();
 
-echo "</div>\n";
+echo html_div_end();
 
-echo "</div>\n";
+echo html_div_end();
 
 echo div_window();
 echo div_window('2');
