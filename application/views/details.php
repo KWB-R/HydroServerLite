@@ -205,14 +205,7 @@ function getGridConfig2(dataAdapter, columnsConfig)
 {
 	return jQuery.extend(
 		getGridConfig(dataAdapter, columnsConfig), 
-		{
-			theme: 'darkblue',
-			sortable: true,
-			pageable: true,
-			autoheight: true,
-			editable: false,
-			selectionmode: 'singlecell'
-		}
+		gridConfigExtended
 	);
 } // end of getGridConfig2()
 
@@ -563,12 +556,7 @@ $(document).ready(function() {
 
 	$tabs = $('#jqxtabs');
 
-	$tabs.jqxTabs({
-		width:'100%',
-		height: 550,
-		theme: 'darkblue',
-		collapsible: true
-	});
+	$tabs.jqxTabs(tabsConfig);
 
 	$tabs.jqxTabs('disable');
 	$tabs.jqxTabs('enableAt', 0);
@@ -765,11 +753,7 @@ function make_grid()
 <?php
 if (isLoggedIn()) {
 echo(
-'	$("#addnew").jqxButton({
-		width: \'250\',
-		height: \'25\',
-		theme: \'darkblue\'
-	}).
+'	$("#addnew").jqxButton(buttonConfig).
 	bind(\'click\', function () {
 
 		$("#popupWindow_new").jqxWindow(\'show\');

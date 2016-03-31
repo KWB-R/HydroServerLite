@@ -73,3 +73,19 @@ var dateDropConfig  = {
 	theme: 'darkblue'
 };
 
+var gridConfigExtended = {
+	theme: 'darkblue',
+	sortable: true,
+	pageable: true,
+	autoheight: true,
+	editable: false,
+	selectionmode: 'singlecell'
+};
+
+var tabsConfig = {
+	width:'100%',
+	height: 550,
+	theme: 'darkblue',
+	collapsible: true
+};
+
