@@ -2,6 +2,27 @@
 // Define the configurations of the controls in sites/details
 //
 
+var chartConfig = {
+	chart: {
+		renderTo: 'container',
+		zoomType: 'x'
+	},
+	legend: {
+		verticalAlign: 'top',
+		enabled: true,
+		shadow: true,
+		y: 40,
+		margin: 50
+	},
+	credits: {
+		enabled: false
+	},
+	exporting: {
+		enabled: true,
+		width: 5000
+	},
+};
+
 var windowConfig = {
 	maxHeight: 800,
 	maxWidth: 800,

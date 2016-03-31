@@ -101,18 +101,7 @@ function getStockChartConfig(
 	variableAndType
 )
 {
-	return {
-		chart: {
-			renderTo: 'container',
-			zoomType: 'x'
-		},
-		legend: {
-			verticalAlign: 'top',
-			enabled: true,
-			shadow: true,
-			y: 40,
-			margin: 50
-		},
+	var configExtension = {
 		title: {
 			text: DATA.text.Dataof + " " + DATA.text.SiteName + " " +
 						DATA.text.From   + " " + date_chart_from + " " +
@@ -120,9 +109,6 @@ function getStockChartConfig(
 			style: {
 				fontSize: '12px'
 			}
-		},
-		credits: {
-			enabled: false
 		},
 		subtitle: {
 			text: DATA.text.ClickDrag
@@ -144,10 +130,6 @@ function getStockChartConfig(
 				margin: 40
 			}
 		},
-		exporting: {
-			enabled: true,
-			width: 5000
-		},
 		rangeSelector: {
 			buttons: [
 				{type: 'day',   count: 1, text: DATA.text.OneD},
@@ -161,7 +143,10 @@ function getStockChartConfig(
 			selected: 6
 		},
 		series: [ {data: data_test, name: variableAndType} ]
-	};
+	}
+
+	return jQuery.extend(chartConfig, configExtension);
+
 } // end of getStockChartConfig()
 
 function getGridConfig(dataAdapter, columnsConfig)
