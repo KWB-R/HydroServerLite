@@ -175,7 +175,6 @@ function getGridConfig(dataAdapter, columnsConfig)
 
 } // end of getGridConfig()
 
-
 function getColumnsConfig(unitGrid, editable)
 {
 	var columns = [
@@ -239,13 +238,9 @@ function editClickHandler(row)
 
 	$('#popupWindow').jqxWindow('show');
 
-	$('#date').jqxDateTimeInput({
-		width: '125px',
-		height: '25px',
-		theme: 'darkblue',
-		formatString: 'MM/dd/yyyy',
-		textAlign: 'center'
-	}).jqxDateTimeInput('setDate', toDate(datepart[0]));
+	$('#date').
+		jqxDateTimeInput(dateInputConfig2).
+		jqxDateTimeInput('setDate', toDate(datepart[0]));
 
 	$('#timepicker').val(toHourAndMinute(datepart[1]));
 
@@ -788,13 +783,7 @@ echo(
 			}
 		});
 
-		$("#date_new").jqxDateTimeInput({
-			width: \'125px\',
-			height: \'25px\',
-			theme: \'darkblue\',
-			formatString: "MM/dd/yyyy",
-			textAlign: "center"
-		});
+		$("#date_new").jqxDateTimeInput(dateInputConfig2);
 
 		$("#timepicker_new" ).timepicker({
 			showOn: "focus",

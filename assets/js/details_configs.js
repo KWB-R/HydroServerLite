@@ -59,6 +59,14 @@ var dateInputConfig = {
 	formatString: 'dd.MM.yyyy hh:mm'
 };
 
+var dateInputConfig2 = {
+	width: '125px',
+	height: '25px',
+	theme: 'darkblue',
+	formatString: 'dd.MM.yyyy hh:mm', //"MM/dd/yyyy",
+	textAlign: 'center'
+};
+
 var dateDropConfig  = {
 	width: '100%',
 	height: 25,
