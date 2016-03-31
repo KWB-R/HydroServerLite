@@ -84,7 +84,7 @@ var DATA = {
 		'DatabaseConfigurationError'
 	);
 	foreach ($names as $name) {
-		echo "$name: \"" . getTxt($name) . "\",\n";
+		echo "\t\t$name: \"" . getTxt($name) . "\",\n";
 	}
 ?>
 		SiteName: "<?php echo $site['SiteName'];?>",
@@ -200,14 +200,6 @@ function getColumnsConfig(unitGrid, editable)
 
 	return columns;
 } // end of getColumnsConfig()
-
-function getGridConfig2(dataAdapter, columnsConfig)
-{
-	return jQuery.extend(
-		getGridConfig(dataAdapter, columnsConfig), 
-		gridConfigExtended
-	);
-} // end of getGridConfig2()
 
 function editClickHandler(row)
 {
@@ -743,17 +735,16 @@ function make_grid()
 		url: toURL("variable/getUnit", { varid: varid })
 	}).
 	done(function(msg) {
-		unitGrid = msg[0].unitA;
 
-		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
-		var columnsConfig = getColumnsConfig(unitGrid, editable);
-		var gridConfig;
+		var columnsConfig = getColumnsConfig(
+			msg[0].unitA, // unit
+			<?php echo (isLoggedIn() ? 'true' : 'false'); ?> // logged in?
+		);
 
-		if (flag === 1) {
-			gridConfig = getGridConfig(dataAdapter, columnsConfig);
-		}
-		else {
-			gridConfig = getGridConfig2(dataAdapter, columnsConfig);
+		var gridConfig = getGridConfig(dataAdapter, columnsConfig);
+
+		if (flag !== 1) {
+			gridConfig = jQuery.extend(gridConfig, gridConfigExtended);
 			flag = 1;
 		}
 
