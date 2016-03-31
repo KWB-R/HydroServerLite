@@ -557,17 +557,22 @@ function saveNewClickHandler()
 function compareClickHandler()
 {
 	$("html, body").animate({scrollTop: 0}, "slow");
+
 	$('#window').jqxWindow('show');
-	$('#windowContent').load(base_url + 'datapoint/compare/1', function() {});
+
+	$('#windowContent').load(toURL('datapoint/compare/1', {}), function() {});
+
 } // end of compareClickHandler()
 
 function exportClickHandler()
 {
-	var url = base_url + 'datapoint/export?siteid=' + DATA.siteid +
-		'&varid=' + varid +
-		'&meth=' + methodid +
-		'&startdate=' + date_from_sql +
-		'&enddate=' + date_to_sql;
+	var url = toURL('datapoint/export', {
+		siteid: DATA.siteid,
+		varid: varid,
+		meth: methodid,
+		startdate: date_from_sql,
+		enddate: date_to_sql
+	});
 
 	window.open(url, '_blank');
 }
