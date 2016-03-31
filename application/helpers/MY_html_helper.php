@@ -111,6 +111,14 @@ function html_ul_beg($class = '', $id = '', $style = '')
 	) . ">";
 }
 
+function encloseInBeginEndComments($html, $sectionName = 'section')
+{
+	return
+		"<!-- BEGIN $sectionName -->\n" .
+		$html .
+		"<!-- END $sectionName -->\n";
+}
+
 // Function for generating options. Keeping it here as it might be used by 
 // various controllers once they get the result from the model.
 
