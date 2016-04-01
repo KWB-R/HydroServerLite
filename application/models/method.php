@@ -74,7 +74,9 @@ class Method extends MY_Model
 
 	function getByVarSite($var, $site)
 	{
-		$this->db->select('MethodID,MethodDescription')
+		$this->db
+			->distinct()
+			->select('MethodID, MethodDescription')
 			->from('seriescatalog')
 			->where('SiteID', $site)
 			->where('VariableID', $var);
