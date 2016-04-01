@@ -157,19 +157,7 @@ function getStockChartConfig(
 	}
 
 	return jQuery.extend(chartConfig, configExtension);
-
 } // end of getStockChartConfig()
-
-function getGridConfig(dataAdapter, columnsConfig)
-{
-	return {
-		source: dataAdapter,
-		width: '100%',
-		columnsresize: true,
-		columns: columnsConfig
-	};
-
-} // end of getGridConfig()
 
 function getColumnsConfig(unitGrid, editable)
 {
@@ -748,12 +736,14 @@ function make_grid()
 	}).
 	done(function(msg) {
 
-		var columnsConfig = getColumnsConfig(
-			msg[0].unitA, // unit
-			<?php echo (isLoggedIn() ? 'true' : 'false'); ?> // logged in?
-		);
+		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
 
-		var gridConfig = getGridConfig(dataAdapter, columnsConfig);
+		var gridConfig = {
+			source: dataAdapter,
+			width: '100%',
+			columnsresize: true,
+			columns: getColumnsConfig(msg[0].unitA, editable)
+		};
 
 		if (flag !== 1) {
 			gridConfig = jQuery.extend(gridConfig, gridConfigExtended);
