@@ -2,6 +2,36 @@
 // Helper functions required in sites/details
 //
 
+// Helper function to generate a URL with parameters
+function toURL(endpoint, parameters)
+{
+	var relative = endpoint + '?' + jQuery.param(parameters);
+
+	//alert("relative URL:\n" + relative);
+
+	return base_url + relative;
+}
+
+function toDatafields(fieldnames)
+{
+	var datafields = [];
+
+	for (var i = 0; i < fieldnames.length; i++) {
+		datafields.push({ name: fieldnames[i] });
+	}
+
+	return datafields;
+}
+
+function toJsonAdapter(url, fieldnames)
+{
+	return new $.jqx.dataAdapter({
+		datatype: "json",
+		datafields: toDatafields(fieldnames),
+		url: url
+	});
+}
+
 function checkTimeFormat(timestring, messages)
 {
 	//Minimum and maximum length is 5, for example, 01:20
