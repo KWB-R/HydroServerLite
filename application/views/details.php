@@ -219,7 +219,15 @@ function editClickHandler(row)
 	vid = dataRecord.ValueID;
 }
 
-//Time Validation Script General
+//
+// Functions to validate time and value strings
+//
+
+function validateValueAndTime(id_value, id_timepicker)
+{
+	return (validatenum(id_value) && validatetime(id_timepicker));
+}
+
 function validatetime(idString)
 {
 	//Removing all space
@@ -236,6 +244,10 @@ function validatetime(idString)
 
 	return true;
 }
+
+//
+// Event Handlers
+//
 
 function validatenum(idSelector)
 {
@@ -441,20 +453,15 @@ function saveClickHandler()
 			vid: vid
 		};
 
-		// Validate value and time
-		if (
-			validatenum("#value") === false || 
-			validatetime("#timepicker") === false) {
+		if (! validateValueAndTime("#value", "#timepicker")) {
 			return false;
 		}
-
-		var vt = $("#value").val();
 
 		//Send out an ajax request to update that data field
 		$.ajax({
 			dataType: "json",
 			url: toURL("datapoint/edit/" + vid, {
-				val: vt,
+				val: $("#value").val(),
 				dt: formatDateSQL(seldate, undefined, ''),
 				time: $("#timepicker").val()
 			})
@@ -478,25 +485,19 @@ function saveClickHandler()
 
 function saveNewClickHandler()
 {
-	// Validate value and time
-	if (
-		validatenum("#value_new") === false ||
-		validatetime("#timepicker_new") === false) {
+	if (! validateValueAndTime("#value_new", "#timepicker_new")) {
 		return false;
 	}
 
-	var vt = $("#value_new").val();
-
-	var seldate= $('#date_new').jqxDateTimeInput('getDate');
-
 	//Send out ajax request to add new value
-
 	$.ajax({
 		dataType: "json",
 		url: toURL("datapoint/add", {
 			varid: varid,
-			val: vt,
-			dt: formatDateSQL(seldate, undefined, ''),
+			val: $("#value_new").val(),
+			dt: formatDateSQL(
+				$('#date_new').jqxDateTimeInput('getDate'), undefined, ''
+			),
 			time: $("#timepicker_new").val(),
 			sid: DATA.siteid,
 			mid: methodid
