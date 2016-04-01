@@ -177,6 +177,20 @@ function getColumnsConfig(unitGrid, editable)
 	return columns;
 } // end of getColumnsConfig()
 
+function getWindowConfig(offset, dx, dy)
+{
+	// Set defaults
+	dx = dx || 220;
+	dy = dy ||  60;
+
+	return {
+		position: {
+			x: parseInt(offset.left, 10) + dx,
+			y: parseInt(offset.top,  10) + dy
+		}
+	};
+}
+
 function editClickHandler(row)
 {
 	// open the popup window when the user clicks a button.
@@ -184,12 +198,7 @@ function editClickHandler(row)
 
 	var offset = $('#jqxgrid').offset();
 
-	$('#popupWindow').jqxWindow({
-		position: {
-			x: parseInt(offset.left, 10) + 220,
-			y: parseInt(offset.top,  10) +  60
-		}
-	});
+	$('#popupWindow').jqxWindow(getWindowConfig(offset));
 
 	// get the clicked row's data and initialize the input fields.
 	var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
