@@ -1,16 +1,27 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 HTML_Render_Head($js_vars, getTxt('SearchData'));
-echo $JS_JQuery;
-echo $JS_JQueryUI;
-echo $JS_JQX;
-echo $JS_GetTheme;
-echo $JS_Globalization; // this is the only page that calls this. This is also the only refernce to MooTools
-echo $JS_Maps;
-echo $CSS_JQX;
-echo $CSS_Main;
-echo $CSS_JQuery_UI;
-echo $CSS_JQStyles;
+
+function beautify($html, $indentlevel = 4)
+{
+	$indentation = str_repeat('  ', $indentlevel);
+
+	$html = str_replace('<script', "\n$indentation<script", $html);
+	$html = str_replace('<link', "\n$indentation<link", $html);
+
+	return $html;
+}
+
+echo beautify($JS_JQuery);
+echo beautify($JS_JQueryUI);
+echo beautify($JS_JQX);
+echo beautify($JS_GetTheme);
+echo beautify($JS_Globalization); // this is the only page that calls this. This is also the only refernce to MooTools
+echo beautify($JS_Maps);
+echo beautify($CSS_JQX);
+echo beautify($CSS_Main);
+echo beautify($CSS_JQuery_UI);
+echo beautify($CSS_JQStyles);
 ?>
 
 
