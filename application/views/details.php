@@ -104,6 +104,10 @@ var DATA = {
 	}
 };
 
+//
+// Functions returning objects for the initialisation of user interface elements
+//
+
 function getStockChartConfig(
 	date_chart_from,
 	date_chart_to,
@@ -191,34 +195,6 @@ function getWindowConfig(offset, dx, dy)
 	};
 }
 
-function editClickHandler(row)
-{
-	// open the popup window when the user clicks a button.
-	editrow = row;
-
-	var offset = $('#jqxgrid').offset();
-
-	$('#popupWindow').jqxWindow(getWindowConfig(offset));
-
-	// get the clicked row's data and initialize the input fields.
-	var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
-
-	//Create a Date time Input
-	var datepart = dataRecord.LocalDateTime.split(' ');
-
-	$('#popupWindow').jqxWindow('show');
-
-	$('#date').
-		jqxDateTimeInput(dateInputConfig2).
-		jqxDateTimeInput('setDate', toDate(datepart[0]));
-
-	$('#timepicker').val(toHourAndMinute(datepart[1]));
-
-	$('#value').val(dataRecord.DataValue);
-
-	vid = dataRecord.ValueID;
-}
-
 //
 // Functions to validate time and value strings
 //
@@ -245,14 +221,42 @@ function validatetime(idString)
 	return true;
 }
 
-//
-// Event Handlers
-//
-
 function validatenum(idSelector)
 {
 	// isValidNumber from assets/js/details_helpers.js
 	return isValidNumber($(idSelector).val(), DATA.text);
+}
+
+//
+// Event Handlers
+//
+
+function editClickHandler(row)
+{
+	// open the popup window when the user clicks a button.
+	editrow = row;
+
+	var offset = $('#jqxgrid').offset();
+
+	$('#popupWindow').jqxWindow(getWindowConfig(offset));
+
+	// get the clicked row's data and initialize the input fields.
+	var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
+
+	//Create a Date time Input
+	var datepart = dataRecord.LocalDateTime.split(' ');
+
+	$('#popupWindow').jqxWindow('show');
+
+	$('#date').
+		jqxDateTimeInput(dateInputConfig2).
+		jqxDateTimeInput('setDate', toDate(datepart[0]));
+
+	$('#timepicker').val(toHourAndMinute(datepart[1]));
+
+	$('#value').val(dataRecord.DataValue);
+
+	vid = dataRecord.ValueID;
 }
 
 function variableSelectHandler(event)
@@ -541,14 +545,11 @@ function exportClickHandler()
 	window.open(url, '_blank');
 }
 
-//Populate the Drop Down list with values from the JSON output of the php page
+//
+// Initialise the User Interface
+//
 
 $(document).ready(function() {
-
-	// There is no such element with id "loadingtext"
-	//$("#loadingtext").hide();
-
-	//Create date selectors and hide them
 
 	//Create Tabs for Table Chart Switching
 
@@ -558,20 +559,20 @@ $(document).ready(function() {
 
 	$tabs.jqxTabs('disable');
 	$tabs.jqxTabs('enableAt', 0);
-
+	
 	$tabs.on('selected', function (event) {
 			if (event.args.item == 1) {
 				$(window).resize();
 			}
 	});
 
-	//Defining the Data adapter for the variable list
+	// Create the Variables Drop Down list with data received in JSON format
+
 	var dataAdapter = toJsonAdapter(
 		toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 }),
 		['VariableID', 'VarNameMod']
 	);
 
-	//Creating the Variables Drop Down list
 	$("#dropdownlist").
 		jqxDropDownList(
 			jQuery.extend(dropDownConfig, {
@@ -581,6 +582,8 @@ $(document).ready(function() {
 			})
 		).
 		bind('select', variableSelectHandler);
+
+	// Create date selectors
 
 	$("#jqxDateTimeInput").
 		jqxDateTimeInput(dateInputConfig).
