@@ -109,56 +109,31 @@ class Method extends MY_Model
 		return $this->db->affected_rows() == 1;
 	}
 
-	function updateVarMeth2($MethodID)
+	function updateVarMeth2($methodID)
 	{
-		$this->tableName = "varmeth";
-		$this->db->select()->from($this->tableName);
+		$tableName = "varmeth";
+
+		$this->db->select()->from($tableName);
 
 		foreach ($this->db->get()->result_array() as $row) {
 
-			$varID = $row['VariableID'];
-			$methID = $row['MethodID'];
-			$parts = explode(',', $methID);
-			$partsCount = count($parts);
+			$variableID = $row['VariableID'];
 
-			foreach ($parts as &$part){
+			$methodIDs = explode(',', $row['MethodID']);
 
-				if ($partsCount == 1 && $part == $MethodID) {
-					$part = '';
-					$this->db
-						->set('MethodID', $part)
-						->where('VariableID', $varID)
-						->update("varmeth");
+			if (in_array($methodID, $methodIDs)) {
 
-					return ($this->db->affected_rows() >= 0);
+				// Remove $MethodID from $methodIDs
+				$methodIDs = array_diff($methodIDs, array($methodID));
 
-				}
-				elseif ($partsCount == 2) {
+				// Update column MethodID with the new string of comma separated 
+				// MethodIDs
+				$this->db
+					->set('MethodID', implode(',', $methodIDs))
+					->where('VariableID', $variableID)
+					->update($tableName);
 
-					if ($part == $MethodID) {
-						$part = '';
-						$newStr = implode($parts);
-						$this->db
-							->set('MethodID', $newStr)
-							->where('VariableID', $varID)
-							->update("varmeth");
-
-						return ($this->db->affected_rows() >= 0);
-					}
-				}
-				else { // $partsCount > 2
-
-					if ($part == $MethodID) {
-						$part = '';
-						$newStr = implode(",", array_filter($parts));
-						$this->db
-							->set('MethodID', $newStr)
-							->where('VariableID', $varID)
-							->update("varmeth");
-
-						return ($this->db->affected_rows() >= 0);
-					}
-				}
+				return ($this->db->affected_rows() >= 0);
 			}
 		}
 	}
