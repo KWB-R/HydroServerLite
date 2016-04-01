@@ -168,18 +168,10 @@ function getColumnsConfig(unitGrid, editable)
 	];
 
 	if (editable === true) {
-
-		var editColumn = {
-			text: 'Edit',
-			datafield: 'Edit',
-			columntype: 'button',
-			cellsrenderer: function () {
-				return 'Edit';
-			},
-			buttonclick: editClickHandler
-		};
-
-		columns = jQuery.merge(columns, [ editColumn ]);
+		columns = jQuery.merge(
+			columns,
+			[ jQuery.extend(editColumnConfig, {buttonclick: editClickHandler}) ]
+		);
 	}
 
 	return columns;

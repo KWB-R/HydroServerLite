@@ -110,6 +110,15 @@ var gridConfigExtended = {
 	selectionmode: 'singlecell'
 };
 
+var editColumnConfig = {
+	text: 'Edit',
+	datafield: 'Edit',
+	columntype: 'button',
+	cellsrenderer: function () {
+		return 'Edit';
+	}
+};
+
 var tabsConfig = {
 	width:'100%',
 	height: 550,
