@@ -200,27 +200,32 @@ function genDropListsH($labelKey, $id, $name, $hint, $req = false)
 	genDropLists($labelKey, $id, $name, $req, $hint);
 }
 
-function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
-	$hint = '', $help = '', $extraSelect = ''
-)
+function html_formGroup_begin($labelKey)
 {
 	$html  = html_div_beg('form-group');
 	$html .= '  ' . html_label('col-sm-2 control-label', getTxt($labelKey));
 	$html .= '  ' . html_div_beg('col-sm-10');
 	$html .= '    '; // indentation
 
+	return $html;
+}
+
+function html_formGroup_content(
+	$type, $id, $name, $req, $extra, $hint, $help, $extraSelect
+)
+{
 	switch ($type) {
 		case 'text':
-			$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
+			$html = "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
 			break;
 		case 'textarea':
-			$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>\n";
+			$html = "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>\n";
 			break;
 		case 'div':
-			$html .= "<div id=\"$id\" name=\"$name\"></div>\n";
+			$html = "<div id=\"$id\" name=\"$name\"></div>\n";
 			break;
 		case 'select':
-			$html .= "<select name=\"$name\" class=\"form-control\" id=\"$id\" $extra>\n";
+			$html = "<select name=\"$name\" class=\"form-control\" id=\"$id\" $extra>\n";
 			$html .= $extraSelect;
 			break;
 		default:
@@ -243,8 +248,26 @@ function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
 		$html .= requiredSpan($req);
 	}
 
-	$html .= "  </div>\n";
+	return $html;
+}
+
+function html_formGroup_end()
+{
+	$html  = "  </div>\n";
 	$html .= "</div>\n";
+
+	return $html;
+}
+
+function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
+	$hint = '', $help = '', $extraSelect = ''
+)
+{
+	$html  = html_formGroup_begin($labelKey);
+	$html .= html_formGroup_content(
+		$type, $id, $name, $req, $extra, $hint, $help, $extraSelect
+	);
+	$html .= html_formGroup_end();
 
 	return $html;
 }
