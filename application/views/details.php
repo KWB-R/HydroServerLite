@@ -985,9 +985,11 @@ echo html_div_beg("col-md-9");
 //addition to navigating back to the map 
 
 echo html_div_beg('row');
-genDropLists('Site', '', '', false);
-echo html_div_beg('site_title') . $site['SiteName'] . html_div_end() . br();
-echo html_div_end();
+	echo html_div_beg('form-group');
+		echo html_label('col-sm-2 control-label', getTxt('Site'));
+		echo html_div_beg('col-sm-10') . $site['SiteName'] . html_div_end();
+	echo html_div_end(); // end of form-group
+echo html_div_end(); // end of row
 
 echo html_div_beg('row');
 genDropLists('Variable', 'dropdownlist', 'dropdownlist', false) . br();
