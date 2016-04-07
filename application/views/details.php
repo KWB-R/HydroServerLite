@@ -238,17 +238,17 @@ function editClickHandler(row)
 	// open the popup window when the user clicks a button.
 	editrow = row;
 
-	var offset = $('#jqxgrid').offset();
+	var $grid = $('#jqxgrid');
 
-	$('#popupWindow').jqxWindow(getWindowConfig(offset));
+	$('#popupWindow').
+		jqxWindow(getWindowConfig($grid.offset())).
+		jqxWindow('show');
 
 	// get the clicked row's data and initialize the input fields.
-	var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
+	var dataRecord = $grid.jqxGrid('getrowdata', editrow);
 
 	//Create a Date time Input
 	var datepart = dataRecord.LocalDateTime.split(' ');
-
-	$('#popupWindow').jqxWindow('show');
 
 	$('#date').
 		jqxDateTimeInput(dateInputConfig2).
@@ -412,23 +412,15 @@ function toMonthEnd(date)
 
 function addValueClickHandler()
 {
-	$("#popupWindow_new").jqxWindow('show');
+	$("#popupWindow_new").
+		jqxWindow(getWindowConfig($("#jqxgrid").offset())).
+		jqxWindow('show');
 
-	var offset = $("#jqxgrid").offset();
+	$("#date_new").
+		jqxDateTimeInput(dateInputConfig2);
 
-	$("#popupWindow_new").jqxWindow({
-		position: {
-			x: parseInt(offset.left, 10) + 220,
-			y: parseInt(offset.top,  10) +  60
-		}
-	});
-
-	$("#date_new").jqxDateTimeInput(dateInputConfig2);
-
-	$("#timepicker_new" ).timepicker({
-		showOn: "focus",
-		showPeriodLabels: false
-	});
+	$("#timepicker_new" ).
+		timepicker(timePickerConfig);
 }
 
 function delValClickHandler()

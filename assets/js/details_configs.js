@@ -101,6 +101,11 @@ var dateDropConfig  = {
 	theme: 'darkblue'
 };
 
+var timePickerConfig = {
+	showOn: "focus",
+	showPeriodLabels: false
+};
+
 var gridConfigExtended = {
 	theme: 'darkblue',
 	sortable: true,
