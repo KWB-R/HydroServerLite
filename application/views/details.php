@@ -449,12 +449,6 @@ function saveClickHandler()
 
 		var seldate= $date.jqxDateTimeInput('getDate');
 
-		var row = {
-			date: formatDateSQL(seldate, undefined, ' ' + $timepicker.val() + ':00'),
-			Value: $value.val(),
-			vid: vid
-		};
-
 		if (! validateValueAndTime($value, $timepicker)) {
 			return false;
 		}
@@ -466,18 +460,21 @@ function saveClickHandler()
 				val: $value.val(),
 				dt: formatDateSQL(seldate, undefined, ''),
 				time: $timepicker.val()
-			})
+			}, true)
 		}).
 		done(function(msg) {
-			if (msg.status == 'success') {
-				$('#jqxgrid').jqxGrid('updaterow', editrow, row);
-				$("#popupWindow").jqxWindow('hide');
-				plot_chart();
-				return true;
-			}
-			else {
-				alert(msg);
-				return false;
+			if (dataAddOrEditHandler(msg, true)) {
+				// update the row in the grid
+				$('#jqxgrid').jqxGrid(
+					'updaterow', 
+					editrow, 
+					{
+						date: formatDateSQL(seldate, undefined, ' ' + 
+							$timepicker.val() + ':00'),
+						Value: $value.val(),
+						vid: vid
+					}
+				);
 			}
 		});
 	} // end of if (editrow >= 0)
@@ -505,22 +502,32 @@ function saveNewClickHandler()
 			time: $timepicker.val(),
 			sid: DATA.siteid,
 			mid: globals.methodID
-		})
+		}, true)
 	}).
 	done(function(msg) {
-		if (msg.status == 'success') {
-			$("#popupWindow_new").jqxWindow('hide');
-			plot_chart();
-			return true;
-		}
-		else {
-			alert(DATA.text.DatabaseConfigurationError);
-			return false;
-		}
+		return dataAddOrEditHandler(msg, false)
 	});
 
 	return true;
 } // end of saveNewClickHandler()
+
+function dataAddOrEditHandler(msg, edit)
+{
+	var success = (msg.status === 'success');
+
+	if (success) {
+
+		// Hide the popup window
+		$(edit ? '#popupWindow' : '#popupWindow_new').jqxWindow('hide');
+
+		plot_chart();
+	}
+	else {
+		alert(edit ? msg : DATA.text.DatabaseConfigurationError);
+	}
+
+	return success;
+}
 
 function compareClickHandler()
 {

@@ -3,11 +3,16 @@
 //
 
 // Helper function to generate a URL with parameters
-function toURL(endpoint, parameters)
+function toURL(endpoint, parameters, debug)
 {
+	// Set default
+	debug = debug || false;
+
 	var relative = endpoint + '?' + jQuery.param(parameters);
 
-	//alert("relative URL:\n" + relative);
+	if (debug) {
+		alert("relative URL:\n" + relative);
+	}
 
 	return base_url + relative;
 }
