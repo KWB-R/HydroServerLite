@@ -447,74 +447,82 @@ function delValClickHandler()
 function saveClickHandler()
 {
 	if (editrow >= 0) {
-
-		var $date       = $('#date');
-		var $timepicker = $('#timepicker');
-		var $value      = $('#value');
-
-		var seldate= $date.jqxDateTimeInput('getDate');
-
-		if (! validateValueAndTime($value, $timepicker)) {
-			return false;
-		}
-
-		//Send out an ajax request to update that data field
-		$.ajax({
-			dataType: "json",
-			url: toURL("datapoint/edit/" + vid, {
-				val: $value.val(),
-				dt: formatDateSQL(seldate, undefined, ''),
-				time: $timepicker.val()
-			}, true)
-		}).
-		done(function(msg) {
-			if (dataAddOrEditHandler(msg, true)) {
-				// update the row in the grid
-				$('#jqxgrid').jqxGrid(
-					'updaterow', 
-					editrow, 
-					{
-						date: formatDateSQL(seldate, undefined, ' ' + 
-							$timepicker.val() + ':00'),
-						Value: $value.val(),
-						vid: vid
-					}
-				);
-			}
-		});
-	} // end of if (editrow >= 0)
+		return handleSaveClick(true);
+	}
 
 	return true;
-} // end of saveClickHandler()
+}
 
 function saveNewClickHandler()
 {
-	var $date       = $('#date_new');
-	var $timepicker = $('#timepicker_new');
-	var $value      = $('#value_new');
+	return handleSaveClick(false);
+}
 
+function handleSaveClick(edit)
+{
+	postfix = (edit ? '' : '_new');
+
+	// Store references to jQuery objects
+	var $date       = $('#date' + postfix);
+	var $timepicker = $('#timepicker' + postfix);
+	var $value      = $('#value' + postfix);
+
+	// Return if value or time are invalid
 	if (! validateValueAndTime($value, $timepicker)) {
 		return false;
 	}
 
-	//Send out ajax request to add new value
-	$.ajax({
-		dataType: "json",
-		url: toURL("datapoint/add", {
-			varid: globals.variableID,
-			val: $value.val(),
-			dt: formatDateSQL($date.jqxDateTimeInput('getDate'), undefined, ''),
-			time: $timepicker.val(),
+	// Store currently selected date
+	var seldate = $date.jqxDateTimeInput('getDate');
+
+	// Provide the endpoint to be used for the Ajax request
+	var endpoint = (edit ? "datapoint/edit/" + vid : "datapoint/add");
+
+	// Provide the parameters to be used for the Ajax request
+	var parameters = {
+		dt: formatDateSQL(seldate, undefined, ''),
+		time: $timepicker.val(),
+		val: $value.val()
+	};
+
+	// To add a new DataValue we need to add SiteID, VariableID and MethodID
+	// to the parameter list
+	if (! edit) {
+		parameters = jQuery.extend(parameters, {
 			sid: DATA.siteid,
-			mid: globals.methodID
-		}, true)
-	}).
-	done(function(msg) {
-		return dataAddOrEditHandler(msg, false)
-	});
+			varid: globals.variableID,
+			mid: globals.methodID,
+		})
+	}
+
+	// Provide handler function for Ajax done event
+	var doneHandler_edit = function(msg) {
+
+		if (dataAddOrEditHandler(msg, true)) {
+
+			newrow = {
+				date: formatDateSQL(seldate, undefined, ' ' + $timepicker.val() + ':00'),
+				Value: $value.val(),
+				vid: vid
+			}
+
+			// update the row in the grid
+			$('#jqxgrid').jqxGrid('updaterow', editrow, newrow);
+		}
+	};
+
+	var doneHandler_add = function(msg) {
+		return dataAddOrEditHandler(msg, false);
+	};
+
+	// Create an ajax request to update or add a DataValue
+	$ajax = $.ajax({dataType: "json", url: toURL(endpoint, parameters)});
+
+	// Set the done-handler for the ajax request
+	$ajax.done((edit ? doneHandler_edit : doneHandler_add));
 
 	return true;
-} // end of saveNewClickHandler()
+}
 
 function dataAddOrEditHandler(msg, edit)
 {
