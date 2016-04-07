@@ -201,32 +201,32 @@ function getWindowConfig(offset, dx, dy)
 // Functions to validate time and value strings
 //
 
-function validateValueAndTime(id_value, id_timepicker)
+function validateValueAndTime(textinput, timepicker)
 {
-	return (validatenum(id_value) && validatetime(id_timepicker));
+	return (validatenum(textinput) && validatetime(timepicker));
 }
 
-function validatetime(idString)
+function validatetime(timepicker)
 {
 	//Removing all space
-	var timestring = trimAllSpace($(idString).val());
+	var timestring = trimAllSpace(timepicker.val());
 
-	$(idString).val(timestring);
+	timepicker.val(timestring);
 
 	// checkTimeFormat from assets/js/details_helpers.js
 	if (! checkTimeFormat(timestring, DATA.text)) {
 		return false;
 	}
 
-	$(idString).val(IsNumeric(timestring));
+	timepicker.val(IsNumeric(timestring));
 
 	return true;
 }
 
-function validatenum(idSelector)
+function validatenum(textinput)
 {
 	// isValidNumber from assets/js/details_helpers.js
-	return isValidNumber($(idSelector).val(), DATA.text);
+	return isValidNumber(textinput.val(), DATA.text);
 }
 
 //
@@ -443,15 +443,19 @@ function saveClickHandler()
 {
 	if (editrow >= 0) {
 
-		var seldate= $('#date').jqxDateTimeInput('getDate');
+		var $date       = $('#date');
+		var $timepicker = $('#timepicker');
+		var $value      = $('#value');
+
+		var seldate= $date.jqxDateTimeInput('getDate');
 
 		var row = {
-			date: formatDateSQL(seldate, undefined, ' ' + $("#timepicker").val() + ':00'),
-			Value: $("#value").val(),
+			date: formatDateSQL(seldate, undefined, ' ' + $timepicker.val() + ':00'),
+			Value: $value.val(),
 			vid: vid
 		};
 
-		if (! validateValueAndTime("#value", "#timepicker")) {
+		if (! validateValueAndTime($value, $timepicker)) {
 			return false;
 		}
 
@@ -459,9 +463,9 @@ function saveClickHandler()
 		$.ajax({
 			dataType: "json",
 			url: toURL("datapoint/edit/" + vid, {
-				val: $("#value").val(),
+				val: $value.val(),
 				dt: formatDateSQL(seldate, undefined, ''),
-				time: $("#timepicker").val()
+				time: $timepicker.val()
 			})
 		}).
 		done(function(msg) {
@@ -483,7 +487,11 @@ function saveClickHandler()
 
 function saveNewClickHandler()
 {
-	if (! validateValueAndTime("#value_new", "#timepicker_new")) {
+	var $date       = $('#date_new');
+	var $timepicker = $('#timepicker_new');
+	var $value      = $('#value_new');
+
+	if (! validateValueAndTime($value, $timepicker)) {
 		return false;
 	}
 
@@ -492,11 +500,9 @@ function saveNewClickHandler()
 		dataType: "json",
 		url: toURL("datapoint/add", {
 			varid: globals.variableID,
-			val: $("#value_new").val(),
-			dt: formatDateSQL(
-				$('#date_new').jqxDateTimeInput('getDate'), undefined, ''
-			),
-			time: $("#timepicker_new").val(),
+			val: $value.val(),
+			dt: formatDateSQL($date.jqxDateTimeInput('getDate'), undefined, ''),
+			time: $timepicker.val(),
 			sid: DATA.siteid,
 			mid: globals.methodID
 		})
@@ -882,9 +888,9 @@ function rows_for_values_table($data)
 	$id_timepicker = $data['id_timepicker'];
 	$id_value = $data['id_value'];
 
-	$onChange = "onChange=\"validatetime('#$id_timepicker')\"";
+	$onChange = "onChange=\"validatetime('$(#$id_timepicker)')\"";
 
-	$onBlur = "onBlur=\"validatenum('#$id_value')\"";
+	$onBlur = "onBlur=\"validatenum($('#$id_value'))\"";
 
 	$style = 'style="margin-right: 5px;"';
 
