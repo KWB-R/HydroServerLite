@@ -233,19 +233,16 @@ function validatenum(textinput)
 // Event Handlers
 //
 
+// Open the popup window when the user clicks a button.
 function editClickHandler(row)
 {
-	// open the popup window when the user clicks a button.
 	editrow = row;
 
 	var $grid = $('#jqxgrid');
 
-	$('#popupWindow').
-		jqxWindow(getWindowConfig($grid.offset())).
-		jqxWindow('show');
-
 	// get the clicked row's data and initialize the input fields.
-	var dataRecord = $grid.jqxGrid('getrowdata', editrow);
+	var dataRecord = $grid.
+		jqxGrid('getrowdata', editrow);
 
 	//Create a Date time Input
 	var datepart = dataRecord.LocalDateTime.split(' ');
@@ -254,35 +251,43 @@ function editClickHandler(row)
 		jqxDateTimeInput(dateInputConfig2).
 		jqxDateTimeInput('setDate', toDate(datepart[0]));
 
-	$('#timepicker').val(toHourAndMinute(datepart[1]));
+	$('#timepicker').
+		val(toHourAndMinute(datepart[1]));
 
-	$('#value').val(dataRecord.DataValue);
+	$('#value').
+		val(dataRecord.DataValue);
 
 	vid = dataRecord.ValueID;
+
+	// Open the popup window
+	$('#popupWindow').
+		jqxWindow(getWindowConfig($grid.offset())).
+		jqxWindow('show');
 }
 
 function variableSelectHandler(event)
 {
-	var item = $('#dropdownlist').jqxDropDownList('getItem', event.args.index);
+	var item = $('#dropdownlist').
+		jqxDropDownList('getItem', event.args.index);
 
 	//Check if a valid value is selected and process futher to display dates
 	if (item !== null) {
-		//Clear the Box
+
+		//Clear the date range
 		$('#daterange').html("");
 
 		globals.variableID = item.value;
 
 		globals.variableAndType = item.label;
 
-		//Going to the next function that will generate a list of data types available for that variable
-		//var t = setTimeout("create_var_list()", 300);
 		get_methods(globals.variableID);
 	}
 }
 
 function methodSelectHandler(event)
 {
-	var item = $('#methodlist').jqxDropDownList('getItem', event.args.index);
+	var item = $('#methodlist').
+		jqxDropDownList('getItem', event.args.index);
 
 	//Check if a valid value is selected and process futher to display dates
 	if (item !== null) {
