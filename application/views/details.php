@@ -656,25 +656,36 @@ function get_dates()
 
 } //End of get_dates()
 
+// Send out an ajax request to get a unit for a given VariableID and call
+// the given callback function with the returned unit when the request ist done
+function getUnit(variableID, callback)
+{
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: toURL("variable/getUnit", {
+			varid: variableID
+		})
+	}).
+	done(function(units) {
+		// Call the callback function with the unit that was returned
+		callback(units[0].unitA);
+	});
+}
+
 function plot_chart()
 {
 	var unit_yaxis = "unit";
 
-	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
+	// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
 	if (globals.variableID != -1) {
-		$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: toURL("variable/getUnit", {
-				varid: globals.variableID
-			})
-		}).
-		done(function(msg) {
-			unit_yaxis = msg[0].unitA;
+		getUnit(globals.variableID, function(unit) {
+			unit_yaxis = unit;
 		});
 	}
 
-	//Chaning Complete Data loading technique..need to create a php page that will output javascript...
+	// Chaining Complete Data loading technique..need to create a php page that
+	// will output javascript...
 	$.ajax({
 		url: toURL('datapoint/getData', {
 			siteid: DATA.siteid,
@@ -695,11 +706,6 @@ function plot_chart()
 			date_chart_from, date_chart_to, unit_yaxis, data_test, 
 			globals.variableAndType
 		));
-
-		// end of new Highcharts.StockChart()
-
-		// There is no such element with id "loadingtext"
-		//$("#loadingtext").hide();
 
 		make_grid();
 
@@ -723,14 +729,8 @@ function make_grid()
 		[ 'ValueID', 'DataValue', 'LocalDateTime' ]
 	);
 
-	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
-	var unitGrid = "Unit: None";
-
-	$.ajax({
-		dataType: "json",
-		url: toURL("variable/getUnit", { varid: globals.variableID })
-	}).
-	done(function(msg) {
+	// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+	getUnit(globals.variableID, function(unit) {
 
 		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
 
@@ -738,7 +738,7 @@ function make_grid()
 			source: dataAdapter,
 			width: '100%',
 			columnsresize: true,
-			columns: getColumnsConfig(msg[0].unitA, editable)
+			columns: getColumnsConfig(unit, editable)
 		};
 
 		if (globals.flag !== 1) {
