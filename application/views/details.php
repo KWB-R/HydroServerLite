@@ -727,13 +727,13 @@ function plot_chart()
 				)
 			);
 
-			make_grid();
+			updateGrid();
 
 			$('#jqxtabs').jqxTabs('enable');
 	});
 }
 
-function make_grid()
+function updateGrid()
 {
 	var editrow = -1;
 	var vid = 0;
@@ -754,7 +754,7 @@ function make_grid()
 
 		$("#jqxgrid").jqxGrid(extraConfig);
 	});
-} // end of make_grid()
+} // end of updateGrid()
 
 function initGrid()
 {
