@@ -230,16 +230,34 @@ function validatenum(textinput)
 // Helper functions
 //
 
+function toInfoString(x)
+{
+	var text = '';
+
+	if (typeof x === 'undefined') {
+		text = '<undefined>';
+	}
+	else if (Array.isArray(x)) {
+		text = "<Array with " + x.length + " elements>";
+	}
+	else {
+		text = x.toString();
+	}
+
+	return text;
+}
+
 function setGlobal(name, value)
 {
-	var message = "Setting global '" + name + "' to '" + value + "' ";
+	var message = "Setting global '" + name + 
+		"' to '" + toInfoString(value) + "' ";
 
 	// Does the value of the global variable change?
 	changed = (globals[name] !== value);
 
 	if (changed) {
 
-		message += "(old value was: '" + globals[name] + "')";
+		message += "(old value was: '" + toInfoString(globals[name]) + "')";
 
 		// Set the global variable to the new value
 		globals[name] = value;
@@ -337,6 +355,14 @@ function dateChangedHandler(event)
 	}
 }
 
+function setCurrentData(data)
+{
+	// Update the plot
+	plot_chart(data);
+
+	$('#jqxtabs').jqxTabs('enable');
+}
+
 function setGlobalDate(isFromDate, date)
 {
 	if (isFromDate) {
@@ -358,7 +384,8 @@ function setGlobalDate(isFromDate, date)
 
 	// If the SQL-formatted version of the date changed update the plot
 	if (changed) {
-		plot_chart();
+		//plot_chart();
+		updateGrid();
 	}
 }
 
@@ -525,7 +552,7 @@ function dataAddOrEditHandler(msg, edit)
 		// Hide the popup window
 		$(edit ? '#popupWindow' : '#popupWindow_new').jqxWindow('hide');
 
-		plot_chart();
+		//plot_chart();
 	}
 	else {
 		alert(edit ? msg : DATA.text.DatabaseConfigurationError);
@@ -702,7 +729,7 @@ function getDataAsScript(callback)
 	});
 }
 
-function plot_chart()
+function plot_chart(data)
 {
 	var unit_yaxis = "unit";
 
@@ -722,14 +749,14 @@ function plot_chart()
 					formatDateSQL(globals.dateFrom, undefined, ''),
 					formatDateSQL(globals.dateTo, undefined, ''),
 					unit_yaxis,
-					data_test,
+					data, // data_test,
 					globals.variableAndType
 				)
 			);
 
-			updateGrid();
+			// updateGrid();
 
-			$('#jqxtabs').jqxTabs('enable');
+			// $('#jqxtabs').jqxTabs('enable');
 	});
 }
 
@@ -765,7 +792,11 @@ function initGrid()
 		setGlobal('flag', 1);
 	}
 
-	$("#jqxgrid").jqxGrid(gridConfig);
+	$("#jqxgrid").
+		jqxGrid(gridConfig).
+		on('bindingcomplete', function(event) {
+			setCurrentData($("#jqxgrid").jqxGrid('getrows'));
+		});
 }
 
 function initPopups()
