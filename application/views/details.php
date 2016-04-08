@@ -361,7 +361,7 @@ function setGlobalDate(isFromDate, date)
 	}
 }
 
-function ajaxSuccessHandler(result)
+function getDatesHandler(result)
 {
 	//Displaying the Available Dates
 	setGlobal('date_from', result.BeginDateTime);
@@ -412,7 +412,7 @@ function ajaxSuccessHandler(result)
 	//Binding An Event To the Second Calendar
 //	$('#jqxDateTimeInputto').on('change', dateToChangedHandler);
 }
-// end of ajaxSuccessHandler()
+// end of getDatesHandler()
 
 function toMonthBegin(date)
 {
@@ -664,7 +664,7 @@ function get_dates()
 			methodid: globals.methodID
 		}),
 		dataType: "json",
-		success: ajaxSuccessHandler
+		success: getDatesHandler
 	});
 
 } //End of get_dates()
