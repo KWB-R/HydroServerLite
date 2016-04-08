@@ -417,12 +417,6 @@ function addValueClickHandler()
 	$("#popupWindow_new").
 		jqxWindow(getWindowConfig($("#jqxgrid").offset())).
 		jqxWindow('show');
-
-	$("#date_new").
-		jqxDateTimeInput(dateInputConfig2);
-
-	$("#timepicker_new" ).
-		timepicker(timePickerConfig);
 }
 
 function delValClickHandler()
@@ -443,6 +437,7 @@ function delValClickHandler()
 
 function saveClickHandler()
 {
+	// Update the edited row when the user clicks the 'Save' button.
 	if (editrow >= 0) {
 		return handleSaveClick(true);
 	}
@@ -609,6 +604,16 @@ $(document).ready(function() {
 	$("#jqxDateTimeInputto").
 		jqxDateTimeInput(dateInputConfig).
 		on("valuechanged", {origin: "to"}, dateChangedHandler);
+
+	// Create the data table (grid) but without binding a data source
+	// and without configuring the columns
+	initGrid();
+
+	// Initialise the buttons foradding/downloading data
+	initButtons();
+
+	// Initialise the popup windows
+	initPopups();
 });
 
 //End of Document Ready Function
@@ -733,111 +738,129 @@ function make_grid()
 	var editrow = -1;
 	var vid = 0;
 
-	var dataAdapter = toJsonAdapter(
-		getDataURL(true),
-		[ 'ValueID', 'DataValue', 'LocalDateTime' ]
-	);
-
 	// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
 	getUnit(globals.variableID, function(unit) {
 
 		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
 
-		var gridConfig = {
-			source: dataAdapter,
-			width: '100%',
-			columnsresize: true,
+		// Update data source and column configuration of the grid
+		var extraConfig = {
+			source: toJsonAdapter(
+				getDataURL(true),
+				[ 'ValueID', 'DataValue', 'LocalDateTime' ]
+			),
 			columns: getColumnsConfig(unit, editable)
 		};
 
-		if (globals.flag !== 1) {
-			gridConfig = jQuery.extend(gridConfig, gridConfigExtended);
-			setGlobal('flag', 1);
-		}
-
-		$("#jqxgrid").jqxGrid(gridConfig);
+		$("#jqxgrid").jqxGrid(extraConfig);
 	});
+} // end of make_grid()
 
-	//Editing functionality
+function initGrid()
+{
+	var gridConfig = gridConfigGeneral;
 
-	// initialize the popup window and buttons.
+	if (globals.flag !== 1) {
+		gridConfig = jQuery.extend(gridConfig, gridConfigExtended);
+		setGlobal('flag', 1);
+	}
 
+	$("#jqxgrid").jqxGrid(gridConfig);
+}
+
+function initPopups()
+{
+	// Initialize the popup windows and the buttons within the windows
+
+	// Popup window 1: Edit/Save/Delete existing values
 	$("#popupWindow").jqxWindow(jQuery.extend(
 		popupWindowConfig, {cancelButton: $("#Cancel")}
 	));
 
-	$("#timepicker").timepicker({showOn: "focus", showPeriodLabels: false});
+	// Time picker
+	$("#timepicker").
+		timepicker(timePickerConfig);
 
-	$("#delval").jqxButton(buttonConfigBase);
-	$("#Cancel").jqxButton(buttonConfigBase);
-	$("#Save"  ).jqxButton(buttonConfigBase);
+	// Button "Delete"
+	$("#delval").
+		jqxButton(buttonConfigBase).
+		unbind("click"). //Multiple events are getting binded for some reason. This makes sure that doesn't happen. 
+		click(delValClickHandler);
 
-	//Delete Value
-	$("#delval").unbind("click"); //Multiple events are getting binded for some reason. This makes sure that doesn't happen. 
-	$("#delval").click(delValClickHandler);
+	// Button "Cancel"
+	$("#Cancel").
+		jqxButton(buttonConfigBase);
 
-	// update the edited row when the user clicks the 'Save' button.
-	$("#Save").unbind("click");
-	$("#Save").click(saveClickHandler);
+	// Button "Save"
+	$("#Save").
+		jqxButton(buttonConfigBase).
+		unbind("click").
+		bind('click', saveClickHandler);
 
-	//End of Editing 
+	// Popup window 2: Add new values
+	var config = jQuery.extend(
+		popupWindowConfig, 
+		{ cancelButton: $("#Cancel_new") }
+	);
 
-	//Add A new Value to the table
-	$("#popupWindow_new").jqxWindow(jQuery.extend(
-		popupWindowConfig, {cancelButton: $("#Cancel_new")}
-	));
+	$("#popupWindow_new").
+		jqxWindow(config).
+		jqxWindow('hide');
 
-	$("#Cancel_new").jqxButton(buttonConfigBase);
-	$("#Save_new"  ).jqxButton(buttonConfigBase);
+	// Button "Cancel"
+	$("#Cancel_new")
+		.jqxButton(buttonConfigBase);
 
-<?php 
+	// Button "Save"
+	$("#Save_new").
+		jqxButton(buttonConfigBase).
+		unbind("click").
+		bind('click', saveNewClickHandler);
 
-if (isLoggedIn()) {
-	echo "$(\"#addnew\").jqxButton(buttonConfig)." . 
-		"bind('click', addValueClickHandler)\n";
+	$("#date_new").
+		jqxDateTimeInput(dateInputConfig2);
+
+	$("#timepicker_new" ).
+		timepicker(timePickerConfig);
+
 }
 
-?> 
+function initButtons()
+{
+	// Add new values
 
-	$("#Save_new").unbind("click");
-	$("#Save_new").bind('click', saveNewClickHandler);
-
-	//End of adding a new value
+<?php 
+	if (isLoggedIn()) {
+		echo "$(\"#addnew\").jqxButton(buttonConfig)." . 
+			"bind('click', addValueClickHandler)\n";
+	}
+?>
 
 	//Export Button
-
 	$("#export").jqxButton(buttonConfig);
 	$("#export").bind('click', exportClickHandler);
+}
 
-	//End of Exporting
-
-	//Comparing
-
-	//Define the button for comaprision
-
-	$("#compare").jqxButton(buttonConfig);
+function initComparison()
+{
 	$('#window').jqxWindow('destroy');
 	$('#mapOuter').empty();
 
-	$('#window' ).jqxWindow(windowConfig);
-	$('#window2').jqxWindow(windowConfig2);
-	$('#window3').jqxWindow(windowConfig2);
-	$('#window4').jqxWindow(windowConfig2);
-	$('#window5').jqxWindow(windowConfig5);
+	// Create and hide windows
+	$('#window').jqxWindow(windowConfig).jqxWindow('hide');
+	$('#window2').jqxWindow(windowConfig2).jqxWindow('hide');
+	$('#window3').jqxWindow(windowConfig2).jqxWindow('hide');
+	$('#window4').jqxWindow(windowConfig2).jqxWindow('hide');
+	$('#window5').jqxWindow(windowConfig5).jqxWindow('hide');
 
-	$('#window' ).jqxWindow('hide');
-	$('#window2').jqxWindow('hide');
-	$('#window3').jqxWindow('hide');
-	$('#window4').jqxWindow('hide');
-	$('#window5').jqxWindow('hide');
+	// Define the button for comparison
+	$("#compare").
+		jqxButton(buttonConfig).
+		click(compareClickHandler);
 
-	$("#compare").click(compareClickHandler);
-
-	//Now Map Loaded. Another Function to open up a new window that will Give them options to select the data to be plotted against the esiting data
-
-	//End of Comparing
-
-} // end of make_grid()
+	// Now Map Loaded. Another Function to open up a new window that will give
+	// them options to select the data to be plotted against the existing data
+}
 
 </script>
 
