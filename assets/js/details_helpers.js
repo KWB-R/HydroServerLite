@@ -11,7 +11,9 @@ function toURL(endpoint, parameters, debug)
 	var relative = endpoint + '?' + jQuery.param(parameters);
 
 	if (debug) {
-		alert("relative URL:\n" + relative);
+		var message = "relative URL: " + relative;
+		//alert(message);
+		console.log(message);
 	}
 
 	return base_url + relative;

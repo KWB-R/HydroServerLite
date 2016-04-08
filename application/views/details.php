@@ -386,7 +386,7 @@ function ajaxSuccessHandler(result)
 
 	//If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12. 
 	globals.date_from_sql = formatDateSQL(globals.dateFrom, toMonthBegin(globals.dateFrom));
-	globals.date_to_sql   = formatDateSql(globals.dateTo, toMonthEnd(globals.dateTo));
+	globals.date_to_sql   = formatDateSQL(globals.dateTo, toMonthEnd(globals.dateTo));
 
 //	$("#fromdatedrop").jqxDropDownButton('setContent', DATA.text.SelectStart);
 //	$("#todatedrop"  ).jqxDropDownButton('setContent', DATA.text.SelectEnd);
@@ -673,6 +673,33 @@ function getUnit(variableID, callback)
 	});
 }
 
+function getDataURL(json)
+{
+	var endpoint = (json ? 'datapoint/getDataJSON' : 'datapoint/getData');
+
+	var parameters = {
+		siteid: DATA.siteid,
+		varid: globals.variableID,
+		meth: globals.methodID,
+		startdate: globals.date_from_sql,
+		enddate: globals.date_to_sql
+	};
+
+	return toURL(endpoint, parameters, true);
+}
+
+function getDataAsScript(callback)
+{
+	$.ajax({
+		url: getDataURL(false),
+		type: "GET",
+		dataType: "script"
+	}).
+	done(function() {
+		callback();
+	});
+}
+
 function plot_chart()
 {
 	var unit_yaxis = "unit";
@@ -686,30 +713,21 @@ function plot_chart()
 
 	// Chaining Complete Data loading technique..need to create a php page that
 	// will output javascript...
-	$.ajax({
-		url: toURL('datapoint/getData', {
-			siteid: DATA.siteid,
-			varid: globals.variableID,
-			meth: globals.methodID,
-			startdate: globals.date_from_sql,
-			enddate: globals.date_to_sql
-		}),
-		type: "GET",
-		dataType: "script"
-	}).
-	done(function(datatest) {
-		var date_chart_from = formatDateSQL(globals.dateFrom, undefined, '');
-		var date_chart_to   = formatDateSQL(globals.dateTo, undefined, '');
+	getDataAsScript(
+		function() {
+			globals.chart = new Highcharts.StockChart(
+				getStockChartConfig(
+					formatDateSQL(globals.dateFrom, undefined, ''),
+					formatDateSQL(globals.dateTo, undefined, ''),
+					unit_yaxis,
+					data_test,
+					globals.variableAndType
+				)
+			);
 
-		// var data_test=datatest;
-		globals.chart = new Highcharts.StockChart(getStockChartConfig(
-			date_chart_from, date_chart_to, unit_yaxis, data_test, 
-			globals.variableAndType
-		));
+			make_grid();
 
-		make_grid();
-
-		$('#jqxtabs').jqxTabs('enable');
+			$('#jqxtabs').jqxTabs('enable');
 	});
 }
 
@@ -719,13 +737,7 @@ function make_grid()
 	var vid = 0;
 
 	var dataAdapter = toJsonAdapter(
-		toURL('datapoint/getDataJSON', {
-			siteid: DATA.siteid,
-			varid: globals.variableID,
-			meth: globals.methodID,
-			startdate: globals.date_from_sql,
-			enddate: globals.date_to_sql
-		}),
+		getDataURL(true),
 		[ 'ValueID', 'DataValue', 'LocalDateTime' ]
 	);
 
