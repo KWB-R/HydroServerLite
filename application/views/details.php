@@ -49,9 +49,6 @@ var globals = {
 	dateFrom: "",
 	dateTo: "",
 
-	date_from: "",
-	date_to: "",
-
 	date_from_sql: "",
 	date_to_sql: "",
 
@@ -349,10 +346,14 @@ function setGlobalDate(isFromDate, date)
 
 	setGlobal((isFromDate ? 'dateFrom' : 'dateTo'), date);
 
+	// If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12.
+	// var month = (isFromDate ? toMonthBegin(date), toMonthEnd(date));
+	var month = date.getMonth() + 1;
+
 	// Convert the date to text so that it can be used within SQL
 	var changed = setGlobal(
 		(isFromDate ? 'date_from_sql' : 'date_to_sql'),
-		formatDateSQL(date)
+		formatDateSQL(date, month)
 	);
 
 	// If the SQL-formatted version of the date changed update the plot
@@ -363,56 +364,39 @@ function setGlobalDate(isFromDate, date)
 
 function getDatesHandler(result)
 {
-	//Displaying the Available Dates
-	setGlobal('date_from', result.BeginDateTime);
-	setGlobal('date_to', result.EndDateTime);
+	// Displaying the Available Dates
+	var date_from = result.BeginDateTime;
+	var date_to = result.EndDateTime;
 
-	//Call the next function to display the data
-	$('#daterange').html("").prepend(
-			'<p>' + 
-			'<strong>' + DATA.text.DatesAvailable + '</strong> ' + globals.date_from + 
-			'<strong> ' + DATA.text.To + ' </strong> ' + globals.date_to +
-			'</p>');
-
-	//$("#jqxDateTimeInput").jqxDateTimeInput(dateInputConfig);
-		//.off().unbind('valueChanged'); // reset the bind functions
-
-	//$("#jqxDateTimeInputto").jqxDateTimeInput(dateInputConfig);
-		//.off().unbind('valueChanged'); // reset the bind functions
-
-	//Restricting the Calendar to those available dates
+	updateDateRangeInfo(date_from, date_to);
 
 	// Convert to Date object without using the time information
-	setGlobal('dateFrom', timeconvert(globals.date_from, false));
-	setGlobal('dateTo', timeconvert(globals.date_to,   false));
+	setGlobal('dateFrom', timeconvert(date_from, false));
+	setGlobal('dateTo', timeconvert(date_to, false));
 
-//	$("#fromdatedrop").jqxDropDownButton(dateDropConfig);
-//	$("#todatedrop"  ).jqxDropDownButton(dateDropConfig);
-
-	//Use Show And Hide Method instead of repeating formation - optimization number 2
+	// Setting min and max dates?
+	//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', ???);
+	//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', ???);
+	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', ???);
+	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', ???);
 
 	$('#jqxDateTimeInput').jqxDateTimeInput('setDate', globals.dateFrom);
-	//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', new Date(year, month - 1, day));
-	//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to - 1, day_to)); 
-
 	$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', globals.dateTo);
-	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to - 1, day_to)); 
 
-	//Plot the Chart with default limits
-
-	//If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12. 
-	setGlobal('date_from_sql', formatDateSQL(globals.dateFrom, toMonthBegin(globals.dateFrom)));
-	setGlobal('date_to_sql', formatDateSQL(globals.dateTo, toMonthEnd(globals.dateTo)));
-
-//	plot_chart();
-
-	//Binding An Event to the first calender
-//	$('#jqxDateTimeInput').on('change', dateChangedHandler);
-
-	//Binding An Event To the Second Calendar
-//	$('#jqxDateTimeInputto').on('change', dateToChangedHandler);
+	// Setting the dates should trigger the corresponding change event...
 }
 // end of getDatesHandler()
+
+function updateDateRangeInfo(date_from, date_to)
+{
+	var html =
+		'<p>' +
+			'<strong>' + DATA.text.DatesAvailable + '</strong> ' + date_from +
+			' <strong>' + DATA.text.To + ' </strong> ' + date_to +
+		'</p>'
+
+	$('#daterange').html("").prepend(html);
+}
 
 function toMonthBegin(date)
 {
