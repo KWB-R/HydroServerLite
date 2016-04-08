@@ -230,6 +230,34 @@ function validatenum(textinput)
 }
 
 //
+// Helper functions
+//
+
+function setGlobal(name, value)
+{
+	var message = "Setting global '" + name + "' to '" + value + "' ";
+
+	// Does the value of the global variable change?
+	changed = (globals[name] !== value);
+
+	if (changed) {
+
+		message += "(old value was: '" + globals[name] + "')";
+
+		// Set the global variable to the new value
+		globals[name] = value;
+	}
+	else {
+		message += "(nothing changed)";
+	}
+
+	console.log(message);
+
+	// Return true if the value of the global variable changed, otherwise false
+	return changed;
+}
+
+//
 // Event Handlers
 //
 
@@ -276,9 +304,8 @@ function variableSelectHandler(event)
 		//Clear the date range
 		$('#daterange').html("");
 
-		globals.variableID = item.value;
-
-		globals.variableAndType = item.label;
+		setGlobal('variableID', item.value);
+		setGlobal('variableAndType', item.label);
 
 		get_methods(globals.variableID);
 	}
@@ -291,65 +318,54 @@ function methodSelectHandler(event)
 
 	//Check if a valid value is selected and process futher to display dates
 	if (item !== null) {
-		globals.methodID = item.value;
+
+		setGlobal('methodID', item.value);
+
 		get_dates();
-		//Now call to check dates
 	}
 }
 
 function dateChangedHandler(event)
 {
-	//alert(event.data.origin + ' changed to:' + event.args.date);
-
+	var origin = event.data.origin;
 	var newDate = new Date(event.args.date);
 
-	switch (event.data.origin) {
+	console.log(origin + ' changed to:' + newDate);
 
-		case 'from':
+	if (origin === 'from' || origin === 'to') {
+		setGlobalDate(origin === 'from', newDate);
+	}
+	else {
+		alert("Unexpected origin calling dateChangedHandler: " + origin);
+	}
+}
 
-			globals.dateFrom = newDate;
-
-			/*//Setting the Second calendar's min date to be the date of the first calendar
-			//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', event.args.date);
-			//	$("#fromdatedrop").jqxDropDownButton('setContent', formatDate(globals.dateFrom));
-
-			//Converting to SQL Format for Searching
-			var date_sql = formatDateSQL(globals.dateFrom);
-
-			if (globals.date_from_sql != date_sql) {
-				globals.date_from_sql = date_sql;
-				plot_chart();
-			}*/
-
-			break;
-
-		case 'to':
-
-			globals.dateTo = newDate;
-
-			//	$("#todatedrop").jqxDropDownButton('setContent', formatDate(globals.dateTo));
-
-			globals.date_to_sql = formatDateSQL(globals.dateTo);
-
-			break;
-
-		default:
-
-			alert(
-				"Unexpected origin calling dateChangedHanlder: " + event.data.origin
-			);
-
-			break;
+function setGlobalDate(isFromDate, date)
+{
+	if (isFromDate) {
+		//Setting the Second calendar's min date to be the date of the first calendar
+		//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', date);
 	}
 
-	plot_chart();
+	setGlobal((isFromDate ? 'dateFrom' : 'dateTo'), date);
+
+	// Convert the date to text so that it can be used within SQL
+	var changed = setGlobal(
+		(isFromDate ? 'date_from_sql' : 'date_to_sql'),
+		formatDateSQL(date)
+	);
+
+	// If the SQL-formatted version of the date changed update the plot
+	if (changed) {
+		plot_chart();
+	}
 }
 
 function ajaxSuccessHandler(result)
 {
 	//Displaying the Available Dates
-	globals.date_from = String(result.BeginDateTime);
-	globals.date_to   = String(result.EndDateTime);
+	setGlobal('date_from', result.BeginDateTime);
+	setGlobal('date_to', result.EndDateTime);
 
 	//Call the next function to display the data
 	$('#daterange').html("").prepend(
@@ -367,8 +383,8 @@ function ajaxSuccessHandler(result)
 	//Restricting the Calendar to those available dates
 
 	// Convert to Date object without using the time information
-	globals.dateFrom = timeconvert(globals.date_from, false);
-	globals.dateTo = timeconvert(globals.date_to,   false);
+	setGlobal('dateFrom', timeconvert(globals.date_from, false));
+	setGlobal('dateTo', timeconvert(globals.date_to,   false));
 
 //	$("#fromdatedrop").jqxDropDownButton(dateDropConfig);
 //	$("#todatedrop"  ).jqxDropDownButton(dateDropConfig);
@@ -385,13 +401,10 @@ function ajaxSuccessHandler(result)
 	//Plot the Chart with default limits
 
 	//If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12. 
-	globals.date_from_sql = formatDateSQL(globals.dateFrom, toMonthBegin(globals.dateFrom));
-	globals.date_to_sql   = formatDateSQL(globals.dateTo, toMonthEnd(globals.dateTo));
+	setGlobal('date_from_sql', formatDateSQL(globals.dateFrom, toMonthBegin(globals.dateFrom)));
+	setGlobal('date_to_sql', formatDateSQL(globals.dateTo, toMonthEnd(globals.dateTo)));
 
-//	$("#fromdatedrop").jqxDropDownButton('setContent', DATA.text.SelectStart);
-//	$("#todatedrop"  ).jqxDropDownButton('setContent', DATA.text.SelectEnd);
-
-	plot_chart();
+//	plot_chart();
 
 	//Binding An Event to the first calender
 //	$('#jqxDateTimeInput').on('change', dateChangedHandler);
@@ -755,7 +768,7 @@ function make_grid()
 
 		if (globals.flag !== 1) {
 			gridConfig = jQuery.extend(gridConfig, gridConfigExtended);
-			globals.flag = 1;
+			setGlobal('flag', 1);
 		}
 
 		$("#jqxgrid").jqxGrid(gridConfig);
