@@ -126,7 +126,9 @@ var editColumnConfig = {
 	columntype: 'button',
 	cellsrenderer: function () {
 		return 'Edit';
-	}
+	},
+	width: 80,
+	sortable: false
 };
 
 var tabsConfig = {

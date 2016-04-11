@@ -183,9 +183,24 @@ function getGridConfig(unit)
 	// Define columns for jqxGrid
 
 	var columns = [
-		{text: DATA.text.ValueID, datafield: 'ValueID'},
-		{text: DATA.text.Date, datafield: 'LocalDateTime'},
-		{text: DATA.text.Value + ' (' + unit + ')', datafield: 'DataValue'}
+		{
+			datafield: 'ValueID',
+			text: DATA.text.ValueID,
+			width: 180
+		},
+		{
+			datafield: 'LocalDateTime',
+			text: DATA.text.Date,
+			cellsformat: 'ddd, yyyy-MM-dd HH:mm',
+			cellsalign: 'right',
+			width: 180
+		},
+		{
+			datafield: 'DataValue',
+			text: DATA.text.Value + ' (' + unit + ')',
+			cellsalign: 'right',
+			width: 180
+		}
 	];
 
 	if (<?php echo (isLoggedIn() ? 'true' : 'false'); ?>) {
