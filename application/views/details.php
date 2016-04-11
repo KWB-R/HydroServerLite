@@ -162,6 +162,25 @@ function getStockChartConfig(
 	return jQuery.extend(chartConfig, configExtension);
 } // end of getStockChartConfig()
 
+function getDataAdapter()
+{
+	var source = {
+		datatype: 'json',
+		url: getDataURL(true),
+		id: 'ValueID',
+		datafields: [
+			{ name: 'ValueID', type: 'int'},
+			{ name: 'DataValue', type: 'float'},
+			{ name: 'LocalDateTime', type: 'date'}
+		]
+	};
+
+	var settings = {
+	};
+
+	return new $.jqx.dataAdapter(source, settings);
+}
+
 function getColumnsConfig(unitGrid, editable)
 {
 	var columns = [
@@ -771,15 +790,10 @@ function updateGrid()
 		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
 
 		// Update data source and column configuration of the grid
-		var extraConfig = {
-			source: toJsonAdapter(
-				getDataURL(true),
-				[ 'ValueID', 'DataValue', 'LocalDateTime' ]
-			),
+		$("#jqxgrid").jqxGrid({
+			source: getDataAdapter(),
 			columns: getColumnsConfig(unit, editable)
-		};
-
-		$("#jqxgrid").jqxGrid(extraConfig);
+		});
 	});
 } // end of updateGrid()
 
