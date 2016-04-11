@@ -162,8 +162,10 @@ function getStockChartConfig(
 	return jQuery.extend(chartConfig, configExtension);
 } // end of getStockChartConfig()
 
-function getDataAdapter()
+function getGridConfig(unit)
 {
+	// Define source and settings for jqx.dataAdapter
+
 	var source = {
 		datatype: 'json',
 		url: getDataURL(true),
@@ -178,26 +180,26 @@ function getDataAdapter()
 	var settings = {
 	};
 
-	return new $.jqx.dataAdapter(source, settings);
-}
+	// Define columns for jqxGrid
 
-function getColumnsConfig(unitGrid, editable)
-{
 	var columns = [
 		{text: DATA.text.ValueID, datafield: 'ValueID'},
 		{text: DATA.text.Date, datafield: 'LocalDateTime'},
-		{text: DATA.text.Value + ' (' + unitGrid + ')', datafield: 'DataValue'}
+		{text: DATA.text.Value + ' (' + unit + ')', datafield: 'DataValue'}
 	];
 
-	if (editable === true) {
+	if (<?php echo (isLoggedIn() ? 'true' : 'false'); ?>) {
 		columns = jQuery.merge(
 			columns,
 			[ jQuery.extend(editColumnConfig, {buttonclick: editClickHandler}) ]
 		);
 	}
 
-	return columns;
-} // end of getColumnsConfig()
+	return {
+		source: new $.jqx.dataAdapter(source, settings),
+		columns: columns
+	};
+} // end of getGridConfig()
 
 function getWindowConfig(offset, dx, dy)
 {
@@ -787,13 +789,9 @@ function updateGrid()
 	// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
 	getUnit(globals.variableID, function(unit) {
 
-		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
-
 		// Update data source and column configuration of the grid
-		$("#jqxgrid").jqxGrid({
-			source: getDataAdapter(),
-			columns: getColumnsConfig(unit, editable)
-		});
+		$("#jqxgrid").jqxGrid(getGridConfig(unit));
+
 	});
 } // end of updateGrid()
 
