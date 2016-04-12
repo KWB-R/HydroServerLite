@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 |--------------------------------------------------------------------------
-| Data Controller 
+| Data Controller
 |--------------------------------------------------------------------------
-| It manages all the data points. 
-| 
+| It manages all the data points.
+|
 */
 class Datapoint extends MY_Controller {
-	
+
 	function __construct()
 	{
 		$dontAuth = array('getData','getDataJSON','compare','export');
@@ -26,16 +26,16 @@ class Datapoint extends MY_Controller {
 		$this->load->library('form_validation');
 		$this->load->library('API_Config');
 	}
-	
+
 	private function createDataPoint($fields)
 	{
 		$dateFormat = "Y-m-d H:i:s";
-		
+
 		$localtime = strtotime($fields['date'] . " " . $fields['time']);
 
 		$dataPoint = array(
 			'DataValue' => $fields['DataValue'],
-			'LocalDateTime' => date($dateFormat, $localtime), 
+			'LocalDateTime' => date($dateFormat, $localtime),
 			'SiteID' => $fields['SiteID'],
 			'VariableID' => $fields['VariableID'],
 			'MethodID' => $fields['MethodID'],
@@ -47,7 +47,7 @@ class Datapoint extends MY_Controller {
 			'CensorCode', 'QualifierID', 'SampleID', 'DerivedFromID',
 			'QualityControlLevelID'
 		);
-		
+
 		foreach ($optionalFields as $field) {
 			$dataPoint[$field] = (
 				isset($fields[$field]) ? $fields[$field] : $this->getConfigItem($field)
@@ -55,11 +55,11 @@ class Datapoint extends MY_Controller {
 		}
 
 		$offsetInSeconds = 3600 * $dataPoint['UTCOffset'];
-		
+
 		$dataPoint['DateTimeUTC'] = date($dateFormat, $localtime - $offsetInSeconds);
 
-		log_message('debug', "createDataPoint: " . print_r($dataPoint, TRUE));	
-		
+		log_message('debug', "createDataPoint: " . print_r($dataPoint, TRUE));
+
 		return $dataPoint;
 	}
 
@@ -135,7 +135,7 @@ class Datapoint extends MY_Controller {
 
 		// Set style and option values (sources, variables) and load the view
 		$variableOptions = ($method != 'addmultiplevalues');
-		
+
 		$this->loadViewWithStyleAndOptions("datapoint/$method", $variableOptions);
 	}
 
@@ -144,9 +144,9 @@ class Datapoint extends MY_Controller {
 		if ($method == 'addvalue')
 		{
 			$datapoint = $this->createDataPoint($this->inputsToDataPointFields());
-			
+
 			$result = $this->datapoints->addPoint($datapoint);
-			
+
 			$success = $result;
 		}
 		elseif ($method == 'addmultiplevalues')
@@ -155,7 +155,7 @@ class Datapoint extends MY_Controller {
 
 			$dataset = array_map(
 				function($i) // callback function (defined inline)
-				{ 
+				{
 					return $this->createDataPoint($this->inputsToDataPointFields($i));
 				},
 				range(1, $rows) // array to loop through (values 1...$rows)
@@ -193,7 +193,7 @@ class Datapoint extends MY_Controller {
 		if ($setVariableOptions) {
 			$data['variableOptions'] = optionsVariable($this->variables->getAll());
 		}
-		
+
 		$this->load->view($view, $data);
 	}
 
@@ -201,19 +201,19 @@ class Datapoint extends MY_Controller {
 	{
 		if ($success) {
 			addSuccess(getTxt($successKey));
-			$this->updateSC();	
+			$this->updateSC();
 		}
 		else {
 			addError(getTxt('ProcessingError') . $errorMessage);
 		}
 	}
-	
+
 	private function setFormValidationRules()
 	{
 		$this->form_validation->set_rules('SourceID', 'SourceID', 'trim|required');
-		$this->form_validation->set_rules('SiteID', 'SiteID', 'trim|required');	
+		$this->form_validation->set_rules('SiteID', 'SiteID', 'trim|required');
 		$this->form_validation->set_rules('VariableID', 'SourceID', 'trim|required');
-		$this->form_validation->set_rules('MethodID', 'SiteID', 'trim|required');	
+		$this->form_validation->set_rules('MethodID', 'SiteID', 'trim|required');
 		$this->form_validation->set_rules('value', 'SourceID', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('datepicker', 'SiteID', 'trim|required');
 		$this->form_validation->set_rules('timepicker', 'SiteID', 'trim|required');
@@ -288,24 +288,24 @@ class Datapoint extends MY_Controller {
 			$data = $content[$row];
 
 			// Is this the header row?
-			if ($row == 1) 
+			if ($row == 1)
 			{
 				// Try to get an assignment between column name and column index.
 				// If NULL is returned, there were missing or unexpected columns.
 				$columnIndex = $this->handleHeaderRow($data, $check, $file);
 
-				if (is_null($columnIndex)) 
+				if (is_null($columnIndex))
 				{
 					return false;
 				}
 			}
-			else 
+			else
 			{
 				$fields = $this->handleDataRow(
 					$data, $columnIndex, $keyIDs, $existingIDs, $row, $file
 				);
 
-				if (is_null($fields))	
+				if (is_null($fields))
 				{
 					return false;
 				}
@@ -347,7 +347,7 @@ class Datapoint extends MY_Controller {
 		else {
 			$unexpected = array_intersect($required2, $captions);
 		}
-		
+
 		// Prepare return value
 		$columnIndex = NULL;
 
@@ -356,12 +356,12 @@ class Datapoint extends MY_Controller {
 		}
 		elseif (count($unexpected) > 0) {
 			addError($this->headerErrorMessage($required, $unexpected, $file, FALSE));
-		} 
+		}
 		else {
 			$columnIndex = array_flip($captions);
 		}
-	
-		// Return the assignment between caption and column index (or NULL, 
+
+		// Return the assignment between caption and column index (or NULL,
 		// if an error occurred)
 		return $columnIndex;
 	}
@@ -374,13 +374,13 @@ class Datapoint extends MY_Controller {
 		$date = NULL; // will be set in validateFields
 
 		// Check for a valid date and a valid data value or raise an error
-		if (!$this->validateFields($data, $columnIndex, $row, $file, $date)) 
+		if (!$this->validateFields($data, $columnIndex, $row, $file, $date))
 		{
 			return NULL;
 		}
 
 		$objects = array('Source', 'Site', 'Variable', 'Method');
-		
+
 		$optObjects = array('QualityControlLevel', 'Qualifier');
 
 		// Extend $objects by names of objects that are given in the file
@@ -389,12 +389,12 @@ class Datapoint extends MY_Controller {
 				array_push($objects, $object);
 			}
 		}
-		
+
 		if (is_null($keyIDs))
 		{
 			// Copy ID values of current row into array $keyIDs and verify that
 			// all IDs exist.
-			
+
 			$anyInvalid = FALSE;
 
 			foreach ($objects as $object)
@@ -404,7 +404,7 @@ class Datapoint extends MY_Controller {
 				// Read the Code from the "<object>Code" column, check if the
 				// code is valid and use the ID corresponding to the code
 				if (! isset($columnIndex[$object . "ID"])) {
-				
+
 					$code = $data[$columnIndex[$object . "Code"]];
 
 					$invalid = $this->addErrorIf(
@@ -428,10 +428,10 @@ class Datapoint extends MY_Controller {
 						$file
 					);
 				}
-				
+
 				// Parentheses are important since "or" has lower precedence than "="!
 				$anyInvalid = ($anyInvalid or $invalid);
-				
+
 				// Copy ID into array $keyIDs
 				$keyIDs[$object] = $id;
 			}
@@ -441,14 +441,14 @@ class Datapoint extends MY_Controller {
 				return NULL;
 			}
 		}
-	
+
 		// Create a result dataset
 		$dataset = array(
 			'date' => $date->format("Y-m-d"),
 			'time' => $date->format("H:i:s"),
 			'DataValue' => $data[$columnIndex['DataValue']]
 		);
-		
+
 		// Copy fields that may be given in the file into the result dataset
 		if (isset($columnIndex['UTCOffset'])) {
 		    $dataset['UTCOffset'] = $data[$columnIndex['UTCOffset']];
@@ -458,7 +458,7 @@ class Datapoint extends MY_Controller {
 		foreach ($objects as $object) {
 			$dataset[$object . "ID"] = $keyIDs[$object];
 		}
-		
+
 		return $dataset;
 	}
 
@@ -467,7 +467,7 @@ class Datapoint extends MY_Controller {
 		$this->loadModel('method');
 		$this->loadModel('qualitycontrollevel');
 		$this->loadModel('qualifier');
-				
+
 		return array(
 			'Site' => array_column(
 				$this->site->getAll(),
@@ -513,11 +513,18 @@ class Datapoint extends MY_Controller {
 	private function validateFields($fields, $columnIndex, $row, $file, &$date)
 	{
 		// Try to convert timestamp to DateTime object or raise an error
-		// As required, $date will be in UTC timezone since UTC was set as the 
+		// As required, $date will be in UTC timezone since UTC was set as the
 		// default timezone in processLang(), being called in the constructor of
 		// the MY_Controller class
+		$timeValue = $fields[$columnIndex['LocalDateTime']];
 
-		$error = $this->toDateTime($fields[$columnIndex['LocalDateTime']], $date);
+		// If the value in column LocalDateTime is numeric then we assume that this numeric
+		// represents the number of days since 1970-01-01 as it is done in MS Excel
+		if (gettype($timeValue) == 'double') {
+			$timeValue = "@" . round(($timeValue - 25569.0) * 86400);
+		}
+
+		$error = $this->toDateTime($timeValue, $date);
 
 		if ($error != "") {
 
@@ -564,10 +571,10 @@ class Datapoint extends MY_Controller {
 		{
 			addError($this->idErrorMessage($idName, $row, $file));
 		}
-		
+
 		return $condition;
 	}
-	
+
 	private function idErrorMessage($idName, $row, $file)
 	{
 		// Try to translate $idName
@@ -577,7 +584,7 @@ class Datapoint extends MY_Controller {
 		if (! $translated) {
 			$translated = $idName;
 		}
-		
+
 		$message = sprintf("%s %s. Row:", getTxt('invalid'), $translated);
 
 		return $this->fileErrorMessage($message, $row, $file);
@@ -612,18 +619,18 @@ class Datapoint extends MY_Controller {
 	{
 		$message = getTxt('InvalidHeading') . implode(",", $captions) . ". Row";
 		$invalids = implode(", ", $invalid);
-		
+
 		if ($missing) {
 			$error = "missing: " . $invalids;
-		} 
+		}
 		else {
 			$error = "unexpected: " . $invalids;
 			$error .= ". Did you forget to check the \"ID's in File?\" option?";
 		}
-		
+
 		return $this->fileErrorMessage($message, 1, $file, $error);
 	}
-	
+
 	public function getData()
 	{
 		$this->getData_generic('getData');
@@ -652,7 +659,7 @@ class Datapoint extends MY_Controller {
 		{
 			// The data fetched depends on the method
 			$result = $this->getDataFromModel($method, $inputs);
-			
+
 			// The output action also depends on the method
 			$this->outputOrExportData($method, $inputs, $result);
 		}
@@ -789,7 +796,7 @@ class Datapoint extends MY_Controller {
 			}
 		}
 
-		echo("$EOL];");	
+		echo("$EOL];");
 	}
 
 	private function echoJavaScriptAssignment2($rows, $noValue, $EOL = "\r\n")
@@ -936,7 +943,7 @@ class Datapoint extends MY_Controller {
 	{
 		$this->action_generic('delete');
 	}
-	
+
 	public function edit()
 	{
 		$this->action_generic('edit');
@@ -960,7 +967,7 @@ class Datapoint extends MY_Controller {
 
 			echo json_encode($output);
 		}
-		else 
+		else
 		{
 			$this->loadApiErrorView($method);
 		}
@@ -1004,15 +1011,15 @@ class Datapoint extends MY_Controller {
 	}
 
 	public function add()
-	{	
+	{
 		$method = 'add';
 		$inputs = NULL;
-		
+
 		if ($this->getAndValidateInputs($method, $inputs))
 		{
 			$source = $this->sc->getSourceBySite($inputs['SiteID']);
 			$sourceID = $source[0]['SourceID'];
-		
+
 			$inputs['SourceID'] = $sourceID;
 
 			$dataPoint = $this->createDataPoint($inputs);
@@ -1022,18 +1029,18 @@ class Datapoint extends MY_Controller {
 			$this->updateSeriesCatalogIf($result);
 
 			$output = array(
-				"status" => $this->successStatus($result), 
+				"status" => $this->successStatus($result),
 				"id" => $result
 			);
 
 			echo json_encode($output);
-		}		
+		}
 		else
 		{
 			$this->loadApiErrorView($method);
-		}	
+		}
 	}
-	
+
 	public function compare()
 	{
 		$valueid = end($this->uri->segment_array());
@@ -1044,30 +1051,30 @@ class Datapoint extends MY_Controller {
 		}
 		//List of CSS to pass to this view
 		$data=$this->StyleData;
-		
+
 		if($valueid==2)
 		{
 			$siteid = $this->getXssCleanInput('siteid');
 			$site = $this->site->getSite($siteid);
 			$data['SiteName']=$site[0]['SiteName'];
 		}
-		
-		$this->load->view("compare/".$valueid,$data);	
+
+		$this->load->view("compare/".$valueid,$data);
 	}
-	
+
 	public function updateSC()
 	{
 		//UPDATES THE SERIES CATALOG.
-		//BREAKING FROM CODEIGINITER POLICIES HERE 
-		//Its just better for now to use the same script. 
-		
-		
+		//BREAKING FROM CODEIGINITER POLICIES HERE
+		//Its just better for now to use the same script.
+
+
 		$connection = mysqli_connect($this->config->item('database_host'), $this->config->item('database_username'), $this->config->item('database_password'),$this->config->item('database_name'))
-		or die("<p>Error connecting to database: " . 
+		or die("<p>Error connecting to database: " .
 				   mysqli_error() . "</p>");
 		mysqli_set_charset ($connection,"utf8");
 		  //echo "<p>Connected to MySQL!</p>";
-		  
+
 		/*  $db = mysql_select_db($this->config->item('database_name'),$connection)
 			or die("<p>Error selecting the database " . $this->config->item('database_name') .
 			  mysql_error() . "</p>");
