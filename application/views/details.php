@@ -965,13 +965,13 @@ if(validatetime_new()==false){
 
 		//Export Button
 		$("#export").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
-		$("#export").bind('click', function () {
+		$("#export").unbind().bind('click', function () {
 			var url=base_url+'datapoint/export?siteid='+siteid+'&varid='+varid+
 				'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 			window.open(url,'_blank');
 		});
 		$("#exportXls").jqxButton({ width: '250', height: '25', theme: 'darkblue'});
-		$("#exportXls").bind('click', function () {
+		$("#exportXls").unbind().bind('click', function () {
 			var url=base_url+'datapoint/exportXls?siteid='+siteid+'&varid='+varid+
 				'&meth='+methodid+'&startdate='+date_from_sql+'&enddate='+date_to_sql;
 			window.open(url,'_blank');
