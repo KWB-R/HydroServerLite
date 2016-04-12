@@ -88,7 +88,9 @@ if (isAdmin()) {
 	);
 }
 
-$menuConfig['DB']['items'][] = html_linkItem("add_site", "sites/add", "AddSite");
+if (isTeacher() || isAdmin()) {
+	$menuConfig['DB']['items'][] = html_linkItem("add_site", "sites/add", "AddSite");
+}
 
 if (isAdmin()) {
 	$menuConfig['DB']['items'] = array_merge(
@@ -166,7 +168,7 @@ if(isLoggedIn()) {
 	echo html_linkItem("login", "auth/logout", "Logout");
 }
 else {
-	echo html_linkItem("login", "#", "LoginButton", 'onclick="showLogin()"');
+	echo html_linkItem("login", "#", "LoginButton", 'onclick="return showLogin();"');
 }
 
 echo "</ul>";
