@@ -24,19 +24,21 @@ class Excel extends PHPExcel
 
 			$sheet->fromArray($result, NULL, 'A2');
 
-			$col = 0;
-			$captions = array_keys($result[1]);
+			if (count($result) > 0) {
+				$col = 0;
+				$captions = array_keys($result[1]);
 
-			foreach ($captions AS $caption) {
+				foreach ($captions AS $caption) {
 
-				// Set column caption in row 1
-				$sheet->setCellValueByColumnAndRow($col, 1, $caption);
+					// Set column caption in row 1
+					$sheet->setCellValueByColumnAndRow($col, 1, $caption);
 
-				// Set AutoSize for all columns
-				$column = PHPExcel_Cell::stringFromColumnIndex($col);
-				$sheet->getColumnDimension($column)->setAutoSize(true);
+					// Set AutoSize for all columns
+					$column = PHPExcel_Cell::stringFromColumnIndex($col);
+					$sheet->getColumnDimension($column)->setAutoSize(true);
 
-				$col++;
+					$col++;
+				}
 			}
 
 			$writer = PHPExcel_IOFactory::createWriter($this, $format);
