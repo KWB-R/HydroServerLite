@@ -26,7 +26,7 @@ class Excel extends PHPExcel
 
 			if (count($result) > 0) {
 				$col = 0;
-				$captions = array_keys($result[1]);
+				$captions = array_keys($result[0]);
 
 				foreach ($captions AS $caption) {
 
