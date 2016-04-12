@@ -372,22 +372,13 @@ function methodSelectHandler(event)
 
 		setGlobal('methodID', item.value);
 
-		get_dates();
-	}
-}
-
-function dateChangedHandler(event)
-{
-	var origin = event.data.origin;
-	var newDate = new Date(event.args.date);
-
-	console.log(origin + ' changed to:' + newDate);
-
-	if (origin === 'from' || origin === 'to') {
-		setGlobalDate(origin === 'from', newDate);
-	}
-	else {
-		alert("Unexpected origin calling dateChangedHandler: " + origin);
+		get_dates(
+			DATA.siteid, 
+			globals.variableID, 
+			globals.methodID, function(result) {
+				setDateTimeRange(result.BeginDateTime, result.EndDateTime);
+			}
+		);
 	}
 }
 
@@ -399,7 +390,7 @@ function setCurrentData(data)
 	$('#jqxtabs').jqxTabs('enable');
 }
 
-function setGlobalDate(isFromDate, date)
+function setMinOrMaxDate(isFromDate, date)
 {
 	if (isFromDate) {
 		//Setting the Second calendar's min date to be the date of the first calendar
@@ -425,12 +416,9 @@ function setGlobalDate(isFromDate, date)
 	}
 }
 
-function getDatesHandler(result)
+function setDateTimeRange(date_from, date_to)
 {
-	// Displaying the Available Dates
-	var date_from = result.BeginDateTime;
-	var date_to = result.EndDateTime;
-
+	// Display the time range of available data
 	updateDateRangeInfo(date_from, date_to);
 
 	// Convert to Date object without using the time information
@@ -438,17 +426,13 @@ function getDatesHandler(result)
 	setGlobal('dateTo', timeconvert(date_to, false));
 
 	// Setting min and max dates?
-	//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', ???);
-	//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', ???);
-	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', ???);
-	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', ???);
+	setMinMaxDates();
 
 	$('#jqxDateTimeInput').jqxDateTimeInput('setDate', globals.dateFrom);
 	$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', globals.dateTo);
 
 	// Setting the dates should trigger the corresponding change event...
 }
-// end of getDatesHandler()
 
 function updateDateRangeInfo(date_from, date_to)
 {
@@ -459,6 +443,14 @@ function updateDateRangeInfo(date_from, date_to)
 		'</p>'
 
 	$('#daterange').html("").prepend(html);
+}
+
+function setMinMaxDates()
+{
+	//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', ???);
+	//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', ???);
+	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', ???);
+	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', ???);
 }
 
 function toMonthBegin(date)
@@ -658,15 +650,19 @@ $(document).ready(function() {
 		).
 		bind('select', variableSelectHandler);
 
-	// Create date selectors
+	// Define the handler function that is called when the user changed a date	
+	var handler = function(event) {
+		setMinOrMaxDate(event.data.isFromDate, new Date(event.args.date));
+	};
 
+	// Create date selectors
 	$("#jqxDateTimeInput").
 		jqxDateTimeInput(dateInputConfig).
-		on("valuechanged", {origin: "from"}, dateChangedHandler);
+		on("valuechanged", {isFromDate: true}, handler);
 
 	$("#jqxDateTimeInputto").
 		jqxDateTimeInput(dateInputConfig).
-		on("valuechanged", {origin: "to"}, dateChangedHandler);
+		on("valuechanged", {isFromDate: false}, handler);
 
 	// Create the data table (grid) but without binding a data source
 	// and without configuring the columns
@@ -706,20 +702,19 @@ function get_methods(variableID)
 		jqxDropDownList('selectIndex', 0);
 }
 
-function get_dates()
+function get_dates(siteID, variableID, methodID, callback)
 {
 	$.ajax({
 		type: "GET",
 		url: toURL("series/getDateJSON", {
-			siteid: DATA.siteid,
-			varid: globals.variableID,
-			methodid: globals.methodID
+			siteid: siteID,
+			varid: variableID,
+			methodid: methodID,
 		}),
 		dataType: "json",
-		success: getDatesHandler
+		success: callback
 	});
-
-} //End of get_dates()
+}
 
 // Send out an ajax request to get a unit for a given VariableID and call
 // the given callback function with the returned unit when the request ist done
