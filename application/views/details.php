@@ -753,6 +753,7 @@ function getDataURL(json)
 	return toURL(endpoint, parameters, true);
 }
 
+/*
 function getDataAsScript(callback)
 {
 	$.ajax({
@@ -762,6 +763,39 @@ function getDataAsScript(callback)
 	}).
 	done(function() {
 		callback();
+	});
+}
+*/
+
+function gridDataToSeriesData(data)
+{
+	var seriesData = [];
+	var time;
+	var dataValue;
+	var j = 0;
+
+	for (var i = 0; i < data.length; i++) {
+
+		time = data[i].LocalDateTime.getTime();
+		dataValue = data[i].DataValue;
+
+		if (time > 0) {
+			seriesData[j++] = [time, dataValue];
+		}
+	}
+
+	return seriesData;
+}
+
+function sortByFirstColumn(data)
+{
+	return data.sort(function (a, b) {
+		if (a[0] === b[0]) {
+			return 0;
+		}
+		else {
+			return (a[0] < b[0]) ? -1 : 1;
+		}
 	});
 }
 
@@ -776,24 +810,21 @@ function plot_chart(data)
 		});
 	}
 
-	// Chaining Complete Data loading technique..need to create a php page that
-	// will output javascript...
-	getDataAsScript(
-		function() {
-			globals.chart = new Highcharts.StockChart(
-				getStockChartConfig(
-					formatDateSQL(globals.dateFrom, undefined, ''),
-					formatDateSQL(globals.dateTo, undefined, ''),
-					unit_yaxis,
-					data, // data_test,
-					globals.variableAndType
-				)
-			);
+	var seriesData = sortByFirstColumn(gridDataToSeriesData(data));
+
+	var config = getStockChartConfig(
+		formatDateSQL(globals.dateFrom, undefined, ''),
+		formatDateSQL(globals.dateTo, undefined, ''),
+		unit_yaxis,
+		seriesData, // data_test,
+		globals.variableAndType
+	);
+
+	globals.chart = new Highcharts.StockChart(config);
 
 			// updateGrid();
 
 			// $('#jqxtabs').jqxTabs('enable');
-	});
 }
 
 function updateGrid()
