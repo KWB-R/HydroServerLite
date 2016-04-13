@@ -634,21 +634,33 @@ $(document).ready(function() {
 	});
 
 	// Create the Variables Drop Down list with data received in JSON format
-
 	var dataAdapter = toJsonAdapter(
 		toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 }),
 		['VariableID', 'VarNameMod']
 	);
 
-	$("#dropdownlist").
-		jqxDropDownList(
-			jQuery.extend(dropDownConfig, {
-				source: dataAdapter,
-				displayMember: 'VarNameMod',
-				valueMember: 'VariableID'
-			})
-		).
-		bind('select', variableSelectHandler);
+	var config = jQuery.extend(dropDownConfig, {
+		source: dataAdapter,
+		displayMember: 'VarNameMod',
+		valueMember: 'VariableID'
+	});
+
+	$("#dropdownlist").jqxDropDownList(config).
+		on('select', variableSelectHandler);
+
+	// Create the Methods Drop Down list. The source property will only be set in 
+	// get_methods() that is called when a variable was selected.
+	config = jQuery.extend(dropDownConfig, {
+		displayMember: 'MethodDescription',
+		valueMember: 'MethodID'
+	});
+
+	$('#methodlist').
+		jqxDropDownList(dropDownConfig).
+		on('select', methodSelectHandler).
+		on('bindingComplete', function (event) {
+			$('#methodlist').jqxDropDownList('selectIndex', 0);
+		});
 
 	// Define the handler function that is called when the user changed a date	
 	var handler = function(event) {
@@ -686,20 +698,10 @@ function get_methods(variableID)
 		[ 'MethodID', 'MethodDescription' ]
 	);
 
-	$('#methodlist').
-		//off().
-		//unbind('valuechanged').
-		//Creating the Drop Down list
-		jqxDropDownList(
-			jQuery.extend(dropDownConfig, {
-				source: dataAdapter,
-				displayMember: 'MethodDescription',
-				valueMember: 'MethodID'
-			})
-		).
-		//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
-		bind('select', methodSelectHandler).
-		jqxDropDownList('selectIndex', 0);
+	// Bind the new source to the Methods drop down list. As the 'bindingComplete'
+	// event is bound to the list, the first entry will be selected automatically 
+	// after loading the new list elements.
+	$('#methodlist').jqxDropDownList({ source: dataAdapter });
 }
 
 function get_dates(siteID, variableID, methodID, callback)
