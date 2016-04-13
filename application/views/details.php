@@ -383,6 +383,8 @@ function methodSelectHandler(event)
 
 		setGlobal('methodID', item.value);
 
+		// Load the date range of available data and call a function that handles
+		// the new dates after loading.
 		get_dates(
 			DATA.siteid, 
 			globals.variableID, 
@@ -437,7 +439,7 @@ function setDateTimeRange(date_from, date_to)
 	setGlobal('dateTo', timeconvert(date_to, false));
 
 	// Setting min and max dates?
-	setMinMaxDates();
+	//setMinMaxDates();
 
 	$('#jqxDateTimeInput').jqxDateTimeInput('setDate', globals.dateFrom);
 	$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', globals.dateTo);
