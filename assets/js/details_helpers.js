@@ -160,9 +160,14 @@ function timeconvert(timestamp, useTime)
 
 function toDate(datestring)
 {
-	var parts = datestring.split('-');
+	var parts = datestring.substring(0, 10).split('-');
 
 	return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+function toLocaleDateString_HH_MM(date) 
+{
+	return date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5);
 }
 
 function toHourAndMinute(timestring)

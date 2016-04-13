@@ -419,7 +419,7 @@ function setMinOrMaxDate(isFromDate, date)
 	// Convert the date to text so that it can be used within SQL
 	var changed = setGlobal(
 		(isFromDate ? 'date_from_sql' : 'date_to_sql'),
-		formatDateSQL(date, month)
+		formatDateSQL(date, undefined, ' ' + date.toTimeString().substring(0, 8))
 	);
 
 	// If the SQL-formatted version of the date changed update the plot
@@ -435,8 +435,16 @@ function setDateTimeRange(date_from, date_to)
 	updateDateRangeInfo(date_from, date_to);
 
 	// Convert to Date object without using the time information
-	setGlobal('dateFrom', timeconvert(date_from, false));
-	setGlobal('dateTo', timeconvert(date_to, false));
+	var startDate = new Date(date_from.substring(0, 10) + 'T00:00:00');
+	var endDate   = new Date(date_to.substring(0, 10) + 'T00:00:00');
+
+	// Set endDate to the start of the next day unless it refers to 00:00:00
+	if (date_to.substring(11) != '00:00:00') {
+		endDate.setDate(endDate.getDate() + 1);
+	}
+
+	setGlobal('dateFrom', startDate);
+	setGlobal('dateTo', endDate);
 
 	// Setting min and max dates?
 	//setMinMaxDates();
@@ -808,8 +816,8 @@ function plot_chart(data)
 	var seriesData = sortByFirstColumn(gridDataToSeriesData(data));
 
 	var config = getStockChartConfig(
-		formatDateSQL(globals.dateFrom, undefined, ''),
-		formatDateSQL(globals.dateTo, undefined, ''),
+		toLocaleDateString_HH_MM(globals.dateFrom),
+		toLocaleDateString_HH_MM(globals.dateTo),
 		unit_yaxis,
 		seriesData, // data_test,
 		globals.variableAndType
