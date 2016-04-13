@@ -358,7 +358,18 @@ function variableSelectHandler(event)
 		setGlobal('variableID', item.value);
 		setGlobal('variableAndType', item.label);
 
-		get_methods(globals.variableID);
+		// Update the source property of the Methods drop down list. As the 
+		// 'bindingComplete' event is bound to the list, the first entry will be 
+		// selected automatically after the new list elements are loaded.
+
+		var url = toURL('methods/getSiteVarJSON', {
+			siteid: DATA.siteid,
+			varid: globals.variableID
+		});
+
+		$('#methodlist').jqxDropDownList({ 
+			source: toJsonAdapter(url, ['MethodID', 'MethodDescription'])
+		});
 	}
 }
 
@@ -649,7 +660,7 @@ $(document).ready(function() {
 		on('select', variableSelectHandler);
 
 	// Create the Methods Drop Down list. The source property will only be set in 
-	// get_methods() that is called when a variable was selected.
+	// variableSelectHandler() that is called when a variable was selected.
 	config = jQuery.extend(dropDownConfig, {
 		displayMember: 'MethodDescription',
 		valueMember: 'MethodID'
@@ -690,20 +701,6 @@ $(document).ready(function() {
 //End of Document Ready Function
 
 //Function to get dates and plot a default plot
-
-function get_methods(variableID)
-{
-	var dataAdapter = toJsonAdapter(
-		toURL('methods/getSiteVarJSON', {siteid: DATA.siteid, varid: variableID}),
-		[ 'MethodID', 'MethodDescription' ]
-	);
-
-	// Bind the new source to the Methods drop down list. As the 'bindingComplete'
-	// event is bound to the list, the first entry will be selected automatically 
-	// after loading the new list elements.
-	$('#methodlist').jqxDropDownList({ source: dataAdapter });
-}
-
 function get_dates(siteID, variableID, methodID, callback)
 {
 	$.ajax({
