@@ -80,11 +80,17 @@ var buttonConfig = {
 	height: '25'
 };
 
+// Placeholders in formatString (see http://www.jqwidgets.com/jquery-widgets-
+// documentation/documentation/jqxdatetimeinput/jquery-datetimeinput-api.htm):
+//
+// 'hh'-the hour, using a 12-hour clock from 01 to 12
+// 'HH'-the hour, using a 24-hour clock from 00 to 23
+
 var dateInputConfig = {
 	width: '100%',
 	height: '25px',
 	theme: 'darkblue',
-	formatString: 'dd.MM.yyyy hh:mm'
+	formatString: 'dd.MM.yyyy HH:mm'
 };
 
 var dateInputConfig2 = {

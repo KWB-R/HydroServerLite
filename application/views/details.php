@@ -441,10 +441,10 @@ function setDateTimeRange(date_from, date_to)
 	// Setting min and max dates?
 	//setMinMaxDates();
 
+	// Set the dates in the input boxes. All dependent actions will be performed
+	// in the callback function that is registered for the change event.
 	$('#jqxDateTimeInput').jqxDateTimeInput('setDate', globals.dateFrom);
 	$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', globals.dateTo);
-
-	// Setting the dates should trigger the corresponding change event...
 }
 
 function updateDateRangeInfo(date_from, date_to)
@@ -675,19 +675,18 @@ $(document).ready(function() {
 			$('#methodlist').jqxDropDownList('selectIndex', 0);
 		});
 
-	// Define the handler function that is called when the user changed a date	
-	var handler = function(event) {
-		setMinOrMaxDate(event.data.isFromDate, new Date(event.args.date));
-	};
-
-	// Create date selectors
+	// Create date selectors and bind the 'valuechanged' event
 	$("#jqxDateTimeInput").
 		jqxDateTimeInput(dateInputConfig).
-		on("valuechanged", {isFromDate: true}, handler);
+		on("valuechanged", function(event) {
+			setMinOrMaxDate(true, event.args.date);
+		});
 
 	$("#jqxDateTimeInputto").
 		jqxDateTimeInput(dateInputConfig).
-		on("valuechanged", {isFromDate: false}, handler);
+		on("valuechanged", function(event) {
+			setMinOrMaxDate(false, event.args.date);
+		});
 
 	// Create the data table (grid) but without binding a data source
 	// and without configuring the columns

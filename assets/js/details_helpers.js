@@ -144,7 +144,9 @@ function add_zero(value)
 function timeconvert(timestamp, useTime)
 {
 	// set default of useTime to true
-	useTime = useTime || true;
+	if (useTime === undefined) {
+		useTime = true;
+	}
 
 	var year   = parseInt(timestamp.slice( 0,  4), 10);
 	var month  = parseInt(timestamp.slice( 5,  7), 10);
