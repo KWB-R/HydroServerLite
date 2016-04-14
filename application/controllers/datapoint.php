@@ -450,8 +450,14 @@ class Datapoint extends MY_Controller {
 		);
 
 		// Copy fields that may be given in the file into the result dataset
-		if (isset($columnIndex['UTCOffset'])) {
-		    $dataset['UTCOffset'] = $data[$columnIndex['UTCOffset']];
+		$fieldnames = array(
+			'UTCOffset', 'CensorCode', 'ValueAccuracy', 'OffsetValue'
+		);
+
+		foreach ($fieldnames as $fieldname) {
+			if (isset($columnIndex[$fieldname])) {
+				$dataset[$fieldname] = $data[$columnIndex[$fieldname]];
+			}
 		}
 
 		// Copy ID fields into the result dataset
