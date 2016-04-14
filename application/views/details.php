@@ -107,60 +107,18 @@ var DATA = {
 // Functions returning objects for the initialisation of user interface elements
 //
 
-function getStockChartConfig(
-	date_chart_from,
-	date_chart_to,
-	unit_yaxis,
-	data_test,
-	variableAndType
-)
+function getRangeSelectorButtonConfig(texts)
 {
-	var configExtension = {
-		title: {
-			text: DATA.text.Dataof + " " + DATA.text.SiteName + " " +
-						DATA.text.From   + " " + date_chart_from + " " +
-						DATA.text.To     + " " + date_chart_to,
-			style: {
-				fontSize: '12px'
-			}
-		},
-		subtitle: {
-			text: DATA.text.ClickDrag
-		},
-		xAxis: {
-			type: 'datetime',
-			dateTimeLabelFormats: {
-				month: '%e.%b / %Y',
-				year: '%b.%Y'
-			},
-			title: {
-				text: DATA.text.TimeMsg,
-				margin: 30
-			}
-		},
-		yAxis: {
-			title: {
-				text: unit_yaxis,
-				margin: 40
-			}
-		},
-		rangeSelector: {
-			buttons: [
-				{type: 'day',   count: 1, text: DATA.text.OneD},
-				{type: 'day',   count: 3, text: DATA.text.ThreeD},
-				{type: 'week',  count: 1, text: DATA.text.OneW},
-				{type: 'month', count: 1, text: DATA.text.OneM},
-				{type: 'month', count: 6, text: DATA.text.SixM},
-				{type: 'year',  count: 1, text: DATA.text.OneY},
-				{type: 'all', text: DATA.text.All}
-			],
-			selected: 6
-		},
-		series: [ {data: data_test, name: variableAndType} ]
-	}
-
-	return jQuery.extend(chartConfig, configExtension);
-} // end of getStockChartConfig()
+	return [
+		{ type: 'day',   count: 1, text: texts.OneD },
+		{ type: 'day',   count: 3, text: texts.ThreeD },
+		{ type: 'week',  count: 1, text: texts.OneW },
+		{ type: 'month', count: 1, text: texts.OneM },
+		{ type: 'month', count: 6, text: texts.SixM },
+		{ type: 'year',  count: 1, text: texts.OneY },
+		{ type: 'all',             text: texts.All }
+	];
+}
 
 function getGridConfig(unit)
 {
@@ -461,7 +419,7 @@ function updateDateRangeInfo(date_from, date_to)
 		'<p>' +
 			'<strong>' + DATA.text.DatesAvailable + '</strong> ' + date_from +
 			' <strong>' + DATA.text.To + ' </strong> ' + date_to +
-		'</p>'
+		'</p>';
 
 	$('#daterange').html("").prepend(html);
 }
@@ -559,8 +517,8 @@ function handleSaveClick(edit)
 		parameters = jQuery.extend(parameters, {
 			sid: DATA.siteid,
 			varid: globals.variableID,
-			mid: globals.methodID,
-		})
+			mid: globals.methodID
+		});
 	}
 
 	// Provide handler function for Ajax done event
@@ -700,6 +658,9 @@ $(document).ready(function() {
 	// and without configuring the columns
 	initGrid();
 
+	// Initialise the chart but without any data
+	initChart();
+
 	// Initialise the buttons foradding/downloading data
 	initButtons();
 
@@ -717,7 +678,7 @@ function get_dates(siteID, variableID, methodID, callback)
 		url: toURL("series/getDateJSON", {
 			siteid: siteID,
 			varid: variableID,
-			methodid: methodID,
+			methodid: methodID
 		}),
 		dataType: "json",
 		success: callback
@@ -775,16 +736,16 @@ function gridDataToSeriesData(data)
 	var seriesData = [];
 	var time;
 	var dataValue;
-	var j = 0;
 
 	for (var i = 0; i < data.length; i++) {
+		localDateTime = data[i].LocalDateTime;
 
-		time = data[i].LocalDateTime.getTime();
+		// Number of milliseconds since 1970-01-01, according to universal time
+		time_ms = localDateTime.getTime();
+		
 		dataValue = data[i].DataValue;
 
-		if (time > 0) {
-			seriesData[j++] = [time, dataValue];
-		}
+		seriesData[i] = [time_ms, dataValue];
 	}
 
 	return seriesData;
@@ -804,30 +765,58 @@ function sortByFirstColumn(data)
 
 function plot_chart(data)
 {
-	var unit_yaxis = "unit";
-
 	// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
 	if (globals.variableID != -1) {
 		getUnit(globals.variableID, function(unit) {
-			unit_yaxis = unit;
+			updateChart(data, unit, DATA.text);
 		});
 	}
+}
 
-	var seriesData = sortByFirstColumn(gridDataToSeriesData(data));
+function updateChart(data, unit, texts)
+{
+	if (typeof(globals.chart) === 'undefined') {
+		return;
+	}
+	
+	var titleParts = [
+		texts.Dataof, texts.SiteName,
+		texts.From, toLocaleDateString_HH_MM(globals.dateFrom),
+		texts.To, toLocaleDateString_HH_MM(globals.dateTo)
+	];
 
-	var config = getStockChartConfig(
-		toLocaleDateString_HH_MM(globals.dateFrom),
-		toLocaleDateString_HH_MM(globals.dateTo),
-		unit_yaxis,
-		seriesData, // data_test,
-		globals.variableAndType
-	);
+	// Update the variable elements of the chart
+	var titleConfig = {text: titleParts.join(' '), style: { fontSize: '12px' }};
+	var subtitleConfig = {text: texts.ClickDrag};
 
-	globals.chart = new Highcharts.StockChart(config);
+	globals.chart.setTitle(titleConfig, subtitleConfig);
 
-			// updateGrid();
+	console.log(globals.chart.xAxis[0]);
+	titleConfig = {
+		text: texts.TimeMsg
+		//, margin: 30
+	};
+	globals.chart.xAxis[0].setTitle(titleConfig);
 
-			// $('#jqxtabs').jqxTabs('enable');
+	console.log(globals.chart.yAxis[0]);
+	titleConfig = {
+		text: 'Unit: ' + unit
+		//, margin: 40
+	};
+	globals.chart.yAxis[0].setTitle(titleConfig);
+	//globals.chart.redraw();
+//	config.series = [ 
+//		{
+//			data: sortByFirstColumn(gridDataToSeriesData(data)),
+//			name: globals.variableAndType
+//		}
+//	];
+
+//globals.chart.redraw();
+//chart.series[0].setData(data,true);
+//you have to call set and add functions on chart object before calling redraw.
+//chart.xAxis[0].setCategories([2,4,5,6,7], false);
+
 }
 
 function updateGrid()
@@ -858,6 +847,26 @@ function initGrid()
 		on('bindingcomplete', function(event) {
 			setCurrentData($("#jqxgrid").jqxGrid('getrows'));
 		});
+}
+
+function initChart()
+{
+	Highcharts.setOptions({
+		global: { useUTC: false }
+	});
+
+	var config = jQuery.extend(myStockChartConfig, {
+		chart: {
+			renderTo: 'container'
+		},
+		rangeSelector: {
+			buttons: getRangeSelectorButtonConfig(DATA.text),
+			selected: 6
+		},
+		series: [ {data: [0, 100, 0], name: "empty series" } ],
+	});
+
+	globals.chart = new Highcharts.StockChart(config);
 }
 
 function initPopups()

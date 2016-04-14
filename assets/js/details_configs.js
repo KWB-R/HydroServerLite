@@ -9,27 +9,6 @@ var dropDownConfig = {
 	selectedIndex: 0
 };
 
-var chartConfig = {
-	chart: {
-		renderTo: 'container',
-		zoomType: 'x'
-	},
-	legend: {
-		verticalAlign: 'top',
-		enabled: true,
-		shadow: true,
-		y: 40,
-		margin: 50
-	},
-	credits: {
-		enabled: false
-	},
-	exporting: {
-		enabled: true,
-		width: 5000
-	},
-};
-
 var windowConfig = {
 	maxHeight: 800,
 	maxWidth: 800,
@@ -142,5 +121,135 @@ var tabsConfig = {
 	height: 550,
 	theme: 'darkblue',
 	collapsible: true
+};
+
+// Sub configurations for Highcharts.StockChart
+var dateTimeLabelFormats_en = {
+	millisecond: "%A, %b %e, %H:%M:%S.%L",
+	second:      "%A, %b %e, %H:%M:%S",
+	minute:      "%A, %b %e, %H:%M",
+	hour:        "%A, %b %e, %H:%M",
+	day:         "%A, %b %e, %Y %H:%M",
+	week:        "Week from %A, %b %e, %Y %H:%M",
+	month:       "%B %Y %H:%M",
+	year:        "%Y"
+};
+
+var dateTimeLabelFormats_de = {
+	millisecond: "%a, %e. %b, %H:%M:%S.%L",
+	second:      "%a, %e. %b, %H:%M:%S",
+	minute:      "%a, %e. %b, %H:%M",
+	hour:        "%a, %e. %b, %H:%M",
+	day:         "%a, %e. %b, %Y %H:%M",
+	week:        "Woche vom %a, %e. %b %Y %H:%M",
+	month:       "%B %Y %H:%M",
+	year:        "%Y"
+};
+
+var dateTimeLabelFormatsGroup_en = {
+	millisecond: [
+		dateTimeLabelFormats_en.millisecond,
+		dateTimeLabelFormats_en.millisecond,
+		'-%H:%M:%S.%L'
+	],
+	second: [
+		dateTimeLabelFormats_en.second,
+		dateTimeLabelFormats_en.second,
+		'-%H:%M:%S'
+	],
+	minute: [
+		dateTimeLabelFormats_en.minute,
+		dateTimeLabelFormats_en.minute,
+		'-%H:%M'
+	],
+	hour: [
+		dateTimeLabelFormats_en.hour,
+		dateTimeLabelFormats_en.hour,
+		'-%H:%M'
+	],
+	day: ['%A, %b %e, %Y', '%A, %b %e', '-%A, %b %e, %Y'],
+	week: ['Week from %A, %b %e, %Y', '%A, %b %e', '-%A, %b %e, %Y'],
+	month: ['%B %Y', '%B', '-%B %Y'],
+	year: ['%Y', '%Y', '-%Y']
+};
+
+var dateTimeLabelFormatsGroup_de = {
+	millisecond: [
+		dateTimeLabelFormats_de.millisecond,
+		dateTimeLabelFormats_de.millisecond,
+		'-%H:%M:%S.%L'
+	],
+	second: [
+		dateTimeLabelFormats_de.second,
+		dateTimeLabelFormats_de.second,
+		'-%H:%M:%S'
+	],
+	minute: [
+		dateTimeLabelFormats_de.minute,
+		dateTimeLabelFormats_de.minute,
+		'-%H:%M'
+	],
+	hour: [
+		dateTimeLabelFormats_de.hour,
+		dateTimeLabelFormats_de.hour,
+		'-%H:%M'
+	],
+	day: ['%a, %e. %b %Y', '%a, %e. %b', '-%a, %e. %b %Y'],
+	week: ['Woche vom %a, %e. %b %Y', '%a, %e. %b', '-%a, %e. %b %Y'],
+	month: ['%b %Y', '%b', '-%b %Y'],
+	year: ['%Y', '%Y', '-%Y']
+};
+
+var myStockChartConfig = {
+	chart: {
+		zoomType: 'x'
+	},
+	legend: {
+		verticalAlign: 'top',
+		enabled: true,
+		shadow: true,
+		y: 40,
+		margin: 50
+	},
+	credits: {
+		enabled: false
+	},
+	exporting: {
+		enabled: true,
+		width: 5000
+	},
+	plotOptions: {
+		line: {
+			marker: {
+				enabled: true
+			}
+		},
+		series: { 
+			dataGrouping: {
+				dateTimeLabelFormats: dateTimeLabelFormatsGroup_de
+			}
+		}
+	},
+	xAxis: {
+		type: 'datetime',
+		ordinal: false,
+		dateTimeLabelFormats: {
+			month: '%e.%b / %Y',
+			year: '%b.%Y'
+		}
+	},
+	yAxis: {
+		title: {
+			text: "Y-AXIS"
+		}
+	},
+	rangeSelector: {
+		inputDateFormat:     '%d.%m.%Y %H:%M',
+		inputEditDateFormat: '%d.%m.%Y %H:%M'
+	},
+	tooltip: {
+		enabled: true,
+		dateTimeLabelFormats: dateTimeLabelFormats_de
+	}
 };
 
