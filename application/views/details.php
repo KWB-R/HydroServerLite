@@ -659,7 +659,7 @@ $(document).ready(function() {
 	initGrid();
 
 	// Initialise the chart but without any data
-	initChart();
+	initChart(stockChartConfig, DATA.text);
 
 	// Initialise the buttons foradding/downloading data
 	initButtons();
@@ -786,37 +786,26 @@ function updateChart(data, unit, texts)
 	];
 
 	// Update the variable elements of the chart
-	var titleConfig = {text: titleParts.join(' '), style: { fontSize: '12px' }};
-	var subtitleConfig = {text: texts.ClickDrag};
+	globals.chart.setTitle(
+		{ // main title
+			text: titleParts.join(' '),
+			style: { fontSize: '12px' }
+		}, 
+		{ // sub title
+			text: texts.ClickDrag
+		}
+	);
 
-	globals.chart.setTitle(titleConfig, subtitleConfig);
-
-	console.log(globals.chart.xAxis[0]);
-	titleConfig = {
-		text: texts.TimeMsg
-		//, margin: 30
-	};
-	globals.chart.xAxis[0].setTitle(titleConfig);
-
-	console.log(globals.chart.yAxis[0]);
-	titleConfig = {
+	globals.chart.yAxis[0].setTitle({
 		text: 'Unit: ' + unit
 		//, margin: 40
-	};
-	globals.chart.yAxis[0].setTitle(titleConfig);
-	//globals.chart.redraw();
-//	config.series = [ 
-//		{
-//			data: sortByFirstColumn(gridDataToSeriesData(data)),
-//			name: globals.variableAndType
-//		}
-//	];
+	});
 
-//globals.chart.redraw();
-//chart.series[0].setData(data,true);
-//you have to call set and add functions on chart object before calling redraw.
-//chart.xAxis[0].setCategories([2,4,5,6,7], false);
+	data = sortByFirstColumn(gridDataToSeriesData(data));
 
+	globals.chart.series[0].setData(data);
+	globals.chart.series[0].name = globals.variableAndType;
+	globals.chart.redraw();
 }
 
 function updateGrid()
@@ -849,22 +838,32 @@ function initGrid()
 		});
 }
 
-function initChart()
+function initChart(config, texts)
 {
 	Highcharts.setOptions({
 		global: { useUTC: false }
 	});
 
-	var config = jQuery.extend(myStockChartConfig, {
+	var configUpdate = {
 		chart: {
 			renderTo: 'container'
 		},
 		rangeSelector: {
-			buttons: getRangeSelectorButtonConfig(DATA.text),
+			buttons: getRangeSelectorButtonConfig(texts),
 			selected: 6
 		},
-		series: [ {data: [0, 100, 0], name: "empty series" } ],
-	});
+		xAxis: {
+			title: {
+				text: texts.TimeMsg
+				//, margin: 30
+			}
+		},
+		series: [
+			{ data: [0, 100, 0], name: "empty series" }
+		],
+	};
+
+	var config = jQuery.extend(config, configUpdate);
 
 	globals.chart = new Highcharts.StockChart(config);
 }

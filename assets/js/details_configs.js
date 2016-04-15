@@ -200,7 +200,7 @@ var dateTimeLabelFormatsGroup_de = {
 	year: ['%Y', '%Y', '-%Y']
 };
 
-var myStockChartConfig = {
+var stockChartConfig = {
 	chart: {
 		zoomType: 'x'
 	},
@@ -231,6 +231,9 @@ var myStockChartConfig = {
 		}
 	},
 	xAxis: {
+		title: {
+			text: 'X-AXIS'
+		},
 		type: 'datetime',
 		ordinal: false,
 		dateTimeLabelFormats: {
@@ -240,7 +243,7 @@ var myStockChartConfig = {
 	},
 	yAxis: {
 		title: {
-			text: "Y-AXIS"
+			text: 'Y-AXIS'
 		}
 	},
 	rangeSelector: {
