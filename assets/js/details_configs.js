@@ -64,21 +64,22 @@ var buttonConfig = {
 //
 // 'hh'-the hour, using a 12-hour clock from 01 to 12
 // 'HH'-the hour, using a 24-hour clock from 00 to 23
+function getDateInputConfig(version)
+{
+	var config = {
+		height: '25px',
+		theme: 'darkblue',
+		formatString: 'dd.MM.yyyy HH:mm',
+	};
 
-var dateInputConfig = {
-	width: '100%',
-	height: '25px',
-	theme: 'darkblue',
-	formatString: 'dd.MM.yyyy HH:mm'
-};
+	var configUpdate = (
+		version === 1 ? 
+		{ width: '100%' } :
+		{ width: '130px', textAlign: 'center' }
+	);
 
-var dateInputConfig2 = {
-	width: '125px',
-	height: '25px',
-	theme: 'darkblue',
-	formatString: 'dd.MM.yyyy hh:mm', //"MM/dd/yyyy",
-	textAlign: 'center'
-};
+	return jQuery.extend(config, configUpdate);
+}
 
 var dateDropConfig  = {
 	width: '100%',
@@ -106,7 +107,7 @@ function getGridConfig(extended)
 		theme: 'darkblue',
 		sortable: true,
 		pageable: true,
-		autoheight: true,
+		//autoheight: true,
 		editable: false,
 		selectionmode: 'singlecell'
 	};

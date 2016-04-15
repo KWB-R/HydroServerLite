@@ -279,23 +279,27 @@ function editClickHandler(row)
 	var $grid = $('#jqxgrid');
 
 	// get the clicked row's data and initialize the input fields.
-	var dataRecord = $grid.
-		jqxGrid('getrowdata', editrow);
+	var dataRecord = $grid.jqxGrid('getrowdata', editrow);
 
-	//Create a Date time Input
-	var datepart = dataRecord.LocalDateTime.split(' ');
+	var valueID = dataRecord.ValueID;
+	var dataValue = dataRecord.DataValue;
+	var localDateTime = dataRecord.LocalDateTime;
 
+	//var datepart = localDateTime.split(' ');
+	var localISO = localDateTime.toISOString();
+	var localDate = toDate(localISO.substring(0, 10));
+	var localTime = toHourAndMinute(localISO.substring(11, 19));
+	
+	// Create a Date time Input
 	$('#date').
-		jqxDateTimeInput(dateInputConfig2).
-		jqxDateTimeInput('setDate', toDate(datepart[0]));
+		jqxDateTimeInput(getDateInputConfig(2)).
+		jqxDateTimeInput('setDate', localDateTime);
 
-	$('#timepicker').
-		val(toHourAndMinute(datepart[1]));
+	//$('#timepicker').val(localTime);
 
-	$('#value').
-		val(dataRecord.DataValue);
+	$('#value').val(dataValue);
 
-	vid = dataRecord.ValueID;
+	vid = valueID;
 
 	// Open the popup window
 	$('#popupWindow').
@@ -496,11 +500,12 @@ function handleSaveClick(edit)
 
 	// Store references to jQuery objects
 	var $date       = $('#date' + postfix);
-	var $timepicker = $('#timepicker' + postfix);
+	//var $timepicker = $('#timepicker' + postfix);
 	var $value      = $('#value' + postfix);
 
 	// Return if value or time are invalid
-	if (! validateValueAndTime($value, $timepicker)) {
+	//if (! validateValueAndTime($value, $timepicker)) {
+	if (! validatenum($value)) {
 		return false;
 	}
 
@@ -510,10 +515,14 @@ function handleSaveClick(edit)
 	// Provide the endpoint to be used for the Ajax request
 	var endpoint = (edit ? "datapoint/edit/" + vid : "datapoint/add");
 
+	var dateISOString = seldate.toISOString();
+
 	// Provide the parameters to be used for the Ajax request
 	var parameters = {
-		dt: formatDateSQL(seldate, undefined, ''),
-		time: $timepicker.val(),
+		//dt: formatDateSQL(seldate, undefined, ''),
+		// time: $timepicker.val(),
+		dt: dateISOString.substring(0, 10),
+		time: dateISOString.substring(11, 19),
 		val: $value.val()
 	};
 
@@ -533,7 +542,8 @@ function handleSaveClick(edit)
 		if (dataAddOrEditHandler(msg, true)) {
 
 			newrow = {
-				date: formatDateSQL(seldate, undefined, ' ' + $timepicker.val() + ':00'),
+				//date: formatDateSQL(seldate, undefined, ' ' + $timepicker.val() + ':00'),
+				date: seldate,
 				Value: $value.val(),
 				vid: vid
 			}
@@ -648,6 +658,8 @@ $(document).ready(function() {
 		});
 
 	// Create date selectors and bind the 'valuechanged' event
+	var dateInputConfig = getDateInputConfig(1);
+
 	$("#jqxDateTimeInput").
 		jqxDateTimeInput(dateInputConfig).
 		on("valuechanged", function(event) {
@@ -826,7 +838,9 @@ function initGrid()
 	$("#jqxgrid").
 		jqxGrid(gridConfig).
 		on('bindingcomplete', function(event) {
-			setCurrentData($("#jqxgrid").jqxGrid('getrows'));
+			var $grid = $("#jqxgrid");
+			//$grid.jqxGrid('autoresizecolumns');
+			setCurrentData($grid.jqxGrid('getrows'));
 		});
 }
 
@@ -922,8 +936,8 @@ function initPopups()
 	));
 
 	// Time picker
-	$("#timepicker").
-		timepicker(timePickerConfig);
+	//$("#timepicker").
+	//	timepicker(timePickerConfig);
 
 	// Button "Delete"
 	$("#delval").
@@ -962,10 +976,10 @@ function initPopups()
 		bind('click', saveNewClickHandler);
 
 	$("#date_new").
-		jqxDateTimeInput(dateInputConfig2);
+		jqxDateTimeInput(getDateInputConfig(2));
 
-	$("#timepicker_new" ).
-		timepicker(timePickerConfig);
+	//$("#timepicker_new" ).
+	//	timepicker(timePickerConfig);
 
 }
 
@@ -1081,10 +1095,10 @@ function nonEmptyElements($elements)
 
 function rows_for_values_table($data)
 {
-	$id_timepicker = $data['id_timepicker'];
+	//$id_timepicker = $data['id_timepicker'];
 	$id_value = $data['id_value'];
 
-	$onChange = "onChange=\"validatetime('$(#$id_timepicker)')\"";
+	//$onChange = "onChange=\"validatetime('$(#$id_timepicker)')\"";
 
 	$onBlur = "onBlur=\"validatenum($('#$id_value'))\"";
 
@@ -1100,14 +1114,14 @@ function rows_for_values_table($data)
 		html_td_left('<div id="' . $data['id_date']. '">' . html_div_end()),
 
 		// row 3
-		html_td_right(getTxt('Time')) .
-		html_td_left(
-			html_input(
-				$data['id_timepicker'],
-				'type="text" name="' . $data['id_timepicker'] . '" ' . 
-					$onChange . ' size="10"'
-			)
-		),
+//		html_td_right(getTxt('Time')) .
+//		html_td_left(
+//			html_input(
+//				$data['id_timepicker'],
+//				'type="text" name="' . $data['id_timepicker'] . '" ' . 
+//					$onChange . ' size="10"'
+//			)
+//		),
 
 		// row 4
 		html_td_right(getTxt('Value')) .
@@ -1231,7 +1245,7 @@ echo encloseInBeginEndComments(
 		html_enter_values_div(rows_for_values_table(array(
 			'caption' => 'ChangeValues',
 			'id_date' => 'date',
-			'id_timepicker' => 'timepicker',
+//			'id_timepicker' => 'timepicker',
 			'id_value' => 'value',
 			'id_save' => 'Save',
 			'id_cancel' => 'Cancel',
@@ -1267,7 +1281,7 @@ echo encloseInBeginEndComments(
 		html_enter_values_div(rows_for_values_table(array(
 			'caption' => 'EnterValues',
 			'id_date' => 'date_new',
-			'id_timepicker' => 'timepicker_new',
+//			'id_timepicker' => 'timepicker_new',
 			'id_value' => 'value_new',
 			'id_save' => 'Save_new',
 			'id_cancel' => 'Cancel_new',
