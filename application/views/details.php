@@ -659,7 +659,7 @@ $(document).ready(function() {
 	initGrid();
 
 	// Initialise the chart but without any data
-	initChart(stockChartConfig, DATA.text);
+	initChart();
 
 	// Initialise the buttons foradding/downloading data
 	initButtons();
@@ -767,45 +767,34 @@ function plot_chart(data)
 {
 	// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
 	if (globals.variableID != -1) {
+		var title = getTitle(DATA.text, globals.dateFrom, globals.dateTo);
 		getUnit(globals.variableID, function(unit) {
-			updateChart(data, unit, DATA.text);
+			updateChart(stockChartConfig, data, title, unit, DATA.text);
 		});
 	}
 }
 
-function updateChart(data, unit, texts)
+function updateChart(baseConfig, data, title, unit, texts)
 {
-	if (typeof(globals.chart) === 'undefined') {
+	if (typeof globals.chart === 'undefined') {
 		return;
 	}
-	
-	var titleParts = [
-		texts.Dataof, texts.SiteName,
-		texts.From, toLocaleDateString_HH_MM(globals.dateFrom),
-		texts.To, toLocaleDateString_HH_MM(globals.dateTo)
-	];
 
-	// Update the variable elements of the chart
-	globals.chart.setTitle(
-		{ // main title
-			text: titleParts.join(' '),
-			style: { fontSize: '12px' }
-		}, 
-		{ // sub title
-			text: texts.ClickDrag
-		}
-	);
+	var labels = {
+		title: title,
+		yAxis: unit
+	};
 
-	globals.chart.yAxis[0].setTitle({
-		text: 'Unit: ' + unit
-		//, margin: 40
-	});
+	var dataseries = {
+		data: sortByFirstColumn(gridDataToSeriesData(data)),
+		name: globals.variableAndType
+	};
 
-	data = sortByFirstColumn(gridDataToSeriesData(data));
+	var config = updateChartConfig(baseConfig, texts, labels, dataseries);
 
-	globals.chart.series[0].setData(data);
-	globals.chart.series[0].name = globals.variableAndType;
-	globals.chart.redraw();
+	// Destroy the current chart and create a new one
+	globals.chart.destroy();
+	globals.chart = new Highcharts.StockChart(config);
 }
 
 function updateGrid()
@@ -838,15 +827,48 @@ function initGrid()
 		});
 }
 
-function initChart(config, texts)
+function getTitle(texts, dateFrom, dateTo)
 {
-	Highcharts.setOptions({
-		global: { useUTC: false }
-	});
+	var titleParts = [
+		texts.Dataof, texts.SiteName,
+		texts.From, toLocaleDateString_HH_MM(dateFrom),
+		texts.To, toLocaleDateString_HH_MM(dateTo)
+	];
+
+	return titleParts.join(' ');
+}
+
+function updateChartConfig(baseConfig, texts, labels, dataseries)
+{
+	var defaultLabels = {
+		title: '<title>',
+		subtitle: texts.ClickDrag,
+		xAxis: texts.TimeMsg,
+		yAxis: '<y-axis>'
+	};
+
+	labels = (typeof labels === 'undefined') ?
+		defaultLabels :
+		jQuery.extend(defaultLabels, labels);
+
+	// Set defaults
+	if (typeof dataseries === 'undefined') {
+		dataseries = {
+			data: [0, 100, 0],
+			name: "dummy series"
+		};
+	}
 
 	var configUpdate = {
 		chart: {
 			renderTo: 'container'
+		},
+		title: {
+			text: labels.title,
+			style: { fontSize: '12px' }
+		},
+		subtitle: {
+			text: labels.subtitle
 		},
 		rangeSelector: {
 			buttons: getRangeSelectorButtonConfig(texts),
@@ -854,16 +876,33 @@ function initChart(config, texts)
 		},
 		xAxis: {
 			title: {
-				text: texts.TimeMsg
+				text: labels.xAxis
 				//, margin: 30
 			}
 		},
+		yAxis: {
+			title: {
+				text: labels.yAxis
+				//, margin: 40
+			}
+		},
 		series: [
-			{ data: [0, 100, 0], name: "empty series" }
+			dataseries
 		],
 	};
 
-	var config = jQuery.extend(config, configUpdate);
+	return jQuery.extend(baseConfig, configUpdate);
+}
+
+function initChart()
+{
+	Highcharts.setOptions({
+		global: {
+			useUTC: false
+		}
+	});
+
+	var config = updateChartConfig(stockChartConfig, DATA.text);
 
 	globals.chart = new Highcharts.StockChart(config);
 }
