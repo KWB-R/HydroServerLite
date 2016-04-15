@@ -52,7 +52,6 @@ var globals = {
 	date_from_sql: "",
 	date_to_sql: "",
 
-	flag: 0,
 	chart: undefined,
 
 	updateRequired: false
@@ -122,7 +121,7 @@ function getRangeSelectorButtonConfig(texts)
 	];
 }
 
-function getGridConfig(unit)
+function getGridConfigUpdate(unit)
 {
 	// Define source and settings for jqx.dataAdapter
 
@@ -174,7 +173,7 @@ function getGridConfig(unit)
 		source: new $.jqx.dataAdapter(source, settings),
 		columns: columns
 	};
-} // end of getGridConfig()
+} // end of getGridConfigUpdate()
 
 function getWindowConfig(offset, dx, dy)
 {
@@ -814,19 +813,15 @@ function updateGrid()
 	getUnit(globals.variableID, function(unit) {
 
 		// Update data source and column configuration of the grid
-		$("#jqxgrid").jqxGrid(getGridConfig(unit));
+		var config = getGridConfigUpdate(unit);
+		$("#jqxgrid").jqxGrid(config);
 
 	});
-} // end of updateGrid()
+}
 
 function initGrid()
 {
-	var gridConfig = gridConfigGeneral;
-
-	if (globals.flag !== 1) {
-		gridConfig = jQuery.extend(gridConfig, gridConfigExtended);
-		setGlobal('flag', 1);
-	}
+	var gridConfig = getGridConfig(true);
 
 	$("#jqxgrid").
 		jqxGrid(gridConfig).

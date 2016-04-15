@@ -91,19 +91,32 @@ var timePickerConfig = {
 	showPeriodLabels: false
 };
 
-var gridConfigGeneral = {
-	width: '100%',
-	columnsresize: true
-};
+function getGridConfig(extended)
+{
+	if (typeof extended === 'undefined') {
+		extended = true;
+	}
 
-var gridConfigExtended = {
-	theme: 'darkblue',
-	sortable: true,
-	pageable: true,
-	autoheight: true,
-	editable: false,
-	selectionmode: 'singlecell'
-};
+	var configGeneral = {
+		width: '100%',
+		columnsresize: true
+	};
+
+	var configExtended = {
+		theme: 'darkblue',
+		sortable: true,
+		pageable: true,
+		autoheight: true,
+		editable: false,
+		selectionmode: 'singlecell'
+	};
+
+	return (
+		extended ?
+		jQuery.extend(configGeneral, configExtended) :
+		configGeneral
+	);
+}
 
 var editColumnConfig = {
 	text: 'Edit',
