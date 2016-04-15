@@ -53,7 +53,9 @@ var globals = {
 	date_to_sql: "",
 
 	flag: 0,
-	chart: ""
+	chart: undefined,
+
+	updateRequired: false
 };
 
 //
@@ -339,7 +341,11 @@ function methodSelectHandler(event)
 	//Check if a valid value is selected and process futher to display dates
 	if (item !== null) {
 
-		setGlobal('methodID', item.value);
+		changed = setGlobal('methodID', item.value);
+
+		if (changed) {
+			setGlobal('updateRequired', true);
+		}
 
 		// Load the date range of available data and call a function that handles
 		// the new dates after loading.
@@ -381,9 +387,10 @@ function setMinOrMaxDate(isFromDate, date)
 	);
 
 	// If the SQL-formatted version of the date changed update the plot
-	if (changed) {
+	if (changed || globals.updateRequired) {
 		//plot_chart();
 		updateGrid();
+		setGlobal('updateRequried', false);
 	}
 }
 
