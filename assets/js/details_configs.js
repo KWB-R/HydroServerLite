@@ -200,59 +200,92 @@ var dateTimeLabelFormatsGroup_de = {
 	year: ['%Y', '%Y', '-%Y']
 };
 
-var stockChartConfig = {
-	chart: {
-		zoomType: 'x'
-	},
-	legend: {
-		verticalAlign: 'top',
-		enabled: true,
-		shadow: true,
-		y: 40,
-		margin: 50
-	},
-	credits: {
-		enabled: false
-	},
-	exporting: {
-		enabled: true,
-		width: 5000
-	},
-	plotOptions: {
-		line: {
-			marker: {
-				enabled: true
+function getStockChartConfig(country)
+{
+	country = country || 'en'
+
+	var inputDateFormat = (
+		country === 'de' ?
+		'%d.%m.%Y %H:%M' :
+		'%m/%d/%Y %H:%M'
+	);
+
+	var dateTimeLabelFormatsGroup = (
+		country === 'de' ?
+		dateTimeLabelFormatsGroup_de :
+		dateTimeLabelFormatsGroup_en
+	);
+
+	var dateTimeLabelFormats = (
+		country === 'de' ?
+		dateTimeLabelFormats_de :
+		dateTimeLabelFormats_en
+	);
+
+	return {
+		chart: {
+			zoomType: 'x'
+		},
+		legend: {
+			verticalAlign: 'top',
+			enabled: true,
+			shadow: true,
+			y: 40,
+			margin: 50
+		},
+		credits: {
+			enabled: false
+		},
+		exporting: {
+			enabled: true,
+			width: 5000
+		},
+		plotOptions: {
+			line: {
+				marker: {
+					enabled: true
+				}
+			},
+			series: { 
+				dataGrouping: {
+					dateTimeLabelFormats: dateTimeLabelFormatsGroup
+				}
 			}
 		},
-		series: { 
-			dataGrouping: {
-				dateTimeLabelFormats: dateTimeLabelFormatsGroup_de
+		xAxis: {
+			title: {
+				text: 'X-AXIS'
+			},
+			type: 'datetime',
+			ordinal: false,
+			dateTimeLabelFormats: {
+				month: '%e.%b / %Y',
+				year: '%b.%Y'
 			}
-		}
-	},
-	xAxis: {
-		title: {
-			text: 'X-AXIS'
 		},
-		type: 'datetime',
-		ordinal: false,
-		dateTimeLabelFormats: {
-			month: '%e.%b / %Y',
-			year: '%b.%Y'
+		yAxis: {
+			title: {
+				text: 'Y-AXIS'
+			}
+		},
+		rangeSelector: {
+			inputDateFormat: inputDateFormat,
+			inputEditDateFormat: inputDateFormat,
+			enabled: true,
+			inputEnabled: true,
+			inputBoxHeight: 25,
+			inputStyle: {
+				//color: 'red',
+				//fontWeight: 'bold'
+				//fontSize: '10pt',
+				width: '140px',
+				height: '20px'
+			}
+		},
+		tooltip: {
+			enabled: true,
+			dateTimeLabelFormats: dateTimeLabelFormats
 		}
-	},
-	yAxis: {
-		title: {
-			text: 'Y-AXIS'
-		}
-	},
-	rangeSelector: {
-		inputDateFormat:     '%d.%m.%Y %H:%M',
-		inputEditDateFormat: '%d.%m.%Y %H:%M'
-	},
-	tooltip: {
-		enabled: true,
-		dateTimeLabelFormats: dateTimeLabelFormats_de
 	}
-};
+}
 

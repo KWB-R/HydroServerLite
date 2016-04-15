@@ -776,7 +776,8 @@ function plot_chart(data)
 	if (globals.variableID != -1) {
 		var title = getTitle(DATA.text, globals.dateFrom, globals.dateTo);
 		getUnit(globals.variableID, function(unit) {
-			updateChart(stockChartConfig, data, title, unit, DATA.text);
+			var config = getStockChartConfig('de');
+			updateChart(config, data, title, unit, DATA.text);
 		});
 	}
 }
@@ -898,7 +899,8 @@ function updateChartConfig(baseConfig, texts, labels, dataseries)
 		],
 	};
 
-	return jQuery.extend(baseConfig, configUpdate);
+	// Use deep extension (recursive copy)
+	return jQuery.extend(true, baseConfig, configUpdate);
 }
 
 function initChart()
@@ -909,7 +911,8 @@ function initChart()
 		}
 	});
 
-	var config = updateChartConfig(stockChartConfig, DATA.text);
+	var config = getStockChartConfig('de');
+	config = updateChartConfig(config, DATA.text);
 
 	globals.chart = new Highcharts.StockChart(config);
 }
