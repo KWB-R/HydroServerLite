@@ -362,14 +362,6 @@ function methodSelectHandler(event)
 	}
 }
 
-function setCurrentData(data)
-{
-	// Update the plot
-	plot_chart(data);
-
-	$('#jqxtabs').jqxTabs('enable');
-}
-
 function setMinOrMaxDate(isFromDate, date)
 {
 	if (isFromDate) {
@@ -391,9 +383,13 @@ function setMinOrMaxDate(isFromDate, date)
 
 	// If the SQL-formatted version of the date changed update the plot
 	if (changed || globals.updateRequired) {
-		//plot_chart();
-		updateGrid();
-		setGlobal('updateRequired', false);
+
+		// Get the unit and call the given function if the unit is available
+		getUnit(globals.variableID, function(unit) {
+
+			updateGridAndPlot(unit);
+			setGlobal('updateRequired', false);
+		});
 	}
 }
 
@@ -674,7 +670,7 @@ $(document).ready(function() {
 
 	// Create the data table (grid) but without binding a data source
 	// and without configuring the columns
-	initGrid();
+	$("#jqxgrid").jqxGrid(getGridConfig(true));
 
 	// Initialise the chart but without any data
 	initChart();
@@ -703,6 +699,7 @@ function get_dates(siteID, variableID, methodID, callback)
 	});
 }
 
+// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
 // Send out an ajax request to get a unit for a given VariableID and call
 // the given callback function with the returned unit when the request ist done
 function getUnit(variableID, callback)
@@ -781,67 +778,66 @@ function sortByFirstColumn(data)
 	});
 }
 
-function plot_chart(data)
+function updateGridAndPlot(unit)
 {
-	// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
-	if (globals.variableID != -1) {
-		var title = getTitle(DATA.text, globals.dateFrom, globals.dateTo);
-		getUnit(globals.variableID, function(unit) {
-			var config = getStockChartConfig('de');
-			updateChart(config, data, title, unit, DATA.text);
-		});
-	}
-}
+	var $grid = $("#jqxgrid");
+	var $tabs = $('#jqxtabs');
+	var eventname = 'bindingcomplete';
+	var config;
 
-function updateChart(baseConfig, data, title, unit, texts)
-{
-	if (typeof globals.chart === 'undefined') {
-		return;
-	}
+	// Update data source and column configuration of the grid
+	config = getGridConfigUpdate(unit);
+	$grid.jqxGrid(config);
 
-	var labels = {
-		title: title,
-		yAxis: unit
-	};
+	// Rebind the bindingComplete event
+	$grid.unbind(eventname);
+	$grid.bind(eventname, function(event) {
 
-	var dataseries = {
-		data: sortByFirstColumn(gridDataToSeriesData(data)),
-		name: globals.variableAndType
-	};
+		// Get the data from the grid
+		var data = $grid.jqxGrid('getrows');
 
-	var config = updateChartConfig(baseConfig, texts, labels, dataseries);
+		// Recreate the chart object. Destroy the current chart if there is any.
+		if (typeof globals.chart !== 'undefined') {
 
-	// Destroy the current chart and create a new one
-	globals.chart.destroy();
-	globals.chart = new Highcharts.StockChart(config);
-}
+			globals.chart.destroy();
+		}
 
-function updateGrid()
-{
-	var editrow = -1;
-	var vid = 0;
+		// Create a new chart object
+		setGlobal('chart', newChart(data, unit));
 
-	// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
-	getUnit(globals.variableID, function(unit) {
-
-		// Update data source and column configuration of the grid
-		var config = getGridConfigUpdate(unit);
-		$("#jqxgrid").jqxGrid(config);
-
+		// Enable the grid tab and the plot tab
+		$tabs.jqxTabs('enableAt', 2);
+		$tabs.jqxTabs('enableAt', 1);
 	});
 }
 
-function initGrid()
+function newChart(griddata, unit)
 {
-	var gridConfig = getGridConfig(true);
+	var config = getStockChartConfig('de');
+	var configUpdate;
+	var labels = undefined;
+	var dataseries = undefined;
 
-	$("#jqxgrid").
-		jqxGrid(gridConfig).
-		on('bindingcomplete', function(event) {
-			var $grid = $("#jqxgrid");
-			//$grid.jqxGrid('autoresizecolumns');
-			setCurrentData($grid.jqxGrid('getrows'));
-		});
+	if (typeof griddata !== 'undefined') {
+
+		labels = {
+			title: getTitle(DATA.text, globals.dateFrom, globals.dateTo),
+			yAxis: unit
+		};
+
+		dataseries = {
+			data: sortByFirstColumn(gridDataToSeriesData(griddata)),
+			name: globals.variableAndType
+		};
+	}
+
+	// Create the variable parts of the configuration
+	configUpdate = getChartConfigUpdate(DATA.text, labels, dataseries);
+
+	// Use deep extension (recursive copy)
+	config = jQuery.extend(true, config, configUpdate);
+
+	return new Highcharts.StockChart(config);
 }
 
 function getTitle(texts, dateFrom, dateTo)
@@ -855,28 +851,33 @@ function getTitle(texts, dateFrom, dateTo)
 	return titleParts.join(' ');
 }
 
-function updateChartConfig(baseConfig, texts, labels, dataseries)
+function getChartConfigUpdate(texts, labels, dataseries)
 {
-	var defaultLabels = {
-		title: '<title>',
-		subtitle: texts.ClickDrag,
-		xAxis: texts.TimeMsg,
-		yAxis: '<y-axis>'
-	};
-
-	labels = (typeof labels === 'undefined') ?
-		defaultLabels :
-		jQuery.extend(defaultLabels, labels);
-
-	// Set defaults
-	if (typeof dataseries === 'undefined') {
-		dataseries = {
+	// Define defaults
+	var defaults = {
+		labels: {
+			title: '<title>',
+			subtitle: texts.ClickDrag,
+			xAxis: texts.TimeMsg,
+			yAxis: '<y-axis>'
+		},
+		dataseries: {
 			data: [0, 100, 0],
 			name: "dummy series"
-		};
+		}
 	}
 
-	var configUpdate = {
+	// Use the defaults labels where no labels are given
+	labels = (typeof labels === 'undefined') ?
+		defaults.labels :
+		jQuery.extend(defaults.labels, labels);
+
+	// Use the default series if not dataseries is given
+	if (typeof dataseries === 'undefined') {
+		dataseries = defaults.dataseries;
+	}
+
+	return {
 		chart: {
 			renderTo: 'container'
 		},
@@ -907,9 +908,6 @@ function updateChartConfig(baseConfig, texts, labels, dataseries)
 			dataseries
 		],
 	};
-
-	// Use deep extension (recursive copy)
-	return jQuery.extend(true, baseConfig, configUpdate);
 }
 
 function initChart()
@@ -920,10 +918,8 @@ function initChart()
 		}
 	});
 
-	var config = getStockChartConfig('de');
-	config = updateChartConfig(config, DATA.text);
-
-	globals.chart = new Highcharts.StockChart(config);
+	// Create a new chart object and save the reference in a global variable
+	setGlobal('chart', newChart());
 }
 
 function initPopups()
