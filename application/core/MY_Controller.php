@@ -110,6 +110,7 @@ class MY_Controller extends CI_Controller {
 			),
 			'JS_Globalization' => array(
 				'jqwidgets/globalization/jquery.global.js',
+				'jqwidgets/globalization/globalize.js',
 				'highstock.js',
 				'modules/exporting.js'
 			),
