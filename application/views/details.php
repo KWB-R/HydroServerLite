@@ -216,23 +216,6 @@ function validatenum(textinput)
 // Helper functions
 //
 
-function toInfoString(x)
-{
-	var text = '';
-
-	if (typeof x === 'undefined') {
-		text = '<undefined>';
-	}
-	else if (Array.isArray(x)) {
-		text = "<Array with " + x.length + " elements>";
-	}
-	else {
-		text = x.toString();
-	}
-
-	return text;
-}
-
 function setGlobal(name, value)
 {
 	var message = "Setting global '" + name + 

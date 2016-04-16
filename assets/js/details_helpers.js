@@ -2,6 +2,23 @@
 // Helper functions required in sites/details
 //
 
+function toInfoString(x)
+{
+	var text = '';
+
+	if (typeof x === 'undefined') {
+		text = '<undefined>';
+	}
+	else if (Array.isArray(x)) {
+		text = "<Array with " + x.length + " elements>";
+	}
+	else {
+		text = x.toString();
+	}
+
+	return text;
+}
+
 // Helper function to generate a URL with parameters
 function toURL(endpoint, parameters, debug)
 {
