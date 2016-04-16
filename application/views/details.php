@@ -393,7 +393,7 @@ function setMinOrMaxDate(isFromDate, date)
 	if (changed || globals.updateRequired) {
 		//plot_chart();
 		updateGrid();
-		setGlobal('updateRequried', false);
+		setGlobal('updateRequired', false);
 	}
 }
 
