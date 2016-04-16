@@ -237,11 +237,8 @@ function editClickHandler(row)
 	var localDate = toDate(localISO.substring(0, 10));
 	var localTime = toHourAndMinute(localISO.substring(11, 19));
 	
-	// Create a Date time Input
-	$('#date').
-		jqxDateTimeInput(getDateInputConfig(2)).
-		jqxDateTimeInput('setDate', localDateTime);
-
+	// Set date and time in date and time input field
+	$('#date').jqxDateTimeInput('setDate', localDateTime);
 	//$('#timepicker').val(localTime);
 
 	$('#value').val(dataValue);
@@ -404,29 +401,18 @@ function delValClickHandler()
 	});
 } // end of delValClickHandler()
 
-function saveClickHandler()
-{
-	// Update the edited row when the user clicks the 'Save' button.
-	if (editrow >= 0) {
-		return handleSaveClick(true);
-	}
-
-	return true;
-}
-
-function saveNewClickHandler()
-{
-	return handleSaveClick(false);
-}
-
 function handleSaveClick(edit)
 {
+	if (edit && editrow < 0) {
+		return true;
+	}
+
 	postfix = (edit ? '' : '_new');
 
 	// Store references to jQuery objects
-	var $date       = $('#date' + postfix);
+	var $date = $('#date' + postfix);
 	//var $timepicker = $('#timepicker' + postfix);
-	var $value      = $('#value' + postfix);
+	var $value = $('#value' + postfix);
 
 	// Return if value or time are invalid
 	//if (! (validatenum($value) && validatetime($timepicker)) ) {
@@ -591,12 +577,14 @@ $(document).ready(function() {
 	$("#jqxDateTimeInput").
 		jqxDateTimeInput(dateInputConfig).
 		on("valuechanged", function(event) {
+			console.log("#jqxDateTimeInput fired 'valuechanged'");
 			setMinOrMaxDate(true, event.args.date);
 		});
 
 	$("#jqxDateTimeInputto").
 		jqxDateTimeInput(dateInputConfig).
 		on("valuechanged", function(event) {
+			console.log("#jqxDateTimeInputto fired 'valuechanged'");
 			setMinOrMaxDate(false, event.args.date);
 		});
 
@@ -857,58 +845,43 @@ function initChart()
 function initPopups()
 {
 	// Initialize the popup windows and the buttons within the windows
+	var config;
 
-	// Popup window 1: Edit/Save/Delete existing values
-	$("#popupWindow").jqxWindow(jQuery.extend(
-		popupWindowConfig, {cancelButton: $("#Cancel")}
-	));
+	// Create and hide popup window 1: Edit/Save/Delete existing values
+	config = jQuery.extend(popupWindowConfig, { cancelButton: $("#Cancel") });
+	$("#popupWindow").jqxWindow(config).jqxWindow('hide');
 
-	// Time picker
-	//$("#timepicker").
-	//	timepicker(timePickerConfig);
+	// Create and hide popup window 2: Add new values
+	config = jQuery.extend(popupWindowConfig, { cancelButton: $("#Cancel_new") });
+	$("#popupWindow_new").jqxWindow(config).jqxWindow('hide');
 
-	// Button "Delete"
-	$("#delval").
-		jqxButton(buttonConfigBase).
-		unbind("click"). //Multiple events are getting binded for some reason. This makes sure that doesn't happen. 
-		click(delValClickHandler);
+	// Create inputs in popup window 1 and popup window 2
 
-	// Button "Cancel"
-	$("#Cancel").
-		jqxButton(buttonConfigBase);
+	// Date and time inputs
+	config = getDateInputConfig(2);
+	$('#date'    ).jqxDateTimeInput(config);
+	$("#date_new").jqxDateTimeInput(config);
+	//$("#timepicker").timepicker(timePickerConfig);
+	//$("#timepicker_new" ).timepicker(timePickerConfig);
 
-	// Button "Save"
-	$("#Save").
-		jqxButton(buttonConfigBase).
-		unbind("click").
-		bind('click', saveClickHandler);
+	// Button "Delete" (only in popup window 1)
+	$("#delval").jqxButton(buttonConfigBase).
+		on('click', delValClickHandler);
 
-	// Popup window 2: Add new values
-	var config = jQuery.extend(
-		popupWindowConfig, 
-		{ cancelButton: $("#Cancel_new") }
-	);
+	// Buttons "Cancel"
+	$("#Cancel"    ).jqxButton(buttonConfigBase);
+	$("#Cancel_new").jqxButton(buttonConfigBase);
 
-	$("#popupWindow_new").
-		jqxWindow(config).
-		jqxWindow('hide');
+	// Buttons "Save"
+	$("#Save").jqxButton(buttonConfigBase).
+		on('click', function(event) {
+			return handleSaveClick(true);
+		});
 
-	// Button "Cancel"
-	$("#Cancel_new")
-		.jqxButton(buttonConfigBase);
-
-	// Button "Save"
-	$("#Save_new").
-		jqxButton(buttonConfigBase).
-		unbind("click").
-		bind('click', saveNewClickHandler);
-
-	$("#date_new").
-		jqxDateTimeInput(getDateInputConfig(2));
-
-	//$("#timepicker_new" ).
-	//	timepicker(timePickerConfig);
-
+	$("#Save_new").jqxButton(buttonConfigBase).
+		on('click', function(event) {
+			return handleSaveClick(false);
+		});
 }
 
 function initButtons()
