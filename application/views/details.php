@@ -190,11 +190,6 @@ function getWindowConfig(offset, dx, dy)
 // Functions to validate time and value strings
 //
 
-function validateValueAndTime(textinput, timepicker)
-{
-	return (validatenum(textinput) && validatetime(timepicker));
-}
-
 function validatetime(timepicker)
 {
 	//Removing all space
@@ -214,7 +209,6 @@ function validatetime(timepicker)
 
 function validatenum(textinput)
 {
-	// isValidNumber from assets/js/details_helpers.js
 	return isValidNumber(textinput.val(), globals.texts);
 }
 
@@ -368,10 +362,6 @@ function setMinOrMaxDate(isFromDate, date)
 
 	setGlobal((isFromDate ? 'dateFrom' : 'dateTo'), date);
 
-	// If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12.
-	// var month = (isFromDate ? toMonthBegin(date), toMonthEnd(date));
-	var month = date.getMonth() + 1;
-
 	// Convert the date to text so that it can be used within SQL
 	var changed = setGlobal(
 		(isFromDate ? 'date_from_sql' : 'date_to_sql'),
@@ -435,20 +425,6 @@ function setMinMaxDates()
 	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', ???);
 }
 
-function toMonthBegin(date)
-{
-	var monthBegin = date.getMonth();
-
-	return (monthBegin === 0) ? 1 : monthBegin;
-}
-
-function toMonthEnd(date)
-{
-	var monthEnd = date.getMonth() + 2;
-
-	return (monthEnd > 12) ? 12 : monthEnd;
-}
-
 function addValueClickHandler()
 {
 	$("#popupWindow_new").
@@ -497,7 +473,7 @@ function handleSaveClick(edit)
 	var $value      = $('#value' + postfix);
 
 	// Return if value or time are invalid
-	//if (! validateValueAndTime($value, $timepicker)) {
+	//if (! (validatenum($value) && validatetime($timepicker)) ) {
 	if (! validatenum($value)) {
 		return false;
 	}
