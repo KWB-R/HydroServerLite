@@ -717,20 +717,20 @@ form ul.login a {
     }
 
         #nav h2:after {
-         //   content: "+";
-          //  font-size: .8em;
-          //  vertical-align: sub;
-          //  position: absolute;
-          //  bottom: 0;
-          //  right: 0;
-          //  padding-right: .5em;
+         /* content: "+"; */
+         /* font-size: .8em; */
+         /* vertical-align: sub; */
+         /* position: absolute; */
+         /* bottom: 0; */
+         /* right: 0; */
+         /* padding-right: .5em; */
         }
 
     #nav ul {
         list-style: none;
         padding: 0;
-       // width: 150px;
-       // border: 1px solid #000;
+       /* width: 150px; */
+       /* border: 1px solid #000; */
         z-index: 501;
     }
 
@@ -786,19 +786,19 @@ form ul.login a {
     }
 
    #nav li:hover > a, div#nav li:hover > h2 {
-      //  background-color: #3C3C3C;
+      /* background-color: #3C3C3C; */
     }
 
     #nav li:hover ul {
-       // display: block;
+       /* display: block; */
     }
 
         #nav li:hover ul ul {
-         //   display: none;
+         /* display: none; */
         }
 
     #nav ul ul li {
-     //   border-left: 25px solid #3C3C3C;
+     /* border-left: 25px solid #3C3C3C; */
     }
 
 .home a {
