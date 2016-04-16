@@ -105,19 +105,6 @@ globals.texts = {
 // Functions returning objects for the initialisation of user interface elements
 //
 
-function getRangeSelectorButtonConfig(texts)
-{
-	return [
-		{ type: 'day',   count: 1, text: texts.OneD },
-		{ type: 'day',   count: 3, text: texts.ThreeD },
-		{ type: 'week',  count: 1, text: texts.OneW },
-		{ type: 'month', count: 1, text: texts.OneM },
-		{ type: 'month', count: 6, text: texts.SixM },
-		{ type: 'year',  count: 1, text: texts.OneY },
-		{ type: 'all',             text: texts.All }
-	];
-}
-
 function getGridConfigUpdate(unit)
 {
 	// Define source and settings for jqx.dataAdapter
@@ -171,20 +158,6 @@ function getGridConfigUpdate(unit)
 		columns: columns
 	};
 } // end of getGridConfigUpdate()
-
-function getWindowConfig(offset, dx, dy)
-{
-	// Set defaults
-	dx = dx || 220;
-	dy = dy ||  60;
-
-	return {
-		position: {
-			x: parseInt(offset.left, 10) + dx,
-			y: parseInt(offset.top,  10) + dy
-		}
-	};
-}
 
 //
 // Functions to validate time and value strings

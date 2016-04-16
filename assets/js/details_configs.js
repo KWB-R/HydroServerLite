@@ -59,22 +59,6 @@ var buttonConfig = {
 	height: '25'
 };
 
-// Placeholders in formatString (see http://www.jqwidgets.com/jquery-widgets-
-// documentation/documentation/jqxdatetimeinput/jquery-datetimeinput-api.htm):
-//
-// 'hh'-the hour, using a 12-hour clock from 01 to 12
-// 'HH'-the hour, using a 24-hour clock from 00 to 23
-function getDateInputConfig(version)
-{
-	return config = {
-		height: '25px',
-		theme: 'darkblue',
-		formatString: 'dd.MM.yyyy HH:mm',
-		width:     (version === 1 ? '100%' : '100%'), // '150px'
-		textAlign: (version === 1 ? 'left' : 'left')  // 'center'
-	};
-}
-
 var dateDropConfig  = {
 	width: '100%',
 	height: 25,
@@ -208,6 +192,26 @@ var dateTimeLabelFormatsGroup_de = {
 	year: ['%Y', '%Y', '-%Y']
 };
 
+//
+// Functions returning objects for the initialisation of user interface elements
+//
+
+function getDateInputConfig(version)
+{
+	// Placeholders in formatString (see http://www.jqwidgets.com/jquery-widgets-
+	// documentation/documentation/jqxdatetimeinput/jquery-datetimeinput-api.htm):
+	//
+	// 'hh'-the hour, using a 12-hour clock from 01 to 12
+	// 'HH'-the hour, using a 24-hour clock from 00 to 23
+	return {
+		height: '25px',
+		theme: 'darkblue',
+		formatString: 'dd.MM.yyyy HH:mm',
+		width:     (version === 1 ? '100%' : '100%'), // '150px'
+		textAlign: (version === 1 ? 'left' : 'left')  // 'center'
+	};
+}
+
 function getStockChartConfig(country)
 {
 	country = country || 'en'
@@ -295,5 +299,32 @@ function getStockChartConfig(country)
 			dateTimeLabelFormats: dateTimeLabelFormats
 		}
 	}
+}
+
+function getRangeSelectorButtonConfig(texts)
+{
+	return [
+		{ type: 'day',   count: 1, text: texts.OneD },
+		{ type: 'day',   count: 3, text: texts.ThreeD },
+		{ type: 'week',  count: 1, text: texts.OneW },
+		{ type: 'month', count: 1, text: texts.OneM },
+		{ type: 'month', count: 6, text: texts.SixM },
+		{ type: 'year',  count: 1, text: texts.OneY },
+		{ type: 'all',             text: texts.All }
+	];
+}
+
+function getWindowConfig(offset, dx, dy)
+{
+	// Set defaults
+	dx = dx || 220;
+	dy = dy ||  60;
+
+	return {
+		position: {
+			x: parseInt(offset.left, 10) + dx,
+			y: parseInt(offset.top,  10) + dy
+		}
+	};
 }
 
