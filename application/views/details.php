@@ -41,10 +41,10 @@ echo beautify($CSS_JQStyles);
 //
 
 var globals = {
-
-	variableID: -1,           // currently selected VariableID
+	siteID: <?php echo $SiteID;?>, // currently selected SiteID
+	variableID: -1, // currently selected VariableID
 	variableAndType: "", // currently selected "<VariableName> (<DataType>)"
-	methodID: -1,        // currently selected MethodID
+	methodID: -1, // currently selected MethodID
 
 	dateFrom: "",
 	dateTo: "",
@@ -62,7 +62,6 @@ var globals = {
 //
 
 var DATA = {
-	siteid:<?php echo $SiteID;?>,
 	text:{
 <?php
 	$names = array(
@@ -326,7 +325,7 @@ function variableSelectHandler(event)
 		// selected automatically after the new list elements are loaded.
 
 		var url = toURL('methods/getSiteVarJSON', {
-			siteid: DATA.siteid,
+			siteid: globals.siteID,
 			varid: globals.variableID
 		});
 
@@ -353,8 +352,8 @@ function methodSelectHandler(event)
 		// Load the date range of available data and call a function that handles
 		// the new dates after loading.
 		get_dates(
-			DATA.siteid, 
-			globals.variableID, 
+			globals.siteID,
+			globals.variableID,
 			globals.methodID, function(result) {
 				setDateTimeRange(result.BeginDateTime, result.EndDateTime);
 			}
@@ -526,7 +525,7 @@ function handleSaveClick(edit)
 	// to the parameter list
 	if (! edit) {
 		parameters = jQuery.extend(parameters, {
-			sid: DATA.siteid,
+			sid: globals.siteID,
 			varid: globals.variableID,
 			mid: globals.methodID
 		});
@@ -593,7 +592,7 @@ function compareClickHandler()
 function exportClickHandler()
 {
 	var url = toURL('datapoint/export', {
-		siteid: DATA.siteid,
+		siteid: globals.siteID,
 		varid: globals.variableID,
 		meth: globals.methodID,
 		startdate: globals.date_from_sql,
@@ -626,7 +625,10 @@ $(document).ready(function() {
 
 	// Create the Variables Drop Down list with data received in JSON format
 	var dataAdapter = toJsonAdapter(
-		toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 }),
+		toURL('variable/getSiteJSON', {
+			siteid: globals.siteID,
+			withtype: 1
+		}),
 		['VariableID', 'VarNameMod']
 	);
 
@@ -722,7 +724,7 @@ function getDataURL(json)
 	var endpoint = (json ? 'datapoint/getDataJSON' : 'datapoint/getData');
 
 	var parameters = {
-		siteid: DATA.siteid,
+		siteid: globals.siteID,
 		varid: globals.variableID,
 		meth: globals.methodID,
 		startdate: globals.date_from_sql,
