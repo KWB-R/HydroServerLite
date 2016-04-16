@@ -61,8 +61,7 @@ var globals = {
 // Define all (translated) message texts beforehand
 //
 
-var DATA = {
-	text:{
+globals.texts = {
 <?php
 	$names = array(
 		'InvalidTimeFive',
@@ -94,13 +93,12 @@ var DATA = {
 		'DatabaseConfigurationError'
 	);
 	foreach ($names as $name) {
-		echo "\t\t$name: \"" . getTxt($name) . "\",\n";
+		echo "\t$name: \"" . getTxt($name) . "\",\n";
 	}
 ?>
-		SiteName: "<?php echo $site['SiteName'];?>",
-		ValueID: "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
-		Value: "<?php echo str_replace(':', '', getTxt('Value'));?>"
-	}
+	SiteName: "<?php echo $site['SiteName'];?>",
+	ValueID: "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
+	Value: "<?php echo str_replace(':', '', getTxt('Value'));?>"
 };
 
 //
@@ -143,19 +141,19 @@ function getGridConfigUpdate(unit)
 	var columns = [
 		{
 			datafield: 'ValueID',
-			text: DATA.text.ValueID
+			text: globals.texts.ValueID
 			, width: 'auto' //180
 		},
 		{
 			datafield: 'LocalDateTime',
-			text: DATA.text.Date,
+			text: globals.texts.Date,
 			cellsformat: 'ddd, yyyy-MM-dd HH:mm',
 			cellsalign: 'right'
 			, width: 'auto' //180
 		},
 		{
 			datafield: 'DataValue',
-			text: DATA.text.Value + ' (' + unit + ')',
+			text: globals.texts.Value + ' (' + unit + ')',
 			cellsalign: 'right'
 			, width: 'auto' //180
 		}
@@ -205,7 +203,7 @@ function validatetime(timepicker)
 	timepicker.val(timestring);
 
 	// checkTimeFormat from assets/js/details_helpers.js
-	if (! checkTimeFormat(timestring, DATA.text)) {
+	if (! checkTimeFormat(timestring, globals.texts)) {
 		return false;
 	}
 
@@ -217,7 +215,7 @@ function validatetime(timepicker)
 function validatenum(textinput)
 {
 	// isValidNumber from assets/js/details_helpers.js
-	return isValidNumber(textinput.val(), DATA.text);
+	return isValidNumber(textinput.val(), globals.texts);
 }
 
 //
@@ -422,8 +420,8 @@ function updateDateRangeInfo(date_from, date_to)
 {
 	var html =
 		'<p>' +
-			'<strong>' + DATA.text.DatesAvailable + '</strong> ' + date_from +
-			' <strong>' + DATA.text.To + ' </strong> ' + date_to +
+			'<strong>' + globals.texts.DatesAvailable + '</strong> ' + date_from +
+			' <strong>' + globals.texts.To + ' </strong> ' + date_to +
 		'</p>';
 
 	$('#daterange').html("").prepend(html);
@@ -573,7 +571,7 @@ function dataAddOrEditHandler(msg, edit)
 		//plot_chart();
 	}
 	else {
-		alert(edit ? msg : DATA.text.DatabaseConfigurationError);
+		alert(edit ? msg : globals.texts.DatabaseConfigurationError);
 	}
 
 	return success;
@@ -823,7 +821,7 @@ function newChart(griddata, unit)
 	if (typeof griddata !== 'undefined') {
 
 		labels = {
-			title: getTitle(DATA.text, globals.dateFrom, globals.dateTo),
+			title: getTitle(globals.texts, globals.dateFrom, globals.dateTo),
 			yAxis: unit
 		};
 
@@ -834,7 +832,7 @@ function newChart(griddata, unit)
 	}
 
 	// Create the variable parts of the configuration
-	configUpdate = getChartConfigUpdate(DATA.text, labels, dataseries);
+	configUpdate = getChartConfigUpdate(globals.texts, labels, dataseries);
 
 	// Use deep extension (recursive copy)
 	config = jQuery.extend(true, config, configUpdate);
