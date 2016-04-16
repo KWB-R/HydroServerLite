@@ -144,21 +144,21 @@ function getGridConfigUpdate(unit)
 	var columns = [
 		{
 			datafield: 'ValueID',
-			text: DATA.text.ValueID,
-			width: 180
+			text: DATA.text.ValueID
+			, width: 'auto' //180
 		},
 		{
 			datafield: 'LocalDateTime',
 			text: DATA.text.Date,
 			cellsformat: 'ddd, yyyy-MM-dd HH:mm',
-			cellsalign: 'right',
-			width: 180
+			cellsalign: 'right'
+			, width: 'auto' //180
 		},
 		{
 			datafield: 'DataValue',
 			text: DATA.text.Value + ' (' + unit + ')',
-			cellsalign: 'right',
-			width: 180
+			cellsalign: 'right'
+			, width: 'auto' //180
 		}
 	];
 

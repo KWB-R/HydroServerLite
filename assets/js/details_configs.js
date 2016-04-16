@@ -66,19 +66,13 @@ var buttonConfig = {
 // 'HH'-the hour, using a 24-hour clock from 00 to 23
 function getDateInputConfig(version)
 {
-	var config = {
+	return config = {
 		height: '25px',
 		theme: 'darkblue',
 		formatString: 'dd.MM.yyyy HH:mm',
+		width:     (version === 1 ? '100%' : '100%'), // '150px'
+		textAlign: (version === 1 ? 'left' : 'left')  // 'center'
 	};
-
-	var configUpdate = (
-		version === 1 ? 
-		{ width: '100%' } :
-		{ width: '130px', textAlign: 'center' }
-	);
-
-	return jQuery.extend(config, configUpdate);
 }
 
 var dateDropConfig  = {
