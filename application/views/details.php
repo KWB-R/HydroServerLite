@@ -41,6 +41,7 @@ echo beautify($CSS_JQStyles);
 //
 
 var globals = {
+
 	siteID: <?php echo $SiteID;?>, // currently selected SiteID
 	variableID: -1, // currently selected VariableID
 	variableAndType: "", // currently selected "<VariableName> (<DataType>)"
@@ -54,7 +55,9 @@ var globals = {
 
 	chart: undefined,
 
-	updateRequired: false
+	updateRequired: false,
+
+	editRowData: undefined // content of the currently selected grid row
 };
 
 //
@@ -221,29 +224,16 @@ function setGlobal(name, value)
 // Open the popup window when the user clicks a button.
 function editClickHandler(row)
 {
-	editrow = row;
-
 	var $grid = $('#jqxgrid');
 
-	// get the clicked row's data and initialize the input fields.
-	var dataRecord = $grid.jqxGrid('getrowdata', editrow);
+	// Save the content of the clicked row in a global variable
+	setGlobal('editRowData', $grid.jqxGrid('getrowdata', row))
 
-	var valueID = dataRecord.ValueID;
-	var dataValue = dataRecord.DataValue;
-	var localDateTime = dataRecord.LocalDateTime;
+	// Set the value of the date and time input field
+	$('#date').jqxDateTimeInput('setDate', globals.editRowData.LocalDateTime);
 
-	//var datepart = localDateTime.split(' ');
-	var localISO = localDateTime.toISOString();
-	var localDate = toDate(localISO.substring(0, 10));
-	var localTime = toHourAndMinute(localISO.substring(11, 19));
-	
-	// Set date and time in date and time input field
-	$('#date').jqxDateTimeInput('setDate', localDateTime);
-	//$('#timepicker').val(localTime);
-
-	$('#value').val(dataValue);
-
-	vid = valueID;
+	// Set the value of the data value input field
+	$('#value').val(globals.editRowData.DataValue);
 
 	// Open the popup window
 	$('#popupWindow').
@@ -390,29 +380,67 @@ function delValClickHandler()
 	//Send out a delete request
 	$.ajax({
 		dataType: "json",
-		url: toURL("datapoint/delete/" + vid, {})
+		url: toURL("datapoint/delete/" + globals.editRowData.ValueID, {})
 	}).
 	done(function(result) {
+		var $grid = $("#jqxgrid");
+
 		if(result.status == 'success') {
-			//Remove that row from the table
-			$('#jqxgrid').jqxGrid('deleterow', editrow); //This one might be having issues.
+
+			// Remove that row from the table
+			$grid.jqxGrid('deleterow', globals.editRowData.ValueID);
 			$("#popupWindow").jqxWindow('hide');
+
+			// Update the chart with the current grid data. Lookup the unit before...
+			getUnit(globals.variableID, function(unit) {
+				updateChart($grid, unit);
+			});
 		}
 	});
 } // end of delValClickHandler()
 
-function handleSaveClick(edit)
+// Provide handler function for Ajax done event
+function handleEditedOrNewValue(edit, result, record)
 {
-	if (edit && editrow < 0) {
-		return true;
+	var success = (result.status === 'success');
+	var $grid = $('#jqxgrid');
+
+	if (success) {
+
+		// Hide the popup window
+		$(edit ? '#popupWindow' : '#popupWindow_new').jqxWindow('hide');
+
+		// If a new data value was added, update the ValueID that was returned
+		// by the datapoint/add request
+		if (! edit) {
+			record.ValueID = result.id;
+		}
+
+		// Update the grid (change the current row or add a row)
+		$grid.jqxGrid((edit ? 'updaterow' : 'addrow'), record.ValueID, record);
+
+		// Update the chart with the current grid data. Lookup the unit before...
+		getUnit(globals.variableID, function(unit) {
+			updateChart($grid, unit);
+		});
+	}
+	else {
+		alert(edit ? result : globals.texts.DatabaseConfigurationError);
 	}
 
-	postfix = (edit ? '' : '_new');
+	return success;
+}
+
+function handleSaveClick(edit)
+{
+	var postfix = (edit ? '' : '_new');
 
 	// Store references to jQuery objects
 	var $date = $('#date' + postfix);
 	//var $timepicker = $('#timepicker' + postfix);
 	var $value = $('#value' + postfix);
+
+	console.log("handleSaveClick(edit = " + edit + ")");
 
 	// Return if value or time are invalid
 	//if (! (validatenum($value) && validatetime($timepicker)) ) {
@@ -420,79 +448,62 @@ function handleSaveClick(edit)
 		return false;
 	}
 
-	// Store currently selected date
-	var seldate = $date.jqxDateTimeInput('getDate');
+	// If we are editing, the ValueID is stored in globals.editRowData.
+	// Otherwise set it to -1 to indicate that a new value is added
+	var valueID = (edit ? globals.editRowData.ValueID : -1);
+
+	// Compose a datapoint record (using UDM field names) from the inputs or
+	// from global variables
+	var record = {
+		LocalDateTime: $date.jqxDateTimeInput('getDate'),
+		DataValue: $value.val(),
+		ValueID: valueID
+	};
 
 	// Provide the endpoint to be used for the Ajax request
-	var endpoint = (edit ? "datapoint/edit/" + vid : "datapoint/add");
+	var endpoint = (edit ?
+		"datapoint/edit/" + valueID :
+		"datapoint/add"
+	);
 
-	var dateISOString = seldate.toISOString();
+	// Create an ajax request to update or add a DataValue
+	var url = toURL(endpoint, toApiCallParameters(edit, record));
 
+	$.ajax({
+		dataType: "json",
+		url: url,
+		complete: function(jqXHR, textStatus) {
+			console.log("Request " + url + "completed with: " + textStatus);
+		}
+	}).done(function(result) {
+		console.log("back from " + url)
+		console.log("Calling handleEditedOrNewValue(" + edit + ", ...)");
+		handleEditedOrNewValue(edit, result, record);
+	});
+
+	return true;
+}
+
+function toApiCallParameters(edit, record)
+{
 	// Provide the parameters to be used for the Ajax request
 	var parameters = {
-		//dt: formatDateSQL(seldate, undefined, ''),
-		// time: $timepicker.val(),
-		dt: dateISOString.substring(0, 10),
-		time: dateISOString.substring(11, 19),
-		val: $value.val()
+		dt:   record.LocalDateTime.toISOString().substring(0, 10),
+		time: record.LocalDateTime.toISOString().substring(11, 19),
+		val:  record.DataValue
 	};
 
 	// To add a new DataValue we need to add SiteID, VariableID and MethodID
 	// to the parameter list
 	if (! edit) {
 		parameters = jQuery.extend(parameters, {
-			sid: globals.siteID,
+			sid:   globals.siteID,
 			varid: globals.variableID,
-			mid: globals.methodID
+			mid:   globals.methodID
 		});
 	}
 
-	// Provide handler function for Ajax done event
-	var doneHandler_edit = function(msg) {
-
-		if (dataAddOrEditHandler(msg, true)) {
-
-			newrow = {
-				//date: formatDateSQL(seldate, undefined, ' ' + $timepicker.val() + ':00'),
-				date: seldate,
-				Value: $value.val(),
-				vid: vid
-			}
-
-			// update the row in the grid
-			$('#jqxgrid').jqxGrid('updaterow', editrow, newrow);
-		}
-	};
-
-	var doneHandler_add = function(msg) {
-		return dataAddOrEditHandler(msg, false);
-	};
-
-	// Create an ajax request to update or add a DataValue
-	$ajax = $.ajax({dataType: "json", url: toURL(endpoint, parameters)});
-
-	// Set the done-handler for the ajax request
-	$ajax.done((edit ? doneHandler_edit : doneHandler_add));
-
-	return true;
-}
-
-function dataAddOrEditHandler(msg, edit)
-{
-	var success = (msg.status === 'success');
-
-	if (success) {
-
-		// Hide the popup window
-		$(edit ? '#popupWindow' : '#popupWindow_new').jqxWindow('hide');
-
-		//plot_chart();
-	}
-	else {
-		alert(edit ? msg : globals.texts.DatabaseConfigurationError);
-	}
-
-	return success;
+	return parameters;
 }
 
 function compareClickHandler()
@@ -880,12 +891,12 @@ function initPopups()
 	// Buttons "Save"
 	$("#Save").jqxButton(buttonConfigBase).
 		on('click', function(event) {
-			return handleSaveClick(true);
+			handleSaveClick(true);
 		});
 
 	$("#Save_new").jqxButton(buttonConfigBase).
 		on('click', function(event) {
-			return handleSaveClick(false);
+			handleSaveClick(false);
 		});
 }
 
