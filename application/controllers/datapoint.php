@@ -44,7 +44,6 @@ class Datapoint extends MY_Controller {
 				$fields['time'] = substr($timestring, 0, $pos);
 			}
 		}
-		print_r($fields);
 	}
 
 	private function createDataPoint($fields)
