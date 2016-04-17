@@ -118,8 +118,10 @@ function getGridConfigUpdate(unit)
 		id: 'ValueID',
 		datafields: [
 			{ name: 'ValueID', type: 'int'},
-			{ name: 'DataValue', type: 'float'},
-			{ name: 'LocalDateTime', type: 'date'}
+			{ name: 'LocalDateTime', type: 'date'},
+			{ name: 'UTCOffset', type: 'int'},
+			{ name: 'CensorCode', type: 'string'},
+			{ name: 'DataValue', type: 'float'}
 		]
 	};
 
@@ -131,8 +133,8 @@ function getGridConfigUpdate(unit)
 	var columns = [
 		{
 			datafield: 'ValueID',
-			text: globals.texts.ValueID,
-			width: 80 //'auto'
+			text: globals.texts.ValueID
+			//width: 80 //'auto'
 		},
 		{
 			datafield: 'LocalDateTime',
@@ -142,10 +144,20 @@ function getGridConfigUpdate(unit)
 			width: 180
 		},
 		{
+			datafield: 'UTCOffset',
+			text: 'UTCOffset',
+			cellsalign: 'right'
+		},
+		{
+			datafield: 'CensorCode',
+			text: 'CensorCode',
+			cellsalign: 'right'
+		},
+		{
 			datafield: 'DataValue',
 			text: globals.texts.Value + ' (' + unit + ')',
-			cellsalign: 'right',
-			width: 140
+			cellsalign: 'right'
+			//width: 140
 		}
 	];
 
@@ -486,10 +498,22 @@ function handleSaveClick(edit)
 
 function toApiCallParameters(edit, record)
 {
+	var d = record.LocalDateTime;
+	var offset = -1 * (d.getTimezoneOffset() / 60);
+
 	// Provide the parameters to be used for the Ajax request
 	var parameters = {
-		dt:   record.LocalDateTime.toISOString().substring(0, 10),
-		time: record.LocalDateTime.toISOString().substring(11, 19),
+		//dt:   record.LocalDateTime.toISOString().substring(0, 10),
+		//time: record.LocalDateTime.toISOString().substring(11, 19),
+		dt:	d.getFullYear() + "-" +
+			add_zero(d.getMonth() + 1) + "-" +
+			add_zero(d.getDate()),
+		time: add_zero(d.getHours()) + ":" +
+			add_zero(d.getMinutes()) + 
+			(edit ? "" : ":" + add_zero(d.getSeconds())) + // no seconds for edit
+			// Add an indication of the UTC offset to the timestring (datapoint/add
+			// will consider it)
+			((offset >= 0 ? "+" : "") + add_zero(offset)),
 		val:  record.DataValue
 	};
 
