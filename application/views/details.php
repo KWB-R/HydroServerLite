@@ -327,7 +327,7 @@ function setMinOrMaxDate(isFromDate, date)
 		// Get the unit and call the given function if the unit is available
 		getUnit(globals.variableID, function(unit) {
 
-			updateGridAndPlot(unit);
+			updateGridAndChart(unit);
 			setGlobal('updateRequired', false);
 		});
 	}
@@ -698,7 +698,7 @@ function sortByFirstColumn(data)
 	});
 }
 
-function updateGridAndPlot(unit)
+function updateGridAndChart(unit)
 {
 	var $grid = $("#jqxgrid");
 	var $tabs = $('#jqxtabs');
@@ -713,22 +713,27 @@ function updateGridAndPlot(unit)
 	$grid.unbind(eventname);
 	$grid.bind(eventname, function(event) {
 
-		// Get the data from the grid
-		var data = $grid.jqxGrid('getrows');
-
-		// Recreate the chart object. Destroy the current chart if there is any.
-		if (typeof globals.chart !== 'undefined') {
-
-			globals.chart.destroy();
-		}
-
-		// Create a new chart object
-		setGlobal('chart', newChart(data, unit));
+		updateChart($grid, unit);
 
 		// Enable the grid tab and the plot tab
 		$tabs.jqxTabs('enableAt', 2);
 		$tabs.jqxTabs('enableAt', 1);
 	});
+}
+
+function updateChart($grid, unit)
+{
+	// Get the data from the grid
+	var data = $grid.jqxGrid('getrows');
+
+	// Recreate the chart object. Destroy the current chart if there is any.
+	if (typeof globals.chart !== 'undefined') {
+
+		globals.chart.destroy();
+	}
+
+	// Create a new chart object
+	setGlobal('chart', newChart(data, unit));
 }
 
 function newChart(griddata, unit)
@@ -754,7 +759,7 @@ function newChart(griddata, unit)
 	// Create the variable parts of the configuration
 	configUpdate = getChartConfigUpdate(globals.texts, labels, dataseries);
 
-	// Use deep extension (recursive copy)
+	// Extend the base configuration with the update (recursive copy)
 	config = jQuery.extend(true, config, configUpdate);
 
 	return new Highcharts.StockChart(config);
