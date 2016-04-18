@@ -958,11 +958,20 @@ class Datapoint extends MY_Controller {
 		}
 		else if ($method == 'edit')
 		{
+			// Is the UTCOffset coded in the time string?
+			$this->getUtcFromTimeIfApplicable($inputs);
+
+			// If not, use the default from the configuration
+			if (! isset($inputs['UTCOffset'])) {
+				$inputs['UTCOffset'] = $this->getConfigItem('UTCOffset');
+			}
+
 			$LocalDateTime = sprintf("%s %s:00", $inputs['date'], $inputs['time']);
 
 			$localtime = strtotime($LocalDateTime);
 
-			$ms = $this->config->item('UTCOffset') * 3600;
+			//$ms = $this->config->item('UTCOffset') * 3600;
+			$ms = $inputs['UTCOffset'] * 3600;
 
 			$DateTimeUTC = date("Y-m-d H:i:s", $localtime - $ms);
 
