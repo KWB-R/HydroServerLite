@@ -337,12 +337,12 @@ function setMinOrMaxDate(isFromDate, date)
 
 function setDateTimeRange(date_from, date_to)
 {
-	// Display the time range of available data
-	updateDateRangeInfo(date_from, date_to);
-
 	// Convert to Date object without using the time information
 	var startDate = new Date(date_from.substring(0, 10) + 'T00:00:00');
 	var endDate   = new Date(date_to.substring(0, 10) + 'T00:00:00');
+
+	// Display the time range of available data
+	updateDateRangeInfo(startDate, endDate);
 
 	// Set endDate to the start of the next day unless it refers to 00:00:00
 	if (date_to.substring(11) != '00:00:00') {
@@ -361,15 +361,14 @@ function setDateTimeRange(date_from, date_to)
 	$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', globals.dateTo);
 }
 
-function updateDateRangeInfo(date_from, date_to)
+function updateDateRangeInfo(startDate, endDate)
 {
-	var html =
-		'<p>' +
-			'<strong>' + globals.texts.DatesAvailable + '</strong> ' + date_from +
-			' <strong>' + globals.texts.To + ' </strong> ' + date_to +
-		'</p>';
+	var html;
 
-	$('#daterange').html("").prepend(html);
+	html  = '<strong>' + globals.texts.DatesAvailable + '</strong> ' + startDate;
+	html += ' <strong>' + globals.texts.To + ' </strong> ' + endDate;
+
+	$('#daterange').html("").prepend('<p>' + html + '</p>');
 }
 
 function setMinMaxDates()
