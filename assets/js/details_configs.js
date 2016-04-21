@@ -55,7 +55,7 @@ var buttonConfigBase = {
 
 var buttonConfig = {
 	theme: 'darkblue',
-	width: '250',
+	width: '220',
 	height: '25'
 };
 
