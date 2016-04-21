@@ -6,21 +6,6 @@
 
 // Functions for setting HTML attributes
 
-function html_class($class = '')
-{
-	return html_attr("class", $class);
-}
-
-function html_id($id = '')
-{
-	return html_attr("id", $id);
-}
-
-function html_style($style = '')
-{
-	return html_attr("style", $style);
-}
-
 function html_attr($name, $value = '')
 {
 	return (($value == '')? '' : " $name=\"$value\"");
@@ -42,7 +27,7 @@ function html_attribs($assignments)
 // Full HTML Tags
 function html_label($class, $content)
 {
-	return "<label class=\"$class\">$content</label>";
+	return "<label class=\"$class\">$content</label>\n";
 }
 
 function html_tr($content)
@@ -70,17 +55,6 @@ function html_input_button($id, $value, $content = '')
 	return "<input id=\"$id\" type=\"button\" value=\"$value\" $content />\n";
 }
 
-function html_br($number = 1)
-{
-	$html = "";
-
-	for ($i = 0; $i < $number; $i++) {
-		$html = $html . "<br />";
-	}
-
-	return $html . "\n";
-}
-
 function html_b($content)
 {
 	return '<b>' . $content . '</b>';
@@ -92,14 +66,9 @@ function html_a($url, $content, $attributes = '')
 		($attributes? " " . $attributes : "") . ">" . $content . "</a>";
 }
 
-function html_h($content, $level)
-{
-	return "\n<h$level>" . $content . "</h$level>";
-}
-
 function html_span($class, $content = '')
 {
-	return "<span" . html_class($class) . '>' . $content . "</span>";
+	return "<span" . html_attr("class", $class) . '>' . $content . "</span>";
 }
 
 function html_option($value, $content)
@@ -127,12 +96,17 @@ function html_div_beg($class = '', $id = '', $role = '')
 		"class" => $class, "id" => $id, "role" => $role
 	));
 
-	return "\n<div" . $attribs . ">";
+	return "<div" . $attribs . ">\n";
+}
+
+function html_div_end($indent = 0, $eol = true)
+{
+	return str_repeat('  ', $indent) . "</div>" . ($eol ? "\n" : '');
 }
 
 function html_li_beg($class = '')
 {
-	return "\n<li" . html_class($class) . ">";
+	return "\n<li" . html_attr("class", $class) . ">";
 }
 
 function html_ul_beg($class = '', $id = '', $style = '')
@@ -142,7 +116,16 @@ function html_ul_beg($class = '', $id = '', $style = '')
 	) . ">";
 }
 
-//Function for generating options. Keeping it here as it might be used by various controllers once they get the result from the model.
+function encloseInBeginEndComments($html, $sectionName = 'section')
+{
+	return
+		"\n<!-- BEGIN $sectionName -->\n\n" .
+		$html .
+		"\n<!-- END $sectionName -->\n\n";
+}
+
+// Function for generating options. Keeping it here as it might be used by 
+// various controllers once they get the result from the model.
 
 function optionsSource($result)
 {
@@ -192,97 +175,37 @@ function getDetailsImg($name)
 	return base_url() . "uploads/" . $name;
 }
 
+function requiredSpan($req)
+{
+	$span = "    <span class=\"required\"></span>\n";
+	//$span = '<span class="required" />';
+
+	return $req ? $span : '';
+}
+
 function genInput($labelKey, $id, $name, $req = false, $extra = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
-
-	if($req) {
-		$html .= '<span class="required"/>';
-	}
-
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup("text", $labelKey, $id, $name, $req, $extra);
 }
 
 function genInputD($labelKey, $id, $name, $req = false, $extra = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>";
-	
-	if ($req) {
-		$html .= '<span class="required"/>';
-	}
-
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup("textarea", $labelKey, $id, $name, $req, $extra);
 }
 
 function genInputH($labelKey, $id, $name, $hint, $req = false, $extra = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
-
-	if ($req) {
-		$html .= '<span class="required"/>';
-	}
-
-	$html .= '<span class="hint" title="'.$hint.'">?</span>';
-
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup("text", $labelKey, $id, $name, $req, $extra, $hint);
 }
 
-function genInputT($labelKey,$id,$name,$req=false,$extra='',$help)
+function genInputT($labelKey, $id, $name, $req = false, $extra = '', $help)
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>";
-
-	if ($req) {
-		$html .= '<span class="required"></span>';
-	}
-
-	$html .= '<span class="em">&nbsp;&nbsp;' . getTxt($help) . '</span>';
-
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup('text', $labelKey, $id, $name, $req, $extra, '', $help);
 }
 
 function genDropLists($labelKey, $id, $name, $req = false, $hint = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= '<div id="' . $id . '" name="' . $name . '"></div>';
-
-	if ($req) {
-		$html .= '<span class="required" />';
-	}
-
-	if ($hint !== '') {
-		$html .= '<span class="hint" title="'.$hint.'">?</span>';
-	}
-	
-	$html .= "</div>\n";
-	$html .= "</div>\n";
-
-	echo $html;
+	echo html_formGroup('div', $labelKey, $id, $name, $req, '', $hint);
 }
 
 function genDropListsH($labelKey, $id, $name, $hint, $req = false)
@@ -290,31 +213,68 @@ function genDropListsH($labelKey, $id, $name, $hint, $req = false)
 	genDropLists($labelKey, $id, $name, $req, $hint);
 }
 
+function html_formGroup($type, $labelKey, $id, $name, $req = false, $extra = '',
+	$hint = '', $help = '', $extraSelect = ''
+)
+{
+	$html  = html_div_beg('form-group');
+	$html .= '  ' . html_label('col-sm-2 control-label', getTxt($labelKey));
+	$html .= '  ' . html_div_beg('col-sm-10');
+	$html .= '    '; // indentation
+
+	switch ($type) {
+		case 'text':
+			$html .= "<input type=\"text\" class=\"form-control\" id=\"$id\" name=\"$name\" $extra>\n";
+			break;
+		case 'textarea':
+			$html .= "<textarea class=\"form-control\" rows=\"6\" id=\"$id\" name=\"$name\" $extra></textarea>\n";
+			break;
+		case 'div':
+			$html .= "<div id=\"$id\" name=\"$name\"></div>\n";
+			break;
+		case 'select':
+			$html .= "<select name=\"$name\" class=\"form-control\" id=\"$id\" $extra>\n";
+			$html .= $extraSelect;
+			break;
+		default:
+			break;
+	}
+
+	if ($type !== 'select') {
+		$html .= requiredSpan($req);
+	}
+
+	if ($hint !== '') {
+		$html .= "    <span class=\"hint\" title=\"$hint\">?</span>\n";
+	}
+
+	if ($help !== '') {
+		$html .= "    <span class=\"em\">" . nbs(2) . getTxt($help) . "</span>\n";
+	}
+
+	if ($type === 'select') {
+		$html .= requiredSpan($req);
+	}
+
+	$html .= "  </div>\n";
+	$html .= "</div>\n";
+
+	return $html;
+}
+
 function genSelect($labelKey, $id, $name, $optionBlock, $defaultSelect = false,
 	$req = false, $extra = '', $hint = '')
 {
-	$html  = html_div_beg('form-group');
-	$html .= html_label('col-sm-2 control-label', getTxt($labelKey));
-	$html .= html_div_beg('col-sm-10');
-	$html .= "<select name=\"$name\" class=\"form-control\" id=\"$id\" $extra>\n";
-
 	if ($defaultSelect) {
-		$html .= '<option value="-1">' . getTxt($defaultSelect) . '</option>' .
-			$optionBlock . '</select>';
+		$extraSelect = '<option value="-1">' . getTxt($defaultSelect) . '</option>' .
+			$optionBlock . "</select>\n";
+	} else {
+		$extraSelect = '';
 	}
-	
-	if ($hint !== '') {
-		$html .= "<span class=\"hint\" title=\"$hint\">?</span>\n";
-	}
-	
-	if ($req) {
-		$html .= '<span class="required" />';
-	}
-	
-	$html .= "</div>\n";
-	$html .= "</div>\n";
 
-	echo $html;
+	echo html_formGroup(
+		'select', $labelKey, $id, $name, $req, $extra, $hint, '', $extraSelect
+	);
 }
 
 function genSelectH($labelKey, $id, $name, $optionBlock, $hint,
@@ -325,9 +285,9 @@ function genSelectH($labelKey, $id, $name, $optionBlock, $hint,
 	);
 }
 
-function genHeading($headingKey,$req=false,$defaultColumn=9)
+function genHeading($headingKey, $req = false, $defaultColumn = 9)
 {
-	echo "<div class='col-md-" . $defaultColumn . "'>";
+	echo "<div class=\"col-md-$defaultColumn\">\n";
 
 	// ALSO DISPLAYS THE ERROR MSGS. In case this function is not being used,
 	// a call to the below function will be needed. 
@@ -335,22 +295,29 @@ function genHeading($headingKey,$req=false,$defaultColumn=9)
 	showMsgs();
 
 	if ($req) {
-		echo'<p class="em" align="right">'.getTxt('RequiredFieldsAsterisk').'</p>';
+		echo '<p class="em" align="right">' . getTxt('RequiredFieldsAsterisk') .
+			"</p>\n";
 	}
-	
-	echo '<p class="h3" align="center"><strong>' . getTxt($headingKey) . '</strong></p>
-          <p>&nbsp;</p>';
+
+	echo '<p class="h3" align="center"><strong>' . getTxt($headingKey) .
+		"</strong></p>\n";
+
+	echo '<p>' . nbs(1) . "</p>\n";
 }
 
 function genSubmit($labelKey, $end = true)
 {
-	echo '<div class="col-md-3 col-md-offset-9">
-    <input type="SUBMIT" name="submit" value="'.getTxt($labelKey).'" class="button"/></div>
-    </FORM>';
-    
+	$html  = '<div class="col-md-3 col-md-offset-9">';
+	$html .= '<input type="SUBMIT" name="submit" value="' . getTxt($labelKey) .
+		'" class="button"/>';
+	$html .= "</div>\n";
+	$html .= "</form>\n";
+
 	if ($end) {
-		echo "</div>";
+		$html .= "</div>";
 	}
+
+	echo $html;
 }
 
 function HTML_Render_Head($js_vars, $PageTitle = "")
@@ -383,72 +350,99 @@ PageHead;
 function HTML_Render_Body_Start()
 {
 	global $_SITE_Minimum_PHP_Version;
+
 	$HTML_1 = <<<PageBody1
 	</head>
 	<body>
 		<div class="container">
 		<div class="masthead">
 PageBody1;
+
 	$HTML_1A = <<<PartA
 		</div>
 
 <!-- /container -->
 PartA;
+
 	$HTML_2 = <<<PageBody2
 		<div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
 		<div class="col-md-3" id="navArea">
 PageBody2;
+
 	$HTML_3 = <<<PageBody3
 		</div>
 
 PageBody3;
+
 	echo $HTML_1;
+
 	echo getTopBanner();
+
 	echo $HTML_1A;
+
 	$CI = &get_instance();
 	$CI->load->view('templates/header');
+
 	echo $HTML_2;
+
 	$CI->load->view('templates/nav_parts');
+
 //	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
 //		checkPHPVersion($_SITE_Minimum_PHP_Version);
+
 	echo $HTML_3;
 }
 
-function HTML_Render_Body_StartInstall(){
+function HTML_Render_Body_StartInstall()
+{
 	global $_SITE_Minimum_PHP_Version;
+
 	$HTML_1 = <<<PageBody1
 	</head>
 	<body>
 		<div class="container">
 		<div class="masthead">
 PageBody1;
+
 	$HTML_1A = 	<<<PartA
 		</div>
 
 <!-- /container -->
 PartA;
+
 	$HTML_2 = <<<PageBody2
 		<div class="row mainContainer" style="margin-left:0px;margin-right:0px;">
 		<div class="col-md-3">
 PageBody2;
+
 	$HTML_3 = <<<PageBody3
 		</div>
-
 PageBody3;
+
 	echo $HTML_1;
+
 	echo getTopBanner();
+
 	echo $HTML_1A;
+
 	$CI = &get_instance();
 	$CI->load->view('templates/header');
+
 	echo $HTML_2;
+
 //	if ($instanceName->isAdmin()) //Still don't know what this does, maybe manages versions? Will worry about this when I reach that page. 
 //		checkPHPVersion($_SITE_Minimum_PHP_Version);
+
 	echo $HTML_3;
 }
 
 function showMsgs()
 {
-	if (isset($_SESSION["Errors"]) || isset($_SESSION["Warnings"]) || isset($_SESSION["Successes"]))
+	if (
+		isset($_SESSION["Errors"]) ||
+		isset($_SESSION["Warnings"]) ||
+		isset($_SESSION["Successes"])
+	)
 	{
 		echo "<ul class=\"messages\">";
 		showMessages("Errors","error");
@@ -460,13 +454,12 @@ function showMsgs()
 
 function getTopBanner()
 {
-	
 	if (!defined('BASEURL2')) {
 		define('BASEURL2',"");
 	}
 	
 	$name = 'topBanner' . substr(BASEURL2, 0, -1);
-	
+
 	//Check uploads directory for topBanner
 	$topBanner = "";
 	$extensions = array('.gif','.jpg','.png','.jpeg');
@@ -534,7 +527,8 @@ function showMessages($key, $class)
 	unset($_SESSION[$key]);
 }
 
-function HTML_Render_Body_End(){
+function HTML_Render_Body_End()
+{
 	$HTML_1 =   " </div>   <!-- Closing row -->";
 
 	$HTML_1A = '
@@ -549,8 +543,10 @@ function HTML_Render_Body_End(){
 		</div>';
 
 	echo $HTML_1;
+
 	$CI = &get_instance();
 	$CI->load->view('templates/footer');
+
 	echo $HTML_1A;
 
 	if (!isLoggedIn()) {

@@ -38,7 +38,7 @@ function html_li_sublist($keyword, $id, $items)
 		html_li_beg("nav-header") .
 			html_a(
 				"#", # target
-				html_h(getTxt($keyword), 4), # content
+				heading(getTxt($keyword), 4), # content
 				html_attribs(array("data-toggle" => "collapse",	"data-target" => "#$id"))
 			) .
 			html_ul_beg("collapse", $id, "list-style: none;") .
