@@ -27,10 +27,36 @@ class Datapoint extends MY_Controller {
 		$this->load->library('API_Config');
 	}
 	
+	private function getUtcFromTimeIfApplicable(&$fields)
+	{
+		if (! isset($fields['UTCOffset'])) {
+
+			$timestring = $fields['time'];
+
+			$posPlus = stripos($timestring, "+");
+			$posMinus = stripos($timestring, "-");
+
+			if (($posPlus !== false) || ($posMinus !== false)) {
+
+				$pos = (($posPlus !== false) ? $posPlus : $posMinus);
+
+				$fields['UTCOffset'] = (0 + substr($timestring, $pos + 1));
+				$fields['time'] = substr($timestring, 0, $pos);
+			}
+		}
+	}
+
 	private function createDataPoint($fields)
 	{
 		$dateFormat = "Y-m-d H:i:s";
 		
+		// If no UTCOffset is given in the fields, check if the $fields['time']
+		// contains information on the UTC Offset (e.g. 14:15:00+02). If yes,
+		// strip off the UTC information from $fields['time'] and set
+		// $fields['UTCOffset'] to the according value (in hours).
+
+		$this->getUtcFromTimeIfApplicable($fields);
+
 		$localtime = strtotime($fields['date'] . " " . $fields['time']);
 
 		$dataPoint = array(
@@ -969,11 +995,20 @@ class Datapoint extends MY_Controller {
 		}
 		else if ($method == 'edit')
 		{
+			// Is the UTCOffset coded in the time string?
+			$this->getUtcFromTimeIfApplicable($inputs);
+
+			// If not, use the default from the configuration
+			if (! isset($inputs['UTCOffset'])) {
+				$inputs['UTCOffset'] = $this->getConfigItem('UTCOffset');
+			}
+
 			$LocalDateTime = sprintf("%s %s:00", $inputs['date'], $inputs['time']);
 
 			$localtime = strtotime($LocalDateTime);
 
-			$ms = $this->config->item('UTCOffset') * 3600;
+			//$ms = $this->config->item('UTCOffset') * 3600;
+			$ms = $inputs['UTCOffset'] * 3600;
 
 			$DateTimeUTC = date("Y-m-d H:i:s", $localtime - $ms);
 
