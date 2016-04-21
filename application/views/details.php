@@ -363,10 +363,12 @@ function setDateTimeRange(date_from, date_to)
 
 function updateDateRangeInfo(startDate, endDate)
 {
-	var html;
+	var html = '';
 
-	html  = '<strong>' + globals.texts.DatesAvailable + '</strong> ' + startDate;
-	html += ' <strong>' + globals.texts.To + ' </strong> ' + endDate;
+	html += '<strong>' + globals.texts.DatesAvailable + '</strong> ';
+	html += startDate.toLocaleString();
+	html += ' <strong>' + globals.texts.To + ' </strong> ';
+	html += endDate.toLocaleString();
 
 	$('#daterange').html("").prepend('<p>' + html + '</p>');
 }
