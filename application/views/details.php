@@ -1119,16 +1119,18 @@ echo html_formGroup_end();
 echo html_div_end(); // end of row
 
 echo html_div_beg('row');
-genDropLists('Variable', 'dropdownlist', 'dropdownlist', false) . br();
+genDropLists('Variable', 'dropdownlist', 'dropdownlist', false);
+echo br();
 echo html_div_end();
 
 //The type is already selected when the Variable is selected!
 //echo html_div_beg('row');
-//genDropLists('Type','typelist', 'typelist', false) . br();
+//genDropLists('Type','typelist', 'typelist', false)
+//echo br();
 //echo html_div_end();
-
 echo html_div_beg('row');
-genDropLists('Method', 'methodlist', 'methodlist', false) . br();
+genDropLists('Method', 'methodlist', 'methodlist', false);
+echo br();
 echo html_div_end();
 
 echo html_div_beg('', 'daterange') . html_div_end();
