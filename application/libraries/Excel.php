@@ -1,19 +1,19 @@
-<?php 
+<?php
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once APPPATH."/third_party/PHPExcel.php"; 
- 
-class Excel extends PHPExcel 
-{ 
-		public function __construct() 
-		{ 
-        parent::__construct(); 
-    }
+require_once APPPATH."/third_party/PHPExcel.php";
+
+class Excel extends PHPExcel
+{
+		public function __construct()
+		{
+			parent::__construct();
+		}
 
 		public function output_as_xls(
-			$result, 
-			$sheetName = 'data', 
+			$result,
+			$sheetName = 'data',
 			$format = 'Excel5'
 			// 'Excel5' (Excel 2003 .XLS) or 'Excel2007' (Excel 2007 .XLSX)
 		)
@@ -24,28 +24,31 @@ class Excel extends PHPExcel
 
 			$sheet->fromArray($result, NULL, 'A2');
 
-			$col = 0;
-			$captions = array_keys($result[1]);
+			if (count($result) > 0) {
+				$col = 0;
+				$captions = array_keys($result[0]);
 
-			foreach ($captions AS $caption) {
+				foreach ($captions AS $caption) {
 
-				// Set column caption in row 1
-				$sheet->setCellValueByColumnAndRow($col, 1, $caption);
+					// Set column caption in row 1
+					$sheet->setCellValueByColumnAndRow($col, 1, $caption);
 
-				// Set AutoSize for all columns
-				$column = PHPExcel_Cell::stringFromColumnIndex($col);
-				$sheet->getColumnDimension($column)->setAutoSize(true);
+					// Set AutoSize for all columns
+					$column = PHPExcel_Cell::stringFromColumnIndex($col);
+					$sheet->getColumnDimension($column)->setAutoSize(true);
 
-				$col++;
+					$col++;
+				}
 			}
 
 			$writer = PHPExcel_IOFactory::createWriter($this, $format);
 			$writer->save('php://output');
 		}
 
-		public function read_xls($file, $cacheSizeMB = 20)
+		public function read_xls($file, $extension, $cacheSizeMB = 20)
 		{
-			return $this->read_xls_or_csv($file, 'Excel5', '', $cacheSizeMB);
+			$fileType = ($extension === 'xls' ? 'Excel5' : 'Excel2007');
+			return $this->read_xls_or_csv($file, $fileType, '', $cacheSizeMB);
 		}
 
 		public function read_csv($file, $delimiter = ',', $cacheSizeMB = 20)
@@ -85,7 +88,7 @@ class Excel extends PHPExcel
 			 * @return array
 			 */
 
-			return $excel->getActiveSheet()->toArray(null, false, false, true);
+			return $excel->getActiveSheet()->toArray(null, true, false, true);
 		}
 
 }

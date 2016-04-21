@@ -81,7 +81,7 @@ $("#importfile").submit(function() {
 	if(!$('#valueSpec').is(':checked'))
 	{
 		if(($("#SourceID option:selected").val())==-1){
-			alert(<?php echo "'".getTxt('SelectSourceMsg')."'";?>);
+			alert(<?php echo "'".getTxt('SelectSource')."'";?>);
 			return false;
 		}
 	
@@ -110,8 +110,7 @@ $("#importfile").submit(function() {
 	names.forEach(function(name)
 	{
 		var ext = name.split('.').pop().toLowerCase();
-		if (ext != "csv" && ext != "xls")
-		{
+		if (ext !== "csv" && ext !== "xls" && ext !== "xlsx") {
 			flag=0;
 		}
 	});

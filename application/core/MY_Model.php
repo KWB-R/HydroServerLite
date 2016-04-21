@@ -6,11 +6,16 @@ class MY_Model extends CI_Model
 		parent::__construct();
 	}
 	
-	function getAll()
+	function getAll($translate = true)
 	{
 		$query = $this->db->get($this->tableName);
+		$result = $query->result_array();
 
-		return $this->tranResult($query->result_array());
+		if ($translate === true) {
+			$result = $this->tranResult($result);
+		}
+
+		return $result;
 	}
 
 	function affectedRows()

@@ -541,9 +541,15 @@ function compareClickHandler()
 
 } // end of compareClickHandler()
 
-function exportClickHandler()
+function exportClickHandler(event)
 {
-	var url = toURL('datapoint/export', {
+	var endpoint = (
+		event.data.type === 'xls' ?
+		'datapoint/exportXls' :
+		'datapoint/export'
+	);
+	
+	var url = toURL(endpoint, {
 		siteid: globals.siteID,
 		varid: globals.variableID,
 		meth: globals.methodID,
@@ -936,9 +942,13 @@ function initButtons()
 	}
 ?>
 
-	//Export Button
+	//Export Button (CSV)
 	$("#export").jqxButton(buttonConfig);
-	$("#export").bind('click', exportClickHandler);
+	$("#export").bind('click', {type: 'csv'}, exportClickHandler);
+
+	//Export Button (XLS)
+	$("#exportXls").jqxButton(buttonConfig);
+	$("#exportXls").bind('click', {type: 'xls'}, exportClickHandler);
 }
 
 function initComparison()
@@ -1201,11 +1211,14 @@ echo encloseInBeginEndComments(
 
 echo '<div style="alignment-adjust: middle; float:right;">';
 
+$style = 'style=" margin-top:5px"';
+
 if (isLoggedIn()) {
-	echo html_input_button('addnew', getTxt('AddRow')) . br(2);
+	echo html_input_button('addnew', getTxt('AddRow'), $style);
 }
 
-echo html_input_button('export', getTxt('DownloadData'));
+echo html_input_button('export', getTxt('DownloadData') . ' (.csv)', $style);
+echo html_input_button('exportXls', getTxt('DownloadData') .' (.xls)', $style);
 
 echo html_div_end();
 
