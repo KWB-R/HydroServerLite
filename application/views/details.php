@@ -1,16 +1,27 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 HTML_Render_Head($js_vars, getTxt('SearchData'));
-echo $JS_JQuery;
-echo $JS_JQueryUI;
-echo $JS_JQX;
-echo $JS_GetTheme;
-echo $JS_Globalization; // this is the only page that calls this. This is also the only refernce to MooTools
-echo $JS_Maps;
-echo $CSS_JQX;
-echo $CSS_Main;
-echo $CSS_JQuery_UI;
-echo $CSS_JQStyles;
+
+function beautify($html, $indentlevel = 4)
+{
+	$indentation = str_repeat('  ', $indentlevel);
+
+	$html = str_replace('<script', "\n$indentation<script", $html);
+	$html = str_replace('<link', "\n$indentation<link", $html);
+
+	return $html;
+}
+
+echo beautify($JS_JQuery);
+echo beautify($JS_JQueryUI);
+echo beautify($JS_JQX);
+echo beautify($JS_GetTheme);
+echo beautify($JS_Globalization); // this is the only page that calls this. This is also the only refernce to MooTools
+echo beautify($JS_Maps);
+echo beautify($CSS_JQX);
+echo beautify($CSS_Main);
+echo beautify($CSS_JQuery_UI);
+echo beautify($CSS_JQStyles);
 ?>
 
 
@@ -84,7 +95,7 @@ var DATA = {
 		'DatabaseConfigurationError'
 	);
 	foreach ($names as $name) {
-		echo "$name: \"" . getTxt($name) . "\",\n";
+		echo "\t\t$name: \"" . getTxt($name) . "\",\n";
 	}
 ?>
 		SiteName: "<?php echo $site['SiteName'];?>",
@@ -101,18 +112,7 @@ function getStockChartConfig(
 	variableAndType
 )
 {
-	return {
-		chart: {
-			renderTo: 'container',
-			zoomType: 'x'
-		},
-		legend: {
-			verticalAlign: 'top',
-			enabled: true,
-			shadow: true,
-			y: 40,
-			margin: 50
-		},
+	var configExtension = {
 		title: {
 			text: DATA.text.Dataof + " " + DATA.text.SiteName + " " +
 						DATA.text.From   + " " + date_chart_from + " " +
@@ -120,9 +120,6 @@ function getStockChartConfig(
 			style: {
 				fontSize: '12px'
 			}
-		},
-		credits: {
-			enabled: false
 		},
 		subtitle: {
 			text: DATA.text.ClickDrag
@@ -144,10 +141,6 @@ function getStockChartConfig(
 				margin: 40
 			}
 		},
-		exporting: {
-			enabled: true,
-			width: 5000
-		},
 		rangeSelector: {
 			buttons: [
 				{type: 'day',   count: 1, text: DATA.text.OneD},
@@ -161,20 +154,10 @@ function getStockChartConfig(
 			selected: 6
 		},
 		series: [ {data: data_test, name: variableAndType} ]
-	};
+	}
+
+	return jQuery.extend(chartConfig, configExtension);
 } // end of getStockChartConfig()
-
-function getGridConfig(dataAdapter, columnsConfig)
-{
-	return {
-		source: dataAdapter,
-		width: '100%',
-		columnsresize: true,
-		columns: columnsConfig
-	};
-
-} // end of getGridConfig()
-
 
 function getColumnsConfig(unitGrid, editable)
 {
@@ -185,37 +168,28 @@ function getColumnsConfig(unitGrid, editable)
 	];
 
 	if (editable === true) {
-
-		var editColumn = {
-			text: 'Edit',
-			datafield: 'Edit',
-			columntype: 'button',
-			cellsrenderer: function () {
-				return 'Edit';
-			},
-			buttonclick: editClickHandler
-		};
-
-		columns = jQuery.merge(columns, [ editColumn ]);
+		columns = jQuery.merge(
+			columns,
+			[ jQuery.extend(editColumnConfig, {buttonclick: editClickHandler}) ]
+		);
 	}
 
 	return columns;
 } // end of getColumnsConfig()
 
-function getGridConfig2(dataAdapter, columnsConfig)
+function getWindowConfig(offset, dx, dy)
 {
-	return jQuery.extend(
-		getGridConfig(dataAdapter, columnsConfig), 
-		{
-			theme: 'darkblue',
-			sortable: true,
-			pageable: true,
-			autoheight: true,
-			editable: false,
-			selectionmode: 'singlecell'
+	// Set defaults
+	dx = dx || 220;
+	dy = dy ||  60;
+
+	return {
+		position: {
+			x: parseInt(offset.left, 10) + dx,
+			y: parseInt(offset.top,  10) + dy
 		}
-	);
-} // end of getGridConfig2()
+	};
+}
 
 function editClickHandler(row)
 {
@@ -224,12 +198,7 @@ function editClickHandler(row)
 
 	var offset = $('#jqxgrid').offset();
 
-	$('#popupWindow').jqxWindow({
-		position: {
-			x: parseInt(offset.left, 10) + 220,
-			y: parseInt(offset.top,  10) +  60
-		}
-	});
+	$('#popupWindow').jqxWindow(getWindowConfig(offset));
 
 	// get the clicked row's data and initialize the input fields.
 	var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
@@ -239,13 +208,9 @@ function editClickHandler(row)
 
 	$('#popupWindow').jqxWindow('show');
 
-	$('#date').jqxDateTimeInput({
-		width: '125px',
-		height: '25px',
-		theme: 'darkblue',
-		formatString: 'MM/dd/yyyy',
-		textAlign: 'center'
-	}).jqxDateTimeInput('setDate', toDate(datepart[0]));
+	$('#date').
+		jqxDateTimeInput(dateInputConfig2).
+		jqxDateTimeInput('setDate', toDate(datepart[0]));
 
 	$('#timepicker').val(toHourAndMinute(datepart[1]));
 
@@ -258,118 +223,53 @@ function editClickHandler(row)
 function validatetime(idString)
 {
 	//Removing all space
-	var strval = trimAllSpace($(idString).val());
+	var timestring = trimAllSpace($(idString).val());
 
-	//alert("validatetime(" + idString + "): >" + strval + "<")
+	$(idString).val(timestring);
 
-	$(idString).val(strval);
-
-	//Minimum and maximum length is 5, for example, 01:20
-	if (strval.length != 5) {
-		alert(DATA.text.InvalidTimeFive);
+	// checkTimeFormat from assets/js/details_helpers.js
+	if (! checkTimeFormat(timestring, DATA.text)) {
 		return false;
 	}
 
-	//Split the string
-	var timeparts = splitTimeString(strval);
-
-	//Checking hours
-
-	//minimum length for hours is two digits, for example, 12
-	if (timeparts.hour.length != 2) {
-		alert(DATA.text.InvalidTimeHoursTwo);
-		return false;
-	}
-
-	if (timeparts.hour < 0 || timeparts.hour > 23) {
-		alert(timeparts.hour < 0 ?
-			DATA.text.InvalidTimeHoursZeros :
-			DATA.text.InvalidTimeHoursTwentyThree);
-		return false;
-	}
-
-	//Checking minutes
-
-	//minimum length for minutes is 2, for example, 59
-	if (timeparts.minute.length != 2) {
-		alert(DATA.text.InvalidTimeMinutesTwo);
-		return false;
-	} 
-
-	if (timeparts.minute < 0 || timeparts.minute > 59) {
-		alert(timeparts.minute < 0 ?
-			DATA.text.InvalidTimeMinutesZeros :
-			DATA.text.InvalidTimeMinutesFiftyNine);
-		return false;
-	}
-
-	$(idString).val(IsNumeric(strval));
+	$(idString).val(IsNumeric(timestring));
 
 	return true;
 }
 
-//Time Validation Script Ends
-
-//Number validation script
 function validatenum(idSelector)
 {
-	return isValidNumber($(idSelector).val());
+	// isValidNumber from assets/js/details_helpers.js
+	return isValidNumber($(idSelector).val(), DATA.text);
 }
 
-function isValidNumber(val)
+// Helper function to generate a URL with parameters
+function toURL(endpoint, parameters)
 {
-	if (val === null || val.length === 0) {
-		alert(DATA.text.EnterNumberValue);
-		return false;
-	}
+	var relative = endpoint + '?' + jQuery.param(parameters);
 
-	var DecimalFound = false;
+	//alert("relative URL:\n" + relative);
 
-	for (var i = 0; i < val.length; i++) {
-
-		var ch = val.charAt(i);
-
-		if (i === 0 && ch === "-") {
-			continue;
-		}
-
-		if (ch === "." && !DecimalFound) {
-			DecimalFound = true;
-			continue;
-		}
-
-		if (ch < "0" || ch > "9") {
-			alert(DATA.text.EnterValidNumberValue);
-			return false;
-		}
-	}
-
-	return true;
+	return base_url + relative;
 }
 
-//Number Validation script ends
+function toDatafields(fieldnames)
+{
+	var datafields = [];
 
-//Defining the Data adapter for the variable list
-var variablesAdapter = new $.jqx.dataAdapter({
-	datatype: "json",
-	datafields: [
-		{ name: 'VariableID'},
-		{ name: 'VarNameMod'}
-	],
-	url: base_url + 'variable/getSiteJSON?siteid=' + DATA.siteid + '&withtype=1'
-});
+	for (var i = 0; i < fieldnames.length; i++) {
+		datafields.push({ name: fieldnames[i] });
+	}
 
-//Defining the Data adapter for the methods
-function getMethodsAdapter(variableID)
+	return datafields;
+}
+
+function toJsonAdapter(url, fieldnames)
 {
 	return new $.jqx.dataAdapter({
 		datatype: "json",
-		datafields: [
-			{ name: 'MethodID' },
-			{ name: 'MethodDescription' }
-		],
-		url: base_url + 'methods/getSiteVarJSON?siteid=' + DATA.siteid +
-			'&varid=' + variableID
+		datafields: toDatafields(fieldnames),
+		url: url
 	});
 }
 
@@ -407,32 +307,47 @@ function methodSelectHandler(event)
 function dateChangedHandler(event)
 {
 	//alert(event.data.origin + ' changed to:' + event.args.date);
-/*
-	glob_df = new Date(event.args.date);
 
-	//Setting the Second calendar's min date to be the date of the first calendar
-	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', event.args.date);
+	var newDate = new Date(event.args.date);
 
-//	$("#fromdatedrop").jqxDropDownButton('setContent', formatDate(glob_df));
+	switch (event.data.origin) {
 
-	//Converting to SQL Format for Searching
-	var date_sql = formatDateSQL(glob_df);
+		case 'from':
 
-	if (date_from_sql != date_sql) {
-		date_from_sql = date_sql;
-		plot_chart();
+			glob_df = newDate;
+
+			/*//Setting the Second calendar's min date to be the date of the first calendar
+			//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', event.args.date);
+			//	$("#fromdatedrop").jqxDropDownButton('setContent', formatDate(glob_df));
+
+			//Converting to SQL Format for Searching
+			var date_sql = formatDateSQL(glob_df);
+
+			if (date_from_sql != date_sql) {
+				date_from_sql = date_sql;
+				plot_chart();
+			}*/
+
+			break;
+
+		case 'to':
+
+			glob_dt = newDate;
+
+			//	$("#todatedrop").jqxDropDownButton('setContent', formatDate(glob_dt));
+
+			date_to_sql = formatDateSQL(glob_dt);
+
+			break;
+
+		default:
+
+			alert(
+				"Unexpected origin calling dateChangedHanlder: " + event.data.origin
+			);
+
+			break;
 	}
-*/
-		plot_chart();
-}
-
-function dateToChangedHandler(event)
-{
-	glob_dt = new Date(event.args.date);
-
-//	$("#todatedrop").jqxDropDownButton('setContent', formatDate(glob_dt));
-
-	date_to_sql = formatDateSQL(glob_dt);
 
 	plot_chart();
 }
@@ -507,12 +422,33 @@ function toMonthEnd(date)
 	return (monthEnd > 12) ? 12 : monthEnd;
 }
 
+function addValueClickHandler()
+{
+	$("#popupWindow_new").jqxWindow('show');
+
+	var offset = $("#jqxgrid").offset();
+
+	$("#popupWindow_new").jqxWindow({
+		position: {
+			x: parseInt(offset.left, 10) + 220,
+			y: parseInt(offset.top,  10) +  60
+		}
+	});
+
+	$("#date_new").jqxDateTimeInput(dateInputConfig2);
+
+	$("#timepicker_new" ).timepicker({
+		showOn: "focus",
+		showPeriodLabels: false
+	});
+}
+
 function delValClickHandler()
 {
 	//Send out a delete request
 	$.ajax({
 		dataType: "json",
-		url: base_url+"datapoint/delete/" + vid
+		url: toURL("datapoint/delete/" + vid, {})
 	}).
 	done(function(result) {
 		if(result.status == 'success') {
@@ -547,10 +483,11 @@ function saveClickHandler()
 		//Send out an ajax request to update that data field
 		$.ajax({
 			dataType: "json",
-			url: base_url + "datapoint/edit/" + vid +
-				"?val=" + vt +
-				"&dt=" + formatDateSQL(seldate, undefined, '') +
-				"&time=" + $("#timepicker").val()
+			url: toURL("datapoint/edit/" + vid, {
+				val: vt,
+				dt: formatDateSQL(seldate, undefined, ''),
+				time: $("#timepicker").val()
+			})
 		}).
 		done(function(msg) {
 			if (msg.status == 'success') {
@@ -586,12 +523,14 @@ function saveNewClickHandler()
 
 	$.ajax({
 		dataType: "json",
-		url: base_url + "datapoint/add?varid=" + varid + 
-			"&val=" + vt + 
-			"&dt=" + formatDateSQL(seldate, undefined, '') +
-			"&time=" + $("#timepicker_new").val()+
-			"&sid=" + DATA.siteid +
-			"&mid=" + methodid
+		url: toURL("datapoint/add", {
+			varid: varid,
+			val: vt,
+			dt: formatDateSQL(seldate, undefined, ''),
+			time: $("#timepicker_new").val(),
+			sid: DATA.siteid,
+			mid: methodid
+		})
 	}).
 	done(function(msg) {
 		if (msg.status == 'success') {
@@ -611,17 +550,22 @@ function saveNewClickHandler()
 function compareClickHandler()
 {
 	$("html, body").animate({scrollTop: 0}, "slow");
+
 	$('#window').jqxWindow('show');
-	$('#windowContent').load(base_url + 'datapoint/compare/1', function() {});
+
+	$('#windowContent').load(toURL('datapoint/compare/1', {}), function() {});
+
 } // end of compareClickHandler()
 
 function exportClickHandler()
 {
-	var url = base_url + 'datapoint/export?siteid=' + DATA.siteid +
-		'&varid=' + varid +
-		'&meth=' + methodid +
-		'&startdate=' + date_from_sql +
-		'&enddate=' + date_to_sql;
+	var url = toURL('datapoint/export', {
+		siteid: DATA.siteid,
+		varid: varid,
+		meth: methodid,
+		startdate: date_from_sql,
+		enddate: date_to_sql
+	});
 
 	window.open(url, '_blank');
 }
@@ -639,12 +583,7 @@ $(document).ready(function() {
 
 	$tabs = $('#jqxtabs');
 
-	$tabs.jqxTabs({
-		width:'100%',
-		height: 550,
-		theme: 'darkblue',
-		collapsible: true
-	});
+	$tabs.jqxTabs(tabsConfig);
 
 	$tabs.jqxTabs('disable');
 	$tabs.jqxTabs('enableAt', 0);
@@ -655,17 +594,21 @@ $(document).ready(function() {
 			}
 	});
 
+	//Defining the Data adapter for the variable list
+	var dataAdapter = toJsonAdapter(
+		toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 }),
+		['VariableID', 'VarNameMod']
+	);
+
 	//Creating the Variables Drop Down list
 	$("#dropdownlist").
-		jqxDropDownList({
-			source: variablesAdapter,
-			theme: 'darkblue',
-			height: 25,
-			width: "100%",
-			selectedIndex: 0,
-			displayMember: 'VarNameMod',
-			valueMember: 'VariableID'
-		}).
+		jqxDropDownList(
+			jQuery.extend(dropDownConfig, {
+				source: dataAdapter,
+				displayMember: 'VarNameMod',
+				valueMember: 'VariableID'
+			})
+		).
 		bind('select', variableSelectHandler);
 
 	$("#jqxDateTimeInput").
@@ -683,19 +626,22 @@ $(document).ready(function() {
 
 function get_methods(variableID)
 {
+	var dataAdapter = toJsonAdapter(
+		toURL('methods/getSiteVarJSON', {siteid: DATA.siteid, varid: variableID}),
+		[ 'MethodID', 'MethodDescription' ]
+	);
+
 	$('#methodlist').
-//		off().
-//		unbind('valuechanged').
+		//off().
+		//unbind('valuechanged').
 		//Creating the Drop Down list
-		jqxDropDownList({
-			source: getMethodsAdapter(variableID),
-			theme: 'darkblue',
-			height: 25,
-			width: "100%",
-			selectedIndex: 0,
-			displayMember: 'MethodDescription',
-			valueMember: 'MethodID'
-		}).
+		jqxDropDownList(
+			jQuery.extend(dropDownConfig, {
+				source: dataAdapter,
+				displayMember: 'MethodDescription',
+				valueMember: 'MethodID'
+			})
+		).
 		//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
 		bind('select', methodSelectHandler).
 		jqxDropDownList('selectIndex', 0);
@@ -703,12 +649,13 @@ function get_methods(variableID)
 
 function get_dates()
 {
-	var url = base_url + "series/getDateJSON?siteid=" + DATA.siteid +
-		"&varid=" + varid+"&methodid=" + methodid;
-
 	$.ajax({
 		type: "GET",
-		url: url,
+		url: toURL("series/getDateJSON", {
+			siteid: DATA.siteid,
+			varid: varid,
+			methodid: methodid
+		}),
 		dataType: "json",
 		success: ajaxSuccessHandler
 	});
@@ -724,7 +671,9 @@ function plot_chart()
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: base_url+"variable/getUnit?varid=" + varid
+			url: toURL("variable/getUnit", {
+				varid: varid
+			})
 		}).
 		done(function(msg) {
 			unit_yaxis = msg[0].unitA;
@@ -732,12 +681,14 @@ function plot_chart()
 	}
 
 	//Chaning Complete Data loading technique..need to create a php page that will output javascript...
-	var url_test = base_url + 'datapoint/getData?siteid=' + DATA.siteid + 
-		'&varid=' + varid + '&meth=' + methodid + 
-		'&startdate=' + date_from_sql + '&enddate=' + date_to_sql;
-
 	$.ajax({
-		url: url_test,
+		url: toURL('datapoint/getData', {
+			siteid: DATA.siteid,
+			varid: varid,
+			meth: methodid,
+			startdate: date_from_sql,
+			enddate: date_to_sql
+		}),
 		type: "GET",
 		dataType: "script"
 	}).
@@ -765,41 +716,38 @@ function make_grid()
 {
 	var editrow = -1;
 	var vid = 0;
-	var url = base_url + 'datapoint/getDataJSON?siteid=' + DATA.siteid +
-		'&varid=' + varid +
-		'&meth=' + methodid +
-		'&startdate=' + date_from_sql +
-		'&enddate=' + date_to_sql;
 
-	var dataAdapter = new $.jqx.dataAdapter({
-		datatype: "json",
-		datafields: [
-			{name: 'ValueID'},
-			{name: 'DataValue'},
-			{name: 'LocalDateTime'}
-		],
-		url: url
-	});
+	var dataAdapter = toJsonAdapter(
+		toURL('datapoint/getDataJSON', {
+			siteid: DATA.siteid,
+			varid: varid,
+			meth: methodid,
+			startdate: date_from_sql,
+			enddate: date_to_sql
+		}),
+		[ 'ValueID', 'DataValue', 'LocalDateTime' ]
+	);
 
 	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
 	var unitGrid = "Unit: None";
 
 	$.ajax({
 		dataType: "json",
-		url: base_url+"variable/getUnit?varid=" + varid
+		url: toURL("variable/getUnit", { varid: varid })
 	}).
 	done(function(msg) {
-		unitGrid = msg[0].unitA;
 
 		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
-		var columnsConfig = getColumnsConfig(unitGrid, editable);
-		var gridConfig;
 
-		if (flag === 1) {
-			gridConfig = getGridConfig(dataAdapter, columnsConfig);
-		}
-		else {
-			gridConfig = getGridConfig2(dataAdapter, columnsConfig);
+		var gridConfig = {
+			source: dataAdapter,
+			width: '100%',
+			columnsresize: true,
+			columns: getColumnsConfig(msg[0].unitA, editable)
+		};
+
+		if (flag !== 1) {
+			gridConfig = jQuery.extend(gridConfig, gridConfigExtended);
 			flag = 1;
 		}
 
@@ -838,43 +786,14 @@ function make_grid()
 	$("#Cancel_new").jqxButton(buttonConfigBase);
 	$("#Save_new"  ).jqxButton(buttonConfigBase);
 
-<?php
+<?php 
+
 if (isLoggedIn()) {
-echo(
-'	$("#addnew").jqxButton({
-		width: \'250\',
-		height: \'25\',
-		theme: \'darkblue\'
-	}).
-	bind(\'click\', function () {
+	echo "$(\"#addnew\").jqxButton(buttonConfig)." . 
+		"bind('click', addValueClickHandler)\n";
+}
 
-		$("#popupWindow_new").jqxWindow(\'show\');
-
-		var offset = $("#jqxgrid").offset();
-
-		$("#popupWindow_new").jqxWindow({
-			position: {
-				x: parseInt(offset.left, 10) + 220,
-				y: parseInt(offset.top,  10) +  60
-			}
-		});
-
-		$("#date_new").jqxDateTimeInput({
-			width: \'125px\',
-			height: \'25px\',
-			theme: \'darkblue\',
-			formatString: "MM/dd/yyyy",
-			textAlign: "center"
-		});
-
-		$("#timepicker_new" ).timepicker({
-			showOn: "focus",
-			showPeriodLabels: false
-		});
-	});' // end of click handler
-); // end of echo
-} // end of if (isLoggedIn())
-?>
+?> 
 
 	$("#Save_new").unbind("click");
 	$("#Save_new").bind('click', saveNewClickHandler);
@@ -941,12 +860,12 @@ function html_daterange_row()
 {
 	$html = html_div_beg('row');
 	$html .=   html_div_beg('col-md-6');
-	$html .=     html_div_beg('', 'jqxDateTimeInput') . "</div>\n";
-	$html .=   "</div>\n";
+	$html .=     html_div_beg('', 'jqxDateTimeInput') . html_div_end();
+	$html .=   html_div_end();
 	$html .=   html_div_beg('col-md-6');
-	$html .=     html_div_beg('', 'jqxDateTimeInputto') . "</div>\n";
-	$html .=   "</div>\n";
-	$html .= "</div> <!-- end of row -->\n";
+	$html .=     html_div_beg('', 'jqxDateTimeInputto') . html_div_end();
+	$html .=   html_div_end();
+	$html .= html_div_end();
 	$html .= br();
 
 	return $html;
@@ -1007,7 +926,7 @@ function rows_for_values_table($data)
 
 		// row 2
 		html_td_right(getTxt('Date')) .
-		html_td_left('<div id="' . $data['id_date']. '"></div>'),
+		html_td_left('<div id="' . $data['id_date']. '">' . html_div_end()),
 
 		// row 3
 		html_td_right(getTxt('Time')) .
@@ -1034,13 +953,15 @@ function rows_for_values_table($data)
 	);
 }
 
-function html_enter_values_table($rows)
+function html_enter_values_div($rows)
 {
 	$empty_row = html_tr("<td>&nbsp;</td><td>&nbsp;</td>");
 
-	$html  = "<table>\n";
+	$html  = "<div style=\"overflow: hidden;\">\n";
+	$html .= "  <table>\n";
 	$html .= implode($empty_row, array_map("html_tr", $rows));
-	$html .= "</table>\n";
+	$html .= "  </table>\n";
+	$html .= html_div_end();
 
 	return $html;
 }
@@ -1049,11 +970,11 @@ function div_window($number = '')
 {
 	$html  = "<div id=\"window" . $number . "\">\n";
 	$html .= "  <div id=\"window" . $number . "Header\">\n";
-	$html .= "    " . html_span('', getTxt('CompareTwo'));
-	$html .= "\n  </div>\n";
+	$html .= "    " . html_span('', getTxt('CompareTwo')) . "\n";
+	$html .= html_div_end(1);
 	$html .= "  <div style=\"overflow: hidden;\" id=\"window" . 
-		$number . "Content\"></div>\n";
-	$html .= "</div>\n\n";
+		$number . "Content\">" . html_div_end();
+	$html .= html_div_end() . "\n";
 
 	return $html;
 }
@@ -1067,23 +988,23 @@ echo html_div_beg("col-md-9");
 
 echo html_div_beg('row');
 genDropLists('Site', '', '', false);
-echo html_div_beg('site_title') . $site['SiteName'] . '</div>' . br();
-echo '</div>';
+echo html_div_beg('site_title') . $site['SiteName'] . html_div_end() . br();
+echo html_div_end();
 
 echo html_div_beg('row');
 genDropLists('Variable', 'dropdownlist', 'dropdownlist', false) . br();
-echo '</div>';
+echo html_div_end();
 
 //The type is already selected when the Variable is selected!
 //echo html_div_beg('row');
 //genDropLists('Type','typelist', 'typelist', false) . br();
-//echo '</div>';
+//echo html_div_end();
 
 echo html_div_beg('row');
 genDropLists('Method', 'methodlist', 'methodlist', false) . br();
-echo '</div>';
+echo html_div_end();
 
-echo html_div_beg('', 'daterange') . "</div>\n";
+echo html_div_beg('', 'daterange') . html_div_end();
 
 echo html_daterange_row();
 
@@ -1113,47 +1034,40 @@ echo getTxt('WrongSite');
 echo '<a href="' . site_url('sites/map') .'" style="color:#00F"> ' .
 	getTxt('Here') . '</a> ';
 echo getTxt('GoBack');
-echo "</div>\n";
+echo html_div_end();
 
-echo html_div_beg();
-echo html_div_beg("chart-wrapper");
-echo html_div_beg("chart-inner");
-
-echo '<div id="container" style="width:100%; height: 470px;"></div>';
-
-echo "<!-- Button to compare data values-->\n";
-
-echo html_input_button('compare', getTxt('Compare'), 'style=" float:right"');
-
-echo "</div>\n";
-echo "</div>\n";
-echo "</div>\n";
-
-echo "<!-- End of Chart DIV -->\n";
+echo encloseInBeginEndComments(
+	html_div_beg() .
+	"  " . html_div_beg("chart-wrapper") .
+	"    " . html_div_beg("chart-inner") .
+	"      <div id=\"container\" style=\"width:100%; height: 470px;\">" . html_div_end(3) .
+	"      <!-- Button to compare data values-->\n" .
+	"      " . html_input_button('compare', getTxt('Compare'), 'style=" float:right"') .
+	"    " . html_div_end() .
+	"  " . html_div_end() .
+	html_div_end(),
+	"of Chart DIV"
+);
 
 echo html_div_beg();
 
-echo html_div_beg('', 'jqxgrid') . "</div>\n";
+echo html_div_beg('', 'jqxgrid') . html_div_end();
 
-echo html_div_beg('', 'popupWindow');
-
-echo html_div_beg() . getTxt('Edit') . "</div>\n";
-
-echo '<div style="overflow: hidden;">';
-
-echo html_enter_values_table(rows_for_values_table(array(
-	'caption' => 'ChangeValues',
-	'id_date' => 'date',
-	'id_timepicker' => 'timepicker',
-	'id_value' => 'value',
-	'id_save' => 'Save',
-	'id_cancel' => 'Cancel',
-	'button_delete' => html_input_button("delval", getTxt('Delete'))
-)));
-
-echo "</div>\n";
-
-echo "</div>\n";
+echo encloseInBeginEndComments(
+	html_div_beg('', 'popupWindow') .
+		'<div>' . getTxt('Edit') . html_div_end() .
+		html_enter_values_div(rows_for_values_table(array(
+			'caption' => 'ChangeValues',
+			'id_date' => 'date',
+			'id_timepicker' => 'timepicker',
+			'id_value' => 'value',
+			'id_save' => 'Save',
+			'id_cancel' => 'Cancel',
+			'button_delete' => html_input_button("delval", getTxt('Delete'))
+		))) .
+	html_div_end(),
+	"of DIV #popupWindow (change values)"
+);
 
 echo '<div style="alignment-adjust: middle; float:right;">';
 
@@ -1163,47 +1077,43 @@ if (isLoggedIn()) {
 
 echo html_input_button('export', getTxt('DownloadData'));
 
-echo "</div>\n";
+echo html_div_end();
 
-echo "</div>\n";
+echo html_div_end();
 
 echo "<!-- End Of Grid Div.  -->\n";
 
-echo "</div>\n";
+echo html_div_end();
 
 echo "<!-- Jqx Tabs end -->\n";
 
-echo "</div>\n";
+echo html_div_end();
 
-echo html_div_beg('', 'popupWindow_new');
-
-echo html_div_beg() . getTxt('Add') . "</div>\n";
-
-echo '<div style="overflow: hidden;">';
-
-echo html_enter_values_table(rows_for_values_table(array(
-	'caption' => 'EnterValues',
-	'id_date' => 'date_new',
-	'id_timepicker' => 'timepicker_new',
-	'id_value' => 'value_new',
-	'id_save' => 'Save_new',
-	'id_cancel' => 'Cancel_new',
-	'button_delete' => ''
-))); 
-
-echo "</div>\n";
-
-echo "</div>\n";
+echo encloseInBeginEndComments(
+	html_div_beg('', 'popupWindow_new') .
+		'<div>' . getTxt('Add') . html_div_end() .
+		html_enter_values_div(rows_for_values_table(array(
+			'caption' => 'EnterValues',
+			'id_date' => 'date_new',
+			'id_timepicker' => 'timepicker_new',
+			'id_value' => 'value_new',
+			'id_save' => 'Save_new',
+			'id_cancel' => 'Cancel_new',
+			'button_delete' => ''
+		))) .
+	html_div_end(),
+	"of DIV #popupWindow_new (enter new values)"
+);
 
 echo br();
 
-echo "</div>\n";
+echo html_div_end();
 
-echo "</div>\n";
+echo html_div_end();
 
-echo "</div>\n";
+echo html_div_end();
 
-echo "</div>\n";
+echo html_div_end();
 
 echo div_window();
 echo div_window('2');

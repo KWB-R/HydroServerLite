@@ -2,6 +2,34 @@
 // Define the configurations of the controls in sites/details
 //
 
+var dropDownConfig = {
+	theme: 'darkblue',
+	height: 25,
+	width: "100%",
+	selectedIndex: 0
+};
+
+var chartConfig = {
+	chart: {
+		renderTo: 'container',
+		zoomType: 'x'
+	},
+	legend: {
+		verticalAlign: 'top',
+		enabled: true,
+		shadow: true,
+		y: 40,
+		margin: 50
+	},
+	credits: {
+		enabled: false
+	},
+	exporting: {
+		enabled: true,
+		width: 5000
+	},
+};
+
 var windowConfig = {
 	maxHeight: 800,
 	maxWidth: 800,
@@ -59,9 +87,42 @@ var dateInputConfig = {
 	formatString: 'dd.MM.yyyy hh:mm'
 };
 
+var dateInputConfig2 = {
+	width: '125px',
+	height: '25px',
+	theme: 'darkblue',
+	formatString: 'dd.MM.yyyy hh:mm', //"MM/dd/yyyy",
+	textAlign: 'center'
+};
+
 var dateDropConfig  = {
 	width: '100%',
 	height: 25,
 	theme: 'darkblue'
+};
+
+var gridConfigExtended = {
+	theme: 'darkblue',
+	sortable: true,
+	pageable: true,
+	autoheight: true,
+	editable: false,
+	selectionmode: 'singlecell'
+};
+
+var editColumnConfig = {
+	text: 'Edit',
+	datafield: 'Edit',
+	columntype: 'button',
+	cellsrenderer: function () {
+		return 'Edit';
+	}
+};
+
+var tabsConfig = {
+	width:'100%',
+	height: 550,
+	theme: 'darkblue',
+	collapsible: true
 };
 
