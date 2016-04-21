@@ -2,6 +2,60 @@
 // Helper functions required in sites/details
 //
 
+function toInfoString(x)
+{
+	var text = '';
+
+	if (typeof x === 'undefined') {
+		text = '<undefined>';
+	}
+	else if (Array.isArray(x)) {
+		text = "<Array with " + x.length + " elements>";
+	}
+	else {
+		text = x.toString();
+	}
+
+	return text;
+}
+
+// Helper function to generate a URL with parameters
+function toURL(endpoint, parameters, debug)
+{
+	// Set default
+	debug = debug || false;
+
+	var relative = endpoint + '?' + jQuery.param(parameters);
+
+	if (debug) {
+		var message = "relative URL: " + relative;
+		//alert(message);
+		console.log(message);
+	}
+
+	return base_url + relative;
+}
+
+function toDatafields(fieldnames)
+{
+	var datafields = [];
+
+	for (var i = 0; i < fieldnames.length; i++) {
+		datafields.push({ name: fieldnames[i] });
+	}
+
+	return datafields;
+}
+
+function toJsonAdapter(url, fieldnames)
+{
+	return new $.jqx.dataAdapter({
+		datatype: "json",
+		datafields: toDatafields(fieldnames),
+		url: url
+	});
+}
+
 function checkTimeFormat(timestring, messages)
 {
 	//Minimum and maximum length is 5, for example, 01:20
@@ -107,7 +161,9 @@ function add_zero(value)
 function timeconvert(timestamp, useTime)
 {
 	// set default of useTime to true
-	useTime = useTime || true;
+	if (useTime === undefined) {
+		useTime = true;
+	}
 
 	var year   = parseInt(timestamp.slice( 0,  4), 10);
 	var month  = parseInt(timestamp.slice( 5,  7), 10);
@@ -121,9 +177,14 @@ function timeconvert(timestamp, useTime)
 
 function toDate(datestring)
 {
-	var parts = datestring.split('-');
+	var parts = datestring.substring(0, 10).split('-');
 
 	return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+function toLocaleDateString_HH_MM(date) 
+{
+	return date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5);
 }
 
 function toHourAndMinute(timestring)

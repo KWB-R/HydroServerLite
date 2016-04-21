@@ -40,30 +40,31 @@ echo beautify($CSS_JQStyles);
 // Define Global Variables
 //
 
-var varid;           // currently selected VariableID
-var variableAndType; // currently selected "<VariableName> (<DataType>)"
-var methodid;        // currently selected MethodID
+var globals = {
 
-var glob_df;
-var glob_dt;
+	siteID: <?php echo $SiteID;?>, // currently selected SiteID
+	variableID: -1, // currently selected VariableID
+	variableAndType: "", // currently selected "<VariableName> (<DataType>)"
+	methodID: -1, // currently selected MethodID
 
-var date_from;
-var date_to;
+	dateFrom: "",
+	dateTo: "",
 
-var date_from_sql;
-var date_to_sql;
+	date_from_sql: "",
+	date_to_sql: "",
 
-var sitename;
-var flag = 0;
-var chart = "";
+	chart: undefined,
+
+	updateRequired: false,
+
+	editRowData: undefined // content of the currently selected grid row
+};
 
 //
 // Define all (translated) message texts beforehand
 //
 
-var DATA = {
-	siteid:<?php echo $SiteID;?>,
-	text:{
+globals.texts = {
 <?php
 	$names = array(
 		'InvalidTimeFive',
@@ -95,352 +96,296 @@ var DATA = {
 		'DatabaseConfigurationError'
 	);
 	foreach ($names as $name) {
-		echo "\t\t$name: \"" . getTxt($name) . "\",\n";
+		echo "\t$name: \"" . getTxt($name) . "\",\n";
 	}
 ?>
-		SiteName: "<?php echo $site['SiteName'];?>",
-		ValueID: "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
-		Value: "<?php echo str_replace(':', '', getTxt('Value'));?>"
-	}
+	SiteName: "<?php echo $site['SiteName'];?>",
+	ValueID: "<?php echo str_replace(':', ' ID', getTxt('Value'));?>",
+	Value: "<?php echo str_replace(':', '', getTxt('Value'));?>"
 };
 
-function getStockChartConfig(
-	date_chart_from,
-	date_chart_to,
-	unit_yaxis,
-	data_test,
-	variableAndType
-)
-{
-	var configExtension = {
-		title: {
-			text: DATA.text.Dataof + " " + DATA.text.SiteName + " " +
-						DATA.text.From   + " " + date_chart_from + " " +
-						DATA.text.To     + " " + date_chart_to,
-			style: {
-				fontSize: '12px'
-			}
-		},
-		subtitle: {
-			text: DATA.text.ClickDrag
-		},
-		xAxis: {
-			type: 'datetime',
-			dateTimeLabelFormats: {
-				month: '%e.%b / %Y',
-				year: '%b.%Y'
-			},
-			title: {
-				text: DATA.text.TimeMsg,
-				margin: 30
-			}
-		},
-		yAxis: {
-			title: {
-				text: unit_yaxis,
-				margin: 40
-			}
-		},
-		rangeSelector: {
-			buttons: [
-				{type: 'day',   count: 1, text: DATA.text.OneD},
-				{type: 'day',   count: 3, text: DATA.text.ThreeD},
-				{type: 'week',  count: 1, text: DATA.text.OneW},
-				{type: 'month', count: 1, text: DATA.text.OneM},
-				{type: 'month', count: 6, text: DATA.text.SixM},
-				{type: 'year',  count: 1, text: DATA.text.OneY},
-				{type: 'all', text: DATA.text.All}
-			],
-			selected: 6
-		},
-		series: [ {data: data_test, name: variableAndType} ]
-	}
+//
+// Functions returning objects for the initialisation of user interface elements
+//
 
-	return jQuery.extend(chartConfig, configExtension);
-} // end of getStockChartConfig()
-
-function getColumnsConfig(unitGrid, editable)
+function getGridConfigUpdate(unit)
 {
+	// Define source and settings for jqx.dataAdapter
+
+	var source = {
+		datatype: 'json',
+		url: getDataURL(true),
+		id: 'ValueID',
+		datafields: [
+			{ name: 'ValueID', type: 'int'},
+			{ name: 'LocalDateTime', type: 'date'},
+			{ name: 'UTCOffset', type: 'int'},
+			{ name: 'CensorCode', type: 'string'},
+			{ name: 'DataValue', type: 'float'}
+		]
+	};
+
+	var settings = {
+	};
+
+	// Define columns for jqxGrid
+
 	var columns = [
-		{text: DATA.text.ValueID, datafield: 'ValueID'},
-		{text: DATA.text.Date, datafield: 'LocalDateTime'},
-		{text: DATA.text.Value + ' (' + unitGrid + ')', datafield: 'DataValue'}
+		{
+			datafield: 'ValueID',
+			text: globals.texts.ValueID
+			//width: 80 //'auto'
+		},
+		{
+			datafield: 'LocalDateTime',
+			text: globals.texts.Date,
+			cellsformat: 'ddd, yyyy-MM-dd HH:mm',
+			cellsalign: 'right',
+			width: 180
+		},
+		{
+			datafield: 'UTCOffset',
+			text: 'UTCOffset',
+			cellsalign: 'right'
+		},
+		{
+			datafield: 'CensorCode',
+			text: 'CensorCode',
+			cellsalign: 'right'
+		},
+		{
+			datafield: 'DataValue',
+			text: globals.texts.Value + ' (' + unit + ')',
+			cellsalign: 'right'
+			//width: 140
+		}
 	];
 
-	if (editable === true) {
+	if (<?php echo (isLoggedIn() ? 'true' : 'false'); ?>) {
 		columns = jQuery.merge(
 			columns,
 			[ jQuery.extend(editColumnConfig, {buttonclick: editClickHandler}) ]
 		);
 	}
 
-	return columns;
-} // end of getColumnsConfig()
-
-function getWindowConfig(offset, dx, dy)
-{
-	// Set defaults
-	dx = dx || 220;
-	dy = dy ||  60;
-
 	return {
-		position: {
-			x: parseInt(offset.left, 10) + dx,
-			y: parseInt(offset.top,  10) + dy
-		}
+		source: new $.jqx.dataAdapter(source, settings),
+		columns: columns
 	};
-}
+} // end of getGridConfigUpdate()
 
-function editClickHandler(row)
-{
-	// open the popup window when the user clicks a button.
-	editrow = row;
+//
+// Functions to validate time and value strings
+//
 
-	var offset = $('#jqxgrid').offset();
-
-	$('#popupWindow').jqxWindow(getWindowConfig(offset));
-
-	// get the clicked row's data and initialize the input fields.
-	var dataRecord = $('#jqxgrid').jqxGrid('getrowdata', editrow);
-
-	//Create a Date time Input
-	var datepart = dataRecord.LocalDateTime.split(' ');
-
-	$('#popupWindow').jqxWindow('show');
-
-	$('#date').
-		jqxDateTimeInput(dateInputConfig2).
-		jqxDateTimeInput('setDate', toDate(datepart[0]));
-
-	$('#timepicker').val(toHourAndMinute(datepart[1]));
-
-	$('#value').val(dataRecord.DataValue);
-
-	vid = dataRecord.ValueID;
-}
-
-//Time Validation Script General
-function validatetime(idString)
+function validatetime(timepicker)
 {
 	//Removing all space
-	var timestring = trimAllSpace($(idString).val());
+	var timestring = trimAllSpace(timepicker.val());
 
-	$(idString).val(timestring);
+	timepicker.val(timestring);
 
 	// checkTimeFormat from assets/js/details_helpers.js
-	if (! checkTimeFormat(timestring, DATA.text)) {
+	if (! checkTimeFormat(timestring, globals.texts)) {
 		return false;
 	}
 
-	$(idString).val(IsNumeric(timestring));
+	timepicker.val(IsNumeric(timestring));
 
 	return true;
 }
 
-function validatenum(idSelector)
+function validatenum(textinput)
 {
-	// isValidNumber from assets/js/details_helpers.js
-	return isValidNumber($(idSelector).val(), DATA.text);
+	return isValidNumber(textinput.val(), globals.texts);
 }
 
-// Helper function to generate a URL with parameters
-function toURL(endpoint, parameters)
+//
+// Helper functions
+//
+
+function setGlobal(name, value)
 {
-	var relative = endpoint + '?' + jQuery.param(parameters);
+	var message = "Setting global '" + name + 
+		"' to '" + toInfoString(value) + "' ";
 
-	//alert("relative URL:\n" + relative);
+	// Does the value of the global variable change?
+	changed = (globals[name] !== value);
 
-	return base_url + relative;
-}
+	if (changed) {
 
-function toDatafields(fieldnames)
-{
-	var datafields = [];
+		message += "(old value was: '" + toInfoString(globals[name]) + "')";
 
-	for (var i = 0; i < fieldnames.length; i++) {
-		datafields.push({ name: fieldnames[i] });
+		// Set the global variable to the new value
+		globals[name] = value;
+	}
+	else {
+		message += "(nothing changed)";
 	}
 
-	return datafields;
+	console.log(message);
+
+	// Return true if the value of the global variable changed, otherwise false
+	return changed;
 }
 
-function toJsonAdapter(url, fieldnames)
+//
+// Event Handlers
+//
+
+// Open the popup window when the user clicks a button.
+function editClickHandler(row)
 {
-	return new $.jqx.dataAdapter({
-		datatype: "json",
-		datafields: toDatafields(fieldnames),
-		url: url
-	});
+	var $grid = $('#jqxgrid');
+
+	// Save the content of the clicked row in a global variable
+	setGlobal('editRowData', $grid.jqxGrid('getrowdata', row))
+
+	// Set the value of the date and time input field
+	$('#date').jqxDateTimeInput('setDate', globals.editRowData.LocalDateTime);
+
+	// Set the value of the data value input field
+	$('#value').val(globals.editRowData.DataValue);
+
+	// Open the popup window
+	$('#popupWindow').
+		jqxWindow(getWindowConfig($grid.offset())).
+		jqxWindow('show');
 }
 
 function variableSelectHandler(event)
 {
-	var item = $('#dropdownlist').jqxDropDownList('getItem', event.args.index);
+	var item = $('#dropdownlist').
+		jqxDropDownList('getItem', event.args.index);
 
 	//Check if a valid value is selected and process futher to display dates
 	if (item !== null) {
-		//Clear the Box
+
+		//Clear the date range
 		$('#daterange').html("");
 
-		varid = item.value;
+		setGlobal('variableID', item.value);
+		setGlobal('variableAndType', item.label);
 
-		variableAndType = item.label;
+		// Update the source property of the Methods drop down list. As the 
+		// 'bindingComplete' event is bound to the list, the first entry will be 
+		// selected automatically after the new list elements are loaded.
 
-		//Going to the next function that will generate a list of data types available for that variable
-		//var t = setTimeout("create_var_list()", 300);
-		get_methods(varid);
+		var url = toURL('methods/getSiteVarJSON', {
+			siteid: globals.siteID,
+			varid: globals.variableID
+		});
+
+		$('#methodlist').jqxDropDownList({ 
+			source: toJsonAdapter(url, ['MethodID', 'MethodDescription'])
+		});
 	}
 }
 
 function methodSelectHandler(event)
 {
-	var item = $('#methodlist').jqxDropDownList('getItem', event.args.index);
+	var item = $('#methodlist').
+		jqxDropDownList('getItem', event.args.index);
 
 	//Check if a valid value is selected and process futher to display dates
 	if (item !== null) {
-		methodid = item.value;
-		get_dates();
-		//Now call to check dates
+
+		changed = setGlobal('methodID', item.value);
+
+		if (changed) {
+			setGlobal('updateRequired', true);
+		}
+
+		// Load the date range of available data and call a function that handles
+		// the new dates after loading.
+		get_dates(
+			globals.siteID,
+			globals.variableID,
+			globals.methodID, function(result) {
+				setDateTimeRange(result.BeginDateTime, result.EndDateTime);
+			}
+		);
 	}
 }
 
-function dateChangedHandler(event)
+function setMinOrMaxDate(isFromDate, date)
 {
-	//alert(event.data.origin + ' changed to:' + event.args.date);
-
-	var newDate = new Date(event.args.date);
-
-	switch (event.data.origin) {
-
-		case 'from':
-
-			glob_df = newDate;
-
-			/*//Setting the Second calendar's min date to be the date of the first calendar
-			//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', event.args.date);
-			//	$("#fromdatedrop").jqxDropDownButton('setContent', formatDate(glob_df));
-
-			//Converting to SQL Format for Searching
-			var date_sql = formatDateSQL(glob_df);
-
-			if (date_from_sql != date_sql) {
-				date_from_sql = date_sql;
-				plot_chart();
-			}*/
-
-			break;
-
-		case 'to':
-
-			glob_dt = newDate;
-
-			//	$("#todatedrop").jqxDropDownButton('setContent', formatDate(glob_dt));
-
-			date_to_sql = formatDateSQL(glob_dt);
-
-			break;
-
-		default:
-
-			alert(
-				"Unexpected origin calling dateChangedHanlder: " + event.data.origin
-			);
-
-			break;
+	if (isFromDate) {
+		//Setting the Second calendar's min date to be the date of the first calendar
+		//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', date);
 	}
 
-	plot_chart();
+	setGlobal((isFromDate ? 'dateFrom' : 'dateTo'), date);
+
+	// Convert the date to text so that it can be used within SQL
+	var changed = setGlobal(
+		(isFromDate ? 'date_from_sql' : 'date_to_sql'),
+		formatDateSQL(date, undefined, ' ' + date.toTimeString().substring(0, 8))
+	);
+
+	// If the SQL-formatted version of the date changed update the plot
+	if (changed || globals.updateRequired) {
+
+		// Get the unit and call the given function if the unit is available
+		getUnit(globals.variableID, function(unit) {
+
+			updateGridAndChart(unit);
+			setGlobal('updateRequired', false);
+		});
+	}
 }
 
-function ajaxSuccessHandler(result)
+function setDateTimeRange(date_from, date_to)
 {
-	//Displaying the Available Dates
-	date_from = String(result.BeginDateTime);
-	date_to   = String(result.EndDateTime);
-
-	//Call the next function to display the data
-	$('#daterange').html("").prepend(
-			'<p>' + 
-			'<strong>' + DATA.text.DatesAvailable + '</strong> ' + date_from + 
-			'<strong> ' + DATA.text.To + ' </strong> ' + date_to +
-			'</p>');
-
-	//$("#jqxDateTimeInput").jqxDateTimeInput(dateInputConfig);
-		//.off().unbind('valueChanged'); // reset the bind functions
-
-	//$("#jqxDateTimeInputto").jqxDateTimeInput(dateInputConfig);
-		//.off().unbind('valueChanged'); // reset the bind functions
-
-	//Restricting the Calendar to those available dates
-
 	// Convert to Date object without using the time information
-	glob_df = timeconvert(date_from, false);
-	glob_dt = timeconvert(date_to,   false);
+	var startDate = new Date(date_from.substring(0, 10) + 'T00:00:00');
+	var endDate   = new Date(date_to.substring(0, 10) + 'T00:00:00');
 
-//	$("#fromdatedrop").jqxDropDownButton(dateDropConfig);
-//	$("#todatedrop"  ).jqxDropDownButton(dateDropConfig);
+	// Display the time range of available data
+	updateDateRangeInfo(startDate, endDate);
 
-	//Use Show And Hide Method instead of repeating formation - optimization number 2
+	// Set endDate to the start of the next day unless it refers to 00:00:00
+	if (date_to.substring(11) != '00:00:00') {
+		endDate.setDate(endDate.getDate() + 1);
+	}
 
-	$('#jqxDateTimeInput').jqxDateTimeInput('setDate', glob_df);
-	//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', new Date(year, month - 1, day));
-	//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to - 1, day_to)); 
+	setGlobal('dateFrom', startDate);
+	setGlobal('dateTo', endDate);
 
-	$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', glob_dt);
-	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', new Date(year_to, month_to - 1, day_to)); 
+	// Setting min and max dates?
+	//setMinMaxDates();
 
-	//Plot the Chart with default limits
-
-	//If the month is 0 or 13 it causes issues. We need to keep it between 1 and 12. 
-	date_from_sql = formatDateSQL(glob_df, toMonthBegin(glob_df));
-	date_to_sql   = formatDateSql(glob_dt, toMonthEnd(glob_dt));
-
-//	$("#fromdatedrop").jqxDropDownButton('setContent', DATA.text.SelectStart);
-//	$("#todatedrop"  ).jqxDropDownButton('setContent', DATA.text.SelectEnd);
-
-	plot_chart();
-
-	//Binding An Event to the first calender
-//	$('#jqxDateTimeInput').on('change', dateChangedHandler);
-
-	//Binding An Event To the Second Calendar
-//	$('#jqxDateTimeInputto').on('change', dateToChangedHandler);
-}
-// end of ajaxSuccessHandler()
-
-function toMonthBegin(date)
-{
-	var monthBegin = date.getMonth();
-
-	return (monthBegin === 0) ? 1 : monthBegin;
+	// Set the dates in the input boxes. All dependent actions will be performed
+	// in the callback function that is registered for the change event.
+	$('#jqxDateTimeInput').jqxDateTimeInput('setDate', globals.dateFrom);
+	$('#jqxDateTimeInputto').jqxDateTimeInput('setDate', globals.dateTo);
 }
 
-function toMonthEnd(date)
+function updateDateRangeInfo(startDate, endDate)
 {
-	var monthEnd = date.getMonth() + 2;
+	var html = '';
 
-	return (monthEnd > 12) ? 12 : monthEnd;
+	html += '<strong>' + globals.texts.DatesAvailable + '</strong> ';
+	html += startDate.toLocaleString();
+	html += ' <strong>' + globals.texts.To + ' </strong> ';
+	html += endDate.toLocaleString();
+
+	$('#daterange').html("").prepend('<p>' + html + '</p>');
+}
+
+function setMinMaxDates()
+{
+	//$("#jqxDateTimeInput").jqxDateTimeInput('setMinDate', ???);
+	//$("#jqxDateTimeInput").jqxDateTimeInput('setMaxDate', ???);
+	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMinDate', ???);
+	//$("#jqxDateTimeInputto").jqxDateTimeInput('setMaxDate', ???);
 }
 
 function addValueClickHandler()
 {
-	$("#popupWindow_new").jqxWindow('show');
-
-	var offset = $("#jqxgrid").offset();
-
-	$("#popupWindow_new").jqxWindow({
-		position: {
-			x: parseInt(offset.left, 10) + 220,
-			y: parseInt(offset.top,  10) +  60
-		}
-	});
-
-	$("#date_new").jqxDateTimeInput(dateInputConfig2);
-
-	$("#timepicker_new" ).timepicker({
-		showOn: "focus",
-		showPeriodLabels: false
-	});
+	$("#popupWindow_new").
+		jqxWindow(getWindowConfig($("#jqxgrid").offset())).
+		jqxWindow('show');
 }
 
 function delValClickHandler()
@@ -448,104 +393,143 @@ function delValClickHandler()
 	//Send out a delete request
 	$.ajax({
 		dataType: "json",
-		url: toURL("datapoint/delete/" + vid, {})
+		url: toURL("datapoint/delete/" + globals.editRowData.ValueID, {})
 	}).
 	done(function(result) {
+		var $grid = $("#jqxgrid");
+
 		if(result.status == 'success') {
-			//Remove that row from the table
-			$('#jqxgrid').jqxGrid('deleterow', editrow); //This one might be having issues.
+
+			// Remove that row from the table
+			$grid.jqxGrid('deleterow', globals.editRowData.ValueID);
 			$("#popupWindow").jqxWindow('hide');
+
+			// Update the chart with the current grid data. Lookup the unit before...
+			getUnit(globals.variableID, function(unit) {
+				updateChart($grid, unit);
+			});
 		}
 	});
 } // end of delValClickHandler()
 
-function saveClickHandler()
+// Provide handler function for Ajax done event
+function handleEditedOrNewValue(edit, result, record)
 {
-	if (editrow >= 0) {
+	var success = (result.status === 'success');
+	var $grid = $('#jqxgrid');
 
-		var seldate= $('#date').jqxDateTimeInput('getDate');
+	if (success) {
 
-		var row = {
-			date: formatDateSQL(seldate, undefined, ' ' + $("#timepicker").val() + ':00'),
-			Value: $("#value").val(),
-			vid: vid
-		};
+		// Hide the popup window
+		$(edit ? '#popupWindow' : '#popupWindow_new').jqxWindow('hide');
 
-		// Validate value and time
-		if (
-			validatenum("#value") === false || 
-			validatetime("#timepicker") === false) {
-			return false;
+		// If a new data value was added, update the ValueID that was returned
+		// by the datapoint/add request
+		if (! edit) {
+			record.ValueID = result.id;
 		}
 
-		var vt = $("#value").val();
+		// Update the grid (change the current row or add a row)
+		$grid.jqxGrid((edit ? 'updaterow' : 'addrow'), record.ValueID, record);
 
-		//Send out an ajax request to update that data field
-		$.ajax({
-			dataType: "json",
-			url: toURL("datapoint/edit/" + vid, {
-				val: vt,
-				dt: formatDateSQL(seldate, undefined, ''),
-				time: $("#timepicker").val()
-			})
-		}).
-		done(function(msg) {
-			if (msg.status == 'success') {
-				$('#jqxgrid').jqxGrid('updaterow', editrow, row);
-				$("#popupWindow").jqxWindow('hide');
-				plot_chart();
-				return true;
-			}
-			else {
-				alert(msg);
-				return false;
-			}
+		// Update the chart with the current grid data. Lookup the unit before...
+		getUnit(globals.variableID, function(unit) {
+			updateChart($grid, unit);
 		});
-	} // end of if (editrow >= 0)
+	}
+	else {
+		alert(edit ? result : globals.texts.DatabaseConfigurationError);
+	}
 
-	return true;
-} // end of saveClickHandler()
+	return success;
+}
 
-function saveNewClickHandler()
+function handleSaveClick(edit)
 {
-	// Validate value and time
-	if (
-		validatenum("#value_new") === false ||
-		validatetime("#timepicker_new") === false) {
+	var postfix = (edit ? '' : '_new');
+
+	// Store references to jQuery objects
+	var $date = $('#date' + postfix);
+	//var $timepicker = $('#timepicker' + postfix);
+	var $value = $('#value' + postfix);
+
+	console.log("handleSaveClick(edit = " + edit + ")");
+
+	// Return if value or time are invalid
+	//if (! (validatenum($value) && validatetime($timepicker)) ) {
+	if (! validatenum($value)) {
 		return false;
 	}
 
-	var vt = $("#value_new").val();
+	// If we are editing, the ValueID is stored in globals.editRowData.
+	// Otherwise set it to -1 to indicate that a new value is added
+	var valueID = (edit ? globals.editRowData.ValueID : -1);
 
-	var seldate= $('#date_new').jqxDateTimeInput('getDate');
+	// Compose a datapoint record (using UDM field names) from the inputs or
+	// from global variables
+	var record = {
+		LocalDateTime: $date.jqxDateTimeInput('getDate'),
+		DataValue: $value.val(),
+		ValueID: valueID
+	};
 
-	//Send out ajax request to add new value
+	// Provide the endpoint to be used for the Ajax request
+	var endpoint = (edit ?
+		"datapoint/edit/" + valueID :
+		"datapoint/add"
+	);
+
+	// Create an ajax request to update or add a DataValue
+	var url = toURL(endpoint, toApiCallParameters(edit, record));
 
 	$.ajax({
 		dataType: "json",
-		url: toURL("datapoint/add", {
-			varid: varid,
-			val: vt,
-			dt: formatDateSQL(seldate, undefined, ''),
-			time: $("#timepicker_new").val(),
-			sid: DATA.siteid,
-			mid: methodid
-		})
-	}).
-	done(function(msg) {
-		if (msg.status == 'success') {
-			$("#popupWindow_new").jqxWindow('hide');
-			plot_chart();
-			return true;
+		url: url,
+		complete: function(jqXHR, textStatus) {
+			console.log("Request " + url + "completed with: " + textStatus);
 		}
-		else {
-			alert(DATA.text.DatabaseConfigurationError);
-			return false;
-		}
+	}).done(function(result) {
+		console.log("back from " + url)
+		console.log("Calling handleEditedOrNewValue(" + edit + ", ...)");
+		handleEditedOrNewValue(edit, result, record);
 	});
 
 	return true;
-} // end of saveNewClickHandler()
+}
+
+function toApiCallParameters(edit, record)
+{
+	var d = record.LocalDateTime;
+	var offset = -1 * (d.getTimezoneOffset() / 60);
+
+	// Provide the parameters to be used for the Ajax request
+	var parameters = {
+		//dt:   record.LocalDateTime.toISOString().substring(0, 10),
+		//time: record.LocalDateTime.toISOString().substring(11, 19),
+		dt:	d.getFullYear() + "-" +
+			add_zero(d.getMonth() + 1) + "-" +
+			add_zero(d.getDate()),
+		time: add_zero(d.getHours()) + ":" +
+			add_zero(d.getMinutes()) + 
+			(edit ? "" : ":" + add_zero(d.getSeconds())) + // no seconds for edit
+			// Add an indication of the UTC offset to the timestring (datapoint/add
+			// will consider it)
+			((offset >= 0 ? "+" : "") + add_zero(offset)),
+		val:  record.DataValue
+	};
+
+	// To add a new DataValue we need to add SiteID, VariableID and MethodID
+	// to the parameter list
+	if (! edit) {
+		parameters = jQuery.extend(parameters, {
+			sid:   globals.siteID,
+			varid: globals.variableID,
+			mid:   globals.methodID
+		});
+	}
+
+	return parameters;
+}
 
 function compareClickHandler()
 {
@@ -560,24 +544,21 @@ function compareClickHandler()
 function exportClickHandler()
 {
 	var url = toURL('datapoint/export', {
-		siteid: DATA.siteid,
-		varid: varid,
-		meth: methodid,
-		startdate: date_from_sql,
-		enddate: date_to_sql
+		siteid: globals.siteID,
+		varid: globals.variableID,
+		meth: globals.methodID,
+		startdate: globals.date_from_sql,
+		enddate: globals.date_to_sql
 	});
 
 	window.open(url, '_blank');
 }
 
-//Populate the Drop Down list with values from the JSON output of the php page
+//
+// Initialise the User Interface
+//
 
 $(document).ready(function() {
-
-	// There is no such element with id "loadingtext"
-	//$("#loadingtext").hide();
-
-	//Create date selectors and hide them
 
 	//Create Tabs for Table Chart Switching
 
@@ -587,253 +568,399 @@ $(document).ready(function() {
 
 	$tabs.jqxTabs('disable');
 	$tabs.jqxTabs('enableAt', 0);
-
+	
 	$tabs.on('selected', function (event) {
 			if (event.args.item == 1) {
 				$(window).resize();
 			}
 	});
 
-	//Defining the Data adapter for the variable list
+	// Create the Variables Drop Down list with data received in JSON format
 	var dataAdapter = toJsonAdapter(
-		toURL('variable/getSiteJSON', { siteid: DATA.siteid, withtype: 1 }),
+		toURL('variable/getSiteJSON', {
+			siteid: globals.siteID,
+			withtype: 1
+		}),
 		['VariableID', 'VarNameMod']
 	);
 
-	//Creating the Variables Drop Down list
-	$("#dropdownlist").
-		jqxDropDownList(
-			jQuery.extend(dropDownConfig, {
-				source: dataAdapter,
-				displayMember: 'VarNameMod',
-				valueMember: 'VariableID'
-			})
-		).
-		bind('select', variableSelectHandler);
+	var config = jQuery.extend(dropDownConfig, {
+		source: dataAdapter,
+		displayMember: 'VarNameMod',
+		valueMember: 'VariableID'
+	});
+
+	$("#dropdownlist").jqxDropDownList(config).
+		on('select', variableSelectHandler);
+
+	// Create the Methods Drop Down list. The source property will only be set in 
+	// variableSelectHandler() that is called when a variable was selected.
+	config = jQuery.extend(dropDownConfig, {
+		displayMember: 'MethodDescription',
+		valueMember: 'MethodID'
+	});
+
+	$('#methodlist').
+		jqxDropDownList(dropDownConfig).
+		on('select', methodSelectHandler).
+		on('bindingComplete', function (event) {
+			$('#methodlist').jqxDropDownList('selectIndex', 0);
+		});
+
+	// Create date selectors and bind the 'valuechanged' event
+	var dateInputConfig = getDateInputConfig(1);
 
 	$("#jqxDateTimeInput").
 		jqxDateTimeInput(dateInputConfig).
-		on("valuechanged", {origin: "from"}, dateChangedHandler);
+		on("valuechanged", function(event) {
+			console.log("#jqxDateTimeInput fired 'valuechanged'");
+			setMinOrMaxDate(true, event.args.date);
+		});
 
 	$("#jqxDateTimeInputto").
 		jqxDateTimeInput(dateInputConfig).
-		on("valuechanged", {origin: "to"}, dateChangedHandler);
+		on("valuechanged", function(event) {
+			console.log("#jqxDateTimeInputto fired 'valuechanged'");
+			setMinOrMaxDate(false, event.args.date);
+		});
+
+	// Create the data table (grid) but without binding a data source
+	// and without configuring the columns
+	$("#jqxgrid").jqxGrid(getGridConfig(true));
+
+	// Initialise the chart but without any data
+	initChart();
+
+	// Initialise the buttons foradding/downloading data
+	initButtons();
+
+	// Initialise the popup windows
+	initPopups();
 });
 
 //End of Document Ready Function
 
 //Function to get dates and plot a default plot
-
-function get_methods(variableID)
-{
-	var dataAdapter = toJsonAdapter(
-		toURL('methods/getSiteVarJSON', {siteid: DATA.siteid, varid: variableID}),
-		[ 'MethodID', 'MethodDescription' ]
-	);
-
-	$('#methodlist').
-		//off().
-		//unbind('valuechanged').
-		//Creating the Drop Down list
-		jqxDropDownList(
-			jQuery.extend(dropDownConfig, {
-				source: dataAdapter,
-				displayMember: 'MethodDescription',
-				valueMember: 'MethodID'
-			})
-		).
-		//Binding an Event in case of Selection of Drop Down List to update the varid according to the selection
-		bind('select', methodSelectHandler).
-		jqxDropDownList('selectIndex', 0);
-}
-
-function get_dates()
+function get_dates(siteID, variableID, methodID, callback)
 {
 	$.ajax({
 		type: "GET",
 		url: toURL("series/getDateJSON", {
-			siteid: DATA.siteid,
-			varid: varid,
-			methodid: methodid
+			siteid: siteID,
+			varid: variableID,
+			methodid: methodID
 		}),
 		dataType: "json",
-		success: ajaxSuccessHandler
+		success: callback
 	});
+}
 
-} //End of get_dates()
-
-function plot_chart()
+// Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
+// Send out an ajax request to get a unit for a given VariableID and call
+// the given callback function with the returned unit when the request ist done
+function getUnit(variableID, callback)
 {
-	var unit_yaxis = "unit";
-
-	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 4/11/2013
-	if (varid != -1) {
-		$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: toURL("variable/getUnit", {
-				varid: varid
-			})
-		}).
-		done(function(msg) {
-			unit_yaxis = msg[0].unitA;
-		});
-	}
-
-	//Chaning Complete Data loading technique..need to create a php page that will output javascript...
 	$.ajax({
-		url: toURL('datapoint/getData', {
-			siteid: DATA.siteid,
-			varid: varid,
-			meth: methodid,
-			startdate: date_from_sql,
-			enddate: date_to_sql
-		}),
+		type: "GET",
+		dataType: "json",
+		url: toURL("variable/getUnit", {
+			varid: variableID
+		})
+	}).
+	done(function(units) {
+		// Call the callback function with the unit that was returned
+		callback(units[0].unitA);
+	});
+}
+
+function getDataURL(json)
+{
+	var endpoint = (json ? 'datapoint/getDataJSON' : 'datapoint/getData');
+
+	var parameters = {
+		siteid: globals.siteID,
+		varid: globals.variableID,
+		meth: globals.methodID,
+		startdate: globals.date_from_sql,
+		enddate: globals.date_to_sql
+	};
+
+	return toURL(endpoint, parameters, true);
+}
+
+/*
+function getDataAsScript(callback)
+{
+	$.ajax({
+		url: getDataURL(false),
 		type: "GET",
 		dataType: "script"
 	}).
-	done(function(datatest) {
-		var date_chart_from = formatDateSQL(glob_df, undefined, '');
-		var date_chart_to   = formatDateSQL(glob_dt, undefined, '');
+	done(function() {
+		callback();
+	});
+}
+*/
 
-		// var data_test=datatest;
-		chart = new Highcharts.StockChart(getStockChartConfig(
-			date_chart_from, date_chart_to, unit_yaxis, data_test, variableAndType
-		));
+function gridDataToSeriesData(data)
+{
+	var seriesData = [];
+	var time;
+	var dataValue;
 
-		// end of new Highcharts.StockChart()
+	for (var i = 0; i < data.length; i++) {
+		localDateTime = data[i].LocalDateTime;
 
-		// There is no such element with id "loadingtext"
-		//$("#loadingtext").hide();
+		// Number of milliseconds since 1970-01-01, according to universal time
+		time_ms = localDateTime.getTime();
+		
+		dataValue = data[i].DataValue;
 
-		make_grid();
+		seriesData[i] = [time_ms, dataValue];
+	}
 
-		$('#jqxtabs').jqxTabs('enable');
+	return seriesData;
+}
+
+function sortByFirstColumn(data)
+{
+	return data.sort(function (a, b) {
+		if (a[0] === b[0]) {
+			return 0;
+		}
+		else {
+			return (a[0] < b[0]) ? -1 : 1;
+		}
 	});
 }
 
-function make_grid()
+function updateGridAndChart(unit)
 {
-	var editrow = -1;
-	var vid = 0;
+	var $grid = $("#jqxgrid");
+	var $tabs = $('#jqxtabs');
+	var eventname = 'bindingcomplete';
+	var config;
 
-	var dataAdapter = toJsonAdapter(
-		toURL('datapoint/getDataJSON', {
-			siteid: DATA.siteid,
-			varid: varid,
-			meth: methodid,
-			startdate: date_from_sql,
-			enddate: date_to_sql
-		}),
-		[ 'ValueID', 'DataValue', 'LocalDateTime' ]
-	);
+	// Update data source and column configuration of the grid
+	config = getGridConfigUpdate(unit);
+	$grid.jqxGrid(config);
 
-	//Adding a Unit Fetcher! Author : Rohit Khattar ChangeDate : 11/4/2013
-	var unitGrid = "Unit: None";
+	// Rebind the bindingComplete event
+	$grid.unbind(eventname);
+	$grid.bind(eventname, function(event) {
 
-	$.ajax({
-		dataType: "json",
-		url: toURL("variable/getUnit", { varid: varid })
-	}).
-	done(function(msg) {
+		updateChart($grid, unit);
 
-		var editable = <?php echo (isLoggedIn() ? 'true' : 'false'); ?>;
+		// Enable the grid tab and the plot tab
+		$tabs.jqxTabs('enableAt', 2);
+		$tabs.jqxTabs('enableAt', 1);
+	});
+}
 
-		var gridConfig = {
-			source: dataAdapter,
-			width: '100%',
-			columnsresize: true,
-			columns: getColumnsConfig(msg[0].unitA, editable)
+function updateChart($grid, unit)
+{
+	// Get the data from the grid
+	var data = $grid.jqxGrid('getrows');
+
+	// Recreate the chart object. Destroy the current chart if there is any.
+	if (typeof globals.chart !== 'undefined') {
+
+		globals.chart.destroy();
+	}
+
+	// Create a new chart object
+	setGlobal('chart', newChart(data, unit));
+}
+
+function newChart(griddata, unit)
+{
+	var config = getStockChartConfig('de');
+	var configUpdate;
+	var labels = undefined;
+	var dataseries = undefined;
+
+	if (typeof griddata !== 'undefined') {
+
+		labels = {
+			title: getTitle(globals.texts, globals.dateFrom, globals.dateTo),
+			yAxis: unit
 		};
 
-		if (flag !== 1) {
-			gridConfig = jQuery.extend(gridConfig, gridConfigExtended);
-			flag = 1;
-		}
+		dataseries = {
+			data: sortByFirstColumn(gridDataToSeriesData(griddata)),
+			name: globals.variableAndType
+		};
+	}
 
-		$("#jqxgrid").jqxGrid(gridConfig);
-	});
+	// Create the variable parts of the configuration
+	configUpdate = getChartConfigUpdate(globals.texts, labels, dataseries);
 
-	//Editing functionality
+	// Extend the base configuration with the update (recursive copy)
+	config = jQuery.extend(true, config, configUpdate);
 
-	// initialize the popup window and buttons.
-
-	$("#popupWindow").jqxWindow(jQuery.extend(
-		popupWindowConfig, {cancelButton: $("#Cancel")}
-	));
-
-	$("#timepicker").timepicker({showOn: "focus", showPeriodLabels: false});
-
-	$("#delval").jqxButton(buttonConfigBase);
-	$("#Cancel").jqxButton(buttonConfigBase);
-	$("#Save"  ).jqxButton(buttonConfigBase);
-
-	//Delete Value
-	$("#delval").unbind("click"); //Multiple events are getting binded for some reason. This makes sure that doesn't happen. 
-	$("#delval").click(delValClickHandler);
-
-	// update the edited row when the user clicks the 'Save' button.
-	$("#Save").unbind("click");
-	$("#Save").click(saveClickHandler);
-
-	//End of Editing 
-
-	//Add A new Value to the table
-	$("#popupWindow_new").jqxWindow(jQuery.extend(
-		popupWindowConfig, {cancelButton: $("#Cancel_new")}
-	));
-
-	$("#Cancel_new").jqxButton(buttonConfigBase);
-	$("#Save_new"  ).jqxButton(buttonConfigBase);
-
-<?php 
-
-if (isLoggedIn()) {
-	echo "$(\"#addnew\").jqxButton(buttonConfig)." . 
-		"bind('click', addValueClickHandler)\n";
+	return new Highcharts.StockChart(config);
 }
 
-?> 
+function getTitle(texts, dateFrom, dateTo)
+{
+	var titleParts = [
+		texts.Dataof, texts.SiteName,
+		texts.From, toLocaleDateString_HH_MM(dateFrom),
+		texts.To, toLocaleDateString_HH_MM(dateTo)
+	];
 
-	$("#Save_new").unbind("click");
-	$("#Save_new").bind('click', saveNewClickHandler);
+	return titleParts.join(' ');
+}
 
-	//End of adding a new value
+function getChartConfigUpdate(texts, labels, dataseries)
+{
+	// Define defaults
+	var defaults = {
+		labels: {
+			title: '<title>',
+			subtitle: texts.ClickDrag,
+			xAxis: texts.TimeMsg,
+			yAxis: '<y-axis>'
+		},
+		dataseries: {
+			data: [0, 100, 0],
+			name: "dummy series"
+		}
+	}
+
+	// Use the defaults labels where no labels are given
+	labels = (typeof labels === 'undefined') ?
+		defaults.labels :
+		jQuery.extend(defaults.labels, labels);
+
+	// Use the default series if not dataseries is given
+	if (typeof dataseries === 'undefined') {
+		dataseries = defaults.dataseries;
+	}
+
+	return {
+		chart: {
+			renderTo: 'container'
+		},
+		title: {
+			text: labels.title,
+			style: { fontSize: '12px' }
+		},
+		subtitle: {
+			text: labels.subtitle
+		},
+		rangeSelector: {
+			buttons: getRangeSelectorButtonConfig(texts),
+			selected: 6
+		},
+		xAxis: {
+			title: {
+				text: labels.xAxis
+				//, margin: 30
+			}
+		},
+		yAxis: {
+			title: {
+				text: labels.yAxis
+				//, margin: 40
+			}
+		},
+		series: [
+			dataseries
+		],
+	};
+}
+
+function initChart()
+{
+	Highcharts.setOptions({
+		global: {
+			useUTC: false
+		}
+	});
+
+	// Create a new chart object and save the reference in a global variable
+	setGlobal('chart', newChart());
+}
+
+function initPopups()
+{
+	// Initialize the popup windows and the buttons within the windows
+	var config;
+
+	// Create and hide popup window 1: Edit/Save/Delete existing values
+	config = jQuery.extend(popupWindowConfig, { cancelButton: $("#Cancel") });
+	$("#popupWindow").jqxWindow(config).jqxWindow('hide');
+
+	// Create and hide popup window 2: Add new values
+	config = jQuery.extend(popupWindowConfig, { cancelButton: $("#Cancel_new") });
+	$("#popupWindow_new").jqxWindow(config).jqxWindow('hide');
+
+	// Create inputs in popup window 1 and popup window 2
+
+	// Date and time inputs
+	config = getDateInputConfig(2);
+	$('#date'    ).jqxDateTimeInput(config);
+	$("#date_new").jqxDateTimeInput(config);
+	//$("#timepicker").timepicker(timePickerConfig);
+	//$("#timepicker_new" ).timepicker(timePickerConfig);
+
+	// Button "Delete" (only in popup window 1)
+	$("#delval").jqxButton(buttonConfigBase).
+		on('click', delValClickHandler);
+
+	// Buttons "Cancel"
+	$("#Cancel"    ).jqxButton(buttonConfigBase);
+	$("#Cancel_new").jqxButton(buttonConfigBase);
+
+	// Buttons "Save"
+	$("#Save").jqxButton(buttonConfigBase).
+		on('click', function(event) {
+			handleSaveClick(true);
+		});
+
+	$("#Save_new").jqxButton(buttonConfigBase).
+		on('click', function(event) {
+			handleSaveClick(false);
+		});
+}
+
+function initButtons()
+{
+	// Add new values
+
+<?php 
+	if (isLoggedIn()) {
+		echo "$(\"#addnew\").jqxButton(buttonConfig)." . 
+			"bind('click', addValueClickHandler)\n";
+	}
+?>
 
 	//Export Button
-
 	$("#export").jqxButton(buttonConfig);
 	$("#export").bind('click', exportClickHandler);
+}
 
-	//End of Exporting
-
-	//Comparing
-
-	//Define the button for comaprision
-
-	$("#compare").jqxButton(buttonConfig);
+function initComparison()
+{
 	$('#window').jqxWindow('destroy');
 	$('#mapOuter').empty();
 
-	$('#window' ).jqxWindow(windowConfig);
-	$('#window2').jqxWindow(windowConfig2);
-	$('#window3').jqxWindow(windowConfig2);
-	$('#window4').jqxWindow(windowConfig2);
-	$('#window5').jqxWindow(windowConfig5);
+	// Create and hide windows
+	$('#window').jqxWindow(windowConfig).jqxWindow('hide');
+	$('#window2').jqxWindow(windowConfig2).jqxWindow('hide');
+	$('#window3').jqxWindow(windowConfig2).jqxWindow('hide');
+	$('#window4').jqxWindow(windowConfig2).jqxWindow('hide');
+	$('#window5').jqxWindow(windowConfig5).jqxWindow('hide');
 
-	$('#window' ).jqxWindow('hide');
-	$('#window2').jqxWindow('hide');
-	$('#window3').jqxWindow('hide');
-	$('#window4').jqxWindow('hide');
-	$('#window5').jqxWindow('hide');
+	// Define the button for comparison
+	$("#compare").
+		jqxButton(buttonConfig).
+		click(compareClickHandler);
 
-	$("#compare").click(compareClickHandler);
-
-	//Now Map Loaded. Another Function to open up a new window that will Give them options to select the data to be plotted against the esiting data
-
-	//End of Comparing
-
-} // end of make_grid()
+	// Now Map Loaded. Another Function to open up a new window that will give
+	// them options to select the data to be plotted against the existing data
+}
 
 </script>
 
@@ -910,12 +1037,12 @@ function nonEmptyElements($elements)
 
 function rows_for_values_table($data)
 {
-	$id_timepicker = $data['id_timepicker'];
+	//$id_timepicker = $data['id_timepicker'];
 	$id_value = $data['id_value'];
 
-	$onChange = "onChange=\"validatetime('#$id_timepicker')\"";
+	//$onChange = "onChange=\"validatetime('$(#$id_timepicker)')\"";
 
-	$onBlur = "onBlur=\"validatenum('#$id_value')\"";
+	$onBlur = "onBlur=\"validatenum($('#$id_value'))\"";
 
 	$style = 'style="margin-right: 5px;"';
 
@@ -929,14 +1056,14 @@ function rows_for_values_table($data)
 		html_td_left('<div id="' . $data['id_date']. '">' . html_div_end()),
 
 		// row 3
-		html_td_right(getTxt('Time')) .
-		html_td_left(
-			html_input(
-				$data['id_timepicker'],
-				'type="text" name="' . $data['id_timepicker'] . '" ' . 
-					$onChange . ' size="10"'
-			)
-		),
+//		html_td_right(getTxt('Time')) .
+//		html_td_left(
+//			html_input(
+//				$data['id_timepicker'],
+//				'type="text" name="' . $data['id_timepicker'] . '" ' . 
+//					$onChange . ' size="10"'
+//			)
+//		),
 
 		// row 4
 		html_td_right(getTxt('Value')) .
@@ -987,21 +1114,24 @@ echo html_div_beg("col-md-9");
 //addition to navigating back to the map 
 
 echo html_div_beg('row');
-genDropLists('Site', '', '', false);
-echo html_div_beg('site_title') . $site['SiteName'] . html_div_end() . br();
-echo html_div_end();
+echo html_formGroup_begin('Site');
+echo $site['SiteName'] . "\n";
+echo html_formGroup_end();
+echo html_div_end(); // end of row
 
 echo html_div_beg('row');
-genDropLists('Variable', 'dropdownlist', 'dropdownlist', false) . br();
+genDropLists('Variable', 'dropdownlist', 'dropdownlist', false);
+echo br();
 echo html_div_end();
 
 //The type is already selected when the Variable is selected!
 //echo html_div_beg('row');
-//genDropLists('Type','typelist', 'typelist', false) . br();
+//genDropLists('Type','typelist', 'typelist', false)
+//echo br();
 //echo html_div_end();
-
 echo html_div_beg('row');
-genDropLists('Method', 'methodlist', 'methodlist', false) . br();
+genDropLists('Method', 'methodlist', 'methodlist', false);
+echo br();
 echo html_div_end();
 
 echo html_div_beg('', 'daterange') . html_div_end();
@@ -1059,7 +1189,7 @@ echo encloseInBeginEndComments(
 		html_enter_values_div(rows_for_values_table(array(
 			'caption' => 'ChangeValues',
 			'id_date' => 'date',
-			'id_timepicker' => 'timepicker',
+//			'id_timepicker' => 'timepicker',
 			'id_value' => 'value',
 			'id_save' => 'Save',
 			'id_cancel' => 'Cancel',
@@ -1095,7 +1225,7 @@ echo encloseInBeginEndComments(
 		html_enter_values_div(rows_for_values_table(array(
 			'caption' => 'EnterValues',
 			'id_date' => 'date_new',
-			'id_timepicker' => 'timepicker_new',
+//			'id_timepicker' => 'timepicker_new',
 			'id_value' => 'value_new',
 			'id_save' => 'Save_new',
 			'id_cancel' => 'Cancel_new',
