@@ -96,6 +96,7 @@ class MY_Controller extends CI_Controller {
 				'jqwidgets/jqxmenu.js', //details
 				'jqwidgets/jqxgrid.js', //details
 				'jqwidgets/jqxgrid.selection.js', //details
+				'jqwidgets/jqxgrid.filter.js', //details
 				'jqwidgets/jqxgrid.columnsresize.js', //details
 				'jqwidgets/jqxgrid.pager.js', //details
 				'jqwidgets/jqxgrid.sort.js', //details

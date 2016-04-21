@@ -84,6 +84,7 @@ function getGridConfig(extended)
 	var configExtended = {
 		theme: 'darkblue',
 		sortable: true,
+		filterable: true,
 		pageable: true,
 		//autoheight: true,
 		editable: false,
