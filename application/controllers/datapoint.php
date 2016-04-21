@@ -106,7 +106,7 @@ class Datapoint extends MY_Controller {
 			elseif ($method == 'importfile')
 			{
 				// fileUploadHandler now in MY_Controller
-				$files = $this->fileUploadHandler('csv|CSV|xls|XLS', 'files');
+				$files = $this->fileUploadHandler('csv|CSV|xls|XLS|xlsx|XLSX', 'files');
 				$valid = $files;
 			}
 
@@ -255,11 +255,14 @@ class Datapoint extends MY_Controller {
 		{
 			$extension = $file['file_ext'];
 
-			if ($extension == '.csv') {
+			if ($extension === '.csv' || $extension === '.CSV') {
 				$content = $this->excel->read_csv($file['full_path']);
 			}
-			else if ($extension == '.xls') {
-				$content = $this->excel->read_xls($file['full_path']);
+			else if ($extension === '.xls' || $extension === '.XLS') {
+				$content = $this->excel->read_xls($file['full_path'], 'xls');
+			}
+			else if ($extension === '.xlsx' || $extension === '.XLSX') {
+				$content = $this->excel->read_xls($file['full_path'], 'xlsx');
 			}
 
 			if (is_null($content))

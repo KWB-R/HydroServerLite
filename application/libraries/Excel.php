@@ -45,9 +45,10 @@ class Excel extends PHPExcel
 			$writer->save('php://output');
 		}
 
-		public function read_xls($file, $cacheSizeMB = 20)
+		public function read_xls($file, $extension, $cacheSizeMB = 20)
 		{
-			return $this->read_xls_or_csv($file, 'Excel5', '', $cacheSizeMB);
+			$fileType = ($extension === 'xls' ? 'Excel5' : 'Excel2007');
+			return $this->read_xls_or_csv($file, $fileType, '', $cacheSizeMB);
 		}
 
 		public function read_csv($file, $delimiter = ',', $cacheSizeMB = 20)
