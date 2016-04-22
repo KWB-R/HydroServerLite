@@ -69,7 +69,7 @@ class Variable extends MY_Controller
 				}
 			}
 
-			echo json_encode($result);
+			echo $this->jsonEncoded($result);
 		}
 		else {
 			$this->loadApiErrorView("Siteid", "getSiteJSON?siteid=1");
@@ -98,7 +98,7 @@ class Variable extends MY_Controller
 				$types = array();
 			}
 
-			echo json_encode($types);
+			echo $this->jsonEncoded($types);
 		}
 		else {
 			$this->loadApiErrorView(
@@ -175,7 +175,7 @@ class Variable extends MY_Controller
 			);
 		}
 
-		echo json_encode($result);
+		echo $this->jsonEncoded($result);
 	}
 
 	public function getUnitTypes()
@@ -207,7 +207,7 @@ class Variable extends MY_Controller
 			'orgtype' => $otherSlashNew
 		);
 
-		echo json_encode($result);
+		echo $this->jsonEncoded($result);
 	}
 
 	public function getUnitsByType()
@@ -238,7 +238,7 @@ class Variable extends MY_Controller
 					'unitid' => "-10"
 				);
 			}
-			echo json_encode($result);
+			echo $this->jsonEncoded($result);
 		}
 		else {
 			$this->loadApiErrorView("unitsType", "getUnitTypes?type=Area");
@@ -263,7 +263,7 @@ class Variable extends MY_Controller
 			$this->addSuccessOrError($result, 'VariableSuccess');
 		}
 
-		echo json_encode(array("status" => ($result? "success" : "failed")));
+		echo $this->jsonEncoded(array("status" => ($result? "success" : "failed")));
 	}
 
 	//
@@ -435,7 +435,7 @@ class Variable extends MY_Controller
 			return ($a['VarNameMod'] < $b['VarNameMod']) ? -1 : 1;
 		});
 
-		echo json_encode($variables);
+		echo $this->jsonEncoded($variables);
 	}
 
 	private function getWithOrWithoutUnit($withUnit)
@@ -444,7 +444,7 @@ class Variable extends MY_Controller
 
 		if ($var !== false) {
 
-			echo json_encode(
+			echo $this->jsonEncoded(
 				$withUnit ?
 				$this->variables->getVariableWithUnit($var) :
 				$this->variables->getUnit($var)
