@@ -95,17 +95,23 @@ class Site extends MY_Model
 		$query = $this->db->get();
 		return $this->tranResult($query->result_array());	
 	}
-	
-	function getSite($siteID)
+
+	function getSite($siteID = -1)
 	{
-		$this->db->select()
+		$object = $this->db
+			->select()
 			->from($this->tableName)
-			->where($this->tableName.'.SiteID',$siteID)
 			->join('sitepic', $this->tableName.'.SiteID=sitepic.siteid', 'left');
+
+		if ($siteID !== -1) {
+			$object = $object->where($this->tableName.'.SiteID', $siteID);
+		}
+
 		$query = $this->db->get();
-		return $this->tranResult($query->result_array());	
+
+		return $this->tranResult($query->result_array());
 	}
-	
+
 	function getSiteTypes()
 	{
 		$query = $this->db->get('sitetypecv');

@@ -352,8 +352,8 @@ class Sites extends MY_Controller {
 	{
 		$siteID = $this->input->get('siteid', TRUE);
 
-		if ($siteID) {
-			$result = $this->site->getSite($siteID);
+		if ($siteID !== false) {
+			$result = $this->site->getSite(0 + $siteID);
 			echo $this->jsonEncoded($result);
 		}
 		else {
