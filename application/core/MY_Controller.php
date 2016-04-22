@@ -247,9 +247,9 @@ class MY_Controller extends CI_Controller {
 	protected function jsonEncoded($object, $pretty = true)
 	{
 		if ($pretty === true) {
-			json_encode($object, JSON_PRETTY_PRINT);
+			return json_encode($object, JSON_PRETTY_PRINT);
 		} else {
-			json_encode($object);
+			return json_encode($object);
 		}
 	}
 }
