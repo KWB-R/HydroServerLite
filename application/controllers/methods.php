@@ -124,7 +124,7 @@ class Methods extends MY_Controller {
 				$output="failed";
 			}		
 		$output = array("status"=>$output);
-		echo json_encode($output);	
+		echo $this->jsonEncoded($output);
 	}
 	
 	public function methodInfo()
@@ -157,7 +157,7 @@ class Methods extends MY_Controller {
 			{
 				$var['MethodDescription']=translateTerm($var['MethodDescription']);
 			}
-			echo json_encode($result);
+			echo $this->jsonEncoded($result);
 		}
 		else
 		{
@@ -177,7 +177,7 @@ class Methods extends MY_Controller {
 			{
 				$var['MethodDescription']=translateTerm($var['MethodDescription']);
 			}
-			echo json_encode($result);
+			echo $this->jsonEncoded($result);
 		}
 		else
 		{
@@ -192,7 +192,7 @@ class Methods extends MY_Controller {
 			{
 				$var['MethodDescription']=translateTerm($var['MethodDescription']);
 			}
-		echo json_encode($result);
+		echo $this->jsonEncoded($result);
 	}
 	
 }
