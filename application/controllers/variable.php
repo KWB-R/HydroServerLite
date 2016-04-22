@@ -440,21 +440,21 @@ class Variable extends MY_Controller
 
 	private function getWithOrWithoutUnit($withUnit)
 	{
-		$var = $this->getXssCleanInput('varid');
+		$variableID = $this->getXssCleanInput('varid');
 
-		if ($var !== false) {
+		if ($variableID !== false) {
 
 			echo $this->jsonEncoded(
 				$withUnit ?
-				$this->variables->getVariableWithUnit($var) :
-				$this->variables->getUnit($var)
+				$this->variables->getVariableWithUnit(0 + $variableID) :
+				$this->variables->getUnit(0 + $variableID)
 			);
 		}
 		else {
 
 			$this->loadApiErrorView(
 				"VariableID", 
-				$withUnit ? "getWithUnit?varid=1" : "getUnit?varid=1"
+				($withUnit ? "getWithUnit" : "getUnit") . "?varid=1"
 			);
 		}
 	}

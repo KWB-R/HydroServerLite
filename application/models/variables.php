@@ -53,28 +53,42 @@ class Variables extends MY_Model
 		return $this->db->get()->result_array();
 	}
 
-	function getUnit($varID)
+	function getUnit($variableID = -1)
 	{
-		$this->db->select('unitsAbbreviation as unitA')
+		$object = $this->db
+			->select('unitsAbbreviation as unitA')
 			->from($this->tableName)
-			->join('units', $this->tableName.'.VariableunitsID=units.unitsID', 'inner')
-			->where('VariableID', $varID);
-		
+			->join('units', $this->tableName . '.VariableunitsID=units.unitsID', 'inner');
+
+		$object = $this->filterIfRequired($object, $variableID);
+
 		return $this->translatedResult();
 	}
 
-	function getVariableWithUnit($var)
+	function getVariableWithUnit($variableID = -1)
 	{
 		$table = $this->tableName;
 
-		$this->db->select()
+		$object = $this->db
+			->select()
 			->from($table)
-			->join('units', $table . '.VariableunitsID = units.unitsID', 'inner')
-			->where('VariableID', $var);
+			->join('units', $table . '.VariableunitsID = units.unitsID', 'inner');
+
+		$object = $this->filterIfRequired($object, $variableID);
 
 		return $this->translatedResult();
 	}
-	
+
+	private function filterIfRequired($object, $variableID)
+	{
+		// Filter for the VariableID if the VariableID is given
+		if ($variableID !== -1) {
+			$object = $object->where('VariableID', $variableID);
+		}
+
+		return $object;
+	}
+
 	function getAllWithUnits()
 	{
 		$this->db->select()
