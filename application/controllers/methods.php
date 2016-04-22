@@ -10,189 +10,219 @@ class Methods extends MY_Controller {
 	
 	function __construct()
 	{
-		$this->dontAuth = array('getMethodsJSON','getJSON','getSiteVarJSON');
+		$this->dontAuth = array('getMethodsJSON', 'getJSON', 'getSiteVarJSON');
 		parent::__construct();
-		$this->load->model('method','',TRUE);
+		$this->loadModel('method');
 		$this->load->library('form_validation');
 	}
-	
+
 	public function add()
-	{	
-		if(!isAdmin())
-		{
-			$this->kickOut();	
-		}
-		if($_POST)
-		{
+	{
+		$this->kickNonAdminOut();
+
+		if ($_POST) {
 			$this->form_validation->set_rules('MethodDescription', 'MethodDescription', 'trim|required');
-			$this->form_validation->set_rules('MethodLink', 'MethodLink', 'trim');	
+			$this->form_validation->set_rules('MethodLink', 'MethodLink', 'trim');
 			$this->form_validation->set_rules('jqxWidget', 'VariableList', 'trim|required');
 		}
-		if ($this->form_validation->run() == FALSE)
-		{
-			  $errors = validation_errors();
-			  if(!empty($errors))
-			  {addError($errors);}
-		}
-		else
-		{
-			$result=$this->method->add($this->input->post('MethodDescription'),$this->input->post('MethodLink'),$this->input->post('jqxWidget'));
-			if($result)
-			{
-				addSuccess(getTxt('MethodSuccessfully'));	
-			}
-			else
-			{
-				addError(getTxt('ProcessingError'));
+
+		if ($this->form_validation->run() == FALSE) {
+			$errors = validation_errors();
+
+			if (! empty($errors)) {
+				addError($errors);
 			}
 		}
-		
-		
+		else {
+			$result = $this->method->add(
+				$this->input->post('MethodDescription'),
+				$this->input->post('MethodLink'),
+				$this->input->post('jqxWidget')
+			);
+
+			$this->addSuccessOrError($result, 'MethodSuccessfully');
+		}
 		
 		//List of CSS to pass to this view
-		$data=$this->StyleData;
-		$this->load->view('methods/addmethod',$data);
+		$data = $this->StyleData;
+		$this->load->view('methods/addmethod', $data);
 	}
 	
 	public function change()
-	{	
-		if(!isAdmin())
-		{
-			$this->kickOut();	
-		}
-		if($_POST)
-		{
+	{
+		$this->kickNonAdminOut();
+
+		if ($_POST) {
+
 			$this->form_validation->set_rules('MethodDescription2', 'MethodDescription', 'trim|required');
-			$this->form_validation->set_rules('MethodLink2', 'MethodLink', 'trim');	
+			$this->form_validation->set_rules('MethodLink2', 'MethodLink', 'trim');
 			$this->form_validation->set_rules('MethodID2', 'Method ID', 'trim|required');
-		
-		if ($this->form_validation->run() == FALSE)
-		{
-			  $errors = validation_errors();
-			  if(!empty($errors))
-			  {addError($errors);}
-		}
-		else
-		{
-			$result = $this->method->update($this->input->post('MethodID2'),$this->input->post('MethodDescription2'),$this->input->post('MethodLink2'));
-			if($result)
-			{	
-				addSuccess(getTxt('MethodEdited'));		
+
+			if ($this->form_validation->run() == FALSE) {
+
+				$errors = validation_errors();
+
+				if (! empty($errors)) {
+					addError($errors);
+				}
 			}
-			else
-			{
-				addError(getTxt('ProcessingError'));	
-			}		
+			else {
+				$result = $this->method->update(
+					$this->input->post('MethodID2'),
+					$this->input->post('MethodDescription2'),
+					$this->input->post('MethodLink2')
+				);
+
+				$this->addSuccessOrError($result, 'MethodEdited');
+			}
 		}
-		}
-		//Get methods that can be edited. 
+
+		// Get methods that can be edited
 		$methods = $this->method->getEditable();
 		$methodsArray = array();
-		foreach($methods as $method)
-		{
-			$methodsArray[$method['MethodID']]=$method['MethodDescription'];
+
+		foreach($methods as $method) {
+			$methodsArray[$method['MethodID']] = $method['MethodDescription'];
 		}
+
 		$methodOptions = genOptions($methodsArray);
 		
-		//List of CSS to pass to this view
-		$data=$this->StyleData;
-		$data['methodOptions']=$methodOptions;
-		$this->load->view('methods/changemethod',$data);
+		// List of CSS to pass to this view
+		$data = $this->StyleData;
+		$data['methodOptions'] = $methodOptions;
+		$this->load->view('methods/changemethod', $data);
 	}
 	
 	public function delete()
 	{
-		$methodid = end($this->uri->segment_array());
-		if($methodid=="delete")
-		{
-			$data['errorMsg']="One of the parameters: methodid is not defined. An example request would be delete/1";
-			$this->load->view('templates/apierror',$data);
+		$methodID = end($this->uri->segment_array());
+
+		if ($methodID == "delete") {
+			$this->loadApiErrorView(
+				"One of the parameters: methodid is not defined. " .
+				"An example request would be delete/1"
+			);
 			return;
 		}
-		$result = $this->method->delete($methodid);
-		if($result)
-			{	
-				if($this->input->get('ui', TRUE))
-				addSuccess(getTxt('MethodDeleted'));	
-				$output="success";
-				$delMethodID= $this->method->updateVarMeth2($methodid);	
-			}
-		else
-			{
-				if($this->input->get('ui', TRUE))
-				addError(getTxt('ProcessingError'));	
-				$output="failed";
-			}		
-		$output = array("status"=>$output);
-		echo $this->jsonEncoded($output);
+
+		$result = $this->method->delete($methodID);
+
+		if ($this->input->get('ui', TRUE)) {
+			$this->addSuccessOrError($result, 'MethodDeleted');
+		}
+
+		if ($result) {
+			$output = "success";
+			$delMethodID = $this->method->updateVarMeth2($methodID);
+		}
+		else {
+			$output = "failed";
+		}
+
+		echo $this->jsonEncoded(array("status" => $output));
 	}
-	
+
 	public function methodInfo()
-	{	
-		if(!isAdmin())
-		{
-			$this->kickOut();	
-		}
-		$methodid = end($this->uri->segment_array());
-		if($methodid=="methodInfo")
-		{
-			$data['errorMsg']="One of the parameters: MethodID is not defined. An example request would be methodInfo/1";
-			$this->load->view('templates/apierror',$data);
+	{
+		$this->kickNonAdminOut();
+
+		$methodID = end($this->uri->segment_array());
+
+		if ($methodID == "methodInfo") {
+			$this->LoadApiErrorView(
+				"One of the parameters: MethodID is not defined. " .
+				"An example request would be methodInfo/1"
+			);
 			return;
 		}
-		
-		$method = $this->method->getByID($methodid);
-		//List of CSS to pass to this view
-		$data=$this->StyleData;
-		$data['Method']=$method[0];
-		$this->load->view('methods/methodinfo',$data);
+
+		$method = $this->method->getByID($methodID);
+
+		// List of CSS to pass to this view
+		$data = $this->StyleData;
+		$data['Method'] = $method[0];
+		$this->load->view('methods/methodinfo', $data);
 	}
 	
 	public function getMethodsJSON()
 	{
-		if($this->input->get('var', TRUE))
-		{
-			$result = $this->method->getMethodsByVar($this->input->get('var', TRUE));
-			foreach($result as &$var)
-			{
-				$var['MethodDescription']=translateTerm($var['MethodDescription']);
-			}
+		$variableID = $this->input->get('var', TRUE);
+
+		if ($variableID) {
+
+			$result = $this->method->getMethodsByVar($variableID);
+
+			$result = $this->translateTerms($result);
+
 			echo $this->jsonEncoded($result);
 		}
-		else
-		{
-			$data['errorMsg']="One of the parameters: Variable is not defined. An example request would be getMethodsJSON?var=1";
-			$this->load->view('templates/apierror',$data);	
+		else {
+			$this->loadApiErrorView(
+				"One of the parameters: Variable is not defined. " .
+				"An example request would be getMethodsJSON?var=1"
+			);
 		}
 	}
-	
+
 	public function getSiteVarJSON()
 	{
-		$var = $this->input->get('varid', TRUE);
-		$site = $this->input->get('siteid', TRUE);
-		if($var!==false&&$site!==false)
-		{
-			$result = $this->method->getByVarSite($var,$site);
-			foreach($result as &$var)
-			{
-				$var['MethodDescription']=translateTerm($var['MethodDescription']);
-			}
+		$variableID = $this->input->get('varid', TRUE);
+		$siteID = $this->input->get('siteid', TRUE);
+
+		if ($variableID !== false && $siteID !== false) {
+
+			$result = $this->method->getByVarSite($variableID, $siteID);
+
+			$result = $this->translateTerms($result);
+
 			echo $this->jsonEncoded($result);
 		}
-		else
-		{
-			$data['errorMsg']="One of the parameters: VariableID, SiteID is not defined. An example request would be getSiteVarJSON?varid=1&&siteid=2";
-			$this->load->view('templates/apierror',$data);	
+		else {
+			$this->loadApiErrorView(
+				"One of the parameters: VariableID, SiteID is not defined. ".
+				"An example request would be getSiteVarJSON?varid=1&siteid=2"
+			);
 		}
 	}
+
 	public function getJSON()
 	{
 		$result = $this->method->getAll();
-		foreach($result as &$var)
-			{
-				$var['MethodDescription']=translateTerm($var['MethodDescription']);
-			}
+
+		$result = $this->translateTerms($result);
+
 		echo $this->jsonEncoded($result);
 	}
 	
+	private function kickNonAdminOut()
+	{
+		if (! isAdmin()) {
+			$this->kickOut();
+		}
+	}
+
+	private function addSuccessOrError($success, $successKeyword)
+	{
+		if ($success) {
+			addSuccess(getTxt($successKeyword));
+		}
+		else {
+			addError(getTxt('ProcessingError'));
+		}
+	}
+
+	private function translateTerms($records)
+	{
+		foreach ($records as &$record) {
+			$record['MethodDescription'] = translateTerm($record['MethodDescription']);
+		}
+
+		return $records;
+	}
+
+	private function loadApiErrorView($errorMessage)
+	{
+		$data['errorMsg'] = $errorMessage;
+		$this->load->view('templates/apierror', $data);
+	}
 }
