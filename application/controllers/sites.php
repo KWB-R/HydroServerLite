@@ -333,35 +333,35 @@ class Sites extends MY_Controller {
 			$this->load->view('templates/apierror',$data);	
 		}		
 	}
-	
+
 	public function getSitesJSON()
 	{
-		if($this->input->get('source', TRUE))
-		{
-			$result = $this->site->getSitebySource($this->input->get('source', TRUE));
-			echo json_encode($result);
+		$sourceID = $this->input->get('source', TRUE);
+
+		if ($sourceID) {
+			$result = $this->site->getSitebySource($sourceID);
+			echo $this->jsonEncoded($result);
 		}
-		else
-		{
-			$data['errorMsg']="One of the parameters: Source is not defined. An example request would be getSitesJSON?source=1";
-			$this->load->view('templates/apierror',$data);	
+		else {
+			$data['errorMsg'] = "One of the parameters: Source is not defined. An example request would be getSitesJSON?source=1";
+			$this->load->view('templates/apierror', $data);
 		}
 	}
-	
+
 	public function getSiteJSON()
 	{
-		if($this->input->get('siteid', TRUE))
-		{
-			$result = $this->site->getSite($this->input->get('siteid', TRUE));
-			echo json_encode($result);
+		$siteID = $this->input->get('siteid', TRUE);
+
+		if ($siteID) {
+			$result = $this->site->getSite($siteID);
+			echo $this->jsonEncoded($result);
 		}
-		else
-		{
-			$data['errorMsg']="One of the parameters: Siteid is not defined. An example request would be getSiteJSON?siteid=1";
-			$this->load->view('templates/apierror',$data);	
-		}	
+		else {
+			$data['errorMsg'] = "One of the parameters: Siteid is not defined. An example request would be getSiteJSON?siteid=1";
+			$this->load->view('templates/apierror', $data);
+		}
 	}
-	
+
 	public function delete()
 	{
 		$siteid = end($this->uri->segment_array());
@@ -387,6 +387,6 @@ class Sites extends MY_Controller {
 				$output="failed";
 			}		
 		$output = array("status"=>$output);
-		echo json_encode($output);	
+		echo $this->jsonEncoded($output);
 	}
 }

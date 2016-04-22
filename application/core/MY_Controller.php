@@ -243,4 +243,13 @@ class MY_Controller extends CI_Controller {
 		// Return the path of the directory created or '' in case of an error
 		return (($result)? $newDir : '');
 	}
+
+	protected function jsonEncoded($object, $pretty = true)
+	{
+		if ($pretty === true) {
+			json_encode($object, JSON_PRETTY_PRINT);
+		} else {
+			json_encode($object);
+		}
+	}
 }
