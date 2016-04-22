@@ -187,15 +187,23 @@ class Source extends MY_Controller {
 	
 	public function get()
 	{
-		$sourceid = end($this->uri->segment_array());
-		if($sourceid=="get")
-		{
-			$data['errorMsg']="One of the parameters: SourceID is not defined. An example request would be get/1";
-			$this->load->view('templates/apierror',$data);
+		$sourceID = end($this->uri->segment_array());
+
+		if ($sourceID == "get") {
+			$data['errorMsg'] = "One of the parameters: SourceID is not defined. An example request would be get/1";
+			$this->load->view('templates/apierror', $data);
 			return;
 		}
-		$result = $this->sources->get($sourceid);
-		echo json_encode($result[0]);
+
+		// Convert to numeric
+		$sourceID = (0 + $sourceID);
+		$result = $this->sources->get($sourceID);
+
+		if (count($result) > 0 && $sourceID !== -1) {
+			$result = $result[0];
+		}
+
+		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 	
 	public function delete()

@@ -94,17 +94,23 @@ class Sources extends MY_Model
 		$query=$this->db->get('topiccategorycv');
 		return $this->tranResult($query->result_array());		
 	}
-	
-	function get($sourceid)
+
+	function get($sourceID = -1)
 	{
-		$this->db->select()
-		->from($this->tableName)
-		->join('isometadata',$this->tableName.'.MetadataID=isometadata.MetadataID')
-		->where('SourceID',$sourceid);
-		$query=$this->db->get();
-		return $this->tranResult($query->result_array());	
+		$object = $this->db
+			->select()
+			->from($this->tableName)
+			->join('isometadata', $this->tableName . '.MetadataID=isometadata.MetadataID');
+
+		if($sourceID !== -1) {
+			$object->where('SourceID', $sourceID);
+		}
+
+		$query = $this->db->get();
+
+		return $this->tranResult($query->result_array());
 	}
-	
+
 	function getWithMetadata()
 	{
 		$this->db->select()
