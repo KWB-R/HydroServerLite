@@ -724,19 +724,18 @@ class Datapoint extends MY_Controller {
 
 		$fieldList = $this->getConfigItem("field_list_$method", $default);
 
-		if (($method == 'getData') or ($method == 'getDataJSON'))
-		{
-			$result = $this->datapoints->getData(
-				$inputs['SiteID'],
-				$inputs['VariableID'],
-				$inputs['MethodID'],
-				$inputs['startdate'],
-				$inputs['enddate'],
-				$fieldList
+		$methods = array('getData', 'getDataJSON', 'export', 'exportXls');
+
+		if (in_array($method, $methods))	{
+
+			$isExport = (substr($method, 0, 6) === 'export');
+
+			$extended = (
+				$isExport ?
+				(boolean) $this->getConfigItem('extended_export', FALSE) :
+				FALSE
 			);
-		}
-		else if ($method == 'export' || $method == 'exportXls')
-		{
+
 			$result = $this->datapoints->getResultData(
 				$inputs['SiteID'],
 				$inputs['VariableID'],
@@ -744,11 +743,14 @@ class Datapoint extends MY_Controller {
 				$inputs['startdate'],
 				$inputs['enddate'],
 				$fieldList,
-				(boolean) $this->getConfigItem('extended_export', FALSE)
+				$extended
 			);
+
+			if (! $isExport) {
+				$result = $result->result_array();
+			}
 		}
-		else
-		{
+		else {
 			addError("Unknown method in outputOrExportData: ", $method);
 		}
 
