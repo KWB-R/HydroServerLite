@@ -721,7 +721,6 @@ class Datapoint extends MY_Controller {
 		// Read list of fields to be provided from the config file
 		// or use the default fields
 		$default = 'ValueID, DataValue, LocalDateTime';
-
 		$fieldList = $this->getConfigItem("field_list_$method", $default);
 
 		$methods = array('getData', 'getDataJSON', 'export', 'exportXls');
@@ -736,10 +735,14 @@ class Datapoint extends MY_Controller {
 				FALSE
 			);
 
+			$condition = array(
+				'SiteID' => $inputs['SiteID'],
+				'VariableID' => $inputs['VariableID'],
+				'MethodID' => $inputs['MethodID']
+			);
+
 			$result = $this->datapoints->getResultData(
-				$inputs['SiteID'],
-				$inputs['VariableID'],
-				$inputs['MethodID'],
+				$condition,
 				$inputs['startdate'],
 				$inputs['enddate'],
 				$fieldList,

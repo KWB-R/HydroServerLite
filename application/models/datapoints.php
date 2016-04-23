@@ -33,44 +33,27 @@ class Datapoints extends MY_Model
 	}
 
 	function getResultData(
-		$siteID = -1, $variableID = -1, $methodID = -1,	$start = '', $end = '',	
+		$conditions = array('SiteID' => -1, 'VariableID' => -1, 'MethodID' => -1),
+		$start = '', $end = '',
 		$fieldList = 'ValueID, DataValue, LocalDateTime',
 		$extended = FALSE
 	)
 	{
-		$ids = array(
-			'SiteID' => $siteID,
-			'VariableID' => $variableID,
-			'MethodID' => $methodID
-		);
+		// In the following we will work with an array of arrays each of which
+		// represents a combination of IDs for which the records are to be filtered.
 
-		// keep only IDs that are not -1 in the array
-		$ids = array_filter($ids, function($id) {
-			return ($id != -1);
-		});
-
-		if ($extended)
-		{
-			$fields = preg_split("/\s*,\s*/", $fieldList);
-
-			$fields = array_merge(
-				$this->prefixed($fields, 'A.'),
-				array(
-					'B.SiteCode', 
-					'C.VariableCode', 
-					'D.Organization', 
-					'E.MethodDescription',
-					'F.QualifierCode'
-				)
+		if (! is_array($conditions) || count($conditions) == 0) {
+			log_message("error",
+				"Non-empty array expected in argument 'conditions' of " .
+				"Datapoints::getResultData()."
 			);
-			
-			$fieldList = implode(', ', $fields);
-			
-			// Rewrite the array $ids by prefixing its keys with 'A.'
-			$ids = array_combine(
-				$this->prefixed(array_keys($ids), 'A.'), 
-				array_values($ids)
-			);
+			return FALSE;
+		}
+
+		if ($extended) {
+			// Prefix field names with A (DataValues), B (Sites), C (Variables),
+			// D (Sources) , E (Methods), and F (Qualifiers)
+			$fieldList = $this->extendedFieldList($fieldList);
 		}
 
 		// start the SQL query
@@ -78,8 +61,7 @@ class Datapoints extends MY_Model
 
 		// if required, extend query source by joining tables Sites, Variables,
 		// Sources, Methods
-		if ($extended)
-		{
+		if ($extended) {
 			$this->db->join('sites AS B', 'A.SiteID = B.SiteID', 'INNER');
 			$this->db->join('variables AS C', 'A.VariableID = C.VariableID', 'INNER');
 			$this->db->join('sources AS D', 'A.SourceID = D.SourceID', 'INNER');
@@ -87,23 +69,69 @@ class Datapoints extends MY_Model
 			$this->db->join('qualifiers AS F', 'A.QualifierID = F.QualifierID', 'LEFT');
 		}
 
-		// append a condition to the WHERE clause for the remaining IDs
-		$this->db->where($ids);
-
+		// Generate the part of the WHERE clause that represents the time interval 
+		// restriction (if any)
 		$timeCondition = $this->sqlTimeCondition($start, $end);
 
-		if ($timeCondition !== '')
-		{
-			$this->db->where($timeCondition);
+		// Guarantee that we continue with an array of arrays
+		if (! is_array(array_values($conditions)[0])) {
+			$conditions = array($conditions);
+		}
+
+		// Biuld the WHERE clause incrementally
+		for ($i = 0; $i < count($conditions); $i++) {
+
+			// keep only IDs that are not -1 in the array
+			$condition = array_filter($conditions[$i], function($id) {
+				return ($id != -1);
+			});
+
+			// Rewrite the array $condition by prefixing its keys with 'A.'
+			$condition = array_combine(
+				$this->prefixed(array_keys($condition), 'A.'),
+				array_values($condition)
+			);
+
+			// If this is not the first condition, start a new block of the
+			// WHERE clause with OR and set the first element of this block to the
+			// expression "ValueID > -1" which is always TRUE
+			if ($i > 0) {
+				$this->db->or_where('ValueID >', -1);
+			}
+
+			// We have to repeat the time restriction in each OR block
+			if ($timeCondition !== '') {
+				$this->db->where($timeCondition);
+			}
+
+			$this->db->where($condition);
 		}
 
 		$this->db->order_by('DateTimeUTC');
-		
+
 		$result = $this->db->get();
 		
 		log_message("debug", "Last Query: " . $this->db->last_query());
-		
+
 		return $result;
+	}
+
+	private function extendedFieldList($fieldList)
+	{
+		$fields = preg_split("/\s*,\s*/", $fieldList);
+
+		$fields = array_merge(
+			$this->prefixed($fields, 'A.'),
+			array(
+				'B.SiteCode',
+				'C.VariableCode',
+				'D.Organization',
+				'E.MethodDescription',
+				'F.QualifierCode'
+			)
+		);
+
+		return implode(', ', $fields);
 	}
 
 	private function prefixed($values, $prefix = "") 
