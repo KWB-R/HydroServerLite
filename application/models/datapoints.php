@@ -31,9 +31,10 @@ class Datapoints extends MY_Model
 		//Not returning this as batch processing doesn't return a true result here.
 		return true;
 	}
-	
-	function getQueryForGetData($siteID = -1, $variableID = -1, $methodID = -1,
-		$start = '', $end = '',	$fieldList = 'ValueID, DataValue, LocalDateTime',
+
+	function getResultData(
+		$siteID = -1, $variableID = -1, $methodID = -1,	$start = '', $end = '',	
+		$fieldList = 'ValueID, DataValue, LocalDateTime',
 		$extended = FALSE
 	)
 	{
@@ -131,29 +132,6 @@ class Datapoints extends MY_Model
 		}
 
 		return implode(' AND ', $conditions);
-	}
-
-	function getData($site, $var, $method, $start, $end,
-		$fieldList = 'ValueID, DataValue, LocalDateTime', $extended = FALSE
-	)
-	{
-		$query = $this->getQueryForGetData($site, $var, $method, $start, $end,
-			$fieldList, $extended
-		);
-
-		return $query->result_array();	
-	}
-	
-	function getResultData($site, $var, $method, $start, $end,
-		$fieldList = 'ValueID, DataValue, LocalDateTime', $extended = FALSE
-	)
-	{
-		log_message('debug', "getResultData(site=$site,var=$var,method=$method," .
-			"start=$start,end=$end)...");
-		
-		return $this->getQueryForGetData(
-			$site, $var, $method, $start, $end, $fieldList, $extended
-		);
 	}
 
 	function delete($ValueID)
