@@ -133,14 +133,18 @@ class Series extends MY_Controller {
 	
 	public function getJSON()
 	{
-		$result = $this->sc->getAll();
-		$finalresult=array();
-		foreach($result as $row)
-		{
-			if($row['VariableID']!=null)
-			$finalresult[]=$row;
+		$records = $this->sc->getAll();
+
+		$result = array();
+
+		foreach ($records as $row) {
+
+			if (isset($row['VariableID']) && $row['VariableID'] != null) {
+				$result[] = $row;
+			}
 		}
-		echo json_encode($finalresult);
+
+		echo $this->jsonEncoded($result);
 	}
 	
 	public function getDateJSON()
