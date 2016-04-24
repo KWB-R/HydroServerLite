@@ -112,7 +112,7 @@ class Datapoints extends MY_Model
 		$result = $this->db->get();
 		
 		log_message("debug", "Last Query: " . $this->db->last_query());
-
+//echo $this->db->last_query();
 		return $result;
 	}
 

@@ -99,7 +99,22 @@ class API_Config
 
 	private static function assignmentString($a, $b)
 	{
-		return "$a=$b";
+		// If b is an array, create a string of the form $a[]=$b[1]&$a[]=$b[2]& ...
+		if (is_array($b)) {
+
+			$assignments = array();
+
+			foreach ($b as $element) {
+				$assignments[] = $a . '[]=' . $element;
+			};
+
+			$assignments = implode('&', $assignments);
+		}
+		else {
+			$assignments = "$a=$b";
+		}
+
+		return $assignments;
 	}
 }
 

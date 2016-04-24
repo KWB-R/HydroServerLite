@@ -685,6 +685,11 @@ class Datapoint extends MY_Controller {
 		$this->getData_generic('exportXls');
 	}
 
+	public function getSeries()
+	{
+		$this->getData_generic('getSeries');
+	}
+
 	private function getData_generic($method)
 	{
 		$inputs = NULL;
@@ -705,6 +710,7 @@ class Datapoint extends MY_Controller {
 
 	private function getAndValidateInputs($method, &$inputs)
 	{
+
 		$config = $this->getApiConfiguration();
 
 		$parameterMapping = API_Config::parameterMapping($config[$method]);
@@ -723,11 +729,15 @@ class Datapoint extends MY_Controller {
 		$default = 'ValueID, DataValue, LocalDateTime';
 		$fieldList = $this->getConfigItem("field_list_$method", $default);
 
-		$methods = array('getData', 'getDataJSON', 'export', 'exportXls');
+		$methods = array(
+			'getData', 'getDataJSON', 'export', 'exportXls', 'getSeries'
+		);
 
 		if (in_array($method, $methods))	{
 
-			$isExport = (substr($method, 0, 6) === 'export');
+			$isExport = ($method === 'getSeries') ?
+				($inputs['format'] !== 'json') :
+				(substr($method, 0, 6) === 'export');
 
 			$extended = (
 				$isExport ?
@@ -735,16 +745,31 @@ class Datapoint extends MY_Controller {
 				FALSE
 			);
 
-			$condition = array(
-				'SiteID' => $inputs['SiteID'],
-				'VariableID' => $inputs['VariableID'],
-				'MethodID' => $inputs['MethodID']
-			);
+			if ($method === 'getSeries') {
+				$catalogFields = 'SourceID, SiteID, VariableID, MethodID';
+				$condition = $this->sc->get($inputs['SeriesID'], $catalogFields);
+			}
+			else {
+				$condition = array(
+					'SiteID' => $inputs['SiteID'],
+					'VariableID' => $inputs['VariableID'],
+					'MethodID' => $inputs['MethodID']
+				);
+			}
+
+			$defaultStart = ''; //'1900-01-01';
+			$defaultEnd = ''; //'2100-01-01';
+
+			$startdate = isset($inputs['startdate']) ?
+				$inputs['startdate'] : $defaultStart;
+
+			$enddate = isset($inputs['enddate']) ?
+				$inputs['enddate'] : $defaultEnd;
 
 			$result = $this->datapoints->getResultData(
 				$condition,
-				$inputs['startdate'],
-				$inputs['enddate'],
+				$startdate,
+				$enddate,
 				$fieldList,
 				$extended
 			);
@@ -755,6 +780,7 @@ class Datapoint extends MY_Controller {
 		}
 		else {
 			addError("Unknown method in outputOrExportData: ", $method);
+			$result = NULL;
 		}
 
 		return $result;
@@ -762,7 +788,9 @@ class Datapoint extends MY_Controller {
 
 	private function outputOrExportData($method, $inputs, $result)
 	{
-		if ($method == 'getData')
+		$format = $this->getFormat($method, $inputs);
+
+		if ($format === 'code')
 		{
 			// hsonne: Why filter for non-NoDataValues only for getData?
 			$variable = $this->variables->getVariableWithUnit($inputs['VariableID']);
@@ -773,26 +801,29 @@ class Datapoint extends MY_Controller {
 
 			$this->echoJavaScriptAssignment2($result, $noValue);
 		}
-		elseif ($method == 'getDataJSON')
+		elseif ($format === 'json')
 		{
-			$options = $this->getConfigItem("json_encode_options", 0);
-			echo json_encode($result, $options);
+			echo $this->jsonEncoded($result);
 		}
-		elseif (in_array($method, array('export', 'exportXls')))
+		elseif (in_array($format, array('csv', 'xls', 'xlsx')))
 		{
-			if ($method == 'export') {
-				$filename = $this->toExportName($inputs, '.csv');
+			$nameparts = ($method === 'getSeries' ? array() : $inputs);
+
+			if ($format === 'csv')
+			{
+				$filename = $this->toExportName($nameparts, '.csv');
 				$contentType = 'text/csv';
 			}
 			else {
-				$filename = $this->toExportName($inputs, '.xls');
+				$filename = $this->toExportName($nameparts, '.xls');
 				$contentType = 'application/vnd.ms-excel';
 			}
 
 			header('Content-Type: ' . $contentType);
 			header('Content-Disposition: attachment; filename=' . $filename);
 
-			if ($method == 'export') {
+			if ($format === 'csv')
+			{
 				$this->load->dbutil();
 				echo $this->dbutil->csv_from_result($result);
 			}
@@ -804,6 +835,21 @@ class Datapoint extends MY_Controller {
 		}
 		else {
 			addError("Unknown method in outputOrExportData: ", $method);
+		}
+	}
+
+	private function getFormat($method, $inputs)
+	{
+		if ($method === 'getSeries') {
+			return $inputs['format'];
+		}
+
+		switch($method) {
+			case 'getData': return 'code';
+			case 'getDataJSON': return 'json';
+			case 'export': return 'csv';
+			case 'exportXls': return 'xls';
+			case 'exportXlsx': return 'xlsx';
 		}
 	}
 
@@ -938,6 +984,10 @@ class Datapoint extends MY_Controller {
 			'getDataJSON' => $getParameters,
 			'export' => $getParameters,
 			'exportXls' => $getParameters,
+			'getSeries' => array(
+				'SeriesID' => API_Config::parameter('seriesid', array(1,3,4)),
+				'format' => API_Config::parameter('format', '[json|csv|xls|xlsx]')
+			),
 			'delete' => array(
 				'ValueID' => API_Config::parameter('')
 			),

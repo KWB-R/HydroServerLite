@@ -246,6 +246,8 @@ class MY_Controller extends CI_Controller {
 
 	protected function jsonEncoded($object, $pretty = true)
 	{
+		//$options = $this->getConfigItem("json_encode_options", 0);
+
 		if ($pretty === true) {
 			return json_encode($object, JSON_PRETTY_PRINT);
 		} else {
