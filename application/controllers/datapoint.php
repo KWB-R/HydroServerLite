@@ -733,7 +733,7 @@ class Datapoint extends MY_Controller {
 			'getData', 'getDataJSON', 'export', 'exportXls', 'getSeries'
 		);
 
-		if (in_array($method, $methods))	{
+		if (in_array($method, $methods)) {
 
 			$isExport = ($method === 'getSeries') ?
 				($inputs['format'] !== 'json') :

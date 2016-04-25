@@ -9,12 +9,11 @@ echo $CSS_Main;
 ?>
 
 <script type="text/javascript">
-	var server = 'http://localhost/hydroserverlite_cc/index.php/default/';
 
 function initGrid()
 {
 	var source = jQuery.extend(getSourceConfig(), {
-		url: "http://localhost/hydroserverlite_cc/index.php/default/series/getJSON"
+		url: base_url + "series/getJSON"
 	});
 
 	var $grid = $('#grid_series');
@@ -34,7 +33,7 @@ function getDataAdapter(source)
 			mylog('loadComplete');
 		},
 		loadError: function (xhr, status, error) {
-			alert('loadError! Status: ' + status + ", error: " + error);
+			alert('Error loading ' + source.url + ": " + error);
 			console.log(error);
 		},
 		downloadComplete: function (data, status, xhr) {
@@ -75,8 +74,7 @@ function handleExportClick(format)
 	}
 
 	var parameterString = jQuery.param({seriesid: seriesIDs, format: format});
-	var base_url = 'http://localhost/hydroserverlite_cc/index.php/default';
-	var url = base_url + '/datapoint/getSeries?' + parameterString;
+	var url = base_url + 'datapoint/getSeries?' + parameterString;
 
 	//alert("downloading series via url: " + url);
 
@@ -161,13 +159,30 @@ function getSourceConfig()
 	};
 }
 
-function getGridConfig(object)
+function getGridConfigBase()
 {
-	var gridConfig = {
+	return {
 		width: 800,
 		height: 300,
-		columnsresize: true
-	};
+		columnsresize: true,
+		pageable: true,
+		pagesizeoptions: ['10', '20', '50'],
+		//autoheight: true,
+		sortable: true,
+		filterable: true,
+		filtermode: [
+			'default', // 0
+			'excel'    // 1
+		][1],
+		groupable: true
+		//showgroupsheader: false,
+	}
+}
+
+function getGridConfig(object)
+{
+	var gridConfig = jQuery.extend(getGridConfigBase(), {
+	});
 
 	return jQuery.extend(gridConfig, {
 		source: getDataAdapter(getSource(object)),
@@ -177,19 +192,7 @@ function getGridConfig(object)
 
 function getGridConfig2(idWidth, codeWidth, textWidth)
 {
-	return {
-		width: 800,
-		pageable: true,
-		pagesizeoptions: ['10', '20', '50'],
-		autoheight: true,
-		sortable: true,
-		filterable: true,
-		filtermode: [
-			'default', // 0
-			'excel' // 1
-		][1],
-		groupable: true,
-		//showgroupsheader: false,
+	var extraConfig = {
 		//groups: [ "VariableCode" ], //"Organization", "SiteName" ],
 		altrows: true,
 		enabletooltips: true,
@@ -210,7 +213,6 @@ function getGridConfig2(idWidth, codeWidth, textWidth)
 			'multiplecellsadvanced', // 8
 			'checkbox'               // 9
 		][9],
-		columnsresize: true,
 		columns: [
 			// Possible attributes:
 			// text: 'Product Name', 
@@ -250,6 +252,8 @@ function getGridConfig2(idWidth, codeWidth, textWidth)
 			//{ text: 'QualityControlLevel', align: 'center', name: 'QualityControlLevel' }
 		]
 	};
+	
+	return jQuery.extend(getGridConfigBase(), extraConfig);
 }
 
 function mylog(message)
@@ -361,7 +365,7 @@ function mylog(message)
 		};
 
 		return {
-			url: server + endpoints[object],
+			url: base_url + endpoints[object],
 			datatype: 'json'
 		};
 	}
