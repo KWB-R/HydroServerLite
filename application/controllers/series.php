@@ -21,7 +21,13 @@ class Series extends MY_Controller {
 		$data=$this->StyleData;
 		$this->load->view('series/edit',$data);	
 	}
-	
+
+	public function export()
+	{
+		$data = $this->StyleData;
+		$this->load->view('series/export', $data);
+	}
+
 	public function update()
 	{
 		$updatedSeries=array();
