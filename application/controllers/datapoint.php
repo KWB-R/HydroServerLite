@@ -893,12 +893,12 @@ class Datapoint extends MY_Controller {
 			'MethodID' => 'Meth'
 		);
 
-		$filename = 'HSL';
+		$filename = 'HSL_' . date("Y_m_d");
 
-		foreach($shortNames as $longName => $shortName)
-		{
-			if (isset($inputs[$longName]))
-			{
+		foreach($shortNames as $longName => $shortName) {
+
+			if (isset($inputs[$longName])) {
+
 				$filename .= sprintf('_%s_%s', $shortName, $inputs[$longName]);
 			}
 		}
