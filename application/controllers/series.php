@@ -12,7 +12,7 @@ class Series extends MY_Controller {
 	{
 		$this->dontAuth = array('getDateJSON');
 		parent::__construct();
-		$this->load->model('sc','',TRUE);
+		$this->loadModel('sc');
 		$this->load->library('form_validation');
 	}
 	
@@ -26,6 +26,35 @@ class Series extends MY_Controller {
 	{
 		$data = $this->StyleData;
 		$this->load->view('series/export', $data);
+	}
+
+	public function exportObjects()
+	{
+		//$content = $this->input->post('content');
+		$filename = $this->input->post('filename');
+		//echo $filename;
+
+		if ($filename === "seriesCatalog") {
+			$dbResult = $this->sc->getDbResult();
+		}
+		elseif ($filename === "sources") {
+			$this->loadModel('sources');
+			$dbResult = $this->sources->getDbResult();
+		}
+		elseif ($filename === "sites") {
+			$this->loadModel('site');
+			$dbResult = $this->site->getDbResult();
+		}
+		elseif ($filename === "variables") {
+			$this->loadModel('variables');
+			$dbResult = $this->variables->getDbResult();
+		}
+		elseif ($filename === "methods") {
+			$this->loadModel('method');
+			$dbResult = $this->method->getDbResult();
+		}
+
+		$this->exportToSpreadsheet($dbResult, 'xls', $filename);
 	}
 
 	public function update()

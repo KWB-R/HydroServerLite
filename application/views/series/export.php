@@ -196,7 +196,7 @@ function getGridConfig2(idWidth, codeWidth, textWidth)
 		//groups: [ "VariableCode" ], //"Organization", "SiteName" ],
 		altrows: true,
 		enabletooltips: true,
-		editable: true,
+		editable: false,
 		ready: function (){
 			// Start with hidden ID columns once the grid is loaded
 			showOrHideIdColumns(false);
@@ -379,8 +379,10 @@ function mylog(message)
 
 	function getExportHandler($grid, filename)
 	{
+		var url = base_url + "series/exportObjects";
+
 		return (function(event) {
-			$grid.jqxGrid('exportdata', 'xls', filename);
+			$grid.jqxGrid('exportdata', 'json', filename, true, null, true, url);
 		});
 	}
 
