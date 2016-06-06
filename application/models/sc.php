@@ -73,7 +73,13 @@ class Sc extends MY_Model
 
 		return $this->db->get($this->tableName)->result_array();
 	}
-	
+
+	function getAllValid()
+	{
+		$this->db->where("VariableID >", 0);
+		return $this->db->get($this->tableName);
+	}
+
 	function update($series,$seriesID)
 	{
 		$this->db->where('SeriesID',$seriesID);

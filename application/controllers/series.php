@@ -35,7 +35,8 @@ class Series extends MY_Controller {
 		//echo $filename;
 
 		if ($filename === "seriesCatalog") {
-			$dbResult = $this->sc->getDbResult();
+			//$dbResult = $this->sc->getDbResult();
+			$dbResult = $this->sc->getAllValid();
 		}
 		elseif ($filename === "sources") {
 			$this->loadModel('sources');
