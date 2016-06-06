@@ -54,7 +54,7 @@ class Series extends MY_Controller {
 			$dbResult = $this->method->getDbResult();
 		}
 
-		$this->exportToSpreadsheet($dbResult, 'xls', $filename);
+		$this->exportToSpreadsheet($dbResult, 'xls', $filename . ".xls");
 	}
 
 	public function update()
