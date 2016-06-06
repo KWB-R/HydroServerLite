@@ -779,7 +779,7 @@ class Datapoint extends MY_Controller {
 			}
 		}
 		else {
-			addError("Unknown method in outputOrExportData: ", $method);
+			addError("Unknown method in getDataFromModel: ", $method);
 			$result = NULL;
 		}
 
@@ -809,29 +809,9 @@ class Datapoint extends MY_Controller {
 		{
 			$nameparts = ($method === 'getSeries' ? array() : $inputs);
 
-			if ($format === 'csv')
-			{
-				$filename = $this->toExportName($nameparts, '.csv');
-				$contentType = 'text/csv';
-			}
-			else {
-				$filename = $this->toExportName($nameparts, '.xls');
-				$contentType = 'application/vnd.ms-excel';
-			}
+			$filename = $this->toExportName($nameparts, '.' . $format);
 
-			header('Content-Type: ' . $contentType);
-			header('Content-Disposition: attachment; filename=' . $filename);
-
-			if ($format === 'csv')
-			{
-				$this->load->dbutil();
-				echo $this->dbutil->csv_from_result($result);
-			}
-			else {
-				$this->load->library('Excel');
-				header('Cache-Control: max-age=0'); //no cache
-				$this->excel->output_as_xls($result->result_array());
-			}
+			$this->exportToSpreadsheet($result, $format, $filename);
 		}
 		else {
 			addError("Unknown method in outputOrExportData: ", $method);

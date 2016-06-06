@@ -259,4 +259,22 @@ class MY_Controller extends CI_Controller {
 			return json_encode($object);
 		}
 	}
+
+	protected function exportToSpreadsheet($result, $format, $filename)
+	{
+		$type = ($format === 'csv' ? 'text/csv' : 'application/vnd.ms-excel');
+
+		header('Content-Type: ' . $type);
+		header('Content-Disposition: attachment; filename=' . $filename);
+
+		if ($format === 'csv') {
+			$this->load->dbutil();
+			echo $this->dbutil->csv_from_result($result);
+		}
+		else {
+			$this->load->library('Excel');
+			header('Cache-Control: max-age=0'); //no cache
+			$this->excel->output_as_xls($result->result_array());
+		}
+	}
 }
