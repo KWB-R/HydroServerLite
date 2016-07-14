@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id='Description'>
+			Download Time Series
+    </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="JavaScript Grid with rich support for Data Filtering, Paging, Editing, Sorting and Grouping" />
+		<!-- hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets -->
+    <link rel="stylesheet"        href="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxgrid.sort.js"></script> 
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxgrid.pager.js"></script> 
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxgrid.selection.js"></script> 
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxgrid.columnsresize.js"></script> 
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxgrid.edit.js"></script> 
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxgrid.filter.js"></script> 
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/jqwidgets_v4_1_1/jqwidgets/jqxgrid.grouping.js"></script> 
+    <script type="text/javascript" src="hydroserverlite_cc/assets/js/scripts/demos.js"></script>
+    <script type="text/javascript">
+
+			$(document).ready(function () {
+
+				initGrid();
+
+				initSourceDropDown();
+
+				initButtons();
+
+			});
+
+function getGroups()
+{
+	var groups = [];
+
+	var $grid = $('#jqxgrid');
+
+	var numberOfGroups = $grid.jqxGrid('getrootgroupscount');
+
+	for (var i = 0; i < numberOfGroups; i++) {
+		groups.push($grid.jqxGrid('getgroup', i));
+	}
+
+	return groups;
+}
+
+function initGrid()
+{
+	var $grid = $('#jqxgrid');
+
+	// Get grid column (width of ID columns = 25px)
+	var config = jQuery.extend(getGridConfig('35px', '60px', '170px'), {
+		source: getDataAdapter('flusshygiene offline')
+	});
+
+	$grid.jqxGrid(config);
+
+	$grid.on('groupschanged', function(event) {
+		var groups = getGroups();
+		//alert('groupschanged. There are ' + groups.length + " groups now.");
+		console.log(groups);
+	});
+}
+
+function getDataAdapter(sourceName)
+{
+	var url = (
+		sourceName === 'localhost' ?
+		"http://localhost/hydroserverlite_cc/index.php/default/series/getJSON" :
+		"testseries.txt"
+	);
+
+	// prepare the data
+	var source = jQuery.extend(getSourceConfig(), {
+		url: url
+	});
+
+	return new $.jqx.dataAdapter(source, {
+		downloadComplete: function (data, status, xhr) {
+			mylog('downloadComplete');
+		},
+		loadComplete: function (data) {
+			mylog('loadComplete');
+		},
+		loadError: function (xhr, status, error) {
+			alert('loadError: ' + status);
+			console.log(error);
+		}
+	});
+}
+
+function initSourceDropDown()
+{
+	var $source = $('#source');
+
+	$source.jqxDropDownList({
+		source: [
+		  "flusshygiene offline",
+		  "localhost"
+		]
+	});
+
+	$source.on('change', function(event) {
+		setSource($source.jqxDropDownList('getItem', event.args.index));
+	});
+
+	$source.on('bindingComplete', function(event) {
+		$source.jqxDropDownList('selectIndex', 0);
+	});
+}
+
+function setSource(item)
+{
+	$('#jqxgrid').jqxGrid({
+		source: getDataAdapter(item.value)
+	});
+}
+
+function initButtons()
+{
+	$('#downloadButtonXls').jqxButton({
+	}).on('click', function(event) {
+		handleExportClick('xls');
+	});
+
+	$('#downloadButtonCsv').jqxButton({
+	}).on('click', function(event) {
+		handleExportClick('csv');
+	});
+
+	var $button = $('#showIDsButton');
+
+	$button.jqxToggleButton({
+		width: '200px'
+	}).on('click', function(event) {
+		var toggled = $button.jqxToggleButton('toggled');
+		showOrHideIdColumns(toggled);
+	});
+}
+
+function handleExportClick(format)
+{
+	var seriesIDs = getSelectedIDs();
+
+	if (seriesIDs.length === 0) {
+		alert("Please select at least one series!");
+		return;
+	}
+
+	var parameterString = jQuery.param({seriesid: seriesIDs, format: format});
+	var base_url = 'http://localhost/hydroserverlite_cc/index.php/default';
+	var url = base_url + '/datapoint/getSeries?' + parameterString;
+
+	//alert("downloading series via url: " + url);
+
+	window.open(url, '_blank');
+}
+
+function showOrHideIdColumns(show)
+{
+	var method = (show ? 'showcolumn' : 'hidecolumn');
+	var $grid = $('#jqxgrid');
+	var objects = ['Source', 'Site', 'Variable', 'Method']; //, 'QualityControlLevel'];
+
+	objects.forEach(function(columnName) {
+		$grid.jqxGrid(method, columnName + 'ID');
+	});
+
+	objects = ['Site', 'Variable'];
+
+	objects.forEach(function(columnName) {
+		$grid.jqxGrid(method, columnName + 'Code');
+	});
+}
+
+function getSelectedIDs()
+{
+	var $grid = $('#jqxgrid');
+	var rowIndices = $grid.jqxGrid('getselectedrowindexes');
+	var seriesIDs = [];
+	var rowData;
+
+	rowIndices.forEach(function(rowIndex) {
+		if (rowIndex != undefined) {
+			rowData = $grid.jqxGrid('getrowdata', rowIndex);
+			seriesIDs.push(rowData.SeriesID);
+		}
+	});
+
+	return seriesIDs;
+}
+
+function getSourceConfig()
+{
+	// possible values for type: 'int', 'float', 'bool'
+	return {
+		datatype: "json",
+		datafields: [
+			{ name: 'SeriesID', type: 'int'},
+			{ name: 'ValueCount', type: 'int'},
+			{ name: 'BeginDateTime', type: 'date'},
+			{ name: 'EndDateTime', type: 'date'},
+			{ name: 'SourceID', type: 'int'},
+			{ name: 'Organization'},
+			{ name: 'SiteID', type: 'int'},
+			{ name: 'SiteCode'},
+			{ name: 'SiteName'},
+			{ name: 'VariableID', type: 'int'},
+			{ name: 'VariableCode'},
+			{ name: 'VariableName'},
+			{ name: 'MethodID', type: 'int'},
+			{ name: 'MethodDescription'}
+			//{ name: 'QualityControlLevelID', type: 'int'},
+			//{ name: 'QualityControlLevelCode'}
+			// "SiteType":"Stream",
+			// "Speciation":"",
+			// "VariableunitsID":"342",
+			// "VariableunitsName":"number of organisms per 100 milliliter",
+			// "SampleMedium":"Surface Water",
+			// "ValueType":"Field Observation",
+			// "TimeSupport":"0",
+			// "TimeunitsID":"104",
+			// "TimeunitsName":"day",
+			// "DataType":"Average",
+			// "GeneralCategory":"Biota",
+			// "SourceDescription":"Kompetenzzentrum Wasser Berlin",
+			// "Citation":"",
+			// "BeginDateTime":"2000-01-01 12:00:00",
+			// "EndDateTime":"2016-04-18 21:45:00",
+			// "BeginDateTimeUTC":"1969-12-31 23:00:00",
+			// "EndDateTimeUTC":"2016-04-18 20:45:00",
+		],
+		id: 'SeriesID'
+	};
+}
+
+function getGridConfig(idWidth, codeWidth, textWidth)
+{
+	return {
+		width: 850,
+		pageable: true,
+		pagesizeoptions: ['10', '20', '50'],
+		autoheight: true,
+		sortable: true,
+		filterable: true,
+		filtermode: [
+			'default', // 0
+			'excel' // 1
+		][1],
+		groupable: true,
+		//showgroupsheader: false,
+		//groups: [ "VariableCode" ], //"Organization", "SiteName" ],
+		altrows: true,
+		enabletooltips: true,
+		editable: true,
+		ready: function (){
+			// Start with hidden ID columns once the grid is loaded
+			showOrHideIdColumns(false);
+		},
+		selectionmode: [
+			'none',                  // 0
+			'singlerow',             // 1
+			'multiplerows',          // 2
+			'multiplerowsextended',  // 3
+			'multiplerowsadvanced',  // 4
+			'singlecell',            // 5
+			'multilpecells',         // 6
+			'multiplecellsextended', // 7
+			'multiplecellsadvanced', // 8
+			'checkbox'               // 9
+		][9],
+		columnsresize: true,
+		columns: [
+			// Possible attributes:
+			// text: 'Product Name', 
+			// columngroup: 'ProductDetails', 
+			// columntype: 'number', 'checkbox', 'numberinput', 'dropdownlist',
+    	// 	'combobox', 'datetimeinput', 'textbox', 'template', 'custom'
+			// datafield: 'ProductName', 
+			// width: 250 , 
+			// cellsalign: 'right', 
+			// align: 'right', 
+			// cellsformat: 'c2',	'ddd, yyyy-MM-dd HH:mm',
+			// cellsrenderer: cellsrenderer,
+	//			{ text: 'Selected', columntype: 'checkbox', datafield: 'Selected', width: 80 },
+			{ columngroup: 'Series', text: 'ID', datafield: 'SeriesID', width: idWidth },
+			{ columngroup: 'Series', text: 'Count', datafield: 'ValueCount', width: 50, cellsalign: 'right' },
+			{ columngroup: 'Series', text: 'First', datafield: 'BeginDateTime', width: 85, cellsformat: 'yyyy-MM-dd' },
+			{ columngroup: 'Series', text: 'Last', datafield: 'EndDateTime', width: 85, cellsformat: 'yyyy-MM-dd' },
+			{ columngroup: 'Source', text: 'ID', datafield: 'SourceID', width: idWidth },
+			{ columngroup: 'Source', text: 'Organization', datafield: 'Organization', width: codeWidth },
+			{ columngroup: 'Site', text: 'ID', datafield: 'SiteID', width: idWidth },
+			{ columngroup: 'Site', text: 'Code', datafield: 'SiteCode', width: codeWidth },
+			{ columngroup: 'Site', text: 'Site', datafield: 'SiteName', width: textWidth },
+			{ columngroup: 'Variable', text: 'ID', datafield: 'VariableID', width: idWidth },
+			{ columngroup: 'Variable', text: 'Code', datafield: 'VariableCode', width: codeWidth },
+			{ columngroup: 'Variable', text: 'Variable', datafield: 'VariableName', width: textWidth },
+			{ columngroup: 'Method', text: 'ID', datafield: 'MethodID', width: idWidth } ,
+			{ columngroup: 'Method', text: 'Method',  datafield: 'MethodDescription', width: textWidth }
+			//{ columngroup: 'QualityControlLevel', text: 'ID', datafield: 'QualityControlLevelID' },
+			//{ columngroup: 'QualityControlLevel', text: 'Code', datafield: 'QualityControlLevelCode' }
+		],
+		columngroups: [
+			{ text: 'Series', align: 'center', name: 'Series' },
+			{ text: 'Source', align: 'center', name: 'Source' },
+			{ text: 'Site', align: 'center', name: 'Site' },
+			{ text: 'Variable', align: 'center', name: 'Variable' },
+			{ text: 'Method', align: 'center', name: 'Method' }
+			//{ text: 'QualityControlLevel', align: 'center', name: 'QualityControlLevel' }
+		]
+	};
+}
+
+function mylog(message)
+{
+	console.log(message);
+	// alert(message);
+}
+    </script>
+</head>
+
+<body class='default'>
+
+	Source: 
+	<div id="source">
+  </div>
+
+	<div>
+		<input id='showIDsButton' type="button" value="Show IDs and Codes" />
+  </div>
+
+	<div id="jqxgrid">
+	</div>
+
+	<div>
+		<input id='downloadButtonXls' type="button" value="Download selected series (xls)" />
+  </div>
+
+	<div>
+		<input id='downloadButtonCsv' type="button" value="Download selected series (csv)" />
+  </div>
+
+</body>
+</html>

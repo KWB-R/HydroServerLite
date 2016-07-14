@@ -47,6 +47,11 @@ class MY_Model extends CI_Model
 		return $this->db->get()->result_array();
 	}
 	
+	function getDbResult()
+	{
+		return $this->db->get($this->tableName);
+	}
+
 	function tranResult($result)
 	{
 		//Put in the logic to translate the results before showing it to the user. 

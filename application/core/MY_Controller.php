@@ -103,6 +103,11 @@ class MY_Controller extends CI_Controller {
 				'jqwidgets/jqxgrid.edit.js', //details
 				'jqwidgets/jqxexpander.js' //details
 			),
+			'JS_JQX_GridExtra' => array( // series/export
+				'jqwidgets/jqxgrid.export.js',
+				'jqwidgets/jqxgrid.grouping.js',
+				'jqwidgets/jqxdata.export.js'
+			),
 			'JS_GetTheme' => array(
 				'gettheme.js'
 			),
@@ -246,10 +251,30 @@ class MY_Controller extends CI_Controller {
 
 	protected function jsonEncoded($object, $pretty = true)
 	{
+		//$options = $this->getConfigItem("json_encode_options", 0);
+
 		if ($pretty === true) {
 			return json_encode($object, JSON_PRETTY_PRINT);
 		} else {
 			return json_encode($object);
+		}
+	}
+
+	protected function exportToSpreadsheet($result, $format, $filename)
+	{
+		$type = ($format === 'csv' ? 'text/csv' : 'application/vnd.ms-excel');
+
+		header('Content-Type: ' . $type);
+		header('Content-Disposition: attachment; filename=' . $filename);
+
+		if ($format === 'csv') {
+			$this->load->dbutil();
+			echo $this->dbutil->csv_from_result($result);
+		}
+		else {
+			$this->load->library('Excel');
+			header('Cache-Control: max-age=0'); //no cache
+			$this->excel->output_as_xls($result->result_array());
 		}
 	}
 }

@@ -58,13 +58,28 @@ class Sc extends MY_Model
 		return $this->db->affected_rows()>=0;
 	}
 	
-	function get($seriesID)
+	function get($seriesIDs, $fields = '')
 	{
-		$this->db->where('SeriesID',$seriesID);
-		$query=$this->db->Get($this->tableName);
-		return $query->result_array();
+		// Let $seriesIDs be an array of SeriesIDs
+		if (! is_array($seriesIDs)) {
+			$seriesIDs = array($seriesIDs);
+		}
+
+		if ($fields !== '') {
+			$this->db->select($fields);
+		}
+
+		$this->db->where_in('SeriesID', $seriesIDs);
+
+		return $this->db->get($this->tableName)->result_array();
 	}
-	
+
+	function getAllValid()
+	{
+		$this->db->where("VariableID >", 0);
+		return $this->db->get($this->tableName);
+	}
+
 	function update($series,$seriesID)
 	{
 		$this->db->where('SeriesID',$seriesID);

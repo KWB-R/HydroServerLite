@@ -24,11 +24,13 @@ function getMenuName()
 // Helper Functions for generationg parts of this template
 //
 
-function html_linkItem($class, $url, $textKey, $attributes = '')
+function html_linkItem($class, $url, $textKey = '', $attributes = '', $text = '')
 {
+	$text = ($textKey === '') ? $text : getTxt($textKey);
+
 	return 
 		html_li_beg($class) . 
-			html_a(site_url($url), getTxt($textKey), $attributes) . 
+			html_a(site_url($url), $text, $attributes) . 
 		"</li>";
 }
 
@@ -100,7 +102,8 @@ if (isAdmin()) {
 			html_linkItem("edit_variable", "variable/edit", "ChangeVariable"),
 			html_linkItem("add_method", "methods/add", "AddMethod"),
 			html_linkItem("edit_method", "methods/change", "ChangeMethod"),
-			html_linkItem("edit_variable", "series", "EditSC")
+			html_linkItem("edit_variable", "series", "EditSC"),
+			html_linkItem("import_data", "series/export", "", "", "Download Data")
 		)
 	);
 }
